@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "414429242328",
+    "project_id": "gigaturnip-b6b5b",
+    "storage_bucket": "gigaturnip-b6b5b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414429242328:android:77b1305db9bae70f67c8ad",
+        "android_client_info": {
+          "package_name": "io.kloop.gigaturnip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414429242328-hocr7f7afl2j39mq46s5h877fm6s2e41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvPwWECwMSkjp4-MCOYFInHWGpYWk1Cuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414429242328-hocr7f7afl2j39mq46s5h877fm6s2e41.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "414429242328-4arrplodtdo5uo1ftg03dnht406sgg6t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.kloop.gigaturnip"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414429242328:android:2916c95425e866b467c8ad",
+        "android_client_info": {
+          "package_name": "kg.kloop.android.gigaturnip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414429242328-7alrfsifff7n6m7ot6lf15jrub86b5ag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kg.kloop.android.gigaturnip",
+            "certificate_hash": "b2fe0049e30cad08a19eae691a8d7df27d09affe"
+          }
+        },
+        {
+          "client_id": "414429242328-g868e8bsqhrglsds2qd7tseopkvg6o01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kg.kloop.android.gigaturnip",
+            "certificate_hash": "f08417a341d3e322bcff1ebb0befa31b53cecf2b"
+          }
+        },
+        {
+          "client_id": "414429242328-h6dihamt66jvdtj2d7dhvujh5kifavks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kg.kloop.android.gigaturnip",
+            "certificate_hash": "d860cd5c6e07c6955c1b2f9a2db321e1ebd1278a"
+          }
+        },
+        {
+          "client_id": "414429242328-iv4aqlufmg92t8unh4n5av0498egl296.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kg.kloop.android.gigaturnip",
+            "certificate_hash": "2730ff1f848968f186b3cff66726715d388f3b37"
+          }
+        },
+        {
+          "client_id": "414429242328-leob5pvvu6orivvga73qudfpe8k51iuj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kg.kloop.android.gigaturnip",
+            "certificate_hash": "70b06ba2b8080b730fe47d07861ea0a943bd9bd0"
+          }
+        },
+        {
+          "client_id": "414429242328-hocr7f7afl2j39mq46s5h877fm6s2e41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvPwWECwMSkjp4-MCOYFInHWGpYWk1Cuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414429242328-hocr7f7afl2j39mq46s5h877fm6s2e41.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "414429242328-4arrplodtdo5uo1ftg03dnht406sgg6t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.kloop.gigaturnip"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
