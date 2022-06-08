@@ -1,38 +1,19 @@
 part of 'app_bloc.dart';
 
-enum AppStatus {
-  authenticated,
-  unauthenticated,
+@immutable
+abstract class AppState {}
+
+class AppStateLoggedIn extends AppState {
+  final AuthUser user;
+
+  AppStateLoggedIn({required this.user});
 }
 
-class AppState extends Equatable {
-  final AppStatus status;
-  final AuthUser user;
-  final Campaign? selectedCampaign;
+class AppStateLoggedOut extends AppState with EquatableMixin {
+  final Exception? exception;
 
-  const AppState._({
-    required this.status,
-    this.user = AuthUser.empty,
-    this.selectedCampaign
-  });
-
-  const AppState.authenticated(AuthUser user)
-      : this._(status: AppStatus.authenticated, user: user);
-
-  const AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
-
-  AppState copyWith({
-    AppStatus? status,
-    AuthUser? user,
-    Campaign? selectedCampaign,
-  }) {
-    return AppState._(
-        status: status ?? this.status,
-        user: user ?? this.user,
-        selectedCampaign: selectedCampaign ?? this.selectedCampaign
-    );
-  }
+  AppStateLoggedOut({required this.exception});
 
   @override
-  List<Object> get props => [status, user];
+  List<Object?> get props => [exception];
 }

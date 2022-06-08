@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
+import 'package:gigaturnip/src/features/home/home.dart';
 
 class CampaignsView extends StatelessWidget {
   const CampaignsView({Key? key}) : super(key: key);
@@ -22,8 +23,8 @@ class CampaignsView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               onTap: () {
-                context.read<CampaignsCubit>().selectCampaign(context, campaign);
-                // Navigator.of(context).pushNamed('');
+                // context.read<CampaignsCubit>().selectCampaign(context, campaign);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));
               },
             );
           },

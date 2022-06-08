@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/features/home/home.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,8 +9,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -28,9 +25,9 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(user.email ?? '', style: textTheme.headline6),
+            // Text(user.email ?? '', style: textTheme.headline6),
             const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headline5),
+            // Text(user.name ?? '', style: textTheme.headline5),
           ],
         ),
       ),

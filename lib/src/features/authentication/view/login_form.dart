@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gigaturnip/src/features/authentication/cubit/login_cubit.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<AppBloc, AppState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage ?? 'Authentication Failure'),
-              ),
-            );
+        if (state is AppStateLoggedOut) {
+          if (state.exception != null) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text('Authentication Failure'),
+                ),
+              );
+          }
         }
       },
       child: const Align(
@@ -25,13 +27,12 @@ class LoginForm extends StatelessWidget {
         child: SingleChildScrollView(
           child: Center(
             child: _GoogleLoginButton(),
-          )
+          ),
         ),
       ),
     );
   }
 }
-
 
 class _GoogleLoginButton extends StatelessWidget {
   const _GoogleLoginButton();
@@ -52,11 +53,7 @@ class _GoogleLoginButton extends StatelessWidget {
         primary: theme.colorScheme.secondary,
       ),
       icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
-      onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
+      onPressed: () => context.read<AppBloc>().add(AppLoginRequested()),
     );
   }
-}
-
-extension on LoginStatus {
-  bool get isSubmissionFailure => this == LoginStatus.submissionFailure;
 }

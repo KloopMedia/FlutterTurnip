@@ -9,6 +9,8 @@ abstract class AppEvent extends Equatable {
 
 class AppLogoutRequested extends AppEvent {}
 
+class AppLoginRequested extends AppEvent {}
+
 class AppUserChanged extends AppEvent {
   final AuthUser user;
 
@@ -17,10 +19,4 @@ class AppUserChanged extends AppEvent {
 
   @override
   List<Object> get props => [user];
-}
-
-class AppSelectedCampaignChange extends AppEvent {
-  final Campaign? campaign;
-
-  const AppSelectedCampaignChange(this.campaign);
 }

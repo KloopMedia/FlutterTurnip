@@ -7,42 +7,50 @@ import 'package:flutter/foundation.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc(
-      {required AuthenticationRepository authenticationRepository,
-      required GigaTurnipRepository gigaTurnipRepository})
-      : _authenticationRepository = authenticationRepository,
+  final AuthenticationRepository _authenticationRepository;
+  late final StreamSubscription<AuthUser> _userSubscription;
+
+  AppBloc({
+    required AuthenticationRepository authenticationRepository,
+    required GigaTurnipRepository gigaTurnipRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty
-              ? AppState.authenticated(authenticationRepository.currentUser)
-              : const AppState.unauthenticated(),
+              ? AppStateLoggedIn(user: authenticationRepository.currentUser)
+              : AppStateLoggedOut(exception: null),
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
-    on<AppSelectedCampaignChange>(_onSelectedCampaignChange);
+    on<AppLoginRequested>(_onLoginRequested);
     _userSubscription = _authenticationRepository.user.listen(
       (user) => add(AppUserChanged(user)),
     );
   }
 
-  final AuthenticationRepository _authenticationRepository;
-  late final StreamSubscription<AuthUser> _userSubscription;
-
   void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
-    emit(
-      event.user.isNotEmpty ? AppState.authenticated(event.user) : const AppState.unauthenticated(),
-    );
+    if (event.user.isNotEmpty) {
+      emit(AppStateLoggedIn(user: event.user));
+    } else {
+      emit(AppStateLoggedOut(exception: null));
+    }
   }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
     unawaited(_authenticationRepository.logOut());
   }
 
-  void _onSelectedCampaignChange(AppSelectedCampaignChange event, Emitter<AppState> emit) {
-    emit(state.copyWith(selectedCampaign: event.campaign));
+  void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) {
+    emit(AppStateLoggedOut(exception: null));
+    try {
+      _authenticationRepository.logInWithGoogle();
+    } on LogInWithGoogleFailure catch (e) {
+      emit(AppStateLoggedOut(exception: e));
+    } catch (e) {
+      emit(AppStateLoggedOut(exception: const LogInWithGoogleFailure()));
+    }
   }
 
   @override
