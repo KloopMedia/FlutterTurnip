@@ -1,4 +1,4 @@
-import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/models.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'task.g.dart';

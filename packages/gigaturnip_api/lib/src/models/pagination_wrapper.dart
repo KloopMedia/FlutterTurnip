@@ -1,3 +1,6 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable()
 class PaginationWrapper<T> {
   final int count;
   final String? next;
@@ -12,11 +15,15 @@ class PaginationWrapper<T> {
   });
 
   factory PaginationWrapper.fromJson(json) {
-    return PaginationWrapper(
-      count: json['count'],
-      results: json['results'],
-      previous: json['previous'],
-      next: json['next'],
-    );
+    try {
+      return PaginationWrapper(
+        count: json['count'],
+        results: json['results'],
+        previous: json['previous'],
+        next: json['next'],
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 }

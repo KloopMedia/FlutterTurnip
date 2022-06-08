@@ -12,7 +12,6 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       complete: json['complete'] as bool,
       reopened: json['reopened'] as bool,
       stage: Stage.fromJson(json['stage'] as Map<String, dynamic>),
-      assignee: json['assignee'] as int,
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -21,5 +20,4 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'complete': instance.complete,
       'reopened': instance.reopened,
       'stage': instance.stage,
-      'assignee': instance.assignee,
     };

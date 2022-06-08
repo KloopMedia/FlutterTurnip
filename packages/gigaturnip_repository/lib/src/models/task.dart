@@ -11,7 +11,6 @@ class Task extends Equatable {
   final bool complete;
   final bool reopened;
   final Stage stage;
-  final int assignee;
 
   const Task({
     required this.id,
@@ -19,7 +18,6 @@ class Task extends Equatable {
     required this.complete,
     required this.reopened,
     required this.stage,
-    required this.assignee,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -27,5 +25,5 @@ class Task extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, responses, complete, reopened, stage, assignee];
+  List<Object?> get props => [id, responses, complete, reopened, stage];
 }

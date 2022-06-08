@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign;
+import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class GigaTurnipRepository {
@@ -26,6 +26,29 @@ class GigaTurnipRepository {
               id: apiCampaign.id,
               name: apiCampaign.name,
               description: apiCampaign.description,
+            ))
+        .toList();
+  }
+
+  Future<List<Task>> getTasks() async {
+    final tasks = await _gigaTurnipApiClient.getTasks();
+    return tasks
+        .map((apiTask) => Task(
+              id: apiTask.id,
+              responses: apiTask.responses,
+              complete: apiTask.complete,
+              reopened: apiTask.reopened,
+              stage: Stage(
+                id: apiTask.stage.id,
+                name: apiTask.stage.name,
+                description: apiTask.stage.description,
+                chain: Chain(
+                  id: apiTask.stage.chain.id,
+                  name: apiTask.stage.chain.name,
+                  description: apiTask.stage.chain.description,
+                  campaign: apiTask.stage.chain.campaign,
+                ),
+              ),
             ))
         .toList();
   }
