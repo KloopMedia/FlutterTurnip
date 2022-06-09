@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Chain;
 
 part 'chain.g.dart';
 
@@ -19,6 +20,15 @@ class Chain extends Equatable {
 
   factory Chain.fromJson(Map<String, dynamic> json) {
     return _$ChainFromJson(json);
+  }
+
+  factory Chain.fromApiModel(api.Chain model) {
+    return Chain(
+      id: model.id,
+      name: model.name,
+      description: model.description,
+      campaign: model.campaign,
+    );
   }
 
   @override

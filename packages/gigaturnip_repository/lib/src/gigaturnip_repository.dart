@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Stage, Chain;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class GigaTurnipRepository {
@@ -20,36 +20,17 @@ class GigaTurnipRepository {
   }
 
   Future<List<Campaign>> getCampaigns() async {
-    final campaigns = await _gigaTurnipApiClient.getCampaigns();
+    final data = await _gigaTurnipApiClient.getCampaigns();
+    final campaigns = data.results;
     return campaigns
-        .map((apiCampaign) => Campaign(
-              id: apiCampaign.id,
-              name: apiCampaign.name,
-              description: apiCampaign.description,
-            ))
+        .map((apiCampaign) => Campaign.fromApiModel(apiCampaign))
         .toList();
   }
 
   Future<List<Task>> getTasks() async {
     final tasks = await _gigaTurnipApiClient.getTasks();
-    return tasks
-        .map((apiTask) => Task(
-              id: apiTask.id,
-              responses: apiTask.responses,
-              complete: apiTask.complete,
-              reopened: apiTask.reopened,
-              stage: Stage(
-                id: apiTask.stage.id,
-                name: apiTask.stage.name,
-                description: apiTask.stage.description,
-                chain: Chain(
-                  id: apiTask.stage.chain.id,
-                  name: apiTask.stage.chain.name,
-                  description: apiTask.stage.chain.description,
-                  campaign: apiTask.stage.chain.campaign,
-                ),
-              ),
-            ))
+    return tasks.results
+        .map((apiTask) => Task.fromApiModel(apiTask))
         .toList();
   }
 }
@@ -66,5 +47,10 @@ class ApiInterceptors extends Interceptor {
     options.headers['Authorization'] = 'JWT $accessToken';
 
     return handler.next(options);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
+    return handler.next(response);
   }
 }

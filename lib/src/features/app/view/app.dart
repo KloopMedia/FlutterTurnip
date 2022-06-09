@@ -34,28 +34,19 @@ class App extends StatelessWidget {
           authenticationRepository: _authenticationRepository,
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
-        child: const AppView(),
+        child: MaterialApp(
+          home: BlocBuilder<AppBloc, AppState>(
+            builder: (context, state) {
+              if (state is AppStateLoggedIn) {
+                return const CampaignsPage();
+              } else {
+                return const LoginPage();
+              }
+            },
+          ),
+          routes: {'/tasks': (context) => const HomePage()},
+        ),
       ),
-    );
-  }
-}
-
-class AppView extends StatelessWidget {
-  const AppView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocBuilder<AppBloc, AppState>(
-        builder: (context, state) {
-          if (state is AppStateLoggedIn) {
-            return const CampaignsPage();
-          } else {
-            return const LoginPage();
-          }
-        },
-      ),
-      routes: {'tasks/': (context) => const HomePage()},
     );
   }
 }

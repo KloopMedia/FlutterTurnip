@@ -16,15 +16,12 @@ class CampaignsCubit extends Cubit<CampaignsState> {
   }) : super(const CampaignsState());
 
   void loadCampaigns() async {
-    print('loading campaigns');
     emit(state.copyWith(status: CampaignsStatus.loading));
     try {
       final campaigns = await gigaTurnipRepository.getCampaigns();
-      final tasks = await gigaTurnipRepository.getTasks();
-      print(tasks);
       emit(state.copyWith(campaigns: campaigns, status: CampaignsStatus.initialized));
     } catch (e) {
-      print('sdfsdf $e');
+      print('Campaign cubit error: $e');
       emit(state.copyWith(
         status: CampaignsStatus.error,
         errorMessage: 'Failed to load campaigns',

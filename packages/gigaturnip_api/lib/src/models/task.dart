@@ -10,7 +10,7 @@ class Task {
   final bool complete;
   final bool reopened;
   final Stage stage;
-  final int assignee;
+  final int? assignee;
 
   const Task({
     required this.id,

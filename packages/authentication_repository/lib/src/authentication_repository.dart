@@ -1,4 +1,3 @@
-import 'package:authentication_repository/src/authentication_exceptions.dart';
 import 'package:authentication_repository/src/cache_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;

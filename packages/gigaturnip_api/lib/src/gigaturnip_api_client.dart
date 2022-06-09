@@ -12,28 +12,29 @@ class GigaTurnipApiClient {
   GigaTurnipApiClient({Dio? httpClient})
       : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl));
 
-
-  Future<List<Campaign>> getCampaigns() async {
+  Future<PaginationWrapper<Campaign>> getCampaigns() async {
     try {
       final response = await _httpClient.get(campaignsRoute);
-      final data = PaginationWrapper.fromJson(response.data);
-      List<Campaign> campaigns = data.results.map((json) => Campaign.fromJson(json)).toList();
-      return campaigns;
+      return PaginationWrapper<Campaign>.fromJson(
+        response.data,
+        (json) => Campaign.fromJson(json as Map<String, dynamic>),
+      );
     } on DioError catch (e) {
       rethrow;
     } catch (e) {
       rethrow;
     }
   }
-  
-  Future<List<Task>> getTasks({Map<String, dynamic>? query}) async {
+
+  Future<PaginationWrapper<Task>> getTasks({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(tasksRoute);
-      print(response);
-      final data = PaginationWrapper.fromJson(response.data);
-      List<Task> tasks = data.results.map((json) => Task.fromJson(json)).toList();
-      return tasks;
+      return PaginationWrapper.fromJson(
+        response.data,
+        (json) => Task.fromJson(json as Map<String, dynamic>),
+      );
     } catch (e) {
+      print('Api error: $e');
       rethrow;
     }
   }
