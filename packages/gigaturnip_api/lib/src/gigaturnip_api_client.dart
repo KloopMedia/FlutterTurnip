@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:gigaturnip_api/src/helpers/exceptions.dart';
 import 'package:gigaturnip_api/src/helpers/routes.dart';
 import 'package:gigaturnip_api/src/models/models.dart';
 
@@ -20,7 +21,7 @@ class GigaTurnipApiClient {
         (json) => Campaign.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
-      rethrow;
+      throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
       rethrow;
     }
@@ -33,8 +34,9 @@ class GigaTurnipApiClient {
         response.data,
         (json) => Task.fromJson(json as Map<String, dynamic>),
       );
+    } on DioError catch (e) {
+      throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
-      print('Api error: $e');
       rethrow;
     }
   }
