@@ -28,7 +28,7 @@ class GigaTurnipApiClient {
   // TODO: Add methods
   Future<PaginationWrapper<Task>> getTasks({Map<String, dynamic>? query}) async {
     try {
-      final response = await _httpClient.get(tasksRoute);
+      final response = await _httpClient.get(tasksRoute, queryParameters: query);
       return PaginationWrapper.fromJson(
         response.data,
         (json) => Task.fromJson(json as Map<String, dynamic>),
