@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:gigaturnip_api/src/helpers/exceptions.dart';
-import 'package:gigaturnip_api/src/helpers/routes.dart';
-import 'package:gigaturnip_api/src/models/models.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
   static const baseUrl = 'http://127.0.0.1:8000';
@@ -13,9 +11,9 @@ class GigaTurnipApiClient {
   GigaTurnipApiClient({Dio? httpClient})
       : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl));
 
-  Future<PaginationWrapper<Campaign>> getCampaigns() async {
+  Future<PaginationWrapper<Campaign>> getCampaigns({Map<String, dynamic>? query}) async {
     try {
-      final response = await _httpClient.get(campaignsRoute);
+      final response = await _httpClient.get(campaignsRoute, queryParameters: query);
       return PaginationWrapper<Campaign>.fromJson(
         response.data,
         (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -27,6 +25,7 @@ class GigaTurnipApiClient {
     }
   }
 
+  // TODO: Add methods
   Future<PaginationWrapper<Task>> getTasks({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(tasksRoute);

@@ -11,8 +11,8 @@ class PaginationWrapper<T> {
 
   PaginationWrapper({
     required this.count,
-    required this.next,
-    required this.previous,
+    this.next,
+    this.previous,
     required this.results,
   });
 
