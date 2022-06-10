@@ -5,14 +5,26 @@ part 'notification.g.dart';
 @JsonSerializable()
 class Notification {
   final int id;
-  final String name;
-  final String description;
-
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String title;
+  final String text;
+  final int importance;
+  final int campaign;
+  final int? rank;
+  final int targetUser;
 
   Notification({
     required this.id,
-    required this.name,
-    required this.description,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.title,
+    required this.text,
+    required this.importance,
+    required this.campaign,
+    required this.rank,
+    required this.targetUser,
+
   });
 
 
