@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -8,8 +9,8 @@ class TasksView extends StatelessWidget {
   const TasksView({Key? key}) : super(key: key);
 
   void _handleTaskTap(BuildContext context, Task task) {
-    // context.read<AppBloc>().add(AppSelectedCampaignChanged(task));
-    Navigator.of(context).pushNamed('/tasks');
+    context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+    Navigator.of(context).pushNamed('/tasks/new-task');
   }
 
   @override

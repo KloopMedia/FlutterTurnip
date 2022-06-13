@@ -26,3 +26,9 @@ class AppSelectedCampaignChanged extends AppEvent {
 
   const AppSelectedCampaignChanged(this.campaign);
 }
+
+class AppSelectedTaskChanged extends AppEvent {
+  final Task task;
+
+  const AppSelectedTaskChanged(this.task);
+}

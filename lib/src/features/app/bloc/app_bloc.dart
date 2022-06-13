@@ -4,9 +4,11 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
+
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -16,18 +18,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  })
+      : _authenticationRepository = authenticationRepository,
         super(
-          authenticationRepository.currentUser.isNotEmpty
-              ? AppStateLoggedIn(user: authenticationRepository.currentUser)
-              : const AppStateLoggedOut(exception: null),
-        ) {
+        authenticationRepository.currentUser.isNotEmpty
+            ? AppStateLoggedIn(user: authenticationRepository.currentUser)
+            : const AppStateLoggedOut(exception: null),
+      ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     on<AppLoginRequested>(_onLoginRequested);
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
+    on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(AppUserChanged(user)),
+          (user) => add(AppUserChanged(user)),
     );
   }
 
@@ -62,5 +66,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onSelectedCampaignChanged(AppSelectedCampaignChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(campaign: event.campaign));
+  }
+
+  void _onSelectedTaskChanged(AppSelectedTaskChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(task: event.task));
   }
 }
