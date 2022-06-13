@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
@@ -25,6 +26,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     on<AppLoginRequested>(_onLoginRequested);
+    on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     _userSubscription = _authenticationRepository.user.listen(
       (user) => add(AppUserChanged(user)),
     );
@@ -57,5 +59,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> close() {
     _userSubscription.cancel();
     return super.close();
+  }
+
+  void _onSelectedCampaignChanged(AppSelectedCampaignChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(campaign: event.campaign));
   }
 }

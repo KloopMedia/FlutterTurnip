@@ -1,18 +1,33 @@
 part of 'app_bloc.dart';
 
 @immutable
-abstract class AppState {}
+class AppState extends Equatable {
+  final AuthUser? user;
+  final Campaign? selectedCampaign;
+  final Task? selectedTask;
 
-class AppStateLoggedIn extends AppState {
-  final AuthUser user;
+  const AppState({this.user, this.selectedCampaign, this.selectedTask});
 
-  AppStateLoggedIn({required this.user});
+  AppState copyWith({AuthUser? user, Campaign? campaign, Task? task}) {
+    return AppState(
+      user: user ?? this.user,
+      selectedCampaign: campaign ?? selectedCampaign,
+      selectedTask: task ?? selectedTask,
+    );
+  }
+
+  @override
+  List<Object?> get props => [user, selectedCampaign, selectedTask];
 }
 
-class AppStateLoggedOut extends AppState with EquatableMixin {
+class AppStateLoggedIn extends AppState {
+  const AppStateLoggedIn({required user}) : super(user: user);
+}
+
+class AppStateLoggedOut extends AppState {
   final Exception? exception;
 
-  AppStateLoggedOut({required this.exception});
+  const AppStateLoggedOut({required this.exception});
 
   @override
   List<Object?> get props => [exception];

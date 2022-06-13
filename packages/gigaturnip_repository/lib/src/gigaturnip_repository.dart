@@ -8,8 +8,11 @@ class GigaTurnipRepository {
   late final GigaTurnipApiClient _gigaTurnipApiClient;
 
   List<Campaign> _campaigns = [];
+  List<Task> _tasks = [];
+
   final Duration _cacheValidDuration = const Duration(minutes: 30);
-  DateTime _lastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _tasksLastFetchTime = DateTime.fromMicrosecondsSinceEpoch(0);
 
   GigaTurnipRepository({
     AuthenticationRepository? authenticationRepository,
@@ -24,8 +27,10 @@ class GigaTurnipRepository {
 
   List<Campaign> get allCampaigns => _campaigns;
 
-  bool _shouldRefreshFromApi(bool forceRefresh) {
-    return _lastFetchTime.isBefore(DateTime.now().subtract(_cacheValidDuration)) || forceRefresh;
+  List<Task> get allTasks => _tasks;
+
+  bool _shouldRefreshFromApi(DateTime lastFetchTime, bool forceRefresh) {
+    return lastFetchTime.isBefore(DateTime.now().subtract(_cacheValidDuration)) || forceRefresh;
   }
 
   Future<void> refreshAllCampaigns() async {
@@ -33,12 +38,13 @@ class GigaTurnipRepository {
     final campaigns = data.results.map((apiCampaign) {
       return Campaign.fromApiModel(apiCampaign);
     }).toList();
-    _lastFetchTime = DateTime.now();
+    _campaignLastFetchTime = DateTime.now();
     _campaigns = campaigns;
   }
 
   Future<List<Campaign>> getCampaigns({bool forceRefresh = false}) async {
-    bool shouldRefreshFromApi =_shouldRefreshFromApi(forceRefresh) || _campaigns.isEmpty;
+    bool shouldRefreshFromApi =
+        _shouldRefreshFromApi(_campaignLastFetchTime, forceRefresh) || _campaigns.isEmpty;
 
     if (shouldRefreshFromApi) {
       await refreshAllCampaigns();
@@ -46,9 +52,23 @@ class GigaTurnipRepository {
     return _campaigns;
   }
 
-  Future<List<Task>> getTasks() async {
-    final tasks = await _gigaTurnipApiClient.getTasks();
-    return tasks.results.map((apiTask) => Task.fromApiModel(apiTask)).toList();
+  Future<void> refreshAllTasks() async {
+    final data = await _gigaTurnipApiClient.getTasks();
+    final tasks = data.results.map((apiTask) {
+      return Task.fromApiModel(apiTask);
+    }).toList();
+    _tasksLastFetchTime = DateTime.now();
+    _tasks = tasks;
+  }
+
+  Future<List<Task>> getTasks({bool forceRefresh = false}) async {
+    bool shouldRefreshFromApi =
+        _shouldRefreshFromApi(_tasksLastFetchTime, forceRefresh) || _tasks.isEmpty;
+
+    if (shouldRefreshFromApi) {
+      await refreshAllTasks();
+    }
+    return _tasks;
   }
 }
 

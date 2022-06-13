@@ -23,12 +23,11 @@ Task _$TaskFromJson(Map<String, dynamic> json) => $checkedCreate(
               'stage', (v) => Stage.fromJson(v as Map<String, dynamic>)),
           assignee: $checkedConvert('assignee', (v) => v as int?),
           case_: $checkedConvert(
-              'case_', (v) => Case.fromJson(v as Map<String, dynamic>)),
-          inTasks: $checkedConvert(
-              'in_tasks',
-              (v) => (v as List<dynamic>)
-                  .map((e) => Task.fromJson(e as Map<String, dynamic>))
-                  .toList()),
+              'case_',
+              (v) =>
+                  v == null ? null : Case.fromJson(v as Map<String, dynamic>)),
+          inTasks: $checkedConvert('in_tasks',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
         );
         return val;
       },

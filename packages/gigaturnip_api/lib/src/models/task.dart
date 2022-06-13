@@ -13,9 +13,9 @@ class Task {
   final bool forceComplete;
   final bool reopened;
   final Stage stage;
-  final Case case_;
+  final Case? case_;
   final int? assignee;
-  final List<Task> inTasks;
+  final List<int> inTasks;
 
   const Task({
     required this.id,

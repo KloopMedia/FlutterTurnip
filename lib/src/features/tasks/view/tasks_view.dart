@@ -1,49 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
+import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-class CampaignsView extends StatelessWidget {
-  const CampaignsView({Key? key}) : super(key: key);
+class TasksView extends StatelessWidget {
+  const TasksView({Key? key}) : super(key: key);
 
-  void _handleCampaignTap(BuildContext context, Campaign campaign) {
-    context.read<AppBloc>().add(AppSelectedCampaignChanged(campaign));
+  void _handleTaskTap(BuildContext context, Task task) {
+    // context.read<AppBloc>().add(AppSelectedCampaignChanged(task));
     Navigator.of(context).pushNamed('/tasks');
   }
 
   @override
   Widget build(BuildContext context) {
-    context.read<CampaignsCubit>().loadCampaigns();
-    return BlocConsumer<CampaignsCubit, CampaignsState>(
+    context.read<TasksCubit>().loadTasks();
+    return BlocConsumer<TasksCubit, TasksState>(
       listener: (context, state) {
-        if (state.status == CampaignsStatus.error) {
-          showErrorDialog(context, state.errorMessage ?? 'Error occurred while fetching campaigns');
+        if (state.status == TasksStatus.error) {
+          showErrorDialog(context, state.errorMessage ?? 'An error occurred while fetching tasks');
         }
       },
       builder: (context, state) {
-        if (state.status == CampaignsStatus.loading) {
+        if (state.status == TasksStatus.loading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<CampaignsCubit>().loadCampaigns();
+            context.read<TasksCubit>().loadTasks();
           },
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: state.campaigns.length,
+            itemCount: state.tasks.length,
             itemBuilder: (context, index) {
-              var campaign = state.campaigns[index];
+              var task = state.tasks[index];
               return ListTile(
                 title: Text(
-                  campaign.name,
+                  task.name,
                   textAlign: TextAlign.center,
                 ),
                 onTap: () {
-                  _handleCampaignTap(context, campaign);
+                  _handleTaskTap(context, task);
                 },
               );
             },
