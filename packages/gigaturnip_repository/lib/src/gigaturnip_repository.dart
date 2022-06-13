@@ -1,7 +1,6 @@
 import 'dart:async';
-
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Stage, Chain;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
@@ -30,7 +29,7 @@ class GigaTurnipRepository {
   }
 
   Future<void> refreshAllCampaigns() async {
-    final data = await _gigaTurnipApiClient.getCampaigns(); // This makes the actual HTTP request
+    final data = await _gigaTurnipApiClient.getCampaigns();
     final campaigns = data.results.map((apiCampaign) {
       return Campaign.fromApiModel(apiCampaign);
     }).toList();

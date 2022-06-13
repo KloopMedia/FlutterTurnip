@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
+import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 
 class CampaignsView extends StatelessWidget {
   const CampaignsView({Key? key}) : super(key: key);
@@ -10,9 +11,16 @@ class CampaignsView extends StatelessWidget {
     context.read<CampaignsCubit>().loadCampaigns();
     return BlocConsumer<CampaignsCubit, CampaignsState>(
       listener: (context, state) {
-        // TODO: Add exception handler
+        if (state.status == CampaignsStatus.error) {
+          showErrorDialog(context, state.errorMessage ?? 'Error occurred while fetching campaigns');
+        }
       },
       builder: (context, state) {
+        if (state.status == CampaignsStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         return Column(
           children: [
             ListView.builder(
