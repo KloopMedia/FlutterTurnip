@@ -4,7 +4,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
@@ -21,7 +20,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         super(
           authenticationRepository.currentUser.isNotEmpty
               ? AppStateLoggedIn(user: authenticationRepository.currentUser)
-              : AppStateLoggedOut(exception: null),
+              : const AppStateLoggedOut(exception: null),
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
@@ -36,7 +35,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (event.user.isNotEmpty) {
       emit(AppStateLoggedIn(user: event.user));
     } else {
-      emit(AppStateLoggedOut(exception: null));
+      emit(const AppStateLoggedOut(exception: null));
     }
   }
 
@@ -45,13 +44,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) {
-    emit(AppStateLoggedOut(exception: null));
+    emit(const AppStateLoggedOut(exception: null));
     try {
       _authenticationRepository.logInWithGoogle();
     } on LogInWithGoogleFailure catch (e) {
       emit(AppStateLoggedOut(exception: e));
     } catch (e) {
-      emit(AppStateLoggedOut(exception: const LogInWithGoogleFailure()));
+      emit(const AppStateLoggedOut(exception: LogInWithGoogleFailure()));
     }
   }
 

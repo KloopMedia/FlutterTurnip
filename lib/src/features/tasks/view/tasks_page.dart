@@ -2,7 +2,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
 import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
 import 'package:gigaturnip/src/features/tasks/view/tasks_view.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';

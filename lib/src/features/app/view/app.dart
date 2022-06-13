@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/authentication/authentication.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
-import 'package:gigaturnip/src/features/home/home.dart';
 import 'package:gigaturnip/src/features/tasks/view/tasks_page.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 

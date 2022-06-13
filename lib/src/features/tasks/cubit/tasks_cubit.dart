@@ -27,7 +27,6 @@ class TasksCubit extends Cubit<TasksState> {
       ));
     }
     catch (e) {
-      print(e);
       emit(state.copyWith(
         status: TasksStatus.error,
         errorMessage: 'Failed to load tasks',
