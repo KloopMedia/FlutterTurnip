@@ -20,8 +20,14 @@ class CampaignsCubit extends Cubit<CampaignsState> {
     try {
       final campaigns = await gigaTurnipRepository.getCampaigns();
       emit(state.copyWith(campaigns: campaigns, status: CampaignsStatus.initialized));
-    } catch (e) {
-      print('Campaign cubit error: $e');
+    } on GigaTurnipApiRequestException catch (e) {
+      emit(state.copyWith(
+        status: CampaignsStatus.error,
+        errorMessage: e.message,
+        campaigns: [],
+      ));
+    }
+    catch (e) {
       emit(state.copyWith(
         status: CampaignsStatus.error,
         errorMessage: 'Failed to load campaigns',

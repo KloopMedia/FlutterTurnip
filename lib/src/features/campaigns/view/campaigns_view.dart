@@ -9,7 +9,9 @@ class CampaignsView extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CampaignsCubit>().loadCampaigns();
     return BlocConsumer<CampaignsCubit, CampaignsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        // TODO: Add exception handler
+      },
       builder: (context, state) {
         return Column(
           children: [
@@ -24,7 +26,6 @@ class CampaignsView extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   onTap: () {
-                    // context.read<CampaignsCubit>().selectCampaign(context, campaign);
                     Navigator.of(context).pushNamed('/tasks');
                   },
                 );

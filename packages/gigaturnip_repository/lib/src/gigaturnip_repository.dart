@@ -8,6 +8,10 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 class GigaTurnipRepository {
   late final GigaTurnipApiClient _gigaTurnipApiClient;
 
+  List<Campaign> _campaigns = [];
+  final Duration _cacheValidDuration = const Duration(minutes: 30);
+  DateTime _lastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
+
   GigaTurnipRepository({
     AuthenticationRepository? authenticationRepository,
   }) {
@@ -19,19 +23,33 @@ class GigaTurnipRepository {
     );
   }
 
-  Future<List<Campaign>> getCampaigns() async {
-    final data = await _gigaTurnipApiClient.getCampaigns();
-    final campaigns = data.results;
-    return campaigns
-        .map((apiCampaign) => Campaign.fromApiModel(apiCampaign))
-        .toList();
+  List<Campaign> get allCampaigns => _campaigns;
+
+  bool _shouldRefreshFromApi(bool forceRefresh) {
+    return _lastFetchTime.isBefore(DateTime.now().subtract(_cacheValidDuration)) || forceRefresh;
+  }
+
+  Future<void> refreshAllCampaigns() async {
+    final data = await _gigaTurnipApiClient.getCampaigns(); // This makes the actual HTTP request
+    final campaigns = data.results.map((apiCampaign) {
+      return Campaign.fromApiModel(apiCampaign);
+    }).toList();
+    _lastFetchTime = DateTime.now();
+    _campaigns = campaigns;
+  }
+
+  Future<List<Campaign>> getCampaigns({bool forceRefresh = false}) async {
+    bool shouldRefreshFromApi =_shouldRefreshFromApi(forceRefresh) || _campaigns.isEmpty;
+
+    if (shouldRefreshFromApi) {
+      await refreshAllCampaigns();
+    }
+    return _campaigns;
   }
 
   Future<List<Task>> getTasks() async {
     final tasks = await _gigaTurnipApiClient.getTasks();
-    return tasks.results
-        .map((apiTask) => Task.fromApiModel(apiTask))
-        .toList();
+    return tasks.results.map((apiTask) => Task.fromApiModel(apiTask)).toList();
   }
 }
 
@@ -47,10 +65,5 @@ class ApiInterceptors extends Interceptor {
     options.headers['Authorization'] = 'JWT $accessToken';
 
     return handler.next(options);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) async {
-    return handler.next(response);
   }
 }
