@@ -38,7 +38,7 @@ class App extends StatelessWidget {
         child: MaterialApp(
           home: BlocBuilder<AppBloc, AppState>(
             builder: (context, state) {
-              if (state is AppStateLoggedIn) {
+              if (state.user != null) {
                 return const CampaignsPage();
               } else {
                 return const LoginPage();
@@ -46,8 +46,9 @@ class App extends StatelessWidget {
             },
           ),
           routes: {
-            '/tasks': (context) => const TasksPage(),
-            '/tasks/new-task': (context) => const HomePage(),
+            campaignsRoute: (context) => const CampaignsPage(),
+            tasksRoute: (context) => const TasksPage(),
+            createOrUpdateTaskRoute: (context) => const HomePage(),
           },
         ),
       ),

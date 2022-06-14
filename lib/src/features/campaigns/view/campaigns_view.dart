@@ -10,7 +10,7 @@ class CampaignsView extends StatelessWidget {
 
   void _handleCampaignTap(BuildContext context, Campaign campaign) {
     context.read<AppBloc>().add(AppSelectedCampaignChanged(campaign));
-    Navigator.of(context).pushNamed('/tasks');
+    Navigator.of(context).pushNamed(tasksRoute);
   }
 
   @override

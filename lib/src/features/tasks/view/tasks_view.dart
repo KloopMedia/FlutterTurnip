@@ -10,7 +10,7 @@ class TasksView extends StatelessWidget {
 
   void _handleTaskTap(BuildContext context, Task task) {
     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-    Navigator.of(context).pushNamed('/tasks/new-task');
+    Navigator.of(context).pushNamed(createOrUpdateTaskRoute);
   }
 
   @override

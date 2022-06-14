@@ -22,6 +22,9 @@ class AppState extends Equatable {
 
 class AppStateLoggedIn extends AppState {
   const AppStateLoggedIn({required user}) : super(user: user);
+
+  @override
+  List<Object?> get props => [user];
 }
 
 class AppStateLoggedOut extends AppState {
