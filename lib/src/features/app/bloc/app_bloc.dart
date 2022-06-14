@@ -16,17 +16,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  })
+      : _authenticationRepository = authenticationRepository,
         super(
-          authenticationRepository.currentUser.isNotEmpty
-              ? AppStateLoggedIn(user: authenticationRepository.currentUser)
-              : AppStateLoggedOut(exception: null),
-        ) {
+        authenticationRepository.currentUser.isNotEmpty
+            ? AppStateLoggedIn(user: authenticationRepository.currentUser)
+            : const AppStateLoggedOut(exception: null),
+      ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     on<AppLoginRequested>(_onLoginRequested);
+    on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
+    on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(AppUserChanged(user)),
+          (user) => add(AppUserChanged(user)),
     );
   }
 
@@ -34,7 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (event.user.isNotEmpty) {
       emit(AppStateLoggedIn(user: event.user));
     } else {
-      emit(AppStateLoggedOut(exception: null));
+      emit(const AppStateLoggedOut(exception: null));
     }
   }
 
@@ -42,14 +45,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     unawaited(_authenticationRepository.logOut());
   }
 
-  void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) {
-    emit(AppStateLoggedOut(exception: null));
+  void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) async {
+    emit(const AppStateLoggedOut(exception: null));
     try {
-      _authenticationRepository.logInWithGoogle();
+      await _authenticationRepository.logInWithGoogle();
     } on LogInWithGoogleFailure catch (e) {
       emit(AppStateLoggedOut(exception: e));
     } catch (e) {
-      emit(AppStateLoggedOut(exception: const LogInWithGoogleFailure()));
+      emit(const AppStateLoggedOut(exception: LogInWithGoogleFailure()));
     }
   }
 
@@ -57,5 +60,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> close() {
     _userSubscription.cancel();
     return super.close();
+  }
+
+  void _onSelectedCampaignChanged(AppSelectedCampaignChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(campaign: event.campaign));
+  }
+
+  void _onSelectedTaskChanged(AppSelectedTaskChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(task: event.task));
   }
 }

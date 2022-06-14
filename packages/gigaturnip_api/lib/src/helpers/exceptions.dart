@@ -1,9 +1,16 @@
 import 'package:dio/dio.dart';
 
+enum ErrorTypes {
+  response,
+  timeout,
+  cancel,
+  other
+}
+
 class GigaTurnipApiRequestException implements Exception {
   final String message;
   final int? code;
-  final DioErrorType type;
+  final ErrorTypes type;
 
   const GigaTurnipApiRequestException({required this.message, required this.type, this.code});
 
@@ -12,69 +19,57 @@ class GigaTurnipApiRequestException implements Exception {
       case DioErrorType.connectTimeout:
       case DioErrorType.sendTimeout:
       case DioErrorType.receiveTimeout:
-        return GigaTurnipApiRequestException(
+        return const GigaTurnipApiRequestException(
           message: 'Connection timeout',
-          type: error.type,
+          type: ErrorTypes.cancel,
         );
       case DioErrorType.response:
         final response = error.response;
         if (response != null) {
           return _getExceptionFromCode(response.statusCode);
         } else {
-          return GigaTurnipApiRequestException(
+          return const GigaTurnipApiRequestException(
             message:
                 'Something happened in setting up or sending the request that triggered an Error',
-            type: error.type,
+            type: ErrorTypes.response,
           );
         }
       case DioErrorType.cancel:
-        return GigaTurnipApiRequestException(
+        return const GigaTurnipApiRequestException(
           message: 'Request cancelled',
-          type: error.type,
+          type: ErrorTypes.cancel,
         );
       default:
-        return GigaTurnipApiRequestException(
+        return const GigaTurnipApiRequestException(
           message: 'Some other error',
-          type: error.type,
+          type: ErrorTypes.other,
         );
     }
   }
 
   static GigaTurnipApiRequestException _getExceptionFromCode(int? code) {
+    var message = 'Generic response error';
     switch (code) {
       case 400:
-        return GigaTurnipApiRequestException(
-          message: 'Bad request',
-          type: DioErrorType.response,
-          code: code,
-        );
+        message = 'Bad request';
+        break;
       case 401:
-        return GigaTurnipApiRequestException(
-          message: 'Unauthorized',
-          type: DioErrorType.response,
-          code: code,
-        );
+        message = 'Unauthorized';
+        break;
       case 403:
-        return GigaTurnipApiRequestException(
-          message: 'Forbidden',
-          type: DioErrorType.response,
-          code: code,
-        );
+        message = 'Forbidden';
+        break;
       case 404:
-        return GigaTurnipApiRequestException(
-          message: 'Not found',
-          type: DioErrorType.response,
-          code: code,
-        );
+        message = 'Not found';
+        break;
       case 500:
-        return GigaTurnipApiRequestException(
-          message: 'Internal Server Error',
-          type: DioErrorType.response,
-          code: code,
-        );
-      default:
-        return GigaTurnipApiRequestException(
-            message: 'Generic response error', type: DioErrorType.response, code: code);
+        message = 'Internal Server Error';
+        break;
     }
+    return GigaTurnipApiRequestException(
+      message: message,
+      type: ErrorTypes.response,
+      code: code,
+    );
   }
 }

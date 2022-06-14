@@ -20,3 +20,15 @@ class AppUserChanged extends AppEvent {
   @override
   List<Object> get props => [user];
 }
+
+class AppSelectedCampaignChanged extends AppEvent {
+  final Campaign campaign;
+
+  const AppSelectedCampaignChanged(this.campaign);
+}
+
+class AppSelectedTaskChanged extends AppEvent {
+  final Task task;
+
+  const AppSelectedTaskChanged(this.task);
+}

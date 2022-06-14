@@ -1,38 +1,38 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-part 'campaigns_state.dart';
+part 'tasks_state.dart';
 
-class CampaignsCubit extends Cubit<CampaignsState> {
+class TasksCubit extends Cubit<TasksState> {
   final AuthenticationRepository authenticationRepository;
   final GigaTurnipRepository gigaTurnipRepository;
 
-  CampaignsCubit({
+  TasksCubit({
     required this.gigaTurnipRepository,
     required this.authenticationRepository,
-  }) : super(const CampaignsState());
+  }) : super(const TasksState());
 
-  void loadCampaigns() async {
-    emit(state.copyWith(status: CampaignsStatus.loading));
+  void loadTasks() async {
+    emit(state.copyWith(status: TasksStatus.loading));
     try {
-      final campaigns = await gigaTurnipRepository.getCampaigns();
-      emit(state.copyWith(campaigns: campaigns, status: CampaignsStatus.initialized));
+      final tasks = await gigaTurnipRepository.getTasks();
+      emit(state.copyWith(tasks: tasks, status: TasksStatus.initialized));
     } on GigaTurnipApiRequestException catch (e) {
       emit(state.copyWith(
-        status: CampaignsStatus.error,
+        status: TasksStatus.error,
         errorMessage: e.message,
-        campaigns: [],
+        tasks: [],
       ));
     }
     catch (e) {
       emit(state.copyWith(
-        status: CampaignsStatus.error,
-        errorMessage: 'Failed to load campaigns',
-        campaigns: [],
+        status: TasksStatus.error,
+        errorMessage: 'Failed to load tasks',
+        tasks: [],
       ));
     }
   }
+
 }

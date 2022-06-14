@@ -5,6 +5,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/authentication/authentication.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
 import 'package:gigaturnip/src/features/home/home.dart';
+import 'package:gigaturnip/src/features/tasks/view/tasks_page.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class App extends StatelessWidget {
@@ -37,14 +38,18 @@ class App extends StatelessWidget {
         child: MaterialApp(
           home: BlocBuilder<AppBloc, AppState>(
             builder: (context, state) {
-              if (state is AppStateLoggedIn) {
+              if (state.user != null) {
                 return const CampaignsPage();
               } else {
                 return const LoginPage();
               }
             },
           ),
-          routes: {'/tasks': (context) => const HomePage()},
+          routes: {
+            campaignsRoute: (context) => const CampaignsPage(),
+            tasksRoute: (context) => const TasksPage(),
+            createOrUpdateTaskRoute: (context) => const HomePage(),
+          },
         ),
       ),
     );

@@ -8,6 +8,7 @@ part 'task.g.dart';
 @JsonSerializable()
 class Task extends Equatable {
   final int id;
+  final String name;
   final Map<String, dynamic>? responses;
   final bool complete;
   final bool reopened;
@@ -15,6 +16,7 @@ class Task extends Equatable {
 
   const Task({
     required this.id,
+    required this.name,
     required this.responses,
     required this.complete,
     required this.reopened,
@@ -28,6 +30,7 @@ class Task extends Equatable {
   factory Task.fromApiModel(api.Task model) {
     return Task(
       id: model.id,
+      name: model.stage.name,
       responses: model.responses,
       complete: model.complete,
       reopened: model.reopened,
