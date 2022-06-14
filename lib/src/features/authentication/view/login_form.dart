@@ -1,7 +1,9 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -11,14 +13,9 @@ class LoginForm extends StatelessWidget {
     return BlocListener<AppBloc, AppState>(
       listener: (context, state) {
         if (state is AppStateLoggedOut) {
-          if (state.exception != null) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(
-                  content: Text('Authentication Failure'),
-                ),
-              );
+          final exception = state.exception as LogInWithGoogleFailure?;
+          if (exception != null) {
+            showErrorDialog(context, exception.message);
           }
         }
       },

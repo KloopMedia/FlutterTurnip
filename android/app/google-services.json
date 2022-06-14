@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "414429242328-je18i31ka4j5pk1ie23akopijrufnt81.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "7da521bbf6a8b53864b2630b334c9d331eed98aa"
+          }
+        },
+        {
           "client_id": "414429242328-hocr7f7afl2j39mq46s5h877fm6s2e41.apps.googleusercontent.com",
           "client_type": 3
         }

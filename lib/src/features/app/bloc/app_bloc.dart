@@ -4,11 +4,9 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -47,10 +45,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     unawaited(_authenticationRepository.logOut());
   }
 
-  void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) {
+  void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) async {
     emit(const AppStateLoggedOut(exception: null));
     try {
-      _authenticationRepository.logInWithGoogle();
+      await _authenticationRepository.logInWithGoogle();
     } on LogInWithGoogleFailure catch (e) {
       emit(AppStateLoggedOut(exception: e));
     } catch (e) {
