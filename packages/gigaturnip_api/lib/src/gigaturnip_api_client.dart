@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
@@ -106,13 +107,12 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Task>> getTasksById({Map<String, dynamic>? query, id}) async {
+  Future<Task> getTaskById({Map<String, dynamic>? query, required int id}) async {
     try {
+      final response = await _httpClient.get(tasksRoute + id.toString(), queryParameters: query);
 
-      final response = await _httpClient.get(tasksRoute + id, queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
+      return Task.fromJson(
+        response.data
       );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
@@ -121,24 +121,9 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Task>> getIntegratedTasks({Map<String, dynamic>? query, id}) async {
+  Future<List<Task>> getIntegratedTasks({Map<String, dynamic>? query, required int id}) async {
     try {
-
-      final response = await _httpClient.get(tasksRoute + id + 'get_integrated_tasks', queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<Task>> listDisplayedPrevious({Map<String, dynamic>? query, id}) async {
-    try {
-      final response = await _httpClient.get(tasksRoute + id + 'list_displayed_previous', queryParameters: query);
+      final response = await _httpClient.get('$tasksRoute + ${id.toString()}get_integrated_tasks', queryParameters: query);
       List<Task> list = (json.decode(response.data) as List)
           .map((json) => Task.fromJson(json as Map<String, dynamic>))
           .toList();
@@ -151,13 +136,27 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Task>> openPrevious({Map<String, dynamic>? query, id}) async {
+  Future<List<Task>> listDisplayedPrevious({Map<String, dynamic>? query, required int id}) async {
     try {
+      final response = await _httpClient.get('$tasksRoute${id}list_displayed_previous', queryParameters: query);
+      List<Task> list = (json.decode(response.data) as List)
+          .map((json) => Task.fromJson(json as Map<String, dynamic>))
+          .toList();
 
-      final response = await _httpClient.get(tasksRoute + id + 'open_previous', queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
+      return list;
+    } on DioError catch (e) {
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Task> openPrevious({Map<String, dynamic>? query, required int id}) async {
+    try {
+      final response = await _httpClient.get('$tasksRoute$id/open_previous', queryParameters: query);
+
+      return Task.fromJson(
+          response.data
       );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
@@ -166,13 +165,23 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Task>> releaseAssignment({Map<String, dynamic>? query, id}) async {
+  Future<void> releaseAssignment({Map<String, dynamic>? query, required int id}) async {
     try {
+      await _httpClient.get('$tasksRoute$id/release_assignment', queryParameters: query);
 
-      final response = await _httpClient.get(tasksRoute + id + 'release_assignment', queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
+    } on DioError catch (e) {
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Task> requestAssignment({Map<String, dynamic>? query, required int id}) async {
+    try {
+      final response = await _httpClient.get('$tasksRoute$id/request_assignment', queryParameters: query);
+
+      return Task.fromJson(
+          response.data
       );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
@@ -181,14 +190,10 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Task>> requestAssignment({Map<String, dynamic>? query, id}) async {
+  Future<void> triggerWebhook({Map<String, dynamic>? query, required int id}) async {
     try {
+      await _httpClient.get('$tasksRoute$id/trigger_webhook', queryParameters: query);
 
-      final response = await _httpClient.get(tasksRoute + id + 'request_assignment', queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
-      );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
@@ -196,29 +201,10 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Task>> triggerWebhook({Map<String, dynamic>? query, id}) async {
+  Future<void> uncomplete({Map<String, dynamic>? query, required int id}) async {
     try {
+      await _httpClient.get('$tasksRoute$id/unclomplete', queryParameters: query);
 
-      final response = await _httpClient.get(tasksRoute + id + 'trigger_webhook', queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<PaginationWrapper<Task>> uncomplete({Map<String, dynamic>? query, id}) async {
-    try {
-
-      final response = await _httpClient.get(tasksRoute + id + 'uncomplete', queryParameters: query);
-      return PaginationWrapper.fromJson(
-        response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
-      );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
