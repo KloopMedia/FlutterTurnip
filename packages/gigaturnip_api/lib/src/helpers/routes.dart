@@ -1,6 +1,6 @@
 // Campaigns routes
 const campaignsRoute = '/api/v1/campaigns/';
-const userCampaignsRoute = '${campaignsRoute}list_user_selectable/';
+const userCampaignsRoute = '${campaignsRoute}list_user_campaigns/';
 const selectableCampaignsRoute = '${campaignsRoute}list_user_selectable/';
 
 // Tasks routes
