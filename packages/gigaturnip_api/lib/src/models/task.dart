@@ -12,7 +12,7 @@ class Task {
   final bool complete;
   final bool forceComplete;
   final bool reopened;
-  final Stage stage;
+  final TaskStage stage;
   final Case? case_;
   final int? assignee;
   final List<int> inTasks;

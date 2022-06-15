@@ -20,7 +20,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) => $checkedCreate(
           reopened: $checkedConvert('reopened', (v) => v as bool),
           forceComplete: $checkedConvert('force_complete', (v) => v as bool),
           stage: $checkedConvert(
-              'stage', (v) => Stage.fromJson(v as Map<String, dynamic>)),
+              'stage', (v) => TaskStage.fromJson(v as Map<String, dynamic>)),
           assignee: $checkedConvert('assignee', (v) => v as int?),
           case_: $checkedConvert(
               'case_',
