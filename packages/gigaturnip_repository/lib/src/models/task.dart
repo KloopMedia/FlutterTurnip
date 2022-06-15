@@ -12,7 +12,7 @@ class Task extends Equatable {
   final Map<String, dynamic>? responses;
   final bool complete;
   final bool reopened;
-  final Stage stage;
+  final TaskStage stage;
 
   const Task({
     required this.id,
@@ -34,7 +34,7 @@ class Task extends Equatable {
       responses: model.responses,
       complete: model.complete,
       reopened: model.reopened,
-      stage: Stage.fromApiModel(model.stage),
+      stage: TaskStage.fromApiModel(model.stage),
     );
   }
 

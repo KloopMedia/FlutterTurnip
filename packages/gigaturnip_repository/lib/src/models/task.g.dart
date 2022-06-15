@@ -12,7 +12,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       responses: json['responses'] as Map<String, dynamic>?,
       complete: json['complete'] as bool,
       reopened: json['reopened'] as bool,
-      stage: Stage.fromJson(json['stage'] as Map<String, dynamic>),
+      stage: TaskStage.fromJson(json['stage'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
