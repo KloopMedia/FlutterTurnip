@@ -1,17 +1,26 @@
 // Campaigns routes
 const campaignsRoute = '/api/v1/campaigns/';
-const listUserCampaignsRoute = '${campaignsRoute}list_user_selectable/';
-const listUserSelectableCampaignsRoute = '${campaignsRoute}list_user_selectable/';
+const userCampaignsRoute = '${campaignsRoute}list_user_selectable/';
+const selectableCampaignsRoute = '${campaignsRoute}list_user_selectable/';
 
 // Tasks routes
 const tasksRoute = '/api/v1/tasks/';
-const userSelectableRoute = '/api/v1/tasks/user_selectable/';
-const userRelevantRoute = '/api/v1/tasks/';
+const selectableTasksRoute = '${tasksRoute}user_selectable/';
+const relevantTasksRoute = '${tasksRoute}user_relevant';
+
+// Specific task's routes
+const integratedTasksActionRoute = '/get_integrated_tasks';
+const displayedPreviousTasksActionRoute = '/list_displayed_previous';
+const openPreviousTaskActionRoute = '/open_previous';
+const releaseTaskActionRoute = '/release_assignment';
+const requestTaskActionRoute = '/request_assignment';
+const triggerWebhookActionRoute = '/trigger_webhook';
+const reopenTaskActionRoute = '/uncomplete';
 
 
 // Notifications routes
 const notificationsRoute = '/api/v1/notifications/';
-const listUserNotificationsRoute = '/api/v1/notifications/list_user_notifications/';
+const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
 
 
 // TODO: Add all routes
