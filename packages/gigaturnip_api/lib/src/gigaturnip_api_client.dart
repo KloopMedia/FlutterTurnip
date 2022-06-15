@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
@@ -33,7 +31,7 @@ class GigaTurnipApiClient {
   Future<List<Campaign>> getListUserCampaigns({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(listUserCampaignsRoute, queryParameters: query);
-      List<Campaign> list = (json.decode(response.data) as List)
+      List<Campaign> list = (response.data as List)
           .map((json) => Campaign.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -48,7 +46,7 @@ class GigaTurnipApiClient {
   Future<List<Campaign>> getListUserSelectableCampaigns({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(listUserSelectableCampaignsRoute, queryParameters: query);
-      List<Campaign> list = (json.decode(response.data) as List)
+      List<Campaign> list = (response.data as List)
           .map((json) => Campaign.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -80,7 +78,7 @@ class GigaTurnipApiClient {
   Future<List<Task>> getUserSelectable({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(userSelectableRoute, queryParameters: query);
-      List<Task> list = (json.decode(response.data) as List)
+      List<Task> list = (response.data as List)
           .map((json) => Task.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -95,7 +93,7 @@ class GigaTurnipApiClient {
   Future<List<Task>> getUserRelevant({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(userRelevantRoute, queryParameters: query);
-      List<Task> list = (json.decode(response.data) as List)
+      List<Task> list = (response.data as List)
           .map((json) => Task.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -124,7 +122,7 @@ class GigaTurnipApiClient {
   Future<List<Task>> getIntegratedTasks({Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get('$tasksRoute + ${id.toString()}get_integrated_tasks', queryParameters: query);
-      List<Task> list = (json.decode(response.data) as List)
+      List<Task> list = (response.data as List)
           .map((json) => Task.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -139,7 +137,7 @@ class GigaTurnipApiClient {
   Future<List<Task>> listDisplayedPrevious({Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get('$tasksRoute${id}list_displayed_previous', queryParameters: query);
-      List<Task> list = (json.decode(response.data) as List)
+      List<Task> list = (response.data as List)
           .map((json) => Task.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -231,7 +229,7 @@ class GigaTurnipApiClient {
   Future<List<Notification>> getListUserNotifications({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(listUserNotificationsRoute, queryParameters: query);
-      List<Notification> list = (json.decode(response.data) as List)
+      List<Notification> list = (response.data as List)
           .map((json) => Notification.fromJson(json as Map<String, dynamic>))
           .toList();
 
