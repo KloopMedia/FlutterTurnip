@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
-  static const baseUrl = 'http://127.0.0.1:8000';
+  static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
 
   final Dio _httpClient;
 

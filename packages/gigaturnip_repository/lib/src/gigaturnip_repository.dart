@@ -4,11 +4,17 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Stage, Chain;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
+enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
+
+enum TasksActions { listOpenTasks, listClosedTasks }
+
 class GigaTurnipRepository {
   late final GigaTurnipApiClient _gigaTurnipApiClient;
 
-  List<Campaign> _campaigns = [];
-  List<Task> _tasks = [];
+  List<Campaign> _userCampaigns = [];
+  List<Campaign> _selectableCampaigns = [];
+  List<Task> _openedTasks = [];
+  List<Task> _closedTasks = [];
 
   final Duration _cacheValidDuration = const Duration(minutes: 30);
   DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
@@ -25,50 +31,77 @@ class GigaTurnipRepository {
     );
   }
 
-  List<Campaign> get allCampaigns => _campaigns;
-
-  List<Task> get allTasks => _tasks;
-
   bool _shouldRefreshFromApi(DateTime lastFetchTime, bool forceRefresh) {
     return lastFetchTime.isBefore(DateTime.now().subtract(_cacheValidDuration)) || forceRefresh;
   }
 
   Future<void> refreshAllCampaigns() async {
-    final data = await _gigaTurnipApiClient.getCampaigns();
-    final campaigns = data.results.map((apiCampaign) {
+    final userCampaignsData = await _gigaTurnipApiClient.getUserCampaigns();
+    final userCampaigns = userCampaignsData.map((apiCampaign) {
       return Campaign.fromApiModel(apiCampaign);
     }).toList();
+
+    final selectableCampaignsData = await _gigaTurnipApiClient.getSelectableCampaigns();
+    final selectableCampaigns = selectableCampaignsData.map((apiCampaign) {
+      return Campaign.fromApiModel(apiCampaign);
+    }).toList();
+
     _campaignLastFetchTime = DateTime.now();
-    _campaigns = campaigns;
+    _userCampaigns = userCampaigns;
+    _selectableCampaigns = selectableCampaigns;
   }
 
-  Future<List<Campaign>> getCampaigns({bool forceRefresh = false}) async {
+  Future<List<Campaign>> getCampaigns({
+    required CampaignsActions action,
+    bool forceRefresh = false,
+  }) async {
     bool shouldRefreshFromApi =
-        _shouldRefreshFromApi(_campaignLastFetchTime, forceRefresh) || _campaigns.isEmpty;
+        _shouldRefreshFromApi(_campaignLastFetchTime, forceRefresh) || _userCampaigns.isEmpty;
 
     if (shouldRefreshFromApi) {
       await refreshAllCampaigns();
     }
-    return _campaigns;
+    if (action == CampaignsActions.listUserCampaigns) {
+      return _userCampaigns;
+    } else {
+      return _selectableCampaigns;
+    }
   }
 
-  Future<void> refreshAllTasks() async {
-    final data = await _gigaTurnipApiClient.getTasks();
-    final tasks = data.results.map((apiTask) {
+  Future<void> refreshAllTasks(Campaign selectedCampaign) async {
+    final openedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
+      'complete': false,
+      'stage__chain__campaign': selectedCampaign.id,
+    });
+    final openedTasks = openedTasksData.map((apiTask) {
       return Task.fromApiModel(apiTask);
     }).toList();
+
+    final closedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
+      'complete': true,
+      'stage__chain__campaign': selectedCampaign.id,
+    });
+    final closedTasks = closedTasksData.map((apiTask) {
+      return Task.fromApiModel(apiTask);
+    }).toList();
+
     _tasksLastFetchTime = DateTime.now();
-    _tasks = tasks;
+    _openedTasks = openedTasks;
+    _closedTasks = closedTasks;
   }
 
-  Future<List<Task>> getTasks({bool forceRefresh = false}) async {
+  Future<List<Task>> getTasks({
+    required TasksActions action,
+    required Campaign selectedCampaign,
+    bool forceRefresh = false,
+  }) async {
     bool shouldRefreshFromApi =
-        _shouldRefreshFromApi(_tasksLastFetchTime, forceRefresh) || _tasks.isEmpty;
+        _shouldRefreshFromApi(_tasksLastFetchTime, forceRefresh) || _openedTasks.isEmpty;
 
     if (shouldRefreshFromApi) {
-      await refreshAllTasks();
+      await refreshAllTasks(selectedCampaign);
     }
-    return _tasks;
+    return _openedTasks;
   }
 }
 

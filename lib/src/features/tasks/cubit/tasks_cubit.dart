@@ -14,10 +14,22 @@ class TasksCubit extends Cubit<TasksState> {
     required this.authenticationRepository,
   }) : super(const TasksState());
 
-  void loadTasks() async {
+  void loadTasks(Campaign? selectedCampaign, [bool forceRefresh = false]) async {
     emit(state.copyWith(status: TasksStatus.loading));
+    if (selectedCampaign == null) {
+      emit(state.copyWith(
+        status: TasksStatus.error,
+        errorMessage: "Campaign wasn't selected. Can't load tasks.",
+        tasks: [],
+      ));
+      return;
+    }
     try {
-      final tasks = await gigaTurnipRepository.getTasks();
+      final tasks = await gigaTurnipRepository.getTasks(
+        action: TasksActions.listOpenTasks,
+        selectedCampaign: selectedCampaign,
+        forceRefresh: forceRefresh,
+      );
       emit(state.copyWith(tasks: tasks, status: TasksStatus.initialized));
     } on GigaTurnipApiRequestException catch (e) {
       emit(state.copyWith(
@@ -25,8 +37,7 @@ class TasksCubit extends Cubit<TasksState> {
         errorMessage: e.message,
         tasks: [],
       ));
-    }
-    catch (e) {
+    } catch (e) {
       emit(state.copyWith(
         status: TasksStatus.error,
         errorMessage: 'Failed to load tasks',
@@ -34,5 +45,4 @@ class TasksCubit extends Cubit<TasksState> {
       ));
     }
   }
-
 }

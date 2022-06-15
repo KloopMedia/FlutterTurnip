@@ -15,7 +15,8 @@ class TasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TasksCubit>().loadTasks();
+    final selectedCampaign = context.read<AppBloc>().state.selectedCampaign;
+    context.read<TasksCubit>().loadTasks(selectedCampaign);
     return BlocConsumer<TasksCubit, TasksState>(
       listener: (context, state) {
         if (state.status == TasksStatus.error) {
@@ -30,7 +31,7 @@ class TasksView extends StatelessWidget {
         }
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<TasksCubit>().loadTasks();
+            context.read<TasksCubit>().loadTasks(selectedCampaign, true);
           },
           child: ListView.builder(
             shrinkWrap: true,

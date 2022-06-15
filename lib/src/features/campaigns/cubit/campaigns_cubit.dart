@@ -18,7 +18,9 @@ class CampaignsCubit extends Cubit<CampaignsState> {
   void loadCampaigns() async {
     emit(state.copyWith(status: CampaignsStatus.loading));
     try {
-      final campaigns = await gigaTurnipRepository.getCampaigns();
+      final campaigns = await gigaTurnipRepository.getCampaigns(
+        action: CampaignsActions.listUserCampaigns,
+      );
       emit(state.copyWith(campaigns: campaigns, status: CampaignsStatus.initialized));
     } on GigaTurnipApiRequestException catch (e) {
       emit(state.copyWith(
@@ -26,8 +28,7 @@ class CampaignsCubit extends Cubit<CampaignsState> {
         errorMessage: e.message,
         campaigns: [],
       ));
-    }
-    catch (e) {
+    } catch (e) {
       emit(state.copyWith(
         status: CampaignsStatus.error,
         errorMessage: 'Failed to load campaigns',

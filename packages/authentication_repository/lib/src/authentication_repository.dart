@@ -71,6 +71,7 @@ class AuthenticationRepository {
         _googleSignIn.signOut(),
       ]);
     } catch (_) {
+      // TODO: Fix googleSignIn log out error
       throw LogOutFailure();
     }
   }
