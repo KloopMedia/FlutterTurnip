@@ -5,7 +5,7 @@ const selectableCampaignsRoute = '$campaignsRoute/list_user_selectable';
 
 // TaskStages routes
 const taskStagesRoute = '/api/v1/taskstages';
-const userRelevantTaskStageRoute = '$campaignsRoute/user_relevant';
+const userRelevantTaskStageRoute = '$taskStagesRoute/user_relevant';
 
 // Tasks routes
 const tasksRoute = '/api/v1/tasks';
