@@ -82,7 +82,6 @@ class GigaTurnipRepository {
 
     _userRelevantTaskStagesLastFetchTime = DateTime.now();
     _userRelevantTaskStages = userRelevantTaskStages;
-    print(userRelevantTaskStages);
   }
 
   Future<List<TaskStage>> getUserRelevantTaskStages({
