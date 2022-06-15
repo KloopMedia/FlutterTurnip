@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Stage, Chain;
+import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Chain, TaskStage;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
@@ -15,10 +15,12 @@ class GigaTurnipRepository {
   List<Campaign> _selectableCampaigns = [];
   List<Task> _openedTasks = [];
   List<Task> _closedTasks = [];
+  List<TaskStage> _userRelevantTaskStages = [];
 
   final Duration _cacheValidDuration = const Duration(minutes: 30);
   DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _tasksLastFetchTime = DateTime.fromMicrosecondsSinceEpoch(0);
+  DateTime _userRelevantTaskStagesLastFetchTime = DateTime.fromMicrosecondsSinceEpoch(0);
 
   GigaTurnipRepository({
     AuthenticationRepository? authenticationRepository,
@@ -68,19 +70,52 @@ class GigaTurnipRepository {
     }
   }
 
+  Future<void> refreshUserRelevantTaskStages(Campaign selectedCampaign) async {
+    final userRelevantTaskStageData = await _gigaTurnipApiClient.getUserRelevantTaskStages(
+      query: {
+        'chain__campaign': selectedCampaign.id,
+      },
+    );
+    final userRelevantTaskStages = userRelevantTaskStageData.map((apiTaskStage) {
+      return TaskStage.fromApiModel(apiTaskStage);
+    }).toList();
+
+    _userRelevantTaskStagesLastFetchTime = DateTime.now();
+    _userRelevantTaskStages = userRelevantTaskStages;
+    print(userRelevantTaskStages);
+  }
+
+  Future<List<TaskStage>> getUserRelevantTaskStages({
+    required Campaign selectedCampaign,
+    bool forceRefresh = false,
+  }) async {
+    bool shouldRefreshFromApi =
+        _shouldRefreshFromApi(_userRelevantTaskStagesLastFetchTime, forceRefresh) ||
+            _userRelevantTaskStages.isEmpty;
+
+    if (shouldRefreshFromApi) {
+      await refreshUserRelevantTaskStages(selectedCampaign);
+    }
+    return _userRelevantTaskStages;
+  }
+
   Future<void> refreshAllTasks(Campaign selectedCampaign) async {
-    final openedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
-      'complete': false,
-      'stage__chain__campaign': selectedCampaign.id,
-    });
+    final openedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
+      query: {
+        'complete': false,
+        'stage__chain__campaign': selectedCampaign.id,
+      },
+    );
     final openedTasks = openedTasksData.map((apiTask) {
       return Task.fromApiModel(apiTask);
     }).toList();
 
-    final closedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
-      'complete': true,
-      'stage__chain__campaign': selectedCampaign.id,
-    });
+    final closedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
+      query: {
+        'complete': true,
+        'stage__chain__campaign': selectedCampaign.id,
+      },
+    );
     final closedTasks = closedTasksData.map((apiTask) {
       return Task.fromApiModel(apiTask);
     }).toList();
