@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/src/models/models.dart';
 
@@ -7,32 +9,41 @@ part 'task_stage.g.dart';
 class TaskStage {
   final int id;
   final String name;
-  final List<Chain> chain;
+  final String description;
+  final Chain chain;
   final List<int> inStages;
   final List<int> outStages;
-  final int xPos;
-  final int yPos;
-  final List<String> jsonSchema;
-  final List<String> uiSchema;
-  final String library;
+  @JsonKey(fromJson: _stringToDouble, toJson: _stringFromDouble)
+  final double xPos;
+  @JsonKey(fromJson: _stringToDouble, toJson: _stringFromDouble)
+  final double yPos;
+  @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
+  final Map<String, dynamic> jsonSchema;
+  @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
+  final Map<String, dynamic> uiSchema;
+  final String? library;
   final bool copyInput;
   final bool allowMultipleFiles;
   final bool isCreatable;
   final List<int> displayedPrevStages;
-  final String assignUserBy;
-  final String richText;
-  final String webhookAddress;
-  final String webhookPlayloadFields;
-  final String webhookParams;
+  final String? assignUserBy;
+  final int? assignUserFromStage;
+  final List<int> ranks;
+  final String? richText;
+  final String? webhookAddress;
+  final String? webhookPlayloadField;
+  final String? webhookParams;
   final List<dynamic> dynamicJsons;
-  final String webhookResponseField;
+  final String? webhookResponseField;
   final bool allowGoBack;
   final bool allowRelease;
+  final Map<String, dynamic>? externalMetadata;
 
 
   TaskStage({
     required this.id,
     required this.name,
+    required this.description,
     required this.chain,
     required this.inStages,
     required this.outStages,
@@ -46,18 +57,32 @@ class TaskStage {
     required this.isCreatable,
     required this.displayedPrevStages,
     required this.assignUserBy,
+    required this.assignUserFromStage,
+    required this.ranks,
     required this.richText,
     required this.webhookAddress,
-    required this.webhookPlayloadFields,
+    required this.webhookPlayloadField,
     required this.webhookParams,
     required this.dynamicJsons,
     required this.webhookResponseField,
     required this.allowGoBack,
-    required this.allowRelease
+    required this.allowRelease,
+    required this.externalMetadata,
   });
-
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
     return _$TaskStageFromJson(json);
   }
+
+  static double _stringToDouble(String number) => double.parse(number);
+  static String _stringFromDouble(double number) => number.toString();
+
+  static Map<String, dynamic> _stringToMap(String? json) {
+    try {
+      return json != null ? jsonDecode(json) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+  static String _stringFromMap(Map<String, dynamic> json) => jsonEncode(json);
 }
