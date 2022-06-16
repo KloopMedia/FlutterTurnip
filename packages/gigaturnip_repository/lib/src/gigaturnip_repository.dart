@@ -119,6 +119,8 @@ class GigaTurnipRepository {
       return Task.fromApiModel(apiTask);
     }).toList();
 
+    // TODO: Add available tasks action
+
     _tasksLastFetchTime = DateTime.now();
     _openedTasks = openedTasks;
     _closedTasks = closedTasks;
@@ -135,7 +137,14 @@ class GigaTurnipRepository {
     if (shouldRefreshFromApi) {
       await refreshAllTasks(selectedCampaign);
     }
-    return _openedTasks;
+
+    // TODO: Add available tasks action
+    switch (action) {
+      case TasksActions.listOpenTasks:
+        return _openedTasks;
+      case TasksActions.listClosedTasks:
+        return _closedTasks;
+    }
   }
 }
 

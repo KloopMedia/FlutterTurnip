@@ -13,24 +13,13 @@ class TasksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tasks'),
-        actions: <Widget>[
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
-        ],
+    return BlocProvider<TasksCubit>(
+      create: (context) => TasksCubit(
+        selectedCampaign: context.read<AppBloc>().state.selectedCampaign!,
+        gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+        authenticationRepository: context.read<AuthenticationRepository>(),
       ),
-      body: BlocProvider<TasksCubit>(
-        create: (context) => TasksCubit(
-          gigaTurnipRepository: context.read<GigaTurnipRepository>(),
-          authenticationRepository: context.read<AuthenticationRepository>(),
-        ),
-        child: const TasksView(),
-      ),
+      child: const TasksView(),
     );
   }
 }
