@@ -1,6 +1,3 @@
-
-import 'package:flutter/material.dart';
-import 'package:gigaturnip_api/src/models/case.dart';
 import 'package:gigaturnip_api/src/models/models.dart';
 import 'package:json_annotation/json_annotation.dart';
 
