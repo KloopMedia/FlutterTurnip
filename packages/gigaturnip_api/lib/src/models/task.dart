@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:gigaturnip_api/src/models/case.dart';
 import 'package:gigaturnip_api/src/models/models.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,8 +11,8 @@ class Task {
   final int id;
   final Map<String, dynamic>? responses;
   final bool complete;
-  final bool forceComplete;
-  final bool reopened;
+  final bool? forceComplete;
+  final bool? reopened;
   final TaskStage stage;
   final Case? case_;
   final int? assignee;

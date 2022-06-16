@@ -6,7 +6,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
 
-enum TasksActions { listOpenTasks, listClosedTasks }
+enum TasksActions { listOpenTasks, listClosedTasks, listSelectableTasks }
 
 class GigaTurnipRepository {
   late final GigaTurnipApiClient _gigaTurnipApiClient;
@@ -16,6 +16,7 @@ class GigaTurnipRepository {
   List<Task> _openedTasks = [];
   List<Task> _closedTasks = [];
   List<TaskStage> _userRelevantTaskStages = [];
+  List<Task> _availableTasks = [];
 
   final Duration _cacheValidDuration = const Duration(minutes: 30);
   DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
@@ -119,11 +120,19 @@ class GigaTurnipRepository {
       return Task.fromApiModel(apiTask);
     }).toList();
 
-    // TODO: Add available tasks action
+    final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
+      query: {
+        'stage__chain__campaign': selectedCampaign.id,
+      },
+    );
+    final availableTasks = availableTasksData.results.map((apiTask) {
+      return Task.fromApiModel(apiTask);
+    }).toList();
 
     _tasksLastFetchTime = DateTime.now();
     _openedTasks = openedTasks;
     _closedTasks = closedTasks;
+    _availableTasks = availableTasks;
   }
 
   Future<List<Task>> getTasks({
@@ -137,13 +146,14 @@ class GigaTurnipRepository {
     if (shouldRefreshFromApi) {
       await refreshAllTasks(selectedCampaign);
     }
-
-    // TODO: Add available tasks action
+    
     switch (action) {
       case TasksActions.listOpenTasks:
         return _openedTasks;
       case TasksActions.listClosedTasks:
         return _closedTasks;
+      case TasksActions.listSelectableTasks:
+        return _availableTasks;
     }
   }
 }

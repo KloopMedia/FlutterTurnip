@@ -33,7 +33,7 @@ class Task extends Equatable {
       name: model.stage.name,
       responses: model.responses,
       complete: model.complete,
-      reopened: model.reopened,
+      reopened: model.reopened ?? false,
       stage: TaskStage.fromApiModel(model.stage),
     );
   }

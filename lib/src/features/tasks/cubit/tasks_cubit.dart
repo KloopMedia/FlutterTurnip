@@ -38,7 +38,11 @@ class TasksCubit extends Cubit<TasksState> {
           );
           break;
         case Tabs.availableTasksTab:
-          tasks = [];
+          tasks = await gigaTurnipRepository.getTasks(
+            action: TasksActions.listSelectableTasks,
+            selectedCampaign: selectedCampaign,
+            forceRefresh: forceRefresh,
+          );
           break;
         default:
           throw Exception('Unknown tab was selected');
