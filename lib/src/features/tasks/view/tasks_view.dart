@@ -6,8 +6,19 @@ import 'package:gigaturnip/src/features/tasks/view/tasks_bottom_navigation_bar.d
 import 'package:gigaturnip/src/features/tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 
-class TasksView extends StatelessWidget {
+class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
+
+  @override
+  State<TasksView> createState() => _TasksViewState();
+}
+
+class _TasksViewState extends State<TasksView> {
+  @override
+  initState() {
+    context.read<TasksCubit>().loadTasks();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +49,14 @@ class TasksView extends StatelessWidget {
             );
           }
           return TasksListView(
-              tasks: state.tasks,
-              onRefresh: () {
-                context.read<TasksCubit>().loadTasks(forceRefresh: true);
-              },
-              onTap: (task) {
-                context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                Navigator.of(context).pushNamed(createOrUpdateTaskRoute);
-              },
+            tasks: state.tasks,
+            onRefresh: () {
+              context.read<TasksCubit>().loadTasks(forceRefresh: true);
+            },
+            onTap: (task) {
+              context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+              Navigator.of(context).pushNamed(createOrUpdateTaskRoute);
+            },
           );
         },
       ),
