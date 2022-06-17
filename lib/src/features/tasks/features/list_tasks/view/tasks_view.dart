@@ -18,7 +18,7 @@ class TasksView extends StatefulWidget {
 class _TasksViewState extends State<TasksView> {
   @override
   initState() {
-    context.read<TasksCubit>().loadTasks();
+    context.read<TasksCubit>().initialize();
     super.initState();
   }
 
@@ -59,7 +59,7 @@ class _TasksViewState extends State<TasksView> {
           return GenericListView<Task>(
             items: state.tasks,
             onRefresh: () {
-              context.read<TasksCubit>().loadTasks(forceRefresh: true);
+              context.read<TasksCubit>().refresh();
             },
             onTap: (task) {
               context.read<AppBloc>().add(AppSelectedTaskChanged(task));
