@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
 import 'package:gigaturnip/src/features/tasks/view/tasks_bottom_navigation_bar.dart';
-import 'package:gigaturnip/src/features/tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import 'package:gigaturnip/src/widgets/lists/generic_list_view.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -48,8 +49,8 @@ class _TasksViewState extends State<TasksView> {
               child: CircularProgressIndicator(),
             );
           }
-          return TasksListView(
-            tasks: state.tasks,
+          return GenericListView<Task>(
+            items: state.tasks,
             onRefresh: () {
               context.read<TasksCubit>().loadTasks(forceRefresh: true);
             },

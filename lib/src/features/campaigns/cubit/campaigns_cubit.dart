@@ -15,11 +15,12 @@ class CampaignsCubit extends Cubit<CampaignsState> {
     required this.authenticationRepository,
   }) : super(const CampaignsState());
 
-  void loadCampaigns() async {
+  void loadCampaigns({bool forceRefresh = false}) async {
     emit(state.copyWith(status: CampaignsStatus.loading));
     try {
       final campaigns = await gigaTurnipRepository.getCampaigns(
-        action: CampaignsActions.listUserCampaigns,
+          action: CampaignsActions.listUserCampaigns,
+          forceRefresh: forceRefresh,
       );
       emit(state.copyWith(campaigns: campaigns, status: CampaignsStatus.initialized));
     } on GigaTurnipApiRequestException catch (e) {
