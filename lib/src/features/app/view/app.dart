@@ -5,7 +5,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/authentication/authentication.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
 import 'package:gigaturnip/src/features/home/home.dart';
-import 'package:gigaturnip/src/features/tasks/view/tasks_page.dart';
+import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class App extends StatelessWidget {
@@ -48,7 +48,8 @@ class App extends StatelessWidget {
           routes: {
             campaignsRoute: (context) => const CampaignsPage(),
             tasksRoute: (context) => const TasksPage(),
-            createOrUpdateTaskRoute: (context) => const HomePage(),
+            createTasksRoute: (context) => const CreateTasksPage(),
+            taskInstanceRoute: (context) => const HomePage(),
           },
         ),
       ),

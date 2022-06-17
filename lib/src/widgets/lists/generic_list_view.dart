@@ -46,6 +46,16 @@ class GenericListView<T> extends StatelessWidget {
                 onTap(item);
               },
             );
+          } else if (item is TaskStage) {
+            return ListTile(
+              title: Text(
+                item.name,
+                textAlign: TextAlign.center,
+              ),
+              onTap: () {
+                onTap(item);
+              },
+            );
           } else {
             throw Exception('Unknown class $T');
           }

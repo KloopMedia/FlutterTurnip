@@ -1,12 +1,5 @@
 part of 'tasks_cubit.dart';
 
-enum TasksStatus {
-  uninitialized,
-  loading,
-  initialized,
-  error,
-}
-
 enum Tabs {
   openTasksTab,
   closedTasksTab,

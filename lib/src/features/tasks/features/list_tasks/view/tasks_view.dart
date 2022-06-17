@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
-import 'package:gigaturnip/src/features/tasks/view/tasks_bottom_navigation_bar.dart';
+import 'package:gigaturnip/src/features/tasks/constants/status.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/lists/generic_list_view.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -27,6 +28,12 @@ class _TasksViewState extends State<TasksView> {
       appBar: AppBar(
         title: const Text('Tasks'),
         actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(createTasksRoute);
+            },
+            icon: const Icon(Icons.add),
+          ),
           IconButton(
             key: const Key('homePage_logout_iconButton'),
             icon: const Icon(Icons.exit_to_app),
@@ -56,7 +63,7 @@ class _TasksViewState extends State<TasksView> {
             },
             onTap: (task) {
               context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-              Navigator.of(context).pushNamed(createOrUpdateTaskRoute);
+              Navigator.of(context).pushNamed(createTasksRoute);
             },
           );
         },
