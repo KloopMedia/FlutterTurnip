@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -42,7 +41,7 @@ class CreateTasksCubit extends Cubit<CreateTasksState> {
 
   void initialize() async {
     emit(state.copyWith(status: TasksStatus.loading));
-    final taskStages = await fetchData();
+    final taskStages = await fetchData(forceRefresh: true);
     emit(state.copyWith(status: TasksStatus.initialized, taskStages: taskStages));
   }
 
