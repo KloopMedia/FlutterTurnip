@@ -18,7 +18,8 @@ class TitleCard extends StatelessWidget {
       height: 120,
       child: Card(
         elevation: 3,
-        color: Theme.of(context).colorScheme.secondary,
+        margin: const EdgeInsets.all(8),
+        color: Colors.grey[300],
         child: TextButton(
             style: TextButton.styleFrom(
               primary: Colors.black,
@@ -28,10 +29,7 @@ class TitleCard extends StatelessWidget {
             },
             child: Text(
               title,
-              style: const TextStyle(
-                fontSize: 25,
-                fontFamily: 'RaleWay',
-              ),
+              style: const TextStyle(fontSize: 25),
             )),
       ),
     );

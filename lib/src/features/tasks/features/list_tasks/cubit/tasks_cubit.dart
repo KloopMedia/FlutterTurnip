@@ -17,7 +17,6 @@ class TasksCubit extends Cubit<TasksState> {
     required this.selectedCampaign,
   }) : super(const TasksState());
 
-
   void initialize() async {
     emit(state.copyWith(status: TasksStatus.loading));
     final data = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
@@ -73,7 +72,6 @@ class TasksCubit extends Cubit<TasksState> {
     return null;
   }
 
-
   TasksActions _getActionFromTab(Tabs tab) {
     switch (tab) {
       case Tabs.openTasksTab:
@@ -86,7 +84,7 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Tabs _getTabFromIndex(int index) {
-    switch(index) {
+    switch (index) {
       case 0:
         return Tabs.openTasksTab;
       case 1:

@@ -4,9 +4,8 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
-import 'package:gigaturnip/src/widgets/lists/generic_list_view.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -56,7 +55,7 @@ class _TasksViewState extends State<TasksView> {
               child: CircularProgressIndicator(),
             );
           }
-          return GenericListView<Task>(
+          return TasksListView(
             items: state.tasks,
             onRefresh: () {
               context.read<TasksCubit>().refresh();

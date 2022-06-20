@@ -48,6 +48,7 @@ dependencies:
     path: packages/gigaturnip_repository
   flow_builder: ^0.0.9
   font_awesome_flutter: ^10.1.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

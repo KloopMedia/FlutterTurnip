@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/widgets/cards/title_card.dart';
+import 'package:gigaturnip/src/widgets/cards/id_title_card.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-typedef ItemCallback = void Function(Campaign item);
+typedef ItemCallback = void Function(Task item);
 typedef RefreshCallback = void Function();
 
-class CampaignsListView extends StatelessWidget {
+class TasksListView extends StatelessWidget {
   final ItemCallback onTap;
   final RefreshCallback onRefresh;
-  final List<Campaign> items;
+  final List<Task> items;
 
-  const CampaignsListView({
+  const TasksListView({
     Key? key,
     required this.onTap,
     required this.onRefresh,
@@ -29,8 +29,10 @@ class CampaignsListView extends StatelessWidget {
           var item = items[index];
           return Padding(
             padding: const EdgeInsets.all(4.0),
-            child: TitleCard(
+            child: IdTitleCard(
+              id: item.id,
               title: item.name,
+              date: item.createdAt,
               onTap: () {
                 onTap(item);
               },
