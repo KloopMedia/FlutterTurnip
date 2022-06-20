@@ -13,6 +13,7 @@ class Task extends Equatable {
   final bool complete;
   final bool reopened;
   final TaskStage stage;
+  final DateTime? createdAt;
 
   const Task({
     required this.id,
@@ -21,6 +22,7 @@ class Task extends Equatable {
     required this.complete,
     required this.reopened,
     required this.stage,
+    required this.createdAt,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class Task extends Equatable {
       responses: model.responses,
       complete: model.complete,
       reopened: model.reopened ?? false,
+      createdAt: model.createdAt,
       stage: TaskStage.fromApiModel(model.stage),
     );
   }

@@ -28,11 +28,17 @@ Task _$TaskFromJson(Map<String, dynamic> json) => $checkedCreate(
                   v == null ? null : Case.fromJson(v as Map<String, dynamic>)),
           inTasks: $checkedConvert('in_tasks',
               (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          createdAt: $checkedConvert('created_at',
+              (v) => v == null ? null : DateTime.parse(v as String)),
+          updatedAt: $checkedConvert('updated_at',
+              (v) => v == null ? null : DateTime.parse(v as String)),
         );
         return val;
       },
       fieldKeyMap: const {
         'forceComplete': 'force_complete',
-        'inTasks': 'in_tasks'
+        'inTasks': 'in_tasks',
+        'createdAt': 'created_at',
+        'updatedAt': 'updated_at'
       },
     );

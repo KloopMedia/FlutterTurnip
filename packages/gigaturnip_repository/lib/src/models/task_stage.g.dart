@@ -6,14 +6,14 @@ part of 'task_stage.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TaskStage _$StageFromJson(Map<String, dynamic> json) => TaskStage(
+TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
       id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String,
       chain: Chain.fromJson(json['chain'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$StageToJson(TaskStage instance) => <String, dynamic>{
+Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
