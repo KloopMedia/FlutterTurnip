@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -73,9 +74,14 @@ class AppDrawer extends StatelessWidget {
               margin: const EdgeInsets.all(5),
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  context.read<AppBloc>().add(AppLogoutRequested());
-                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                onPressed: () async {
+                  final bloc = context.read<AppBloc>();
+                  final navigator = Navigator.of(context);
+                  final shouldLogout = await showLogOutDialog(context);
+                  if (shouldLogout) {
+                    bloc.add(AppLogoutRequested());
+                    navigator.popUntil(ModalRoute.withName('/'));
+                  }
                 },
                 child: const Text('LOG OUT'),
               ),
