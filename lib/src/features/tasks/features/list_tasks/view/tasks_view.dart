@@ -27,6 +27,12 @@ class _TasksViewState extends State<TasksView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tasks'),
+        leading: BackButton(
+          onPressed: () {
+            context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
+            Navigator.maybePop(context);
+          },
+        ),
         actions: <Widget>[
           IconButton(
             onPressed: () {
