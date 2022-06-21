@@ -75,6 +75,7 @@ class AppDrawer extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   context.read<AppBloc>().add(AppLogoutRequested());
+                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
                 },
                 child: const Text('LOG OUT'),
               ),

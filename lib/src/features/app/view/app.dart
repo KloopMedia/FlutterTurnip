@@ -40,13 +40,13 @@ class App extends StatelessWidget {
             builder: (context, state) {
               if (state.user != null) {
                 return const CampaignsPage();
-              } else {
+              }
+              else {
                 return const LoginPage();
               }
             },
           ),
           routes: {
-            campaignsRoute: (context) => const CampaignsPage(),
             tasksRoute: (context) => const TasksPage(),
             createTasksRoute: (context) => const CreateTasksPage(),
             taskInstanceRoute: (context) => const HomePage(),
