@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.da
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -33,11 +34,17 @@ class _TasksViewState extends State<TasksView> {
             },
             icon: const Icon(Icons.add),
           ),
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
+          Builder(builder: (context) {
+            final avatar = context.read<AppBloc>().state.user!.photo;
+            return IconButton(
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              icon: avatar != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(avatar),
+                    )
+                  : const Icon(Icons.person),
+            );
+          })
         ],
       ),
       body: BlocConsumer<TasksCubit, TasksState>(
@@ -67,6 +74,7 @@ class _TasksViewState extends State<TasksView> {
           );
         },
       ),
+      endDrawer: const AppDrawer(),
       bottomNavigationBar: BlocBuilder<TasksCubit, TasksState>(
         builder: (context, state) {
           return TasksBottomNavigationBar(
