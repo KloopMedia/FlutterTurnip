@@ -39,6 +39,10 @@ class App extends StatelessWidget {
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
         child: MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.red,
+          ),
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           home: BlocBuilder<AppBloc, AppState>(
