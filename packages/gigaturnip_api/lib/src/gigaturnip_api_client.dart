@@ -5,6 +5,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
   static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
+  // static const baseUrl = 'http://127.0.0.1:8000';
 
   final Dio _httpClient;
 
@@ -89,17 +90,17 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<List<Task>> getUserSelectableTasks({Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Task>> getUserSelectableTasks({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(
         selectableTasksRoute,
         queryParameters: query,
       );
-      List<Task> list = (response.data as List)
-          .map((json) => Task.fromJson(json as Map<String, dynamic>))
-          .toList();
 
-      return list;
+      return PaginationWrapper.fromJson(
+        response.data,
+            (json) => Task.fromJson(json as Map<String, dynamic>),
+      );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {

@@ -20,7 +20,7 @@ class TaskStage extends Equatable {
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
-    return _$StageFromJson(json);
+    return _$TaskStageFromJson(json);
   }
 
   factory TaskStage.fromApiModel(api.TaskStage model) {

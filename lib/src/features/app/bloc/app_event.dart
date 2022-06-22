@@ -14,7 +14,6 @@ class AppLoginRequested extends AppEvent {}
 class AppUserChanged extends AppEvent {
   final AuthUser user;
 
-  @visibleForTesting
   const AppUserChanged(this.user);
 
   @override
@@ -22,13 +21,13 @@ class AppUserChanged extends AppEvent {
 }
 
 class AppSelectedCampaignChanged extends AppEvent {
-  final Campaign campaign;
+  final Campaign? campaign;
 
   const AppSelectedCampaignChanged(this.campaign);
 }
 
 class AppSelectedTaskChanged extends AppEvent {
-  final Task task;
+  final Task? task;
 
   const AppSelectedTaskChanged(this.task);
 }
