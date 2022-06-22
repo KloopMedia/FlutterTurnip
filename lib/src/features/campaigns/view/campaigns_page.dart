@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class CampaignsPage extends StatelessWidget {
   const CampaignsPage({Key? key}) : super(key: key);
@@ -14,10 +15,10 @@ class CampaignsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Campaigns'),
+        title: Text(context.loc.campaigns),
         actions: <Widget>[
           IconButton(
-            key: const Key('homePage_logout_iconButton'),
+            key: Key(context.loc.homePage_logout_iconButton),
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
           )

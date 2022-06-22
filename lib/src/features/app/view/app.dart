@@ -7,6 +7,9 @@ import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
 import 'package:gigaturnip/src/features/home/home.dart';
 import 'package:gigaturnip/src/features/tasks/view/tasks_page.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip/src/features/app/routes/routes.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class App extends StatelessWidget {
   const App({
@@ -36,6 +39,8 @@ class App extends StatelessWidget {
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
         child: MaterialApp(
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
           home: BlocBuilder<AppBloc, AppState>(
             builder: (context, state) {
               if (state.user != null) {

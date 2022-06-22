@@ -5,6 +5,8 @@ import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
 import 'package:gigaturnip/src/features/tasks/view/tasks_bottom_navigation_bar.dart';
 import 'package:gigaturnip/src/features/tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+
 
 class TasksView extends StatelessWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -13,10 +15,10 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tasks'),
+        title: Text(context.loc.tasks),
         actions: <Widget>[
           IconButton(
-            key: const Key('homePage_logout_iconButton'),
+            key: Key(context.loc.homePage_logout_iconButton),
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
           )
@@ -27,7 +29,7 @@ class TasksView extends StatelessWidget {
           if (state.status == TasksStatus.error) {
             showErrorDialog(
               context,
-              state.errorMessage ?? 'An error occurred while fetching tasks',
+              state.errorMessage ?? context.loc.fetching_error_tasks,
             );
           }
         },

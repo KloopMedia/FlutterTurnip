@@ -1,0 +1,18 @@
+{
+    "login" : "Login",
+    "home" : "Home",
+    "tasks" : "Tasks",
+    "campaigns" : "Campaigns",
+    "homePage_logout_iconButton" : "HomePage Logout IconButton",
+    "error_occurred" : "An error occurred",
+
+    "ok" : "Ok",
+    "open" : "Open",
+    "closed" : "Closed",
+    "available" : "Available",
+
+    "sign_in" : "SIGN IN WITH GOOGLE",
+    "failed_to_load_campaigns" : "Failed to load campaigns",
+    "fetching_error" : "Error occurred while fetching campaigns",
+    "fetching_error_tasks" : "An error occurred while fetching tasks"
+}
