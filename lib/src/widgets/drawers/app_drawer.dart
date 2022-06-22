@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.blue,
+      color: Colors.blue, // TODO: Replace to global theme color
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Column(
         children: [

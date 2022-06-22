@@ -42,7 +42,7 @@ class IdTitleCard extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(child: Text('#$id')),
-                    Text(DateFormat.yMd().add_jm().format(date!)),
+                    if (date != null) Text(DateFormat.yMd().add_jm().format(date!)),
                   ],
                 )
               ],
