@@ -74,8 +74,9 @@ class _TasksViewState extends State<TasksView> {
               context.read<TasksCubit>().refresh();
             },
             onTap: (task) {
+              print(task);
               context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-              Navigator.of(context).pushNamed(createTasksRoute);
+              Navigator.of(context).pushNamed(taskInstanceRoute);
             },
           );
         },

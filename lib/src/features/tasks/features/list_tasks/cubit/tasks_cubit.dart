@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
@@ -7,13 +6,11 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 part 'tasks_state.dart';
 
 class TasksCubit extends Cubit<TasksState> {
-  final AuthenticationRepository authenticationRepository;
   final GigaTurnipRepository gigaTurnipRepository;
   final Campaign selectedCampaign;
 
   TasksCubit({
     required this.gigaTurnipRepository,
-    required this.authenticationRepository,
     required this.selectedCampaign,
   }) : super(const TasksState());
 

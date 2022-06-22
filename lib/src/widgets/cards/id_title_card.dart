@@ -25,6 +25,7 @@ class IdTitleCard extends StatelessWidget {
         color: Colors.grey[300],
         margin: const EdgeInsets.all(8.0),
         child: InkWell(
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

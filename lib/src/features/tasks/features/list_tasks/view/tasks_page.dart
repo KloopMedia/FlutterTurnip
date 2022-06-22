@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
@@ -17,7 +16,6 @@ class TasksPage extends StatelessWidget {
       create: (context) => TasksCubit(
         selectedCampaign: context.read<AppBloc>().state.selectedCampaign!,
         gigaTurnipRepository: context.read<GigaTurnipRepository>(),
-        authenticationRepository: context.read<AuthenticationRepository>(),
       ),
       child: const TasksView(),
     );
