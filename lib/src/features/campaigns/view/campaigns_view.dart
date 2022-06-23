@@ -4,11 +4,8 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
-<<<<<<< HEAD
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-=======
->>>>>>> b115fdf1b50bfe865e3097a436537459f3ae0b57
 
 class CampaignsView extends StatefulWidget {
   const CampaignsView({Key? key}) : super(key: key);

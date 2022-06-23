@@ -18,13 +18,11 @@ class CampaignsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.loc.campaigns),
         actions: <Widget>[
-<<<<<<< HEAD
           IconButton(
             key: Key(context.loc.homePage_logout_iconButton),
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
-=======
+          ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;
             return IconButton(
@@ -36,7 +34,6 @@ class CampaignsPage extends StatelessWidget {
                   : const Icon(Icons.person),
             );
           })
->>>>>>> b115fdf1b50bfe865e3097a436537459f3ae0b57
         ],
       ),
       body: BlocProvider<CampaignsCubit>(

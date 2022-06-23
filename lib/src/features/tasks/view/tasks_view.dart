@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/features/tasks/cubit/tasks_cubit.dart';
-import 'package:gigaturnip/src/features/tasks/view/tasks_bottom_navigation_bar.dart';
-import 'package:gigaturnip/src/features/tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/tasks_cubit.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/tasks_bottom_navigation_bar.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/tasks_list_view.dart';
+
+
 
 
 class TasksView extends StatelessWidget {
