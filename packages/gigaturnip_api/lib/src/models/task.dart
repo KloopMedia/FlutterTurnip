@@ -1,5 +1,3 @@
-
-import 'package:gigaturnip_api/src/models/case.dart';
 import 'package:gigaturnip_api/src/models/models.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,12 +8,14 @@ class Task {
   final int id;
   final Map<String, dynamic>? responses;
   final bool complete;
-  final bool forceComplete;
-  final bool reopened;
+  final bool? forceComplete;
+  final bool? reopened;
   final TaskStage stage;
   final Case? case_;
   final int? assignee;
   final List<int> inTasks;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const Task({
     required this.id,
@@ -27,6 +27,8 @@ class Task {
     required this.assignee,
     required this.case_,
     required this.inTasks,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
