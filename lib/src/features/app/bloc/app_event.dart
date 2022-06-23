@@ -20,6 +20,12 @@ class AppUserChanged extends AppEvent {
   List<Object> get props => [user];
 }
 
+class AppLocaleChanged extends AppEvent {
+  final AppLocales locale;
+
+  const AppLocaleChanged(this.locale);
+}
+
 class AppSelectedCampaignChanged extends AppEvent {
   final Campaign? campaign;
 

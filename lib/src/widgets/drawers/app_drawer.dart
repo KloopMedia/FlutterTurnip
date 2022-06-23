@@ -65,30 +65,64 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget buildBody(BuildContext context) {
-    return Expanded(
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.all(5),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  final bloc = context.read<AppBloc>();
-                  final navigator = Navigator.of(context);
-                  final shouldLogout = await showLogOutDialog(context);
-                  if (shouldLogout) {
-                    bloc.add(AppLogoutRequested());
-                    navigator.popUntil(ModalRoute.withName('/'));
-                  }
-                },
-                child: const Text('LOG OUT'),
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (context, state) {
+        final bloc = context.read<AppBloc>();
+        final navigator = Navigator.of(context);
+        return Expanded(
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: DropdownButtonFormField<AppLocales>(
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.language),
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                  ),
+                  value: state.appLocale,
+                  onChanged: (AppLocales? locale) {
+                    if (locale != null) {
+                      bloc.add(AppLocaleChanged(locale));
+                    }
+                  },
+                  items: const [
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.system,
+                      child: Text('System'),
+                    ),
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.english,
+                      child: Text('English'),
+                    ),
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.russian,
+                      child: Text('Russian'),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: const EdgeInsets.all(5),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final shouldLogout = await showLogOutDialog(context);
+                      if (shouldLogout) {
+                        bloc.add(AppLogoutRequested());
+                        navigator.popUntil(ModalRoute.withName('/'));
+                      }
+                    },
+                    child: const Text('LOG OUT'),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

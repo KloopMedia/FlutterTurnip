@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
@@ -24,6 +24,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             : const AppStateLoggedOut(exception: null),
       ) {
     on<AppUserChanged>(_onUserChanged);
+    on<AppLocaleChanged>(_onLocaleChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     on<AppLoginRequested>(_onLoginRequested);
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
@@ -68,5 +69,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onSelectedTaskChanged(AppSelectedTaskChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(task: event.task));
+  }
+
+  void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(appLocale: event.locale));
   }
 }

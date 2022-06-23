@@ -16,11 +16,15 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      schema: json['schema'] as Map<String, dynamic>?,
+      uiSchema: json['uiSchema'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'schema': instance.schema,
+      'uiSchema': instance.uiSchema,
       'responses': instance.responses,
       'complete': instance.complete,
       'reopened': instance.reopened,

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
@@ -66,3 +67,5 @@ class TasksView extends StatelessWidget {
     );
   }
 }
+=======
+>>>>>>> refs/remotes/origin/ramil

@@ -18,11 +18,14 @@ class CampaignsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.loc.campaigns),
         actions: <Widget>[
+<<<<<<< HEAD
           IconButton(
             key: Key(context.loc.homePage_logout_iconButton),
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
           ),
+=======
+>>>>>>> refs/remotes/origin/ramil
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;
             return IconButton(
