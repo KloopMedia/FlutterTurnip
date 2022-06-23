@@ -9,6 +9,8 @@ part 'task.g.dart';
 class Task extends Equatable {
   final int id;
   final String name;
+  final Map<String, dynamic>? schema;
+  final Map<String, dynamic>? uiSchema;
   final Map<String, dynamic>? responses;
   final bool complete;
   final bool reopened;
@@ -23,6 +25,8 @@ class Task extends Equatable {
     required this.reopened,
     required this.stage,
     required this.createdAt,
+    required this.schema,
+    required this.uiSchema,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,8 @@ class Task extends Equatable {
       complete: model.complete,
       reopened: model.reopened ?? false,
       createdAt: model.createdAt,
+      schema: model.stage.jsonSchema,
+      uiSchema: model.stage.uiSchema,
       stage: TaskStage.fromApiModel(model.stage),
     );
   }
