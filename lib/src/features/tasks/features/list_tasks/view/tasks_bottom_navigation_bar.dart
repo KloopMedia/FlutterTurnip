@@ -22,15 +22,15 @@ class TasksBottomNavigationBar extends StatelessWidget {
       selectedItemColor: Colors.amber[800],
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_forward),
           label: context.loc.open,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.check),
+          icon: const Icon(Icons.check),
           label: context.loc.closed,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bolt),
+          icon: const Icon(Icons.bolt),
           label: context.loc.available,
         ),
       ],
