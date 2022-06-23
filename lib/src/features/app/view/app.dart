@@ -10,7 +10,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip/src/features/app/routes/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class App extends StatelessWidget {
   const App({
     Key? key,
@@ -38,23 +37,19 @@ class App extends StatelessWidget {
           authenticationRepository: _authenticationRepository,
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
-        child: MaterialApp(
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: BlocBuilder<AppBloc, AppState>(
-            builder: (context, state) {
-              if (state.user != null) {
-                return const CampaignsPage();
-              }
-              else {
-                return const LoginPage();
-              }
-            },
-          ),
-          routes: {
-            tasksRoute: (context) => const TasksPage(),
-            createTasksRoute: (context) => const CreateTasksPage(),
-            taskInstanceRoute: (context) => const TaskPage(),
+        child: BlocBuilder<AppBloc, AppState>(
+          builder: (context, state) {
+            return MaterialApp(
+              locale: state.locale,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              home: state.user != null ? const CampaignsPage() : const LoginPage(),
+              routes: {
+                tasksRoute: (context) => const TasksPage(),
+                createTasksRoute: (context) => const CreateTasksPage(),
+                taskInstanceRoute: (context) => const TaskPage(),
+              },
+            );
           },
         ),
       ),
