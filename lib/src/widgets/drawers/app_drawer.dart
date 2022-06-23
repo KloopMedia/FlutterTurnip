@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -86,18 +88,18 @@ class AppDrawer extends StatelessWidget {
                       bloc.add(AppLocaleChanged(locale));
                     }
                   },
-                  items: const [
+                  items: [
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.system,
-                      child: Text('System'),
+                      child: Text(context.loc.system),
                     ),
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.english,
-                      child: Text('English'),
+                      child: Text(context.loc.english),
                     ),
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.russian,
-                      child: Text('Russian'),
+                      child: Text(context.loc.russian),
                     ),
                   ],
                 ),
@@ -115,7 +117,7 @@ class AppDrawer extends StatelessWidget {
                         navigator.popUntil(ModalRoute.withName('/'));
                       }
                     },
-                    child: const Text('LOG OUT'),
+                    child: Text(context.loc.logout),
                   ),
                 ),
               )

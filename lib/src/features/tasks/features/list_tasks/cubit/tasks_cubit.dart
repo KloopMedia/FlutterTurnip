@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 part 'tasks_state.dart';
 

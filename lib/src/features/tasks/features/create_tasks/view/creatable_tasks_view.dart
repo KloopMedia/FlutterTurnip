@@ -5,6 +5,8 @@ import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/view/creatable_tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+
 
 class CreateTasksView extends StatefulWidget {
   const CreateTasksView({Key? key}) : super(key: key);
@@ -24,14 +26,14 @@ class _CreateTasksViewState extends State<CreateTasksView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tasks'),
+        title: Text(context.loc.tasks),
       ),
       body: BlocConsumer<CreateTasksCubit, CreateTasksState>(
         listener: (context, state) {
           if (state.status == TasksStatus.error) {
             showErrorDialog(
               context,
-              state.errorMessage ?? 'An error occurred while fetching tasks',
+              state.errorMessage ?? context.loc.fetching_error_tasks,
             );
           }
         },

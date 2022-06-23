@@ -7,8 +7,6 @@ import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.dart';
 import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:gigaturnip/src/features/app/routes/routes.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -37,35 +35,32 @@ class App extends StatelessWidget {
           authenticationRepository: _authenticationRepository,
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
-<<<<<<< HEAD
         child: MaterialApp(
-          // theme: ThemeData(
-          //   primarySwatch: Colors.purple,
-          //   accentColor: Colors.grey,q
-          //   buttonColor: Colors.red,
-          //   textTheme: TextTheme(
-          //     bodyText1: TextStyle(
-          //       color: Colors.black,
-          //       fontFamily:'OpenSans',
-          //       fontWeight:FontWeight.bold,
-          //       fontSize: 18,
-          //     ),
-          //   ),
-          //   appBarTheme: AppBarTheme(
-          //     textTheme: ThemeData.light().textTheme.copyWith(
-          //       titleMedium: TextStyle(
-          //         color: Colors.white,
-          //         fontFamily: 'OpenSans',
-          //         fontSize: 20,
-          //       ),
-          //       button: TextStyle(
-          //         color: Colors.white,
-          //       )
-          //     ),
-          //   ),
-          // ),
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+    theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.grey,
+            buttonColor: Colors.red,
+            textTheme: TextTheme(
+              bodyText1: TextStyle(
+                color: Colors.black,
+                fontFamily:'OpenSans',
+                fontWeight:FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            appBarTheme: AppBarTheme(
+              textTheme: ThemeData.light().textTheme.copyWith(
+                titleMedium: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                ),
+                button: TextStyle(
+                  color: Colors.white,
+                )
+              ),
+            ),
+          ),
           home: BlocBuilder<AppBloc, AppState>(
             builder: (context, state) {
               if (state.user != null) {
@@ -80,21 +75,6 @@ class App extends StatelessWidget {
             tasksRoute: (context) => const TasksPage(),
             createTasksRoute: (context) => const CreateTasksPage(),
             taskInstanceRoute: (context) => const TaskPage(),
-=======
-        child: BlocBuilder<AppBloc, AppState>(
-          builder: (context, state) {
-            return MaterialApp(
-              locale: state.locale,
-              supportedLocales: AppLocalizations.supportedLocales,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: state.user != null ? const CampaignsPage() : const LoginPage(),
-              routes: {
-                tasksRoute: (context) => const TasksPage(),
-                createTasksRoute: (context) => const CreateTasksPage(),
-                taskInstanceRoute: (context) => const TaskPage(),
-              },
-            );
->>>>>>> refs/remotes/origin/ramil
           },
         ),
       ),
