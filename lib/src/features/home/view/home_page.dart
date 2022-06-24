@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,10 +14,10 @@ class HomePage extends StatelessWidget {
     var user = state.user;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text(context.loc.home),
         actions: <Widget>[
           IconButton(
-            key: const Key('homePage_logout_iconButton'),
+            key: Key(context.loc.homePage_logout_iconButton),
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
           )

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import "package:gigaturnip/extensions/buildcontext/loc.dart";
 
 class LoginForm extends StatelessWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -39,8 +40,8 @@ class _GoogleLoginButton extends StatelessWidget {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
       key: const Key('loginForm_googleLogin_raisedButton'),
-      label: const Text(
-        'SIGN IN WITH GOOGLE',
+      label: Text(
+        context.loc.sign_in,
         style: TextStyle(color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(

@@ -1,0 +1,26 @@
+{
+     "login" : "Зарегистрироваться",
+     "logout" : "ВЫЙТИ",
+     "home" : "Главная Страница",
+     "tasks" : "Задания",
+     "campaigns" : "Кампании",
+     "homePage_logout_iconButton" : "Кнопка Выхода",
+     "error_occurred" : "Обнаружена ошибка",
+
+     "ok" : "Ок",
+     "open" : "Открытые",
+     "closed" : "Закрытые",
+     "available" : "Доступные",
+     "cancel" : "Отменить",
+
+     "sign_in" : "Зарегистрироваться через Гугл",
+     "failed_to_load_campaigns" : "Неудалось загрузить кампании",
+     "failed_to_load_tasks" : "Failed to load tasks",
+     "fetching_error" : "Ошибка при получении кампаний",
+     "fetching_error_tasks" : "Ошибка при получении заданий",
+     "system" : "Система",
+     "english" : "Английский",
+     "russian" : "Русский",
+
+     "are_you_sure_logout" : "Вы уверены что хотите выйти?"
+}

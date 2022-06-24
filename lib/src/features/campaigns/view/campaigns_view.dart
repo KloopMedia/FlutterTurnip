@@ -4,6 +4,8 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class CampaignsView extends StatefulWidget {
   const CampaignsView({Key? key}) : super(key: key);
@@ -24,7 +26,7 @@ class _CampaignsViewState extends State<CampaignsView> {
     return BlocConsumer<CampaignsCubit, CampaignsState>(
       listener: (context, state) {
         if (state.status == CampaignsStatus.error) {
-          showErrorDialog(context, state.errorMessage ?? 'Error occurred while fetching campaigns');
+          showErrorDialog(context, state.errorMessage ?? context.loc.fetching_error);
         }
       },
       builder: (context, state) {
