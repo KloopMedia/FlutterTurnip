@@ -57,12 +57,13 @@ class App extends StatelessWidget {
                     backgroundColor: Colors.red,
                   ),
                 ),
-                bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                  // backgroundColor: Colors.purple,
-                  selectedIconTheme: IconThemeData(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
+                // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                //   backgroundColor: Colors.purple,
+                //   selectedIconTheme: IconThemeData(
+                //     color: Theme.of(context).primaryColor,
+                //   ),
+                //   selectedItemColor: Theme.of(context).colorScheme.primary,
+                // ),
               ),
               locale: state.locale,
               supportedLocales: AppLocalizations.supportedLocales,

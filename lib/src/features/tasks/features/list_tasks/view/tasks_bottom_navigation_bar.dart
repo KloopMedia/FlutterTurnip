@@ -18,9 +18,6 @@ class TasksBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: index,
       onTap: onTap,
-      selectedIconTheme: IconThemeData(
-        color: Theme.of(context).primaryColor,
-      ),
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: const Icon(Icons.arrow_forward),
