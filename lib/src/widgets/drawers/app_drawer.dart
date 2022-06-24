@@ -77,32 +77,35 @@ class AppDrawer extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child: DropdownButtonFormField<AppLocales>(
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.language),
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButtonFormField<AppLocales>(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.language),
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                    ),
+                    value: state.appLocale,
+                    onChanged: (AppLocales? locale) {
+                      if (locale != null) {
+                        bloc.add(AppLocaleChanged(locale));
+                      }
+                    },
+                    items: [
+                      DropdownMenuItem<AppLocales>(
+                        value: AppLocales.system,
+                        child: Text(context.loc.system),
+                      ),
+                      DropdownMenuItem<AppLocales>(
+                        value: AppLocales.english,
+                        child: Text(context.loc.english),
+                      ),
+                      DropdownMenuItem<AppLocales>(
+                        value: AppLocales.russian,
+                        child: Text(context.loc.russian),
+                      ),
+                    ],
                   ),
-                  value: state.appLocale,
-                  onChanged: (AppLocales? locale) {
-                    if (locale != null) {
-                      bloc.add(AppLocaleChanged(locale));
-                    }
-                  },
-                  items: [
-                    DropdownMenuItem<AppLocales>(
-                      value: AppLocales.system,
-                      child: Text(context.loc.system),
-                    ),
-                    DropdownMenuItem<AppLocales>(
-                      value: AppLocales.english,
-                      child: Text(context.loc.english),
-                    ),
-                    DropdownMenuItem<AppLocales>(
-                      value: AppLocales.russian,
-                      child: Text(context.loc.russian),
-                    ),
-                  ],
                 ),
               ),
               Align(
