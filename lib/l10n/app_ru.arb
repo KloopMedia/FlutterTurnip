@@ -15,6 +15,7 @@
 
      "sign_in" : "Зарегистрироваться через Гугл",
      "failed_to_load_campaigns" : "Неудалось загрузить кампании",
+     "failed_to_load_tasks" : "Failed to load tasks",
      "fetching_error" : "Ошибка при получении кампаний",
      "fetching_error_tasks" : "Ошибка при получении заданий",
      "system" : "Система",
