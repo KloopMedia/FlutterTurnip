@@ -7,6 +7,7 @@ import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.dart';
 import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -35,46 +36,44 @@ class App extends StatelessWidget {
           authenticationRepository: _authenticationRepository,
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
-        child: MaterialApp(
-    theme: ThemeData(
-            primarySwatch: Colors.purple,
-            accentColor: Colors.grey,
-            buttonColor: Colors.red,
-            textTheme: TextTheme(
-              bodyText1: TextStyle(
-                color: Colors.black,
-                fontFamily:'OpenSans',
-                fontWeight:FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            appBarTheme: AppBarTheme(
-              textTheme: ThemeData.light().textTheme.copyWith(
-                titleMedium: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'OpenSans',
-                  fontSize: 20,
-                ),
-                button: TextStyle(
-                  color: Colors.white,
+        child: BlocBuilder<AppBloc, AppState>(
+          builder: (context, state) {
+            return MaterialApp(
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch:Colors.purple,
                 )
+                    .copyWith(secondary: Colors.grey[300]),
+                fontFamily: 'OpenSans',
+                textTheme:ThemeData.light().textTheme.copyWith(
+                    titleMedium:(const TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontWeight:FontWeight.bold,
+                      fontSize: 18,
+                    ))
+                ),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                ),
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  // backgroundColor: Colors.purple,
+                  selectedIconTheme: IconThemeData(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
               ),
-            ),
-          ),
-          home: BlocBuilder<AppBloc, AppState>(
-            builder: (context, state) {
-              if (state.user != null) {
-                return const CampaignsPage();
-              }
-              else {
-                return const LoginPage();
-              }
-            },
-          ),
-          routes: {
-            tasksRoute: (context) => const TasksPage(),
-            createTasksRoute: (context) => const CreateTasksPage(),
-            taskInstanceRoute: (context) => const TaskPage(),
+              locale: state.locale,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              home: state.user != null ? const CampaignsPage() : const LoginPage(),
+              routes: {
+                tasksRoute: (context) => const TasksPage(),
+                createTasksRoute: (context) => const CreateTasksPage(),
+                taskInstanceRoute: (context) => const TaskPage(),
+              },
+            );
           },
         ),
       ),
