@@ -18,8 +18,6 @@ class TasksBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: index,
       onTap: onTap,
-      // TODO: Change selected tab's color to global theme color.
-      selectedItemColor: Colors.amber[800],
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: const Icon(Icons.arrow_forward),

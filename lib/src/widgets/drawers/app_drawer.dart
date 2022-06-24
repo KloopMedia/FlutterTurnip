@@ -11,6 +11,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -42,7 +43,7 @@ class AppDrawer extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.blue, // TODO: Replace to global theme color
+      color: Theme.of(context).colorScheme.primary,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Column(
         children: [
@@ -117,6 +118,9 @@ class AppDrawer extends StatelessWidget {
                         navigator.popUntil(ModalRoute.withName('/'));
                       }
                     },
+                    // style: ElevatedButton.styleFrom(
+                    //   primary: Colors.red, // Background color
+                    // ),
                     child: Text(context.loc.logout),
                   ),
                 ),

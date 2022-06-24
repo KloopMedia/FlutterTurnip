@@ -39,6 +39,24 @@ class App extends StatelessWidget {
         child: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
             return MaterialApp(
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch: Colors.purple,
+                ).copyWith(secondary: Colors.grey[300]),
+                fontFamily: 'OpenSans',
+                textTheme: ThemeData.light().textTheme.copyWith(
+                      titleMedium: const TextStyle(
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                ),
+              ),
               locale: state.locale,
               supportedLocales: AppLocalizations.supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
