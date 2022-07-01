@@ -13,7 +13,7 @@
      "available" : "Доступные",
      "cancel" : "Отменить",
 
-     "sign_in" : "Зарегистрироваться через Гугл",
+     "sign_in" : "Зарегистрироваться через Google",
      "failed_to_load_campaigns" : "Неудалось загрузить кампании",
      "failed_to_load_tasks" : "Failed to load tasks",
      "fetching_error" : "Ошибка при получении кампаний",
