@@ -64582,7 +64582,7 @@ var $async$qs=A.I(function(a,b){if(a===1){o=b
 s=p}while(true)switch(s){case 0:g=null
 p=4
 s=7
-return A.T(m.a.n0(0,"/api/v1/campaigns/list_user_campaigns",g,t.z),$async$qs)
+return A.T(m.a.n0(0,"/api/v1/campaigns//list_user_campaigns/",g,t.z),$async$qs)
 case 7:l=b
 k=J.cl(t.j.a(l.a),new A.a0p(),t.i7).bx(0)
 q=k
@@ -64610,7 +64610,7 @@ var $async$qq=A.I(function(a,b){if(a===1){o=b
 s=p}while(true)switch(s){case 0:g=null
 p=4
 s=7
-return A.T(m.a.n0(0,"/api/v1/campaigns/list_user_selectable",g,t.z),$async$qq)
+return A.T(m.a.n0(0,"/api/v1/campaigns//list_user_selectable/",g,t.z),$async$qq)
 case 7:l=b
 k=J.cl(t.j.a(l.a),new A.a0o(),t.i7).bx(0)
 q=k
@@ -64636,7 +64636,7 @@ MD(a){var s=0,r=A.M(t.sE),q,p=2,o,n=[],m=this,l,k,j,i,h,g
 var $async$qt=A.I(function(b,c){if(b===1){o=c
 s=p}while(true)switch(s){case 0:p=4
 s=7
-return A.T(m.a.n0(0,"/api/v1/taskstages/user_relevant",a,t.z),$async$qt)
+return A.T(m.a.n0(0,"/api/v1/taskstages//user_relevant/",a,t.z),$async$qt)
 case 7:l=c
 k=J.cl(t.j.a(l.a),new A.a0q(),t.TX).bx(0)
 q=k
@@ -64662,7 +64662,7 @@ MG(a){var s=0,r=A.M(t.mv),q,p=2,o,n=[],m=this,l,k,j,i,h
 var $async$qv=A.I(function(b,c){if(b===1){o=c
 s=p}while(true)switch(s){case 0:p=4
 s=7
-return A.T(m.a.n0(0,"/api/v1/tasks/user_selectable",a,t.z),$async$qv)
+return A.T(m.a.n0(0,"/api/v1/tasks//user_selectable/",a,t.z),$async$qv)
 case 7:l=c
 j=A.aD4(l.a,new A.a0s(),t.CL)
 q=j
@@ -64688,7 +64688,7 @@ MF(a){var s=0,r=A.M(t.D6),q,p=2,o,n=[],m=this,l,k,j,i,h,g
 var $async$n3=A.I(function(b,c){if(b===1){o=c
 s=p}while(true)switch(s){case 0:p=4
 s=7
-return A.T(m.a.n0(0,"/api/v1/tasks/user_relevant",a,t.z),$async$n3)
+return A.T(m.a.n0(0,"/api/v1/tasks//user_relevant/",a,t.z),$async$n3)
 case 7:l=c
 k=J.cl(t.j.a(l.a),new A.a0r(),t.CL).bx(0)
 q=k
