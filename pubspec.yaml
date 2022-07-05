@@ -51,6 +51,10 @@ dependencies:
   flow_builder: ^0.0.9
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
+  uniturnip:
+    git:
+      url: https://github.com/KloopMedia/uniturnip.git
+      ref: test_integration_with_flutterturnip
 
 dev_dependencies:
   flutter_test:
