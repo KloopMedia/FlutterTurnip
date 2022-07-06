@@ -135,6 +135,12 @@ class GigaTurnipRepository {
     _availableTasks = availableTasks;
   }
 
+  Future<Task> createTask(int id) async {
+    final taskId = await _gigaTurnipApiClient.createTask(id: id);
+    final task = await _gigaTurnipApiClient.getTaskById(id: taskId);
+    return Task.fromApiModel(task);
+  }
+
   Future<List<Task>> getTasks({
     required TasksActions action,
     required Campaign selectedCampaign,

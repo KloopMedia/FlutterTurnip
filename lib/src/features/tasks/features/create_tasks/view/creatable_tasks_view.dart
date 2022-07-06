@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/view/creatable_tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
-import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 
 class CreateTasksView extends StatefulWidget {
@@ -49,8 +48,7 @@ class _CreateTasksViewState extends State<CreateTasksView> {
               context.read<CreateTasksCubit>().refresh();
             },
             onTap: (taskStage) {
-              // context.read<AppBloc>().add(AppSelectedTaskChanged());
-              Navigator.of(context).pushNamed(taskInstanceRoute);
+              context.read<CreateTasksCubit>().createTask(context, taskStage);
             },
           );
         },
