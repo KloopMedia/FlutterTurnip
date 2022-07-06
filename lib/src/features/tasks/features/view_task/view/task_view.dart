@@ -27,7 +27,14 @@ class _TaskViewState extends State<TaskView> {
           // TODO: implement error handling
         },
         builder: (context, state) {
-          return JSONSchemaUI(schema: state.task.schema!, ui: state.task.uiSchema!, onUpdate: onUpdate);
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: JSONSchemaUI(
+              schema: state.task.schema!,
+              ui: state.task.uiSchema!,
+              onUpdate: onUpdate,
+            ),
+          );
         },
       ),
     );

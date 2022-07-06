@@ -52,6 +52,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   uniturnip:
+#    path: ../uniturnip
     git:
       url: https://github.com/KloopMedia/uniturnip.git
       ref: test_integration_with_flutterturnip

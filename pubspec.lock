@@ -350,6 +350,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "10.1.0"
+  form_field_validator:
+    dependency: transitive
+    description:
+      name: form_field_validator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -759,7 +766,7 @@ packages:
     description:
       path: "."
       ref: test_integration_with_flutterturnip
-      resolved-ref: "461bd609b821c439fd4897667ab05b347ea11a00"
+      resolved-ref: "812bc29fb1dd157818714ebaa840db9c0b7f7e6a"
       url: "https://github.com/KloopMedia/uniturnip.git"
     source: git
     version: "1.0.0+1"
