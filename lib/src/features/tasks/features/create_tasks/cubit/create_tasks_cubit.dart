@@ -20,7 +20,9 @@ class CreateTasksCubit extends Cubit<CreateTasksState> {
   Future<List<TaskStage>> fetchData({bool forceRefresh = false}) async {
     try {
       return await gigaTurnipRepository.getUserRelevantTaskStages(
-          selectedCampaign: selectedCampaign);
+        selectedCampaign: selectedCampaign,
+        forceRefresh: forceRefresh,
+      );
     } on GigaTurnipApiRequestException catch (e) {
       emit(
         state.copyWith(
