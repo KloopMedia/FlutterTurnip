@@ -32,6 +32,7 @@ class _TaskViewState extends State<TaskView> {
             child: JSONSchemaUI(
               schema: state.task.schema!,
               ui: state.task.uiSchema!,
+              data: state.task.responses ?? {},
               onUpdate: onUpdate,
             ),
           );
