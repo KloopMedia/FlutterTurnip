@@ -8,8 +8,8 @@
     "error_occurred" : "An error occurred",
 
     "ok" : "Ok",
-    "open" : "Open",
-    "closed" : "Closed",
+    "done" : "Done",
+    "undone" : "Undone",
     "available" : "Available",
     "cancel" : "Cancel",
 
