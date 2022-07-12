@@ -17,7 +17,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required this.gigaTurnipRepository,
     required Task selectedTask,
   }) : super(TaskState.fromTask(selectedTask)) {
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 20), (timer) {
       if (_cache != state) {
         _cache = state;
         _saveTask(state);
