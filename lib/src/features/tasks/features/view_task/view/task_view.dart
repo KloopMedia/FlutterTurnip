@@ -12,9 +12,18 @@ class TaskView extends StatefulWidget {
 
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
+  late UIModel formController;
 
   @override
   void initState() {
+    taskBloc = context.read<TaskBloc>();
+    formController = UIModel(
+      data: taskBloc.state.responses ?? {},
+      disabled: taskBloc.state.complete,
+      onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
+        taskBloc.add(UpdateTaskEvent(data));
+      },
+    );
     super.initState();
   }
 
@@ -26,32 +35,27 @@ class _TaskViewState extends State<TaskView> {
 
   @override
   Widget build(BuildContext context) {
-    taskBloc = context.read<TaskBloc>();
     return Scaffold(
       appBar: AppBar(
         title: Text(context.read<TaskBloc>().state.name),
       ),
-      body: BlocConsumer<TaskBloc, TaskState>(
+      body: BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
+          formController.data = state.responses!;
+          formController.disabled = state.complete;
           // TODO: implement error handling
         },
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: JSONSchemaUI(
-              schema: state.schema!,
-              ui: state.uiSchema!,
-              data: state.responses ?? {},
-              disabled: state.complete,
-              onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
-                context.read<TaskBloc>().add(UpdateTaskEvent(data));
-              },
-              onSubmit: ({required Map<String, dynamic> data}) {
-                context.read<TaskBloc>().add(SubmitTaskEvent(data));
-              },
-            ),
-          );
-        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: JSONSchemaUI(
+            schema: context.read<TaskBloc>().state.schema!,
+            ui: context.read<TaskBloc>().state.uiSchema!,
+            formController: formController,
+            onSubmit: ({required Map<String, dynamic> data}) {
+              context.read<TaskBloc>().add(SubmitTaskEvent(data));
+            },
+          ),
+        ),
       ),
     );
   }

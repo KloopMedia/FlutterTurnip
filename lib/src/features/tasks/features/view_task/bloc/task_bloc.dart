@@ -30,8 +30,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   void _saveTask(Task task) async {
-    if (!task.complete) {
-      await gigaTurnipRepository.updateTask(state);
+    if (!state.complete) {
+      await gigaTurnipRepository.updateTask(task);
     }
   }
 
