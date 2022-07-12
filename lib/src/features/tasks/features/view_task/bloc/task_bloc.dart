@@ -11,13 +11,17 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
   Timer? timer;
+  TaskState? _cache;
 
   TaskBloc({
     required this.gigaTurnipRepository,
     required Task selectedTask,
   }) : super(TaskState.fromTask(selectedTask)) {
-    timer = Timer.periodic(const Duration(seconds: 20), (timer) {
-      _saveTask(state);
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_cache != state) {
+        _cache = state;
+        _saveTask(state);
+      }
     });
 
     on<UpdateTaskEvent>(_onUpdateTask);
