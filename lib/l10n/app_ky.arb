@@ -1,0 +1,28 @@
+{
+    "login" : "Кирүү",
+    "logout" : "ПОЧТАДАН ЧЫГУУ",
+    "home" : "Үй",
+    "tasks" : "Тапшырмалар",
+    "campaigns" : "Кампаниялар",
+    "homePage_logout_iconButton" : "HomePage Logout IconButton",
+    "error_occurred" : "Ката кетти",
+
+    "ok" : "Ok",
+    "open" : "Ачык",
+    "closed" : "Жабык",
+    "available" : "Жеткиликтүү",
+    "cancel" : "Жокко чыгаруу",
+
+    "sign_in" : "GOOGLE МЕНЕН КИРГИЗИНИЗ",
+    "failed_to_load_campaigns" : "Failed to load campaigns",
+    "failed_to_load_tasks" : "Failed to load tasks",
+    "fetching_error" : "Error occurred while fetching campaigns",
+    "fetching_error_tasks" : "An error occurred while fetching tasks",
+    "system" : "Система",
+    "english" : "Англисче",
+    "russian" : "Орусча",
+    "kyrgyz" : "Кыргызсча",
+    "language" : "Тил",
+
+    "are_you_sure_logout" : "Чын эле чыгып кеткиңиз келеби?"
+}

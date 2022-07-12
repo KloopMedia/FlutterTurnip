@@ -55,9 +55,12 @@ class AppDrawer extends StatelessWidget {
             user.name ?? '',
             style: const TextStyle(fontSize: 28, color: Colors.white),
           ),
-          Text(
-            user.email ?? '',
-            style: const TextStyle(fontSize: 16, color: Colors.white),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(
+              user.email ?? '',
+              style: const TextStyle(fontSize: 16, color: Colors.white),
+            ),
           ),
           const SizedBox(
             height: 12,
@@ -92,7 +95,7 @@ class AppDrawer extends StatelessWidget {
                   items: [
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.system,
-                      child: Text(context.loc.system),
+                      child: Text(context.loc.language),
                     ),
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.english,
@@ -101,6 +104,10 @@ class AppDrawer extends StatelessWidget {
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.russian,
                       child: Text(context.loc.russian),
+                    ),
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.english,
+                      child: Text(context.loc.kyrgyz),
                     ),
                   ],
                 ),
