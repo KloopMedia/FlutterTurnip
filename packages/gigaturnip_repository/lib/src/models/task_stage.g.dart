@@ -17,5 +17,5 @@ Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
-      'chain': instance.chain,
+      'chain': instance.chain.toJson(),
     };

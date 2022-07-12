@@ -11,16 +11,25 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
-  void onUpdate({required Map data, required MapPath path}) {
-    print(data);
-    print(path);
+  late TaskBloc taskBloc;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    taskBloc.add(ExitTaskEvent());
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    taskBloc = context.read<TaskBloc>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.read<TaskBloc>().state.task.name),
+        title: Text(context.read<TaskBloc>().state.name),
       ),
       body: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
@@ -30,10 +39,16 @@ class _TaskViewState extends State<TaskView> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: JSONSchemaUI(
-              schema: state.task.schema!,
-              ui: state.task.uiSchema!,
-              data: state.task.responses ?? {},
-              onUpdate: onUpdate,
+              schema: state.schema!,
+              ui: state.uiSchema!,
+              data: state.responses ?? {},
+              disabled: state.complete,
+              onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
+                context.read<TaskBloc>().add(UpdateTaskEvent(data));
+              },
+              onSubmit: ({required Map<String, dynamic> data}) {
+                context.read<TaskBloc>().add(SubmitTaskEvent(data));
+              },
             ),
           );
         },

@@ -152,7 +152,7 @@ class GigaTurnipRepository {
     if (shouldRefreshFromApi) {
       await refreshAllTasks(selectedCampaign);
     }
-    
+
     switch (action) {
       case TasksActions.listOpenTasks:
         return _openedTasks;
@@ -161,6 +161,14 @@ class GigaTurnipRepository {
       case TasksActions.listSelectableTasks:
         return _availableTasks;
     }
+  }
+
+  Future<void> updateTask(Task task) async {
+    final data = task.toJson();
+    await _gigaTurnipApiClient.updateTaskById(
+      id: task.id,
+      data: data,
+    );
   }
 }
 
