@@ -95,7 +95,7 @@ class AppDrawer extends StatelessWidget {
                   items: [
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.system,
-                      child: Text(context.loc.language),
+                      child: Text(context.loc.language,)
                     ),
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.english,
