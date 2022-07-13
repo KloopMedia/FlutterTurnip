@@ -55,9 +55,12 @@ class AppDrawer extends StatelessWidget {
             user.name ?? '',
             style: const TextStyle(fontSize: 28, color: Colors.white),
           ),
-          Text(
-            user.email ?? '',
-            style: const TextStyle(fontSize: 16, color: Colors.white),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(
+              user.email ?? '',
+              style: const TextStyle(fontSize: 16, color: Colors.white),
+            ),
           ),
           const SizedBox(
             height: 12,
@@ -77,35 +80,36 @@ class AppDrawer extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButtonFormField<AppLocales>(
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.language),
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                    ),
-                    value: state.appLocale,
-                    onChanged: (AppLocales? locale) {
-                      if (locale != null) {
-                        bloc.add(AppLocaleChanged(locale));
-                      }
-                    },
-                    items: [
-                      DropdownMenuItem<AppLocales>(
-                        value: AppLocales.system,
-                        child: Text(context.loc.system),
-                      ),
-                      DropdownMenuItem<AppLocales>(
-                        value: AppLocales.english,
-                        child: Text(context.loc.english),
-                      ),
-                      DropdownMenuItem<AppLocales>(
-                        value: AppLocales.russian,
-                        child: Text(context.loc.russian),
-                      ),
-                    ],
+                child: DropdownButtonFormField<AppLocales>(
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.language),
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
                   ),
+                  value: state.appLocale,
+                  onChanged: (AppLocales? locale) {
+                    if (locale != null) {
+                      bloc.add(AppLocaleChanged(locale));
+                    }
+                  },
+                  items: [
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.system,
+                      child: Text(context.loc.language,)
+                    ),
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.english,
+                      child: Text(context.loc.english),
+                    ),
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.russian,
+                      child: Text(context.loc.russian),
+                    ),
+                    DropdownMenuItem<AppLocales>(
+                      value: AppLocales.english,
+                      child: Text(context.loc.kyrgyz),
+                    ),
+                  ],
                 ),
               ),
               Align(

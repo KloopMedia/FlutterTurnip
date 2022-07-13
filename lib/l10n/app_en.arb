@@ -1,6 +1,6 @@
 {
     "login" : "Login",
-    "logout" : "LOG OUT",
+    "logout" : "LOG OUT FROM EMAIL",
     "home" : "Home",
     "tasks" : "Tasks",
     "campaigns" : "Campaigns",
@@ -8,8 +8,8 @@
     "error_occurred" : "An error occurred",
 
     "ok" : "Ok",
-    "open" : "Open",
-    "closed" : "Closed",
+    "done" : "Done",
+    "undone" : "Undone",
     "available" : "Available",
     "cancel" : "Cancel",
 
@@ -21,6 +21,8 @@
     "system" : "System",
     "english" : "English",
     "russian" : "Russian",
+    "kyrgyz" : "Kyrgyz",
+    "language" : "Language",
 
     "are_you_sure_logout" : "Are you sure you want to log out?"
 }
