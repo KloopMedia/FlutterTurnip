@@ -74,9 +74,13 @@ class _TasksViewState extends State<TasksView> {
             onRefresh: () {
               context.read<TasksCubit>().refresh();
             },
-            onTap: (task) {
+            onTap: (task) async {
+              final taskBloc = context.read<TasksCubit>();
               context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-              Navigator.of(context).pushNamed(taskInstanceRoute);
+              final shouldRefresh = await Navigator.of(context).pushNamed(taskInstanceRoute);
+              if (shouldRefresh == true) {
+                taskBloc.refresh();
+              }
             },
           );
         },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/view/creatable_tasks_list_view.dart';
@@ -47,8 +48,12 @@ class _CreateTasksViewState extends State<CreateTasksView> {
             onRefresh: () {
               context.read<CreateTasksCubit>().refresh();
             },
-            onTap: (taskStage) {
-              context.read<CreateTasksCubit>().createTask(context, taskStage);
+            onTap: (taskStage) async {
+              final bloc = context.read<AppBloc>();
+              final navigator = Navigator.of(context);
+              final task = await context.read<CreateTasksCubit>().createTask(context, taskStage);
+              bloc.add(AppSelectedTaskChanged(task));
+              navigator.pushReplacementNamed(taskInstanceRoute);
             },
           );
         },

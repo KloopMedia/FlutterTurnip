@@ -16,7 +16,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc({
     required this.gigaTurnipRepository,
     required Task selectedTask,
-  }) : super(TaskState.fromTask(selectedTask)) {
+  }) : super(TaskState.fromTask(selectedTask, TaskStatus.initialized)) {
     timer = Timer.periodic(const Duration(seconds: 20), (timer) {
       if (_cache != state) {
         _cache = state;
@@ -29,20 +29,29 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<ExitTaskEvent>(_onExitTask);
   }
 
-  void _saveTask(Task task) async {
+  Future<Task> _getTask(int id) async {
+    return await gigaTurnipRepository.getTask(id);
+  }
+
+  Future<int?> _saveTask(Task task) async {
     if (!state.complete) {
-      await gigaTurnipRepository.updateTask(task);
+      return await gigaTurnipRepository.updateTask(task);
     }
+    return null;
   }
 
   void _onUpdateTask(UpdateTaskEvent event, Emitter<TaskState> emit) {
     emit(state.copyWith(responses: event.formData));
   }
 
-  void _onSubmitTask(SubmitTaskEvent event, Emitter<TaskState> emit) {
+  void _onSubmitTask(SubmitTaskEvent event, Emitter<TaskState> emit) async {
     final newState = state.copyWith(responses: event.formData, complete: true);
-    _saveTask(newState);
-    emit(newState);
+    final nextTaskId = await _saveTask(newState);
+    if (nextTaskId != null) {
+      final nextTask = await _getTask(nextTaskId);
+      emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
+    }
+    emit(newState.copyWith(taskStatus: TaskStatus.redirectToTasksList));
   }
 
   void _onExitTask(ExitTaskEvent event, Emitter<TaskState> emit) {

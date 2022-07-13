@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html_iframe/flutter_html_iframe.dart';
 import 'package:flutter_html_table/flutter_html_table.dart';
 import 'package:flutter_html_video/flutter_html_video.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/widgets/simple_audio_player/simple_audio_player.dart';
 import 'package:uniturnip/json_schema_ui.dart';
@@ -43,11 +44,25 @@ class _TaskViewState extends State<TaskView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(taskBloc.state.name),
+        leading: BackButton(
+          onPressed: () {
+            context.read<AppBloc>().add(const AppSelectedTaskChanged(null));
+            Navigator.pop(context, true);
+          },
+        ),
       ),
       body: BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
           formController.data = state.responses!;
           formController.disabled = state.complete;
+          if (state.taskStatus == TaskStatus.redirectToNextTask) {
+            if (state.nextTask != null) {
+              context.read<AppBloc>().add(AppSelectedTaskChanged(state.nextTask));
+              Navigator.pushReplacementNamed(context, tasksRoute);
+            }
+          } else if (state.taskStatus == TaskStatus.redirectToTasksList) {
+            Navigator.pop(context, true);
+          }
           // TODO: implement error handling
         },
         child: ListView(

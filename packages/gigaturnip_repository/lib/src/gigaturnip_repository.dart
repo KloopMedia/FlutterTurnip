@@ -163,12 +163,21 @@ class GigaTurnipRepository {
     }
   }
 
-  Future<void> updateTask(Task task) async {
+  Future<Task> getTask(int id) async {
+    final response = await _gigaTurnipApiClient.getTaskById(id: id);
+    return Task.fromApiModel(response);
+  }
+
+  Future<int?> updateTask(Task task) async {
     final data = task.toJson();
-    await _gigaTurnipApiClient.updateTaskById(
+    final response = await _gigaTurnipApiClient.updateTaskById(
       id: task.id,
       data: data,
     );
+    if (response.containsKey('next_direct_id')) {
+      return int.parse(response['next_direct_id']);
+    }
+    return null;
   }
 }
 

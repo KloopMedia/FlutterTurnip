@@ -160,12 +160,14 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<void> updateTaskById({required int id, required dynamic data}) async {
+  Future<Map<String, dynamic>> updateTaskById({required int id, required dynamic data}) async {
     try {
-      await _httpClient.patch('$tasksRoute$id/', data: data);
+      final response = await _httpClient.patch('$tasksRoute$id/', data: data);
+      return response.data;
+    } on DioError catch (e) {
+      throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
-      print('hahah');
-      print(e);
+      rethrow;
     }
   }
 

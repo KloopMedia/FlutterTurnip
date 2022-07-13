@@ -1,8 +1,20 @@
 part of 'task_bloc.dart';
 
+enum TaskStatus {
+  uninitialized,
+  initialized,
+  redirectToNextTask,
+  redirectToTasksList,
+}
+
 @immutable
 class TaskState extends Task with EquatableMixin {
+  final Task? nextTask;
+  final TaskStatus taskStatus;
+
   TaskState({
+    this.nextTask,
+    required this.taskStatus,
     required int id,
     required String name,
     required Map<String, dynamic>? schema,
@@ -11,21 +23,22 @@ class TaskState extends Task with EquatableMixin {
     required bool complete,
     required bool reopened,
     required TaskStage stage,
-    required DateTime? createdAt,})
-      : super(
-    id: id,
-    name: name,
-    responses: responses,
-    complete: complete,
-    reopened: reopened,
-    stage: stage,
-    createdAt: createdAt,
-    schema: schema,
-    uiSchema: uiSchema,
-  );
+    required DateTime? createdAt,
+  }) : super(
+          id: id,
+          name: name,
+          responses: responses,
+          complete: complete,
+          reopened: reopened,
+          stage: stage,
+          createdAt: createdAt,
+          schema: schema,
+          uiSchema: uiSchema,
+        );
 
-  factory TaskState.fromTask(Task task) {
+  factory TaskState.fromTask(Task task, TaskStatus taskStatus) {
     return TaskState(
+      taskStatus: taskStatus,
       id: task.id,
       name: task.name,
       responses: task.responses,
@@ -43,8 +56,13 @@ class TaskState extends Task with EquatableMixin {
 
   TaskState copyWith({
     Map<String, dynamic>? responses,
-    bool? complete,}) {
+    bool? complete,
+    TaskStatus? taskStatus,
+    Task? nextTask,
+  }) {
     return TaskState(
+      nextTask: nextTask ?? this.nextTask,
+      taskStatus: taskStatus ?? this.taskStatus,
       responses: responses ?? this.responses,
       complete: complete ?? this.complete,
       createdAt: createdAt,
