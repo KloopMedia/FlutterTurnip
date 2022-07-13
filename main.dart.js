@@ -98260,7 +98260,7 @@ var $async$vm=A.n(function(b,c){if(b===1){o=c
 s=p}while(true)switch(s){case 0:h=null
 p=4
 s=7
-return A.t(m.a.r9(0,"/api/v1/tasks/"+B.f.j(a),h,t.z),$async$vm)
+return A.t(m.a.r9(0,"/api/v1/tasks/"+a+"/",h,t.z),$async$vm)
 case 7:l=c
 j=A.aTB(l.a)
 q=j
