@@ -175,7 +175,7 @@ class GigaTurnipRepository {
       data: data,
     );
     if (response.containsKey('next_direct_id')) {
-      return int.parse(response['next_direct_id']);
+      return response['next_direct_id'];
     }
     return null;
   }

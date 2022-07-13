@@ -58,7 +58,7 @@ class _TaskViewState extends State<TaskView> {
           if (state.taskStatus == TaskStatus.redirectToNextTask) {
             if (state.nextTask != null) {
               context.read<AppBloc>().add(AppSelectedTaskChanged(state.nextTask));
-              Navigator.pushReplacementNamed(context, tasksRoute);
+              Navigator.pushReplacementNamed(context, taskInstanceRoute);
             }
           } else if (state.taskStatus == TaskStatus.redirectToTasksList) {
             Navigator.pop(context, true);
