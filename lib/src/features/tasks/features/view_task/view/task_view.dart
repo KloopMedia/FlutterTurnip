@@ -11,32 +11,51 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
-  void onUpdate({required Map data, required MapPath path}) {
-    print(data);
-    print(path);
+  late TaskBloc taskBloc;
+  late UIModel formController;
+
+  @override
+  void initState() {
+    taskBloc = context.read<TaskBloc>();
+    formController = UIModel(
+      data: taskBloc.state.responses ?? {},
+      disabled: taskBloc.state.complete,
+      onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
+        taskBloc.add(UpdateTaskEvent(data));
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    taskBloc.add(ExitTaskEvent());
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.read<TaskBloc>().state.task.name),
+        title: Text(context.read<TaskBloc>().state.name),
       ),
-      body: BlocConsumer<TaskBloc, TaskState>(
+      body: BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
+          formController.data = state.responses!;
+          formController.disabled = state.complete;
           // TODO: implement error handling
         },
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: JSONSchemaUI(
-              schema: state.task.schema!,
-              ui: state.task.uiSchema!,
-              data: state.task.responses ?? {},
-              onUpdate: onUpdate,
-            ),
-          );
-        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: JSONSchemaUI(
+            schema: context.read<TaskBloc>().state.schema!,
+            ui: context.read<TaskBloc>().state.uiSchema!,
+            formController: formController,
+            onSubmit: ({required Map<String, dynamic> data}) {
+              context.read<TaskBloc>().add(SubmitTaskEvent(data));
+            },
+          ),
+        ),
       ),
     );
   }

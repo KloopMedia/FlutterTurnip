@@ -5,7 +5,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api show TaskStage;
 
 part 'task_stage.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TaskStage extends Equatable {
   final int id;
   final String name;
@@ -31,6 +31,8 @@ class TaskStage extends Equatable {
       chain: Chain.fromApiModel(model.chain),
     );
   }
+
+  Map<String, dynamic> toJson() => _$TaskStageToJson(this);
 
   @override
   List<Object?> get props => [id, name, description, chain];

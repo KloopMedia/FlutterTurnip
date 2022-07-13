@@ -160,6 +160,15 @@ class GigaTurnipApiClient {
     }
   }
 
+  Future<void> updateTaskById({required int id, required dynamic data}) async {
+    try {
+      await _httpClient.patch('$tasksRoute$id/', data: data);
+    } catch (e) {
+      print('hahah');
+      print(e);
+    }
+  }
+
   Future<List<Task>> getIntegratedTasks({Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get(

@@ -4,7 +4,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Chain;
 
 part 'chain.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Chain extends Equatable {
   final int id;
   final String name;
@@ -30,6 +30,8 @@ class Chain extends Equatable {
       campaign: model.campaign,
     );
   }
+
+  Map<String, dynamic> toJson() => _$ChainToJson(this);
 
   @override
   List<Object?> get props => [id, name, description, campaign];
