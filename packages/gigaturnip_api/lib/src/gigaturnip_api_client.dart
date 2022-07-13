@@ -148,7 +148,7 @@ class GigaTurnipApiClient {
   Future<Task> getTaskById({Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get(
-        tasksRoute + id.toString(),
+        '$tasksRoute$id/',
         queryParameters: query,
       );
 
