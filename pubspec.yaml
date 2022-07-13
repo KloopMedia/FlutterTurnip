@@ -51,6 +51,11 @@ dependencies:
   flow_builder: ^0.0.9
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
+  uniturnip:
+#    path: ../uniturnip
+    git:
+      url: https://github.com/KloopMedia/uniturnip.git
+      ref: test_integration_with_flutterturnip
 
 dev_dependencies:
   flutter_test:
@@ -98,8 +103,8 @@ flutter:
   fonts:
    - family: OpenSans
      fonts:
-       - asset: assets\fonts\OpenSans-Regular.ttf
-       - asset: assets\fonts\OpenSans-Bold.ttf
+       - asset: assets/fonts/OpenSans-Regular.ttf
+       - asset: assets/fonts/OpenSans-Bold.ttf
          weight: 700
 
 #     - family: Schyler

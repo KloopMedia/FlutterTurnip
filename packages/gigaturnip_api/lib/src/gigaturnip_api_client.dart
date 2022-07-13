@@ -5,6 +5,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
   static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
+
   // static const baseUrl = 'http://127.0.0.1:8000';
 
   final Dio _httpClient;
@@ -74,6 +75,24 @@ class GigaTurnipApiClient {
     }
   }
 
+  /// Request task creation and on success return task's id.
+  Future<int> createTask({required int id}) async {
+    try {
+      final response = await _httpClient.post(
+        taskStagesRoute + id.toString() + createTaskActionRoute,
+      );
+      final taskId = response.data['id'];
+      if (taskId == null) {
+        throw Exception("Task creation error: Id of created task can't be null");
+      }
+      return taskId;
+    } on DioError catch (e) {
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   //Task methods
   Future<PaginationWrapper<Task>> getTasks({Map<String, dynamic>? query}) async {
     try {
@@ -99,7 +118,7 @@ class GigaTurnipApiClient {
 
       return PaginationWrapper.fromJson(
         response.data,
-            (json) => Task.fromJson(json as Map<String, dynamic>),
+        (json) => Task.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
       throw GigaTurnipApiRequestException.fromDioError(e);
@@ -159,7 +178,8 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<List<Task>> getDisplayedPreviousTasks({Map<String, dynamic>? query, required int id}) async {
+  Future<List<Task>> getDisplayedPreviousTasks(
+      {Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get(
         tasksRoute + id.toString() + displayedPreviousTasksActionRoute,
