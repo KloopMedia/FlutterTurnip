@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'app_event.dart';
@@ -29,6 +30,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLoginRequested>(_onLoginRequested);
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
+    on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
     _userSubscription = _authenticationRepository.user.listen(
           (user) => add(AppUserChanged(user)),
     );
@@ -73,5 +75,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(appLocale: event.locale));
+  }
+
+  void _onSelectedNotificationChanged(AppSelectedNotificationChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(notification: event.notification));
   }
 }

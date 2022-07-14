@@ -9,6 +9,8 @@ import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../notifications/view/notifications_page.dart';
+
 class App extends StatelessWidget {
   const App({
     Key? key,
@@ -65,6 +67,7 @@ class App extends StatelessWidget {
                 tasksRoute: (context) => const TasksPage(),
                 createTasksRoute: (context) => const CreateTasksPage(),
                 taskInstanceRoute: (context) => const TaskPage(),
+                notificationsRoute: (context) => const NotificationsPage()
               },
             );
           },
