@@ -46,21 +46,30 @@ class App extends StatelessWidget {
                 fontFamily: 'OpenSans',
                 textTheme: ThemeData.light().textTheme.copyWith(
                       titleMedium: const TextStyle(
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'EBGaramond-Regular',
+                        // fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
+                  titleLarge: const TextStyle(
+                    fontFamily: 'EBGaramond-Regular',
+                    fontSize: 20,
+                  )
                     ),
                 elevatedButtonTheme: ElevatedButtonThemeData(
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.redAccent[200],
                   ),
+                ),
+                floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: Colors.redAccent[200],
                 ),
               ),
               locale: state.locale,
               supportedLocales: AppLocalizations.supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: state.user != null ? const CampaignsPage() : const LoginPage(),
+              home: state.user != null
+                  ? const CampaignsPage()
+                  : const LoginPage(),
               routes: {
                 tasksRoute: (context) => const TasksPage(),
                 createTasksRoute: (context) => const CreateTasksPage(),

@@ -35,12 +35,12 @@ class _TasksViewState extends State<TasksView> {
           },
         ),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(createTasksRoute);
-            },
-            icon: const Icon(Icons.add),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed(createTasksRoute);
+          //   },
+          //   icon: const Icon(Icons.add),
+          // ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;
             return IconButton(
@@ -92,6 +92,14 @@ class _TasksViewState extends State<TasksView> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed:(){
+          Navigator.of(context).pushNamed(createTasksRoute);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
