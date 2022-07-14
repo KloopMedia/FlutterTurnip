@@ -58,8 +58,10 @@ class AuthenticationRepository {
 
       await _firebaseAuth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
+      print(e);
       throw LogInWithGoogleFailure.fromCode(e.code);
     } catch (_) {
+      print(_);
       throw const LogInWithGoogleFailure();
     }
   }
@@ -71,6 +73,7 @@ class AuthenticationRepository {
         _googleSignIn.signOut(),
       ]);
     } catch (_) {
+      print(_);
       // TODO: Fix googleSignIn log out error
       throw LogOutFailure();
     }
