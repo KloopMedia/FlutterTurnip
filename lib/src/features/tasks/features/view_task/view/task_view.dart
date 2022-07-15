@@ -1,13 +1,12 @@
+import 'dart:async';
+import 'dart:convert' show utf8, base64;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html_iframe/flutter_html_iframe.dart';
-import 'package:flutter_html_table/flutter_html_table.dart';
-import 'package:flutter_html_video/flutter_html_video.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
-import 'package:gigaturnip/src/widgets/simple_audio_player/simple_audio_player.dart';
 import 'package:uniturnip/json_schema_ui.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -19,6 +18,7 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   late UIModel formController;
+  late WebViewController _webViewController;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _TaskViewState extends State<TaskView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedTaskChanged(null));
-            Navigator.pop(context, true);
+            Navigator.pop(context);
           },
         ),
       ),
@@ -65,18 +65,28 @@ class _TaskViewState extends State<TaskView> {
           }
           // TODO: implement error handling
         },
-        child: ListView(
+        child: Column(
           children: [
-            Html(
-              data: taskBloc.state.stage.richText ?? '',
-              customRenders: {
-                tableMatcher(): tableRender(),
-                iframeMatcher(): iframeRender(),
-                videoMatcher(): videoRender(),
-                audioMatcher(): CustomRender.widget(
-                  widget: (context, buildChildren) => SimpleAudioPlayer(context: context),
-                ),
-              },
+            Expanded(
+              child: WebView(
+                debuggingEnabled: true,
+                javascriptMode: JavascriptMode.unrestricted,
+                initialUrl: 'http://localhost:3000/',
+                onWebViewCreated: (WebViewController webViewController) {
+                  setState(() {
+                    _webViewController = webViewController;
+                  });
+                },
+                onPageFinished: (str) async {
+                  final text = context.read<TaskBloc>().state.stage.richText ?? '';
+                  final encodedText = base64.encode(utf8.encode(text));
+                  Future.delayed(const Duration(milliseconds: 10), () {
+                    _webViewController.runJavascript("""
+                  (function() { window.dispatchEvent(new CustomEvent('flutter_rich_text_event', {detail: "$encodedText"})); })();
+                    """);
+                  });
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
