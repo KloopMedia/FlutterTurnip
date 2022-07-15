@@ -1,12 +1,10 @@
-import 'dart:async';
-import 'dart:convert' show utf8, base64;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
+import 'package:gigaturnip/src/utilities/constants/urls.dart';
+import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
 import 'package:uniturnip/json_schema_ui.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -18,7 +16,6 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   late UIModel formController;
-  late WebViewController _webViewController;
 
   @override
   void initState() {
@@ -65,28 +62,11 @@ class _TaskViewState extends State<TaskView> {
           }
           // TODO: implement error handling
         },
-        child: Column(
+        child: ListView(
           children: [
-            Expanded(
-              child: WebView(
-                debuggingEnabled: true,
-                javascriptMode: JavascriptMode.unrestricted,
-                initialUrl: 'http://localhost:3000/',
-                onWebViewCreated: (WebViewController webViewController) {
-                  setState(() {
-                    _webViewController = webViewController;
-                  });
-                },
-                onPageFinished: (str) async {
-                  final text = context.read<TaskBloc>().state.stage.richText ?? '';
-                  final encodedText = base64.encode(utf8.encode(text));
-                  Future.delayed(const Duration(milliseconds: 10), () {
-                    _webViewController.runJavascript("""
-                  (function() { window.dispatchEvent(new CustomEvent('flutter_rich_text_event', {detail: "$encodedText"})); })();
-                    """);
-                  });
-                },
-              ),
+            RichTextWebview(
+              text: context.read<TaskBloc>().state.stage.richText ?? '',
+              initialUrl: richTextWebviewUrl,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

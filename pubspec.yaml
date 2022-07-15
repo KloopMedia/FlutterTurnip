@@ -56,12 +56,7 @@ dependencies:
     git:
       url: https://github.com/KloopMedia/uniturnip.git
       ref: test_integration_with_flutterturnip
-  flutter_html: ^3.0.0-alpha.5
-  flutter_html_iframe: ^3.0.0-alpha.3
-  flutter_html_table: ^3.0.0-alpha.3
-  flutter_html_video: ^3.0.0-alpha.3
-  just_audio: ^0.9.27
-  webview_flutter: ^3.0.4
+  webview_flutter_plus: ^0.3.0+2
 
 dev_dependencies:
   flutter_test:
