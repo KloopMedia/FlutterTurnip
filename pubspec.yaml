@@ -110,7 +110,7 @@ flutter:
      fonts:
        - asset: assets/fonts/EBGaramond-Regular.ttf
        - asset: assets/fonts/EBGaramond-SemiBold.ttf
-         weight: 500
+         weight: 200
 
 #     - family: Schyler
 #       fonts:

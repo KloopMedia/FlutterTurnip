@@ -22,7 +22,7 @@ class IdTitleCard extends StatelessWidget {
     return SizedBox(
       height: 120,
       child: Card(
-        color: Colors.grey[300],
+        color: Theme.of(context).colorScheme.copyWith().secondary,
         margin: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: onTap,
@@ -35,15 +35,13 @@ class IdTitleCard extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
                 Row(
                   children: [
-                    Expanded(child: Text('#$id')),
-                    if (date != null) Text(DateFormat.yMd().add_jm().format(date!)),
+                    Expanded(child: Text('#$id', style: Theme.of(context).textTheme.headlineSmall,)),
+                    if (date != null) Text(DateFormat.yMd().add_jm().format(date!), style: Theme.of(context).textTheme.headlineSmall,),
                   ],
                 )
               ],

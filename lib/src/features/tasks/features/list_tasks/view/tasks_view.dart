@@ -27,7 +27,11 @@ class _TasksViewState extends State<TasksView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.loc.tasks),
+        centerTitle: true,
+        title: Text(
+          context.loc.tasks,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
@@ -93,13 +97,13 @@ class _TasksViewState extends State<TasksView> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:(){
+        onPressed: () {
           Navigator.of(context).pushNamed(createTasksRoute);
         },
-        child: Icon(Icons.add),
-        backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.copyWith().primary,
+        child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

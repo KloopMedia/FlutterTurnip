@@ -23,6 +23,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     const Color primaryColor = Color.fromRGBO(69, 123, 157, 1);
+     const Color secondaryColor = Color.fromRGBO(168, 210, 219, 1);
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthenticationRepository>(
@@ -40,29 +43,58 @@ class App extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               theme: ThemeData(
-                colorScheme: ColorScheme.fromSwatch(
-                  primarySwatch: Colors.purple,
-                ).copyWith(secondary: Colors.grey[300]),
-                fontFamily: 'OpenSans',
+                colorScheme: ColorScheme.fromSwatch().copyWith(
+                  primary: primaryColor,
+                  secondary: secondaryColor,
+                ),
+                // fontFamily: 'Roboto',
                 textTheme: ThemeData.light().textTheme.copyWith(
-                      titleMedium: const TextStyle(
-                        fontFamily: 'EBGaramond-Regular',
-                        // fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                  titleLarge: const TextStyle(
-                    fontFamily: 'EBGaramond-Regular',
-                    fontSize: 20,
-                  )
-                    ),
-                elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.redAccent[200],
+                  titleSmall: const TextStyle(
+                    fontFamily: 'Open-Sans',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18
                   ),
-                ),
-                floatingActionButtonTheme: FloatingActionButtonThemeData(
-                  backgroundColor: Colors.redAccent[200],
-                ),
+                    titleMedium: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 25,
+                    ),
+                    titleLarge: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 27,
+                      color: Colors.white,
+                    ),
+                  headlineLarge: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                      color: Colors.black87,
+                  ),
+                    headlineMedium: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                      color: Colors.black87,
+                    ),
+                    headlineSmall: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+            ),
+                // elevatedButtonTheme: ElevatedButtonThemeData(
+                //   style: TextButton.styleFrom(
+                //     backgroundColor: Colors.redAccent[200],
+                //   ),
+                // ),
+                // floatingActionButtonTheme: FloatingActionButtonThemeData(
+                //   backgroundColor: Colors.redAccent[200],
+                // ),
+                appBarTheme: const AppBarTheme(
+                  color: primaryColor,
+                )
               ),
               locale: state.locale,
               supportedLocales: AppLocalizations.supportedLocales,

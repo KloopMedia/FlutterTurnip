@@ -21,11 +21,11 @@ class TasksBottomNavigationBar extends StatelessWidget {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: const Icon(Icons.arrow_forward),
-          label: context.loc.done,
+          label: context.loc.todo,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.check),
-          label: context.loc.undone,
+          label: context.loc.done,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.bolt),

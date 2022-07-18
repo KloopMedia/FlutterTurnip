@@ -4,7 +4,6 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
-
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
 
@@ -43,7 +42,7 @@ class AppDrawer extends StatelessWidget {
     }
 
     return Container(
-      color: Theme.of(context).colorScheme.primary,
+      color: Theme.of(context).colorScheme.secondary,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Column(
         children: [
@@ -53,13 +52,13 @@ class AppDrawer extends StatelessWidget {
           ),
           Text(
             user.name ?? '',
-            style: const TextStyle(fontSize: 28, color: Colors.white),
+            style: const TextStyle(fontSize: 28, color: Colors.black),
           ),
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
               user.email ?? '',
-              style: const TextStyle(fontSize: 16, color: Colors.white),
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           const SizedBox(
@@ -94,20 +93,31 @@ class AppDrawer extends StatelessWidget {
                   },
                   items: [
                     DropdownMenuItem<AppLocales>(
-                      value: AppLocales.system,
-                      child: Text(context.loc.language,)
-                    ),
+                        value: AppLocales.system,
+                        child: Text(
+                          context.loc.language,
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        )),
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.english,
-                      child: Text(context.loc.english),
+                      child: Text(
+                        context.loc.english,
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
                     ),
                     DropdownMenuItem<AppLocales>(
                       value: AppLocales.russian,
-                      child: Text(context.loc.russian),
+                      child: Text(
+                        context.loc.russian,
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
                     ),
                     DropdownMenuItem<AppLocales>(
-                      value: AppLocales.english,
-                      child: Text(context.loc.kyrgyz),
+                      value: AppLocales.kyrgyz,
+                      child: Text(
+                        context.loc.kyrgyz,
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
                     ),
                   ],
                 ),
@@ -128,7 +138,10 @@ class AppDrawer extends StatelessWidget {
                     // style: ElevatedButton.styleFrom(
                     //   primary: Colors.red, // Background color
                     // ),
-                    child: Text(context.loc.logout),
+                    child: Text(
+                      context.loc.logout,
+                      style: const TextStyle(fontSize: 20),
+                    ),
                   ),
                 ),
               )
