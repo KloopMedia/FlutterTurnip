@@ -9,7 +9,7 @@
 
     "ok" : "Ok",
     "done" : "Done",
-    "undone" : "Undone",
+    "todo" : "To do",
     "available" : "Available",
     "cancel" : "Cancel",
 
