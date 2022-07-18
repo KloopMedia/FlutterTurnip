@@ -10,10 +10,12 @@ enum TaskStatus {
 @immutable
 class TaskState extends Task with EquatableMixin {
   final Task? nextTask;
+  final List<Task> previousTasks;
   final TaskStatus taskStatus;
 
   TaskState({
     this.nextTask,
+    this.previousTasks = const [],
     required this.taskStatus,
     required int id,
     required String name,
@@ -52,15 +54,17 @@ class TaskState extends Task with EquatableMixin {
   }
 
   @override
-  List<Object?> get props => [id, responses, complete];
+  List<Object?> get props => [id, responses, complete, previousTasks, nextTask, taskStatus];
 
   TaskState copyWith({
     Map<String, dynamic>? responses,
     bool? complete,
     TaskStatus? taskStatus,
     Task? nextTask,
+    List<Task>? previousTasks,
   }) {
     return TaskState(
+      previousTasks: previousTasks ?? this.previousTasks,
       nextTask: nextTask ?? this.nextTask,
       taskStatus: taskStatus ?? this.taskStatus,
       responses: responses ?? this.responses,

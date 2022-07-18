@@ -179,6 +179,11 @@ class GigaTurnipRepository {
     }
     return null;
   }
+
+  Future<List<Task>> getPreviousTasks(int id) async {
+    final tasks = await _gigaTurnipApiClient.getDisplayedPreviousTasks(id: id);
+    return tasks.map((task) => Task.fromApiModel(task)).toList();
+  }
 }
 
 class ApiInterceptors extends Interceptor {

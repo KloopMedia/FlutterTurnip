@@ -20,6 +20,7 @@ class _TaskViewState extends State<TaskView> {
   @override
   void initState() {
     taskBloc = context.read<TaskBloc>();
+    taskBloc.add(InitializeTaskEvent());
     formController = UIModel(
       data: taskBloc.state.responses ?? {},
       disabled: taskBloc.state.complete,
@@ -48,9 +49,9 @@ class _TaskViewState extends State<TaskView> {
           },
         ),
       ),
-      body: BlocListener<TaskBloc, TaskState>(
+      body: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
-          formController.data = state.responses!;
+          formController.data = state.responses ?? {};
           formController.disabled = state.complete;
           if (state.taskStatus == TaskStatus.redirectToNextTask) {
             if (state.nextTask != null) {
@@ -62,25 +63,44 @@ class _TaskViewState extends State<TaskView> {
           }
           // TODO: implement error handling
         },
-        child: ListView(
-          children: [
-            RichTextWebview(
-              text: context.read<TaskBloc>().state.stage.richText ?? '',
-              initialUrl: richTextWebviewUrl,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: JSONSchemaUI(
-                schema: taskBloc.state.schema!,
-                ui: taskBloc.state.uiSchema!,
-                formController: formController,
-                onSubmit: ({required Map<String, dynamic> data}) {
-                  taskBloc.add(SubmitTaskEvent(data));
-                },
+        buildWhen: (previousState, currentState) {
+          return (previousState.previousTasks != currentState.previousTasks) || (previousState.complete != currentState.complete);
+        },
+        builder: (context, state) {
+          return ListView(
+            children: [
+              RichTextWebview(
+                text: state.stage.richText ?? '',
+                initialUrl: richTextWebviewUrl,
               ),
-            ),
-          ],
-        ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    for (var task in state.previousTasks)
+                      JSONSchemaUI(
+                        schema: task.schema!,
+                        ui: task.uiSchema!,
+                        formController: UIModel(disabled: true, data: task.responses ?? {}),
+                        hideSubmitButton: true,
+                      ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: JSONSchemaUI(
+                  schema: state.schema!,
+                  ui: state.uiSchema!,
+                  formController: formController,
+                  onSubmit: ({required Map<String, dynamic> data}) {
+                    taskBloc.add(SubmitTaskEvent(data));
+                  },
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
