@@ -28,6 +28,6 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'responses': instance.responses,
       'complete': instance.complete,
       'reopened': instance.reopened,
-      'stage': instance.stage,
+      'stage': instance.stage.toJson(),
       'createdAt': instance.createdAt?.toIso8601String(),
     };

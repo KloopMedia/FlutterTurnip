@@ -23,8 +23,10 @@ class GigaTurnipApiClient {
         (json) => Campaign.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -38,8 +40,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -53,8 +57,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -69,8 +75,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -87,8 +95,10 @@ class GigaTurnipApiClient {
       }
       return taskId;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -103,8 +113,10 @@ class GigaTurnipApiClient {
         (json) => Task.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -121,8 +133,10 @@ class GigaTurnipApiClient {
         (json) => Task.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -139,8 +153,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -148,14 +164,29 @@ class GigaTurnipApiClient {
   Future<Task> getTaskById({Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get(
-        tasksRoute + id.toString(),
+        '$tasksRoute$id/',
         queryParameters: query,
       );
 
       return Task.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> updateTaskById({required int id, required dynamic data}) async {
+    try {
+      final response = await _httpClient.patch('$tasksRoute$id/', data: data);
+      return response.data;
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -172,8 +203,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -191,8 +224,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -206,8 +241,10 @@ class GigaTurnipApiClient {
 
       return Task.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -219,8 +256,10 @@ class GigaTurnipApiClient {
         queryParameters: query,
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -234,8 +273,10 @@ class GigaTurnipApiClient {
 
       return Task.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -247,8 +288,10 @@ class GigaTurnipApiClient {
         queryParameters: query,
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -260,8 +303,10 @@ class GigaTurnipApiClient {
         queryParameters: query,
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -275,8 +320,10 @@ class GigaTurnipApiClient {
         (json) => Notification.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -290,8 +337,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

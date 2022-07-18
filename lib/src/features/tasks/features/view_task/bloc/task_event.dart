@@ -10,4 +10,10 @@ class UpdateTaskEvent extends TaskEvent {
   UpdateTaskEvent(this.formData);
 }
 
-class SubmitTaskEvent extends TaskEvent {}
+class SubmitTaskEvent extends TaskEvent {
+  final Map<String, dynamic> formData;
+
+  SubmitTaskEvent(this.formData);
+}
+
+class ExitTaskEvent extends TaskEvent {}

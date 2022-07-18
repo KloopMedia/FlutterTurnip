@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../../../app/app.dart';
-
 part 'create_tasks_state.dart';
 
 class CreateTasksCubit extends Cubit<CreateTasksState> {
@@ -56,13 +54,10 @@ class CreateTasksCubit extends Cubit<CreateTasksState> {
     emit(state.copyWith(status: TasksStatus.initialized, taskStages: taskStages));
   }
 
-  void createTask(BuildContext context, TaskStage taskStage) async {
+  Future<Task> createTask(BuildContext context, TaskStage taskStage) async {
     try {
-      final bloc = context.read<AppBloc>();
-      final navigator = Navigator.of(context);
       final task = await gigaTurnipRepository.createTask(taskStage.id);
-      bloc.add(AppSelectedTaskChanged(task));
-      navigator.pushNamed(taskInstanceRoute);
+      return task;
     } on GigaTurnipApiRequestException catch (e) {
       emit(
         state.copyWith(

@@ -5,18 +5,20 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api show TaskStage;
 
 part 'task_stage.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TaskStage extends Equatable {
   final int id;
   final String name;
   final String description;
   final Chain chain;
+  final String? richText;
 
   const TaskStage({
     required this.id,
     required this.name,
     required this.description,
     required this.chain,
+    required this.richText,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
@@ -29,9 +31,12 @@ class TaskStage extends Equatable {
       name: model.name,
       description: model.description,
       chain: Chain.fromApiModel(model.chain),
+      richText: model.richText,
     );
   }
 
+  Map<String, dynamic> toJson() => _$TaskStageToJson(this);
+
   @override
-  List<Object?> get props => [id, name, description, chain];
+  List<Object?> get props => [id, name, description, chain, richText];
 }

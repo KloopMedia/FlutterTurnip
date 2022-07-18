@@ -152,7 +152,7 @@ class GigaTurnipRepository {
     if (shouldRefreshFromApi) {
       await refreshAllTasks(selectedCampaign);
     }
-    
+
     switch (action) {
       case TasksActions.listOpenTasks:
         return _openedTasks;
@@ -163,6 +163,7 @@ class GigaTurnipRepository {
     }
   }
 
+
   Future<List<Notifications>?> getNotifications() async {
     final notificationsData = await _gigaTurnipApiClient.getUserNotifications();
     final notifications = notificationsData.map((apiNotification) {
@@ -170,6 +171,23 @@ class GigaTurnipRepository {
     }).toList();
     print('repo=>$notifications');
     return notifications;
+  }
+
+  Future<Task> getTask(int id) async {
+    final response = await _gigaTurnipApiClient.getTaskById(id: id);
+    return Task.fromApiModel(response);
+  }
+
+  Future<int?> updateTask(Task task) async {
+    final data = task.toJson();
+    final response = await _gigaTurnipApiClient.updateTaskById(
+      id: task.id,
+      data: data,
+    );
+    if (response.containsKey('next_direct_id')) {
+      return response['next_direct_id'];
+    }
+    return null;
   }
 }
 
