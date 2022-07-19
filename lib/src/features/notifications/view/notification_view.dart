@@ -20,12 +20,12 @@ class NotificationView extends StatelessWidget {
         Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                alignment: Alignment.center,
-                color: Colors.purple[400],
-                child: Text(campaignName, style: const TextStyle(fontSize: 18.0, color: Colors.white)),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.all(10.0),
+              //   alignment: Alignment.center,
+              //   color: Colors.purple[400],
+              //   child: Text(campaignName, style: const TextStyle(fontSize: 18.0, color: Colors.white)),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(

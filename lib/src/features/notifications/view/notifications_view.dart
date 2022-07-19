@@ -28,7 +28,7 @@ class _NotificationsViewState extends State<NotificationsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(context.loc.notifications),
       ),
       body: BlocConsumer<NotificationsCubit, NotificationsState>(
           listener: (context, state) {
