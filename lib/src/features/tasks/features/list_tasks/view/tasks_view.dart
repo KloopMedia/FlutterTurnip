@@ -10,7 +10,9 @@ import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 
 class TasksView extends StatefulWidget {
-  const TasksView({Key? key}) : super(key: key);
+  const TasksView({Key? key, required this.campaignName}) : super(key: key);
+
+  final String campaignName;
 
   @override
   State<TasksView> createState() => _TasksViewState();
@@ -43,7 +45,7 @@ class _TasksViewState extends State<TasksView> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(notificationsRoute);
+              Navigator.of(context).pushNamed(notificationsRoute, arguments: widget.campaignName);
             },
             icon: const Icon(Icons.notifications),
           ),

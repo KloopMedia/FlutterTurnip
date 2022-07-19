@@ -166,10 +166,9 @@ class GigaTurnipRepository {
 
   Future<List<Notifications>?> getNotifications() async {
     final notificationsData = await _gigaTurnipApiClient.getUserNotifications();
-    final notifications = notificationsData.map((apiNotification) {
+    final notifications = notificationsData.results.map((apiNotification) {
       return Notifications.fromApiModel(apiNotification);
     }).toList();
-    print('repo=>$notifications');
     return notifications;
   }
 

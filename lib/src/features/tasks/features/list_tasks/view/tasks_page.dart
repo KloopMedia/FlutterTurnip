@@ -12,12 +12,13 @@ class TasksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final campaignName = ModalRoute.of(context)?.settings.arguments as String;
     return BlocProvider<TasksCubit>(
       create: (context) => TasksCubit(
         selectedCampaign: context.read<AppBloc>().state.selectedCampaign!,
         gigaTurnipRepository: context.read<GigaTurnipRepository>(),
       ),
-      child: const TasksView(),
+      child: TasksView(campaignName: campaignName),
     );
   }
 }
