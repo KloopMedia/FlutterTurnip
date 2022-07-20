@@ -23,7 +23,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         _saveTask(state);
       }
     });
-
+    on<InitializeTaskEvent>(_onInitializeTask);
     on<UpdateTaskEvent>(_onUpdateTask);
     on<SubmitTaskEvent>(_onSubmitTask);
     on<ExitTaskEvent>(_onExitTask);
@@ -40,6 +40,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     return null;
   }
 
+  Future<List<Task>> _getPreviousTasks(int id) async {
+    return gigaTurnipRepository.getPreviousTasks(id);
+  }
+
   void _onUpdateTask(UpdateTaskEvent event, Emitter<TaskState> emit) {
     emit(state.copyWith(responses: event.formData));
   }
@@ -50,8 +54,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     if (nextTaskId != null) {
       final nextTask = await _getTask(nextTaskId);
       emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
+    } else {
+      emit(newState.copyWith(taskStatus: TaskStatus.redirectToTasksList));
     }
-    emit(newState.copyWith(taskStatus: TaskStatus.redirectToTasksList));
   }
 
   void _onExitTask(ExitTaskEvent event, Emitter<TaskState> emit) {
@@ -62,5 +67,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   Future<void> close() {
     timer?.cancel();
     return super.close();
+  }
+
+  Future<void> _onInitializeTask(InitializeTaskEvent event, Emitter<TaskState> emit) async {
+    final previousTasks = await _getPreviousTasks(state.id);
+    print("PREV TASKS $previousTasks");
+    emit(state.copyWith(previousTasks: previousTasks));
   }
 }
