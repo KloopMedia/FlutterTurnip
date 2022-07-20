@@ -17,7 +17,7 @@ class TasksPage extends StatelessWidget {
         selectedCampaign: context.read<AppBloc>().state.selectedCampaign!,
         gigaTurnipRepository: context.read<GigaTurnipRepository>(),
       ),
-      child: const TasksView(),
+      child: TasksView(),
     );
   }
 }

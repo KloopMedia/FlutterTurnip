@@ -29,6 +29,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLoginRequested>(_onLoginRequested);
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
+    on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
     _userSubscription = _authenticationRepository.user.listen(
           (user) => add(AppUserChanged(user)),
     );
@@ -73,5 +74,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(appLocale: event.locale));
+  }
+
+  void _onSelectedNotificationChanged(AppSelectedNotificationChanged event, Emitter<AppState> emit) {
+    emit(state.copyWith(notification: event.notification));
   }
 }
