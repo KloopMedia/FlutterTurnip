@@ -12,7 +12,7 @@ class Notification {
   final int importance;
   final int campaign;
   final int? rank;
-  final int targetUser;
+  final int? targetUser;
 
   Notification({
     required this.id,
