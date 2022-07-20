@@ -37,9 +37,3 @@ class AppSelectedTaskChanged extends AppEvent {
 
   const AppSelectedTaskChanged(this.task);
 }
-
-class AppSelectedNotificationChanged extends AppEvent {
-  final Notifications? notification;
-
-  const AppSelectedNotificationChanged(this.notification);
-}

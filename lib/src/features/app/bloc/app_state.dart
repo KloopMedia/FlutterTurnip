@@ -8,23 +8,20 @@ class AppState extends Equatable {
   final AuthUser? user;
   final Campaign? selectedCampaign;
   final Task? selectedTask;
-  final Notifications? selectedNotification;
 
   const AppState({
     this.appLocale = AppLocales.system,
     this.user,
     this.selectedCampaign,
     this.selectedTask,
-    this.selectedNotification
   });
 
-  AppState copyWith({AppLocales? appLocale, AuthUser? user, Campaign? campaign, Task? task, Notifications? notification }) {
+  AppState copyWith({AppLocales? appLocale, AuthUser? user, Campaign? campaign, Task? task}) {
     return AppState(
       appLocale: appLocale ?? this.appLocale,
       user: user ?? this.user,
       selectedCampaign: campaign ?? selectedCampaign,
       selectedTask: task ?? selectedTask,
-      selectedNotification: notification ??  selectedNotification
     );
   }
 
@@ -42,7 +39,7 @@ class AppState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [appLocale, user, selectedCampaign, selectedTask, selectedNotification];
+  List<Object?> get props => [appLocale, user, selectedCampaign, selectedTask];
 }
 
 class AppStateLoggedIn extends AppState {

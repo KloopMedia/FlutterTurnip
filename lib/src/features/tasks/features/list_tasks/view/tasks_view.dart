@@ -41,12 +41,6 @@ class _TasksViewState extends State<TasksView> {
             },
             icon: const Icon(Icons.add),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(notificationsRoute);
-            },
-            icon: const Icon(Icons.notifications),
-          ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;
             return IconButton(

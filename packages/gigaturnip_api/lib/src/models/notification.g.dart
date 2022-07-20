@@ -24,7 +24,7 @@ Notification _$NotificationFromJson(Map<String, dynamic> json) =>
           importance: $checkedConvert('importance', (v) => v as int),
           campaign: $checkedConvert('campaign', (v) => v as int),
           rank: $checkedConvert('rank', (v) => v as int?),
-          targetUser: $checkedConvert('target_user', (v) => v as int?),
+          targetUser: $checkedConvert('target_user', (v) => v as int),
         );
         return val;
       },
