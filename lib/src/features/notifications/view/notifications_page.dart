@@ -9,10 +9,9 @@ class NotificationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final campaignName = ModalRoute.of(context)?.settings.arguments as String;
     return BlocProvider<NotificationsCubit>(
       create: (context) => NotificationsCubit(gigaTurnipRepository: context.read<GigaTurnipRepository>()),
-      child: NotificationsView(campaignName: campaignName)
+      child: const NotificationsView()
     );
   }
 }

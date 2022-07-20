@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/authentication/authentication.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
+import 'package:gigaturnip/src/features/notifications/notifications.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.dart';
 import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../notifications/view/notifications_page.dart';
 
 class App extends StatelessWidget {
   const App({

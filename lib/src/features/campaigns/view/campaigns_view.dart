@@ -37,7 +37,7 @@ class _CampaignsViewState extends State<CampaignsView> {
         return CampaignsListView(
           onTap: (campaign) {
             context.read<AppBloc>().add(AppSelectedCampaignChanged(campaign));
-            Navigator.of(context).pushNamed(tasksRoute, arguments: campaign.name);
+            Navigator.of(context).pushNamed(tasksRoute);
           },
           onRefresh: () {
             context.read<CampaignsCubit>().loadCampaigns(forceRefresh: true);

@@ -24,25 +24,28 @@ class NotificationsListView extends StatelessWidget {
         onRefresh();
       },
       child: ListView.builder(
-            shrinkWrap: true,
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            var item = items[index];
-            var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(DateTime.parse('${item.createdAt}'));
-            return Card(
-                elevation: 3,
-                margin: const EdgeInsets.all(8),
-                color: Colors.grey[300],
-                child: ListTile(
-                  title: Text(item.title),
-                  subtitle: Text(createdAt),
-                  trailing: (item.importance < 3) ? const Icon(Icons.notification_important, color: Colors.red) : null,
-                  onTap: () {
-                    onTap(item);
-                  },
-                )
-            );
-          },
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          var item = items[index];
+          var createdAt =
+              DateFormat('MMM d, yyyy  HH:mm').format(DateTime.parse('${item.createdAt}'));
+          return Card(
+            elevation: 3,
+            margin: const EdgeInsets.all(8),
+            color: Colors.grey[300],
+            child: ListTile(
+              title: Text(item.title),
+              subtitle: Text(createdAt),
+              trailing: (item.importance < 3)
+                  ? const Icon(Icons.notification_important, color: Colors.red)
+                  : null,
+              onTap: () {
+                onTap(item);
+              },
+            ),
+          );
+        },
       ),
     );
   }
