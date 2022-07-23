@@ -12,6 +12,8 @@
     "todo" : "To do",
     "available" : "Available",
     "cancel" : "Cancel",
+    "mytasks" : "My Tasks",
+    "newtasks" : "New Tasks",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",

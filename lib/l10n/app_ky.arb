@@ -12,6 +12,8 @@
     "todo" : "Артка кайтарылды",
     "available" : "Жеткиликтүү",
     "cancel" : "Жокко чыгаруу",
+    "mytasks" : "Менин Милдеттери",
+    "newtasks" : "Жаңы Милдеттер",
 
     "sign_in" : "GOOGLE МЕНЕН КИРГИЗИНИЗ",
     "failed_to_load_campaigns" : "Failed to load campaigns",

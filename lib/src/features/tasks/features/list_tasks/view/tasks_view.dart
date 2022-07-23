@@ -96,14 +96,14 @@ class _TasksViewState extends State<TasksView> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(createTasksRoute);
-        },
-        backgroundColor: Theme.of(context).colorScheme.copyWith().primary,
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.of(context).pushNamed(createTasksRoute);
+      //   },
+      //   backgroundColor: Theme.of(context).colorScheme.copyWith().primary,
+      //   child: const Icon(Icons.add),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

@@ -24,22 +24,22 @@ class TasksListView extends StatelessWidget {
         onRefresh();
       },
       child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          var item = items[index];
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: IdTitleCard(
-              id: item.id,
-              title: item.name,
-              date: item.createdAt,
-              onTap: () {
-                onTap(item);
-              },
-            ),
-          );
-        },
-      ),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            var item = items[index];
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: IdTitleCard(
+                id: item.id,
+                title: item.name,
+                date: item.createdAt,
+                onTap: () {
+                  onTap(item);
+                },
+              ),
+            );
+          },
+        ),
     );
   }
 }

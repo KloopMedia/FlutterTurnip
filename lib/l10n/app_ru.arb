@@ -12,6 +12,8 @@
      "todo" : "Сделать",
      "available" : "Доступные",
      "cancel" : "Отменить",
+     "mytasks" : "Мои Задачи",
+     "newtasks" : "Новые Задачи",
 
      "sign_in" : "Зарегистрироваться через Google",
      "failed_to_load_campaigns" : "Неудалось загрузить кампании",
