@@ -16,16 +16,23 @@ class TasksCubit extends Cubit<TasksState> {
 
   void initialize() async {
     emit(state.copyWith(status: TasksStatus.loading));
-    final data = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final data_open = await _fetchData(
+        action: TasksActions.listOpenTasks, forceRefresh: true);
+    final data_closed = await _fetchData(
+        action: TasksActions.listClosedTasks, forceRefresh: true);
+    final data = {
+      'open': data_open ?? [],
+      'closed': data_closed ?? [],
+    };
     if (data != null) {
-      emit(state.copyWith(tasks: data, status: TasksStatus.initialized));
+      emit(state.copyWith(tasks: data , status: TasksStatus.initialized));
     }
   }
 
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
     final action = _getActionFromTab(state.selectedTab);
-    final data = await _fetchData(action: action, forceRefresh: true);
+    final data = {'' : await _fetchData(action: action, forceRefresh: true) ?? []};
     if (data != null) {
       emit(state.copyWith(tasks: data, status: TasksStatus.initialized));
     }
@@ -36,13 +43,14 @@ class TasksCubit extends Cubit<TasksState> {
     final tab = _getTabFromIndex(index);
     final action = _getActionFromTab(tab);
     emit(state.copyWith(selectedTab: tab, tabIndex: index));
-    final data = await _fetchData(action: action);
+    final data = {'' : await _fetchData(action: action) ?? []};
     if (data != null) {
       emit(state.copyWith(tasks: data, status: TasksStatus.initialized));
     }
   }
 
-  Future<List<Task>?> _fetchData({required TasksActions action, bool forceRefresh = false}) async {
+  Future<List<Task>?> _fetchData(
+      {required TasksActions action, bool forceRefresh = false}) async {
     try {
       return await gigaTurnipRepository.getTasks(
         action: action,
@@ -54,7 +62,7 @@ class TasksCubit extends Cubit<TasksState> {
         state.copyWith(
           status: TasksStatus.error,
           errorMessage: e.message,
-          tasks: [],
+          tasks: {},
         ),
       );
     } catch (e) {
@@ -62,7 +70,7 @@ class TasksCubit extends Cubit<TasksState> {
         state.copyWith(
           status: TasksStatus.error,
           errorMessage: 'Failed to load tasks',
-          tasks: [],
+          tasks: {},
         ),
       );
     }

@@ -7,7 +7,7 @@ enum Tabs {
 }
 
 class TasksState extends Equatable {
-  final List<Task> tasks;
+  final Map<String, List<Task>> tasks;
   final TasksStatus status;
   final String? errorMessage;
   final Tabs selectedTab;
@@ -16,13 +16,13 @@ class TasksState extends Equatable {
   const TasksState({
     this.status = TasksStatus.uninitialized,
     this.errorMessage,
-    this.tasks = const [],
+    this.tasks = const {},
     this.selectedTab = Tabs.openTasksTab,
     this.tabIndex = 0,
   });
 
   TasksState copyWith({
-    List<Task>? tasks,
+    Map<String, List<Task>>? tasks,
     TasksStatus? status,
     String? errorMessage,
     Tabs? selectedTab,
