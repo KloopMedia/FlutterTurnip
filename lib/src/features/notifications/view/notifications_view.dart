@@ -7,6 +7,8 @@ import 'package:gigaturnip/src/features/notifications/view/notification_view.dar
 import 'package:gigaturnip/src/features/notifications/view/notifications_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 
+import '../cubit/notifications_cubit.dart';
+
 class NotificationsView extends StatefulWidget {
   const NotificationsView({Key? key}) : super(key: key);
 

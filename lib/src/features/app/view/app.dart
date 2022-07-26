@@ -40,6 +40,7 @@ class App extends StatelessWidget {
         ),
         child: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
+            final bloc = context.read<AppBloc>();
             return MaterialApp(
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSwatch(
@@ -59,7 +60,8 @@ class App extends StatelessWidget {
                   ),
                 ),
               ),
-              locale: state.locale,
+              /// передается локализация, сохраненная в sharedPreferences
+              locale: bloc.sharedPrefsLocale ?? state.locale ?? const Locale('system'),
               supportedLocales: AppLocalizations.supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               home: state.user != null ? const CampaignsPage() : const LoginPage(),
