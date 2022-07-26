@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
@@ -12,6 +13,7 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<AuthUser> _userSubscription;
+  AppLocales? sharedPrefsAppLocale;
 
   AppBloc({
     required AuthenticationRepository authenticationRepository,
@@ -33,6 +35,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _userSubscription = _authenticationRepository.user.listen(
           (user) => add(AppUserChanged(user)),
     );
+    _getLocaleFromSharedPrefs();
+  }
+
+  Locale? get sharedPrefsLocale {
+    switch(sharedPrefsAppLocale) {
+      case AppLocales.system:
+        return const Locale('system');
+      case AppLocales.russian:
+        return const Locale('ru');
+      case AppLocales.english:
+        return const Locale('en');
+      default:
+        return null;
+    }
   }
 
   void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
@@ -73,10 +89,51 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) {
-    emit(state.copyWith(appLocale: event.locale));
+    _setLocaleToSharedPrefs(event.locale);
+
+    /// перезаписывает переменную sharedPrefsAppLocale новой локализацией, чтобы передать эту переменную в метод copyWith
+    _getLocaleFromSharedPrefs();
+
+    emit(state.copyWith(appLocale: sharedPrefsAppLocale ?? event.locale));
   }
 
   void _onSelectedNotificationChanged(AppSelectedNotificationChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(notification: event.notification));
+  }
+
+  void _setLocaleToSharedPrefs(AppLocales? appLocales) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String locale;
+    switch(appLocales) {
+      case AppLocales.system:
+        locale = 'system';
+        break;
+      case AppLocales.russian:
+        locale = 'ru';
+        break;
+      case AppLocales.english:
+        locale = 'en';
+        break;
+      default:
+        return null;
+    }
+    sharedPreferences.setString('locale', locale);
+  }
+
+  void _getLocaleFromSharedPrefs() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.containsKey('locale')) {
+      String sharedLang = sharedPreferences.getString('locale')!;
+      switch(sharedLang) {
+        case 'system':
+          sharedPrefsAppLocale = AppLocales.system;
+          break;
+        case 'ru':
+          sharedPrefsAppLocale = AppLocales.russian;
+          break;
+        case 'en':
+          sharedPrefsAppLocale = AppLocales.english;
+      }
+    }
   }
 }

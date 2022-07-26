@@ -11,7 +11,7 @@ class AppState extends Equatable {
   final Notifications? selectedNotification;
 
   const AppState({
-    this.appLocale = AppLocales.system,
+    this.appLocale,
     this.user,
     this.selectedCampaign,
     this.selectedTask,

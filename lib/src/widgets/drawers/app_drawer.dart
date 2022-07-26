@@ -85,7 +85,8 @@ class AppDrawer extends StatelessWidget {
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                     ),
-                    value: state.appLocale,
+                    /// передается локализация, сохраненная в sharedPreferences
+                    value: bloc.sharedPrefsAppLocale ?? state.appLocale ?? AppLocales.system,
                     onChanged: (AppLocales? locale) {
                       if (locale != null) {
                         bloc.add(AppLocaleChanged(locale));
