@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.kloop.gigaturnip">
    <application
-        android:label="gigaturnip"
+        android:label="GigaTurnip"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
