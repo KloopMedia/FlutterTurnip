@@ -5,7 +5,8 @@ typedef CardCallback = void Function();
 
 class IdTitleCard extends StatelessWidget {
   final String title;
-  final int id;
+  final String description;
+  final int? id;
   final DateTime? date;
   final CardCallback onTap;
 
@@ -15,6 +16,7 @@ class IdTitleCard extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.date,
+    this.description = "",
   }) : super(key: key);
 
   @override
@@ -27,8 +29,7 @@ class IdTitleCard extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
-                  visualDensity:
-                      const VisualDensity(horizontal: 4, vertical: 4),
+                  visualDensity: const VisualDensity(horizontal: 4, vertical: 4),
                   leading: Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: FittedBox(
@@ -42,12 +43,15 @@ class IdTitleCard extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  subtitle: const Text('Here is your description'),
+                  subtitle: Text(description),
                   trailing: Column(
                     children: [
-                      Text(
-                        '#$id',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                      Visibility(
+                        visible: id != null,
+                        child: Text(
+                          '#$id',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ),
                       const SizedBox(
                         height: 25,
@@ -55,7 +59,7 @@ class IdTitleCard extends StatelessWidget {
                       if (date != null)
                         Text(
                           DateFormat.Hm().add_d().add_MMM().format(date!),
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: Theme.of(context).textTheme.caption,
                         ),
                     ],
                   ),

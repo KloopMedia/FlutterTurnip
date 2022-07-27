@@ -4,10 +4,11 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/double_tasks_list_view.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
-import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -39,12 +40,6 @@ class _TasksViewState extends State<TasksView> {
           },
         ),
         actions: <Widget>[
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.of(context).pushNamed(createTasksRoute);
-          //   },
-          //   icon: const Icon(Icons.add),
-          // ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;
             return IconButton(
@@ -73,16 +68,43 @@ class _TasksViewState extends State<TasksView> {
               child: CircularProgressIndicator(),
             );
           }
-          return TasksListView(
-            items: state.tasks,
-            onRefresh: () {
-              context.read<TasksCubit>().refresh();
-            },
-            onTap: (task) {
-              context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-              Navigator.of(context).pushNamed(taskInstanceRoute);
-            },
-          );
+          switch (state.selectedTab) {
+            case Tabs.assignedTasksTab:
+              return DoubleTasksListView(
+                firstList: state.openTasks,
+                secondList: state.closeTasks,
+                headerOne: 'To Do',
+                headerTwo: 'Done',
+                onRefresh: () {
+                  context.read<TasksCubit>().refresh();
+                },
+                onTap: (task) {
+                  context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+                  Navigator.of(context).pushNamed(taskInstanceRoute);
+                },
+              );
+            case Tabs.availableTasksTab:
+              return DoubleTasksListView(
+                firstList: state.creatableTasks,
+                secondList: state.availableTasks,
+                headerOne: 'Создать',
+                headerTwo: 'Получить',
+                onRefresh: () {
+                  context.read<TasksCubit>().refresh();
+                },
+                onTap: (item) async {
+                  if (item is TaskStage) {
+                    final task = await context.read<TasksCubit>().createTask(item);
+                    if (!mounted) return;
+                    context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+                    Navigator.of(context).pushNamed(taskInstanceRoute);
+                  } else {
+                    context.read<AppBloc>().add(AppSelectedTaskChanged(item));
+                    Navigator.of(context).pushNamed(taskInstanceRoute);
+                  }
+                },
+              );
+          }
         },
       ),
       endDrawer: const AppDrawer(),
@@ -96,14 +118,6 @@ class _TasksViewState extends State<TasksView> {
           );
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.of(context).pushNamed(createTasksRoute);
-      //   },
-      //   backgroundColor: Theme.of(context).colorScheme.copyWith().primary,
-      //   child: const Icon(Icons.add),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
