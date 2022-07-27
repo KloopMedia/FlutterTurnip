@@ -8,6 +8,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
+
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -18,13 +19,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-  })
-      : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(
-        authenticationRepository.currentUser.isNotEmpty
-            ? AppStateLoggedIn(user: authenticationRepository.currentUser)
-            : const AppStateLoggedOut(exception: null),
-      ) {
+          authenticationRepository.currentUser.isNotEmpty
+              ? AppStateLoggedIn(user: authenticationRepository.currentUser)
+              : const AppStateLoggedOut(exception: null),
+        ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLocaleChanged>(_onLocaleChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
@@ -33,19 +33,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
     _userSubscription = _authenticationRepository.user.listen(
-          (user) => add(AppUserChanged(user)),
+      (user) => add(AppUserChanged(user)),
     );
     _getLocaleFromSharedPrefs();
   }
 
   Locale? get sharedPrefsLocale {
-    switch(sharedPrefsAppLocale) {
+    switch (sharedPrefsAppLocale) {
       case AppLocales.system:
         return const Locale('system');
       case AppLocales.russian:
         return const Locale('ru');
       case AppLocales.english:
         return const Locale('en');
+      case AppLocales.kyrgyz:
+        return const Locale('ky');
       default:
         return null;
     }
@@ -97,14 +99,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(state.copyWith(appLocale: sharedPrefsAppLocale ?? event.locale));
   }
 
-  void _onSelectedNotificationChanged(AppSelectedNotificationChanged event, Emitter<AppState> emit) {
+  void _onSelectedNotificationChanged(
+      AppSelectedNotificationChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(notification: event.notification));
   }
 
   void _setLocaleToSharedPrefs(AppLocales? appLocales) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String locale;
-    switch(appLocales) {
+    switch (appLocales) {
       case AppLocales.system:
         locale = 'system';
         break;
@@ -114,17 +117,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       case AppLocales.english:
         locale = 'en';
         break;
+      case AppLocales.kyrgyz:
+        locale = 'ky';
+        break;
       default:
         return null;
     }
     sharedPreferences.setString('locale', locale);
+    sharedPrefsAppLocale = appLocales;
   }
 
   void _getLocaleFromSharedPrefs() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.containsKey('locale')) {
       String sharedLang = sharedPreferences.getString('locale')!;
-      switch(sharedLang) {
+      switch (sharedLang) {
         case 'system':
           sharedPrefsAppLocale = AppLocales.system;
           break;
@@ -133,6 +140,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           break;
         case 'en':
           sharedPrefsAppLocale = AppLocales.english;
+          break;
+        case 'ky':
+          sharedPrefsAppLocale = AppLocales.kyrgyz;
       }
     }
   }
