@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() {
   return BlocOverrides.runZoned(
@@ -14,6 +15,7 @@ Future<void> main() {
       final authenticationRepository = AuthenticationRepository();
       await authenticationRepository.user.first;
       final gigaTurnipRepository = GigaTurnipRepository();
+      await SharedPreferences.getInstance();
       runApp(
         App(
           authenticationRepository: authenticationRepository,

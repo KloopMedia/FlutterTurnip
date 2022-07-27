@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/authentication/authentication.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_page.dart';
+import 'package:gigaturnip/src/features/notifications/notifications.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.dart';
 import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class App extends StatelessWidget {
   const App({
@@ -41,6 +43,7 @@ class App extends StatelessWidget {
         ),
         child: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
+            final bloc = context.read<AppBloc>();
             return MaterialApp(
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSwatch().copyWith(
@@ -96,7 +99,8 @@ class App extends StatelessWidget {
                   color: primaryColor,
                 )
               ),
-              locale: state.locale,
+              /// передается локализация, сохраненная в sharedPreferences
+              locale: bloc.sharedPrefsLocale ?? state.locale ?? const Locale('system'),
               supportedLocales: AppLocalizations.supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               home: state.user != null
@@ -106,6 +110,7 @@ class App extends StatelessWidget {
                 tasksRoute: (context) => const TasksPage(),
                 createTasksRoute: (context) => const CreateTasksPage(),
                 taskInstanceRoute: (context) => const TaskPage(),
+                notificationsRoute: (context) => const NotificationsPage()
               },
             );
           },

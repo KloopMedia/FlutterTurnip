@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Chain, TaskStage;
+import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Chain, TaskStage, Notification;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
@@ -163,12 +163,35 @@ class GigaTurnipRepository {
     }
   }
 
-  Future<void> updateTask(Task task) async {
+
+  Future<List<Notifications>?> getNotifications() async {
+    final notificationsData = await _gigaTurnipApiClient.getUserNotifications();
+    final notifications = notificationsData.results.map((apiNotification) {
+      return Notifications.fromApiModel(apiNotification);
+    }).toList();
+    return notifications;
+  }
+
+  Future<Task> getTask(int id) async {
+    final response = await _gigaTurnipApiClient.getTaskById(id: id);
+    return Task.fromApiModel(response);
+  }
+
+  Future<int?> updateTask(Task task) async {
     final data = task.toJson();
-    await _gigaTurnipApiClient.updateTaskById(
+    final response = await _gigaTurnipApiClient.updateTaskById(
       id: task.id,
       data: data,
     );
+    if (response.containsKey('next_direct_id')) {
+      return response['next_direct_id'];
+    }
+    return null;
+  }
+
+  Future<List<Task>> getPreviousTasks(int id) async {
+    final tasks = await _gigaTurnipApiClient.getDisplayedPreviousTasks(id: id);
+    return tasks.map((task) => Task.fromApiModel(task)).toList();
   }
 }
 

@@ -8,7 +8,6 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/double_ta
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -40,6 +39,12 @@ class _TasksViewState extends State<TasksView> {
           },
         ),
         actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(notificationsRoute);
+            },
+            icon: const Icon(Icons.notifications),
+          ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;
             return IconButton(
@@ -78,9 +83,12 @@ class _TasksViewState extends State<TasksView> {
                 onRefresh: () {
                   context.read<TasksCubit>().refresh();
                 },
-                onTap: (task) {
+                onTap: (task) async {
                   context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                  Navigator.of(context).pushNamed(taskInstanceRoute);
+                  final shouldRefresh = await Navigator.of(context).pushNamed(taskInstanceRoute);
+                  if (shouldRefresh == true && mounted) {
+                    context.read<TasksCubit>().refresh();
+                  }
                 },
               );
             case Tabs.availableTasksTab:
@@ -97,10 +105,13 @@ class _TasksViewState extends State<TasksView> {
                     final task = await context.read<TasksCubit>().createTask(item);
                     if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                    Navigator.of(context).pushNamed(taskInstanceRoute);
                   } else {
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
-                    Navigator.of(context).pushNamed(taskInstanceRoute);
+                  }
+                  if (!mounted) return;
+                  final shouldRefresh = await Navigator.of(context).pushNamed(taskInstanceRoute);
+                  if (shouldRefresh == true && mounted) {
+                    context.read<TasksCubit>().refresh();
                   }
                 },
               );

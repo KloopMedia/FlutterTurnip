@@ -79,47 +79,50 @@ class AppDrawer extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child: DropdownButtonFormField<AppLocales>(
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.language),
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                  ),
-                  value: state.appLocale,
-                  onChanged: (AppLocales? locale) {
-                    if (locale != null) {
-                      bloc.add(AppLocaleChanged(locale));
-                    }
-                  },
-                  items: [
-                    DropdownMenuItem<AppLocales>(
-                        value: AppLocales.system,
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButtonFormField<AppLocales>(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.language),
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                    ),
+                    value: bloc.sharedPrefsAppLocale ?? state.appLocale ?? AppLocales.system,
+                    onChanged: (AppLocales? locale) {
+                      if (locale != null) {
+                        bloc.add(AppLocaleChanged(locale));
+                      }
+                    },
+                    items: [
+                      DropdownMenuItem<AppLocales>(
+                          value: AppLocales.system,
+                          child: Text(
+                            context.loc.language,
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          )),
+                      DropdownMenuItem<AppLocales>(
+                        value: AppLocales.english,
                         child: Text(
-                          context.loc.language,
+                          context.loc.english,
                           style: Theme.of(context).textTheme.headlineLarge,
-                        )),
-                    DropdownMenuItem<AppLocales>(
-                      value: AppLocales.english,
-                      child: Text(
-                        context.loc.english,
-                        style: Theme.of(context).textTheme.headlineLarge,
+                        ),
                       ),
-                    ),
-                    DropdownMenuItem<AppLocales>(
-                      value: AppLocales.russian,
-                      child: Text(
-                        context.loc.russian,
-                        style: Theme.of(context).textTheme.headlineLarge,
+                      DropdownMenuItem<AppLocales>(
+                        value: AppLocales.russian,
+                        child: Text(
+                          context.loc.russian,
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
                       ),
-                    ),
-                    DropdownMenuItem<AppLocales>(
-                      value: AppLocales.kyrgyz,
-                      child: Text(
-                        context.loc.kyrgyz,
-                        style: Theme.of(context).textTheme.headlineLarge,
+                      DropdownMenuItem<AppLocales>(
+                        value: AppLocales.kyrgyz,
+                        child: Text(
+                          context.loc.kyrgyz,
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Align(

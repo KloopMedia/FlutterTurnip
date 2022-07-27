@@ -6,7 +6,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 class GigaTurnipApiClient {
   static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
 
-  // static const baseUrl = 'http://127.0.0.1:8000';
+  //static const baseUrl = 'http://127.0.0.1:8000';
 
   final Dio _httpClient;
 
@@ -23,8 +23,10 @@ class GigaTurnipApiClient {
         (json) => Campaign.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -38,8 +40,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -53,8 +57,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -69,8 +75,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -87,8 +95,10 @@ class GigaTurnipApiClient {
       }
       return taskId;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -103,8 +113,10 @@ class GigaTurnipApiClient {
         (json) => Task.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -121,8 +133,10 @@ class GigaTurnipApiClient {
         (json) => Task.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -139,8 +153,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -148,24 +164,30 @@ class GigaTurnipApiClient {
   Future<Task> getTaskById({Map<String, dynamic>? query, required int id}) async {
     try {
       final response = await _httpClient.get(
-        tasksRoute + id.toString(),
+        '$tasksRoute$id/',
         queryParameters: query,
       );
 
       return Task.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
 
-  Future<void> updateTaskById({required int id, required dynamic data}) async {
+  Future<Map<String, dynamic>> updateTaskById({required int id, required dynamic data}) async {
     try {
-      await _httpClient.patch('$tasksRoute$id/', data: data);
-    } catch (e) {
-      print('hahah');
+      final response = await _httpClient.patch('$tasksRoute$id/', data: data);
+      return response.data;
+    } on DioError catch (e) {
       print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
     }
   }
 
@@ -181,8 +203,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -200,8 +224,10 @@ class GigaTurnipApiClient {
 
       return list;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -215,8 +241,10 @@ class GigaTurnipApiClient {
 
       return Task.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -228,8 +256,10 @@ class GigaTurnipApiClient {
         queryParameters: query,
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -243,8 +273,10 @@ class GigaTurnipApiClient {
 
       return Task.fromJson(response.data);
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -256,8 +288,10 @@ class GigaTurnipApiClient {
         queryParameters: query,
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -269,8 +303,10 @@ class GigaTurnipApiClient {
         queryParameters: query,
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -284,23 +320,26 @@ class GigaTurnipApiClient {
         (json) => Notification.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
 
-  Future<List<Notification>> getUserNotifications({Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
-      List<Notification> list = (response.data as List)
-          .map((json) => Notification.fromJson(json as Map<String, dynamic>))
-          .toList();
-
-      return list;
+      return PaginationWrapper<Notification>.fromJson(
+          response.data,
+          (json) => Notification.fromJson(json as Map<String, dynamic>),
+      );
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

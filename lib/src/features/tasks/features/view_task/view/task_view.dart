@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
+import 'package:gigaturnip/src/utilities/constants/urls.dart';
+import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
 import 'package:uniturnip/json_schema_ui.dart';
 
 class TaskView extends StatefulWidget {
@@ -17,6 +20,7 @@ class _TaskViewState extends State<TaskView> {
   @override
   void initState() {
     taskBloc = context.read<TaskBloc>();
+    taskBloc.add(InitializeTaskEvent());
     formController = UIModel(
       data: taskBloc.state.responses ?? {},
       disabled: taskBloc.state.complete,
@@ -50,24 +54,65 @@ class _TaskViewState extends State<TaskView> {
             color: Colors.white,
           ),
         ),
+        leading: BackButton(
+          onPressed: () {
+            context.read<AppBloc>().add(const AppSelectedTaskChanged(null));
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body: BlocListener<TaskBloc, TaskState>(
+      body: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
-          formController.data = state.responses!;
+          formController.data = state.responses ?? {};
           formController.disabled = state.complete;
+          if (state.taskStatus == TaskStatus.redirectToNextTask) {
+            if (state.nextTask != null) {
+              context.read<AppBloc>().add(AppSelectedTaskChanged(state.nextTask));
+              Navigator.pushReplacementNamed(context, taskInstanceRoute);
+            }
+          } else if (state.taskStatus == TaskStatus.redirectToTasksList) {
+            Navigator.pop(context, true);
+          }
           // TODO: implement error handling
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: JSONSchemaUI(
-            schema: context.read<TaskBloc>().state.schema!,
-            ui: context.read<TaskBloc>().state.uiSchema!,
-            formController: formController,
-            onSubmit: ({required Map<String, dynamic> data}) {
-              context.read<TaskBloc>().add(SubmitTaskEvent(data));
-            },
-          ),
-        ),
+        buildWhen: (previousState, currentState) {
+          return (previousState.previousTasks != currentState.previousTasks) || (previousState.complete != currentState.complete);
+        },
+        builder: (context, state) {
+          return ListView(
+            children: [
+              RichTextWebview(
+                text: state.stage.richText ?? '',
+                initialUrl: richTextWebviewUrl,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    for (var task in state.previousTasks)
+                      JSONSchemaUI(
+                        schema: task.schema!,
+                        ui: task.uiSchema!,
+                        formController: UIModel(disabled: true, data: task.responses ?? {}),
+                        hideSubmitButton: true,
+                      ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: JSONSchemaUI(
+                  schema: state.schema!,
+                  ui: state.uiSchema!,
+                  formController: formController,
+                  onSubmit: ({required Map<String, dynamic> data}) {
+                    taskBloc.add(SubmitTaskEvent(data));
+                  },
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
