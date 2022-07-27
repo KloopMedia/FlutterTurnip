@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/double_ta
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
