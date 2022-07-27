@@ -16,7 +16,11 @@ class CampaignsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.loc.campaigns),
+        centerTitle: true,
+        title: Text(
+          context.loc.campaigns,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         actions: <Widget>[
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;

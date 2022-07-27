@@ -20,16 +20,12 @@ class TasksBottomNavigationBar extends StatelessWidget {
       onTap: onTap,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: const Icon(Icons.arrow_forward),
-          label: context.loc.open,
+          icon: const Icon(Icons.playlist_add_check),
+          label: context.loc.mytasks,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.check),
-          label: context.loc.closed,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.bolt),
-          label: context.loc.available,
+          icon: const Icon(Icons.playlist_add),
+          label: context.loc.newtasks,
         ),
       ],
     );

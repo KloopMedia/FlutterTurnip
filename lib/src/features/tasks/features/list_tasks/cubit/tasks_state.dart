@@ -1,35 +1,46 @@
 part of 'tasks_cubit.dart';
 
 enum Tabs {
-  openTasksTab,
-  closedTasksTab,
+  assignedTasksTab,
   availableTasksTab,
 }
 
 class TasksState extends Equatable {
-  final List<Task> tasks;
+  final List<Task> openTasks;
+  final List<Task> closeTasks;
+  final List<Task> availableTasks;
+  final List<TaskStage> creatableTasks;
   final TasksStatus status;
   final String? errorMessage;
   final Tabs selectedTab;
   final int tabIndex;
 
   const TasksState({
+    this.openTasks = const [],
+    this.closeTasks = const [],
+    this.availableTasks = const [],
+    this.creatableTasks = const [],
     this.status = TasksStatus.uninitialized,
     this.errorMessage,
-    this.tasks = const [],
-    this.selectedTab = Tabs.openTasksTab,
+    this.selectedTab = Tabs.assignedTasksTab,
     this.tabIndex = 0,
   });
 
   TasksState copyWith({
-    List<Task>? tasks,
+    List<TaskStage>? creatableTasks,
+    List<Task>? openTasks,
+    List<Task>? closeTasks,
+    List<Task>? availableTasks,
     TasksStatus? status,
     String? errorMessage,
     Tabs? selectedTab,
     int? tabIndex,
   }) {
     return TasksState(
-      tasks: tasks ?? this.tasks,
+      openTasks: openTasks ?? this.openTasks,
+      closeTasks: closeTasks ?? this.closeTasks,
+      availableTasks: availableTasks ?? this.availableTasks,
+      creatableTasks: creatableTasks ?? this.creatableTasks,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       selectedTab: selectedTab ?? this.selectedTab,
@@ -38,5 +49,13 @@ class TasksState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [tasks, status, selectedTab, tabIndex];
+  List<Object?> get props => [
+        openTasks,
+        closeTasks,
+        availableTasks,
+        creatableTasks,
+        status,
+        selectedTab,
+        tabIndex,
+      ];
 }

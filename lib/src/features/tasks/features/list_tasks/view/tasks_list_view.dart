@@ -8,7 +8,7 @@ typedef RefreshCallback = void Function();
 class TasksListView extends StatelessWidget {
   final ItemCallback onTap;
   final RefreshCallback onRefresh;
-  final List<Task> items;
+  final Map<String, List<Task>> items;
 
   const TasksListView({
     Key? key,
@@ -23,23 +23,60 @@ class TasksListView extends StatelessWidget {
       onRefresh: () async {
         onRefresh();
       },
-      child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          var item = items[index];
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: IdTitleCard(
-              id: item.id,
-              title: item.name,
-              date: item.createdAt,
-              onTap: () {
-                onTap(item);
-              },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('To-do', style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.start,),
             ),
-          );
-        },
+            Expanded(
+              child: ListView.builder(
+                itemCount: items['open']?.length ?? 0,
+                itemBuilder: (context, index) {
+                  var itemOpen = items['open'] ?? [];
+                  return Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: IdTitleCard(
+                      id: itemOpen[index].id,
+                      title: itemOpen[index].name,
+                      date: itemOpen[index].createdAt,
+                      onTap: () {
+                        onTap(itemOpen[index]);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Done', style: Theme.of(context).textTheme.titleMedium,),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: items['closed']?.length ?? 0,
+                itemBuilder: (context, index) {
+                  var itemClosed = items['closed'] ?? [];
+                  return Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: IdTitleCard(
+                      id: itemClosed[index].id,
+                      title: itemClosed[index].name,
+                      date: itemClosed[index].createdAt,
+                      onTap: () {
+                        onTap(itemClosed[index]);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+

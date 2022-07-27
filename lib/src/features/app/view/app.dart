@@ -25,6 +25,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     const Color primaryColor = Color.fromRGBO(69, 123, 157, 1);
+     const Color secondaryColor = Color.fromRGBO(168, 210, 219, 1);
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthenticationRepository>(
@@ -43,28 +46,66 @@ class App extends StatelessWidget {
             final bloc = context.read<AppBloc>();
             return MaterialApp(
               theme: ThemeData(
-                colorScheme: ColorScheme.fromSwatch(
-                  primarySwatch: Colors.purple,
-                ).copyWith(secondary: Colors.grey[300]),
-                fontFamily: 'OpenSans',
-                textTheme: ThemeData.light().textTheme.copyWith(
-                      titleMedium: const TextStyle(
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
+                colorScheme: ColorScheme.fromSwatch().copyWith(
+                  primary: primaryColor,
+                  secondary: secondaryColor,
                 ),
+                // fontFamily: 'Roboto',
+                textTheme: ThemeData.light().textTheme.copyWith(
+                  titleSmall: const TextStyle(
+                    fontFamily: 'Open-Sans',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18
+                  ),
+                    titleMedium: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 25,
+                    ),
+                    titleLarge: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 27,
+                      color: Colors.white,
+                    ),
+                  headlineLarge: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                      color: Colors.black87,
+                  ),
+                    headlineMedium: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                      color: Colors.black87,
+                    ),
+                    headlineSmall: const TextStyle(
+                      fontFamily: 'Open-Sans',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+            ),
+                // elevatedButtonTheme: ElevatedButtonThemeData(
+                //   style: TextButton.styleFrom(
+                //     backgroundColor: Colors.redAccent[200],
+                //   ),
+                // ),
+                // floatingActionButtonTheme: FloatingActionButtonThemeData(
+                //   backgroundColor: Colors.redAccent[200],
+                // ),
+                appBarTheme: const AppBarTheme(
+                  color: primaryColor,
+                )
               ),
               /// передается локализация, сохраненная в sharedPreferences
               locale: bloc.sharedPrefsLocale ?? state.locale ?? const Locale('system'),
               supportedLocales: AppLocalizations.supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: state.user != null ? const CampaignsPage() : const LoginPage(),
+              home: state.user != null
+                  ? const CampaignsPage()
+                  : const LoginPage(),
               routes: {
                 tasksRoute: (context) => const TasksPage(),
                 createTasksRoute: (context) => const CreateTasksPage(),

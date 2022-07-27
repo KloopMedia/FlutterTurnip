@@ -7,7 +7,6 @@ import 'package:gigaturnip/src/features/tasks/features/create_tasks/cubit/index.
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/view/creatable_tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 
-
 class CreateTasksView extends StatefulWidget {
   const CreateTasksView({Key? key}) : super(key: key);
 
@@ -26,7 +25,13 @@ class _CreateTasksViewState extends State<CreateTasksView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.loc.tasks),
+        title: SizedBox(
+          width: double.infinity,
+          child: Text(
+            context.loc.tasks,
+            overflow: TextOverflow.visible,
+          ),
+        ),
       ),
       body: BlocConsumer<CreateTasksCubit, CreateTasksState>(
         listener: (context, state) {

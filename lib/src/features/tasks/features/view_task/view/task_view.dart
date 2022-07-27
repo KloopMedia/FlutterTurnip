@@ -41,7 +41,19 @@ class _TaskViewState extends State<TaskView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(taskBloc.state.name),
+        centerTitle: true,
+        title: Text(
+          context.read<TaskBloc>().state.name,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 3,
+          style: const TextStyle(
+            fontFamily: 'Open-Sans',
+            fontWeight: FontWeight.w400,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedTaskChanged(null));

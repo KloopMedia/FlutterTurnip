@@ -109,6 +109,11 @@ flutter:
        - asset: assets/fonts/OpenSans-Regular.ttf
        - asset: assets/fonts/OpenSans-Bold.ttf
          weight: 700
+   - family: EBGaramond
+     fonts:
+       - asset: assets/fonts/EBGaramond-Regular.ttf
+       - asset: assets/fonts/EBGaramond-SemiBold.ttf
+         weight: 200
 
 #     - family: Schyler
 #       fonts:

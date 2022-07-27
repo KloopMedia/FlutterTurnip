@@ -1,6 +1,6 @@
 {
     "login" : "Login",
-    "logout" : "LOG OUT",
+    "logout" : "LOG OUT FROM EMAIL",
     "home" : "Home",
     "tasks" : "Tasks",
     "campaigns" : "Campaigns",
@@ -9,10 +9,12 @@
     "notifications" : "Notifications",
 
     "ok" : "Ok",
-    "open" : "Open",
-    "closed" : "Closed",
+    "done" : "Done",
+    "todo" : "To do",
     "available" : "Available",
     "cancel" : "Cancel",
+    "mytasks" : "My Tasks",
+    "newtasks" : "New Tasks",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
@@ -22,6 +24,8 @@
     "system" : "System",
     "english" : "English",
     "russian" : "Russian",
+    "kyrgyz" : "Kyrgyz",
+    "language" : "Language",
 
     "are_you_sure_logout" : "Are you sure you want to log out?"
 }

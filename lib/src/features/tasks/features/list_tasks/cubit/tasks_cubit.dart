@@ -15,31 +15,51 @@ class TasksCubit extends Cubit<TasksState> {
   }) : super(const TasksState());
 
   void initialize() async {
-    emit(state.copyWith(status: TasksStatus.loading));
-    final data = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    if (data != null) {
-      emit(state.copyWith(tasks: data, status: TasksStatus.initialized));
-    }
+    refresh();
   }
 
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
-    final action = _getActionFromTab(state.selectedTab);
-    final data = await _fetchData(action: action, forceRefresh: true);
-    if (data != null) {
-      emit(state.copyWith(tasks: data, status: TasksStatus.initialized));
+    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+    emit(state.copyWith(
+      openTasks: openTasks,
+      closeTasks: closeTasks,
+      availableTasks: availableTasks,
+      creatableTasks: creatableTasks,
+      status: TasksStatus.initialized,
+    ));
+  }
+
+  Future<Task> createTask(TaskStage taskStage) async {
+    try {
+      return await gigaTurnipRepository.createTask(taskStage.id);
+    } on GigaTurnipApiRequestException catch (e) {
+      emit(
+        state.copyWith(
+          status: TasksStatus.error,
+          errorMessage: e.message,
+        ),
+      );
+      rethrow;
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          status: TasksStatus.error,
+          errorMessage: 'Failed to create tasks: $e',
+        ),
+      );
+      rethrow;
     }
   }
 
   void onTabChange(int index) async {
     emit(state.copyWith(status: TasksStatus.loading));
     final tab = _getTabFromIndex(index);
-    final action = _getActionFromTab(tab);
-    emit(state.copyWith(selectedTab: tab, tabIndex: index));
-    final data = await _fetchData(action: action);
-    if (data != null) {
-      emit(state.copyWith(tasks: data, status: TasksStatus.initialized));
-    }
+    emit(state.copyWith(selectedTab: tab, tabIndex: index, status: TasksStatus.initialized));
   }
 
   Future<List<Task>?> _fetchData({required TasksActions action, bool forceRefresh = false}) async {
@@ -54,7 +74,6 @@ class TasksCubit extends Cubit<TasksState> {
         state.copyWith(
           status: TasksStatus.error,
           errorMessage: e.message,
-          tasks: [],
         ),
       );
     } catch (e) {
@@ -62,31 +81,42 @@ class TasksCubit extends Cubit<TasksState> {
         state.copyWith(
           status: TasksStatus.error,
           errorMessage: 'Failed to load tasks',
-          tasks: [],
         ),
       );
     }
     return null;
   }
 
-  TasksActions _getActionFromTab(Tabs tab) {
-    switch (tab) {
-      case Tabs.openTasksTab:
-        return TasksActions.listOpenTasks;
-      case Tabs.closedTasksTab:
-        return TasksActions.listClosedTasks;
-      case Tabs.availableTasksTab:
-        return TasksActions.listSelectableTasks;
+  Future<List<TaskStage>> _fetchCreatableTasks({bool forceRefresh = false}) async {
+    try {
+      return await gigaTurnipRepository.getUserRelevantTaskStages(
+        selectedCampaign: selectedCampaign,
+        forceRefresh: forceRefresh,
+      );
+    } on GigaTurnipApiRequestException catch (e) {
+      emit(
+        state.copyWith(
+          status: TasksStatus.error,
+          errorMessage: e.message,
+        ),
+      );
+      rethrow;
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: TasksStatus.error,
+          errorMessage: 'Failed to load tasks',
+        ),
+      );
+      rethrow;
     }
   }
 
   Tabs _getTabFromIndex(int index) {
     switch (index) {
       case 0:
-        return Tabs.openTasksTab;
+        return Tabs.assignedTasksTab;
       case 1:
-        return Tabs.closedTasksTab;
-      case 2:
         return Tabs.availableTasksTab;
       default:
         throw Exception('Unknown index $index');
