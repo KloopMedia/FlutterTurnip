@@ -57,7 +57,7 @@ class _TaskViewState extends State<TaskView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedTaskChanged(null));
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           },
         ),
       ),
