@@ -9,12 +9,14 @@ class IdTitleCard extends StatelessWidget {
   final int? id;
   final DateTime? date;
   final CardCallback onTap;
+  final IconData icon;
 
   const IdTitleCard({
     Key? key,
     required this.id,
     required this.title,
     required this.onTap,
+    required this.icon,
     this.date,
     this.description = "",
   }) : super(key: key);
@@ -34,7 +36,7 @@ class IdTitleCard extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: FittedBox(
                         child: Icon(
-                      Icons.assignment_turned_in_outlined,
+                      icon,
                       color: Theme.of(context).colorScheme.copyWith().secondary,
                     )),
                   ),

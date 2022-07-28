@@ -15,6 +15,8 @@
     "cancel" : "Cancel",
     "mytasks" : "My Tasks",
     "newtasks" : "New Tasks",
+    "create" : "Create",
+    "receive" : "Receive",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",

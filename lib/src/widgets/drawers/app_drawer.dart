@@ -98,27 +98,27 @@ class AppDrawer extends StatelessWidget {
                           value: AppLocales.system,
                           child: Text(
                             context.loc.language,
-                            style: Theme.of(context).textTheme.headlineLarge,
+                            style: Theme.of(context).textTheme.titleSmall,
                           )),
                       DropdownMenuItem<AppLocales>(
                         value: AppLocales.english,
                         child: Text(
                           context.loc.english,
-                          style: Theme.of(context).textTheme.headlineLarge,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                       DropdownMenuItem<AppLocales>(
                         value: AppLocales.russian,
                         child: Text(
                           context.loc.russian,
-                          style: Theme.of(context).textTheme.headlineLarge,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                       DropdownMenuItem<AppLocales>(
                         value: AppLocales.kyrgyz,
                         child: Text(
                           context.loc.kyrgyz,
-                          style: Theme.of(context).textTheme.headlineLarge,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                     ],
