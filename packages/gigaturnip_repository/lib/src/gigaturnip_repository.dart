@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' hide Campaign, Task, Chain, TaskStage, Notification;
+import 'package:gigaturnip_api/gigaturnip_api.dart'
+    hide Campaign, Task, Chain, TaskStage, Notification;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
@@ -163,9 +164,10 @@ class GigaTurnipRepository {
     }
   }
 
-
-  Future<List<Notifications>?> getNotifications() async {
-    final notificationsData = await _gigaTurnipApiClient.getUserNotifications();
+  Future<List<Notifications>?> getNotifications(int campaignId) async {
+    final notificationsData = await _gigaTurnipApiClient.getUserNotifications(
+      query: {'campaign': campaignId},
+    );
     final notifications = notificationsData.results.map((apiNotification) {
       return Notifications.fromApiModel(apiNotification);
     }).toList();
