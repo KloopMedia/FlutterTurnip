@@ -18,6 +18,9 @@ class TasksListView extends StatelessWidget {
     required this.items,
   }) : super(key: key);
 
+  final IconData iconToDo = Icons.assignment_turned_in_outlined;
+  final IconData iconDone = Icons.done;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -47,6 +50,7 @@ class TasksListView extends StatelessWidget {
                       id: itemOpen[index].id,
                       title: itemOpen[index].name,
                       date: itemOpen[index].createdAt,
+                      icon: iconToDo,
                       onTap: () {
                         onTap(itemOpen[index]);
                       },
@@ -73,6 +77,7 @@ class TasksListView extends StatelessWidget {
                       id: itemClosed[index].id,
                       title: itemClosed[index].name,
                       date: itemClosed[index].createdAt,
+                      icon: iconDone,
                       onTap: () {
                         onTap(itemClosed[index]);
                       },

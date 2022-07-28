@@ -70,6 +70,8 @@ class SliverTaskList extends StatelessWidget {
 
   const SliverTaskList({Key? key, required this.items, required this.onTap}) : super(key: key);
 
+  final IconData icon = Icons.account_balance_outlined;
+
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -81,6 +83,7 @@ class SliverTaskList extends StatelessWidget {
               id: null,
               title: item.name,
               description: item.description,
+              icon: icon,
               date: null,
               onTap: () {
                 onTap(item);
@@ -91,6 +94,7 @@ class SliverTaskList extends StatelessWidget {
             id: item.id,
             title: item.name,
             description: item.stage.description,
+            icon: icon,
             date: item.createdAt,
             onTap: () {
               onTap(item);
