@@ -23,6 +23,9 @@ class DoubleTasksListView extends StatelessWidget {
     this.headerTwo,
   }) : super(key: key);
 
+  final IconData iconToDo = Icons.assignment_turned_in_outlined;
+  final IconData iconDone = Icons.done;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -32,9 +35,9 @@ class DoubleTasksListView extends StatelessWidget {
       child: CustomScrollView(
         slivers: [
           SliverTaskListHeader(title: headerOne),
-          SliverTaskList(items: firstList, onTap: onTap),
+          SliverTaskList(items: firstList, onTap: onTap, icon: iconToDo,),
           SliverTaskListHeader(title: headerTwo),
-          SliverTaskList(items: secondList, onTap: onTap)
+          SliverTaskList(items: secondList, onTap: onTap, icon: iconDone,)
         ],
       ),
     );
@@ -67,10 +70,14 @@ class SliverTaskListHeader extends StatelessWidget {
 class SliverTaskList extends StatelessWidget {
   final List items;
   final ItemCallback onTap;
+  final IconData icon;
 
-  const SliverTaskList({Key? key, required this.items, required this.onTap}) : super(key: key);
-
-  final IconData icon = Icons.account_balance_outlined;
+  const SliverTaskList({
+    Key? key,
+    required this.items,
+    required this.onTap,
+    required this.icon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
