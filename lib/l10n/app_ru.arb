@@ -15,6 +15,8 @@
      "cancel" : "Отменить",
      "mytasks" : "Мои Задачи",
      "newtasks" : "Новые Задачи",
+     "create" : "Создать",
+     "receive" : "Получить",
 
      "sign_in" : "Зарегистрироваться через Google",
      "failed_to_load_campaigns" : "Неудалось загрузить кампании",

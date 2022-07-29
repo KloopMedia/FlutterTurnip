@@ -27,6 +27,9 @@ class DoubleTasksListView extends StatelessWidget {
     this.showLoader = false,
   }) : super(key: key);
 
+  final IconData iconToDo = Icons.assignment_turned_in_outlined;
+  final IconData iconDone = Icons.done;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -37,9 +40,9 @@ class DoubleTasksListView extends StatelessWidget {
         controller: scrollController,
         slivers: [
           SliverTaskListHeader(title: headerOne),
-          SliverTaskList(items: firstList, onTap: onTap),
+          SliverTaskList(items: firstList, onTap: onTap, icon: iconToDo,),
           SliverTaskListHeader(title: headerTwo),
-          SliverTaskList(items: secondList, onTap: onTap),
+          SliverTaskList(items: secondList, onTap: onTap, icon: iconDone,),
           if (showLoader) const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
         ],
       ),
@@ -73,8 +76,14 @@ class SliverTaskListHeader extends StatelessWidget {
 class SliverTaskList extends StatelessWidget {
   final List items;
   final ItemCallback onTap;
+  final IconData icon;
 
-  const SliverTaskList({Key? key, required this.items, required this.onTap}) : super(key: key);
+  const SliverTaskList({
+    Key? key,
+    required this.items,
+    required this.onTap,
+    required this.icon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +96,7 @@ class SliverTaskList extends StatelessWidget {
               id: null,
               title: item.name,
               description: item.description,
+              icon: icon,
               date: null,
               onTap: () {
                 onTap(item);
@@ -97,6 +107,7 @@ class SliverTaskList extends StatelessWidget {
             id: item.id,
             title: item.name,
             description: item.stage.description,
+            icon: icon,
             date: item.createdAt,
             onTap: () {
               onTap(item);

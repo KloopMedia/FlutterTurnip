@@ -9,6 +9,8 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dar
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -95,8 +97,8 @@ class _TasksViewState extends State<TasksView> {
               return DoubleTasksListView(
                 firstList: state.openTasks,
                 secondList: state.closeTasks,
-                headerOne: 'To Do',
-                headerTwo: 'Done',
+                headerOne: context.loc.todo,
+                headerTwo: context.loc.done,
                 onRefresh: () {
                   context.read<TasksCubit>().refresh();
                 },
@@ -112,8 +114,8 @@ class _TasksViewState extends State<TasksView> {
               return DoubleTasksListView(
                 firstList: state.creatableTasks,
                 secondList: state.availableTasks,
-                headerOne: 'Создать',
-                headerTwo: 'Получить',
+                headerOne: context.loc.create,
+                headerTwo: context.loc.receive,
                 scrollController: _scrollController,
                 showLoader: state.status == TasksStatus.loadingNextPage,
                 onRefresh: () {
