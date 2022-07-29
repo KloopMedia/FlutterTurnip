@@ -18,6 +18,10 @@ class GigaTurnipRepository {
   List<Task> _closedTasks = [];
   List<TaskStage> _userRelevantTaskStages = [];
   List<Task> _availableTasks = [];
+  bool _hasNextAvailableTasks = false;
+  final int _pageLimit = 10;
+  int _pageOffset = 0;
+  bool _isLoading = false;
 
   final Duration _cacheValidDuration = const Duration(minutes: 30);
   DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
@@ -124,16 +128,46 @@ class GigaTurnipRepository {
     final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
       query: {
         'stage__chain__campaign': selectedCampaign.id,
+        'limit': _pageLimit,
       },
     );
+
     final availableTasks = availableTasksData.results.map((apiTask) {
       return Task.fromApiModel(apiTask);
     }).toList();
+
+    _hasNextAvailableTasks = availableTasksData.hasNext;
+    _pageOffset = 0;
 
     _tasksLastFetchTime = DateTime.now();
     _openedTasks = openedTasks;
     _closedTasks = closedTasks;
     _availableTasks = availableTasks;
+  }
+
+  Future<List<Task>> getNextTasksPage(Campaign selectedCampaign) async {
+    if (_hasNextAvailableTasks && !_isLoading) {
+      _isLoading = true;
+      _pageOffset += _pageLimit;
+
+      final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
+        query: {
+          'stage__chain__campaign': selectedCampaign.id,
+          'limit': _pageLimit,
+          'offset': _pageOffset,
+        },
+      );
+      _isLoading = false;
+
+      _hasNextAvailableTasks = availableTasksData.hasNext;
+
+      final availableTasks = availableTasksData.results.map((apiTask) {
+        return Task.fromApiModel(apiTask);
+      }).toList();
+
+      _availableTasks.addAll(availableTasks);
+    }
+    return _availableTasks;
   }
 
   Future<Task> createTask(int id) async {
