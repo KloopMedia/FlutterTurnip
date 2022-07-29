@@ -3,4 +3,5 @@ enum TasksStatus {
   loading,
   initialized,
   error,
+  loadingNextPage,
 }

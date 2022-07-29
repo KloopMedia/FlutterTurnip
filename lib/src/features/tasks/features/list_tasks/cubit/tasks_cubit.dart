@@ -21,10 +21,9 @@ class TasksCubit extends Cubit<TasksState> {
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
-    final availableTasks =
-        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
-    final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks);
+    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks);
+    final creatableTasks = await _fetchCreatableTasks();
     emit(state.copyWith(
       openTasks: openTasks,
       closeTasks: closeTasks,
@@ -32,6 +31,12 @@ class TasksCubit extends Cubit<TasksState> {
       creatableTasks: creatableTasks,
       status: TasksStatus.initialized,
     ));
+  }
+
+  Future<void> getNextPage() async {
+    emit(state.copyWith(status: TasksStatus.loadingNextPage));
+    final tasks = await gigaTurnipRepository.getNextTasksPage(selectedCampaign);
+    emit(state.copyWith(availableTasks: tasks, status: TasksStatus.initialized));
   }
 
   Future<Task> createTask(TaskStage taskStage) async {
