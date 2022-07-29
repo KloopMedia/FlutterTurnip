@@ -16,6 +16,7 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   late UIModel formController;
+  late String richText;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _TaskViewState extends State<TaskView> {
         taskBloc.add(UpdateTaskEvent(data));
       },
     );
+    richText = taskBloc.state.stage.richText ?? '';
     super.initState();
   }
 
@@ -76,29 +78,32 @@ class _TaskViewState extends State<TaskView> {
           // TODO: implement error handling
         },
         buildWhen: (previousState, currentState) {
-          return (previousState.previousTasks != currentState.previousTasks) || (previousState.complete != currentState.complete);
+          return (previousState.previousTasks != currentState.previousTasks) ||
+              (previousState.complete != currentState.complete);
         },
         builder: (context, state) {
           return ListView(
             children: [
-              RichTextWebview(
-                text: state.stage.richText ?? '',
-                initialUrl: richTextWebviewUrl,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    for (var task in state.previousTasks)
-                      JSONSchemaUI(
-                        schema: task.schema!,
-                        ui: task.uiSchema!,
-                        formController: UIModel(disabled: true, data: task.responses ?? {}),
-                        hideSubmitButton: true,
-                      ),
-                  ],
+              if (richText.isNotEmpty)
+                RichTextWebview(
+                  text: richText,
+                  initialUrl: richTextWebviewUrl,
                 ),
-              ),
+              if (state.previousTasks.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      for (var task in state.previousTasks)
+                        JSONSchemaUI(
+                          schema: task.schema!,
+                          ui: task.uiSchema!,
+                          formController: UIModel(disabled: true, data: task.responses ?? {}),
+                          hideSubmitButton: true,
+                        ),
+                    ],
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: JSONSchemaUI(
