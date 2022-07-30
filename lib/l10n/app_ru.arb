@@ -1,5 +1,5 @@
 {
-     "login" : "Зарегистрироваться",
+    "login" : "Зарегистрироваться",
      "logout" : "ВЫЙТИ ИЗ ПОЧТЫ",
      "home" : "Главная Страница",
      "tasks" : "Задания",
@@ -9,8 +9,8 @@
      "notifications" : "Уведомления",
 
      "ok" : "Ок",
-     "done" : "Выполненые",
-     "todo" : "Сделать",
+     "done" : "Выполненные",
+     "todo" : "Невыполненные",
      "available" : "Доступные",
      "cancel" : "Отменить",
      "mytasks" : "Мои Задачи",
@@ -18,16 +18,17 @@
      "create" : "Создать",
      "receive" : "Получить",
 
+
      "sign_in" : "Зарегистрироваться через Google",
-     "failed_to_load_campaigns" : "Неудалось загрузить кампании",
-     "failed_to_load_tasks" : "Failed to load tasks",
+     "failed_to_load_campaigns" : "Не удалось загрузить кампании",
+     "failed_to_load_tasks" : "Не удалось загрузить задания",
      "fetching_error" : "Ошибка при получении кампаний",
      "fetching_error_tasks" : "Ошибка при получении заданий",
      "system" : "Система",
      "english" : "Английский",
      "russian" : "Русский",
      "kyrgyz" : "Кыргызский",
-     "language" : "Язык",
+     "language" : "Выбрать язык",
 
      "are_you_sure_logout" : "Вы уверены что хотите выйти?"
 }
