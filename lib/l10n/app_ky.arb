@@ -5,7 +5,6 @@
     "tasks" : "Тапшырмалар",
     "campaigns" : "Кампаниялар",
     "homePage_logout_iconButton" : "HomePage Logout IconButton",
-    Башкы бетке чыгуу icon  баскычы
     "error_occurred" : "Системада белгисиз ката кетти",
     "notifications" : "Билдирүүлөр",
 
@@ -20,12 +19,11 @@
     "create" : "Түзүү",
     "receive" : "Алуу",
 
-
     "sign_in" : "Google аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",
     "failed_to_load_tasks" : "Тапшырманы жүктөөдөгү  ката",
-    "fetching_error" : , “Кампанияларды алуудагы ката”
-   "fetching_error_tasks" : , “Тапшырмаларды алуудагы ката”
+    "fetching_error" : "Кампанияларды алуудагы ката",
+    "fetching_error_tasks" : "Тапшырмаларды алуудагы ката",
     "system" : "Система",
     "english" : "Англисче",
     "russian" : "Орусча",
