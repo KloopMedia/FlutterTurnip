@@ -46,7 +46,7 @@ class _TaskViewState extends State<TaskView> {
           context.read<TaskBloc>().state.name,
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
-          maxLines: 3,
+          maxLines: 5,
           style: const TextStyle(
             fontFamily: 'Open-Sans',
             fontWeight: FontWeight.w400,
