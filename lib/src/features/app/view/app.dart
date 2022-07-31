@@ -77,8 +77,8 @@ class App extends StatelessWidget {
                     headlineMedium: const TextStyle(
                       fontFamily: 'Open-Sans',
                       fontWeight: FontWeight.w400,
-                      fontSize: 23,
-                      color: Colors.black87,
+                      fontSize: 20,
+                      color: Colors.white,
                     ),
                     headlineSmall: const TextStyle(
                       fontFamily: 'Open-Sans',
