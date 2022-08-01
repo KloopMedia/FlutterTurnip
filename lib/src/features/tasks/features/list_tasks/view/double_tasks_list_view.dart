@@ -23,8 +23,8 @@ class DoubleTasksListView extends StatelessWidget {
     this.headerTwo,
   }) : super(key: key);
 
-  final IconData iconToDo = Icons.assignment_turned_in_outlined;
-  final IconData iconDone = Icons.done;
+  final IconData iconToDo = Icons.today_rounded;
+  final IconData iconDone = Icons.assignment_turned_in_outlined;
 
   @override
   Widget build(BuildContext context) {
