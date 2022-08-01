@@ -28,8 +28,7 @@ class NotificationsListView extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (context, index) {
           var item = items[index];
-          var createdAt =
-              DateFormat('MMM d, yyyy  HH:mm').format(DateTime.parse('${item.createdAt}'));
+          var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(item.createdAt);
           return Card(
             elevation: 3,
             margin: const EdgeInsets.all(8),
