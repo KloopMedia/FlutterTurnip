@@ -1,33 +1,35 @@
 {
     "login" : "Кирүү",
-    "logout" : "ПОЧТАДАН ЧЫГУУ",
-    "home" : "Үй",
+    "logout" : "Чыгуу",
+    "home" : "Башкы бет",
     "tasks" : "Тапшырмалар",
     "campaigns" : "Кампаниялар",
     "homePage_logout_iconButton" : "HomePage Logout IconButton",
-    "error_occurred" : "Ката кетти",
-    "notifications" : "Уведомления",
+    "error_occurred" : "Системада белгисиз ката кетти",
+    "notifications" : "Билдирүүлөр",
 
-    "ok" : "Ok",
-    "done" : "Бүттү",
-    "todo" : "Артка кайтарылды",
+
+    "ok" : "Oк",
+    "done" : "Аткарылган",
+    "todo" : "Аткарылуучу",
     "available" : "Жеткиликтүү",
-    "cancel" : "Жокко чыгаруу",
-    "mytasks" : "Менин Милдеттери",
-    "newtasks" : "Жаңы Милдеттер",
+    "cancel" : "Артка кайрылуу",
+    "mytasks" : "Менин тапшырмаларым",
+    "newtasks" : "Жаңы тапшырмалар",
     "create" : "Түзүү",
     "receive" : "Алуу",
 
-    "sign_in" : "GOOGLE МЕНЕН КИРГИЗИНИЗ",
-    "failed_to_load_campaigns" : "Failed to load campaigns",
-    "failed_to_load_tasks" : "Failed to load tasks",
-    "fetching_error" : "Error occurred while fetching campaigns",
-    "fetching_error_tasks" : "An error occurred while fetching tasks",
+    "sign_in" : "Google аркылуу катталуу",
+    "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",
+    "failed_to_load_tasks" : "Тапшырманы жүктөөдөгү  ката",
+    "fetching_error" : "Кампанияларды алуудагы ката",
+    "fetching_error_tasks" : "Тапшырмаларды алуудагы ката",
     "system" : "Система",
     "english" : "Англисче",
     "russian" : "Орусча",
-    "kyrgyz" : "Кыргызсча",
-    "language" : "Тил",
+    "kyrgyz" : "Кыргызча",
+    "language" : "Тилди тандоо",
 
-    "are_you_sure_logout" : "Чын эле чыгып кеткиңиз келеби?"
+    "are_you_sure_logout" : "Чыгууну тастыктаңыз"
+
 }

@@ -48,13 +48,8 @@ class _TaskViewState extends State<TaskView> {
           context.read<TaskBloc>().state.name,
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
-          maxLines: 3,
-          style: const TextStyle(
-            fontFamily: 'Open-Sans',
-            fontWeight: FontWeight.w400,
-            fontSize: 20,
-            color: Colors.white,
-          ),
+          maxLines: 5,
+          style: Theme.of(context).textTheme.headlineMedium
         ),
         leading: BackButton(
           onPressed: () {
