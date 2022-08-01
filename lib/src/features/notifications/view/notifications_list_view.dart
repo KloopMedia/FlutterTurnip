@@ -28,17 +28,16 @@ class NotificationsListView extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (context, index) {
           var item = items[index];
-          var createdAt =
-              DateFormat('MMM d, yyyy  HH:mm').format(DateTime.parse('${item.createdAt}'));
+          var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(item.createdAt);
           return Card(
             elevation: 3,
             margin: const EdgeInsets.all(8),
-            color: Colors.grey[300],
+            color: Theme.of(context).colorScheme.secondary,
             child: ListTile(
               title: Text(item.title),
               subtitle: Text(createdAt),
               trailing: (item.importance < 3)
-                  ? const Icon(Icons.notification_important, color: Colors.red)
+                  ? const Icon(Icons.notifications_active, color: Colors.red)
                   : null,
               onTap: () {
                 onTap(item);

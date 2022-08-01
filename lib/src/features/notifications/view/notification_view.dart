@@ -14,12 +14,16 @@ class NotificationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var createdAt =
-        DateFormat('MMM d, yyyy  HH:mm').format(DateTime.parse('${notification.createdAt}'));
+    var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(notification.createdAt);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(notification.title),
+        title: Text(
+          notification.title,
+          style: Theme.of(context).textTheme.headlineMedium,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: Column(mainAxisSize: MainAxisSize.min, children: [
         Padding(

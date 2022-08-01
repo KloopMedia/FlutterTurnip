@@ -87,14 +87,6 @@ class App extends StatelessWidget {
                       color: Colors.black87,
                     ),
             ),
-                // elevatedButtonTheme: ElevatedButtonThemeData(
-                //   style: TextButton.styleFrom(
-                //     backgroundColor: Colors.redAccent[200],
-                //   ),
-                // ),
-                // floatingActionButtonTheme: FloatingActionButtonThemeData(
-                //   backgroundColor: Colors.redAccent[200],
-                // ),
                 appBarTheme: const AppBarTheme(
                   color: primaryColor,
                 )
