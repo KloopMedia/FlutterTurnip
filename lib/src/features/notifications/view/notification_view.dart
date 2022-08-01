@@ -3,9 +3,11 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:intl/intl.dart';
 
 class NotificationView extends StatelessWidget {
-  const NotificationView(
-      {Key? key, required this.notification, required this.campaignName})
-      : super(key: key);
+  const NotificationView({
+    Key? key,
+    required this.notification,
+    required this.campaignName,
+  }) : super(key: key);
 
   final Notifications notification;
   final String campaignName;
@@ -17,13 +19,18 @@ class NotificationView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(notification.title),
+        title: Text(
+          notification.title,
+          style: Theme.of(context).textTheme.headlineMedium,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: Column(mainAxisSize: MainAxisSize.min, children: [
         // Container(
         //   padding: const EdgeInsets.all(10.0),
         //   alignment: Alignment.center,
-        //   color: Colors.purple[400],
+        //   color: Theme.of(context).colorScheme.primary,
         //   child: Text(campaignName, style: const TextStyle(fontSize: 18.0, color: Colors.white)),
         // ),
         Padding(

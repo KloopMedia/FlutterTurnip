@@ -51,20 +51,28 @@ class ItemCard extends StatelessWidget {
   final Notifications item;
   final ItemCallback onTap;
 
-  const ItemCard({Key? key, required this.item, required this.onTap}) : super(key: key);
+  const ItemCard({
+    Key? key,
+    required this.item,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateFormat('MMM d, yyyy  HH:mm').format(DateTime.parse('${item.createdAt}'));
+    final createdAt = DateFormat('MMM d, yyyy  HH:mm')
+        .format(DateTime.parse('${item.createdAt}'));
     return Card(
       elevation: 3,
       margin: const EdgeInsets.all(8),
-      color: Colors.grey[300],
+      color: Theme.of(context).colorScheme.secondary,
       child: ListTile(
-        title: Text(item.title),
+        title: Text(
+          item.title,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
         subtitle: Text(createdAt),
         trailing: (item.importance < 3)
-            ? const Icon(Icons.notification_important, color: Colors.red)
+            ? const Icon(Icons.notifications_active, color: Colors.red)
             : null,
         onTap: () {
           onTap(item);
