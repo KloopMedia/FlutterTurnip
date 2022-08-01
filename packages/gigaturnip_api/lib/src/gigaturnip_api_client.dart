@@ -123,6 +123,7 @@ class GigaTurnipApiClient {
 
   Future<PaginationWrapper<Task>> getUserSelectableTasks({Map<String, dynamic>? query}) async {
     try {
+      print('getting data');
       final response = await _httpClient.get(
         selectableTasksRoute,
         queryParameters: query,

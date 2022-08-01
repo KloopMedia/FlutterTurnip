@@ -12,6 +12,8 @@ class DoubleTasksListView extends StatelessWidget {
   final List<dynamic> secondList;
   final String? headerOne;
   final String? headerTwo;
+  final ScrollController? scrollController;
+  final bool showLoader;
 
   const DoubleTasksListView({
     Key? key,
@@ -21,6 +23,8 @@ class DoubleTasksListView extends StatelessWidget {
     required this.secondList,
     this.headerOne,
     this.headerTwo,
+    this.scrollController,
+    this.showLoader = false,
   }) : super(key: key);
 
   final IconData iconToDo = Icons.assignment_turned_in_outlined;
@@ -33,11 +37,13 @@ class DoubleTasksListView extends StatelessWidget {
         onRefresh();
       },
       child: CustomScrollView(
+        controller: scrollController,
         slivers: [
           SliverTaskListHeader(title: headerOne),
           SliverTaskList(items: firstList, onTap: onTap, icon: iconToDo,),
           SliverTaskListHeader(title: headerTwo),
-          SliverTaskList(items: secondList, onTap: onTap, icon: iconDone,)
+          SliverTaskList(items: secondList, onTap: onTap, icon: iconDone,),
+          if (showLoader) const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
         ],
       ),
     );

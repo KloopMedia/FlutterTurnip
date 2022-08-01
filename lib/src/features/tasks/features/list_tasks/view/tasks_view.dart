@@ -20,14 +20,30 @@ class TasksView extends StatefulWidget {
 }
 
 class _TasksViewState extends State<TasksView> {
+  late ScrollController _scrollController;
+
   @override
   initState() {
     context.read<TasksCubit>().initialize();
+    _scrollController = ScrollController();
     super.initState();
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _scrollController.addListener(() {
+      var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
+
+      if (_scrollController.position.pixels > nextPageTrigger && context.read<TasksCubit>().state.status == TasksStatus.initialized) {
+        context.read<TasksCubit>().getNextPage();
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -100,6 +116,8 @@ class _TasksViewState extends State<TasksView> {
                 secondList: state.availableTasks,
                 headerOne: context.loc.create,
                 headerTwo: context.loc.receive,
+                scrollController: _scrollController,
+                showLoader: state.status == TasksStatus.loadingNextPage,
                 onRefresh: () {
                   context.read<TasksCubit>().refresh();
                 },

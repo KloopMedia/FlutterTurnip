@@ -19,4 +19,7 @@ class PaginationWrapper<T> {
   factory PaginationWrapper.fromJson(json, T Function(Object? json) fromJsonT) {
     return _$PaginationWrapperFromJson(json, fromJsonT);
   }
+
+  bool get hasNext => next != null ? true : false;
+  bool get hasPrevious => previous != null ? true : false;
 }
