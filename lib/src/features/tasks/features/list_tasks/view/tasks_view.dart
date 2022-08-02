@@ -9,7 +9,8 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dar
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import './tasks_map.dart';
+
 
 
 class TasksView extends StatefulWidget {
@@ -136,6 +137,8 @@ class _TasksViewState extends State<TasksView> {
                   }
                 },
               );
+            case Tabs.map:
+              return TasksMap();
           }
         },
       ),

@@ -20,9 +20,11 @@ class TasksCubit extends Cubit<TasksState> {
 
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
-    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final openTasks = await _fetchData(
+        action: TasksActions.listOpenTasks, forceRefresh: true);
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks);
-    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks);
+    final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks);
     final creatableTasks = await _fetchCreatableTasks();
     emit(state.copyWith(
       openTasks: openTasks,
@@ -36,7 +38,8 @@ class TasksCubit extends Cubit<TasksState> {
   Future<void> getNextPage() async {
     emit(state.copyWith(status: TasksStatus.loadingNextPage));
     final tasks = await gigaTurnipRepository.getNextTasksPage(selectedCampaign);
-    emit(state.copyWith(availableTasks: tasks, status: TasksStatus.initialized));
+    emit(
+        state.copyWith(availableTasks: tasks, status: TasksStatus.initialized));
   }
 
   Future<Task> createTask(TaskStage taskStage) async {
@@ -64,10 +67,15 @@ class TasksCubit extends Cubit<TasksState> {
   void onTabChange(int index) async {
     emit(state.copyWith(status: TasksStatus.loading));
     final tab = _getTabFromIndex(index);
-    emit(state.copyWith(selectedTab: tab, tabIndex: index, status: TasksStatus.initialized));
+    emit(state.copyWith(
+      selectedTab: tab,
+      tabIndex: index,
+      status: TasksStatus.initialized,
+    ));
   }
 
-  Future<List<Task>?> _fetchData({required TasksActions action, bool forceRefresh = false}) async {
+  Future<List<Task>?> _fetchData(
+      {required TasksActions action, bool forceRefresh = false}) async {
     try {
       return await gigaTurnipRepository.getTasks(
         action: action,
@@ -92,7 +100,8 @@ class TasksCubit extends Cubit<TasksState> {
     return null;
   }
 
-  Future<List<TaskStage>> _fetchCreatableTasks({bool forceRefresh = false}) async {
+  Future<List<TaskStage>> _fetchCreatableTasks(
+      {bool forceRefresh = false}) async {
     try {
       return await gigaTurnipRepository.getUserRelevantTaskStages(
         selectedCampaign: selectedCampaign,
@@ -123,6 +132,8 @@ class TasksCubit extends Cubit<TasksState> {
         return Tabs.assignedTasksTab;
       case 1:
         return Tabs.availableTasksTab;
+      case 2:
+        return Tabs.map;
       default:
         throw Exception('Unknown index $index');
     }

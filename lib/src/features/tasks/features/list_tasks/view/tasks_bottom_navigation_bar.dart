@@ -27,6 +27,10 @@ class TasksBottomNavigationBar extends StatelessWidget {
           icon: const Icon(Icons.playlist_add),
           label: context.loc.newtasks,
         ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.map),
+          label: context.loc.map,
+        )
       ],
     );
   }
