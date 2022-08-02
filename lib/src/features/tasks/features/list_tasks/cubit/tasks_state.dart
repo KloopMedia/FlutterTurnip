@@ -3,6 +3,7 @@ part of 'tasks_cubit.dart';
 enum Tabs {
   assignedTasksTab,
   availableTasksTab,
+  map,
 }
 
 class TasksState extends Equatable {
