@@ -1,4 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
@@ -9,7 +11,6 @@ import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.
 import 'package:gigaturnip/src/features/tasks/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class App extends StatelessWidget {
   const App({
@@ -25,8 +26,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     const Color primaryColor = Color.fromRGBO(69, 123, 157, 1);
-     const Color secondaryColor = Color.fromRGBO(168, 210, 219, 1);
+    const Color primaryColor = Color.fromRGBO(69, 123, 157, 1);
+    const Color secondaryColor = Color.fromRGBO(168, 210, 219, 1);
 
     return MultiRepositoryProvider(
       providers: [
@@ -41,56 +42,62 @@ class App extends StatelessWidget {
           authenticationRepository: _authenticationRepository,
           gigaTurnipRepository: _gigaTurnipRepository,
         ),
-        child: BlocBuilder<AppBloc, AppState>(
+        child: BlocConsumer<AppBloc, AppState>(
+          listener: (context, state) {
+            if (!kIsWeb) {
+              FirebaseCrashlytics.instance.setUserIdentifier('${state.user?.id}');
+              FirebaseCrashlytics.instance.setCustomKey(
+                  'campaign', '[${state.selectedCampaign?.id}] ${state.selectedCampaign?.name}');
+              FirebaseCrashlytics.instance
+                  .setCustomKey('task', '[${state.selectedTask?.id}] ${state.selectedTask?.name}');
+            }
+          },
           builder: (context, state) {
             final bloc = context.read<AppBloc>();
             return MaterialApp(
               theme: ThemeData(
-                colorScheme: ColorScheme.fromSwatch().copyWith(
-                  primary: primaryColor,
-                  secondary: secondaryColor,
-                ),
-                // fontFamily: 'Roboto',
-                textTheme: ThemeData.light().textTheme.copyWith(
-                  titleSmall: const TextStyle(
-                    fontFamily: 'Open-Sans',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18
+                  colorScheme: ColorScheme.fromSwatch().copyWith(
+                    primary: primaryColor,
+                    secondary: secondaryColor,
                   ),
-                    titleMedium: const TextStyle(
-                      fontFamily: 'Open-Sans',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 25,
-                    ),
-                    titleLarge: const TextStyle(
-                      fontFamily: 'Open-Sans',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 27,
-                      color: Colors.white,
-                    ),
-                  headlineLarge: const TextStyle(
-                      fontFamily: 'Open-Sans',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 23,
-                      color: Colors.black87,
-                  ),
-                    headlineMedium: const TextStyle(
-                      fontFamily: 'Open-Sans',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                    headlineSmall: const TextStyle(
-                      fontFamily: 'Open-Sans',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                      color: Colors.black87,
-                    ),
-            ),
-                appBarTheme: const AppBarTheme(
-                  color: primaryColor,
-                )
-              ),
+                  // fontFamily: 'Roboto',
+                  textTheme: ThemeData.light().textTheme.copyWith(
+                        titleSmall: const TextStyle(
+                            fontFamily: 'Open-Sans', fontWeight: FontWeight.w400, fontSize: 18),
+                        titleMedium: const TextStyle(
+                          fontFamily: 'Open-Sans',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 25,
+                        ),
+                        titleLarge: const TextStyle(
+                          fontFamily: 'Open-Sans',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 27,
+                          color: Colors.white,
+                        ),
+                        headlineLarge: const TextStyle(
+                          fontFamily: 'Open-Sans',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 23,
+                          color: Colors.black87,
+                        ),
+                        headlineMedium: const TextStyle(
+                          fontFamily: 'Open-Sans',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                        headlineSmall: const TextStyle(
+                          fontFamily: 'Open-Sans',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                          color: Colors.black87,
+                        ),
+                      ),
+                  appBarTheme: const AppBarTheme(
+                    color: primaryColor,
+                  )),
+
               /// передается локализация, сохраненная в sharedPreferences
               locale: bloc.sharedPrefsLocale ?? state.locale ?? const Locale('system'),
               supportedLocales: AppLocalizations.supportedLocales,

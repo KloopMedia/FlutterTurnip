@@ -47,6 +47,7 @@ class AuthenticationRepository {
           googleProvider,
         );
         credential = userCredential.credential!;
+        print(credential);
       } else {
         final googleUser = await _googleSignIn.signIn();
         final googleAuth = await googleUser!.authentication;

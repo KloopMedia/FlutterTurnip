@@ -14,11 +14,59 @@
       },
       "oauth_client": [
         {
+          "client_id": "414429242328-13mtsc95hta1ibnk391l8edqum4h6fib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "4763441e86fec6bcc7a8ffa5b921a99d2ba4259f"
+          }
+        },
+        {
+          "client_id": "414429242328-5shnvbn270ophgulms86ng8p4ugiudm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "70b06ba2b8080b730fe47d07861ea0a943bd9bd0"
+          }
+        },
+        {
+          "client_id": "414429242328-apc4docjr9r9bojlsj6olvpbrfu1a1j9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "b97661937864e4ec15968592501e343911ab1a0e"
+          }
+        },
+        {
           "client_id": "414429242328-je18i31ka4j5pk1ie23akopijrufnt81.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.kloop.gigaturnip",
             "certificate_hash": "7da521bbf6a8b53864b2630b334c9d331eed98aa"
+          }
+        },
+        {
+          "client_id": "414429242328-nmpe0uodcup6crn88e6ih6uo1ioftl0e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "dc2f92e447306a7ed1a39942ba38d3ce3494d438"
+          }
+        },
+        {
+          "client_id": "414429242328-nn36l3br5osuit879bcb9jmbl455q0jk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "f2734534cc2f063176c2c544f0ce4d4b6ea002bd"
+          }
+        },
+        {
+          "client_id": "414429242328-svicobu8hv2grmbupfbeat34rr5eu4an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.kloop.gigaturnip",
+            "certificate_hash": "40c1c6bfbf528b97a5be9aa770569f15c86b4523"
           }
         },
         {
