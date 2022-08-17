@@ -74,4 +74,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     print("PREV TASKS $previousTasks");
     emit(state.copyWith(previousTasks: previousTasks));
   }
+
+
 }
