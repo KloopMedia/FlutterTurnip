@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart';
 
 part 'task_event.dart';
 
@@ -75,5 +80,35 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(previousTasks: previousTasks));
   }
 
+  Future _uploadFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    final path = result.files.single.path;
+    final File file = File(path!);
+
+    final fileName = basename(file.path);
+    final destination = 'file/$fileName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
+
+      return ref.putFile(file);
+    } on firebase_storage.FirebaseException catch (e) {
+      return null;
+    }
+  }
+
+  void _compressImage(){
+
+  }
+
+  void _compressAudio(){
+
+  }
+
+  void _compressVideo(){
+
+  }
 
 }

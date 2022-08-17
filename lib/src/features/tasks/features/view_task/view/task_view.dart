@@ -1,18 +1,11 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
-import 'package:path/path.dart';
+
 import 'package:uniturnip/json_schema_ui.dart';
-import 'package:provider/provider.dart';
-
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:path/path.dart' as path;
-import 'package:file_picker/file_picker.dart';
-
 
 
 class TaskView extends StatefulWidget {
@@ -27,11 +20,9 @@ class _TaskViewState extends State<TaskView> {
   late UIModel formController;
   late String richText;
 
-  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
-
   @override
   void initState() {
-    // taskBloc = context.read<TaskBloc>();
+    taskBloc = context.read<TaskBloc>();
     taskBloc.add(InitializeTaskEvent());
     formController = UIModel(
       data: taskBloc.state.responses ?? {},
@@ -49,29 +40,6 @@ class _TaskViewState extends State<TaskView> {
     taskBloc.add(ExitTaskEvent());
     super.dispose();
   }
-
-  Future uploadFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
-
-    final path = result.files.single.path;
-    final File file = File(path!);
-
-    if (file == null) return;
-
-    final fileName = basename(file.path);
-    final destination = 'file/$fileName';
-
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
-
-      return ref.putFile(file);
-    } on firebase_storage.FirebaseException catch (e) {
-      return null;
-    }
-
-  }
-
 
 
   @override
@@ -141,6 +109,7 @@ class _TaskViewState extends State<TaskView> {
                   schema: state.schema!,
                   ui: state.uiSchema!,
                   formController: formController,
+
                   onSubmit: ({required Map<String, dynamic> data}) {
                     taskBloc.add(SubmitTaskEvent(data));
                   },
