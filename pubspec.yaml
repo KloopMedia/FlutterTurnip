@@ -41,6 +41,7 @@ dependencies:
   file_picker: ^4.5.0
   firebase_auth: ^3.3.18
   path: ^1.8.1
+  image_picker: ^0.8.5+3
   firebase_analytics: ^9.1.8
   google_sign_in: ^5.3.1
   bloc: ^8.0.3
@@ -63,6 +64,7 @@ dependencies:
   shared_preferences: 2.0.15
   flutter_launcher_icons: ^0.9.3
   firebase_crashlytics: ^2.8.7
+  video_compress: ^3.1.1
 
 dev_dependencies:
   flutter_test:
