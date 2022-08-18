@@ -96,7 +96,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     if (file == null) return;
 
     final fileName = basename(file.path);
-    final destination = 'file/$fileName';
+    final destination = 'files/$fileName';
 
     uploadFile(destination, file);
   }
