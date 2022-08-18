@@ -82,16 +82,26 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(previousTasks: previousTasks));
   }
 
-  Future _uploadFile() async {
+
+  Future _selectFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result == null) return;
 
     final path = result.files.single.path;
-    final File file = File(path!);
+    File file;
+    return file = File(path!);
+  }
+
+  Future _uploadFile(file) async {
+    if (file == null) return;
 
     final fileName = basename(file.path);
     final destination = 'file/$fileName';
 
+    uploadFile(destination, file);
+  }
+
+  static uploadFile(String destination, File file) {
     try {
       final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
 
@@ -99,11 +109,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     } on firebase_storage.FirebaseException catch (e) {
       return null;
     }
-  }
-
-  Future _compressAudio() async{
-
-
   }
 
   Future _compressVideo(File file) async{
@@ -123,6 +128,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       quality: 80,
     );
     return result;
+  }
+
+  Future _compressAudio() async{
+
   }
 
 }
