@@ -8,8 +8,8 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:video_compress/video_compress.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 part 'task_event.dart';
 
@@ -106,7 +106,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   }
 
-  Future _compressVideo(file) async{
+  Future _compressVideo(File file) async{
     MediaInfo? mediaInfo = await VideoCompress.compressVideo(
       file.path,
       quality: VideoQuality.DefaultQuality,
@@ -115,13 +115,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     return mediaInfo;
   }
 
-  Future _compressImage() async {
-    ImagePicker imagePicker = ImagePicker();
-    PickedFile? compressedImage = await imagePicker.getImage(
-      source: ImageSource.camera,
-      imageQuality: 85,
+  Future _compressImage(File file) async {
+    var result = await FlutterImageCompress.compressWithFile(
+      file.absolute.path,
+      minWidth: 200,
+      minHeight: 200,
+      quality: 80,
+      rotate: 90,
     );
-    return compressedImage;
+    return result;
   }
 
 }
