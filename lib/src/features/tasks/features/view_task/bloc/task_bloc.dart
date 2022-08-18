@@ -121,7 +121,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       minWidth: 200,
       minHeight: 200,
       quality: 80,
-      rotate: 90,
     );
     return result;
   }
