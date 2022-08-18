@@ -104,45 +104,45 @@ class GigaTurnipRepository {
     return _userRelevantTaskStages;
   }
 
-  Future<void> refreshAllTasks(Campaign selectedCampaign) async {
-    final openedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
-      query: {
-        'complete': false,
-        'stage__chain__campaign': selectedCampaign.id,
-      },
-    );
-    final openedTasks = openedTasksData.map((apiTask) {
-      return Task.fromApiModel(apiTask);
-    }).toList();
-
-    final closedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
-      query: {
-        'complete': true,
-        'stage__chain__campaign': selectedCampaign.id,
-      },
-    );
-    final closedTasks = closedTasksData.map((apiTask) {
-      return Task.fromApiModel(apiTask);
-    }).toList();
-
-    final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
-      query: {
-        'stage__chain__campaign': selectedCampaign.id,
-        'limit': _pageLimit,
-      },
-    );
-
-    final availableTasks = availableTasksData.results.map((apiTask) {
-      return Task.fromApiModel(apiTask);
-    }).toList();
-
-    _hasNextAvailableTasks = availableTasksData.hasNext;
-    _pageOffset = 0;
-
+  Future<void> refreshAllTasks(Campaign selectedCampaign, TasksActions action) async {
+    switch (action) {
+      case TasksActions.listOpenTasks:
+        final openedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
+          query: {
+            'complete': false,
+            'stage__chain__campaign': selectedCampaign.id,
+          },
+        );
+        _openedTasks = openedTasksData.map((apiTask) {
+          return Task.fromApiModel(apiTask);
+        }).toList();
+        break;
+      case TasksActions.listClosedTasks:
+        final closedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
+          query: {
+            'complete': true,
+            'stage__chain__campaign': selectedCampaign.id,
+          },
+        );
+        _closedTasks = closedTasksData.map((apiTask) {
+          return Task.fromApiModel(apiTask);
+        }).toList();
+        break;
+      case TasksActions.listSelectableTasks:
+        final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
+          query: {
+            'stage__chain__campaign': selectedCampaign.id,
+            'limit': _pageLimit,
+          },
+        );
+        _availableTasks = availableTasksData.results.map((apiTask) {
+          return Task.fromApiModel(apiTask);
+        }).toList();
+        _hasNextAvailableTasks = availableTasksData.hasNext;
+        _pageOffset = 0;
+        break;
+    }
     _tasksLastFetchTime = DateTime.now();
-    _openedTasks = openedTasks;
-    _closedTasks = closedTasks;
-    _availableTasks = availableTasks;
   }
 
   Future<List<Task>> getNextTasksPage(Campaign selectedCampaign) async {
@@ -185,7 +185,7 @@ class GigaTurnipRepository {
         _shouldRefreshFromApi(_tasksLastFetchTime, forceRefresh) || _openedTasks.isEmpty;
 
     if (shouldRefreshFromApi) {
-      await refreshAllTasks(selectedCampaign);
+      await refreshAllTasks(selectedCampaign, action);
     }
 
     switch (action) {

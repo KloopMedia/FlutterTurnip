@@ -20,17 +20,25 @@ class TasksCubit extends Cubit<TasksState> {
 
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
-    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks);
-    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks);
-    final creatableTasks = await _fetchCreatableTasks();
-    emit(state.copyWith(
-      openTasks: openTasks,
-      closeTasks: closeTasks,
-      availableTasks: availableTasks,
-      creatableTasks: creatableTasks,
-      status: TasksStatus.initialized,
-    ));
+    switch (state.selectedTab) {
+      case Tabs.assignedTasksTab:
+        final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+        final closeTasks = await _fetchData(action: TasksActions.listClosedTasks);
+        emit(state.copyWith(
+          openTasks: openTasks,
+          closeTasks: closeTasks,
+        ));
+        break;
+      case Tabs.availableTasksTab:
+        final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks);
+        final creatableTasks = await _fetchCreatableTasks();
+        emit(state.copyWith(
+          availableTasks: availableTasks,
+          creatableTasks: creatableTasks,
+        ));
+        break;
+    }
+    emit(state.copyWith(status: TasksStatus.initialized));
   }
 
   Future<void> getNextPage() async {
@@ -64,6 +72,24 @@ class TasksCubit extends Cubit<TasksState> {
   void onTabChange(int index) async {
     emit(state.copyWith(status: TasksStatus.loading));
     final tab = _getTabFromIndex(index);
+    switch (tab) {
+      case Tabs.assignedTasksTab:
+        final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+        final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        emit(state.copyWith(
+          openTasks: openTasks,
+          closeTasks: closeTasks,
+        ));
+        break;
+      case Tabs.availableTasksTab:
+        final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+        final creatableTasks = await _fetchCreatableTasks();
+        emit(state.copyWith(
+          availableTasks: availableTasks,
+          creatableTasks: creatableTasks,
+        ));
+        break;
+    }
     emit(state.copyWith(selectedTab: tab, tabIndex: index, status: TasksStatus.initialized));
   }
 
