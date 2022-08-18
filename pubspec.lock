@@ -41,7 +41,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "9da29a42bc7b586ee865a4322e38c73894098d18"
+      resolved-ref: "7b47d423a619bc7f073e849d250d31b175b710ba"
       url: "https://github.com/KloopMedia/audio_recorder.git"
     source: git
     version: "0.0.1"
@@ -233,7 +233,7 @@ packages:
       name: ffi
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "2.0.1"
   file:
     dependency: transitive
     description:
@@ -247,7 +247,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.6.1"
+    version: "5.0.1"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -673,7 +673,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.1.2"
   permission_handler:
     dependency: transitive
     description:
@@ -992,7 +992,7 @@ packages:
     description:
       path: "."
       ref: test_integration_with_flutterturnip
-      resolved-ref: c5a511c5ca209462d49cfd86fd702bf392f3121b
+      resolved-ref: "502f7576bc06d653c79e36d147d4c939a07b7b57"
       url: "https://github.com/KloopMedia/uniturnip.git"
     source: git
     version: "1.0.0+1"
@@ -1079,7 +1079,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.1"
+    version: "2.7.0"
   xdg_directories:
     dependency: transitive
     description:
