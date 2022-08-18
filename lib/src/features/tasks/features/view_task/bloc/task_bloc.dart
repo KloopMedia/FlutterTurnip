@@ -101,11 +101,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
-  void _compressAudio(){
+  Future _compressAudio() async{
+
 
   }
 
-  Future compressVideo(file) async{
+  Future _compressVideo(file) async{
     MediaInfo? mediaInfo = await VideoCompress.compressVideo(
       file.path,
       quality: VideoQuality.DefaultQuality,
@@ -114,7 +115,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     return mediaInfo;
   }
 
-  Future compressImage() async {
+  Future _compressImage() async {
     ImagePicker imagePicker = ImagePicker();
     PickedFile? compressedImage = await imagePicker.getImage(
       source: ImageSource.camera,
@@ -122,6 +123,5 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
     return compressedImage;
   }
-
 
 }
