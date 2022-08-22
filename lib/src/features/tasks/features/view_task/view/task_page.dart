@@ -16,6 +16,7 @@ class TaskPage extends StatelessWidget {
       create: (context) => TaskBloc(
         selectedTask: context.read<AppBloc>().state.selectedTask!,
         gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+        user: context.read<AppBloc>().state.user!,
       ),
       child: const TaskView(),
     );

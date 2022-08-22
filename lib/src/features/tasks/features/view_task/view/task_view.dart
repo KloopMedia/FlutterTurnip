@@ -7,7 +7,6 @@ import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
 
 import 'package:uniturnip/json_schema_ui.dart';
 
-
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
 
@@ -30,6 +29,10 @@ class _TaskViewState extends State<TaskView> {
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
         taskBloc.add(UpdateTaskEvent(data));
       },
+      saveFile: (paths, type, {private = false}) async {
+        final path = await context.read<TaskBloc>().uploadFile(paths, type, private);
+      return path;
+    },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();
@@ -41,19 +44,16 @@ class _TaskViewState extends State<TaskView> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          context.read<TaskBloc>().state.name,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 5,
-          style: Theme.of(context).textTheme.headlineMedium
-        ),
+        title: Text(context.read<TaskBloc>().state.name,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 5,
+            style: Theme.of(context).textTheme.headlineMedium),
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedTaskChanged(null));
@@ -98,7 +98,6 @@ class _TaskViewState extends State<TaskView> {
                           ui: task.uiSchema!,
                           formController: UIModel(disabled: true, data: task.responses ?? {}),
                           hideSubmitButton: true,
-
                         ),
                     ],
                   ),
@@ -109,7 +108,6 @@ class _TaskViewState extends State<TaskView> {
                   schema: state.schema!,
                   ui: state.uiSchema!,
                   formController: formController,
-
                   onSubmit: ({required Map<String, dynamic> data}) {
                     taskBloc.add(SubmitTaskEvent(data));
                   },

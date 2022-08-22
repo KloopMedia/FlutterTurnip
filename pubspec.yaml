@@ -38,7 +38,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.17.0
   firebase_storage: ^10.0.2
-  file_picker: ^4.5.0
   firebase_auth: ^3.3.18
   path: ^1.8.1
   flutter_image_compress: ^1.0.0-nullsafety
@@ -56,10 +55,10 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   uniturnip:
-#    path: ../uniturnip
-    git:
-      url: https://github.com/KloopMedia/uniturnip.git
-      ref: test_integration_with_flutterturnip
+    path: ../uniturnip
+#    git:
+#      url: https://github.com/KloopMedia/uniturnip.git
+#      ref: test_integration_with_flutterturnip
   webview_flutter_plus: ^0.3.0+2
   shared_preferences: 2.0.15
   flutter_launcher_icons: ^0.9.3
