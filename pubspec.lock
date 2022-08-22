@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.1"
+  arrow_path:
+    dependency: transitive
+    description:
+      name: arrow_path
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   async:
     dependency: transitive
     description:
@@ -464,6 +471,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.2"
+  graphite:
+    dependency: "direct main"
+    description:
+      name: graphite
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   graphs:
     dependency: transitive
     description:
@@ -959,6 +973,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  touchable:
+    dependency: transitive
+    description:
+      name: touchable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   typed_data:
     dependency: transitive
     description:
