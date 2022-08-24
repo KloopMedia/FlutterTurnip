@@ -4,6 +4,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
+
 import 'package:uniturnip/json_schema_ui.dart';
 
 class TaskView extends StatefulWidget {
@@ -28,6 +29,9 @@ class _TaskViewState extends State<TaskView> {
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
         taskBloc.add(UpdateTaskEvent(data));
       },
+      saveFile: (paths, type, {private = false}) async {
+        return context.read<TaskBloc>().uploadFile(paths, type, private);
+      },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();
@@ -44,13 +48,11 @@ class _TaskViewState extends State<TaskView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          context.read<TaskBloc>().state.name,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 5,
-          style: Theme.of(context).textTheme.headlineMedium
-        ),
+        title: Text(context.read<TaskBloc>().state.name,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 5,
+            style: Theme.of(context).textTheme.headlineMedium),
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedTaskChanged(null));

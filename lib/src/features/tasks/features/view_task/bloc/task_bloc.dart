@@ -1,20 +1,28 @@
 import 'dart:async';
+import 'dart:io';
+
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:uniturnip/json_schema_ui.dart';
+import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
-
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
+  final AuthUser user;
   Timer? timer;
   TaskState? _cache;
 
   TaskBloc({
     required this.gigaTurnipRepository,
+    required this.user,
     required Task selectedTask,
   }) : super(TaskState.fromTask(selectedTask, TaskStatus.initialized)) {
     timer = Timer.periodic(const Duration(seconds: 20), (timer) {
@@ -71,7 +79,50 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<void> _onInitializeTask(InitializeTaskEvent event, Emitter<TaskState> emit) async {
     final previousTasks = await _getPreviousTasks(state.id);
-    print("PREV TASKS $previousTasks");
     emit(state.copyWith(previousTasks: previousTasks));
+  }
+
+  Future<String> uploadFile(List<String?> filePaths, FileType type, bool private) async {
+    final prefix = private ? 'private' : 'public';
+    final storagePath =
+        '$prefix/${state.stage.chain.campaign}/${state.stage.chain.id}/${state.stage.id}/${user.id}/${state.id}';
+
+    for (var path in filePaths) {
+      File file = File(path!);
+      File? compressed = file;
+
+      if (type == FileType.image) {
+        compressed = await _compressImage(file);
+      } else if (type == FileType.video) {
+        compressed = await _compressVideo(file);
+      }
+      if (compressed != null) {
+         try {
+           final ref = firebase_storage.FirebaseStorage.instance.ref(storagePath);
+
+           await ref.putFile(compressed);
+           return ref.fullPath;
+         } on firebase_storage.FirebaseException catch (e) {
+           print(e);
+           rethrow;
+         }
+      } else {
+        print('No compressed files');
+      }
+    }
+    return '';
+  }
+
+  Future<File?> _compressVideo(File file) async {
+    MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+      file.path,
+      quality: VideoQuality.DefaultQuality,
+    );
+    return mediaInfo?.file;
+  }
+
+  Future<File?> _compressImage(File file) async {
+    final result = await FlutterImageCompress.compressWithFile(file.absolute.path);
+    return File(file.absolute.path).writeAsBytes(result!, flush: true);
   }
 }
