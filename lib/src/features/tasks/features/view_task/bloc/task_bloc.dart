@@ -82,7 +82,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(previousTasks: previousTasks));
   }
 
-  Future<String?> uploadFile(List<String?> filePaths, FileType type, bool private) async {
+  Future<String> uploadFile(List<String?> filePaths, FileType type, bool private) async {
     final prefix = private ? 'private' : 'public';
     final storagePath =
         '$prefix/${state.stage.chain.campaign}/${state.stage.chain.id}/${state.stage.id}/${user.id}/${state.id}';
@@ -110,6 +110,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         print('No compressed files');
       }
     }
+    return '';
   }
 
   Future<File?> _compressVideo(File file) async {

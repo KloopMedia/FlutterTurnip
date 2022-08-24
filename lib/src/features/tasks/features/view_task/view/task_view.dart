@@ -30,9 +30,8 @@ class _TaskViewState extends State<TaskView> {
         taskBloc.add(UpdateTaskEvent(data));
       },
       saveFile: (paths, type, {private = false}) async {
-        final path = await context.read<TaskBloc>().uploadFile(paths, type, private);
-      return path;
-    },
+        return context.read<TaskBloc>().uploadFile(paths, type, private);
+      },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();
