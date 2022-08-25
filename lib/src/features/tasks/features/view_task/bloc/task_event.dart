@@ -19,3 +19,9 @@ class SubmitTaskEvent extends TaskEvent {
 }
 
 class ExitTaskEvent extends TaskEvent {}
+
+class UploadFilesTaskEvent extends TaskEvent {
+  final List<String> paths;
+
+  UploadFilesTaskEvent(this.paths);
+}

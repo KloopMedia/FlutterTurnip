@@ -29,7 +29,7 @@ class _TaskViewState extends State<TaskView> {
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
         taskBloc.add(UpdateTaskEvent(data));
       },
-      saveFile: (paths, type, {private = false}) async {
+      saveFile: (paths, type, {private = false}) {
         return context.read<TaskBloc>().uploadFile(paths, type, private);
       },
     );
