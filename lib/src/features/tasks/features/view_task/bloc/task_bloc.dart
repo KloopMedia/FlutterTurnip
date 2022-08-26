@@ -70,8 +70,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
-  void _onExitTask(ExitTaskEvent event, Emitter<TaskState> emit) {
-    _saveTask(state);
+  void _onExitTask(ExitTaskEvent event, Emitter<TaskState> emit) async {
+    await _saveTask(state);
+    emit(state.copyWith(taskStatus: TaskStatus.redirectToTasksList));
   }
 
   @override
