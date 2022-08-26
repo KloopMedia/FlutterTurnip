@@ -32,6 +32,9 @@ class _TaskViewState extends State<TaskView> {
       saveFile: (paths, type, {private = false}) {
         return context.read<TaskBloc>().uploadFile(paths, type, private);
       },
+      getFile: (path) {
+        return context.read<TaskBloc>().getFile(path);
+      }
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();

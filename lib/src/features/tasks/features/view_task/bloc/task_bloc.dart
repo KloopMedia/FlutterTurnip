@@ -86,11 +86,30 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(previousTasks: previousTasks));
   }
 
+  Future<FileModel> getFile(path) async {
+    final ref = firebase_storage.FirebaseStorage.instance.ref(path);
+    final data = await ref.getMetadata();
+    final url = await ref.getDownloadURL();
+    final type = _getFileType(data.contentType);
+    return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
+  }
+
+  FileType _getFileType(String? contentType) {
+    final type = contentType?.split('/').first;
+    switch (type) {
+      case 'video':
+        return FileType.video;
+      case 'image':
+        return FileType.image;
+      default:
+        return FileType.any;
+    }
+  }
+
   Future<UploadTask?> uploadFile(String path, FileType type, bool private) async {
     String filename = basename(path);
     final prefix = private ? 'private' : 'public';
-    final storagePath =
-        '$prefix/'
+    final storagePath = '$prefix/'
         '${state.stage.chain.campaign}/'
         '${state.stage.chain.id}/'
         '${state.stage.id}/'
@@ -109,9 +128,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     if (compressed != null) {
       try {
         final ref = firebase_storage.FirebaseStorage.instance.ref(storagePath);
-
         return ref.putFile(compressed);
-        // return ref.fullPath;
       } on firebase_storage.FirebaseException catch (e) {
         print(e);
         rethrow;
