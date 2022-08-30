@@ -34,7 +34,11 @@ class _TaskViewState extends State<TaskView> {
       },
       getFile: (path) {
         return context.read<TaskBloc>().getFile(path);
-      }
+      },
+      saveAudioRecord: (path) async {
+        // TODO: Add audio saving.
+        throw UnimplementedError();
+      },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();

@@ -265,14 +265,12 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<Task> requestTask({Map<String, dynamic>? query, required int id}) async {
+  Future<void> requestTask({Map<String, dynamic>? query, required int id}) async {
     try {
-      final response = await _httpClient.get(
+      await _httpClient.get(
         tasksRoute + id.toString() + requestTaskActionRoute,
         queryParameters: query,
       );
-
-      return Task.fromJson(response.data);
     } on DioError catch (e) {
       print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);

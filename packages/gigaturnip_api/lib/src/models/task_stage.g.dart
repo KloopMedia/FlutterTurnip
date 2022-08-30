@@ -56,6 +56,10 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
           allowRelease: $checkedConvert('allow_release', (v) => v as bool),
           externalMetadata: $checkedConvert(
               'external_metadata', (v) => v as Map<String, dynamic>?),
+          cardJsonSchema: $checkedConvert(
+              'card_json_schema', (v) => TaskStage._stringToMap(v as String?)),
+          cardUiSchema: $checkedConvert(
+              'card_ui_schema', (v) => TaskStage._stringToMap(v as String?)),
         );
         return val;
       },
@@ -80,6 +84,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
         'webhookResponseField': 'webhook_response_field',
         'allowGoBack': 'allow_go_back',
         'allowRelease': 'allow_release',
-        'externalMetadata': 'external_metadata'
+        'externalMetadata': 'external_metadata',
+        'cardJsonSchema': 'card_json_schema',
+        'cardUiSchema': 'card_ui_schema'
       },
     );

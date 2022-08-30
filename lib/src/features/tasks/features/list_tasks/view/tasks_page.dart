@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/combined_task_view.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TasksPage extends StatelessWidget {
   const TasksPage({Key? key}) : super(key: key);
+  final bool simpleView = true;
 
   static Page page() => const MaterialPage<void>(child: TasksPage());
 
@@ -17,7 +19,7 @@ class TasksPage extends StatelessWidget {
         selectedCampaign: context.read<AppBloc>().state.selectedCampaign!,
         gigaTurnipRepository: context.read<GigaTurnipRepository>(),
       ),
-      child: const TasksView(),
+      child: simpleView ? const CombinedTasksView() : const TasksView(),
     );
   }
 }

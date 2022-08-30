@@ -18,6 +18,26 @@ class TasksCubit extends Cubit<TasksState> {
     refresh();
   }
 
+  void initializeCombined() async {
+    refreshCombined();
+  }
+
+  void refreshCombined() async {
+    emit(state.copyWith(status: TasksStatus.loading));
+    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final creatableTasks = await _fetchCreatableTasks();
+    print(availableTasks);
+    emit(state.copyWith(
+      openTasks: openTasks,
+      closeTasks: closeTasks,
+      availableTasks: availableTasks,
+      creatableTasks: creatableTasks,
+      status: TasksStatus.initialized,
+    ));
+  }
+
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
     switch (state.selectedTab) {
@@ -69,20 +89,31 @@ class TasksCubit extends Cubit<TasksState> {
     }
   }
 
+  Future<void> requestTask(Task task) async {
+    try {
+      await gigaTurnipRepository.requestTask(task.id);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   void onTabChange(int index) async {
     emit(state.copyWith(status: TasksStatus.loading));
     final tab = _getTabFromIndex(index);
     switch (tab) {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-        final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        final closeTasks =
+            await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
         ));
         break;
       case Tabs.availableTasksTab:
-        final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+        final availableTasks =
+            await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
         final creatableTasks = await _fetchCreatableTasks();
         emit(state.copyWith(
           availableTasks: availableTasks,

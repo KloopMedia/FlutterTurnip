@@ -1,12 +1,16 @@
 {
     "login" : "Login",
-    "logout" : "LOG OUT FROM EMAIL",
+    "logout_from_email" : "LOG OUT FROM EMAIL",
     "home" : "Home",
     "tasks" : "Tasks",
     "campaigns" : "Campaigns",
     "homePage_logout_iconButton" : "HomePage Logout IconButton",
     "error_occurred" : "An error occurred",
     "notifications" : "Notifications",
+    "logout" : "LOGOUT",
+    "book_online" : "Book an online appointment",
+    "book_offline" : "Book an offline appointment",
+
 
     "ok" : "Ok",
     "done" : "Done",
@@ -17,6 +21,9 @@
     "newtasks" : "New Tasks",
     "create" : "Create",
     "receive" : "Receive",
+    "edit" : "Edit",
+    "sent" : "Sent",
+    "notsent" : "Not sent",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",

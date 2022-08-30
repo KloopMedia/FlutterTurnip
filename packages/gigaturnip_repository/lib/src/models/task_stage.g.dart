@@ -12,6 +12,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
       description: json['description'] as String,
       chain: Chain.fromJson(json['chain'] as Map<String, dynamic>),
       richText: json['richText'] as String?,
+      cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
+      cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
@@ -20,4 +22,6 @@ Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'description': instance.description,
       'chain': instance.chain.toJson(),
       'richText': instance.richText,
+      'cardJsonSchema': instance.cardJsonSchema,
+      'cardUiSchema': instance.cardUiSchema,
     };
