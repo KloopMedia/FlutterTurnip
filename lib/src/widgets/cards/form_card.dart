@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:uniturnip/json_schema_ui.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:uniturnip/json_schema_ui.dart';
 
 typedef CardCallback = void Function();
 
@@ -89,7 +91,13 @@ class CardBody extends StatelessWidget {
     return JSONSchemaUI(
       schema: hasCardData ? task.cardJsonSchema! : task.schema!,
       ui: hasCardData ? task.cardUiSchema! : task.uiSchema!,
-      formController: UIModel(disabled: true),
+      formController: UIModel(
+        disabled: true,
+        data: task.responses ?? {},
+        getFile: (path) {
+          return context.read<TasksCubit>().getFile(path);
+        },
+      ),
     );
   }
 }
