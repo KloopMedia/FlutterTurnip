@@ -51,7 +51,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
-            Navigator.maybePop(context);
+            Navigator.maybePop(context, true);
           },
         ),
         actions: <Widget>[

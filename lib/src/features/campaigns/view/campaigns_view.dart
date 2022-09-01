@@ -5,6 +5,7 @@ import 'package:gigaturnip/src/features/campaigns/campaigns.dart';
 import 'package:gigaturnip/src/features/campaigns/view/campaigns_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/utilities/dialogs/join_campaign_dialog.dart';
 
 class CampaignsView extends StatefulWidget {
   const CampaignsView({Key? key}) : super(key: key);
@@ -35,14 +36,24 @@ class _CampaignsViewState extends State<CampaignsView> {
           );
         }
         return CampaignsListView(
-          onTap: (campaign) {
+          onTap: (campaign, join) async {
+            if (join) {
+              final shouldJoin = await joinCampaignDialog(context);
+              if (!mounted || !shouldJoin) return;
+              await context.read<CampaignsCubit>().joinCampaign(campaign);
+            }
+            if (!mounted) return;
             context.read<AppBloc>().add(AppSelectedCampaignChanged(campaign));
-            Navigator.of(context).pushNamed(tasksRoute);
+            final shouldRefresh = await Navigator.of(context).pushNamed(tasksRoute);
+            if (shouldRefresh == true && mounted) {
+              context.read<CampaignsCubit>().loadCampaigns(forceRefresh: true);
+            }
           },
           onRefresh: () {
             context.read<CampaignsCubit>().loadCampaigns(forceRefresh: true);
           },
-          items: state.campaigns,
+          userCampaigns: state.campaigns,
+          availableCampaigns: state.availableCampaigns,
         );
       },
     );

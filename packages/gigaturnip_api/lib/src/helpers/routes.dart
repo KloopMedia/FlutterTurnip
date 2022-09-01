@@ -3,6 +3,9 @@ const campaignsRoute = '/api/v1/campaigns/';
 const userCampaignsRoute = '$campaignsRoute/list_user_campaigns/';
 const selectableCampaignsRoute = '$campaignsRoute/list_user_selectable/';
 
+// Campaigns actions
+const joinCampaignActionRoute = '/join_campaign/';
+
 // TaskStages routes
 const taskStagesRoute = '/api/v1/taskstages/';
 const userRelevantTaskStageRoute = '$taskStagesRoute/user_relevant/';
@@ -27,6 +30,5 @@ const reopenTaskActionRoute = '/uncomplete/';
 // Notifications routes
 const notificationsRoute = '/api/v1/notifications/';
 const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
-
 
 // TODO: Add all routes

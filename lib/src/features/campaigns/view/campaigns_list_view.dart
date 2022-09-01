@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/widgets/cards/title_card.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-typedef ItemCallback = void Function(Campaign item);
+typedef ItemCallback = void Function(Campaign item, bool join);
 typedef RefreshCallback = void Function();
 
 class CampaignsListView extends StatelessWidget {
+  final List<Campaign> userCampaigns;
+  final List<Campaign> availableCampaigns;
   final ItemCallback onTap;
   final RefreshCallback onRefresh;
-  final List<Campaign> items;
 
   const CampaignsListView({
     Key? key,
     required this.onTap,
     required this.onRefresh,
-    required this.items,
+    required this.userCampaigns,
+    required this.availableCampaigns,
   }) : super(key: key);
 
   @override
@@ -23,20 +25,37 @@ class CampaignsListView extends StatelessWidget {
       onRefresh: () async {
         onRefresh();
       },
-      child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          var item = items[index];
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: TitleCard(
-              title: item.name,
-              onTap: () {
-                onTap(item);
+      child: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = userCampaigns[index];
+                return TitleCard(
+                  title: item.name,
+                  onTap: () {
+                    onTap(item, false);
+                  },
+                );
               },
+              childCount: userCampaigns.length,
             ),
-          );
-        },
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = availableCampaigns[index];
+                return TitleCard(
+                  title: item.name,
+                  onTap: () {
+                    onTap(item, true);
+                  },
+                );
+              },
+              childCount: availableCampaigns.length,
+            ),
+          ),
+        ],
       ),
     );
   }

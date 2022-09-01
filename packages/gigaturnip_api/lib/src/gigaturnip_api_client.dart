@@ -65,6 +65,15 @@ class GigaTurnipApiClient {
     }
   }
 
+  Future<void> joinCampaign(int id) async {
+    try {
+      await _httpClient.post(campaignsRoute + id.toString() + joinCampaignActionRoute);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   // TaskStage methods
   Future<List<TaskStage>> getUserRelevantTaskStages({Map<String, dynamic>? query}) async {
     try {
@@ -327,12 +336,13 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Notification>> getUserNotifications({Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications(
+      {Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
       return PaginationWrapper<Notification>.fromJson(
-          response.data,
-          (json) => Notification.fromJson(json as Map<String, dynamic>),
+        response.data,
+        (json) => Notification.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
       print(e);

@@ -76,6 +76,10 @@ class GigaTurnipRepository {
     }
   }
 
+  Future<void> joinCampaign(int id) async {
+    _gigaTurnipApiClient.joinCampaign(id);
+  }
+
   Future<void> refreshUserRelevantTaskStages(Campaign selectedCampaign) async {
     final userRelevantTaskStageData = await _gigaTurnipApiClient.getUserRelevantTaskStages(
       query: {

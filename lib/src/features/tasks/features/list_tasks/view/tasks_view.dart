@@ -53,7 +53,7 @@ class _TasksViewState extends State<TasksView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
-            Navigator.maybePop(context);
+            Navigator.maybePop(context, true);
           },
         ),
         actions: <Widget>[
