@@ -343,4 +343,24 @@ class GigaTurnipApiClient {
       rethrow;
     }
   }
+
+  Future<PaginationWrapper<Chain>> getGraph({Map<String, dynamic>? query, required int id}) async {
+    try {
+      final response = await _httpClient.post(
+        chains + id.toString() + getAGraph,
+        queryParameters: query,
+      );
+      return PaginationWrapper<Chain>.fromJson(
+        response.data,
+            (json) => Chain.fromJson(json as Map<String, dynamic>),
+      );
+
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 }

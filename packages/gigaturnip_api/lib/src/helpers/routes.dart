@@ -28,5 +28,6 @@ const reopenTaskActionRoute = '/uncomplete/';
 const notificationsRoute = '/api/v1/notifications/';
 const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
 
-
+const chains = 'api/v1/chains';
+const getAGraph = '/get_graph';
 // TODO: Add all routes
