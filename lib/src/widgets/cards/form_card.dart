@@ -66,6 +66,7 @@ class CardHeader extends StatelessWidget {
         children: [
           Expanded(
             child: ListTile(
+              contentPadding: EdgeInsets.zero,
               title: Text(title),
               subtitle: Text('#$id'),
             ),

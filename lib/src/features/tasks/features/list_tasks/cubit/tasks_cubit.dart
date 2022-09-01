@@ -27,8 +27,7 @@ class TasksCubit extends Cubit<TasksState> {
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
     final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
-    final creatableTasks = await _fetchCreatableTasks();
-    print(availableTasks);
+    final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     emit(state.copyWith(
       openTasks: openTasks,
       closeTasks: closeTasks,

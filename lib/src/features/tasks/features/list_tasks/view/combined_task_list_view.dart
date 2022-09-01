@@ -28,7 +28,8 @@ class CombinedTasksListView extends StatelessWidget {
     required this.availableTasks,
     required this.creatableTasks,
     this.scrollController,
-    this.showLoader = false, required this.onRequest,
+    this.showLoader = false,
+    required this.onRequest,
   }) : super(key: key);
 
   final IconData iconToDo = Icons.today_rounded;
@@ -95,27 +96,31 @@ class CreatableTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final item = items[index];
-          return OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              backgroundColor: Colors.lightBlue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (var item in items)
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                onPressed: () {
+                  onTap(item);
+                },
+                child: Text(
+                  item.name,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
-            ),
-            onPressed: () {
-              onTap(item);
-            },
-            child: Text(
-              item.name,
-              style: const TextStyle(color: Colors.white),
-            ),
-          );
-        },
-        childCount: items.length,
+          ],
+        ),
       ),
     );
   }
