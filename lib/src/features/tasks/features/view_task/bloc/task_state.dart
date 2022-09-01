@@ -26,6 +26,8 @@ class TaskState extends Task with EquatableMixin {
     required bool reopened,
     required TaskStage stage,
     required DateTime? createdAt,
+    required Map<String, dynamic>? cardJsonSchema,
+    required Map<String, dynamic>? cardUiSchema,
   }) : super(
           id: id,
           name: name,
@@ -36,6 +38,8 @@ class TaskState extends Task with EquatableMixin {
           createdAt: createdAt,
           schema: schema,
           uiSchema: uiSchema,
+          cardJsonSchema: cardJsonSchema,
+          cardUiSchema: cardUiSchema,
         );
 
   factory TaskState.fromTask(Task task, TaskStatus taskStatus) {
@@ -50,6 +54,8 @@ class TaskState extends Task with EquatableMixin {
       createdAt: task.createdAt,
       schema: task.schema,
       uiSchema: task.uiSchema,
+      cardJsonSchema: task.cardJsonSchema,
+      cardUiSchema: task.cardUiSchema,
     );
   }
 
@@ -76,6 +82,8 @@ class TaskState extends Task with EquatableMixin {
       reopened: reopened,
       stage: stage,
       uiSchema: uiSchema,
+      cardJsonSchema: cardJsonSchema,
+      cardUiSchema: cardUiSchema,
     );
   }
 }

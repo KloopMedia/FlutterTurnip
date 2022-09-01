@@ -4,7 +4,6 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
-
 import 'package:uniturnip/json_schema_ui.dart';
 
 class TaskView extends StatefulWidget {
@@ -34,7 +33,12 @@ class _TaskViewState extends State<TaskView> {
       },
       getFile: (path) {
         return context.read<TaskBloc>().getFile(path);
-      }
+      },
+      saveAudioRecord: (path, private) async {
+        print(path);
+        final task = await context.read<TaskBloc>().uploadFile(path, FileType.any, private);
+        return task!.snapshot.ref.fullPath;
+      },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();

@@ -1,12 +1,15 @@
 {
     "login" : "Кирүү",
-    "logout" : "Чыгуу",
+    "logout_from_email" : "Почтадан Чыгуу",
     "home" : "Башкы бет",
     "tasks" : "Тапшырмалар",
     "campaigns" : "Кампаниялар",
     "homePage_logout_iconButton" : "HomePage Logout IconButton",
     "error_occurred" : "Системада белгисиз ката кетти",
     "notifications" : "Билдирүүлөр",
+    "logout" : "ЧЫГУУ",
+    "book_online" : "онлайн жолугушууга жазылыңыз",
+    "book_offline" : "оффлайн жолугушууга жазылыңыз",
 
 
     "ok" : "Oк",
@@ -18,6 +21,9 @@
     "newtasks" : "Жаңы тапшырмалар",
     "create" : "Түзүү",
     "receive" : "Алуу",
+    "edit" : "Өзгөртүү",
+    "sent" : "Жиберилди",
+    "notsent" : "Жиберилген эмес",
 
     "sign_in" : "Google аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",

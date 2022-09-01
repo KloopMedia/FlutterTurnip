@@ -2,6 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:uniturnip/json_schema_ui.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 
 part 'tasks_state.dart';
 
@@ -16,6 +19,25 @@ class TasksCubit extends Cubit<TasksState> {
 
   void initialize() async {
     refresh();
+  }
+
+  void initializeCombined() async {
+    refreshCombined();
+  }
+
+  void refreshCombined() async {
+    emit(state.copyWith(status: TasksStatus.loading));
+    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+    emit(state.copyWith(
+      openTasks: openTasks,
+      closeTasks: closeTasks,
+      availableTasks: availableTasks,
+      creatableTasks: creatableTasks,
+      status: TasksStatus.initialized,
+    ));
   }
 
   void refresh() async {
@@ -69,20 +91,31 @@ class TasksCubit extends Cubit<TasksState> {
     }
   }
 
+  Future<void> requestTask(Task task) async {
+    try {
+      await gigaTurnipRepository.requestTask(task.id);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   void onTabChange(int index) async {
     emit(state.copyWith(status: TasksStatus.loading));
     final tab = _getTabFromIndex(index);
     switch (tab) {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-        final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        final closeTasks =
+            await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
         ));
         break;
       case Tabs.availableTasksTab:
-        final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+        final availableTasks =
+            await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
         final creatableTasks = await _fetchCreatableTasks();
         emit(state.copyWith(
           availableTasks: availableTasks,
@@ -151,6 +184,26 @@ class TasksCubit extends Cubit<TasksState> {
         return Tabs.availableTasksTab;
       default:
         throw Exception('Unknown index $index');
+    }
+  }
+
+  Future<FileModel> getFile(path) async {
+    final ref = firebase_storage.FirebaseStorage.instance.ref(path);
+    final data = await ref.getMetadata();
+    final url = await ref.getDownloadURL();
+    final type = _getFileType(data.contentType);
+    return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
+  }
+
+  FileType _getFileType(String? contentType) {
+    final type = contentType?.split('/').first;
+    switch (type) {
+      case 'video':
+        return FileType.video;
+      case 'image':
+        return FileType.image;
+      default:
+        return FileType.any;
     }
   }
 }

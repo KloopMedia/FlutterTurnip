@@ -38,6 +38,10 @@ class TaskStage {
   final bool allowGoBack;
   final bool allowRelease;
   final Map<String, dynamic>? externalMetadata;
+  @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
+  final Map<String, dynamic> cardJsonSchema;
+  @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
+  final Map<String, dynamic> cardUiSchema;
 
 
   TaskStage({
@@ -68,6 +72,8 @@ class TaskStage {
     required this.allowGoBack,
     required this.allowRelease,
     required this.externalMetadata,
+    required this.cardJsonSchema,
+    required this.cardUiSchema,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
