@@ -76,6 +76,11 @@ class GigaTurnipRepository {
     }
   }
 
+  Future<Campaign> getCampaignById(int id) async {
+    final campaign = await _gigaTurnipApiClient.getCampaignById(id);
+    return Campaign.fromApiModel(campaign);
+  }
+
   Future<void> joinCampaign(int id) async {
     _gigaTurnipApiClient.joinCampaign(id);
   }

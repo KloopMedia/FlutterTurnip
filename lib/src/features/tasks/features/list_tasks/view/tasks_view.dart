@@ -9,6 +9,7 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dar
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:go_router/go_router.dart';
 
 
 class TasksView extends StatefulWidget {
@@ -20,10 +21,13 @@ class TasksView extends StatefulWidget {
 
 class _TasksViewState extends State<TasksView> {
   late ScrollController _scrollController;
+  // late GoRouter router = GoRouter.of(context);
 
   @override
   initState() {
-    context.read<TasksCubit>().initialize();
+    // router.addListener(() {
+      context.read<TasksCubit>().initialize();
+    // });
     _scrollController = ScrollController();
     super.initState();
   }
@@ -31,6 +35,7 @@ class _TasksViewState extends State<TasksView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    // router.removeListener(() { });
     super.dispose();
   }
 
@@ -53,13 +58,14 @@ class _TasksViewState extends State<TasksView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
-            Navigator.maybePop(context, true);
+            context.pop();
           },
         ),
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(notificationsRoute);
+              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              context.go('/campaign/${selectedCampaign.id}/notifications');
             },
             icon: const Icon(Icons.notifications),
           ),
@@ -103,10 +109,8 @@ class _TasksViewState extends State<TasksView> {
                 },
                 onTap: (task) async {
                   context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                  final shouldRefresh = await Navigator.of(context).pushNamed(taskInstanceRoute);
-                  if (shouldRefresh == true && mounted) {
-                    context.read<TasksCubit>().refresh();
-                  }
+                  final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+                  context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
                 },
               );
             case Tabs.availableTasksTab:
@@ -121,17 +125,16 @@ class _TasksViewState extends State<TasksView> {
                   context.read<TasksCubit>().refresh();
                 },
                 onTap: (item) async {
+                  final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
                   if (item is TaskStage) {
                     final task = await context.read<TasksCubit>().createTask(item);
                     if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+                    context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+
                   } else {
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
-                  }
-                  if (!mounted) return;
-                  final shouldRefresh = await Navigator.of(context).pushNamed(taskInstanceRoute);
-                  if (shouldRefresh == true && mounted) {
-                    context.read<TasksCubit>().refresh();
+                    context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}');
                   }
                 },
               );

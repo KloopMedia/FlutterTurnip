@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/features/campaigns/view/campaigns_list_view.dart'
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/utilities/dialogs/join_campaign_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class CampaignsView extends StatefulWidget {
   const CampaignsView({Key? key}) : super(key: key);
@@ -44,10 +45,7 @@ class _CampaignsViewState extends State<CampaignsView> {
             }
             if (!mounted) return;
             context.read<AppBloc>().add(AppSelectedCampaignChanged(campaign));
-            final shouldRefresh = await Navigator.of(context).pushNamed(tasksRoute);
-            if (shouldRefresh == true && mounted) {
-              context.read<CampaignsCubit>().loadCampaigns(forceRefresh: true);
-            }
+            context.go('/campaign/${campaign.id}');
           },
           onRefresh: () {
             context.read<CampaignsCubit>().loadCampaigns(forceRefresh: true);

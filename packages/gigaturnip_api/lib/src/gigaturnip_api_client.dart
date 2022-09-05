@@ -65,9 +65,25 @@ class GigaTurnipApiClient {
     }
   }
 
+  Future<Campaign> getCampaignById(int id) async {
+    try {
+      final response = await _httpClient.get('$campaignsRoute$id/');
+      return Campaign.fromJson(response.data);
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   Future<void> joinCampaign(int id) async {
     try {
       await _httpClient.post(campaignsRoute + id.toString() + joinCampaignActionRoute);
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
       print(e);
       rethrow;

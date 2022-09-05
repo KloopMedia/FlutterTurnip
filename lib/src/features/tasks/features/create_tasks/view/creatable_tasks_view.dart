@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/create_tasks/view/creatable_tasks_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateTasksView extends StatefulWidget {
   const CreateTasksView({Key? key}) : super(key: key);
@@ -15,10 +16,20 @@ class CreateTasksView extends StatefulWidget {
 }
 
 class _CreateTasksViewState extends State<CreateTasksView> {
+  // late GoRouter router = GoRouter.of(context);
+
   @override
   initState() {
-    context.read<CreateTasksCubit>().initialize();
+    // router.addListener(() {
+    //   context.read<CreateTasksCubit>().initialize();
+    // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // router.removeListener(() {});
+    super.dispose();
   }
 
   @override
@@ -54,11 +65,11 @@ class _CreateTasksViewState extends State<CreateTasksView> {
               context.read<CreateTasksCubit>().refresh();
             },
             onTap: (taskStage) async {
-              final bloc = context.read<AppBloc>();
-              final navigator = Navigator.of(context);
               final task = await context.read<CreateTasksCubit>().createTask(context, taskStage);
-              bloc.add(AppSelectedTaskChanged(task));
-              navigator.pushReplacementNamed(taskInstanceRoute);
+              if (!mounted) return;
+              context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              context.replace('/campaign/${selectedCampaign.id}/tasks/${task.id}');
             },
           );
         },

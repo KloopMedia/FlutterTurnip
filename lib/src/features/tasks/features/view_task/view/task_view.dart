@@ -4,6 +4,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
+import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
 
 class TaskView extends StatefulWidget {
@@ -17,11 +18,15 @@ class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   late UIModel formController;
   late String richText;
+  // late GoRouter router = GoRouter.of(context);
+
 
   @override
   void initState() {
     taskBloc = context.read<TaskBloc>();
-    taskBloc.add(InitializeTaskEvent());
+    // router.addListener(() {
+      taskBloc.add(InitializeTaskEvent());
+    // });
     formController = UIModel(
       data: taskBloc.state.responses ?? {},
       disabled: taskBloc.state.complete,
@@ -35,7 +40,6 @@ class _TaskViewState extends State<TaskView> {
         return context.read<TaskBloc>().getFile(path);
       },
       saveAudioRecord: (path, private) async {
-        print(path);
         final task = await context.read<TaskBloc>().uploadFile(path, FileType.any, private);
         return task!.snapshot.ref.fullPath;
       },
@@ -46,6 +50,7 @@ class _TaskViewState extends State<TaskView> {
 
   @override
   void dispose() {
+    // router.removeListener(() { });
     taskBloc.add(ExitTaskEvent());
     super.dispose();
   }
@@ -74,10 +79,11 @@ class _TaskViewState extends State<TaskView> {
           if (state.taskStatus == TaskStatus.redirectToNextTask) {
             if (state.nextTask != null) {
               context.read<AppBloc>().add(AppSelectedTaskChanged(state.nextTask));
-              Navigator.pushReplacementNamed(context, taskInstanceRoute);
+              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              context.go('campaign/${selectedCampaign.id}/tasks/${state.nextTask!.id}');
             }
           } else if (state.taskStatus == TaskStatus.redirectToTasksList) {
-            Navigator.pop(context, true);
+            context.pop();
           }
           // TODO: implement error handling
         },

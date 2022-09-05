@@ -6,19 +6,43 @@ import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_view.
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TaskPage extends StatelessWidget {
-  const TaskPage({Key? key}) : super(key: key);
+  final int? taskId;
+
+  const TaskPage({Key? key, this.taskId}) : super(key: key);
+
+  Future<Task> loadTask(BuildContext context) async {
+    if (taskId != null) {
+      final appBloc = context.read<AppBloc>();
+      final task = await context.read<GigaTurnipRepository>().getTask(taskId!);
+      appBloc.add(AppSelectedTaskChanged(task));
+      return task;
+    } else {
+      return context.read<AppBloc>().state.selectedTask!;
+    }
+  }
 
   static Page page() => const MaterialPage<void>(child: TaskPage());
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TaskBloc>(
-      create: (context) => TaskBloc(
-        selectedTask: context.read<AppBloc>().state.selectedTask!,
-        gigaTurnipRepository: context.read<GigaTurnipRepository>(),
-        user: context.read<AppBloc>().state.user!,
-      ),
-      child: const TaskView(),
+    return FutureBuilder<Task>(
+      future: loadTask(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return BlocProvider<TaskBloc>(
+          create: (context) => TaskBloc(
+            selectedTask: snapshot.data!,
+            gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+            user: context.read<AppBloc>().state.user!,
+          ),
+          child: const TaskView(),
+        );
+      },
     );
   }
 }

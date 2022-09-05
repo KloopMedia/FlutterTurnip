@@ -8,7 +8,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -19,12 +18,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  })
+      : _authenticationRepository = authenticationRepository,
         super(
-          authenticationRepository.currentUser.isNotEmpty
-              ? AppStateLoggedIn(user: authenticationRepository.currentUser)
-              : const AppStateLoggedOut(exception: null),
-        ) {
+        authenticationRepository.currentUser.isNotEmpty
+            ? AppStateLoggedIn(user: authenticationRepository.currentUser)
+            : const AppStateLoggedOut(exception: null),
+      ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLocaleChanged>(_onLocaleChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
@@ -32,8 +32,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
+
     _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(AppUserChanged(user)),
+          (user) => add(AppUserChanged(user)),
     );
     _getLocaleFromSharedPrefs();
   }
@@ -99,8 +100,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(state.copyWith(appLocale: sharedPrefsAppLocale ?? event.locale));
   }
 
-  void _onSelectedNotificationChanged(
-      AppSelectedNotificationChanged event, Emitter<AppState> emit) {
+  void _onSelectedNotificationChanged(AppSelectedNotificationChanged event,
+      Emitter<AppState> emit) {
     emit(state.copyWith(notification: event.notification));
   }
 

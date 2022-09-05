@@ -1,6 +1,26 @@
-var loginRoute = '/login';
-var campaignsRoute = '/campaigns';
-var tasksRoute = '$campaignsRoute/tasks';
-var createTasksRoute = '$tasksRoute/new-task';
-var taskInstanceRoute = '$tasksRoute/instance';
-var notificationsRoute = '$tasksRoute/notifications';
+const Map<String, dynamic> routes = {
+  'loginRoute': {
+    'name': 'login',
+    'path': '/login',
+  },
+  'campaignsRoute': {
+    'name': 'campaigns',
+    'path': '/',
+  },
+  'tasksRoute': {
+    'name': 'tasks',
+    'path': '/campaign',
+  },
+  'createTasksRoute': {
+    'name': 'create',
+    'path': 'create',
+  },
+  'taskInstanceRoute': {
+    'name': 'task',
+    'path': '/task',
+  },
+  'notificationsRoute': {
+    'name': 'notifications',
+    'path': '/notificationsRoute',
+  },
+};
