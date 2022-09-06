@@ -50,12 +50,13 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
           context.loc.tasks,
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        leading: BackButton(
-          onPressed: () {
-            context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
-            Navigator.maybePop(context, true);
-          },
-        ),
+        leading: null,
+        // leading: BackButton(
+        //   onPressed: () {
+        //     context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
+        //     Navigator.maybePop(context, true);
+        //   },
+        // ),
         actions: <Widget>[
           IconButton(
             onPressed: () {
