@@ -20,15 +20,18 @@ class AppRouter {
     redirect: (routeState) {
       final bool loggedIn = _authenticationRepository.currentUser.isNotEmpty;
       final bool loggingIn = routeState.subloc == '/login';
-      if (!loggedIn) {
-        return loggingIn ? null : '/login';
-      }
 
-      // if the user is logged in but still on the login page, send them to
-      // the home page
-      if (loggingIn) {
-        return '/';
-      }
+      // bundle the location the user is coming from into a query parameter
+      final query = {...routeState.queryParams};
+      var queryString = Uri(queryParameters: query).query;
+      final fromp = routeState.subloc == '/' ? '' : '?from=${routeState.subloc}&$queryString';
+      if (!loggedIn) return loggingIn ? null : '/login$fromp';
+
+      // if the user is logged in, send them where they were going before (or
+      // home if they weren't going anywhere)
+      query.remove('from');
+      queryString = Uri(queryParameters: query).query;
+      if (loggingIn) return '${routeState.queryParams['from'] ?? '/'}?$queryString';
 
       // no need to redirect at all
       return null;
