@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -11,7 +13,6 @@ import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
-
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
 
@@ -21,13 +22,11 @@ class TasksView extends StatefulWidget {
 
 class _TasksViewState extends State<TasksView> {
   late ScrollController _scrollController;
-  // late GoRouter router = GoRouter.of(context);
+  final query = Uri.dataFromString(window.location.href).query;
 
   @override
   initState() {
-    // router.addListener(() {
-      context.read<TasksCubit>().initialize();
-    // });
+    context.read<TasksCubit>().initialize();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -35,7 +34,6 @@ class _TasksViewState extends State<TasksView> {
   @override
   void dispose() {
     _scrollController.dispose();
-    // router.removeListener(() { });
     super.dispose();
   }
 
@@ -44,7 +42,8 @@ class _TasksViewState extends State<TasksView> {
     _scrollController.addListener(() {
       var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
 
-      if (_scrollController.position.pixels > nextPageTrigger && context.read<TasksCubit>().state.status == TasksStatus.initialized) {
+      if (_scrollController.position.pixels > nextPageTrigger &&
+          context.read<TasksCubit>().state.status == TasksStatus.initialized) {
         context.read<TasksCubit>().getNextPage();
       }
     });
@@ -110,7 +109,7 @@ class _TasksViewState extends State<TasksView> {
                 onTap: (task) async {
                   context.read<AppBloc>().add(AppSelectedTaskChanged(task));
                   final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-                  context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+                  context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
                 },
               );
             case Tabs.availableTasksTab:
@@ -130,11 +129,10 @@ class _TasksViewState extends State<TasksView> {
                     final task = await context.read<TasksCubit>().createTask(item);
                     if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
-
+                    context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
                   } else {
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}');
+                    context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}?$query');
                   }
                 },
               );

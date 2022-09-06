@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -18,6 +20,7 @@ class CombinedTasksView extends StatefulWidget {
 
 class _CombinedTasksViewState extends State<CombinedTasksView> {
   late ScrollController _scrollController;
+  final query = Uri.dataFromString(window.location.href).query;
 
   @override
   initState() {
@@ -95,21 +98,21 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
             onTap: (task) async {
               context.read<AppBloc>().add(AppSelectedTaskChanged(task));
               final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-              context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+              context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
             },
             onCreate: (item) async {
               final task = await context.read<TasksCubit>().createTask(item);
               if (!mounted) return;
               context.read<AppBloc>().add(AppSelectedTaskChanged(task));
               final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-              context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+              context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
             },
             onRequest: (item) async {
               await context.read<TasksCubit>().requestTask(item);
               if (!mounted) return;
               context.read<AppBloc>().add(AppSelectedTaskChanged(item));
               final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-              context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}');
+              context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}?$query');
             },
             onRefresh: () {
               context.read<TasksCubit>().refreshCombined();

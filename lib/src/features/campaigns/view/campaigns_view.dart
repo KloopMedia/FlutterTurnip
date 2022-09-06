@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
@@ -16,6 +18,8 @@ class CampaignsView extends StatefulWidget {
 }
 
 class _CampaignsViewState extends State<CampaignsView> {
+  final query = Uri.dataFromString(window.location.href).query;
+
   @override
   initState() {
     context.read<CampaignsCubit>().loadCampaigns();
@@ -45,7 +49,7 @@ class _CampaignsViewState extends State<CampaignsView> {
             }
             if (!mounted) return;
             context.read<AppBloc>().add(AppSelectedCampaignChanged(campaign));
-            context.go('/campaign/${campaign.id}');
+            context.go('/campaign/${campaign.id}?$query');
           },
           onRefresh: () {
             context.read<CampaignsCubit>().loadCampaigns(forceRefresh: true);
