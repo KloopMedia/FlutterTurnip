@@ -18,13 +18,10 @@ class CombinedTasksView extends StatefulWidget {
 
 class _CombinedTasksViewState extends State<CombinedTasksView> {
   late ScrollController _scrollController;
-  // late GoRouter router = GoRouter.of(context);
 
   @override
   initState() {
-    // router.addListener(() {
-    //   context.read<TasksCubit>().initializeCombined();
-    // });
+    context.read<TasksCubit>().initializeCombined();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -32,7 +29,6 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
   @override
   void dispose() {
     _scrollController.dispose();
-    // router.removeListener(() { });
     super.dispose();
   }
 
