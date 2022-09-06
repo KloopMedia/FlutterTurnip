@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -20,7 +18,7 @@ class CombinedTasksView extends StatefulWidget {
 
 class _CombinedTasksViewState extends State<CombinedTasksView> {
   late ScrollController _scrollController;
-  final query = Uri.dataFromString(window.location.href).query;
+  final query = 'simple=true';
 
   @override
   initState() {

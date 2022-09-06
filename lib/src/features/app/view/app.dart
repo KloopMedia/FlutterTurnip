@@ -59,7 +59,10 @@ class App extends StatelessWidget {
           name: 'campaign',
           path: '/',
           builder: (BuildContext context, GoRouterState state) {
-            return const CampaignsPage();
+            final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
+            return CampaignsPage(
+              simpleViewMode: simpleViewMode,
+            );
           },
           routes: [
             GoRoute(

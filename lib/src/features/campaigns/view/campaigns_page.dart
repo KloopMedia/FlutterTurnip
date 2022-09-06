@@ -8,7 +8,9 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class CampaignsPage extends StatelessWidget {
-  const CampaignsPage({Key? key}) : super(key: key);
+  final bool simpleViewMode;
+
+  const CampaignsPage({Key? key, this.simpleViewMode = false}) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: CampaignsPage());
 
@@ -40,7 +42,7 @@ class CampaignsPage extends StatelessWidget {
           gigaTurnipRepository: context.read<GigaTurnipRepository>(),
           authenticationRepository: context.read<AuthenticationRepository>(),
         ),
-        child: const CampaignsView(),
+        child: CampaignsView(simpleViewMode: simpleViewMode),
       ),
       endDrawer: const AppDrawer(),
     );
