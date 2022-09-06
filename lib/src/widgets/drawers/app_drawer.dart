@@ -73,7 +73,6 @@ class AppDrawer extends StatelessWidget {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
         final bloc = context.read<AppBloc>();
-        final navigator = Navigator.of(context);
         return Expanded(
           child: Stack(
             children: [
@@ -135,12 +134,8 @@ class AppDrawer extends StatelessWidget {
                       final shouldLogout = await showLogOutDialog(context);
                       if (shouldLogout) {
                         bloc.add(AppLogoutRequested());
-                        navigator.popUntil(ModalRoute.withName('/'));
                       }
                     },
-                    // style: ElevatedButton.styleFrom(
-                    //   primary: Colors.red, // Background color
-                    // ),
                     child: Text(
                       context.loc.logout,
                       style: const TextStyle(fontSize: 20),

@@ -43,10 +43,7 @@ class AuthenticationRepository {
       late final AuthCredential credential;
       if (isWeb) {
         final googleProvider = GoogleAuthProvider();
-        final userCredential = await _firebaseAuth.signInWithPopup(
-          googleProvider,
-        );
-        credential = userCredential.credential!;
+        await _firebaseAuth.signInWithPopup(googleProvider);
       } else {
         final googleUser = await _googleSignIn.signIn();
         final googleAuth = await googleUser!.authentication;
@@ -54,9 +51,8 @@ class AuthenticationRepository {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
+        await _firebaseAuth.signInWithCredential(credential);
       }
-
-      await _firebaseAuth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       print(e);
       throw LogInWithGoogleFailure.fromCode(e.code);

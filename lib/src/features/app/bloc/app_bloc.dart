@@ -12,7 +12,7 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
-  late final StreamSubscription<AuthUser> _userSubscription;
+  late final StreamSubscription<AuthUser> userSubscription;
   AppLocales? sharedPrefsAppLocale;
 
   AppBloc({
@@ -33,7 +33,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
 
-    _userSubscription = _authenticationRepository.user.listen(
+    userSubscription = _authenticationRepository.user.listen(
           (user) => add(AppUserChanged(user)),
     );
     _getLocaleFromSharedPrefs();
@@ -79,7 +79,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   @override
   Future<void> close() {
-    _userSubscription.cancel();
+    userSubscription.cancel();
     return super.close();
   }
 
