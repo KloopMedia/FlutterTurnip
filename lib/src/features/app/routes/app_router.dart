@@ -1,5 +1,5 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,17 +9,16 @@ import '../../notifications/view/view.dart';
 import '../../tasks/index.dart';
 
 class AppRouter {
-  BuildContext context;
-  AppState state;
+  final AuthenticationRepository _authenticationRepository;
 
-  AppRouter(this.context, this.state);
+  AppRouter(this._authenticationRepository);
 
   get router => _router;
 
   late final GoRouter _router = GoRouter(
-    // refreshListenable: GoRouterRefreshStream(bloc.stream),
+    refreshListenable: GoRouterRefreshStream(_authenticationRepository.user),
     redirect: (routeState) {
-      final bool loggedIn = state.user != null;
+      final bool loggedIn = _authenticationRepository.currentUser.isNotEmpty;
       final bool loggingIn = routeState.subloc == '/login';
       if (!loggedIn) {
         return loggingIn ? null : '/login';
