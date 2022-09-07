@@ -60,10 +60,13 @@ class AppRouter {
             builder: (BuildContext context, GoRouterState state) {
               final id = state.params['cid'];
               final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
+              final shouldJoinCampaign = state.queryParams['join']?.toLowerCase() == 'true';
+
               if (id != null) {
                 return TasksPage(
                   campaignId: int.parse(id),
                   simpleViewMode: simpleViewMode,
+                  shouldJoinCampaign: shouldJoinCampaign,
                 );
               }
               return const TasksPage();

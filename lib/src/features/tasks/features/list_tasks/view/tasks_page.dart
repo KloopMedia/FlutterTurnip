@@ -9,13 +9,27 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 class TasksPage extends StatelessWidget {
   final int? campaignId;
   final bool simpleViewMode;
+  final bool shouldJoinCampaign;
 
-  const TasksPage({Key? key, this.campaignId, this.simpleViewMode = false}) : super(key: key);
+  const TasksPage({
+    Key? key,
+    this.campaignId,
+    this.simpleViewMode = false,
+    this.shouldJoinCampaign = false,
+  }) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: TasksPage());
 
+  Future<void> joinCampaign(BuildContext context, int id) async {
+    await context.read<GigaTurnipRepository>().joinCampaign(id);
+  }
+
   Future<Campaign> loadCampaign(BuildContext context) async {
     if (campaignId != null) {
+      if (shouldJoinCampaign) {
+        print('joining');
+        joinCampaign(context, campaignId!);
+      }
       final appBloc = context.read<AppBloc>();
       final campaign = await context.read<GigaTurnipRepository>().getCampaignById(campaignId!);
       appBloc.add(AppSelectedCampaignChanged(campaign));
