@@ -1,6 +1,6 @@
 part of 'app_bloc.dart';
 
-enum AppLocales { system, russian, english, kyrgyz }
+enum AppLocales { russian, english, kyrgyz }
 
 @immutable
 class AppState extends Equatable {
@@ -37,8 +37,8 @@ class AppState extends Equatable {
 
   Locale? get locale {
     switch (appLocale) {
-      case AppLocales.system:
-        return null;
+      // case AppLocales.system:
+      //   return null;
       case AppLocales.russian:
         return const Locale('ru');
       case AppLocales.english:

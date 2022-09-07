@@ -24,6 +24,7 @@
     "edit" : "Edit",
     "sent" : "Sent",
     "notsent" : "Not sent",
+    "opentosee" : "view/open",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
@@ -32,8 +33,8 @@
     "fetching_error_tasks" : "An error occurred while fetching tasks",
     "system" : "System",
     "english" : "English",
-    "russian" : "Russian",
-    "kyrgyz" : "Kyrgyz",
+    "russian" : "Русский",
+    "kyrgyz" : "Кыргыз тили",
     "language" : "Language",
 
     "are_you_sure_logout" : "Are you sure you want to log out?"

@@ -24,6 +24,7 @@
     "edit" : "Өзгөртүү",
     "sent" : "Жиберилди",
     "notsent" : "Жиберилген эмес",
+    "opentosee" : "Кароо/ачуу",
 
     "sign_in" : "Google аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",
@@ -31,9 +32,9 @@
     "fetching_error" : "Кампанияларды алуудагы ката",
     "fetching_error_tasks" : "Тапшырмаларды алуудагы ката",
     "system" : "Система",
-    "english" : "Англисче",
-    "russian" : "Орусча",
-    "kyrgyz" : "Кыргызча",
+    "english" : "English",
+    "russian" : "Русский",
+    "kyrgyz" : "Кыргыз тили",
     "language" : "Тилди тандоо",
 
     "are_you_sure_logout" : "Чыгууну тастыктаңыз"

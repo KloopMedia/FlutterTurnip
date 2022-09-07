@@ -86,19 +86,20 @@ class AppDrawer extends StatelessWidget {
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                     ),
-                    value: bloc.sharedPrefsAppLocale ?? state.appLocale ?? AppLocales.system,
+                    value: bloc.sharedPrefsAppLocale ?? state.appLocale ?? AppLocales.kyrgyz,
                     onChanged: (AppLocales? locale) {
                       if (locale != null) {
                         bloc.add(AppLocaleChanged(locale));
+
                       }
                     },
                     items: [
-                      DropdownMenuItem<AppLocales>(
-                          value: AppLocales.system,
-                          child: Text(
-                            context.loc.language,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          )),
+                      // DropdownMenuItem<AppLocales>(
+                      //     value: AppLocales.system,
+                      //     child: Text(
+                      //       context.loc.language,
+                      //       style: Theme.of(context).textTheme.titleSmall,
+                      //     )),
                       DropdownMenuItem<AppLocales>(
                         value: AppLocales.english,
                         child: Text(

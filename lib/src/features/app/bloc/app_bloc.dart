@@ -41,8 +41,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Locale? get sharedPrefsLocale {
     switch (sharedPrefsAppLocale) {
-      case AppLocales.system:
-        return const Locale('system');
+      // case AppLocales.system:
+      //   return const Locale('system');
       case AppLocales.russian:
         return const Locale('ru');
       case AppLocales.english:
@@ -109,9 +109,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String locale;
     switch (appLocales) {
-      case AppLocales.system:
-        locale = 'system';
-        break;
+      // case AppLocales.system:
+      //   locale = 'system';
+      //   break;
       case AppLocales.russian:
         locale = 'ru';
         break;
@@ -133,9 +133,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (sharedPreferences.containsKey('locale')) {
       String sharedLang = sharedPreferences.getString('locale')!;
       switch (sharedLang) {
-        case 'system':
-          sharedPrefsAppLocale = AppLocales.system;
-          break;
+        // case 'system':
+        //   sharedPrefsAppLocale = AppLocales.system;
+        //   break;
         case 'ru':
           sharedPrefsAppLocale = AppLocales.russian;
           break;

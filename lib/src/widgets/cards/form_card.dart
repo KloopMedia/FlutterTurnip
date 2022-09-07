@@ -130,7 +130,7 @@ class CardFooter extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              context.loc.edit,
+              context.loc.opentosee,
               style: const TextStyle(color: Colors.white),
             ),
           ),
