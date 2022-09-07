@@ -40,7 +40,7 @@ class TasksPage extends StatelessWidget {
             selectedCampaign: snapshot.data!,
             gigaTurnipRepository: context.read<GigaTurnipRepository>(),
           ),
-          child: simpleViewMode ? const CombinedTasksView() : const TasksView(),
+          child: CombinedTasksView(),
         );
       },
     );
