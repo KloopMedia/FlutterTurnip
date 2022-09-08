@@ -18,15 +18,11 @@ class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   late UIModel formController;
   late String richText;
-  // late GoRouter router = GoRouter.of(context);
-
 
   @override
   void initState() {
     taskBloc = context.read<TaskBloc>();
-    // router.addListener(() {
-      taskBloc.add(InitializeTaskEvent());
-    // });
+    taskBloc.add(InitializeTaskEvent());
     formController = UIModel(
       data: taskBloc.state.responses ?? {},
       disabled: taskBloc.state.complete,
@@ -50,13 +46,14 @@ class _TaskViewState extends State<TaskView> {
 
   @override
   void dispose() {
-    // router.removeListener(() { });
     taskBloc.add(ExitTaskEvent());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var location = Router.of(context).routeInformationProvider?.value.location;
+    var query = location?.substring(location.indexOf('?')) ?? '';
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -80,7 +77,7 @@ class _TaskViewState extends State<TaskView> {
             if (state.nextTask != null) {
               context.read<AppBloc>().add(AppSelectedTaskChanged(state.nextTask));
               final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-              context.go('campaign/${selectedCampaign.id}/tasks/${state.nextTask!.id}');
+              context.go('/campaign/${selectedCampaign.id}/tasks/${state.nextTask!.id}$query');
             }
           } else if (state.taskStatus == TaskStatus.redirectToTasksList) {
             context.pop();
