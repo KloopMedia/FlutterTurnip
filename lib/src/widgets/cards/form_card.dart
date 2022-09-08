@@ -114,9 +114,9 @@ class CardFooter extends StatelessWidget {
       children: [
         Expanded(
           child: status
-              ? const Text(
-                  'Ваше обращение получено!',
-                  style: TextStyle(color: Colors.black87, fontSize: 18),
+              ? Text(
+                  context.loc.request_received,
+                  style: const TextStyle(color: Colors.black87, fontSize: 18),
                 )
               : const SizedBox.shrink(),
         ),

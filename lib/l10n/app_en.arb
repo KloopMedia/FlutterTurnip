@@ -24,7 +24,7 @@
     "edit" : "Edit",
     "sent" : "Sent",
     "notsent" : "Not sent",
-    "opentosee" : "view/open",
+    "opentosee" : "View/Open",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
@@ -37,5 +37,7 @@
     "kyrgyz" : "Кыргыз тили",
     "language" : "Language",
 
-    "are_you_sure_logout" : "Are you sure you want to log out?"
+    "are_you_sure_logout" : "Are you sure you want to log out?",
+
+    "request_received" : "Your request has been received!"
 }

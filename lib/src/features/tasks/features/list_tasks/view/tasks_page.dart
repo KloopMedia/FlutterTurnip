@@ -27,7 +27,6 @@ class TasksPage extends StatelessWidget {
   Future<Campaign> loadCampaign(BuildContext context) async {
     if (campaignId != null) {
       if (shouldJoinCampaign) {
-        print('joining');
         joinCampaign(context, campaignId!);
       }
       final appBloc = context.read<AppBloc>();
