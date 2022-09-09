@@ -104,19 +104,22 @@ class CreatableTaskList extends StatelessWidget {
           runSpacing: 8,
           children: [
             for (var item in items)
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+              SizedBox(
+                height: 50.0,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.lightBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  onTap(item);
-                },
-                child: Text(
-                  item.name,
-                  style: const TextStyle(color: Colors.white),
+                  onPressed: () {
+                    onTap(item);
+                  },
+                  child: Text(
+                    item.name,
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                  ),
                 ),
               ),
           ],
