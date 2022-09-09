@@ -53,7 +53,13 @@ class _TaskViewState extends State<TaskView> {
   @override
   Widget build(BuildContext context) {
     var location = Router.of(context).routeInformationProvider?.value.location;
-    var query = location?.substring(location.indexOf('?')) ?? '';
+    var queryStartIndex = location?.indexOf('?') ?? -1;
+    String query;
+    if (queryStartIndex > 0) {
+      query = location?.substring(queryStartIndex) ?? '';
+    } else {
+      query = '';
+    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
