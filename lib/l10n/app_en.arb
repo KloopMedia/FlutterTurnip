@@ -39,5 +39,9 @@
 
     "are_you_sure_logout" : "Are you sure you want to log out?",
 
-    "request_received" : "Your request has been received!"
+    "request_received" : "Your request has been received!",
+
+    "no_uncompleted_tasks": "No uncompleted tasks",
+    "no_available_tasks": "No available tasks",
+    "no_completed_tasks": "No completed tasks"
 }

@@ -46,11 +46,26 @@ class CombinedTasksListView extends StatelessWidget {
         slivers: [
           CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
           SliverTaskListHeader(title: context.loc.todo),
-          SliverTaskList(items: openTasks, onTap: onTap, icon: iconToDo),
+          SliverTaskList(
+            items: openTasks,
+            onTap: onTap,
+            icon: iconToDo,
+            emptyTitle: context.loc.no_uncompleted_tasks,
+          ),
           SliverTaskListHeader(title: context.loc.receive),
-          SliverTaskList(items: availableTasks, onTap: onRequest, icon: iconDone),
+          SliverTaskList(
+            items: availableTasks,
+            onTap: onRequest,
+            icon: iconDone,
+            emptyTitle: context.loc.no_available_tasks,
+          ),
           SliverTaskListHeader(title: context.loc.done),
-          SliverTaskList(items: closedTasks, onTap: onTap, icon: iconDone),
+          SliverTaskList(
+            items: closedTasks,
+            onTap: onTap,
+            icon: iconDone,
+            emptyTitle: context.loc.no_completed_tasks,
+          ),
           if (showLoader)
             const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
         ],
@@ -133,16 +148,27 @@ class SliverTaskList extends StatelessWidget {
   final List<Task> items;
   final ItemCallback onTap;
   final IconData icon;
+  final String emptyTitle;
 
   const SliverTaskList({
     Key? key,
     required this.items,
     required this.onTap,
     required this.icon,
+    required this.emptyTitle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(emptyTitle, style: Theme.of(context).textTheme.titleSmall),
+        ),
+      );
+    }
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

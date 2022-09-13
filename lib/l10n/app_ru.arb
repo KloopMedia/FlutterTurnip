@@ -39,5 +39,9 @@
 
      "are_you_sure_logout" : "Вы уверены что хотите выйти?",
 
-     "request_received" : "Ваше обращение получено!"
+     "request_received" : "Ваше обращение получено!",
+
+     "no_uncompleted_tasks": "Нет невыполненных заданий",
+     "no_available_tasks": "Нет доступных заданий",
+     "no_completed_tasks": "Нет выполненных заданий"
 }

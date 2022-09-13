@@ -39,5 +39,9 @@
 
     "are_you_sure_logout" : "Чыгууну тастыктаңыз",
 
-    "request_received" : "Сиздин кайрылууңуз кабыл алынды!"
+    "request_received" : "Сиздин кайрылууңуз кабыл алынды!",
+
+    "no_uncompleted_tasks": "Аткарыла элек тапшырмалар жок",
+    "no_available_tasks": "Жаңы тапшырмалар жок",
+    "no_completed_tasks": "Аткарылган тапшырмалар жок"
 }
