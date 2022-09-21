@@ -1142,9 +1142,11 @@ packages:
   uniturnip:
     dependency: "direct main"
     description:
-      path: "../uniturnip"
-      relative: true
-    source: path
+      path: "."
+      ref: test_integration_with_flutterturnip
+      resolved-ref: "504aa7721b8d4bf652fa343df734e1db12e10169"
+      url: "https://github.com/KloopMedia/uniturnip.git"
+    source: git
     version: "1.0.0+1"
   url_launcher:
     dependency: transitive
