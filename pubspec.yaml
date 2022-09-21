@@ -55,16 +55,17 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   uniturnip:
-#    path: ../uniturnip
-    git:
-      url: https://github.com/KloopMedia/uniturnip.git
-      ref: test_integration_with_flutterturnip
+    path: ../uniturnip
+#    git:
+#      url: https://github.com/KloopMedia/uniturnip.git
+#      ref: test_integration_with_flutterturnip
   webview_flutter_plus: ^0.3.0+2
   shared_preferences: 2.0.15
   flutter_launcher_icons: ^0.9.3
   firebase_crashlytics: ^2.8.7
   video_compress: ^3.1.1
   go_router: ^4.3.0
+  cross_file: ^0.3.3+2
 
 dev_dependencies:
   flutter_test:

@@ -29,14 +29,24 @@ class _TaskViewState extends State<TaskView> {
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
         taskBloc.add(UpdateTaskEvent(data));
       },
-      saveFile: (paths, type, {private = false}) {
-        return context.read<TaskBloc>().uploadFile(paths, type, private);
+      saveFile: (rawFile, path, type, {private = false}) {
+        return context.read<TaskBloc>().uploadFile(
+              file: rawFile,
+              path: path,
+              type: type,
+              private: private,
+            );
       },
       getFile: (path) {
         return context.read<TaskBloc>().getFile(path);
       },
-      saveAudioRecord: (path, private) async {
-        final task = await context.read<TaskBloc>().uploadFile(path, FileType.any, private);
+      saveAudioRecord: (file, private) async {
+        final task = await context.read<TaskBloc>().uploadFile(
+              file: file,
+              type: FileType.any,
+              private: private,
+              path: null,
+            );
         return task!.snapshot.ref.fullPath;
       },
     );
