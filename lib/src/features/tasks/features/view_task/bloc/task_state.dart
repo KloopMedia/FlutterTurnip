@@ -68,6 +68,8 @@ class TaskState extends Task with EquatableMixin {
     TaskStatus? taskStatus,
     Task? nextTask,
     List<Task>? previousTasks,
+    Map<String, dynamic>? schema,
+    Map<String, dynamic>? uiSchema,
   }) {
     return TaskState(
       previousTasks: previousTasks ?? this.previousTasks,
@@ -77,11 +79,11 @@ class TaskState extends Task with EquatableMixin {
       complete: complete ?? this.complete,
       createdAt: createdAt,
       name: name,
-      schema: schema,
+      schema: schema ?? this.schema,
       id: id,
       reopened: reopened,
       stage: stage,
-      uiSchema: uiSchema,
+      uiSchema: uiSchema ?? this.uiSchema,
       cardJsonSchema: cardJsonSchema,
       cardUiSchema: cardUiSchema,
     );

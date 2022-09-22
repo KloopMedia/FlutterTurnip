@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
@@ -108,6 +109,26 @@ class GigaTurnipApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> getDynamicJsonTaskStage ({
+    Map<String, dynamic>? query,
+    required int id,
+    Map<String, dynamic>? formData}) async {
+    try {
+      final jsonFormData = jsonEncode(formData);
+      final response = await _httpClient.get(
+        '$taskStagesRoute$id/load_schema_answers/?responses=$jsonFormData',
+        queryParameters: query,
+      );
+      return response.data['schema'];
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   /// Request task creation and on success return task's id.
   Future<int> createTask({required int id}) async {
     try {
@@ -204,15 +225,23 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> updateTaskById({required int id, required dynamic data}) async {
+  Future<Map<String, dynamic>> updateTaskById({required int id, required Map<String, dynamic> data}) async {
+    print('>> updateTaskById data: $data');
     try {
-      final response = await _httpClient.patch('$tasksRoute$id/', data: data);
+      print('BEFORE');
+      Map mapp={
+        "responses": data['responses'],
+       "complete": data['complete']
+      };
+      print('>> updateTaskById mapp: $mapp');
+      final response = await _httpClient.patch('$tasksRoute$id/', data: jsonEncode(mapp));
+      print('AFTER');
+      print('response: $response');
       return response.data;
     } on DioError catch (e) {
-      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
-      print(e);
+      print('CATCH: $e');
       rethrow;
     }
   }

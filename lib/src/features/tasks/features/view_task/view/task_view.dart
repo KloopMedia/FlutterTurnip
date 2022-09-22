@@ -27,7 +27,12 @@ class _TaskViewState extends State<TaskView> {
       data: taskBloc.state.responses ?? {},
       disabled: taskBloc.state.complete,
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
+        if (taskBloc.state.stage.dynamicJsons.isNotEmpty) {
+          taskBloc.add(GetDynamicSchemaTaskEvent(data));
+          print('>>> taskBloc.state.stage.dynamicJsons: ${taskBloc.state.stage.dynamicJsons}');//[{main: marital_status, count: 1, foreign: [salary]}]
+        }
         taskBloc.add(UpdateTaskEvent(data));
+        print('>>> onUpdate data: $data');//{age: 11, date: 2022-08-05, name: ап, time: t_15_30, region: chuy_region, salary: больше сомов 30 000 в месяц, comments: ирll, employed: Постоянная работа, nationality: ро, phone_number: 556, actual_address: рол, marital_status: Не женат_Не замужем, whatsapp_number: 566, meeting_with_whom: ombudsman, benefits_or_pension: Да, description_of_problem: ммр}
       },
       saveFile: (paths, type, {private = false}) {
         return context.read<TaskBloc>().uploadFile(paths, type, private);
@@ -39,6 +44,9 @@ class _TaskViewState extends State<TaskView> {
         final task = await context.read<TaskBloc>().uploadFile(path, FileType.any, private);
         return task!.snapshot.ref.fullPath;
       },
+      // getDynamicJson: (/*int id, Map data*/) async {
+      //   return context.read<TaskBloc>().getDynamicJson(taskBloc.state.id, taskBloc.state.responses);
+      // },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();
