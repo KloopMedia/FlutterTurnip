@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_storage/firebase_storage.dart' show UploadTask;
+import 'package:firebase_storage/firebase_storage.dart' show SettableMetadata, UploadTask;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
@@ -15,7 +15,6 @@ import 'package:uniturnip/json_schema_ui.dart';
 import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
-
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
@@ -113,8 +112,64 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
-  Future<UploadTask?> uploadFile(String path, FileType type, bool private) async {
-    String filename = basename(path);
+  String? _getContentType(FileType type, String extension) {
+    switch (type) {
+      case FileType.video:
+        return 'video/$extension';
+      case FileType.image:
+        return 'image/$extension';
+      default:
+        return null;
+    }
+  }
+
+  Future<UploadTask?> uploadFile({
+    required XFile? file,
+    required String? path,
+    required FileType type,
+    required bool private,
+  }) async {
+    if (file == null) {
+      return null;
+    }
+    final rawFile = await file.readAsBytes();
+    final mimeType = file.mimeType ?? _getContentType(type, extension(file.name));
+
+    if (kIsWeb || path == null) {
+      return _uploadFile(
+        file: rawFile,
+        private: private,
+        filename: file.name,
+        mimeType: mimeType,
+      );
+    }
+
+    Uint8List? compressed = rawFile;
+
+    if (type == FileType.image) {
+      compressed = await _compressImage(file);
+    } else if (type == FileType.video) {
+      compressed = await _compressVideo(file);
+    }
+    if (compressed != null) {
+      return _uploadFile(
+        file: compressed,
+        private: private,
+        filename: file.name,
+        mimeType: mimeType,
+      );
+    } else {
+      print('No compressed files');
+      return null;
+    }
+  }
+
+  Future<UploadTask?> _uploadFile({
+    required Uint8List file,
+    required bool private,
+    required String filename,
+    required String? mimeType,
+  }) async {
     final prefix = private ? 'private' : 'public';
     final storagePath = '$prefix/'
         '${state.stage.chain.campaign}/'
@@ -124,39 +179,33 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         '${state.id}/'
         '$filename';
 
-    File file = File(path);
-    File? compressed = file;
+    final metadata = SettableMetadata(contentType: mimeType);
 
-    if (type == FileType.image) {
-      compressed = await _compressImage(file);
-    } else if (type == FileType.video) {
-      compressed = await _compressVideo(file);
-    }
-    if (compressed != null) {
-      try {
-        final ref = firebase_storage.FirebaseStorage.instance.ref(storagePath);
-        return ref.putFile(compressed);
-      } on firebase_storage.FirebaseException catch (e) {
-        print(e);
-        rethrow;
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance.ref(storagePath);
+      UploadTask uploadTask;
+      if (kIsWeb) {
+        uploadTask = ref.putData(file, metadata);
+      } else {
+        uploadTask = ref.putData(file, metadata);
       }
-    } else {
-      print('No compressed files');
-      return null;
+      return Future.value(uploadTask);
+    } on firebase_storage.FirebaseException catch (e) {
+      print('FIlE UPLOAD ERROR ---> $e');
+      rethrow;
     }
   }
 
-  Future<File?> _compressVideo(File file) async {
+  Future<Uint8List?> _compressVideo(XFile file) async {
     MediaInfo? mediaInfo = await VideoCompress.compressVideo(
       file.path,
       quality: VideoQuality.DefaultQuality,
     );
-    return mediaInfo?.file;
+    return mediaInfo?.file?.readAsBytesSync();
   }
 
-  Future<File?> _compressImage(File file) async {
-    final result = await FlutterImageCompress.compressWithFile(file.absolute.path);
-    return File(file.absolute.path).writeAsBytes(result!, flush: true);
+  Future<Uint8List?> _compressImage(XFile file) async {
+    return await FlutterImageCompress.compressWithFile(file.path);
   }
 
   Future <void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {

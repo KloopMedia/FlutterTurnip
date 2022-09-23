@@ -22,7 +22,7 @@ class TitleCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.copyWith().secondary,
         child: TextButton(
             style: TextButton.styleFrom(
-              primary: Colors.black,
+              foregroundColor: Colors.black,
             ),
             onPressed: () {
               onTap();
