@@ -30,5 +30,3 @@ const reopenTaskActionRoute = '/uncomplete/';
 // Notifications routes
 const notificationsRoute = '/api/v1/notifications/';
 const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
-
-// TODO: Add all routes

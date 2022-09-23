@@ -33,7 +33,7 @@ class TaskStage {
   final String? webhookAddress;
   final String? webhookPlayloadField;
   final String? webhookParams;
-  final List<dynamic> dynamicJsons;
+  final List<Map<String, dynamic>> dynamicJsons;
   final String? webhookResponseField;
   final bool allowGoBack;
   final bool allowRelease;
@@ -42,7 +42,6 @@ class TaskStage {
   final Map<String, dynamic> cardJsonSchema;
   @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
   final Map<String, dynamic> cardUiSchema;
-
 
   TaskStage({
     required this.id,
@@ -56,7 +55,7 @@ class TaskStage {
     required this.jsonSchema,
     required this.uiSchema,
     required this.library,
-    required this. copyInput,
+    required this.copyInput,
     required this.allowMultipleFiles,
     required this.isCreatable,
     required this.displayedPrevStages,
@@ -81,6 +80,7 @@ class TaskStage {
   }
 
   static double _stringToDouble(String number) => double.parse(number);
+
   static String _stringFromDouble(double number) => number.toString();
 
   static Map<String, dynamic> _stringToMap(String? json) {
@@ -90,5 +90,6 @@ class TaskStage {
       return {};
     }
   }
+
   static String _stringFromMap(Map<String, dynamic> json) => jsonEncode(json);
 }

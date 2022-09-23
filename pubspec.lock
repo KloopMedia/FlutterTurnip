@@ -177,7 +177,7 @@ packages:
     source: hosted
     version: "4.2.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -1144,7 +1144,7 @@ packages:
     description:
       path: "."
       ref: test_integration_with_flutterturnip
-      resolved-ref: "504aa7721b8d4bf652fa343df734e1db12e10169"
+      resolved-ref: "940d292897a44423dc47d75eddd4b63592e234aa"
       url: "https://github.com/KloopMedia/uniturnip.git"
     source: git
     version: "1.0.0+1"

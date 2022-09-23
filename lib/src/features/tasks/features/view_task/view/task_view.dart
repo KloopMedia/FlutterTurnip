@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
+import 'package:collection/collection.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -28,6 +29,12 @@ class _TaskViewState extends State<TaskView> {
       disabled: taskBloc.state.complete,
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
         taskBloc.add(UpdateTaskEvent(data));
+        final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsons;
+        if (dynamicJsonMetadata.isNotEmpty) {
+          if (dynamicJsonMetadata.first['main'] == path.last) {
+            taskBloc.add(GetDynamicSchemaTaskEvent(data));
+          }
+        }
       },
       saveFile: (rawFile, path, type, {private = false}) {
         return context.read<TaskBloc>().uploadFile(
@@ -101,8 +108,13 @@ class _TaskViewState extends State<TaskView> {
           // TODO: implement error handling
         },
         buildWhen: (previousState, currentState) {
-          return (previousState.previousTasks != currentState.previousTasks) ||
-              (previousState.complete != currentState.complete);
+          var hasPreviousTasksChange = previousState.previousTasks != currentState.previousTasks;
+          var hasCompleteChange = previousState.complete != currentState.complete;
+          var hasSchemaChange =
+              !(const DeepCollectionEquality().equals(previousState.schema, currentState.schema));
+
+          var shouldRebuild = hasPreviousTasksChange || hasCompleteChange || hasSchemaChange;
+          return shouldRebuild;
         },
         builder: (context, state) {
           return ListView(

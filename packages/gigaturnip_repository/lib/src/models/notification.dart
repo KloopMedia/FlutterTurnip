@@ -20,7 +20,7 @@ class Notifications extends Equatable {
   });
 
   factory Notifications.fromJson(Map<String, dynamic> json) {
-    return _$NotificationFromJson(json);
+    return _$NotificationsFromJson(json);
   }
 
   factory Notifications.fromApiModel(api.Notification model) {

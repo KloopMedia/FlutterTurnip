@@ -113,6 +113,10 @@ class GigaTurnipRepository {
     return _userRelevantTaskStages;
   }
 
+  Future<Map<String, dynamic>> getDynamicJsonTaskStage(int id, Map<String, dynamic>? formData) async {
+    return await _gigaTurnipApiClient.getDynamicJsonTaskStage(id: id, formData: formData);
+  }
+
   Future<void> refreshAllTasks(Campaign selectedCampaign, TasksActions action) async {
     switch (action) {
       case TasksActions.listOpenTasks:

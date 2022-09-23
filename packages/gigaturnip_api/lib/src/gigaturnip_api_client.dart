@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
@@ -108,6 +109,24 @@ class GigaTurnipApiClient {
     }
   }
 
+  Future<Map<String, dynamic>> getDynamicJsonTaskStage(
+      {Map<String, dynamic>? query, required int id, Map<String, dynamic>? formData}) async {
+    try {
+      final jsonFormData = jsonEncode(formData);
+      final response = await _httpClient.get(
+        '$taskStagesRoute$id/load_schema_answers/?responses=$jsonFormData',
+        queryParameters: query,
+      );
+      return response.data['schema'];
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   /// Request task creation and on success return task's id.
   Future<int> createTask({required int id}) async {
     try {
@@ -204,15 +223,22 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> updateTaskById({required int id, required dynamic data}) async {
+  Future<Map<String, dynamic>> updateTaskById({
+    required int id,
+    required Map<String, dynamic> data,
+  }) async {
     try {
-      final response = await _httpClient.patch('$tasksRoute$id/', data: data);
+      Map formData = {
+        "responses": data['responses'],
+        "complete": data['complete'],
+      };
+      final response = await _httpClient.patch('$tasksRoute$id/', data: formData);
       return response.data;
     } on DioError catch (e) {
       print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
-      print(e);
+      print('CATCH: $e');
       rethrow;
     }
   }
@@ -352,8 +378,9 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Notification>> getUserNotifications(
-      {Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications({
+    Map<String, dynamic>? query,
+  }) async {
     try {
       final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
       return PaginationWrapper<Notification>.fromJson(

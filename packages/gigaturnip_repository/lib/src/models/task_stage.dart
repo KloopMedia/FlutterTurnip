@@ -14,6 +14,9 @@ class TaskStage extends Equatable {
   final String? richText;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
+  final Map<String, dynamic>? jsonSchema;
+  final Map<String, dynamic>? uiSchema;
+  final List<Map<String, dynamic>> dynamicJsons;
 
   const TaskStage({
     required this.id,
@@ -23,6 +26,9 @@ class TaskStage extends Equatable {
     required this.richText,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    required this.jsonSchema,
+    required this.uiSchema,
+    required this.dynamicJsons,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
@@ -37,7 +43,10 @@ class TaskStage extends Equatable {
       chain: Chain.fromApiModel(model.chain),
       richText: model.richText,
       cardJsonSchema: model.cardJsonSchema,
-      cardUiSchema: model.cardUiSchema
+      cardUiSchema: model.cardUiSchema,
+      jsonSchema: model.jsonSchema,
+      uiSchema: model.uiSchema,
+      dynamicJsons: model.dynamicJsons,
     );
   }
 

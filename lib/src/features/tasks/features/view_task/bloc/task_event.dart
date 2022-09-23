@@ -25,3 +25,9 @@ class UploadFilesTaskEvent extends TaskEvent {
 
   UploadFilesTaskEvent(this.paths);
 }
+
+class GetDynamicSchemaTaskEvent extends TaskEvent {
+  final Map<String, dynamic> response;
+
+  GetDynamicSchemaTaskEvent(this.response);
+}
