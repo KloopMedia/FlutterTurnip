@@ -109,10 +109,8 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> getDynamicJsonTaskStage ({
-    Map<String, dynamic>? query,
-    required int id,
-    Map<String, dynamic>? formData}) async {
+  Future<Map<String, dynamic>> getDynamicJsonTaskStage(
+      {Map<String, dynamic>? query, required int id, Map<String, dynamic>? formData}) async {
     try {
       final jsonFormData = jsonEncode(formData);
       final response = await _httpClient.get(
@@ -225,20 +223,19 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> updateTaskById({required int id, required Map<String, dynamic> data}) async {
-    print('>> updateTaskById data: $data');
+  Future<Map<String, dynamic>> updateTaskById({
+    required int id,
+    required Map<String, dynamic> data,
+  }) async {
     try {
-      print('BEFORE');
-      Map mapp={
+      Map formData = {
         "responses": data['responses'],
-       "complete": data['complete']
+        "complete": data['complete'],
       };
-      print('>> updateTaskById mapp: $mapp');
-      final response = await _httpClient.patch('$tasksRoute$id/', data: jsonEncode(mapp));
-      print('AFTER');
-      print('response: $response');
+      final response = await _httpClient.patch('$tasksRoute$id/', data: formData);
       return response.data;
     } on DioError catch (e) {
+      print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);
     } catch (e) {
       print('CATCH: $e');
@@ -381,8 +378,9 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Notification>> getUserNotifications(
-      {Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications({
+    Map<String, dynamic>? query,
+  }) async {
     try {
       final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
       return PaginationWrapper<Notification>.fromJson(

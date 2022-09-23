@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
+import 'package:collection/collection.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -27,12 +28,13 @@ class _TaskViewState extends State<TaskView> {
       data: taskBloc.state.responses ?? {},
       disabled: taskBloc.state.complete,
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
-        if (taskBloc.state.stage.dynamicJsons.isNotEmpty) {
-          taskBloc.add(GetDynamicSchemaTaskEvent(data));
-          print('>>> taskBloc.state.stage.dynamicJsons: ${taskBloc.state.stage.dynamicJsons}');//[{main: marital_status, count: 1, foreign: [salary]}]
-        }
         taskBloc.add(UpdateTaskEvent(data));
-        print('>>> onUpdate data: $data');//{age: 11, date: 2022-08-05, name: ап, time: t_15_30, region: chuy_region, salary: больше сомов 30 000 в месяц, comments: ирll, employed: Постоянная работа, nationality: ро, phone_number: 556, actual_address: рол, marital_status: Не женат_Не замужем, whatsapp_number: 566, meeting_with_whom: ombudsman, benefits_or_pension: Да, description_of_problem: ммр}
+        final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsons;
+        if (dynamicJsonMetadata.isNotEmpty) {
+          if (dynamicJsonMetadata.first['main'] == path.last) {
+            taskBloc.add(GetDynamicSchemaTaskEvent(data));
+          }
+        }
       },
       saveFile: (rawFile, path, type, {private = false}) {
         return context.read<TaskBloc>().uploadFile(
@@ -54,9 +56,6 @@ class _TaskViewState extends State<TaskView> {
             );
         return task!.snapshot.ref.fullPath;
       },
-      // getDynamicJson: (/*int id, Map data*/) async {
-      //   return context.read<TaskBloc>().getDynamicJson(taskBloc.state.id, taskBloc.state.responses);
-      // },
     );
     richText = taskBloc.state.stage.richText ?? '';
     super.initState();
@@ -109,8 +108,13 @@ class _TaskViewState extends State<TaskView> {
           // TODO: implement error handling
         },
         buildWhen: (previousState, currentState) {
-          return (previousState.previousTasks != currentState.previousTasks) ||
-              (previousState.complete != currentState.complete);
+          var hasPreviousTasksChange = previousState.previousTasks != currentState.previousTasks;
+          var hasCompleteChange = previousState.complete != currentState.complete;
+          var hasSchemaChange =
+              !(const DeepCollectionEquality().equals(previousState.schema, currentState.schema));
+
+          var shouldRebuild = hasPreviousTasksChange || hasCompleteChange || hasSchemaChange;
+          return shouldRebuild;
         },
         builder: (context, state) {
           return ListView(

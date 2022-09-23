@@ -48,8 +48,11 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
           webhookPlayloadField:
               $checkedConvert('webhook_playload_field', (v) => v as String?),
           webhookParams: $checkedConvert('webhook_params', (v) => v as String?),
-          dynamicJsons:
-              $checkedConvert('dynamic_jsons', (v) => v as List<dynamic>),
+          dynamicJsons: $checkedConvert(
+              'dynamic_jsons',
+              (v) => (v as List<dynamic>)
+                  .map((e) => e as Map<String, dynamic>)
+                  .toList()),
           webhookResponseField:
               $checkedConvert('webhook_response_field', (v) => v as String?),
           allowGoBack: $checkedConvert('allow_go_back', (v) => v as bool),

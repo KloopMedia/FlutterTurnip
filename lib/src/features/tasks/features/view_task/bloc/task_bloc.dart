@@ -8,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart' show SettableMetadata, UploadTask;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:path/path.dart';
 import 'package:uniturnip/json_schema_ui.dart';
@@ -39,6 +38,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<SubmitTaskEvent>(_onSubmitTask);
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
+    if (state.stage.dynamicJsons.isNotEmpty) {
+      add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
+    }
   }
 
   Future<Map<String, dynamic>> getDynamicJson(int id, Map<String, dynamic>? data) async {
@@ -66,7 +68,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   void _onSubmitTask(SubmitTaskEvent event, Emitter<TaskState> emit) async {
     final newState = state.copyWith(responses: event.formData, complete: true);
-    print('> _onSubmitTask: ${event.formData}');
+    emit(newState);
     final nextTaskId = await _saveTask(newState);
     if (nextTaskId != null) {
       final nextTask = await _getTask(nextTaskId);
@@ -208,9 +210,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     return await FlutterImageCompress.compressWithFile(file.path);
   }
 
-  Future <void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
+  Future<void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
+    emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
     final schema = await getDynamicJson(state.stage.id, event.response);
-    emit(state.copyWith(schema: schema));
+    // print(schema);
+    emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
   }
 }
-

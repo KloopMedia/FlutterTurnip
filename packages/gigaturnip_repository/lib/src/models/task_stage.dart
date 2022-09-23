@@ -16,7 +16,7 @@ class TaskStage extends Equatable {
   final Map<String, dynamic>? cardUiSchema;
   final Map<String, dynamic>? jsonSchema;
   final Map<String, dynamic>? uiSchema;
-  final List<dynamic> dynamicJsons;
+  final List<Map<String, dynamic>> dynamicJsons;
 
   const TaskStage({
     required this.id,
