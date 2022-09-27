@@ -43,5 +43,7 @@
 
     "no_uncompleted_tasks": "No uncompleted tasks",
     "no_available_tasks": "No available tasks",
-    "no_completed_tasks": "No completed tasks"
+    "no_completed_tasks": "No completed tasks",
+    "map" : "Map"
+
 }

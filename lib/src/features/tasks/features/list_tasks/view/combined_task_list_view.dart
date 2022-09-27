@@ -32,6 +32,7 @@ class CombinedTasksListView extends StatelessWidget {
     required this.onRequest,
   }) : super(key: key);
 
+
   final IconData iconToDo = Icons.today_rounded;
   final IconData iconDone = Icons.assignment_turned_in_outlined;
 

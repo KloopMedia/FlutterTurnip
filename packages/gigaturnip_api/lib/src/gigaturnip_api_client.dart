@@ -107,6 +107,7 @@ class GigaTurnipApiClient {
     }
   }
 
+
   /// Request task creation and on success return task's id.
   Future<int> createTask({required int id}) async {
     try {
@@ -359,6 +360,19 @@ class GigaTurnipApiClient {
         response.data,
         (json) => Notification.fromJson(json as Map<String, dynamic>),
       );
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future <List<Map<String, dynamic>>> getGraph(int id) async {
+    try {
+      final response = await _httpClient.get('$chainRoute$id$graphsRoute');
+      return response.data;
     } on DioError catch (e) {
       print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);

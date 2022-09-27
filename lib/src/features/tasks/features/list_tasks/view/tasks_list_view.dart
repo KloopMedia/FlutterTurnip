@@ -21,11 +21,13 @@ class TasksListView extends StatelessWidget {
   final IconData iconToDo = Icons.today_rounded;
   final IconData iconDone = Icons.assignment_turned_in_outlined;
 
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
         onRefresh();
+        print(items);
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

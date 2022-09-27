@@ -11,6 +11,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       name: json['name'] as String,
       responses: json['responses'] as Map<String, dynamic>?,
       complete: json['complete'] as bool,
+      forceComplete: json['forceComplete'] as bool?,
       reopened: json['reopened'] as bool,
       stage: TaskStage.fromJson(json['stage'] as Map<String, dynamic>),
       createdAt: json['createdAt'] == null
@@ -29,6 +30,7 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'uiSchema': instance.uiSchema,
       'responses': instance.responses,
       'complete': instance.complete,
+      'forceComplete': instance.forceComplete,
       'reopened': instance.reopened,
       'stage': instance.stage.toJson(),
       'createdAt': instance.createdAt?.toIso8601String(),

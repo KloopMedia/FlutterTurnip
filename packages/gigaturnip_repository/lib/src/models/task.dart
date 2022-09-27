@@ -13,6 +13,7 @@ class Task extends Equatable {
   final Map<String, dynamic>? uiSchema;
   final Map<String, dynamic>? responses;
   final bool complete;
+  final bool? forceComplete;
   final bool reopened;
   final TaskStage stage;
   final DateTime? createdAt;
@@ -24,6 +25,7 @@ class Task extends Equatable {
     required this.name,
     required this.responses,
     required this.complete,
+    required this.forceComplete,
     required this.reopened,
     required this.stage,
     required this.createdAt,
@@ -43,6 +45,7 @@ class Task extends Equatable {
       name: model.stage.name,
       responses: model.responses,
       complete: model.complete,
+      forceComplete: model.forceComplete,
       reopened: model.reopened ?? false,
       createdAt: model.createdAt,
       schema: model.stage.jsonSchema,
@@ -56,5 +59,5 @@ class Task extends Equatable {
   Map<String, dynamic> toJson() => _$TaskToJson(this);
 
   @override
-  List<Object?> get props => [id, responses, complete, reopened, stage];
+  List<Object?> get props => [id, responses, complete, forceComplete, reopened, stage];
 }

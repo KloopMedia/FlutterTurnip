@@ -59,6 +59,12 @@ class TasksCubit extends Cubit<TasksState> {
           creatableTasks: creatableTasks,
         ));
         break;
+      case Tabs.mapTab:
+        final allTasks = await _fetchData(action: TasksActions.allTasks);
+        emit(state.copyWith(
+          allTasks: allTasks,
+        ));
+        break;
     }
     emit(state.copyWith(status: TasksStatus.initialized));
   }
@@ -122,6 +128,12 @@ class TasksCubit extends Cubit<TasksState> {
           creatableTasks: creatableTasks,
         ));
         break;
+      case Tabs.mapTab:
+        final allTasks = await _fetchData(action: TasksActions.allTasks, forceRefresh: true);
+        emit(state.copyWith(
+          allTasks: allTasks,
+        ));
+        break;
     }
     emit(state.copyWith(selectedTab: tab, tabIndex: index, status: TasksStatus.initialized));
   }
@@ -182,6 +194,8 @@ class TasksCubit extends Cubit<TasksState> {
         return Tabs.assignedTasksTab;
       case 1:
         return Tabs.availableTasksTab;
+      case 2:
+        return Tabs.mapTab;
       default:
         throw Exception('Unknown index $index');
     }
@@ -205,5 +219,17 @@ class TasksCubit extends Cubit<TasksState> {
       default:
         return FileType.any;
     }
+  }
+
+  void getGraph(int id) async {
+    try {
+      final graph = await gigaTurnipRepository.getGraph(id);
+      emit(state.copyWith(
+          graph: graph
+      ));
+    } catch (e) {
+      rethrow;
+    }
+
   }
 }

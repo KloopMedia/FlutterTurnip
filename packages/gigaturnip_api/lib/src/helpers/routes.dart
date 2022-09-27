@@ -27,8 +27,12 @@ const requestTaskActionRoute = '/request_assignment/';
 const triggerWebhookActionRoute = '/trigger_webhook/';
 const reopenTaskActionRoute = '/uncomplete/';
 
-// Notifications routes
+  // Notifications routes
 const notificationsRoute = '/api/v1/notifications/';
 const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
+
+// Graphs routes
+const chainRoute = '/api/v1/chains/';
+const graphsRoute = '/get_graph/';
 
 // TODO: Add all routes

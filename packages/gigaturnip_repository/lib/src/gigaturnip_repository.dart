@@ -7,7 +7,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
 
-enum TasksActions { listOpenTasks, listClosedTasks, listSelectableTasks }
+enum TasksActions { listOpenTasks, listClosedTasks, listSelectableTasks, allTasks}
 
 class GigaTurnipRepository {
   late final GigaTurnipApiClient _gigaTurnipApiClient;
@@ -18,6 +18,7 @@ class GigaTurnipRepository {
   List<Task> _closedTasks = [];
   List<TaskStage> _userRelevantTaskStages = [];
   List<Task> _availableTasks = [];
+  List<Task> _allTasks = [];
   bool _hasNextAvailableTasks = false;
   final int _pageLimit = 10;
   int _pageOffset = 0;
@@ -117,7 +118,7 @@ class GigaTurnipRepository {
     switch (action) {
       case TasksActions.listOpenTasks:
         final openedTasksData = await _gigaTurnipApiClient.getUserRelevantTasks(
-          query: {
+          query: {  
             'complete': false,
             'stage__chain__campaign': selectedCampaign.id,
           },
@@ -148,6 +149,19 @@ class GigaTurnipRepository {
           return Task.fromApiModel(apiTask);
         }).toList();
         _hasNextAvailableTasks = availableTasksData.hasNext;
+        _pageOffset = 0;
+        break;
+      case TasksActions.allTasks:
+        final allTasksData = await _gigaTurnipApiClient.getTasks(
+          query: {
+            'stage__chain__campaign': selectedCampaign.id,
+          },
+        );
+        print(allTasksData.count);
+        _allTasks = allTasksData.results.map((apiTask) {
+          return Task.fromApiModel(apiTask);
+        }).toList();
+        _hasNextAvailableTasks = allTasksData.hasNext;
         _pageOffset = 0;
         break;
     }
@@ -204,6 +218,8 @@ class GigaTurnipRepository {
         return _closedTasks;
       case TasksActions.listSelectableTasks:
         return _availableTasks;
+      case TasksActions.allTasks:
+        return _allTasks;
     }
   }
 
@@ -237,6 +253,11 @@ class GigaTurnipRepository {
   Future<List<Task>> getPreviousTasks(int id) async {
     final tasks = await _gigaTurnipApiClient.getDisplayedPreviousTasks(id: id);
     return tasks.map((task) => Task.fromApiModel(task)).toList();
+  }
+
+  Future<List<Map<String, dynamic>>> getGraph(int id) async {
+    final graph = await _gigaTurnipApiClient.getGraph(id);
+    return graph;
   }
 
   Future<void> requestTask(int id) async {
