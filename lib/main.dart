@@ -16,9 +16,9 @@ Future<void> main() async {
   await authenticationRepository.user.first;
   final gigaTurnipRepository = GigaTurnipRepository();
   await SharedPreferences.getInstance();
-  await Permission.microphone.request();
 
   if (!kIsWeb) {
+    await Permission.microphone.request();
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   }
 
