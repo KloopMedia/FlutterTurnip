@@ -51,7 +51,6 @@ dependencies:
     path: packages/authentication_repository
   gigaturnip_repository:
     path: packages/gigaturnip_repository
-  flow_builder: ^0.0.9
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   uniturnip:
@@ -67,6 +66,7 @@ dependencies:
   go_router: ^4.3.0
   cross_file: ^0.3.3+2
   collection: ^1.16.0
+  permission_handler: ^9.2.0
 
 dev_dependencies:
   flutter_test:
