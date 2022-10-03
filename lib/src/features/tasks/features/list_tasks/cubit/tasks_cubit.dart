@@ -5,7 +5,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:uniturnip/json_schema_ui.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-
 part 'tasks_state.dart';
 
 class TasksCubit extends Cubit<TasksState> {
@@ -29,7 +28,8 @@ class TasksCubit extends Cubit<TasksState> {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
-    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     emit(state.copyWith(
       openTasks: openTasks,
@@ -45,15 +45,17 @@ class TasksCubit extends Cubit<TasksState> {
     switch (state.selectedTab) {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-        final closeTasks = await _fetchData(action: TasksActions.listClosedTasks);
+        final closeTasks =
+            await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
         ));
         break;
       case Tabs.availableTasksTab:
-        final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks);
-        final creatableTasks = await _fetchCreatableTasks();
+        final availableTasks =
+            await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+        final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
         emit(state.copyWith(
           availableTasks: availableTasks,
           creatableTasks: creatableTasks,
