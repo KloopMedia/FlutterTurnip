@@ -29,7 +29,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required Task selectedTask,
   }) : super(TaskState.fromTask(selectedTask, TaskStatus.initialized)) {
     timer = Timer.periodic(const Duration(seconds: 20), (timer) {
-      if (_cache != state) {
+      if (_cache != state && !state.complete) {
         _cache = state;
         _saveTask(state);
       }
