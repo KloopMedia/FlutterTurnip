@@ -52,10 +52,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<int?> _saveTask(Task task) async {
-    if (!state.complete) {
-      return await gigaTurnipRepository.updateTask(task);
-    }
-    return null;
+    return await gigaTurnipRepository.updateTask(task);
   }
 
   Future<List<Task>> _getPreviousTasks(int id) async {
@@ -70,6 +67,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final newState = state.copyWith(responses: event.formData, complete: true);
     emit(newState);
     final nextTaskId = await _saveTask(newState);
+    print('nextTaskId $nextTaskId');
     if (nextTaskId != null) {
       final nextTask = await _getTask(nextTaskId);
       emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
