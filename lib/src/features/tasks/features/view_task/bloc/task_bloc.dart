@@ -14,6 +14,7 @@ import 'package:uniturnip/json_schema_ui.dart';
 import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
+
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
@@ -67,7 +68,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final newState = state.copyWith(responses: event.formData, complete: true);
     emit(newState);
     final nextTaskId = await _saveTask(newState);
-    print('nextTaskId $nextTaskId');
     if (nextTaskId != null) {
       final nextTask = await _getTask(nextTaskId);
       emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
@@ -77,7 +77,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   void _onExitTask(ExitTaskEvent event, Emitter<TaskState> emit) async {
-    await _saveTask(state);
+    if (!state.complete) {
+      await _saveTask(state);
+    }
     emit(state.copyWith(taskStatus: TaskStatus.redirectToTasksList));
   }
 
