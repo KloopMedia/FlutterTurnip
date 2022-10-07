@@ -59,24 +59,64 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateFormat('MMM d, yyyy  HH:mm')
-        .format(DateTime.parse('${item.createdAt}'));
-    return Card(
-      elevation: 3,
-      margin: const EdgeInsets.all(8),
-      color: Theme.of(context).colorScheme.secondary,
-      child: ListTile(
-        title: Text(
-          item.title,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        subtitle: Text(createdAt),
-        trailing: (item.importance < 3)
-            ? const Icon(Icons.notifications_active, color: Colors.red)
-            : null,
+    // final createdAt = DateFormat('MMM d, yyyy  HH:mm')
+    //     .format(DateTime.parse('${item.createdAt}'));
+    // return Card(
+    //   elevation: 3,
+    //   margin: const EdgeInsets.all(8),
+    //   color: Theme.of(context).colorScheme.secondary,
+    //   child: ListTile(
+    //     title: Text(
+    //       item.title,
+    //       style: Theme.of(context).textTheme.headlineSmall,
+    //     ),
+    //     subtitle: Text(createdAt),
+    //     trailing: (item.importance < 3)
+    //         ? const Icon(Icons.notifications_active, color: Colors.red)
+    //         : null,
+    //     onTap: () {
+    //       onTap(item);
+    //     },
+    //   ),
+    // );
+    return SizedBox(
+      child: InkWell(
         onTap: () {
           onTap(item);
         },
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                ListTile(
+                  visualDensity: const VisualDensity(horizontal: 4, vertical: 4),
+                  title: Text(
+                    item.title,
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  subtitle: Text(item.text),
+                  trailing: Column(
+                    children: [
+                      Text(
+                        '#${item.id}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ],
+            )),
       ),
     );
   }
