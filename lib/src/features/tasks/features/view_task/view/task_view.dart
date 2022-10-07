@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
-import 'package:gigaturnip/src/utilities/constants/urls.dart';
 import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
@@ -19,6 +19,7 @@ class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   late UIModel formController;
   late String richText;
+  bool isRichTextViewed = true;
 
   @override
   void initState() {
@@ -58,6 +59,9 @@ class _TaskViewState extends State<TaskView> {
       },
     );
     richText = taskBloc.state.stage.richText ?? '';
+    if (isRichTextViewed && richText.isNotEmpty) {
+      _showRichText();
+    }
     super.initState();
   }
 
@@ -65,6 +69,19 @@ class _TaskViewState extends State<TaskView> {
   void dispose() {
     taskBloc.add(ExitTaskEvent());
     super.dispose();
+  }
+
+  void _showRichText() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => RichTextWebView(htmlText: richText),
+        ),
+      );
+      setState(() {
+        isRichTextViewed = false;
+      });
+    });
   }
 
   @override
@@ -91,6 +108,14 @@ class _TaskViewState extends State<TaskView> {
             context.read<TaskBloc>().add(ExitTaskEvent());
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _showRichText();
+            },
+            icon: const Icon(Icons.info),
+          )
+        ],
       ),
       body: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
@@ -119,11 +144,6 @@ class _TaskViewState extends State<TaskView> {
         builder: (context, state) {
           return ListView(
             children: [
-              if (richText.isNotEmpty)
-                RichTextWebview(
-                  text: richText,
-                  initialUrl: richTextWebviewUrl,
-                ),
               if (state.previousTasks.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
