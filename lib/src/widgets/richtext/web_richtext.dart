@@ -1,18 +1,18 @@
 import 'dart:convert';
-import "package:universal_html/html.dart";
+import 'dart:html';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class WebRichText extends StatefulWidget {
+class RichText extends StatefulWidget {
   final String htmlText;
 
-  const WebRichText({Key? key, required this.htmlText}) : super(key: key);
+  const RichText({Key? key, required this.htmlText}) : super(key: key);
 
   @override
-  State<WebRichText> createState() => _WebRichTextState();
+  State<RichText> createState() => _RichTextState();
 }
 
-class _WebRichTextState extends State<WebRichText> {
+class _RichTextState extends State<RichText> {
   final uniqueKey = UniqueKey().toString();
 
   @override

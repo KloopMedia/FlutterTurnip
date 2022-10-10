@@ -2,16 +2,16 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class MobileRichText extends StatefulWidget {
+class RichText extends StatefulWidget {
   final String htmlText;
 
-  const MobileRichText({Key? key, required this.htmlText}) : super(key: key);
+  const RichText({Key? key, required this.htmlText}) : super(key: key);
 
   @override
-  State<MobileRichText> createState() => _MobileRichTextState();
+  State<RichText> createState() => _RichTextState();
 }
 
-class _MobileRichTextState extends State<MobileRichText> {
+class _RichTextState extends State<RichText> {
   @override
   void initState() {
     if (io.Platform.isAndroid) WebView.platform = AndroidWebView();
