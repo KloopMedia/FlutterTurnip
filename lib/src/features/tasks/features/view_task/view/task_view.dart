@@ -1,12 +1,12 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
-import 'package:gigaturnip/src/widgets/richtext_webview/richtext_webview.dart';
+import 'package:gigaturnip/src/widgets/richtext/richtext_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
-import 'package:collection/collection.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class _TaskViewState extends State<TaskView> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => RichTextWebView(htmlText: richText),
+          builder: (context) => RichTextView(htmlText: richText),
         ),
       );
       setState(() {

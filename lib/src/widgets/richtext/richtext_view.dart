@@ -1,19 +1,20 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:gigaturnip/src/widgets/richtext/mobile_richtext.dart';
+import 'package:gigaturnip/src/widgets/richtext/web_richtext.dart';
 
-class RichTextWebView extends StatefulWidget {
+class RichTextView extends StatefulWidget {
   final String htmlText;
 
-  const RichTextWebView({Key? key, required this.htmlText}) : super(key: key);
+  const RichTextView({Key? key, required this.htmlText}) : super(key: key);
 
   @override
-  State<RichTextWebView> createState() => _RichTextWebViewState();
+  State<RichTextView> createState() => _RichTextViewState();
 }
 
-class _RichTextWebViewState extends State<RichTextWebView> {
+class _RichTextViewState extends State<RichTextView> {
   late final String fullHtml;
+  final isWeb = kIsWeb;
 
   @override
   void initState() {
@@ -29,8 +30,6 @@ class _RichTextWebViewState extends State<RichTextWebView> {
       </body>
     </html>
     ''';
-
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
     super.initState();
   }
 
@@ -42,17 +41,13 @@ class _RichTextWebViewState extends State<RichTextWebView> {
       ),
       body: Builder(builder: (context) {
         if (widget.htmlText.isEmpty) {
-          return const Center(
-            child: Text('Rich text is empty'),
-          );
+          return const Center(child: Text('Rich text is empty'));
         }
-        return WebView(
-          javascriptMode: JavascriptMode.unrestricted,
-          initialUrl: 'about:blank',
-          onWebViewCreated: (webViewController) {
-            webViewController.loadHtmlString(fullHtml);
-          },
-        );
+        if (isWeb) {
+          return WebRichText(htmlText: fullHtml);
+        } else {
+          return MobileRichText(htmlText: fullHtml);
+        }
       }),
       bottomNavigationBar: SafeArea(
         child: Padding(
