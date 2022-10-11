@@ -43,6 +43,7 @@ class AuthenticationRepository {
       late final AuthCredential credential;
       if (isWeb) {
         final googleProvider = GoogleAuthProvider();
+        googleProvider.setCustomParameters({'prompt': 'select_account'});
         await _firebaseAuth.signInWithPopup(googleProvider);
       } else {
         final googleUser = await _googleSignIn.signIn();
