@@ -87,6 +87,7 @@ class _NotificationsViewState extends State<NotificationsView> {
             currentIndex: state.tabIndex,
             onTap: (index) {
               context.read<NotificationsCubit>().onTabChange(index);
+              context.read<NotificationsCubit>().loadNotifications();
             },
           );
         },
