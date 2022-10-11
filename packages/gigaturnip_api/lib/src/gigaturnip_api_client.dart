@@ -378,14 +378,27 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Notification>> getUserNotifications({
-    Map<String, dynamic>? query,
-  }) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
       return PaginationWrapper<Notification>.fromJson(
         response.data,
         (json) => Notification.fromJson(json as Map<String, dynamic>),
+      );
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<void> openNotification({Map<String, dynamic>? query, required int id}) async {
+    try {
+      await _httpClient.get(
+        notificationsRoute + id.toString() + openNotificationActionRoute,
+        queryParameters: query,
       );
     } on DioError catch (e) {
       print(e);

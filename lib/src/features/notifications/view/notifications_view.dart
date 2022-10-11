@@ -5,7 +5,6 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/notifications/notifications.dart';
 import 'package:gigaturnip/src/features/notifications/view/notification_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
-
 import '../cubit/notifications_cubit.dart';
 import 'notifications_sliver_list_view.dart';
 
@@ -44,22 +43,51 @@ class _NotificationsViewState extends State<NotificationsView> {
               child: CircularProgressIndicator(),
             );
           }
-          return NotificationsSliverListView(
-            title: campaignName,
-            items: state.notifications,
-            onRefresh: () {
-              context.read<NotificationsCubit>().loadNotifications();
-            },
-            onTap: (notification) {
-              context.read<AppBloc>().add(AppSelectedNotificationChanged(notification));
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => NotificationView(
-                    notification: notification,
-                    campaignName: campaignName,
-                  ),
-                ),
+          switch (state.selectedTab) {
+            case Tabs.unreadNotificationsTab:
+              return NotificationsSliverListView(
+                  title: campaignName,
+                  items: state.unreadNotifications,
+                  onRefresh: () => context.read<NotificationsCubit>().loadNotifications(),
+                  onTap: (notification) {
+                    context.read<AppBloc>().add(AppSelectedNotificationChanged(notification));
+                    context.read<NotificationsCubit>().onReadNotification(notification.id);
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => NotificationView(notification: notification, campaignName: campaignName)))
+                        .then((value) => context.read<NotificationsCubit>().loadNotifications());
+                  }
               );
+            case Tabs.readNotificationsTab:
+              return NotificationsSliverListView(
+                  title: campaignName,
+                  items: state.readNotifications,
+                  onRefresh: () => context.read<NotificationsCubit>().loadNotifications(),
+                  onTap: (notification) {
+                    context.read<AppBloc>().add(AppSelectedNotificationChanged(notification));
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => NotificationView(notification: notification, campaignName: campaignName)));
+                  }
+              );
+          }
+        },
+      ),
+      bottomNavigationBar: BlocBuilder<NotificationsCubit, NotificationsState>(
+        builder: (context, state) {
+          return BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.circle_notifications_outlined),
+                  label: 'Unread notifications'
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.done_all),
+                  label: 'Read notifications'
+              )
+            ],
+            currentIndex: state.tabIndex,
+            onTap: (index) {
+              context.read<NotificationsCubit>().onTabChange(index);
+              context.read<NotificationsCubit>().loadNotifications();
             },
           );
         },

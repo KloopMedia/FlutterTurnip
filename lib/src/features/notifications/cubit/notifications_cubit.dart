@@ -4,6 +4,11 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'notifications_state.dart';
 
+enum Tabs {
+  readNotificationsTab,
+  unreadNotificationsTab,
+}
+
 class NotificationsCubit extends Cubit<NotificationsState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final Campaign selectedCampaign;
@@ -15,21 +20,63 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   void loadNotifications() async {
     emit(state.copyWith(status: NotificationsStatus.loading));
+    final readNotifications = await _getNotifications(true);
+    final unreadNotifications = await _getNotifications(false);
+    emit(state.copyWith(
+      readNotifications: readNotifications,
+      unreadNotifications: unreadNotifications,
+      status: NotificationsStatus.initialized,
+    ));
+  }
+
+  Future<List<Notifications>?> _getNotifications(bool viewed) async {
     try {
-      final notifications = await gigaTurnipRepository.getNotifications(selectedCampaign.id);
-      emit(state.copyWith(notifications: notifications, status: NotificationsStatus.initialized));
+      return await gigaTurnipRepository.getNotifications(
+          selectedCampaign.id, viewed);
     } on GigaTurnipApiRequestException catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.error,
         errorMessage: e.message,
-        notifications: [],
       ));
     } catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.error,
         errorMessage: 'Failed to load notifications',
-        notifications: [],
       ));
     }
+    return null;
   }
+
+  void onTabChange(int index) async {
+    final tab = _getTabFromIndex(index);
+    switch (tab) {
+      case Tabs.unreadNotificationsTab:
+        final unreadNotifications = await _getNotifications(false);
+        emit(state.copyWith(readNotifications: unreadNotifications));
+        break;
+      case Tabs.readNotificationsTab:
+        final readNotifications = await _getNotifications(true);
+        emit(state.copyWith(readNotifications: readNotifications));
+        break;
+    }
+    emit(state.copyWith(selectedTab: tab,
+        tabIndex: index,
+        status: NotificationsStatus.initialized));
+  }
+
+  Tabs _getTabFromIndex(int index) {
+    switch (index) {
+      case 0:
+        return Tabs.unreadNotificationsTab;
+      case 1:
+        return Tabs.readNotificationsTab;
+      default:
+        throw Exception('Unknown index $index');
+    }
+  }
+
+  void onReadNotification(int id) async {
+    await gigaTurnipRepository.getOpenNotification(id);
+  }
+
 }

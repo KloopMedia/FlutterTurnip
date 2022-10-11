@@ -211,14 +211,18 @@ class GigaTurnipRepository {
     }
   }
 
-  Future<List<Notifications>?> getNotifications(int campaignId) async {
+  Future<List<Notifications>?> getNotifications(int campaignId, bool viewed) async {
     final notificationsData = await _gigaTurnipApiClient.getUserNotifications(
-      query: {'campaign': campaignId},
+      query: {'campaign': campaignId, 'viewed': viewed},
     );
     final notifications = notificationsData.results.map((apiNotification) {
       return Notifications.fromApiModel(apiNotification);
     }).toList();
     return notifications;
+  }
+
+  Future<void> getOpenNotification (int id) async {
+    await _gigaTurnipApiClient.openNotification(id: id);
   }
 
   Future<Task> getTask(int id) async {

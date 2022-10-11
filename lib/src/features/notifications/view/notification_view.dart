@@ -14,8 +14,6 @@ class NotificationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(notification.createdAt);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,14 +30,14 @@ class NotificationView extends StatelessWidget {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 Text(
-                  createdAt,
-                  style: Theme.of(context).textTheme.titleSmall,
+                  DateFormat.Hm().add_d().add_MMM().format(notification.createdAt),
+                  style: Theme.of(context).textTheme.caption,
                 ),
               ]),
               const SizedBox(height: 16.0),
               Text(
                 notification.text,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ],
           ),
