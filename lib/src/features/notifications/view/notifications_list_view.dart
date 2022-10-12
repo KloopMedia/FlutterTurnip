@@ -34,8 +34,8 @@ class NotificationsListView extends StatelessWidget {
             margin: const EdgeInsets.all(8),
             color: Theme.of(context).colorScheme.secondary,
             child: ListTile(
-              title: Text(item.title),
-              subtitle: Text(createdAt),
+              title: Text(item.title, style: Theme.of(context).textTheme.titleSmall),
+              subtitle: Text(createdAt, style: Theme.of(context).textTheme.titleSmall),
               trailing: (item.importance < 3)
                   ? const Icon(Icons.notifications_active, color: Colors.red)
                   : null,

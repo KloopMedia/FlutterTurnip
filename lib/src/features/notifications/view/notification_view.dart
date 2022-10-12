@@ -14,12 +14,16 @@ class NotificationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(notification.createdAt);
+    String appBarTitle = notification.title.split(".")[0];
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          notification.title,
-          style: Theme.of(context).textTheme.headlineMedium,
-          maxLines: 3,
+          appBarTitle,
+          style: Theme.of(context).textTheme.headlineSmall,
+          maxLines: 5,
           overflow: TextOverflow.ellipsis,
         ),
       ),
@@ -30,14 +34,14 @@ class NotificationView extends StatelessWidget {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 Text(
-                  DateFormat.Hm().add_d().add_MMM().format(notification.createdAt),
-                  style: Theme.of(context).textTheme.caption,
+                  createdAt,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ]),
               const SizedBox(height: 16.0),
               Text(
                 notification.text,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
           ),
