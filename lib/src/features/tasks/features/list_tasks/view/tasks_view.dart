@@ -128,6 +128,7 @@ class _TasksViewState extends State<TasksView> {
                     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
                     context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
                   } else {
+                    context.read<TasksCubit>().requestTask(item);
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
                     context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}');
                   }

@@ -1158,7 +1158,7 @@ packages:
     description:
       path: "."
       ref: test_integration_with_flutterturnip
-      resolved-ref: "2cfcc46b5ee0841f54b575a5fb246c68a228857c"
+      resolved-ref: a4e5ef78f716f02c141a2681f9fcf3d69abd17fd
       url: "https://github.com/KloopMedia/uniturnip.git"
     source: git
     version: "1.0.0+1"
