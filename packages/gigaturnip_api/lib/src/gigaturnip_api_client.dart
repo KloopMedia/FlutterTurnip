@@ -226,7 +226,6 @@ class GigaTurnipApiClient {
       List<Task> list = (response.data as List)
           .map((json) => Task.fromJson(json as Map<String, dynamic>))
           .toList();
-
       return list;
     } on DioError catch (e) {
       print(e);
@@ -372,7 +371,9 @@ class GigaTurnipApiClient {
   Future <List<Map<String, dynamic>>> getGraph(int id) async {
     try {
       final response = await _httpClient.get('$chainRoute$id$graphsRoute');
-      return response.data;
+      final newResponse = (response.data as List).map((e) => e as Map<String, dynamic>).toList();
+      // print(response.data.runtimeType);
+      return newResponse;
     } on DioError catch (e) {
       print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);

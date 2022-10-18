@@ -157,7 +157,7 @@ class GigaTurnipRepository {
             'stage__chain__campaign': selectedCampaign.id,
           },
         );
-        print(allTasksData.count);
+
         _allTasks = allTasksData.results.map((apiTask) {
           return Task.fromApiModel(apiTask);
         }).toList();

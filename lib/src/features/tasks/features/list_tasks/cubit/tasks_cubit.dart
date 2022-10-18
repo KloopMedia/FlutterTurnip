@@ -221,15 +221,12 @@ class TasksCubit extends Cubit<TasksState> {
     }
   }
 
-  void getGraph(int id) async {
+  Future <List<Map<String, dynamic>>> getGraph(int id) async {
     try {
       final graph = await gigaTurnipRepository.getGraph(id);
-      emit(state.copyWith(
-          graph: graph
-      ));
+      return graph;
     } catch (e) {
       rethrow;
     }
-
   }
 }

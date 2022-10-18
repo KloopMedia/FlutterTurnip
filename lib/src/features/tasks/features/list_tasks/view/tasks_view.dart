@@ -61,7 +61,8 @@ class _TasksViewState extends State<TasksView> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              final selectedCampaign =
+                  context.read<AppBloc>().state.selectedCampaign!;
               context.go('/campaign/${selectedCampaign.id}/notifications');
             },
             icon: const Icon(Icons.notifications),
@@ -106,8 +107,10 @@ class _TasksViewState extends State<TasksView> {
                 },
                 onTap: (task) async {
                   context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                  final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-                  context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+                  final selectedCampaign =
+                      context.read<AppBloc>().state.selectedCampaign!;
+                  context
+                      .go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
                 },
               );
             case Tabs.availableTasksTab:
@@ -122,21 +125,30 @@ class _TasksViewState extends State<TasksView> {
                   context.read<TasksCubit>().refresh();
                 },
                 onTap: (item) async {
-                  final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+                  final selectedCampaign =
+                      context.read<AppBloc>().state.selectedCampaign!;
                   if (item is TaskStage) {
-                    final task = await context.read<TasksCubit>().createTask(item);
+                    final task =
+                        await context.read<TasksCubit>().createTask(item);
                     if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+                    context.go(
+                        '/campaign/${selectedCampaign.id}/tasks/${task.id}');
                   } else {
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}');
+                    context.go(
+                        '/campaign/${selectedCampaign.id}/tasks/${item.id}');
                   }
                 },
               );
             case Tabs.mapTab:
               return TasksMap(
-                allTasks: [...state.closeTasks, ...state.openTasks],
+                allTasks: [
+                  ...state.closeTasks,
+                  ...state.openTasks,
+                  ...state.allTasks,
+                  ...state.availableTasks,
+                ],
               );
           }
         },
