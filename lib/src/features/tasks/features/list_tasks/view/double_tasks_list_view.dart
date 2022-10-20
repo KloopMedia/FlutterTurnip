@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/widgets/cards/id_title_card.dart';
+import 'package:gigaturnip/src/widgets/cards/id_title_card_with_form.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 typedef ItemCallback = void Function(dynamic item);
@@ -14,6 +15,7 @@ class DoubleTasksListView extends StatelessWidget {
   final String? headerTwo;
   final ScrollController? scrollController;
   final bool showLoader;
+  final bool expand;
 
   const DoubleTasksListView({
     Key? key,
@@ -25,6 +27,7 @@ class DoubleTasksListView extends StatelessWidget {
     this.headerTwo,
     this.scrollController,
     this.showLoader = false,
+    this.expand = false,
   }) : super(key: key);
 
   final IconData iconToDo = Icons.today_rounded;
@@ -40,10 +43,21 @@ class DoubleTasksListView extends StatelessWidget {
         controller: scrollController,
         slivers: [
           SliverTaskListHeader(title: headerOne),
-          SliverTaskList(items: firstList, onTap: onTap, icon: iconToDo,),
+          SliverTaskList(
+            items: firstList,
+            onTap: onTap,
+            icon: iconToDo,
+            expand: false,
+          ),
           SliverTaskListHeader(title: headerTwo),
-          SliverTaskList(items: secondList, onTap: onTap, icon: iconDone,),
-          if (showLoader) const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+          SliverTaskList(
+            items: secondList,
+            onTap: onTap,
+            icon: iconDone,
+            expand: expand,
+          ),
+          if (showLoader)
+            const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
         ],
       ),
     );
@@ -77,12 +91,14 @@ class SliverTaskList extends StatelessWidget {
   final List items;
   final ItemCallback onTap;
   final IconData icon;
+  final bool expand;
 
   const SliverTaskList({
     Key? key,
     required this.items,
     required this.onTap,
     required this.icon,
+    required this.expand,
   }) : super(key: key);
 
   @override
@@ -98,6 +114,17 @@ class SliverTaskList extends StatelessWidget {
               description: item.description,
               icon: icon,
               date: null,
+              onTap: () {
+                onTap(item);
+              },
+            );
+          }
+          if (expand) {
+            return IdTitleCardForm(
+              id: item.id,
+              title: item.name,
+              icon: icon,
+              task: item,
               onTap: () {
                 onTap(item);
               },

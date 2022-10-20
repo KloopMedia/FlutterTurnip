@@ -117,6 +117,7 @@ class _TasksViewState extends State<TasksView> {
                 headerTwo: context.loc.receive,
                 scrollController: _scrollController,
                 showLoader: state.status == TasksStatus.loadingNextPage,
+                expand: true,
                 onRefresh: () {
                   context.read<TasksCubit>().refresh();
                 },
