@@ -61,6 +61,8 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
           IconButton(
             onPressed: () {
               // Navigator.of(context).pushNamed(notificationsRoute);
+              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              context.go('/campaign/${selectedCampaign.id}/notifications');
             },
             icon: const Icon(Icons.notifications),
           ),
