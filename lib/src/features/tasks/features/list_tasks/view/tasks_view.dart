@@ -10,6 +10,7 @@ import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../widgets/notification_icon.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -63,7 +64,7 @@ class _TasksViewState extends State<TasksView> {
               final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
               context.go('/campaign/${selectedCampaign.id}/notifications');
             },
-            icon: const Icon(Icons.notifications),
+            icon: const NotificationIcon(),
           ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;

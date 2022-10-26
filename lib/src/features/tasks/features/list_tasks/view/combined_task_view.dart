@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/combined_
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../widgets/notification_icon.dart';
 
 class CombinedTasksView extends StatefulWidget {
   const CombinedTasksView({Key? key}) : super(key: key);
@@ -51,12 +52,13 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
           context.loc.tasks,
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        // leading: BackButton(
-        //   onPressed: () {
-        //     context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
-        //     Navigator.maybePop(context, true);
-        //   },
-        // ),
+        leading: BackButton(
+          onPressed: () {
+            context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
+            context.pop();
+            // Navigator.maybePop(context, true);
+          },
+        ),
         actions: <Widget>[
           IconButton(
             onPressed: () {
@@ -64,7 +66,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
               final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
               context.go('/campaign/${selectedCampaign.id}/notifications');
             },
-            icon: const Icon(Icons.notifications),
+            icon: const NotificationIcon(),
           ),
           Builder(builder: (context) {
             final avatar = context.read<AppBloc>().state.user!.photo;

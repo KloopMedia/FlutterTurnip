@@ -18,10 +18,12 @@ class TasksCubit extends Cubit<TasksState> {
 
   void initialize() async {
     refresh();
+    getUnreadNotifications();
   }
 
   void initializeCombined() async {
     refreshCombined();
+    getUnreadNotifications();
   }
 
   void refreshCombined() async {
@@ -206,6 +208,26 @@ class TasksCubit extends Cubit<TasksState> {
         return FileType.image;
       default:
         return FileType.any;
+    }
+  }
+
+  void getUnreadNotifications() async {
+    try {
+      List<Notifications>? unreadNotifications = [];
+      unreadNotifications = await gigaTurnipRepository.getNotifications(selectedCampaign.id, false);
+      if (unreadNotifications == null || unreadNotifications.isEmpty) {
+        emit(state.copyWith(hasUnreadNotifications: false));
+      } else {
+        emit(state.copyWith(hasUnreadNotifications: true));
+      }
+    } on GigaTurnipApiRequestException catch (e) {
+      emit(state.copyWith(
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        errorMessage: 'Failed to load notifications',
+      ));
     }
   }
 }
