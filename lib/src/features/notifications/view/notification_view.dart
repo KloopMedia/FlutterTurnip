@@ -15,38 +15,34 @@ class NotificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var createdAt = DateFormat('MMM d, yyyy  HH:mm').format(notification.createdAt);
-    String appBarTitle = notification.title.split(".")[0];
-
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          appBarTitle,
-          style: Theme.of(context).textTheme.headlineSmall,
-          maxLines: 5,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      body: Column(mainAxisSize: MainAxisSize.min, children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                Text(
-                  createdAt,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ]),
-              const SizedBox(height: 16.0),
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               Text(
-                notification.text,
+                createdAt,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-            ],
-          ),
-        )
-      ]),
+            ]),
+            const SizedBox(height: 16.0),
+            Text(
+              notification.title,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            const Divider(thickness: 2,),
+            const SizedBox(height: 16.0),
+            Text(
+              notification.text,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
