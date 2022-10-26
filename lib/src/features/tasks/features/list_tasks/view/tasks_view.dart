@@ -7,6 +7,7 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.da
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/double_tasks_list_view.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/tasks_map.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/timeline.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -141,15 +142,24 @@ class _TasksViewState extends State<TasksView> {
                   }
                 },
               );
-            case Tabs.mapTab:
-              return TasksMap(
+            // case Tabs.mapTab:
+            //   return TasksMap(
+            //     allTasks: [
+            //       ...state.closeTasks,
+            //       ...state.openTasks,
+            //       ...state.allTasks,
+            //       ...state.availableTasks,
+            //     ],
+            //   );
+          case Tabs.timeline:
+            return TimeLine(
                 allTasks: [
-                  ...state.closeTasks,
-                  ...state.openTasks,
-                  ...state.allTasks,
-                  ...state.availableTasks,
-                ],
-              );
+                    ...state.closeTasks,
+                    ...state.openTasks,
+                    ...state.allTasks,
+                    ...state.availableTasks,
+                  ],
+            );
           }
         },
       ),

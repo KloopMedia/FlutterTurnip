@@ -59,7 +59,7 @@ class TasksCubit extends Cubit<TasksState> {
           creatableTasks: creatableTasks,
         ));
         break;
-      case Tabs.mapTab:
+      case Tabs.timeline:
         final allTasks = await _fetchData(action: TasksActions.allTasks);
         emit(state.copyWith(
           allTasks: allTasks,
@@ -128,7 +128,7 @@ class TasksCubit extends Cubit<TasksState> {
           creatableTasks: creatableTasks,
         ));
         break;
-      case Tabs.mapTab:
+      case Tabs.timeline:
         final allTasks = await _fetchData(action: TasksActions.allTasks, forceRefresh: true);
         emit(state.copyWith(
           allTasks: allTasks,
@@ -195,7 +195,7 @@ class TasksCubit extends Cubit<TasksState> {
       case 1:
         return Tabs.availableTasksTab;
       case 2:
-        return Tabs.mapTab;
+        return Tabs.timeline;
       default:
         throw Exception('Unknown index $index');
     }
