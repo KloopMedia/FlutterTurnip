@@ -32,7 +32,8 @@ class _TaskViewState extends State<TaskView> {
         taskBloc.add(UpdateTaskEvent(data));
         final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsons;
         if (dynamicJsonMetadata.isNotEmpty) {
-          if (dynamicJsonMetadata.first['main'] == path.last) {
+          if (dynamicJsonMetadata.first['main'] == path.last ||
+              (dynamicJsonMetadata.first['foreign'] as List).contains(path.last)) {
             taskBloc.add(GetDynamicSchemaTaskEvent(data));
           }
         }
