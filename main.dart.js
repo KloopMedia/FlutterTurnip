@@ -28894,7 +28894,8 @@ _.c=null},
 aJ4:function aJ4(a,b){this.a=a
 this.b=b},
 aJ7:function aJ7(a){this.a=a},
-aJ5:function aJ5(a){this.a=a},
+aJ5:function aJ5(a,b){this.a=a
+this.b=b},
 aJ6:function aJ6(){},
 aJ3:function aJ3(a){this.a=a},
 aJ9:function aJ9(){},
@@ -103822,11 +103823,11 @@ n(){var s=this.d
 s===$&&A.b()
 s.n()
 this.aI()},
-v(a){var s=null,r=this.d
-r===$&&A.b()
-r.X(0,new A.aJ4(this,a))
-r=A.aK(A.aU(a,B.Z,t.B).gzx(),s,s,s,s,A.S(a).RG.r,s,s,s)
-return A.kk(A.jN(A.a([A.de(s,B.P6,s,new A.aJ5(a),B.M,s),new A.dI(new A.aJ6(),s)],t.p),s,!1,s,s,s,1,s,!0,s,!1,s,s,s,new A.tl(new A.aJ7(a),s),s,!0,s,s,s,s,s,s,r,s,s,s,1,s),s,A.x5(s,new A.aJ8(this),new A.aJ9(),t.R,t.Nr),s,B.q4,s)}}
+v(a){var s=this,r=null,q=s.d
+q===$&&A.b()
+q.X(0,new A.aJ4(s,a))
+q=A.aK(A.aU(a,B.Z,t.B).gzx(),r,r,r,r,A.S(a).RG.r,r,r,r)
+return A.kk(A.jN(A.a([A.de(r,B.P6,r,new A.aJ5(s,a),B.M,r),new A.dI(new A.aJ6(),r)],t.p),r,!1,r,r,r,1,r,!0,r,!1,r,r,r,new A.tl(new A.aJ7(a),r),r,!0,r,r,r,r,r,r,q,r,r,r,1,r),r,A.x5(r,new A.aJ8(s),new A.aJ9(),t.R,t.Nr),r,B.q4,r)}}
 A.aJ4.prototype={
 $0(){var s=this.a,r=s.d
 r===$&&A.b()
@@ -103845,10 +103846,10 @@ s.c.dz()
 s.Z()},
 $S:0}
 A.aJ5.prototype={
-$0(){var s=this.a,r=A.ax(s,!1,t.W).c.c.a
+$0(){var s=this.b,r=A.ax(s,!1,t.W).c.c.a
 s=s.H(t.b).f.d
 s===$&&A.b()
-s.sl(0,new A.dz("/campaign/"+r+"/notifications",null))},
+s.sl(0,new A.dz("/campaign/"+r+"/notifications?simple=true",null))},
 $S:0}
 A.aJ6.prototype={
 $1(a){var s=null,r=A.ax(a,!1,t.W).c.b.d,q=r!=null?A.ahk(new A.o4(r),s):B.r9
