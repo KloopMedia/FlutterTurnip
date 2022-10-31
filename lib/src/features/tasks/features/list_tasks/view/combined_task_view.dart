@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/important_notifications_cubit.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/combined_task_list_view.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../widgets/notification_icon.dart';
 
 class CombinedTasksView extends StatefulWidget {
@@ -24,6 +26,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
   @override
   initState() {
     context.read<TasksCubit>().initializeCombined();
+    context.read<ImportantNotificationsCubit>().getNotifications();
     _scrollController = ScrollController();
     super.initState();
   }

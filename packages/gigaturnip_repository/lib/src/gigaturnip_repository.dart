@@ -211,9 +211,9 @@ class GigaTurnipRepository {
     }
   }
 
-  Future<List<Notifications>?> getNotifications(int campaignId, bool viewed) async {
+  Future<List<Notifications>?> getNotifications(int campaignId, bool viewed, [int? importance]) async {
     final notificationsData = await _gigaTurnipApiClient.getUserNotifications(
-      query: {'campaign': campaignId, 'viewed': viewed},
+      query: {'campaign': campaignId, 'viewed': viewed, 'importance': importance},
     );
     final notifications = notificationsData.results.map((apiNotification) {
       return Notifications.fromApiModel(apiNotification);

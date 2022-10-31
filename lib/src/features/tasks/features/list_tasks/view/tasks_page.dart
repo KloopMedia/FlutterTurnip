@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/important_notifications_cubit.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/combined_task_view.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
@@ -48,11 +49,21 @@ class TasksPage extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        return BlocProvider<TasksCubit>(
-          create: (context) => TasksCubit(
-            selectedCampaign: snapshot.data!,
-            gigaTurnipRepository: context.read<GigaTurnipRepository>(),
-          ),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<TasksCubit>(
+              create: (context) => TasksCubit(
+                selectedCampaign: snapshot.data!,
+                gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => ImportantNotificationsCubit(
+                gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+                selectedCampaign: snapshot.data!,
+              ),
+            ),
+          ],
           child: simpleViewMode ? const CombinedTasksView() : const TasksView(),
         );
       },
