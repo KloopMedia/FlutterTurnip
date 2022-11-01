@@ -10,6 +10,8 @@
     "logout" : "LOGOUT",
     "book_online" : "Book an online appointment",
     "book_offline" : "Book an offline appointment",
+    "read_notifications" : "Read notifications",
+    "unread_notifications" : "Unread notifications",
 
 
     "ok" : "Ok",
@@ -25,7 +27,9 @@
     "sent" : "Sent",
     "notsent" : "Not sent",
     "opentosee" : "View/Open",
-    "close": "Close",
+    "close" : "Close",
+    "rich_text_is_empty" : "Rich text is empty",
+    "webview" : "Webview",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
@@ -44,12 +48,5 @@
 
     "no_uncompleted_tasks": "No uncompleted tasks",
     "no_available_tasks": "No available tasks",
-    "no_completed_tasks": "No completed tasks",
-
-    "read_notifications": "Read notifications",
-    "unread_notifications": "Unread notifications",
-
-    "empty_richtext": "No explanation for the task",
-    "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
-    "task_returned": "Returned"
+    "no_completed_tasks": "No completed tasks"
 }

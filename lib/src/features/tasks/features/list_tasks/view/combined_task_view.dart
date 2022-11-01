@@ -39,6 +39,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
 
   @override
   Widget build(BuildContext context) {
+
     _scrollController.addListener(() {
       var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
 
@@ -47,6 +48,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
         context.read<TasksCubit>().getNextPage();
       }
     });
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

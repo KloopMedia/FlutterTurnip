@@ -10,6 +10,8 @@
     "logout" : "ЧЫГУУ",
     "book_online" : "онлайн жолугушууга жазылыңыз",
     "book_offline" : "оффлайн жолугушууга жазылыңыз",
+    "read_notifications" : "Окулган билдирүүлөр",
+    "unread_notifications" : "Окула элек билдирүүлөр",
 
 
     "ok" : "Oк",
@@ -25,7 +27,9 @@
     "sent" : "Жиберилди",
     "notsent" : "Жибериле элек",
     "opentosee" : "Тапшырманы көрүү/ачуу",
-    "close": "Жабуу",
+    "close" : "Жабуу",
+    "rich_text_is_empty" : "Rich text is empty",
+    "webview" : "Webview",
 
     "sign_in" : "Google аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",
@@ -45,9 +49,6 @@
     "no_uncompleted_tasks": "Аткарыла элек тапшырмалар жок",
     "no_available_tasks": "Жаңы тапшырмалар жок",
     "no_completed_tasks": "Аткарылган тапшырмалар жок",
-
-    "read_notifications": "Окулган билдирүүлөр",
-    "unread_notifications": "Окула элек билдирүүлөр",
 
     "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
     "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
