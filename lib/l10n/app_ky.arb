@@ -10,6 +10,8 @@
     "logout" : "ЧЫГУУ",
     "book_online" : "онлайн жолугушууга жазылыңыз",
     "book_offline" : "оффлайн жолугушууга жазылыңыз",
+    "read_notifications" : "Окулган билдирүүлөр",
+    "unread_notifications" : "Окула элек билдирүүлөр",
 
 
     "ok" : "Oк",
@@ -25,6 +27,9 @@
     "sent" : "Жиберилди",
     "notsent" : "Жибериле элек",
     "opentosee" : "Тапшырманы көрүү/ачуу",
+    "close" : "Жабуу",
+    "rich_text_is_empty" : "Rich text is empty",
+    "webview" : "Webview",
 
     "sign_in" : "Google аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",

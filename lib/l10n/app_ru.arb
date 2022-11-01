@@ -10,6 +10,8 @@
      "logout" : "ВЫЙТИ",
      "book_online" : "Записаться на онлайн прием",
      "book_offline" : "Записаться на оффлайн прием",
+     "read_notifications" : "Прочитанные уведомления",
+     "unread_notifications" : "Непрочитанные уведомления",
 
      "ok" : "Ок",
      "done" : "Выполненные",
@@ -24,6 +26,9 @@
      "sent" : "Отправлено",
      "notsent" : "Неотправлено",
      "opentosee" : "Посмотреть/Открыть",
+     "close" : "Закрыть",
+     "rich_text_is_empty" : "",
+     "webview" : "Webview",
 
 
      "sign_in" : "Зарегистрироваться через Google",

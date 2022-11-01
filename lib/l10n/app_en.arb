@@ -10,6 +10,8 @@
     "logout" : "LOGOUT",
     "book_online" : "Book an online appointment",
     "book_offline" : "Book an offline appointment",
+    "read_notifications" : "Read notifications",
+    "unread_notifications" : "Unread notifications",
 
 
     "ok" : "Ok",
@@ -25,6 +27,9 @@
     "sent" : "Sent",
     "notsent" : "Not sent",
     "opentosee" : "View/Open",
+    "close" : "Close",
+    "rich_text_is_empty" : "Rich text is empty",
+    "webview" : "Webview",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
