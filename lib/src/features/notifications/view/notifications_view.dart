@@ -74,14 +74,14 @@ class _NotificationsViewState extends State<NotificationsView> {
       bottomNavigationBar: BlocBuilder<NotificationsCubit, NotificationsState>(
         builder: (context, state) {
           return BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                  icon: Icon(Icons.circle_notifications_outlined),
-                  label: 'Unread notifications'
+                  icon: const Icon(Icons.circle_notifications_outlined),
+                  label: context.loc.unread_notifications
               ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.done_all),
-                  label: 'Read notifications'
+                  icon: const Icon(Icons.done_all),
+                  label: context.loc.read_notifications
               )
             ],
             currentIndex: state.tabIndex,

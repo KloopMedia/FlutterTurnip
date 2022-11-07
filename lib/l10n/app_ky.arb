@@ -43,5 +43,7 @@
 
     "no_uncompleted_tasks": "Аткарыла элек тапшырмалар жок",
     "no_available_tasks": "Жаңы тапшырмалар жок",
-    "no_completed_tasks": "Аткарылган тапшырмалар жок"
+    "no_completed_tasks": "Аткарылган тапшырмалар жок",
+    "read_notifications": "Окулган билдирүүлөр",
+    "unread_notifications": "Окула элек билдирүүлөр"
 }
