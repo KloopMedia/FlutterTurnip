@@ -44,6 +44,9 @@
     "no_uncompleted_tasks": "No uncompleted tasks",
     "no_available_tasks": "No available tasks",
     "no_completed_tasks": "No completed tasks",
+
     "read_notifications": "Read notifications",
-    "unread_notifications": "Unread notifications"
+    "unread_notifications": "Unread notifications",
+
+    "empty_richtext": "No explanation for the task"
 }

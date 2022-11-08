@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/widgets/richtext/mobile_richtext.dart'
     if (dart.library.html) 'package:gigaturnip/src/widgets/richtext/web_richtext.dart'
     as multiPlatform;
@@ -42,7 +43,7 @@ class _RichTextViewState extends State<RichTextView> {
       ),
       body: Builder(builder: (context) {
         if (widget.htmlText.isEmpty) {
-          return const Center(child: Text('Rich text is empty'));
+          return Center(child: Text(context.loc.empty_richtext));
         }
         return multiPlatform.RichText(htmlText: fullHtml);
       }),

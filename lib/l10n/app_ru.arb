@@ -44,6 +44,9 @@
      "no_uncompleted_tasks": "Нет невыполненных заданий",
      "no_available_tasks": "Нет доступных заданий",
      "no_completed_tasks": "Нет выполненных заданий",
+
      "read_notifications": "Прочитанные",
-     "unread_notifications": "Непрочитанные"
+     "unread_notifications": "Непрочитанные",
+
+     "empty_richtext": "К заданию нет пояснений"
 }
