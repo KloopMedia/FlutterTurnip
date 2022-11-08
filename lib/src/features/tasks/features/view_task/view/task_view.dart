@@ -160,21 +160,28 @@ class _TaskViewState extends State<TaskView> {
                     ],
                   ),
                 ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: JSONSchemaUI(
-                  schema: state.schema!,
-                  ui: state.uiSchema!,
-                  formController: formController,
-                  onSubmit: ({required Map<String, dynamic> data}) {
-                    taskBloc.add(SubmitTaskEvent(data));
-                  },
-                ),
-              ),
+
+              (state.schema!.isEmpty)
+                ? SizedBox(child: submitEmptyJsonSchemaUi(taskBloc))
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: JSONSchemaUI(
+                      schema: state.schema!,
+                      ui: state.uiSchema!,
+                      formController: formController,
+                      onSubmit: ({required Map<String, dynamic> data}) {
+                        taskBloc.add(SubmitTaskEvent(data));
+                      },
+                    ),
+                  ),
             ],
           );
         },
       ),
     );
   }
+}
+
+submitEmptyJsonSchemaUi (TaskBloc taskBloc) {
+  taskBloc.add(SubmitTaskEvent({}));
 }
