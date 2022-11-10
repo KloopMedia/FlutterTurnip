@@ -25,6 +25,7 @@
     "sent" : "Sent",
     "notsent" : "Not sent",
     "opentosee" : "View/Open",
+    "close": "Close",
 
     "sign_in" : "SIGN IN WITH GOOGLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
