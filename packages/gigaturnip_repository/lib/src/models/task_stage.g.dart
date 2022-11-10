@@ -16,8 +16,11 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
       jsonSchema: json['jsonSchema'] as Map<String, dynamic>?,
       uiSchema: json['uiSchema'] as Map<String, dynamic>?,
-      dynamicJsons: (json['dynamicJsons'] as List<dynamic>)
-          .map((e) => e as Map<String, dynamic>)
+      dynamicJsonsSource: (json['dynamicJsonsSource'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
+      dynamicJsonsTarget: (json['dynamicJsonsTarget'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
           .toList(),
     );
 
@@ -31,5 +34,6 @@ Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'cardUiSchema': instance.cardUiSchema,
       'jsonSchema': instance.jsonSchema,
       'uiSchema': instance.uiSchema,
-      'dynamicJsons': instance.dynamicJsons,
+      'dynamicJsonsSource': instance.dynamicJsonsSource,
+      'dynamicJsonsTarget': instance.dynamicJsonsTarget,
     };

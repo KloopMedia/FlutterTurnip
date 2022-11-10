@@ -39,7 +39,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<SubmitTaskEvent>(_onSubmitTask);
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
-    if (state.stage.dynamicJsons.isNotEmpty) {
+    final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
+    if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
       add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
     }
   }

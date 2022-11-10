@@ -16,7 +16,8 @@ class TaskStage extends Equatable {
   final Map<String, dynamic>? cardUiSchema;
   final Map<String, dynamic>? jsonSchema;
   final Map<String, dynamic>? uiSchema;
-  final List<Map<String, dynamic>> dynamicJsons;
+  final List<Map<String, dynamic>>? dynamicJsonsSource;
+  final List<Map<String, dynamic>>? dynamicJsonsTarget;
 
   const TaskStage({
     required this.id,
@@ -28,7 +29,8 @@ class TaskStage extends Equatable {
     required this.cardUiSchema,
     required this.jsonSchema,
     required this.uiSchema,
-    required this.dynamicJsons,
+    required this.dynamicJsonsSource,
+    required this.dynamicJsonsTarget,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
@@ -46,7 +48,8 @@ class TaskStage extends Equatable {
       cardUiSchema: model.cardUiSchema,
       jsonSchema: model.jsonSchema,
       uiSchema: model.uiSchema,
-      dynamicJsons: model.dynamicJsons,
+      dynamicJsonsSource: model.dynamicJsonsSource,
+      dynamicJsonsTarget: model.dynamicJsonsTarget
     );
   }
 
