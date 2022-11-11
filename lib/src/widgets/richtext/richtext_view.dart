@@ -7,8 +7,10 @@ import 'package:gigaturnip/src/widgets/richtext/mobile_richtext.dart'
 
 class RichTextView extends StatefulWidget {
   final String htmlText;
+  final void Function()? onCloseCallback;
 
-  const RichTextView({Key? key, required this.htmlText}) : super(key: key);
+  const RichTextView({Key? key, required this.htmlText, required this.onCloseCallback})
+      : super(key: key);
 
   @override
   State<RichTextView> createState() => _RichTextViewState();
@@ -37,6 +39,8 @@ class _RichTextViewState extends State<RichTextView> {
 
   @override
   Widget build(BuildContext context) {
+    final onClose = widget.onCloseCallback;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Webview'),
@@ -53,6 +57,9 @@ class _RichTextViewState extends State<RichTextView> {
           child: ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
+              if (onClose != null) {
+                onClose();
+              }
             },
             child: Text(context.loc.close),
           ),

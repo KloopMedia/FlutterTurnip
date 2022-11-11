@@ -72,11 +72,20 @@ class _TaskViewState extends State<TaskView> {
     super.dispose();
   }
 
+  void onWebviewClose() {
+    if (!taskBloc.state.complete) {
+      taskBloc.add(SubmitTaskEvent({}));
+    }
+  }
+
   void _showRichText() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => RichTextView(htmlText: richText),
+          builder: (context) => RichTextView(
+            htmlText: richText,
+            onCloseCallback: (taskBloc.state.schema?.isEmpty ?? true) ? onWebviewClose : null,
+          ),
         ),
       );
       setState(() {
