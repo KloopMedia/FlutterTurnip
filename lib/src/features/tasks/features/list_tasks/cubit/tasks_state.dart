@@ -6,6 +6,7 @@ enum Tabs {
 }
 
 class TasksState extends Equatable {
+  final int totalPages;
   final List<Task> openTasks;
   final List<Task> closeTasks;
   final List<Task> availableTasks;
@@ -17,6 +18,7 @@ class TasksState extends Equatable {
   final bool hasUnreadNotifications;
 
   const TasksState({
+    this.totalPages = 0,
     this.openTasks = const [],
     this.closeTasks = const [],
     this.availableTasks = const [],
@@ -29,6 +31,7 @@ class TasksState extends Equatable {
   });
 
   TasksState copyWith({
+    int? totalPages,
     List<TaskStage>? creatableTasks,
     List<Task>? openTasks,
     List<Task>? closeTasks,
@@ -40,6 +43,7 @@ class TasksState extends Equatable {
     bool? hasUnreadNotifications,
   }) {
     return TasksState(
+      totalPages: totalPages ?? this.totalPages,
       openTasks: openTasks ?? this.openTasks,
       closeTasks: closeTasks ?? this.closeTasks,
       availableTasks: availableTasks ?? this.availableTasks,

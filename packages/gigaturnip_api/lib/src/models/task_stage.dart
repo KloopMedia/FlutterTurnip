@@ -33,7 +33,8 @@ class TaskStage {
   final String? webhookAddress;
   final String? webhookPlayloadField;
   final String? webhookParams;
-  final List<Map<String, dynamic>> dynamicJsons;
+  final List<Map<String, dynamic>>? dynamicJsonsSource;
+  final List<Map<String, dynamic>>? dynamicJsonsTarget;
   final String? webhookResponseField;
   final bool allowGoBack;
   final bool allowRelease;
@@ -66,7 +67,8 @@ class TaskStage {
     required this.webhookAddress,
     required this.webhookPlayloadField,
     required this.webhookParams,
-    required this.dynamicJsons,
+    required this.dynamicJsonsSource,
+    required this.dynamicJsonsTarget,
     required this.webhookResponseField,
     required this.allowGoBack,
     required this.allowRelease,

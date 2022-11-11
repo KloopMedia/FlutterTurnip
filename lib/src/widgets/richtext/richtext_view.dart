@@ -54,7 +54,7 @@ class _RichTextViewState extends State<RichTextView> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Закрыть'),
+            child: Text(context.loc.close),
           ),
         ),
       ),

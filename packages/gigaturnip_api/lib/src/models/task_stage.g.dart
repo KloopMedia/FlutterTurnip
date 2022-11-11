@@ -48,10 +48,15 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
           webhookPlayloadField:
               $checkedConvert('webhook_playload_field', (v) => v as String?),
           webhookParams: $checkedConvert('webhook_params', (v) => v as String?),
-          dynamicJsons: $checkedConvert(
-              'dynamic_jsons',
-              (v) => (v as List<dynamic>)
-                  .map((e) => e as Map<String, dynamic>)
+          dynamicJsonsSource: $checkedConvert(
+              'dynamic_jsons_source',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => e as Map<String, dynamic>)
+                  .toList()),
+          dynamicJsonsTarget: $checkedConvert(
+              'dynamic_jsons_target',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => e as Map<String, dynamic>)
                   .toList()),
           webhookResponseField:
               $checkedConvert('webhook_response_field', (v) => v as String?),
@@ -83,7 +88,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
         'webhookAddress': 'webhook_address',
         'webhookPlayloadField': 'webhook_playload_field',
         'webhookParams': 'webhook_params',
-        'dynamicJsons': 'dynamic_jsons',
+        'dynamicJsonsSource': 'dynamic_jsons_source',
+        'dynamicJsonsTarget': 'dynamic_jsons_target',
         'webhookResponseField': 'webhook_response_field',
         'allowGoBack': 'allow_go_back',
         'allowRelease': 'allow_release',

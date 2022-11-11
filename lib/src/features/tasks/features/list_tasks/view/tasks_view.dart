@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/double_ta
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
+import 'package:gigaturnip/src/widgets/pagination/pagination.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../widgets/notification_icon.dart';
@@ -37,14 +38,14 @@ class _TasksViewState extends State<TasksView> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController.addListener(() {
-      var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
-
-      if (_scrollController.position.pixels > nextPageTrigger &&
-          context.read<TasksCubit>().state.status == TasksStatus.initialized) {
-        context.read<TasksCubit>().getNextPage();
-      }
-    });
+    // _scrollController.addListener(() {
+    //   var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
+    //
+    //   if (_scrollController.position.pixels > nextPageTrigger &&
+    //       context.read<TasksCubit>().state.status == TasksStatus.initialized) {
+    //     context.read<TasksCubit>().getNextPage();
+    //   }
+    // });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -119,6 +120,12 @@ class _TasksViewState extends State<TasksView> {
                 scrollController: _scrollController,
                 showLoader: state.status == TasksStatus.loadingNextPage,
                 expand: true,
+                pagination: Pagination(
+                  total: state.totalPages,
+                  onPageChange: (page) {
+                    context.read<TasksCubit>().getPage(page);
+                  },
+                ),
                 onRefresh: () {
                   context.read<TasksCubit>().refresh();
                 },
