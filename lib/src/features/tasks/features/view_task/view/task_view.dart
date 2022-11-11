@@ -72,11 +72,20 @@ class _TaskViewState extends State<TaskView> {
     super.dispose();
   }
 
+  void onWebviewClose() {
+    if (!taskBloc.state.complete) {
+      taskBloc.add(SubmitTaskEvent({}));
+    }
+  }
+
   void _showRichText() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => RichTextView(htmlText: richText),
+          builder: (context) => RichTextView(
+            htmlText: richText,
+            onCloseCallback: (taskBloc.state.schema?.isEmpty ?? true) ? onWebviewClose : null,
+          ),
         ),
       );
       setState(() {
@@ -160,28 +169,21 @@ class _TaskViewState extends State<TaskView> {
                     ],
                   ),
                 ),
-
-              (state.schema!.isEmpty)
-                ? SizedBox(child: submitEmptyJsonSchemaUi(taskBloc))
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: JSONSchemaUI(
-                      schema: state.schema!,
-                      ui: state.uiSchema!,
-                      formController: formController,
-                      onSubmit: ({required Map<String, dynamic> data}) {
-                        taskBloc.add(SubmitTaskEvent(data));
-                      },
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: JSONSchemaUI(
+                  schema: state.schema!,
+                  ui: state.uiSchema!,
+                  formController: formController,
+                  onSubmit: ({required Map<String, dynamic> data}) {
+                    taskBloc.add(SubmitTaskEvent(data));
+                  },
+                ),
+              ),
             ],
           );
         },
       ),
     );
   }
-}
-
-submitEmptyJsonSchemaUi (TaskBloc taskBloc) {
-  taskBloc.add(SubmitTaskEvent({}));
 }
