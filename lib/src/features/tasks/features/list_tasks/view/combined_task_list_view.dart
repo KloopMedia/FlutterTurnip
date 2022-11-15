@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/notifications/view/notification_view.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/important_notifications_cubit.dart';
 import 'package:gigaturnip/src/widgets/cards/form_card.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:intl/intl.dart';
 
 typedef ItemCallback = void Function(dynamic item);
 typedef RefreshCallback = void Function();
@@ -44,6 +48,31 @@ class CombinedTasksListView extends StatelessWidget {
       child: CustomScrollView(
         controller: scrollController,
         slivers: [
+          BlocBuilder<ImportantNotificationsCubit, ImportantNotificationsState>(
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    final item = state.notifications[index];
+                    return ItemCard(
+                        item: item,
+                        onTap: (notification) {
+                          context
+                              .read<ImportantNotificationsCubit>()
+                              .onReadNotification(notification.id);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) => NotificationView(
+                                      notification: notification, campaignName: '')))
+                              .then((value) =>
+                                  context.read<ImportantNotificationsCubit>().getNotifications());
+                        });
+                  },
+                  childCount: state.notifications.length,
+                ),
+              );
+            },
+          ),
           CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
           SliverTaskListHeader(title: context.loc.todo),
           SliverTaskList(
@@ -189,5 +218,59 @@ class SliverTaskList extends StatelessWidget {
         childCount: items.length,
       ),
     );
+  }
+}
+
+class ItemCard extends StatelessWidget {
+  final Notifications item;
+  final ItemCallback onTap;
+
+  const ItemCard({
+    Key? key,
+    required this.item,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        child: InkWell(
+            onTap: () {
+              onTap(item);
+            },
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        item.title,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      subtitle: Text(item.text),
+                      trailing: Column(
+                        children: [
+                          Text(
+                            '#${item.id}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ],
+                ))));
   }
 }

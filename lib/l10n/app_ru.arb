@@ -10,8 +10,7 @@
      "logout" : "ВЫЙТИ",
      "book_online" : "Записаться на онлайн прием",
      "book_offline" : "Записаться на оффлайн прием",
-     "read_notifications" : "Прочитанные уведомления",
-     "unread_notifications" : "Непрочитанные уведомления",
+
 
      "ok" : "Ок",
      "done" : "Выполненные",
@@ -48,5 +47,10 @@
 
      "no_uncompleted_tasks": "Нет невыполненных заданий",
      "no_available_tasks": "Нет доступных заданий",
-     "no_completed_tasks": "Нет выполненных заданий"
+     "no_completed_tasks": "Нет выполненных заданий",
+
+     "read_notifications": "Прочитанные",
+     "unread_notifications": "Непрочитанные",
+
+     "empty_richtext": "К заданию нет пояснений"
 }

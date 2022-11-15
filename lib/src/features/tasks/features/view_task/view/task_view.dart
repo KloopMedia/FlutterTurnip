@@ -30,9 +30,10 @@ class _TaskViewState extends State<TaskView> {
       disabled: taskBloc.state.complete,
       onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
         taskBloc.add(UpdateTaskEvent(data));
-        final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsons;
-        if (dynamicJsonMetadata.isNotEmpty) {
-          if (dynamicJsonMetadata.first['main'] == path.last) {
+        final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
+        if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
+          if (dynamicJsonMetadata.first['main'] == path.last ||
+              (dynamicJsonMetadata.first['foreign'] as List).contains(path.last)) {
             taskBloc.add(GetDynamicSchemaTaskEvent(data));
           }
         }
@@ -71,11 +72,20 @@ class _TaskViewState extends State<TaskView> {
     super.dispose();
   }
 
+  void onWebviewClose() {
+    if (!taskBloc.state.complete) {
+      taskBloc.add(SubmitTaskEvent({}));
+    }
+  }
+
   void _showRichText() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => RichTextView(htmlText: richText),
+          builder: (context) => RichTextView(
+            htmlText: richText,
+            onCloseCallback: (taskBloc.state.schema?.isEmpty ?? true) ? onWebviewClose : null,
+          ),
         ),
       );
       setState(() {

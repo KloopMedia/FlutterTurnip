@@ -110,11 +110,14 @@ class GigaTurnipApiClient {
   }
 
   Future<Map<String, dynamic>> getDynamicJsonTaskStage(
-      {Map<String, dynamic>? query, required int id, Map<String, dynamic>? formData}) async {
+      {Map<String, dynamic>? query,
+      required int id,
+      required int taskId,
+      Map<String, dynamic>? formData}) async {
     try {
       final jsonFormData = jsonEncode(formData);
       final response = await _httpClient.get(
-        '$taskStagesRoute$id/load_schema_answers/?responses=$jsonFormData',
+        '$taskStagesRoute$id/load_schema_answers/?current_task=$taskId&responses=$jsonFormData',
         queryParameters: query,
       );
       return response.data['schema'];
@@ -378,7 +381,8 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Notification>> getUserNotifications({Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications(
+      {Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
       return PaginationWrapper<Notification>.fromJson(

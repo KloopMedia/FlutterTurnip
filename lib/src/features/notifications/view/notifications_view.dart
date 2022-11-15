@@ -27,9 +27,6 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   @override
   Widget build(BuildContext context) {
-    final String readNotifications = context.loc.read_notifications;
-    final String unreadNotifications = context.loc.unread_notifications;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(context.loc.notifications),
@@ -80,11 +77,11 @@ class _NotificationsViewState extends State<NotificationsView> {
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                   icon: const Icon(Icons.circle_notifications_outlined),
-                  label: unreadNotifications
+                  label: context.loc.unread_notifications
               ),
               BottomNavigationBarItem(
                   icon: const Icon(Icons.done_all),
-                  label: readNotifications
+                  label: context.loc.read_notifications
               )
             ],
             currentIndex: state.tabIndex,

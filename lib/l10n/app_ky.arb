@@ -10,8 +10,6 @@
     "logout" : "ЧЫГУУ",
     "book_online" : "онлайн жолугушууга жазылыңыз",
     "book_offline" : "оффлайн жолугушууга жазылыңыз",
-    "read_notifications" : "Окулган билдирүүлөр",
-    "unread_notifications" : "Окула элек билдирүүлөр",
 
 
     "ok" : "Oк",
@@ -48,5 +46,10 @@
 
     "no_uncompleted_tasks": "Аткарыла элек тапшырмалар жок",
     "no_available_tasks": "Жаңы тапшырмалар жок",
-    "no_completed_tasks": "Аткарылган тапшырмалар жок"
+    "no_completed_tasks": "Аткарылган тапшырмалар жок",
+
+    "read_notifications": "Окулган билдирүүлөр",
+    "unread_notifications": "Окула элек билдирүүлөр",
+
+    "empty_richtext": "Тапшырма үчүн түшүндүрмө жок"
 }

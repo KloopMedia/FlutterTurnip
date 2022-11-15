@@ -33,7 +33,10 @@ class TasksCubit extends Cubit<TasksState> {
     final availableTasks =
         await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+    final totalPages = gigaTurnipRepository.totalPages;
+
     emit(state.copyWith(
+      totalPages: totalPages,
       openTasks: openTasks,
       closeTasks: closeTasks,
       availableTasks: availableTasks,
@@ -58,7 +61,10 @@ class TasksCubit extends Cubit<TasksState> {
         final availableTasks =
             await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
         final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+        final totalPages = gigaTurnipRepository.totalPages;
+
         emit(state.copyWith(
+          totalPages: totalPages,
           availableTasks: availableTasks,
           creatableTasks: creatableTasks,
         ));
@@ -70,6 +76,18 @@ class TasksCubit extends Cubit<TasksState> {
   Future<void> getNextPage() async {
     emit(state.copyWith(status: TasksStatus.loadingNextPage));
     final tasks = await gigaTurnipRepository.getNextTasksPage(selectedCampaign);
+    emit(state.copyWith(availableTasks: tasks, status: TasksStatus.initialized));
+  }
+
+  Future<void> getPreviousPage() async {
+    emit(state.copyWith(status: TasksStatus.loadingNextPage));
+    final tasks = await gigaTurnipRepository.getPreviousTasksPage(selectedCampaign);
+    emit(state.copyWith(availableTasks: tasks, status: TasksStatus.initialized));
+  }
+
+  Future<void> getPage(int page) async {
+    emit(state.copyWith(status: TasksStatus.loadingNextPage));
+    final tasks = await gigaTurnipRepository.getTasksPage(selectedCampaign, page);
     emit(state.copyWith(availableTasks: tasks, status: TasksStatus.initialized));
   }
 
@@ -121,7 +139,10 @@ class TasksCubit extends Cubit<TasksState> {
         final availableTasks =
             await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
         final creatableTasks = await _fetchCreatableTasks();
+        final totalPages = gigaTurnipRepository.totalPages;
+        print('TOTAL: $totalPages');
         emit(state.copyWith(
+          totalPages: totalPages,
           availableTasks: availableTasks,
           creatableTasks: creatableTasks,
         ));

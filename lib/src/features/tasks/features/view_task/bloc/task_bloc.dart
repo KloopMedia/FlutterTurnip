@@ -39,13 +39,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<SubmitTaskEvent>(_onSubmitTask);
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
-    if (state.stage.dynamicJsons.isNotEmpty) {
+    final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
+    if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
       add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
     }
   }
 
-  Future<Map<String, dynamic>> getDynamicJson(int id, Map<String, dynamic>? data) async {
-    return await gigaTurnipRepository.getDynamicJsonTaskStage(id, data);
+  Future<Map<String, dynamic>> getDynamicJson(
+      int id, int taskId, Map<String, dynamic>? data) async {
+    return await gigaTurnipRepository.getDynamicJsonTaskStage(id, taskId, data);
   }
 
   Future<Task> _getTask(int id) async {
@@ -67,6 +69,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   void _onSubmitTask(SubmitTaskEvent event, Emitter<TaskState> emit) async {
     final newState = state.copyWith(responses: event.formData, complete: true);
     emit(newState);
+    print('submit');
     final nextTaskId = await _saveTask(newState);
     if (nextTaskId != null) {
       final nextTask = await _getTask(nextTaskId);
@@ -212,7 +215,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
     emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
-    final schema = await getDynamicJson(state.stage.id, event.response);
+    final schema = await getDynamicJson(state.stage.id, state.id, event.response);
     // print(schema);
     emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
   }

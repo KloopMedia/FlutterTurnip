@@ -16,6 +16,7 @@ class DoubleTasksListView extends StatelessWidget {
   final ScrollController? scrollController;
   final bool showLoader;
   final bool expand;
+  final Widget? pagination;
 
   const DoubleTasksListView({
     Key? key,
@@ -28,6 +29,7 @@ class DoubleTasksListView extends StatelessWidget {
     this.scrollController,
     this.showLoader = false,
     this.expand = false,
+    this.pagination,
   }) : super(key: key);
 
   final IconData iconToDo = Icons.today_rounded;
@@ -58,6 +60,7 @@ class DoubleTasksListView extends StatelessWidget {
           ),
           if (showLoader)
             const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+          if (pagination != null) pagination!,
         ],
       ),
     );
