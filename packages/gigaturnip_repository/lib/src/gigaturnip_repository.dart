@@ -147,6 +147,8 @@ class GigaTurnipRepository {
       case TasksActions.listSelectableTasks:
         final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
           query: {
+            // parameter
+            //'responses_contains' : ,
             'stage__chain__campaign': selectedCampaign.id,
             'limit': _pageLimit,
           },

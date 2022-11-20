@@ -9,6 +9,8 @@ import 'package:gigaturnip/src/features/app/routes/app_router.dart';
 import 'package:gigaturnip/src/features/app/theme/app_theme.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
+import '../theme/ombudsman_theme.dart';
+
 class App extends StatelessWidget {
   const App({
     Key? key,

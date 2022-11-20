@@ -17,6 +17,7 @@ class DoubleTasksListView extends StatelessWidget {
   final bool showLoader;
   final bool expand;
   final Widget? pagination;
+  final Widget search;
 
   const DoubleTasksListView({
     Key? key,
@@ -30,6 +31,7 @@ class DoubleTasksListView extends StatelessWidget {
     this.showLoader = false,
     this.expand = false,
     this.pagination,
+    this.search = const SliverToBoxAdapter(),
   }) : super(key: key);
 
   final IconData iconToDo = Icons.today_rounded;
@@ -44,6 +46,7 @@ class DoubleTasksListView extends StatelessWidget {
       child: CustomScrollView(
         controller: scrollController,
         slivers: [
+          search,
           SliverTaskListHeader(title: headerOne),
           SliverTaskList(
             items: firstList,
