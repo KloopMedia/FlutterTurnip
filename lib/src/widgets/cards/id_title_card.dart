@@ -65,7 +65,7 @@ class IdTitleCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.caption,
                         ),
                       Visibility(
-                        visible: reopened!,
+                        visible: reopened != null && reopened!,
                         child: Text(
                           context.loc.task_returned,
                           style: const TextStyle(fontSize: 12, color: Colors.red),
