@@ -50,5 +50,6 @@
     "unread_notifications": "Unread notifications",
 
     "empty_richtext": "No explanation for the task",
-    "empty_form_fields": "Your form has empty fields. Please correct them and submit again"
+    "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
+    "task_returned": "Returned"
 }
