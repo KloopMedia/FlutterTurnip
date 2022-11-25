@@ -11,7 +11,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:path/path.dart';
 import 'package:uniturnip/json_schema_ui.dart';
-import 'package:video_compress/video_compress.dart';
+// import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
 
@@ -153,9 +153,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     if (type == FileType.image) {
       compressed = await _compressImage(file);
-    } else if (type == FileType.video) {
-      compressed = await _compressVideo(file);
     }
+    // else if (type == FileType.video) {
+    //   compressed = await _compressVideo(file);
+    // }
     if (compressed != null) {
       return _uploadFile(
         file: compressed,
@@ -201,13 +202,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
-  Future<Uint8List?> _compressVideo(XFile file) async {
-    MediaInfo? mediaInfo = await VideoCompress.compressVideo(
-      file.path,
-      quality: VideoQuality.DefaultQuality,
-    );
-    return mediaInfo?.file?.readAsBytesSync();
-  }
+  // Future<Uint8List?> _compressVideo(XFile file) async {
+  //   MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+  //     file.path,
+  //     quality: VideoQuality.DefaultQuality,
+  //   );
+  //   return mediaInfo?.file?.readAsBytesSync();
+  // }
 
   Future<Uint8List?> _compressImage(XFile file) async {
     return await FlutterImageCompress.compressWithFile(file.path);
