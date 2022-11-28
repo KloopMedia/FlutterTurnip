@@ -51,5 +51,7 @@
     "read_notifications": "Окулган билдирүүлөр",
     "unread_notifications": "Окула элек билдирүүлөр",
 
-    "empty_richtext": "Тапшырма үчүн түшүндүрмө жок"
+    "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
+    "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
+    "task_returned": "Кайтарылды"
 }

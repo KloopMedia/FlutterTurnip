@@ -52,5 +52,7 @@
      "read_notifications": "Прочитанные",
      "unread_notifications": "Непрочитанные",
 
-     "empty_richtext": "К заданию нет пояснений"
+     "empty_richtext": "К заданию нет пояснений",
+     "empty_form_fields": "В вашей форме есть пустые поля. Пожалуйста, исправьте их и отправьте снова",
+     "task_returned": "Возвращено"
 }

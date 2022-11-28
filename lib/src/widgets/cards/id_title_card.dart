@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:intl/intl.dart';
 
 typedef CardCallback = void Function();
@@ -10,6 +11,7 @@ class IdTitleCard extends StatelessWidget {
   final DateTime? date;
   final CardCallback onTap;
   final IconData icon;
+  final bool? reopened;
 
   const IdTitleCard({
     Key? key,
@@ -19,6 +21,7 @@ class IdTitleCard extends StatelessWidget {
     required this.icon,
     this.date,
     this.description = "",
+    this.reopened,
   }) : super(key: key);
 
   @override
@@ -47,6 +50,7 @@ class IdTitleCard extends StatelessWidget {
                   ),
                   subtitle: Text(description),
                   trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Visibility(
                         visible: id != null,
@@ -55,14 +59,18 @@ class IdTitleCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
-                      const SizedBox(
-                        height: 25,
-                      ),
                       if (date != null)
                         Text(
                           DateFormat.Hm().add_d().add_MMM().format(date!),
                           style: Theme.of(context).textTheme.caption,
                         ),
+                      Visibility(
+                        visible: reopened != null && reopened!,
+                        child: Text(
+                          context.loc.task_returned,
+                          style: const TextStyle(fontSize: 12, color: Colors.red),
+                        ),
+                      )
                     ],
                   ),
                 ),

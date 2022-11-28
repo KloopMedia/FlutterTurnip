@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
+import 'package:gigaturnip/src/utilities/dialogs/form_validation_snackbar.dart';
 import 'package:gigaturnip/src/widgets/richtext/richtext_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
@@ -184,6 +185,9 @@ class _TaskViewState extends State<TaskView> {
                   onSubmit: ({required Map<String, dynamic> data}) {
                     taskBloc.add(SubmitTaskEvent(data));
                   },
+                  onValidationFailed: () {
+                    showValidationFailedSnackBar(context: context);
+                  }
                 ),
               ),
             ],
