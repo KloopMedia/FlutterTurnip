@@ -47,13 +47,13 @@ class _RichTextViewState extends State<RichTextView> {
       ),
       body: Builder(builder: (context) {
         if (widget.htmlText.isEmpty) {
-          return Center(child: Text(context.loc.empty_richtext));
+          return Center(child: Text(context.loc.empty_richtext, style: Theme.of(context).textTheme.headlineSmall));
         }
         return multiPlatform.RichText(htmlText: fullHtml);
       }),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -61,7 +61,10 @@ class _RichTextViewState extends State<RichTextView> {
                 onClose();
               }
             },
-            child: Text(context.loc.close),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(context.loc.close, style: Theme.of(context).textTheme.headlineMedium),
+            ),
           ),
         ),
       ),

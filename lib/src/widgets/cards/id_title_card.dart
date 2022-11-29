@@ -12,6 +12,7 @@ class IdTitleCard extends StatelessWidget {
   final CardCallback onTap;
   final IconData icon;
   final bool? reopened;
+  final bool? complete;
 
   const IdTitleCard({
     Key? key,
@@ -22,10 +23,12 @@ class IdTitleCard extends StatelessWidget {
     this.date,
     this.description = "",
     this.reopened,
+    this.complete,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final returned = (reopened != null && reopened!) && (complete != null && !complete!);
     return SizedBox(
       child: InkWell(
         onTap: onTap,
@@ -65,12 +68,12 @@ class IdTitleCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.caption,
                         ),
                       Visibility(
-                        visible: reopened != null && reopened!,
+                        visible: returned,
                         child: Text(
                           context.loc.task_returned,
-                          style: const TextStyle(fontSize: 12, color: Colors.red),
+                          style: const TextStyle(fontSize: 14, color: Colors.red),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

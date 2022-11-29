@@ -124,7 +124,8 @@ class _TaskViewState extends State<TaskView> {
             onPressed: () {
               _showRichText();
             },
-            icon: const Icon(Icons.info),
+            icon: const Icon(Icons.article),
+            iconSize: 40.0,
           )
         ],
       ),
