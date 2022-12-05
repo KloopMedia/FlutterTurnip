@@ -9,7 +9,13 @@ abstract class AppEvent extends Equatable {
 
 class AppLogoutRequested extends AppEvent {}
 
-class AppLoginRequested extends AppEvent {}
+enum LoginProvider {apple, google}
+
+class AppLoginRequested extends AppEvent {
+  final LoginProvider provider;
+
+  const AppLoginRequested(this.provider);
+}
 
 class AppUserChanged extends AppEvent {
   final AuthUser user;
