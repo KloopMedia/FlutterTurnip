@@ -18,6 +18,7 @@ class Task extends Equatable {
   final DateTime? createdAt;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
+  final List<Task> displayedPrevTasks;
 
   const Task({
     required this.id,
@@ -31,6 +32,7 @@ class Task extends Equatable {
     required this.uiSchema,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    required this.displayedPrevTasks,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,8 @@ class Task extends Equatable {
       cardJsonSchema: model.stage.cardJsonSchema,
       cardUiSchema: model.stage.cardUiSchema,
       stage: TaskStage.fromApiModel(model.stage),
+      displayedPrevTasks:
+          model.displayedPrevTasks?.map((task) => Task.fromApiModel(task)).toList() ?? [],
     );
   }
 

@@ -20,6 +20,9 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       uiSchema: json['uiSchema'] as Map<String, dynamic>?,
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
+      displayedPrevTasks: (json['displayedPrevTasks'] as List<dynamic>)
+          .map((e) => Task.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -34,4 +37,6 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'createdAt': instance.createdAt?.toIso8601String(),
       'cardJsonSchema': instance.cardJsonSchema,
       'cardUiSchema': instance.cardUiSchema,
+      'displayedPrevTasks':
+          instance.displayedPrevTasks.map((e) => e.toJson()).toList(),
     };

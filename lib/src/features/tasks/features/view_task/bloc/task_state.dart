@@ -28,6 +28,7 @@ class TaskState extends Task with EquatableMixin {
     required DateTime? createdAt,
     required Map<String, dynamic>? cardJsonSchema,
     required Map<String, dynamic>? cardUiSchema,
+    required List<Task> displayedPrevTasks,
   }) : super(
           id: id,
           name: name,
@@ -40,6 +41,7 @@ class TaskState extends Task with EquatableMixin {
           uiSchema: uiSchema,
           cardJsonSchema: cardJsonSchema,
           cardUiSchema: cardUiSchema,
+          displayedPrevTasks: displayedPrevTasks,
         );
 
   factory TaskState.fromTask(Task task, TaskStatus taskStatus) {
@@ -56,6 +58,7 @@ class TaskState extends Task with EquatableMixin {
       uiSchema: task.uiSchema,
       cardJsonSchema: task.cardJsonSchema,
       cardUiSchema: task.cardUiSchema,
+      displayedPrevTasks: task.displayedPrevTasks,
     );
   }
 
@@ -86,6 +89,7 @@ class TaskState extends Task with EquatableMixin {
       uiSchema: uiSchema ?? this.uiSchema,
       cardJsonSchema: cardJsonSchema,
       cardUiSchema: cardUiSchema,
+      displayedPrevTasks: displayedPrevTasks,
     );
   }
 }

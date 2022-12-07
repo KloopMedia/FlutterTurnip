@@ -47,7 +47,7 @@ class _IdTitleCardFormState extends State<IdTitleCardForm> {
             textAlign: TextAlign.left,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
-          subtitle: Text(widget.description),
+          subtitle: Text('#${widget.task.id} ${widget.description}'),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -65,6 +65,21 @@ class _IdTitleCardFormState extends State<IdTitleCardForm> {
             setState(() => _customTileExpanded = expanded);
           },
           children: [
+            if (widget.task.displayedPrevTasks.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    for (var task in widget.task.displayedPrevTasks)
+                      JSONSchemaUI(
+                        schema: task.schema!,
+                        ui: task.uiSchema!,
+                        formController: UIModel(disabled: true, data: task.responses ?? {}),
+                        hideSubmitButton: true,
+                      ),
+                  ],
+                ),
+              ),
             JSONSchemaUI(
               schema: widget.task.schema!,
               ui: widget.task.uiSchema!,
