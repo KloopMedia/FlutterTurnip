@@ -149,13 +149,30 @@ class _TaskViewState extends State<TaskView> {
           var hasCompleteChange = previousState.complete != currentState.complete;
           var hasSchemaChange =
               !(const DeepCollectionEquality().equals(previousState.schema, currentState.schema));
+          var isWebhookTriggered = currentState.taskStatus == TaskStatus.triggerWebhook;
 
-          var shouldRebuild = hasPreviousTasksChange || hasCompleteChange || hasSchemaChange;
+          var shouldRebuild =
+              hasPreviousTasksChange || hasCompleteChange || hasSchemaChange || isWebhookTriggered;
           return shouldRebuild;
         },
         builder: (context, state) {
           return ListView(
             children: [
+              if (state.isIntegrated)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      for (var task in state.integratedTasks)
+                        JSONSchemaUI(
+                          schema: task.schema!,
+                          ui: task.uiSchema!,
+                          formController: UIModel(disabled: true, data: task.responses ?? {}),
+                          hideSubmitButton: true,
+                        ),
+                    ],
+                  ),
+                ),
               if (state.previousTasks.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -171,19 +188,25 @@ class _TaskViewState extends State<TaskView> {
                     ],
                   ),
                 ),
+              if (state.isIntegrated)
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<TaskBloc>().add(const GenerateIntegratedForm());
+                  },
+                  child: const Text('Generate form'),
+                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: JSONSchemaUI(
-                  schema: state.schema!,
-                  ui: state.uiSchema!,
-                  formController: formController,
-                  onSubmit: ({required Map<String, dynamic> data}) {
-                    taskBloc.add(SubmitTaskEvent(data));
-                  },
-                  onValidationFailed: () {
-                    showValidationFailedSnackBar(context: context);
-                  }
-                ),
+                    schema: state.schema!,
+                    ui: state.uiSchema!,
+                    formController: formController,
+                    onSubmit: ({required Map<String, dynamic> data}) {
+                      taskBloc.add(SubmitTaskEvent(data));
+                    },
+                    onValidationFailed: () {
+                      showValidationFailedSnackBar(context: context);
+                    }),
               ),
             ],
           );

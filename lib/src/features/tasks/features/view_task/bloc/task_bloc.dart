@@ -39,6 +39,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<SubmitTaskEvent>(_onSubmitTask);
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
+    on<GenerateIntegratedForm>(_onGenerateIntegratedForm);
     final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
     if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
       add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
@@ -48,6 +49,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   Future<Map<String, dynamic>> getDynamicJson(
       int id, int taskId, Map<String, dynamic>? data) async {
     return await gigaTurnipRepository.getDynamicJsonTaskStage(id, taskId, data);
+  }
+
+  Future<List<Task>> getIntegratedTasks(int id) async {
+    return await gigaTurnipRepository.getIntegratedTasks(id);
   }
 
   Future<Task> _getTask(int id) async {
@@ -94,7 +99,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<void> _onInitializeTask(InitializeTaskEvent event, Emitter<TaskState> emit) async {
     final previousTasks = await _getPreviousTasks(state.id);
-    emit(state.copyWith(previousTasks: previousTasks));
+    final List<Task> integratedTasks = state.isIntegrated ? await getIntegratedTasks(state.id) : [];
+
+    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
   }
 
   Future<FileModel> getFile(path) async {
@@ -219,5 +226,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final schema = await getDynamicJson(state.stage.id, state.id, event.response);
     // print(schema);
     emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+  }
+
+  void _onGenerateIntegratedForm(GenerateIntegratedForm event, Emitter<TaskState> emit) async {
+    await gigaTurnipRepository.triggerWebhook(state.id);
+    final task = await _getTask(state.id);
+    emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.triggerWebhook));
+    emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.initialized));
   }
 }

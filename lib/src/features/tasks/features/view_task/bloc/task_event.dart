@@ -31,3 +31,15 @@ class GetDynamicSchemaTaskEvent extends TaskEvent {
 
   GetDynamicSchemaTaskEvent(this.response);
 }
+
+class GenerateIntegratedForm extends TaskEvent {
+  const GenerateIntegratedForm();
+}
+
+class OpenWebView extends TaskEvent {
+  const OpenWebView();
+}
+
+class CloseWebView extends TaskEvent {
+  const CloseWebView();
+}
