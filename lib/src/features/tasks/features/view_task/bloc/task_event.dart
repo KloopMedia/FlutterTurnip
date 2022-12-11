@@ -43,3 +43,9 @@ class OpenWebView extends TaskEvent {
 class CloseWebView extends TaskEvent {
   const CloseWebView();
 }
+
+class UpdateIntegratedTask extends TaskEvent {
+  final Task task;
+
+  UpdateIntegratedTask(this.task);
+}

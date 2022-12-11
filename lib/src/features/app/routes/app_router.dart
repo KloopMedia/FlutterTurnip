@@ -16,7 +16,6 @@ class AppRouter {
   get router => _router;
 
   late final GoRouter _router = GoRouter(
-    initialLocation: '/campaign/7/tasks/395949',
     refreshListenable: GoRouterRefreshStream(_authenticationRepository.user),
     redirect: (routeState) {
       final bool loggedIn = _authenticationRepository.currentUser.isNotEmpty;

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:rxdart/rxdart.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cross_file/cross_file.dart';
@@ -16,6 +16,10 @@ import 'package:uniturnip/json_schema_ui.dart';
 part 'task_event.dart';
 
 part 'task_state.dart';
+
+EventTransformer<T> debounce<T>(Duration duration) {
+  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+}
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
@@ -40,6 +44,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
     on<GenerateIntegratedForm>(_onGenerateIntegratedForm);
+    on<UpdateIntegratedTask>(_onUpdateIntegratedTask,
+        transformer: debounce(const Duration(milliseconds: 300)));
     final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
     if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
       add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
@@ -135,11 +141,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
+  String createStoragePathFromTask(Task task) {
+    return '${task.stage.chain.campaign}/'
+        '${task.stage.chain.id}/'
+        '${task.stage.id}/'
+        '${user.id}/'
+        '${task.id}';
+  }
+
   Future<UploadTask?> uploadFile({
     required XFile? file,
     required String? path,
     required FileType type,
     required bool private,
+    required Task task,
   }) async {
     if (file == null) {
       return null;
@@ -149,11 +164,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     if (kIsWeb || path == null) {
       return _uploadFile(
-        file: rawFile,
-        private: private,
-        filename: file.name,
-        mimeType: mimeType,
-      );
+          file: rawFile, private: private, filename: file.name, mimeType: mimeType, task: task);
     }
 
     Uint8List? compressed = rawFile;
@@ -170,6 +181,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         private: private,
         filename: file.name,
         mimeType: mimeType,
+        task: task,
       );
     } else {
       print('No compressed files');
@@ -182,15 +194,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required bool private,
     required String filename,
     required String? mimeType,
+    required Task task,
   }) async {
     final prefix = private ? 'private' : 'public';
-    final storagePath = '$prefix/'
-        '${state.stage.chain.campaign}/'
-        '${state.stage.chain.id}/'
-        '${state.stage.id}/'
-        '${user.id}/'
-        '${state.id}/'
-        '$filename';
+    final path = createStoragePathFromTask(task);
+    final storagePath = '$prefix/$path/$filename';
 
     final metadata = SettableMetadata(contentType: mimeType);
 
@@ -233,5 +241,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final task = await _getTask(state.id);
     emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.triggerWebhook));
     emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.initialized));
+  }
+
+  void _onUpdateIntegratedTask(UpdateIntegratedTask event, Emitter<TaskState> emit) {
+    _saveTask(event.task);
   }
 }

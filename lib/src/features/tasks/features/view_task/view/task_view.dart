@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/dialogs/form_validation_snackbar.dart';
 import 'package:gigaturnip/src/widgets/richtext/richtext_view.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uniturnip/json_schema_ui.dart';
 
@@ -45,6 +46,7 @@ class _TaskViewState extends State<TaskView> {
               path: path,
               type: type,
               private: private,
+              task: taskBloc.state,
             );
       },
       getFile: (path) {
@@ -56,6 +58,7 @@ class _TaskViewState extends State<TaskView> {
               type: FileType.any,
               private: private,
               path: null,
+              task: taskBloc.state,
             );
         return task!.snapshot.ref.fullPath;
       },
@@ -164,11 +167,46 @@ class _TaskViewState extends State<TaskView> {
                   child: Column(
                     children: [
                       for (var task in state.integratedTasks)
-                        JSONSchemaUI(
-                          schema: task.schema!,
-                          ui: task.uiSchema!,
-                          formController: UIModel(disabled: true, data: task.responses ?? {}),
-                          hideSubmitButton: true,
+                        ExpansionCard(
+                          task: task,
+                          child: JSONSchemaUI(
+                            schema: task.schema!,
+                            ui: task.uiSchema!,
+                            hideSubmitButton: true,
+                            formController: UIModel(
+                              data: task.responses ?? {},
+                              disabled: task.complete,
+                              onUpdate: ({
+                                required MapPath path,
+                                required Map<String, dynamic> data,
+                              }) {
+                                final updatedTask = task.copyWith(responses: data);
+                                taskBloc.add(UpdateIntegratedTask(updatedTask));
+                              },
+                              saveFile: (rawFile, path, type, {private = false}) {
+                                return context.read<TaskBloc>().uploadFile(
+                                      file: rawFile,
+                                      path: path,
+                                      type: type,
+                                      private: private,
+                                      task: task,
+                                    );
+                              },
+                              getFile: (path) {
+                                return context.read<TaskBloc>().getFile(path);
+                              },
+                              saveAudioRecord: (file, private) async {
+                                final uploadTask = await context.read<TaskBloc>().uploadFile(
+                                      file: file,
+                                      type: FileType.any,
+                                      private: private,
+                                      path: null,
+                                      task: task,
+                                    );
+                                return uploadTask!.snapshot.ref.fullPath;
+                              },
+                            ),
+                          ),
                         ),
                     ],
                   ),
@@ -212,6 +250,38 @@ class _TaskViewState extends State<TaskView> {
           );
         },
       ),
+    );
+  }
+}
+
+class ExpansionCard extends StatefulWidget {
+  final Task task;
+  final Widget child;
+
+  const ExpansionCard({Key? key, required this.task, required this.child}) : super(key: key);
+
+  @override
+  State<ExpansionCard> createState() => _ExpansionCardState();
+}
+
+class _ExpansionCardState extends State<ExpansionCard> {
+  bool _customTileExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      collapsedBackgroundColor: Colors.cyan,
+      title: Text(
+        widget.task.name,
+        textAlign: TextAlign.left,
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      subtitle: Text('#${widget.task.id} ${widget.task.stage.description}'),
+      trailing: Icon(_customTileExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+      onExpansionChanged: (bool expanded) {
+        setState(() => _customTileExpanded = expanded);
+      },
+      children: [widget.child],
     );
   }
 }
