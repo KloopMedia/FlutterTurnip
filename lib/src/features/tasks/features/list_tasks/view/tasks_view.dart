@@ -12,6 +12,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../widgets/SearchBar.dart';
 import '../../../../../widgets/notification_icon.dart';
+import '../../../../../widgets/pagination/pagination.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -38,16 +39,6 @@ class _TasksViewState extends State<TasksView> {
 
   @override
   Widget build(BuildContext context) {
-
-    _scrollController.addListener(() {
-      var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
-
-      if (_scrollController.position.pixels > nextPageTrigger &&
-          context.read<TasksCubit>().state.status == TasksStatus.initialized) {
-        context.read<TasksCubit>().getNextPage();
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -98,6 +89,7 @@ class _TasksViewState extends State<TasksView> {
               child: CircularProgressIndicator(),
             );
           }
+
           switch (state.selectedTab) {
             case Tabs.assignedTasksTab:
               return DoubleTasksListView(
@@ -123,6 +115,15 @@ class _TasksViewState extends State<TasksView> {
                 headerOne: context.loc.create,
                 headerTwo: context.loc.receive,
                 scrollController: _scrollController,
+                // Works when you click
+                pagination: Pagination(
+                  total: state.totalPages,
+                  onPageChange: (page) {
+                    context.read<TasksCubit>().getPage(page);
+                    print("Pagination");
+                    print(state.totalPages);
+                  },
+                ),
                 showLoader: state.status == TasksStatus.loadingNextPage,
                 expand: true,
                 onRefresh: () {
@@ -145,7 +146,7 @@ class _TasksViewState extends State<TasksView> {
                         '/campaign/${selectedCampaign.id}/tasks/${item.id}');
                   }
                 },
-                search: SearchBar(),
+                search: const SearchBar(),
               );
           }
         },
@@ -164,7 +165,3 @@ class _TasksViewState extends State<TasksView> {
     );
   }
 }
-
-
-
-

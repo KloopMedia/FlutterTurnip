@@ -176,7 +176,7 @@ class TasksCubit extends Cubit<TasksState> {
     return null;
   }
 
-  Future<List<TaskStage>> _fetchCreatableTasks({bool forceRefresh = false}) async {
+  Future<List<TaskStage>> _fetchCreatableTasks({bool forceRefresh = false, String query = ''}) async {
     try {
       return await gigaTurnipRepository.getUserRelevantTaskStages(
         selectedCampaign: selectedCampaign,
@@ -250,5 +250,16 @@ class TasksCubit extends Cubit<TasksState> {
         errorMessage: 'Failed to load notifications',
       ));
     }
+  }
+
+  // state is not changing
+  void filterTask(String text) async {
+    final tasks = await gigaTurnipRepository.filterTasks(selectedCampaign, text);
+    final totalPages = gigaTurnipRepository.totalPages;
+    print("filter in cubit");
+    emit(state.copyWith(
+      // totalPages: totalPages,
+      availableTasks: tasks,
+    ));
   }
 }

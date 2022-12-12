@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -10,49 +12,37 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   final TextEditingController textController = TextEditingController();
   final FocusNode focusNode = FocusNode();
-  String query = "";
-  List filteredNames = [];
-  List names = [];
-
-  _SearchBarState() {
-    textController.addListener(() {
-      if (textController.text.isEmpty) {
-        setState(() {
-          query = "";
-          filteredNames = names;
-        });
-      } else {
-        setState(() {
-          query = textController.text;
-        });
-      }
-    });
-  }
+  bool tap = false;
 
   @override
   Widget build(BuildContext context) {
-
-
-
-  return SliverToBoxAdapter(
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: textController,
-        focusNode: focusNode,
-        textInputAction: TextInputAction.search,
-        // onSubmitted: (String _) {
-        //   showResults(context);
-        // },
-        decoration: const InputDecoration(
-          hintText: 'Search',
-          prefixIcon: Icon(Icons.search),
-          border: OutlineInputBorder(),
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          controller: textController,
+          focusNode: focusNode,
+          textInputAction: TextInputAction.search,
+          onSubmitted: (String text) {
+            // showResults(context);
+            // transfer query --> textController
+            context.read<TasksCubit>().filterTask(textController.text);
+          },
+          decoration: InputDecoration(
+              hintText: 'Search',
+              // prefixIcon: tap ? SizedBox() : Icon(Icons.search),
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    context.read<TasksCubit>().filterTask(textController.text);
+                    print(textController.text);
+                  },
+                  icon: const Icon(Icons.search),
+              )),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
 
 class MySearchDelegate extends SearchDelegate {
@@ -96,44 +86,3 @@ class MySearchDelegate extends SearchDelegate {
     return SizedBox();
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:gigaturnip/src/widgets/platform_search.dart';
-//
-//
-//
-//
-// class MaterialSearchDelegate extends AbstractPlatformSearchDelegate {
-//
-//   List<Widget> buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         icon: Icon(Icons.clear),
-//         onPressed: () {
-//           query = '';
-//         },
-//       ),
-//     ];
-//   }
-//
-//   Widget buildLeading(BuildContext context) {
-//     return IconButton(
-//       icon: Icon(Icons.arrow_back),
-//       onPressed: () {
-//         close(context, null);
-//       },
-//     );
-//   }
-//
-//   Widget buildResults(BuildContext context) {
-//     return Container(child: const Text("Search"),);
-//   }
-//
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     return SizedBox();
-//   }
-//
-//
-// }
