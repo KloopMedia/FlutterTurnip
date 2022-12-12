@@ -5,6 +5,7 @@ enum TaskStatus {
   initialized,
   redirectToNextTask,
   redirectToTasksList,
+  triggerWebhook,
 }
 
 @immutable
@@ -12,6 +13,8 @@ class TaskState extends Task with EquatableMixin {
   final Task? nextTask;
   final List<Task> previousTasks;
   final TaskStatus taskStatus;
+  final List<Task> integratedTasks;
+  final bool isRichTextViewed;
 
   TaskState({
     this.nextTask,
@@ -29,6 +32,11 @@ class TaskState extends Task with EquatableMixin {
     required Map<String, dynamic>? cardJsonSchema,
     required Map<String, dynamic>? cardUiSchema,
     required List<Task> displayedPrevTasks,
+    required bool isIntegrated,
+    required List<Map<String, dynamic>>? dynamicSource,
+    required List<Map<String, dynamic>>? dynamicTarget,
+    this.integratedTasks = const [],
+    this.isRichTextViewed = false,
   }) : super(
           id: id,
           name: name,
@@ -42,6 +50,9 @@ class TaskState extends Task with EquatableMixin {
           cardJsonSchema: cardJsonSchema,
           cardUiSchema: cardUiSchema,
           displayedPrevTasks: displayedPrevTasks,
+          isIntegrated: isIntegrated,
+          dynamicSource: dynamicSource,
+          dynamicTarget: dynamicTarget,
         );
 
   factory TaskState.fromTask(Task task, TaskStatus taskStatus) {
@@ -59,12 +70,16 @@ class TaskState extends Task with EquatableMixin {
       cardJsonSchema: task.cardJsonSchema,
       cardUiSchema: task.cardUiSchema,
       displayedPrevTasks: task.displayedPrevTasks,
+      isIntegrated: task.isIntegrated,
+      dynamicSource: task.dynamicSource,
+      dynamicTarget: task.dynamicTarget,
     );
   }
 
   @override
   List<Object?> get props => [id, responses, complete, previousTasks, nextTask, taskStatus];
 
+  @override
   TaskState copyWith({
     Map<String, dynamic>? responses,
     bool? complete,
@@ -73,6 +88,8 @@ class TaskState extends Task with EquatableMixin {
     List<Task>? previousTasks,
     Map<String, dynamic>? schema,
     Map<String, dynamic>? uiSchema,
+    List<Task>? integratedTasks,
+    bool? isRichTextViewed,
   }) {
     return TaskState(
       previousTasks: previousTasks ?? this.previousTasks,
@@ -90,6 +107,11 @@ class TaskState extends Task with EquatableMixin {
       cardJsonSchema: cardJsonSchema,
       cardUiSchema: cardUiSchema,
       displayedPrevTasks: displayedPrevTasks,
+      isIntegrated: isIntegrated,
+      dynamicSource: dynamicSource,
+      dynamicTarget: dynamicTarget,
+      integratedTasks: integratedTasks ?? this.integratedTasks,
+      isRichTextViewed: isRichTextViewed ?? this.isRichTextViewed,
     );
   }
 }

@@ -116,8 +116,17 @@ class GigaTurnipRepository {
     return _userRelevantTaskStages;
   }
 
-  Future<Map<String, dynamic>> getDynamicJsonTaskStage(int id, int taskId, Map<String, dynamic>? formData) async {
-    return await _gigaTurnipApiClient.getDynamicJsonTaskStage(id: id, formData: formData, taskId: taskId);
+  Future<Map<String, dynamic>> getDynamicJsonTaskStage(
+    int stageId,
+    int taskId,
+    Map<String, dynamic>? formData,
+  ) async {
+    return await _gigaTurnipApiClient.getDynamicJsonTaskStage(
+        id: stageId, formData: formData, taskId: taskId);
+  }
+
+  Future<Map<String, dynamic>> triggerWebhook(int id) async {
+    return await _gigaTurnipApiClient.triggerTaskWebhook(id: id);
   }
 
   Future<void> refreshAllTasks(Campaign selectedCampaign, TasksActions action) async {
@@ -187,6 +196,11 @@ class GigaTurnipRepository {
     return _availableTasks;
   }
 
+  Future<List<Task>> getIntegratedTasks(int id) async {
+    final tasks = await _gigaTurnipApiClient.getIntegratedTasks(id: id);
+    return tasks.map((task) => Task.fromApiModel(task)).toList();
+  }
+
   Future<List<Task>> getTasksPage(Campaign selectedCampaign, int page) async {
     if (!_isLoading) {
       _isLoading = true;
@@ -212,7 +226,6 @@ class GigaTurnipRepository {
     return _availableTasks;
   }
 
-
   Future<List<Task>> getPreviousTasksPage(Campaign selectedCampaign) async {
     if (_hasNextAvailableTasks && !_isLoading) {
       _isLoading = true;
@@ -237,7 +250,6 @@ class GigaTurnipRepository {
     }
     return _availableTasks;
   }
-
 
   Future<Task> createTask(int id) async {
     final taskId = await _gigaTurnipApiClient.createTask(id: id);
@@ -267,7 +279,8 @@ class GigaTurnipRepository {
     }
   }
 
-  Future<List<Notifications>?> getNotifications(int campaignId, bool viewed, [int? importance]) async {
+  Future<List<Notifications>?> getNotifications(int campaignId, bool viewed,
+      [int? importance]) async {
     final notificationsData = await _gigaTurnipApiClient.getUserNotifications(
       query: {'campaign': campaignId, 'viewed': viewed, 'importance': importance},
     );
@@ -277,7 +290,7 @@ class GigaTurnipRepository {
     return notifications;
   }
 
-  Future<void> getOpenNotification (int id) async {
+  Future<void> getOpenNotification(int id) async {
     await _gigaTurnipApiClient.openNotification(id: id);
   }
 

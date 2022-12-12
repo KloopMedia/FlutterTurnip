@@ -334,12 +334,17 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<void> triggerTaskWebhook({Map<String, dynamic>? query, required int id}) async {
+  Future<Map<String, dynamic>> triggerTaskWebhook({
+    Map<String, dynamic>? query,
+    required int id,
+  }) async {
     try {
-      await _httpClient.get(
+      final response = await _httpClient.get(
         tasksRoute + id.toString() + triggerWebhookActionRoute,
         queryParameters: query,
       );
+      print(response.data);
+      return response.data;
     } on DioError catch (e) {
       print(e);
       throw GigaTurnipApiRequestException.fromDioError(e);

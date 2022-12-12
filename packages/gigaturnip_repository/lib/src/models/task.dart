@@ -19,6 +19,9 @@ class Task extends Equatable {
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
   final List<Task> displayedPrevTasks;
+  final bool isIntegrated;
+  final List<Map<String, dynamic>>? dynamicSource;
+  final List<Map<String, dynamic>>? dynamicTarget;
 
   const Task({
     required this.id,
@@ -33,6 +36,9 @@ class Task extends Equatable {
     required this.cardJsonSchema,
     required this.cardUiSchema,
     required this.displayedPrevTasks,
+    required this.isIntegrated,
+    required this.dynamicSource,
+    required this.dynamicTarget,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -54,11 +60,36 @@ class Task extends Equatable {
       stage: TaskStage.fromApiModel(model.stage),
       displayedPrevTasks:
           model.displayedPrevTasks?.map((task) => Task.fromApiModel(task)).toList() ?? [],
+      isIntegrated: model.integratorGroup != null,
+      dynamicSource: model.stage.dynamicJsonsSource,
+      dynamicTarget: model.stage.dynamicJsonsTarget,
     );
   }
 
   Map<String, dynamic> toJson() => _$TaskToJson(this);
 
+  Task copyWith({Map<String, dynamic>? responses, bool? complete, Map<String, dynamic>? schema}) {
+    return Task(
+      id: id,
+      name: name,
+      reopened: reopened,
+      createdAt: createdAt,
+      stage: stage,
+      schema: schema ?? this.schema,
+      uiSchema: uiSchema,
+      cardJsonSchema: cardJsonSchema,
+      cardUiSchema: cardUiSchema,
+      displayedPrevTasks: displayedPrevTasks,
+      isIntegrated: isIntegrated,
+      responses: responses ?? this.responses,
+      complete: complete ?? this.complete,
+      dynamicSource: dynamicSource,
+      dynamicTarget: dynamicTarget,
+    );
+  }
+
   @override
   List<Object?> get props => [id, responses, complete, reopened, stage];
+
+  bool get isDynamic => dynamicTarget != null && (dynamicTarget?.isNotEmpty ?? false);
 }

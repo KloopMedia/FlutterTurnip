@@ -67,6 +67,7 @@ dependencies:
   collection: ^1.16.0
   permission_handler: ^9.2.0
   webview_flutter: ^3.0.4
+  rxdart: ^0.27.7
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
