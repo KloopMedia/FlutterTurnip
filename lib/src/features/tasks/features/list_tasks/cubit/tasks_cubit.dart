@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-// import 'package:uniturnip/json_schema_ui.dart';
+import 'package:uniturnip/json_schema_ui.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 part 'tasks_state.dart';
@@ -212,25 +212,25 @@ class TasksCubit extends Cubit<TasksState> {
     }
   }
 
-  // Future<FileModel> getFile(path) async {
-  //   final ref = firebase_storage.FirebaseStorage.instance.ref(path);
-  //   final data = await ref.getMetadata();
-  //   final url = await ref.getDownloadURL();
-  //   final type = _getFileType(data.contentType);
-  //   return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
-  // }
-  //
-  // FileType _getFileType(String? contentType) {
-  //   final type = contentType?.split('/').first;
-  //   switch (type) {
-  //     case 'video':
-  //       return FileType.video;
-  //     case 'image':
-  //       return FileType.image;
-  //     default:
-  //       return FileType.any;
-  //   }
-  // }
+  Future<FileModel> getFile(path) async {
+    final ref = firebase_storage.FirebaseStorage.instance.ref(path);
+    final data = await ref.getMetadata();
+    final url = await ref.getDownloadURL();
+    final type = _getFileType(data.contentType);
+    return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
+  }
+
+  FileType _getFileType(String? contentType) {
+    final type = contentType?.split('/').first;
+    switch (type) {
+      case 'video':
+        return FileType.video;
+      case 'image':
+        return FileType.image;
+      default:
+        return FileType.any;
+    }
+  }
 
   void getUnreadNotifications() async {
     try {
