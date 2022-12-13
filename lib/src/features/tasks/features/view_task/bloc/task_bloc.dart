@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:path/path.dart';
-import 'package:uniturnip/json_schema_ui.dart';
+// import 'package:uniturnip/json_schema_ui.dart';
 // import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
@@ -110,36 +110,36 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
   }
 
-  Future<FileModel> getFile(path) async {
-    final ref = firebase_storage.FirebaseStorage.instance.ref(path);
-    final data = await ref.getMetadata();
-    final url = await ref.getDownloadURL();
-    final type = _getFileType(data.contentType);
-    return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
-  }
+  // Future<FileModel> getFile(path) async {
+  //   final ref = firebase_storage.FirebaseStorage.instance.ref(path);
+  //   final data = await ref.getMetadata();
+  //   final url = await ref.getDownloadURL();
+  //   final type = _getFileType(data.contentType);
+  //   return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
+  // }
 
-  FileType _getFileType(String? contentType) {
-    final type = contentType?.split('/').first;
-    switch (type) {
-      case 'video':
-        return FileType.video;
-      case 'image':
-        return FileType.image;
-      default:
-        return FileType.any;
-    }
-  }
-
-  String? _getContentType(FileType type, String extension) {
-    switch (type) {
-      case FileType.video:
-        return 'video/$extension';
-      case FileType.image:
-        return 'image/$extension';
-      default:
-        return null;
-    }
-  }
+  // FileType _getFileType(String? contentType) {
+  //   final type = contentType?.split('/').first;
+  //   switch (type) {
+  //     case 'video':
+  //       return FileType.video;
+  //     case 'image':
+  //       return FileType.image;
+  //     default:
+  //       return FileType.any;
+  //   }
+  // }
+  //
+  // String? _getContentType(FileType type, String extension) {
+  //   switch (type) {
+  //     case FileType.video:
+  //       return 'video/$extension';
+  //     case FileType.image:
+  //       return 'image/$extension';
+  //     default:
+  //       return null;
+  //   }
+  // }
 
   String createStoragePathFromTask(Task task) {
     return '${task.stage.chain.campaign}/'
@@ -149,45 +149,45 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         '${task.id}';
   }
 
-  Future<UploadTask?> uploadFile({
-    required XFile? file,
-    required String? path,
-    required FileType type,
-    required bool private,
-    required Task task,
-  }) async {
-    if (file == null) {
-      return null;
-    }
-    final rawFile = await file.readAsBytes();
-    final mimeType = file.mimeType ?? _getContentType(type, extension(file.name));
-
-    if (kIsWeb || path == null) {
-      return _uploadFile(
-          file: rawFile, private: private, filename: file.name, mimeType: mimeType, task: task);
-    }
-
-    Uint8List? compressed = rawFile;
-
-    if (type == FileType.image) {
-      compressed = await _compressImage(file);
-    }
-    // else if (type == FileType.video) {
-    //   compressed = await _compressVideo(file);
-    // }
-    if (compressed != null) {
-      return _uploadFile(
-        file: compressed,
-        private: private,
-        filename: file.name,
-        mimeType: mimeType,
-        task: task,
-      );
-    } else {
-      print('No compressed files');
-      return null;
-    }
-  }
+  // Future<UploadTask?> uploadFile({
+  //   required XFile? file,
+  //   required String? path,
+  //   required FileType type,
+  //   required bool private,
+  //   required Task task,
+  // }) async {
+  //   if (file == null) {
+  //     return null;
+  //   }
+  //   final rawFile = await file.readAsBytes();
+  //   final mimeType = file.mimeType ?? _getContentType(type, extension(file.name));
+  //
+  //   if (kIsWeb || path == null) {
+  //     return _uploadFile(
+  //         file: rawFile, private: private, filename: file.name, mimeType: mimeType, task: task);
+  //   }
+  //
+  //   Uint8List? compressed = rawFile;
+  //
+  //   if (type == FileType.image) {
+  //     compressed = await _compressImage(file);
+  //   }
+  //   // else if (type == FileType.video) {
+  //   //   compressed = await _compressVideo(file);
+  //   // }
+  //   if (compressed != null) {
+  //     return _uploadFile(
+  //       file: compressed,
+  //       private: private,
+  //       filename: file.name,
+  //       mimeType: mimeType,
+  //       task: task,
+  //     );
+  //   } else {
+  //     print('No compressed files');
+  //     return null;
+  //   }
+  // }
 
   Future<UploadTask?> _uploadFile({
     required Uint8List file,

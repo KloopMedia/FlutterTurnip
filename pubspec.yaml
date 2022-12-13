@@ -53,11 +53,15 @@ dependencies:
     path: packages/gigaturnip_repository
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
-  uniturnip:
-#    path: ../uniturnip
+#  uniturnip:
+##    path: ../uniturnip
+#    git:
+#      url: https://github.com/KloopMedia/uniturnip.git
+#      ref: test_integration_with_flutterturnip
+  flutter_json_schema_form:
     git:
-      url: https://github.com/KloopMedia/uniturnip.git
-      ref: test_integration_with_flutterturnip
+      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
+      ref: master
   shared_preferences: 2.0.15
   flutter_launcher_icons: ^0.9.3
   firebase_crashlytics: ^2.8.7
@@ -71,6 +75,11 @@ dependencies:
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
+  permission_handler: 10.2.0
+  firebase_storage: 11.0.7
+  firebase_core: 2.4.0
+  firebase_auth: 4.2.0
+  firebase_analytics: 10.0.7
 
 dev_dependencies:
   flutter_test:
