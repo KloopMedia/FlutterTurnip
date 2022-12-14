@@ -69,7 +69,7 @@ class CardHeader extends StatelessWidget {
           Expanded(
             child: ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(title),
+              title: Text(title, style: Theme.of(context).textTheme.titleMedium,),
               subtitle: Text('#$id'),
             ),
           ),
@@ -116,6 +116,7 @@ class CardFooter extends StatelessWidget {
           child: status
               ? Text(
                   context.loc.request_received,
+                  //ToDo implement global theme
                   style: const TextStyle(color: Colors.black87, fontSize: 18),
                 )
               : const SizedBox.shrink(),

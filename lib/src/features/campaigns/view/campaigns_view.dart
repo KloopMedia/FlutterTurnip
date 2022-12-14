@@ -17,7 +17,8 @@ class CampaignsView extends StatefulWidget {
 }
 
 class _CampaignsViewState extends State<CampaignsView> {
-  late final query = widget.simpleViewMode ? '?simple=true' : '';
+  // late final query = widget.simpleViewMode ? '?simple=true' : '';
+  late final query = '?simple=true';
 
   @override
   initState() {

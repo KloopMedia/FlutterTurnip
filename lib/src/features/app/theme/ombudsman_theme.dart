@@ -13,23 +13,23 @@ final web_theme = ThemeData(
     titleSmall: const TextStyle(
       fontFamily: 'Open-Sans',
       fontWeight: FontWeight.w400,
-      fontSize: 18,
+      fontSize: 12,
     ),
     titleMedium: const TextStyle(
       fontFamily: 'Open-Sans',
       fontWeight: FontWeight.w400,
-      fontSize: 19,
+      fontSize: 15,
     ),
     titleLarge: const TextStyle(
       fontFamily: 'Open-Sans',
       fontWeight: FontWeight.w500,
-      fontSize: 20,
+      fontSize: 18,
       color: Colors.white,
     ),
     headlineLarge: const TextStyle(
       fontFamily: 'Open-Sans',
       fontWeight: FontWeight.w400,
-      fontSize: 20,
+      fontSize: 18,
       color: Colors.black87,
     ),
     headlineMedium: const TextStyle(

@@ -63,9 +63,11 @@ class CombinedTasksListView extends StatelessWidget {
                           Navigator.of(context)
                               .push(MaterialPageRoute(
                                   builder: (context) => NotificationView(
-                                      notification: notification, campaignName: '')))
-                              .then((value) =>
-                                  context.read<ImportantNotificationsCubit>().getNotifications());
+                                      notification: notification,
+                                      campaignName: '')))
+                              .then((value) => context
+                                  .read<ImportantNotificationsCubit>()
+                                  .getNotifications());
                         });
                   },
                   childCount: state.notifications.length,
@@ -73,7 +75,8 @@ class CombinedTasksListView extends StatelessWidget {
               );
             },
           ),
-          CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
+          CreatableTaskList(
+              items: creatableTasks, onTap: onCreate, icon: iconToDo),
           SliverTaskListHeader(title: context.loc.todo),
           SliverTaskList(
             items: openTasks,
@@ -96,7 +99,8 @@ class CombinedTasksListView extends StatelessWidget {
             emptyTitle: context.loc.no_completed_tasks,
           ),
           if (showLoader)
-            const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+            const SliverToBoxAdapter(
+                child: Center(child: CircularProgressIndicator())),
         ],
       ),
     );
@@ -193,7 +197,8 @@ class SliverTaskList extends StatelessWidget {
       return SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(emptyTitle, style: Theme.of(context).textTheme.titleSmall),
+          child:
+              Text(emptyTitle, style: Theme.of(context).textTheme.titleSmall),
         ),
       );
     }
@@ -259,7 +264,10 @@ class ItemCard extends StatelessWidget {
                             height: 8,
                           ),
                           Text(
-                            DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                            DateFormat.Hm()
+                                .add_d()
+                                .add_MMM()
+                                .format(item.createdAt),
                             style: Theme.of(context).textTheme.caption,
                           ),
                         ],
