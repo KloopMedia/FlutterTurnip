@@ -28824,7 +28824,8 @@ this.a=b},
 ahw:function ahw(){},
 ahv:function ahv(a){this.a=a},
 ahx:function ahx(){},
-EE:function EE(a){this.a=a},
+EE:function EE(a,b){this.c=a
+this.a=b},
 a5C:function a5C(a){var _=this
 _.d=$
 _.a=null
@@ -103622,7 +103623,7 @@ $0(){this.a.e.$2(this.b,!0)},
 $S:0}
 A.xt.prototype={
 v(a){var s=null,r=A.aC(A.aO(a,B.O,t.B).gMc(),s,s,s,s,A.L(a).RG.r,s,s,s)
-return A.kp(A.jR(A.a([new A.dN(new A.ahw(),s)],t.p),s,!0,s,s,s,1,s,!0,s,!1,s,s,s,s,s,!0,s,s,s,s,s,s,r,s,s,s,1,s),s,A.xk(new A.EE(s),new A.ahx(),t.Wa),s,B.qa,s)}}
+return A.kp(A.jR(A.a([new A.dN(new A.ahw(),s)],t.p),s,!0,s,s,s,1,s,!0,s,!1,s,s,s,s,s,!0,s,s,s,s,s,s,r,s,s,s,1,s),s,A.xk(new A.EE(this.c,s),new A.ahx(),t.Wa),s,B.qa,s)}}
 A.ahw.prototype={
 $1(a){var s=null,r=A.ap(a,!1,t.W).c.b.d,q=r!=null?A.ai7(new A.oa(r),s):B.rf
 return A.cQ(s,q,s,new A.ahv(a),B.H,s)},
@@ -103656,7 +103657,7 @@ return new A.SF(b.a,b.b,new A.aJR(this.a,a),new A.aJS(a),null)},
 $S:628}
 A.aJR.prototype={
 $2(a,b){return this.a54(a,b)},
-a54(a,b){var s=0,r=A.p(t.H),q,p=this,o,n,m,l
+a54(a,b){var s=0,r=A.p(t.H),q,p=this,o,n,m,l,k
 var $async$$2=A.l(function(c,d){if(c===1)return A.m(d,r)
 while(true)switch(s){case 0:s=b?3:4
 break
@@ -103672,8 +103673,9 @@ if(o.c==null){s=1
 break}m=p.b
 J.ce(A.ap(m,!1,t.W),new A.nt(a))
 l=o.d
-if(l===$){l!==$&&A.bc()
-l=o.d="?simple=true"}o=m.H(t.o).f.d
+if(l===$){k=o.a.c?"?simple=true":""
+l!==$&&A.bc()
+l=o.d=k}o=m.H(t.o).f.d
 o===$&&A.b()
 o.sl(0,new A.dG("/campaign/"+a.a+l,null))
 case 1:return A.n(q,r)}})
