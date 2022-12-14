@@ -220,7 +220,13 @@ class _TaskViewState extends State<TaskView> {
                         JSONSchemaUI(
                           schema: task.schema!,
                           ui: task.uiSchema!,
-                          formController: UIModel(disabled: true, data: task.responses ?? {}),
+                          formController: UIModel(
+                            disabled: true,
+                            data: task.responses ?? {},
+                            getFile: (path) {
+                              return context.read<TaskBloc>().getFile(path);
+                            },
+                          ),
                           hideSubmitButton: true,
                         ),
                     ],
