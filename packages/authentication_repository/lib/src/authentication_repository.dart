@@ -69,7 +69,7 @@ class AuthenticationRepository {
       if (isWeb) {
         await FirebaseAuth.instance.signInWithPopup(appleProvider);
       } else {
-        await FirebaseAuth.instance.signInWithProvider(appleProvider);
+        // await FirebaseAuth.instance.signInWithProvider(appleProvider);
       }
     } catch (e) {
       print(e);

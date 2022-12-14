@@ -110,13 +110,15 @@ class _TaskViewState extends State<TaskView> {
       query = '';
     }
 
+    String text = context.read<TaskBloc>().state.name;
+
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(context.read<TaskBloc>().state.name,
+        title: Text(
+            text,
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
-            maxLines: 5,
+            maxLines: 2,
             style: Theme.of(context).textTheme.headlineMedium),
         leading: BackButton(
           onPressed: () {
