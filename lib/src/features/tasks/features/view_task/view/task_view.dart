@@ -223,6 +223,15 @@ class _TaskViewState extends State<TaskView> {
                           formController: UIModel(
                             disabled: true,
                             data: task.responses ?? {},
+                            saveFile: (rawFile, path, type, {private = false}) {
+                              return context.read<TaskBloc>().uploadFile(
+                                file: rawFile,
+                                path: path,
+                                type: type,
+                                private: private,
+                                task: task,
+                              );
+                            },
                             getFile: (path) {
                               return context.read<TaskBloc>().getFile(path);
                             },
