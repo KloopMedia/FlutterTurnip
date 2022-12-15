@@ -2,13 +2,14 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/dialogs/form_validation_snackbar.dart';
 import 'package:gigaturnip/src/widgets/richtext/richtext_view.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:uniturnip/json_schema_ui.dart';
+// import 'package:uniturnip/json_schema_ui.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class TaskView extends StatefulWidget {
 
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
-  late UIModel formController;
+  //late UIModel formController;
   late String richText;
   bool isRichTextViewed = true;
 
@@ -27,42 +28,42 @@ class _TaskViewState extends State<TaskView> {
   void initState() {
     taskBloc = context.read<TaskBloc>();
     taskBloc.add(InitializeTaskEvent());
-    formController = UIModel(
-      data: taskBloc.state.responses ?? {},
-      disabled: taskBloc.state.complete,
-      onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
-        taskBloc.add(UpdateTaskEvent(data));
-        final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
-        if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
-          if (dynamicJsonMetadata.first['main'] == path.last ||
-              (dynamicJsonMetadata.first['foreign'] as List).contains(path.last)) {
-            taskBloc.add(GetDynamicSchemaTaskEvent(data));
-          }
-        }
-      },
-      saveFile: (rawFile, path, type, {private = false}) {
-        return context.read<TaskBloc>().uploadFile(
-              file: rawFile,
-              path: path,
-              type: type,
-              private: private,
-              task: taskBloc.state,
-            );
-      },
-      getFile: (path) {
-        return context.read<TaskBloc>().getFile(path);
-      },
-      saveAudioRecord: (file, private) async {
-        final task = await context.read<TaskBloc>().uploadFile(
-              file: file,
-              type: FileType.any,
-              private: private,
-              path: null,
-              task: taskBloc.state,
-            );
-        return task!.snapshot.ref.fullPath;
-      },
-    );
+    // formController = UIModel(
+    //   data: taskBloc.state.responses ?? {},
+    //   disabled: taskBloc.state.complete,
+    //   onUpdate: ({required MapPath path, required Map<String, dynamic> data}) {
+    //     taskBloc.add(UpdateTaskEvent(data));
+    //     final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
+    //     if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
+    //       if (dynamicJsonMetadata.first['main'] == path.last ||
+    //           (dynamicJsonMetadata.first['foreign'] as List).contains(path.last)) {
+    //         taskBloc.add(GetDynamicSchemaTaskEvent(data));
+    //       }
+    //     }
+    //   },
+    //   saveFile: (rawFile, path, type, {private = false}) {
+    //     return context.read<TaskBloc>().uploadFile(
+    //           file: rawFile,
+    //           path: path,
+    //           type: type,
+    //           private: private,
+    //           task: taskBloc.state,
+    //         );
+    //   },
+    //   getFile: (path) {
+    //     return context.read<TaskBloc>().getFile(path);
+    //   },
+    //   saveAudioRecord: (file, private) async {
+    //     final task = await context.read<TaskBloc>().uploadFile(
+    //           file: file,
+    //           type: FileType.any,
+    //           private: private,
+    //           path: null,
+    //           task: taskBloc.state,
+    //         );
+    //     return task!.snapshot.ref.fullPath;
+    //   },
+    // );
     richText = taskBloc.state.stage.richText ?? '';
     if (isRichTextViewed && richText.isNotEmpty) {
       _showRichText();
@@ -134,8 +135,8 @@ class _TaskViewState extends State<TaskView> {
       ),
       body: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
-          formController.data = state.responses ?? {};
-          formController.disabled = state.complete;
+          // formController.data = state.responses ?? {};
+          // formController.disabled = state.complete;
           if (state.taskStatus == TaskStatus.redirectToNextTask) {
             if (state.nextTask != null) {
               context.read<AppBloc>().add(AppSelectedTaskChanged(state.nextTask));
@@ -169,43 +170,54 @@ class _TaskViewState extends State<TaskView> {
                       for (var task in state.integratedTasks)
                         ExpansionCard(
                           task: task,
-                          child: JSONSchemaUI(
+                          // child: JSONSchemaUI(
+                          //   schema: task.schema!,
+                          //   ui: task.uiSchema!,
+                          //   hideSubmitButton: true,
+                          //   formController: UIModel(
+                          //     data: task.responses ?? {},
+                          //     disabled: task.complete,
+                          //     onUpdate: ({
+                          //       required MapPath path,
+                          //       required Map<String, dynamic> data,
+                          //     }) {
+                          //       final updatedTask = task.copyWith(responses: data);
+                          //       taskBloc.add(UpdateIntegratedTask(updatedTask));
+                          //     },
+                          //     saveFile: (rawFile, path, type, {private = false}) {
+                          //       return context.read<TaskBloc>().uploadFile(
+                          //             file: rawFile,
+                          //             path: path,
+                          //             type: type,
+                          //             private: private,
+                          //             task: task,
+                          //           );
+                          //     },
+                          //     getFile: (path) {
+                          //       return context.read<TaskBloc>().getFile(path);
+                          //     },
+                          //     saveAudioRecord: (file, private) async {
+                          //       final uploadTask = await context.read<TaskBloc>().uploadFile(
+                          //             file: file,
+                          //             type: FileType.any,
+                          //             private: private,
+                          //             path: null,
+                          //             task: task,
+                          //           );
+                          //       return uploadTask!.snapshot.ref.fullPath;
+                          //     },
+                          //   ),
+                          // ),
+                          child: FlutterJsonSchemaForm(
                             schema: task.schema!,
-                            ui: task.uiSchema!,
-                            hideSubmitButton: true,
-                            formController: UIModel(
-                              data: task.responses ?? {},
-                              disabled: task.complete,
-                              onUpdate: ({
-                                required MapPath path,
-                                required Map<String, dynamic> data,
-                              }) {
-                                final updatedTask = task.copyWith(responses: data);
-                                taskBloc.add(UpdateIntegratedTask(updatedTask));
-                              },
-                              saveFile: (rawFile, path, type, {private = false}) {
-                                return context.read<TaskBloc>().uploadFile(
-                                      file: rawFile,
-                                      path: path,
-                                      type: type,
-                                      private: private,
-                                      task: task,
-                                    );
-                              },
-                              getFile: (path) {
-                                return context.read<TaskBloc>().getFile(path);
-                              },
-                              saveAudioRecord: (file, private) async {
-                                final uploadTask = await context.read<TaskBloc>().uploadFile(
-                                      file: file,
-                                      type: FileType.any,
-                                      private: private,
-                                      path: null,
-                                      task: task,
-                                    );
-                                return uploadTask!.snapshot.ref.fullPath;
-                              },
-                            ),
+                            uiSchema: task.uiSchema,
+                            formData: task.responses,
+                            disabled: task.complete,
+                            storage: context.read<AppBloc>().storage,
+                            onChange: (Map<String, dynamic> data, String path) {
+                              final updatedTask = task.copyWith(responses: data);
+                              taskBloc.add(UpdateIntegratedTask(updatedTask));
+                            },
                           ),
                         ),
                     ],
@@ -217,11 +229,18 @@ class _TaskViewState extends State<TaskView> {
                   child: Column(
                     children: [
                       for (var task in state.previousTasks)
-                        JSONSchemaUI(
+                        // JSONSchemaUI(
+                        //   schema: task.schema!,
+                        //   ui: task.uiSchema!,
+                        //   formController: UIModel(disabled: true, data: task.responses ?? {}),
+                        //   hideSubmitButton: true,
+                        // ),
+                        FlutterJsonSchemaForm(
                           schema: task.schema!,
-                          ui: task.uiSchema!,
-                          formController: UIModel(disabled: true, data: task.responses ?? {}),
-                          hideSubmitButton: true,
+                          uiSchema: task.uiSchema,
+                          formData: task.responses,
+                          disabled: true,
+                          storage: context.read<AppBloc>().storage,
                         ),
                     ],
                   ),
@@ -235,17 +254,39 @@ class _TaskViewState extends State<TaskView> {
                 ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: JSONSchemaUI(
-                    schema: state.schema!,
-                    ui: state.uiSchema!,
-                    formController: formController,
-                    onSubmit: ({required Map<String, dynamic> data}) {
-                      taskBloc.add(SubmitTaskEvent(data));
-                    },
-                    onValidationFailed: () {
-                      showValidationFailedSnackBar(context: context);
-                    }),
-              ),
+                // child: JSONSchemaUI(
+                //     schema: state.schema!,
+                //     ui: state.uiSchema!,
+                //     formController: formController,
+                //     onSubmit: ({required Map<String, dynamic> data}) {
+                //       taskBloc.add(SubmitTaskEvent(data));
+                //     },
+                //     onValidationFailed: () {
+                //       showValidationFailedSnackBar(context: context);
+                //     }),
+                child: FlutterJsonSchemaForm(
+                  schema: state.schema!,
+                  uiSchema: state.uiSchema,
+                  formData: state.responses ?? {},
+                  storage: context.read<AppBloc>().storage,
+                  onChange: (Map<String, dynamic> data, String path) {
+                    taskBloc.add(UpdateTaskEvent(data));
+                    final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
+                    final pathList = path.split('.');
+                    if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
+                      if (dynamicJsonMetadata.first['main'] == pathList || (dynamicJsonMetadata.first['foreign'] as List).contains(pathList)) {
+                        taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                      }
+                    }
+                  },
+                  onSubmit: (Map<String, dynamic> data) {
+                    taskBloc.add(SubmitTaskEvent(data));
+                  },
+                  onValidationFailed: () {
+                    showValidationFailedSnackBar(context: context);
+                  }
+                ),
+              )
             ],
           );
         },
