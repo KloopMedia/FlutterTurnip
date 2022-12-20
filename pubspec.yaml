@@ -59,7 +59,7 @@ dependencies:
 #      url: https://github.com/KloopMedia/uniturnip.git
 #      ref: test_integration_with_flutterturnip
   flutter_json_schema_form:
-    path: ../../JsonSchema Form
+    path: ../flutter-jsonschema-form
 #    git:
 #      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
 #      ref: master

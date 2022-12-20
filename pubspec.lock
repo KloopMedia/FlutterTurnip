@@ -450,7 +450,7 @@ packages:
   flutter_json_schema_form:
     dependency: "direct main"
     description:
-      path: "../../JsonSchema Form"
+      path: "../flutter-jsonschema-form"
       relative: true
     source: path
     version: "0.0.1"
