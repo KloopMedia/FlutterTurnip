@@ -55,7 +55,7 @@ class App extends StatelessWidget {
             routeInformationParser: router.routeInformationParser,
             routerDelegate: router.routerDelegate,
             debugShowCheckedModeBanner: false,
-            theme: kIsWeb ? web_theme : theme,
+            theme: web_theme,
             locale: bloc.sharedPrefsLocale ?? bloc.state.locale ?? const Locale('ky'),
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
