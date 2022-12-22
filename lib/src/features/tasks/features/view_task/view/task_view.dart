@@ -115,7 +115,7 @@ class _TaskViewState extends State<TaskView> {
         title: Text(context.read<TaskBloc>().state.name,
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
-            maxLines: 5,
+            maxLines: 2,
             style: Theme.of(context).textTheme.headlineMedium),
         leading: BackButton(
           onPressed: () {

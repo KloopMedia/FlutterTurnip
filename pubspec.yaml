@@ -59,10 +59,10 @@ dependencies:
 #      url: https://github.com/KloopMedia/uniturnip.git
 #      ref: test_integration_with_flutterturnip
   flutter_json_schema_form:
-    path: ../flutter-jsonschema-form
-#    git:
-#      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
-#      ref: master
+#    path: ../flutter-jsonschema-form
+    git:
+      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
+      ref: master
   shared_preferences: 2.0.15
   flutter_launcher_icons: ^0.9.3
   firebase_crashlytics: ^2.8.7
