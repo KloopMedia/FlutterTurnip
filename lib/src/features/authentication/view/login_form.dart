@@ -44,7 +44,7 @@ class _GoogleLoginButton extends StatelessWidget {
     return ElevatedButton.icon(
       key: const Key('loginForm_googleLogin_raisedButton'),
       label: Text(
-        context.loc.sign_in,
+        context.loc.sign_in_with_google,
         style: const TextStyle(color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
@@ -67,9 +67,9 @@ class _AppleLoginButton extends StatelessWidget {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
       key: const Key('loginForm_appleLogin_raisedButton'),
-      label: const Text(
-        "Sign in with Apple",
-        style: TextStyle(color: Colors.white),
+      label: Text(
+        context.loc.sign_in_with_apple,
+        style: const TextStyle(color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(

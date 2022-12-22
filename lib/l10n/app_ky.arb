@@ -27,7 +27,8 @@
     "opentosee" : "Тапшырманы көрүү/ачуу",
     "close": "Жабуу",
 
-    "sign_in" : "Google аркылуу катталуу",
+    "sign_in_with_google" : "Google аркылуу катталуу",
+    "sign_in_with_apple" : "Apple аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",
     "failed_to_load_tasks" : "Тапшырманы жүктөөдөгү  ката",
     "fetching_error" : "Кампанияларды алуудагы ката",
@@ -51,5 +52,6 @@
 
     "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
     "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
-    "task_returned": "Кайтарылды"
+    "task_returned": "Кайтарылды",
+    "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз"
 }

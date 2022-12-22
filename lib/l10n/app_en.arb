@@ -27,7 +27,8 @@
     "opentosee" : "View/Open",
     "close": "Close",
 
-    "sign_in" : "SIGN IN WITH GOOGLE",
+    "sign_in_with_google" : "SIGN IN WITH GOOGLE",
+    "sign_in_with_apple" : "SIGN IN WITH APPLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
     "failed_to_load_tasks" : "Failed to load tasks",
     "fetching_error" : "Error occurred while fetching campaigns",
@@ -51,5 +52,6 @@
 
     "empty_richtext": "No explanation for the task",
     "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
-    "task_returned": "Returned"
+    "task_returned": "Returned",
+    "test_returned": "Returned. Please answer the questions again"
 }

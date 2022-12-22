@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/dialogs/form_validation_snackbar.dart';
@@ -114,7 +115,7 @@ class _TaskViewState extends State<TaskView> {
         title: Text(context.read<TaskBloc>().state.name,
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
-            maxLines: 5,
+            maxLines: 2,
             style: Theme.of(context).textTheme.headlineMedium),
         leading: BackButton(
           onPressed: () {
@@ -250,16 +251,29 @@ class _TaskViewState extends State<TaskView> {
                 ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: JSONSchemaUI(
-                    schema: state.schema!,
-                    ui: state.uiSchema!,
-                    formController: formController,
-                    onSubmit: ({required Map<String, dynamic> data}) {
-                      taskBloc.add(SubmitTaskEvent(data));
-                    },
-                    onValidationFailed: () {
-                      showValidationFailedSnackBar(context: context);
-                    }),
+                child: Column(
+                  children: [
+                    if (state.reopened && !state.complete) Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
+                      margin: const EdgeInsets.all(5.0),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.redAccent),
+                      child: Text(context.loc.test_returned, style: Theme.of(context).textTheme.headlineMedium)
+                    ),
+                    JSONSchemaUI(
+                        schema: state.schema!,
+                        ui: state.uiSchema!,
+                        formController: formController,
+                        onSubmit: ({required Map<String, dynamic> data}) {
+                          taskBloc.add(SubmitTaskEvent(data));
+                        },
+                        onValidationFailed: () {
+                          showWarningSnackBar(context: context, content: context.loc.empty_form_fields);
+                        }),
+                  ],
+                ),
               ),
             ],
           );
