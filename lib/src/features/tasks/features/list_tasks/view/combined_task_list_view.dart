@@ -241,7 +241,7 @@ class ItemCard extends StatelessWidget {
                 onTap(item);
               },
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
                   child: Column(
                     children: [
                       ListTile(
@@ -252,13 +252,11 @@ class ItemCard extends StatelessWidget {
                         ),
                         subtitle: Text(item.text),
                         trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text(
                               '#${item.id}',
                               style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const SizedBox(
-                              height: 8,
                             ),
                             Text(
                               DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
@@ -267,6 +265,7 @@ class ItemCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 10.0,),
                       Container(
                         width: double.infinity,
                         height: 1,

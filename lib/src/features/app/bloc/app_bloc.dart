@@ -16,12 +16,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<AuthUser> userSubscription;
   AppLocales? sharedPrefsAppLocale;
-  firebase_storage.Reference? storage;
 
   AppBloc({
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-    this.storage,
   })  : _authenticationRepository = authenticationRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty
@@ -40,11 +38,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       (user) => add(AppUserChanged(user)),
     );
     _getLocaleFromSharedPrefs();
-    storage = firebase_storage.FirebaseStorage.instance.ref('${state.selectedTask?.stage.chain.campaign}/'
-        '${state.selectedTask?.stage.chain.id}/'
-        '${state.selectedTask?.stage.id}/'
-        '${state.user?.id}/'
-        '${state.selectedTask?.id}');
   }
 
   Locale? get sharedPrefsLocale {

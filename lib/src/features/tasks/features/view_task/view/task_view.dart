@@ -115,8 +115,8 @@ class _TaskViewState extends State<TaskView> {
         title: Text(context.read<TaskBloc>().state.name,
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: Theme.of(context).textTheme.headlineMedium),
+            maxLines: 3,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(height: 0.9)),
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedTaskChanged(null));
@@ -213,7 +213,7 @@ class _TaskViewState extends State<TaskView> {
                             uiSchema: task.uiSchema,
                             formData: task.responses,
                             disabled: task.complete,
-                            storage: context.read<AppBloc>().storage,
+                            storage: taskBloc.storage,
                             onChange: (Map<String, dynamic> data, String path) {
                               final updatedTask = task.copyWith(responses: data);
                               taskBloc.add(UpdateIntegratedTask(updatedTask));
@@ -240,7 +240,7 @@ class _TaskViewState extends State<TaskView> {
                           uiSchema: task.uiSchema,
                           formData: task.responses,
                           disabled: true,
-                          storage: context.read<AppBloc>().storage,
+                          storage: taskBloc.storage,
                         ),
                     ],
                   ),
@@ -268,7 +268,7 @@ class _TaskViewState extends State<TaskView> {
                   schema: state.schema!,
                   uiSchema: state.uiSchema,
                   formData: state.responses ?? {},
-                  storage: context.read<AppBloc>().storage,
+                  storage: taskBloc.storage,
                   onChange: (Map<String, dynamic> data, String path) {
                     taskBloc.add(UpdateTaskEvent(data));
                     final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;

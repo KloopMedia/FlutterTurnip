@@ -49,7 +49,7 @@ class _IdTitleCardFormState extends State<IdTitleCardForm> {
           title: Text(
             widget.title,
             textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           subtitle: Text('#${widget.task.id} ${widget.description}'),
           trailing: Row(
@@ -106,7 +106,6 @@ class _IdTitleCardFormState extends State<IdTitleCardForm> {
               uiSchema: widget.task.uiSchema,
               formData: widget.task.responses ?? {},
               disabled: true,
-              storage: context.read<AppBloc>().storage,
             ),
           ],
         ),

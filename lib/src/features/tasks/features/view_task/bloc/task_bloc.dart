@@ -26,13 +26,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final AuthUser user;
   Timer? timer;
   TaskState? _cache;
-  // firebase_storage.Reference? storage;
+  firebase_storage.Reference? storage;
 
   TaskBloc({
     required this.gigaTurnipRepository,
     required this.user,
     required Task selectedTask,
-    // this.storage,
+    this.storage,
   }) : super(TaskState.fromTask(selectedTask, TaskStatus.initialized)) {
     timer = Timer.periodic(const Duration(seconds: 20), (timer) {
       if (_cache != state && !state.complete) {
@@ -52,11 +52,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
       add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
     }
-    // storage = firebase_storage.FirebaseStorage.instance.ref('${state.stage.chain.campaign}/'
-    //     '${state.stage.chain.id}/'
-    //     '${state.stage.id}/'
-    //     '${user.id}/'
-    //     '${state.id}');
+    storage = firebase_storage.FirebaseStorage.instance.ref('${state.stage.chain.campaign}/'
+        '${state.stage.chain.id}/'
+        '${state.stage.id}/'
+        '${user.id}/'
+        '${state.id}');
   }
 
   Future<Map<String, dynamic>> getDynamicJson(

@@ -108,7 +108,6 @@ class CardBody extends StatelessWidget {
         uiSchema: hasCardData ? task.cardUiSchema! : task.uiSchema!,
         formData: task.responses ?? {},
         disabled: true,
-        storage: context.read<AppBloc>().storage,
     );
   }
 }

@@ -33,7 +33,7 @@ class IdTitleCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 14.0),
             child: Column(
               children: [
                 ListTile(
@@ -49,7 +49,7 @@ class IdTitleCard extends StatelessWidget {
                   title: Text(
                     title,
                     textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   subtitle: Text(description),
                   trailing: Column(
@@ -77,7 +77,9 @@ class IdTitleCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Divider(
+                Container(
+                  width: double.infinity,
+                  height: 1,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ],
