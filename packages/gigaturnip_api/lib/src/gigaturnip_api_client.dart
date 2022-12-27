@@ -12,13 +12,7 @@ class GigaTurnipApiClient {
   final Dio _httpClient;
 
   GigaTurnipApiClient({Dio? httpClient})
-      : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE',
-        'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With, Accept, X-Auth-Token, Authorization',
-      }
-      ));
+      : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl));
 
   Future<PaginationWrapper<Campaign>> getCampaigns({Map<String, dynamic>? query}) async {
     try {

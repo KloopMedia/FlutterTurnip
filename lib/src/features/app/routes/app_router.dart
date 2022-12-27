@@ -41,7 +41,10 @@ class AppRouter {
         name: 'login',
         path: '/login',
         builder: (BuildContext context, GoRouterState state) {
-          return const LoginPage();
+          final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
+          return LoginPage(
+            simpleViewMode: simpleViewMode,
+          );
         },
       ),
       GoRoute(

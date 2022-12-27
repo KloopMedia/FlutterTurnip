@@ -7,7 +7,8 @@ import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import "package:gigaturnip/extensions/buildcontext/loc.dart";
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  final bool simpleViewMode;
+  const LoginForm({Key? key, required this.simpleViewMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,10 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            _GoogleLoginButton(),
-            SizedBox(height: 10),
-            _AppleLoginButton(),
+          children: [
+            const _GoogleLoginButton(),
+            const SizedBox(height: 10),
+            if (simpleViewMode) const _AppleLoginButton(),
           ],
         ),
       ),
