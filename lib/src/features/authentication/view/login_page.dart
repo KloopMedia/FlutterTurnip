@@ -12,7 +12,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Кирүү үчүн "Google аркылуу катталуу" баскычын басыңыз')),//Text(context.loc.login)),
+      appBar: (simpleViewMode)
+          ? AppBar(elevation: 0.0, backgroundColor: Colors.white)
+          : AppBar(title: Text(context.loc.login), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: LoginForm(simpleViewMode: simpleViewMode),

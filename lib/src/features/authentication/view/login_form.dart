@@ -28,7 +28,7 @@ class LoginForm extends StatelessWidget {
           children: [
             const _GoogleLoginButton(),
             const SizedBox(height: 10),
-            if (simpleViewMode) const _AppleLoginButton(),
+            (simpleViewMode) ? const Text('Кирүү үчүн "Google аркылуу катталуу" баскычын басыңыз') : const _AppleLoginButton(),
           ],
         ),
       ),
