@@ -5,15 +5,14 @@ import 'package:gigaturnip_api/gigaturnip_api.dart'
     hide Campaign, Task, Chain, TaskStage, Notification;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
+import 'interceptor.dart';
+import 'utilities/utilities.dart';
 
 enum TasksActions { listOpenTasks, listClosedTasks, listSelectableTasks }
 
 class GigaTurnipRepository {
   late final GigaTurnipApiClient _gigaTurnipApiClient;
 
-  List<Campaign> _userCampaigns = [];
-  List<Campaign> _selectableCampaigns = [];
   List<Task> _openedTasks = [];
   List<Task> _closedTasks = [];
   List<TaskStage> _userRelevantTaskStages = [];
@@ -25,7 +24,6 @@ class GigaTurnipRepository {
   bool _isLoading = false;
 
   final Duration _cacheValidDuration = const Duration(minutes: 30);
-  DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _tasksLastFetchTime = DateTime.fromMicrosecondsSinceEpoch(0);
   DateTime _userRelevantTaskStagesLastFetchTime = DateTime.fromMicrosecondsSinceEpoch(0);
 
@@ -37,55 +35,9 @@ class GigaTurnipRepository {
     _gigaTurnipApiClient = GigaTurnipApiClient(
       httpClient: Dio(BaseOptions(baseUrl: GigaTurnipApiClient.baseUrl))
         ..interceptors.add(
-          ApiInterceptors(authenticationRepository ?? AuthenticationRepository()),
+          ApiInterceptor(authenticationRepository ?? AuthenticationRepository()),
         ),
     );
-  }
-
-  bool _shouldRefreshFromApi(DateTime lastFetchTime, bool forceRefresh) {
-    return lastFetchTime.isBefore(DateTime.now().subtract(_cacheValidDuration)) || forceRefresh;
-  }
-
-  Future<void> refreshAllCampaigns() async {
-    final userCampaignsData = await _gigaTurnipApiClient.getUserCampaigns();
-    final userCampaigns = userCampaignsData.map((apiCampaign) {
-      return Campaign.fromApiModel(apiCampaign);
-    }).toList();
-
-    final selectableCampaignsData = await _gigaTurnipApiClient.getSelectableCampaigns();
-    final selectableCampaigns = selectableCampaignsData.map((apiCampaign) {
-      return Campaign.fromApiModel(apiCampaign);
-    }).toList();
-
-    _campaignLastFetchTime = DateTime.now();
-    _userCampaigns = userCampaigns;
-    _selectableCampaigns = selectableCampaigns;
-  }
-
-  Future<List<Campaign>> getCampaigns({
-    required CampaignsActions action,
-    bool forceRefresh = false,
-  }) async {
-    bool shouldRefreshFromApi =
-        _shouldRefreshFromApi(_campaignLastFetchTime, forceRefresh) || _userCampaigns.isEmpty;
-
-    if (shouldRefreshFromApi) {
-      await refreshAllCampaigns();
-    }
-    if (action == CampaignsActions.listUserCampaigns) {
-      return _userCampaigns;
-    } else {
-      return _selectableCampaigns;
-    }
-  }
-
-  Future<Campaign> getCampaignById(int id) async {
-    final campaign = await _gigaTurnipApiClient.getCampaignById(id);
-    return Campaign.fromApiModel(campaign);
-  }
-
-  Future<void> joinCampaign(int id) async {
-    _gigaTurnipApiClient.joinCampaign(id);
   }
 
   Future<void> refreshUserRelevantTaskStages(Campaign selectedCampaign) async {
@@ -106,11 +58,11 @@ class GigaTurnipRepository {
     required Campaign selectedCampaign,
     bool forceRefresh = false,
   }) async {
-    bool shouldRefreshFromApi =
-        _shouldRefreshFromApi(_userRelevantTaskStagesLastFetchTime, forceRefresh) ||
-            _userRelevantTaskStages.isEmpty;
+    bool shouldRefresh = true;
+        // _shouldRefreshFromApi(_userRelevantTaskStagesLastFetchTime, forceRefresh) ||
+        //     _userRelevantTaskStages.isEmpty;
 
-    if (shouldRefreshFromApi) {
+    if (shouldRefresh) {
       await refreshUserRelevantTaskStages(selectedCampaign);
     }
     return _userRelevantTaskStages;
@@ -262,10 +214,10 @@ class GigaTurnipRepository {
     required Campaign selectedCampaign,
     bool forceRefresh = false,
   }) async {
-    bool shouldRefreshFromApi =
-        _shouldRefreshFromApi(_tasksLastFetchTime, forceRefresh) || _openedTasks.isEmpty;
+    bool shouldRefresh = true;
+        // shouldRefreshFromApi( _tasksLastFetchTime, forceRefresh) || _openedTasks.isEmpty;
 
-    if (shouldRefreshFromApi) {
+    if (shouldRefresh) {
       await refreshAllTasks(selectedCampaign, action);
     }
 
@@ -318,20 +270,5 @@ class GigaTurnipRepository {
 
   Future<void> requestTask(int id) async {
     await _gigaTurnipApiClient.requestTask(id: id);
-  }
-}
-
-class ApiInterceptors extends Interceptor {
-  final AuthenticationRepository _authenticationRepository;
-
-  ApiInterceptors(this._authenticationRepository);
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    var accessToken = await _authenticationRepository.token;
-
-    options.headers['Authorization'] = 'JWT $accessToken';
-
-    return handler.next(options);
   }
 }

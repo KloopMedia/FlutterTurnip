@@ -22,7 +22,7 @@ class TasksPage extends StatelessWidget {
   static Page page() => const MaterialPage<void>(child: TasksPage());
 
   Future<void> joinCampaign(BuildContext context, int id) async {
-    await context.read<GigaTurnipRepository>().joinCampaign(id);
+    await context.read<CampaignRepository>().joinCampaign(id);
   }
 
   Future<Campaign> loadCampaign(BuildContext context) async {
@@ -31,7 +31,7 @@ class TasksPage extends StatelessWidget {
         joinCampaign(context, campaignId!);
       }
       final appBloc = context.read<AppBloc>();
-      final campaign = await context.read<GigaTurnipRepository>().getCampaignById(campaignId!);
+      final campaign = await context.read<CampaignRepository>().getCampaignById(campaignId!);
       appBloc.add(AppSelectedCampaignChanged(campaign));
       return campaign;
     } else {

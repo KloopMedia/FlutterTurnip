@@ -8,7 +8,7 @@ part 'campaigns_state.dart';
 
 class CampaignsCubit extends Cubit<CampaignsState> {
   final AuthenticationRepository authenticationRepository;
-  final GigaTurnipRepository gigaTurnipRepository;
+  final CampaignRepository gigaTurnipRepository;
 
   CampaignsCubit({
     required this.gigaTurnipRepository,
