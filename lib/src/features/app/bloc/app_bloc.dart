@@ -8,7 +8,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -32,6 +31,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
+    on<DeleteAccountRequested>(_onDeleteAccount);
 
     userSubscription = _authenticationRepository.user.listen(
       (user) => add(AppUserChanged(user)),
@@ -155,5 +155,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           sharedPrefsAppLocale = AppLocales.kyrgyz;
       }
     }
+  }
+
+  void _onDeleteAccount(DeleteAccountRequested event, Emitter<AppState> emit) {
+    // TODO Add deletion request
   }
 }
