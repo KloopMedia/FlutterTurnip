@@ -15,10 +15,10 @@ Future<void> main() async {
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
   final gigaTurnipRepository = GigaTurnipRepository();
+  final campaignRepository = CampaignRepository();
   await SharedPreferences.getInstance();
 
   if (!kIsWeb) {
-    await Permission.microphone.request();
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   }
 
@@ -26,6 +26,7 @@ Future<void> main() async {
     App(
       authenticationRepository: authenticationRepository,
       gigaTurnipRepository: gigaTurnipRepository,
+      campaignRepository: campaignRepository,
     ),
   );
 }

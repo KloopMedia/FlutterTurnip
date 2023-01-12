@@ -6,7 +6,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart'
     hide Campaign, Task, Chain, TaskStage, Notification;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import 'interceptor.dart';
+import 'utilities/interceptor.dart';
 import 'utilities/utilities.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
