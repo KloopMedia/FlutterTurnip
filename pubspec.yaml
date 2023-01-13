@@ -51,6 +51,8 @@ dependencies:
     path: packages/authentication_repository
   gigaturnip_repository:
     path: packages/gigaturnip_repository
+  gigaturnip_api:
+    path: packages/gigaturnip_api
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   uniturnip:

@@ -14,15 +14,12 @@ class App extends StatelessWidget {
     Key? key,
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-    required CampaignRepository campaignRepository,
   })  : _authenticationRepository = authenticationRepository,
         _gigaTurnipRepository = gigaTurnipRepository,
-        _campaignRepository = campaignRepository,
         super(key: key);
 
   final AuthenticationRepository _authenticationRepository;
   final GigaTurnipRepository _gigaTurnipRepository;
-  final CampaignRepository _campaignRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +32,6 @@ class App extends StatelessWidget {
         RepositoryProvider<GigaTurnipRepository>(
           create: ((context) => _gigaTurnipRepository),
         ),
-        RepositoryProvider<CampaignRepository>(
-          create: ((context) => _campaignRepository),
-        )
       ],
       child: BlocProvider<AppBloc>(
         create: (_) => AppBloc(

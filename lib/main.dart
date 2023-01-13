@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -14,8 +14,9 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
-  final gigaTurnipRepository = GigaTurnipRepository();
-  final campaignRepository = CampaignRepository();
+  final dio = DioProvider.instance(authenticationRepository);
+  final gigaTurnipApiClient = GigaTurnipApiClient(dio);
+  final gigaTurnipRepository = GigaTurnipRepository(gigaTurnipApiClient);
   await SharedPreferences.getInstance();
 
   if (!kIsWeb) {
@@ -26,7 +27,6 @@ Future<void> main() async {
     App(
       authenticationRepository: authenticationRepository,
       gigaTurnipRepository: gigaTurnipRepository,
-      campaignRepository: campaignRepository,
     ),
   );
 }

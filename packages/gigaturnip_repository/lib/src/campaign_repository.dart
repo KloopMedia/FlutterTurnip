@@ -1,35 +1,22 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:dio/dio.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart'
-    hide Campaign, Task, Chain, TaskStage, Notification;
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 
-import 'utilities/interceptor.dart';
+import '../gigaturnip_repository.dart';
 import 'utilities/utilities.dart';
 
 enum CampaignsActions { listUserCampaigns, listSelectableCampaigns }
 
 class CampaignRepository {
-  late final GigaTurnipApiClient _gigaTurnipApiClient;
+  final api.GigaTurnipApiClient _gigaTurnipApiClient;
+
+  CampaignRepository(this._gigaTurnipApiClient);
 
   List<Campaign> _userCampaigns = [];
   List<Campaign> _selectableCampaigns = [];
 
   final Duration _cacheValidDuration = const Duration(minutes: 30);
   DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
-
-  CampaignRepository({
-    AuthenticationRepository? authenticationRepository,
-  }) {
-    _gigaTurnipApiClient = GigaTurnipApiClient(
-      httpClient: Dio(BaseOptions(baseUrl: GigaTurnipApiClient.baseUrl))
-        ..interceptors.add(
-          ApiInterceptor(authenticationRepository ?? AuthenticationRepository()),
-        ),
-    );
-  }
 
   Future<void> refreshAllCampaigns() async {
     final userCampaignsData = await _gigaTurnipApiClient.getUserCampaigns();
@@ -66,11 +53,11 @@ class CampaignRepository {
   }
 
   Future<Campaign> getCampaignById(int id) async {
-    final campaign = await _gigaTurnipApiClient.getCampaignById(id);
+    final campaign = await _gigaTurnipApiClient.getCampaignById(id.toString());
     return Campaign.fromApiModel(campaign);
   }
 
   Future<void> joinCampaign(int id) async {
-    _gigaTurnipApiClient.joinCampaign(id);
+    _gigaTurnipApiClient.joinCampaign(id.toString());
   }
 }
