@@ -258,7 +258,7 @@ class TasksCubit extends Cubit<TasksState> {
     final totalPages = gigaTurnipRepository.totalPages;
     print("filter in cubit");
     emit(state.copyWith(
-      // totalPages: totalPages,
+      totalPages: totalPages,
       availableTasks: tasks,
     ));
   }
