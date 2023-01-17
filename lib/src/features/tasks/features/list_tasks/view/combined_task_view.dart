@@ -26,7 +26,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
   @override
   initState() {
     context.read<TasksCubit>().initializeCombined();
-    context.read<ImportantNotificationsCubit>().getNotifications();
+    context.read<ImportantNotificationsCubit>().getLastTaskNotifications();
     _scrollController = ScrollController();
     super.initState();
   }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/features/notifications/view/notification_view.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/important_notifications_cubit.dart';
 import 'package:gigaturnip/src/widgets/cards/form_card.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../app/app.dart';
 
 typedef ItemCallback = void Function(dynamic item);
 typedef RefreshCallback = void Function();
@@ -39,6 +40,8 @@ class CombinedTasksListView extends StatelessWidget {
   final IconData iconToDo = Icons.today_rounded;
   final IconData iconDone = Icons.assignment_turned_in_outlined;
 
+  final query = 'simple=true';
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -48,31 +51,29 @@ class CombinedTasksListView extends StatelessWidget {
       child: CustomScrollView(
         controller: scrollController,
         slivers: [
-          BlocBuilder<ImportantNotificationsCubit, ImportantNotificationsState>(
-            builder: (context, state) {
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    final item = state.notifications[index];
-                    return ItemCard(
-                        item: item,
-                        onTap: (notification) {
-                          context
-                              .read<ImportantNotificationsCubit>()
-                              .onReadNotification(notification.id);
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (context) => NotificationView(
-                                      notification: notification, campaignName: '')))
-                              .then((value) =>
-                                  context.read<ImportantNotificationsCubit>().getNotifications());
-                        });
-                  },
-                  childCount: state.notifications.length,
-                ),
-              );
-            },
-          ),
+          // BlocBuilder<ImportantNotificationsCubit, ImportantNotificationsState>(
+          //   builder: (context, state) {
+          //     return SliverList(
+          //       delegate: SliverChildBuilderDelegate(
+          //         (BuildContext context, int index) {
+          //           final item = state.notifications[index];
+          //           return ItemCard(
+          //               item: item,
+          //               onTap: (notification) {
+          //                 context.read<ImportantNotificationsCubit>().onReadNotification(notification.id);
+          //                 Navigator.of(context)
+          //                     .push(MaterialPageRoute(
+          //                         builder: (context) => NotificationView(notification: notification, campaignName: '')))
+          //                     .then((value) => context.read<ImportantNotificationsCubit>().getNotifications());
+          //               }
+          //           );
+          //         },
+          //         childCount: state.notifications.length,
+          //       ),
+          //     );
+          //   },
+          // ),
+
           CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
           //SliverTaskListHeader(title: context.loc.todo),
           SliverTaskList(
@@ -81,12 +82,25 @@ class CombinedTasksListView extends StatelessWidget {
             icon: iconToDo,
             emptyTitle: context.loc.no_uncompleted_tasks,
           ),
-          //SliverTaskListHeader(title: context.loc.receive),
-          SliverTaskList(
-            items: availableTasks,
-            onTap: onRequest,
-            icon: iconDone,
-            emptyTitle: context.loc.no_available_tasks,
+          BlocBuilder<ImportantNotificationsCubit, ImportantNotificationsState>(
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                      final item = state.notifications[index];
+                      return ItemCard(
+                        item: item,
+                        onTap: (notification) async {
+                          //context.read<AppBloc>().add(AppSelectedTaskChanged(item.receiverTask));
+                          final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+                          context.go('/campaign/${selectedCampaign.id}/tasks/${item.receiverTask}?$query');
+                        },
+                      );
+                  },
+                  childCount: 5,
+                ),
+              );
+            },
           ),
           //SliverTaskListHeader(title: context.loc.done),
           SliverTaskList(
@@ -94,6 +108,13 @@ class CombinedTasksListView extends StatelessWidget {
             onTap: onTap,
             icon: iconDone,
             emptyTitle: context.loc.no_completed_tasks,
+          ),
+          //SliverTaskListHeader(title: context.loc.receive),
+          SliverTaskList(
+            items: availableTasks,
+            onTap: onRequest,
+            icon: iconDone,
+            emptyTitle: context.loc.no_available_tasks,
           ),
           if (showLoader)
             const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
@@ -265,6 +286,7 @@ class ItemCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const Text('Кененирээк...', style: TextStyle(decoration: TextDecoration.underline, color: Colors.lightBlue)),
                       const SizedBox(height: 10.0,),
                       Container(
                         width: double.infinity,

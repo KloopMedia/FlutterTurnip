@@ -24,6 +24,7 @@ EventTransformer<T> debounce<T>(Duration duration) {
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final AuthUser user;
+  final int campaign;
   Timer? timer;
   TaskState? _cache;
   firebase_storage.Reference? storage;
@@ -31,6 +32,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc({
     required this.gigaTurnipRepository,
     required this.user,
+    required this.campaign,
     required Task selectedTask,
     this.storage,
   }) : super(TaskState.fromTask(selectedTask, TaskStatus.initialized)) {
@@ -114,7 +116,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final previousTasks = await _getPreviousTasks(state.id);
     final List<Task> integratedTasks = state.isIntegrated ? await getIntegratedTasks(state.id) : [];
 
-    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
+    final notifications = await gigaTurnipRepository.getNotifications(campaign, false) ?? [];
+    final List<Notifications> taskNotifications = [];
+    for (var item in notifications) {
+      if (item.receiverTask == state.id) {
+        taskNotifications.add(item);
+      }
+    }
+
+    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks, notifications: taskNotifications));
   }
 
   // Future<FileModel> getFile(path) async {
