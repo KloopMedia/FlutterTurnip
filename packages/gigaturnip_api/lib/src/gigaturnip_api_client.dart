@@ -421,7 +421,6 @@ class GigaTurnipApiClient {
   Future<PaginationWrapper<Notification>> getLastTaskNotifications({Map<String, dynamic>? query}) async {
     try {
       final response = await _httpClient.get(lastTaskNotificationsActionRoute, queryParameters: query);
-      print('>> order: $response');
       return PaginationWrapper<Notification>.fromJson(
         response.data,
             (json) => Notification.fromJson(json as Map<String, dynamic>),

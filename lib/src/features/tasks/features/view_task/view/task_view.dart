@@ -293,6 +293,7 @@ class _TaskViewState extends State<TaskView> {
                         schema: state.schema!,
                         uiSchema: state.uiSchema,
                         formData: state.responses ?? {},
+                        disabled: state.complete,
                         storage: taskBloc.storage,
                         onChange: (Map<String, dynamic> data, String path) {
                           taskBloc.add(UpdateTaskEvent(data));
