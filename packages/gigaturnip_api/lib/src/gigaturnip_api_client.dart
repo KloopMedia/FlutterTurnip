@@ -6,7 +6,7 @@ part 'gigaturnip_api_client.g.dart';
 
 @RestApi(baseUrl: "https://journal-bb5e3.uc.r.appspot.com/api/v1/")
 abstract class GigaTurnipApiClient {
-  factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _RestClient;
+  factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _GigaTurnipApiClient;
 
   // Campaign methods
 
@@ -20,10 +20,10 @@ abstract class GigaTurnipApiClient {
   Future<List<Campaign>> getSelectableCampaigns();
 
   @GET("$campaignsRoute/{id}")
-  Future<Campaign> getCampaignById(@Path("id") String id);
+  Future<Campaign> getCampaignById(@Path("id") int id);
 
   @GET("$campaignsRoute/{id}/$joinCampaignActionRoute")
-  Future<void> joinCampaign(@Path("id") String id);
+  Future<void> joinCampaign(@Path("id") int id);
 
   // Task methods
 
@@ -37,28 +37,28 @@ abstract class GigaTurnipApiClient {
   Future<List<Task>> getUserRelevantTasks(@Queries() Map<String, dynamic> query);
 
   @GET("$tasksRoute/{id}")
-  Future<Task> getTaskById(@Path("id") String id);
+  Future<Task> getTaskById(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$integratedTasksActionRoute")
-  Future<List<Task>> getIntegratedTasks(@Path("id") String id);
+  Future<List<Task>> getIntegratedTasks(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$displayedPreviousTasksActionRoute")
-  Future<List<Task>> getDisplayedPreviousTasks(@Path("id") String id);
+  Future<List<Task>> getDisplayedPreviousTasks(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$openPreviousTaskActionRoute")
-  Future<Task> openPreviousTask(@Path("id") String id);
+  Future<Task> openPreviousTask(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$releaseTaskActionRoute")
-  Future<void> releaseTask(@Path("id") String id);
+  Future<void> releaseTask(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$requestTaskActionRoute")
-  Future<void> requestTask(@Path("id") String id);
+  Future<void> requestTask(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$triggerWebhookActionRoute")
-  Future<void> triggerTaskWebhook(@Path("id") String id);
+  Future<void> triggerTaskWebhook(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$reopenTaskActionRoute")
-  Future<void> reopenTask(@Path("id") String id);
+  Future<void> reopenTask(@Path("id") int id);
 
   // Notification methods
 
@@ -69,5 +69,5 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Notification>> getUserNotifications(@Queries() Map<String, dynamic> query);
 
   @GET("$notificationsRoute/{id}/$openNotificationActionRoute")
-  Future<void> openNotification(@Path("id") String id);
+  Future<void> openNotification(@Path("id") int id);
 }

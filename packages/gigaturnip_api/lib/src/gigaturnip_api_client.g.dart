@@ -10,8 +10,8 @@ part of 'gigaturnip_api_client.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _RestClient implements GigaTurnipApiClient {
-  _RestClient(
+class _GigaTurnipApiClient implements GigaTurnipApiClient {
+  _GigaTurnipApiClient(
     this._dio, {
     this.baseUrl,
   }) {
