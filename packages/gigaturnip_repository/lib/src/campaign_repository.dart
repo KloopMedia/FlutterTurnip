@@ -18,38 +18,36 @@ class CampaignRepository {
   final Duration _cacheValidDuration = const Duration(minutes: 30);
   DateTime _campaignLastFetchTime = DateTime.fromMillisecondsSinceEpoch(0);
 
-  Future<void> refreshAllCampaigns() async {
-    final userCampaignsData = await _gigaTurnipApiClient.getUserCampaigns();
-    final userCampaigns = userCampaignsData.map((apiCampaign) {
-      return Campaign.fromApiModel(apiCampaign);
-    }).toList();
-
-    final selectableCampaignsData = await _gigaTurnipApiClient.getSelectableCampaigns();
-    final selectableCampaigns = selectableCampaignsData.map((apiCampaign) {
-      return Campaign.fromApiModel(apiCampaign);
-    }).toList();
-
-    _campaignLastFetchTime = DateTime.now();
-    _userCampaigns = userCampaigns;
-    _selectableCampaigns = selectableCampaigns;
-  }
-
-  Future<List<Campaign>> getCampaigns({
-    required CampaignsActions action,
-    bool forceRefresh = false,
-  }) async {
-    bool shouldRefresh =
-        shouldRefreshFromApi(_cacheValidDuration, _campaignLastFetchTime, forceRefresh) ||
-            _userCampaigns.isEmpty;
+  Future<List<Campaign>> getUserCampaigns([forceRefresh = false]) async {
+    bool shouldRefresh = shouldRefreshFromApi(
+      _cacheValidDuration,
+      _campaignLastFetchTime,
+      forceRefresh,
+    );
 
     if (shouldRefresh) {
-      await refreshAllCampaigns();
+      final userCampaignsData = await _gigaTurnipApiClient.getUserCampaigns();
+      _userCampaigns = userCampaignsData.map(Campaign.fromApiModel).toList();
+      _campaignLastFetchTime = DateTime.now();
     }
-    if (action == CampaignsActions.listUserCampaigns) {
-      return _userCampaigns;
-    } else {
-      return _selectableCampaigns;
+
+    return _userCampaigns;
+  }
+
+  Future<List<Campaign>> getSelectableCampaigns([forceRefresh = false]) async {
+    bool shouldRefresh = shouldRefreshFromApi(
+      _cacheValidDuration,
+      _campaignLastFetchTime,
+      forceRefresh,
+    );
+
+    if (shouldRefresh) {
+      final selectableCampaignsData = await _gigaTurnipApiClient.getSelectableCampaigns();
+      _selectableCampaigns = selectableCampaignsData.map(Campaign.fromApiModel).toList();
+      _campaignLastFetchTime = DateTime.now();
     }
+
+    return _selectableCampaigns;
   }
 
   Future<Campaign> getCampaignById(int id) async {
