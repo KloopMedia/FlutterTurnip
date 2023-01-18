@@ -4,6 +4,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_view.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import '../../../../notifications/cubit/notifications_cubit.dart';
 
 class TaskPage extends StatelessWidget {
   final int? taskId;
@@ -44,6 +45,16 @@ class TaskPage extends StatelessWidget {
           ),
           child: TaskView(simpleViewMode: simpleViewMode),
         );
+
+        // return BlocProvider<TaskBloc>(
+        //   create: (context) => TaskBloc(
+        //     selectedTask: snapshot.data!,
+        //     gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+        //     user: context.read<AppBloc>().state.user!,
+        //     campaign: context.read<AppBloc>().state.selectedCampaign!.id,
+        //   ),
+        //   child: TaskView(simpleViewMode: simpleViewMode),
+        // );
       },
     );
   }

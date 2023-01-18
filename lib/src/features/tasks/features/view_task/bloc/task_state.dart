@@ -15,7 +15,6 @@ class TaskState extends Task with EquatableMixin {
   final TaskStatus taskStatus;
   final List<Task> integratedTasks;
   final bool isRichTextViewed;
-  final List<Notifications> notifications;
 
   TaskState({
     this.nextTask,
@@ -38,7 +37,6 @@ class TaskState extends Task with EquatableMixin {
     required List<Map<String, dynamic>>? dynamicTarget,
     this.integratedTasks = const [],
     this.isRichTextViewed = false,
-    this.notifications = const [],
   }) : super(
           id: id,
           name: name,
@@ -92,7 +90,6 @@ class TaskState extends Task with EquatableMixin {
     Map<String, dynamic>? uiSchema,
     List<Task>? integratedTasks,
     bool? isRichTextViewed,
-    List<Notifications>? notifications,
   }) {
     return TaskState(
       previousTasks: previousTasks ?? this.previousTasks,
@@ -115,7 +112,6 @@ class TaskState extends Task with EquatableMixin {
       dynamicTarget: dynamicTarget,
       integratedTasks: integratedTasks ?? this.integratedTasks,
       isRichTextViewed: isRichTextViewed ?? this.isRichTextViewed,
-      notifications: notifications ?? this.notifications,
     );
   }
 }

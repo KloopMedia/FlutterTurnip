@@ -97,7 +97,7 @@ class CombinedTasksListView extends StatelessWidget {
                         },
                       );
                   },
-                  childCount: 5,
+                  childCount: (state.notifications.length < 5) ? state.notifications.length : 5,
                 ),
               );
             },

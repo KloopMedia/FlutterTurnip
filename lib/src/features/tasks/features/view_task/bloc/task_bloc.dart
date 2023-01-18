@@ -116,15 +116,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final previousTasks = await _getPreviousTasks(state.id);
     final List<Task> integratedTasks = state.isIntegrated ? await getIntegratedTasks(state.id) : [];
 
-    final notifications = await gigaTurnipRepository.getNotifications(campaign, false) ?? [];
-    final List<Notifications> taskNotifications = [];
-    for (var item in notifications) {
-      if (item.receiverTask == state.id) {
-        taskNotifications.add(item);
-      }
-    }
-
-    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks, notifications: taskNotifications));
+    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
   }
 
   // Future<FileModel> getFile(path) async {
