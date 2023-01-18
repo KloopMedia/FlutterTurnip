@@ -36,13 +36,23 @@ class TaskPage extends StatelessWidget {
           );
         }
 
-        return BlocProvider<TaskBloc>(
-          create: (context) => TaskBloc(
-            selectedTask: snapshot.data!,
-            gigaTurnipRepository: context.read<GigaTurnipRepository>(),
-            user: context.read<AppBloc>().state.user!,
-            campaign: context.read<AppBloc>().state.selectedCampaign!.id,
-          ),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<TaskBloc>(
+              create: (context) => TaskBloc(
+                selectedTask: snapshot.data!,
+                gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+                user: context.read<AppBloc>().state.user!,
+                campaign: context.read<AppBloc>().state.selectedCampaign!.id,
+              ),
+            ),
+            BlocProvider<NotificationsCubit>(
+              create: (context) => NotificationsCubit(
+                gigaTurnipRepository: context.read<GigaTurnipRepository>(),
+                selectedCampaign: context.read<AppBloc>().state.selectedCampaign!,
+              )
+            ),
+          ],
           child: TaskView(simpleViewMode: simpleViewMode),
         );
 
