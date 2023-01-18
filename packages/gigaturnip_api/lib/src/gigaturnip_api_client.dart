@@ -5,9 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
-  static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
-  // static const baseUrl = 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com';
-  //static const baseUrl = 'http://127.0.0.1:8000';
+  static const baseUrl = 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com';
+  // static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
+
+  // static const baseUrl = 'http://127.0.0.1:8000';
 
   final Dio _httpClient;
 
@@ -413,6 +414,22 @@ class GigaTurnipApiClient {
       await _httpClient.get(
         notificationsRoute + id.toString() + openNotificationActionRoute,
         queryParameters: query,
+      );
+    } on DioError catch (e) {
+      print(e);
+      throw GigaTurnipApiRequestException.fromDioError(e);
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<PaginationWrapper<Notification>> getLastTaskNotifications({Map<String, dynamic>? query}) async {
+    try {
+      final response = await _httpClient.get(lastTaskNotificationsActionRoute, queryParameters: query);
+      return PaginationWrapper<Notification>.fromJson(
+        response.data,
+            (json) => Notification.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
       print(e);

@@ -7,8 +7,9 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class TaskPage extends StatelessWidget {
   final int? taskId;
+  final bool simpleViewMode;
 
-  const TaskPage({Key? key, this.taskId}) : super(key: key);
+  const TaskPage({Key? key, this.taskId, this.simpleViewMode = false}) : super(key: key);
 
   Future<Task> loadTask(BuildContext context) async {
     if (taskId != null) {
@@ -39,8 +40,9 @@ class TaskPage extends StatelessWidget {
             selectedTask: snapshot.data!,
             gigaTurnipRepository: context.read<GigaTurnipRepository>(),
             user: context.read<AppBloc>().state.user!,
+            campaign: context.read<AppBloc>().state.selectedCampaign!.id,
           ),
-          child: const TaskView(),
+          child: TaskView(simpleViewMode: simpleViewMode),
         );
       },
     );

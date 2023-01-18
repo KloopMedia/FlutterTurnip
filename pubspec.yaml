@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.8+21
+version: 1.0.10+23
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -53,11 +53,16 @@ dependencies:
     path: packages/gigaturnip_repository
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
-  uniturnip:
+#  uniturnip:
 #    path: ../uniturnip
+#    git:
+#      url: https://github.com/KloopMedia/uniturnip.git
+#      ref: test_integration_with_flutterturnip
+  flutter_json_schema_form:
+#    path: ../flutter-jsonschema-form
     git:
-      url: https://github.com/KloopMedia/uniturnip.git
-      ref: test_integration_with_flutterturnip
+      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
+      ref: master
   shared_preferences: 2.0.15
   flutter_launcher_icons: ^0.9.3
   firebase_crashlytics: ^2.8.7
@@ -70,7 +75,13 @@ dependencies:
   rxdart: ^0.27.7
 
 dependency_overrides:
-  firebase_core_platform_interface: 4.5.1
+  firebase_core_platform_interface: 4.5.2
+  permission_handler: 10.2.0
+  firebase_core: 2.3.0
+  firebase_storage: 11.0.6
+  firebase_auth: 4.2.0
+  firebase_analytics: 10.0.7
+  firebase_crashlytics: 3.0.7
 
 dev_dependencies:
   flutter_test:
