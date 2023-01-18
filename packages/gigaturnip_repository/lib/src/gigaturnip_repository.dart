@@ -31,6 +31,10 @@ class GigaTurnipRepository {
 
   int get totalPages => _totalPages;
 
+  Future<Response> deleteUser() async {
+    return await _gigaTurnipApiClient.deleteUser();
+  }
+
   GigaTurnipRepository({
     AuthenticationRepository? authenticationRepository,
   }) {

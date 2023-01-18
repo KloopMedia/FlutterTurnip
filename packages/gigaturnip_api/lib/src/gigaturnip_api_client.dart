@@ -6,13 +6,18 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
   static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
-
+  // static const baseUrl = 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com';
   //static const baseUrl = 'http://127.0.0.1:8000';
 
   final Dio _httpClient;
 
   GigaTurnipApiClient({Dio? httpClient})
       : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl));
+
+  // User methods
+  Future<Response> deleteUser() async {
+    return await _httpClient.get(deleteUserRoute);
+  }
 
   // Campaign methods
   Future<PaginationWrapper<Campaign>> getCampaigns({Map<String, dynamic>? query}) async {

@@ -8,10 +8,12 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
+
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
+  final GigaTurnipRepository _gigaTurnipRepository;
   late final StreamSubscription<AuthUser> userSubscription;
   AppLocales? sharedPrefsAppLocale;
 
@@ -19,6 +21,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
   })  : _authenticationRepository = authenticationRepository,
+        _gigaTurnipRepository = gigaTurnipRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty
               ? AppStateLoggedIn(user: authenticationRepository.currentUser)
@@ -157,7 +160,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  void _onDeleteAccount(DeleteAccountRequested event, Emitter<AppState> emit) {
-    // TODO Add deletion request
+  void _onDeleteAccount(DeleteAccountRequested event, Emitter<AppState> emit) async {
+    final response = await _gigaTurnipRepository.deleteUser();
+    if (response.statusCode == 200) {
+      unawaited(_authenticationRepository.logOut());
+    }
   }
 }
