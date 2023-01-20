@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/utilities/dialogs/delete_account_dialog.dart';
-import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/app/app.dart';
+import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -131,16 +131,12 @@ class AppDrawer extends StatelessWidget {
                       margin: const EdgeInsets.all(5),
                       width: double.infinity,
                       child: ElevatedButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
                         onPressed: () async {
-                          final shouldLogout = await deleteAccountDialog(context);
-                          if (shouldLogout) {
-                            bloc.add(DeleteAccountRequested());
-                          }
+                          context.push('/settings');
                         },
-                        child: Text(
-                          context.loc.delete_account_button,
-                          style: const TextStyle(fontSize: 20),
+                        child: const Text(
+                          'Settings',
+                          style: TextStyle(fontSize: 20),
                         ),
                       ),
                     ),

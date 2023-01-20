@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/features/settings/view/settings_page.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/view/task_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,6 +48,9 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(name: 'settings', path: '/settings', builder: (BuildContext context, GoRouterState state) {
+        return const SettingsPage();
+      }),
       GoRoute(
         name: 'campaign',
         path: '/',
