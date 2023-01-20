@@ -134,9 +134,9 @@ class AppDrawer extends StatelessWidget {
                         onPressed: () async {
                           context.push('/settings');
                         },
-                        child: const Text(
-                          'Settings',
-                          style: TextStyle(fontSize: 20),
+                        child: Text(
+                          context.loc.settings,
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                     ),
