@@ -132,10 +132,10 @@ class _TasksViewState extends State<TasksView> {
                 onTap: (item) async {
                   final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
                   if (item is TaskStage) {
-                    final task = await context.read<TasksCubit>().createTask(item);
-                    if (!mounted) return;
-                    context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+                    // final task = await context.read<TasksCubit>().createTask(item);
+                    // if (!mounted) return;
+                    // context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+                    // context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
                   } else {
                     context.read<TasksCubit>().requestTask(item);
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));

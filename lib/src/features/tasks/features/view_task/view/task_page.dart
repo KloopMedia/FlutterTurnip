@@ -10,23 +10,23 @@ class TaskPage extends StatelessWidget {
 
   const TaskPage({Key? key, this.taskId}) : super(key: key);
 
-  Future<Task> loadTask(BuildContext context) async {
-    if (taskId != null) {
-      final appBloc = context.read<AppBloc>();
-      final task = await context.read<GigaTurnipRepository>().getTask(taskId!);
-      appBloc.add(AppSelectedTaskChanged(task));
-      return task;
-    } else {
-      return context.read<AppBloc>().state.selectedTask!;
-    }
-  }
+  // Future<Task> loadTask(BuildContext context) async {
+  //   if (taskId != null) {
+  //     final appBloc = context.read<AppBloc>();
+  //     // final task = await context.read<GigaTurnipRepository>().getTask(taskId!);
+  //     // appBloc.add(AppSelectedTaskChanged(task));
+  //     // return task;
+  //   } else {
+  //     return context.read<AppBloc>().state.selectedTask!;
+  //   }
+  // }
 
   static Page page() => const MaterialPage<void>(child: TaskPage());
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Task>(
-      future: loadTask(context),
+      // future: loadTask(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Center(

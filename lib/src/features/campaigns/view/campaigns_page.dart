@@ -39,7 +39,7 @@ class CampaignsPage extends StatelessWidget {
       ),
       body: BlocProvider<CampaignsCubit>(
         create: (context) => CampaignsCubit(
-          gigaTurnipRepository: context.read<GigaTurnipRepository>().campaign(),
+          gigaTurnipRepository: context.read<GigaTurnipRepository>(),
           authenticationRepository: context.read<AuthenticationRepository>(),
         ),
         child: CampaignsView(simpleViewMode: simpleViewMode),

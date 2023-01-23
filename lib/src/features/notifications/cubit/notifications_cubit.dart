@@ -31,8 +31,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   Future<List<Notifications>?> _getNotifications(bool viewed) async {
     try {
-      return await gigaTurnipRepository.getNotifications(
-          selectedCampaign.id, viewed);
+      // return await gigaTurnipRepository.getNotifications(
+      //     selectedCampaign.id, viewed);
     } on GigaTurnipApiRequestException catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.error,
@@ -76,7 +76,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   void onReadNotification(int id) async {
-    await gigaTurnipRepository.getOpenNotification(id);
+    // await gigaTurnipRepository.getOpenNotification(id);
   }
 
 }

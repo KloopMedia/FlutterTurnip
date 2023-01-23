@@ -35,7 +35,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     timer = Timer.periodic(const Duration(seconds: 20), (timer) {
       if (_cache != state && !state.complete) {
         _cache = state;
-        _saveTask(state);
+        // _saveTask(state);
       }
     });
     on<InitializeTaskEvent>(_onInitializeTask);
@@ -52,26 +52,26 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
-  Future<Map<String, dynamic>> getDynamicJson(
-      int id, int taskId, Map<String, dynamic>? data) async {
-    return await gigaTurnipRepository.getDynamicJsonTaskStage(id, taskId, data);
-  }
-
-  Future<List<Task>> getIntegratedTasks(int id) async {
-    return await gigaTurnipRepository.getIntegratedTasks(id);
-  }
-
-  Future<Task> _getTask(int id) async {
-    return await gigaTurnipRepository.getTask(id);
-  }
-
-  Future<int?> _saveTask(Task task) async {
-    return await gigaTurnipRepository.updateTask(task);
-  }
-
-  Future<List<Task>> _getPreviousTasks(int id) async {
-    return gigaTurnipRepository.getPreviousTasks(id);
-  }
+  // Future<Map<String, dynamic>> getDynamicJson(
+  //     int id, int taskId, Map<String, dynamic>? data) async {
+  //   return await gigaTurnipRepository.getDynamicJsonTaskStage(id, taskId, data);
+  // }
+  //
+  // Future<List<Task>> getIntegratedTasks(int id) async {
+  //   return await gigaTurnipRepository.getIntegratedTasks(id);
+  // }
+  //
+  // Future<Task> _getTask(int id) async {
+  //   return await gigaTurnipRepository.getTask(id);
+  // }
+  //
+  // Future<int?> _saveTask(Task task) async {
+  //   return await gigaTurnipRepository.updateTask(task);
+  // }
+  //
+  // Future<List<Task>> _getPreviousTasks(int id) async {
+  //   return gigaTurnipRepository.getPreviousTasks(id);
+  // }
 
   void _onUpdateTask(UpdateTaskEvent event, Emitter<TaskState> emit) {
     emit(state.copyWith(responses: event.formData));
@@ -81,18 +81,18 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final newState = state.copyWith(responses: event.formData, complete: true);
     emit(newState);
     print('submit');
-    final nextTaskId = await _saveTask(newState);
-    if (nextTaskId != null) {
-      final nextTask = await _getTask(nextTaskId);
-      emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
-    } else {
-      emit(newState.copyWith(taskStatus: TaskStatus.redirectToTasksList));
-    }
+    // final nextTaskId = await _saveTask(newState);
+    // if (nextTaskId != null) {
+    //   final nextTask = await _getTask(nextTaskId);
+    //   emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
+    // } else {
+    //   emit(newState.copyWith(taskStatus: TaskStatus.redirectToTasksList));
+    // }
   }
 
   void _onExitTask(ExitTaskEvent event, Emitter<TaskState> emit) async {
     if (!state.complete) {
-      await _saveTask(state);
+      // await _saveTask(state);
     }
     emit(state.copyWith(taskStatus: TaskStatus.redirectToTasksList));
   }
@@ -104,10 +104,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onInitializeTask(InitializeTaskEvent event, Emitter<TaskState> emit) async {
-    final previousTasks = await _getPreviousTasks(state.id);
-    final List<Task> integratedTasks = state.isIntegrated ? await getIntegratedTasks(state.id) : [];
-
-    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
+    // final previousTasks = await _getPreviousTasks(state.id);
+    // final List<Task> integratedTasks = state.isIntegrated ? await getIntegratedTasks(state.id) : [];
+    //
+    // emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
   }
 
   Future<FileModel> getFile(path) async {
@@ -230,20 +230,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
-    emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
-    final schema = await getDynamicJson(state.stage.id, state.id, event.response);
-    // print(schema);
-    emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+    // emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
+    // final schema = await getDynamicJson(state.stage.id, state.id, event.response);
+    // // print(schema);
+    // emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
   }
 
   void _onGenerateIntegratedForm(GenerateIntegratedForm event, Emitter<TaskState> emit) async {
-    await gigaTurnipRepository.triggerWebhook(state.id);
-    final task = await _getTask(state.id);
-    emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.triggerWebhook));
-    emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.initialized));
+    // // await gigaTurnipRepository.triggerWebhook(state.id);
+    // final task = await _getTask(state.id);
+    // emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.triggerWebhook));
+    // emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.initialized));
   }
 
   void _onUpdateIntegratedTask(UpdateIntegratedTask event, Emitter<TaskState> emit) {
-    _saveTask(event.task);
+    // _saveTask(event.task);
   }
 }

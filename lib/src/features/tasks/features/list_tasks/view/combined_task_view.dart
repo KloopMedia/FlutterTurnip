@@ -100,11 +100,11 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
               context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
             },
             onCreate: (item) async {
-              final task = await context.read<TasksCubit>().createTask(item);
+              // final task = await context.read<TasksCubit>().createTask(item);
               if (!mounted) return;
-              context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-              context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
+              // context.read<AppBloc>().add(AppSelectedTaskChanged(task));
+              // final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              // context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}?$query');
             },
             onRequest: (item) async {
               await context.read<TasksCubit>().requestTask(item);

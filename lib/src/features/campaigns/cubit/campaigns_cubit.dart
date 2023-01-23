@@ -8,7 +8,7 @@ part 'campaigns_state.dart';
 
 class CampaignsCubit extends Cubit<CampaignsState> {
   final AuthenticationRepository authenticationRepository;
-  final CampaignRepository gigaTurnipRepository;
+  final GigaTurnipRepository gigaTurnipRepository;
 
   CampaignsCubit({
     required this.gigaTurnipRepository,
@@ -18,13 +18,8 @@ class CampaignsCubit extends Cubit<CampaignsState> {
   void loadCampaigns({bool forceRefresh = false}) async {
     emit(state.copyWith(status: CampaignsStatus.loading));
     try {
-      final campaigns = await gigaTurnipRepository.getCampaigns(
-        action: CampaignsActions.listUserCampaigns,
-        forceRefresh: forceRefresh,
-      );
-      final availableCampaigns = await gigaTurnipRepository.getCampaigns(
-        action: CampaignsActions.listSelectableCampaigns,
-      );
+      final campaigns = await gigaTurnipRepository.campaign().getUserCampaigns();
+      final availableCampaigns = await gigaTurnipRepository.campaign().getSelectableCampaigns();
       emit(state.copyWith(
         campaigns: campaigns,
         availableCampaigns: availableCampaigns,
@@ -48,6 +43,6 @@ class CampaignsCubit extends Cubit<CampaignsState> {
   }
 
   Future<void> joinCampaign(Campaign campaign) async {
-    await gigaTurnipRepository.joinCampaign(campaign.id);
+    await gigaTurnipRepository.campaign().joinCampaign(campaign.id);
   }
 }
