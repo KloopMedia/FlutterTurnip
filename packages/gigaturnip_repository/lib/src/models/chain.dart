@@ -1,14 +1,20 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Chain;
 
 part 'chain.g.dart';
 
 @JsonSerializable(explicitToJson: true)
+@HiveType(typeId: 2)
 class Chain extends Equatable {
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String description;
+  @HiveField(3)
   final int campaign;
 
   const Chain({

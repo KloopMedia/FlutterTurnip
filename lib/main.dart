@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,10 @@ Future<void> main() async {
   await authenticationRepository.user.first;
   final gigaTurnipRepository = GigaTurnipRepository();
   await SharedPreferences.getInstance();
+  Hive.registerAdapter(TaskAdapter());
+  Hive.registerAdapter(TaskStageAdapter());
+  Hive.registerAdapter(ChainAdapter());
+  await Hive.initFlutter();
 
   if (!kIsWeb) {
     await Permission.microphone.request();
