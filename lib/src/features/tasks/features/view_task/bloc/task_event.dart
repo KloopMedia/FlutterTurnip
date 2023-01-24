@@ -49,3 +49,5 @@ class UpdateIntegratedTask extends TaskEvent {
 
   UpdateIntegratedTask(this.task);
 }
+
+class TriggerWebhook extends TaskEvent {}
