@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -24,7 +25,7 @@ EventTransformer<T> debounce<T>(Duration duration) {
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final AuthUser user;
-  final int campaign;
+  final Campaign campaign;
   Timer? timer;
   TaskState? _cache;
   firebase_storage.Reference? storage;
@@ -75,6 +76,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<int?> _saveTask(Task task) async {
+    final box = Hive.box<Task>(campaign.name);
+    box.put(task.id, task);
     return await gigaTurnipRepository.updateTask(task);
   }
 
