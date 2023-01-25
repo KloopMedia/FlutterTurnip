@@ -56,6 +56,7 @@ class _TasksViewState extends State<TasksView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
+            context.read<TasksCubit>().closeHiveBox();
             context.pop();
           },
         ),

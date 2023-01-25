@@ -77,7 +77,7 @@ class TaskState extends Task with EquatableMixin {
   }
 
   @override
-  List<Object?> get props => [id, responses, complete, previousTasks, nextTask, taskStatus];
+  List<Object?> get props => [id, responses, complete, previousTasks, nextTask, taskStatus, schema, uiSchema];
 
   @override
   TaskState copyWith({

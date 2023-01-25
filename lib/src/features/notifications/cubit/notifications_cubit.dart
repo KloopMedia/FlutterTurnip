@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-
 part 'notifications_state.dart';
 
 enum Tabs {
@@ -27,6 +26,18 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       unreadNotifications: unreadNotifications,
       status: NotificationsStatus.initialized,
     ));
+  }
+
+
+  void getTaskNotifications(int taskId) async {
+    final notifications = await _getNotifications(false) ?? [];
+    final List<Notifications> taskNotifications = [];
+    for (var item in notifications) {
+      if (item.receiverTask == taskId) {
+        taskNotifications.add(item);
+      }
+    }
+    emit(state.copyWith(taskNotifications: taskNotifications));
   }
 
   Future<List<Notifications>?> _getNotifications(bool viewed) async {

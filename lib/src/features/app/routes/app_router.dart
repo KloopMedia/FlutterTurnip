@@ -41,7 +41,10 @@ class AppRouter {
         name: 'login',
         path: '/login',
         builder: (BuildContext context, GoRouterState state) {
-          return const LoginPage();
+          final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
+          return LoginPage(
+            simpleViewMode: simpleViewMode,
+          );
         },
       ),
       GoRoute(
@@ -84,9 +87,11 @@ class AppRouter {
                 path: 'tasks/:tid',
                 builder: (BuildContext context, GoRouterState state) {
                   final id = state.params['tid'];
+                  final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
                   if (id != null) {
                     return TaskPage(
                       taskId: int.parse(id),
+                      simpleViewMode: simpleViewMode,
                     );
                   }
                   return const TaskPage();

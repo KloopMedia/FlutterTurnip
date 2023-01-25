@@ -26,7 +26,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
   @override
   initState() {
     context.read<TasksCubit>().initializeCombined();
-    context.read<ImportantNotificationsCubit>().getNotifications();
+    context.read<ImportantNotificationsCubit>().getLastTaskNotifications();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -49,12 +49,13 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
     });
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Text(
-          context.loc.tasks,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        backgroundColor: Colors.white,
+        //centerTitle: true,
+        // automaticallyImplyLeading: false,
+        // title: Text(
+        //   context.loc.tasks,
+        //   style: Theme.of(context).textTheme.titleLarge,
+        // ),
         actions: <Widget>[
           IconButton(
             onPressed: () {

@@ -9,6 +9,8 @@ abstract class AppEvent extends Equatable {
 
 class AppLogoutRequested extends AppEvent {}
 
+class DeleteAccountRequested extends AppEvent {}
+
 enum LoginProvider {apple, google}
 
 class AppLoginRequested extends AppEvent {

@@ -31,3 +31,8 @@ const reopenTaskActionRoute = '/uncomplete/';
 const notificationsRoute = '/api/v1/notifications/';
 const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
 const openNotificationActionRoute = '/open_notification/';
+const lastTaskNotificationsActionRoute = '$notificationsRoute/last_task_notifications/';
+
+// Users routes
+const usersRoute = '/api/v1/users/';
+const deleteUserRoute = '$usersRoute/delete/';

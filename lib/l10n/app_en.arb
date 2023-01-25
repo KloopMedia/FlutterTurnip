@@ -53,5 +53,10 @@
     "empty_richtext": "No explanation for the task",
     "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
     "task_returned": "Returned",
-    "test_returned": "Returned. Please answer the questions again"
+    "test_returned": "Returned. Please answer the questions again",
+
+    "delete_account_button": "Delete account",
+    "delete_account_dialog_title": "Are you sure you want to delete your account?",
+    "delete_account_dialog_body": "This operation is irreversible. Write word 'Delete' for confirmation",
+    "delete_account_confirmation": "Delete"
 }
