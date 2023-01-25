@@ -14,7 +14,7 @@ class NotificationIcon extends StatelessWidget {
             height: 25,
             child: Stack(
                 children: [
-                  Icon(Icons.notifications, color: Colors.blueGrey.shade100),
+                  const Icon(Icons.notifications),
                   (state.hasUnreadNotifications)
                       ? Align(
                       alignment: Alignment.topRight,

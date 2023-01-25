@@ -16,7 +16,6 @@ class TasksState extends Equatable {
   final Tabs selectedTab;
   final int tabIndex;
   final bool hasUnreadNotifications;
-  final List<Notifications>? lastTaskNotifications;
 
   const TasksState({
     this.totalPages = 0,
@@ -29,7 +28,6 @@ class TasksState extends Equatable {
     this.selectedTab = Tabs.assignedTasksTab,
     this.tabIndex = 0,
     this.hasUnreadNotifications = false,
-    this.lastTaskNotifications = const [],
   });
 
   TasksState copyWith({
@@ -43,7 +41,6 @@ class TasksState extends Equatable {
     Tabs? selectedTab,
     int? tabIndex,
     bool? hasUnreadNotifications,
-    // List<Notifications>? lastTaskNotifications,
   }) {
     return TasksState(
       totalPages: totalPages ?? this.totalPages,
@@ -55,8 +52,7 @@ class TasksState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       selectedTab: selectedTab ?? this.selectedTab,
       tabIndex: tabIndex ?? this.tabIndex,
-      hasUnreadNotifications: hasUnreadNotifications ?? this.hasUnreadNotifications,
-      // lastTaskNotifications: lastTaskNotifications ?? this.lastTaskNotifications,
+        hasUnreadNotifications: hasUnreadNotifications ?? this.hasUnreadNotifications,
     );
   }
 
@@ -70,6 +66,5 @@ class TasksState extends Equatable {
         selectedTab,
         tabIndex,
         hasUnreadNotifications,
-        // lastTaskNotifications
       ];
 }
