@@ -53,10 +53,5 @@
     "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
     "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
     "task_returned": "Кайтарылды",
-    "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз",
-
-    "delete_account_button": "Delete account",
-    "delete_account_dialog_title": "Are you sure you want to delete your account?",
-    "delete_account_dialog_body": "This operation is irreversible. Write word 'Delete' for confirmation",
-    "delete_account_confirmation": "Delete"
+    "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз"
 }

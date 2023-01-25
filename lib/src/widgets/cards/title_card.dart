@@ -29,7 +29,7 @@ class TitleCard extends StatelessWidget {
             },
             child: Text(
               title,
-              style: Theme.of(context).textTheme.headlineLarge,
+              style: Theme.of(context).textTheme.titleMedium,
 
             )),
       ),

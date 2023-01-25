@@ -6,8 +6,6 @@ part 'notification.g.dart';
 @JsonSerializable()
 class Notifications extends Equatable {
   final int id;
-  final int? receiverTask;
-  final int? senderTask;
   final String title;
   final String text;
   final DateTime createdAt;
@@ -15,8 +13,6 @@ class Notifications extends Equatable {
 
   const Notifications({
     required this.id,
-    this.receiverTask,
-    this.senderTask,
     required this.title,
     required this.text,
     required this.createdAt,
@@ -30,8 +26,6 @@ class Notifications extends Equatable {
   factory Notifications.fromApiModel(api.Notification model) {
     return Notifications(
       id: model.id,
-      receiverTask: model.receiverTask,
-      senderTask: model.senderTask,
       title: model.title,
       text: model.text,
       createdAt: model.createdAt,
@@ -40,6 +34,6 @@ class Notifications extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, title, text, createdAt, importance, receiverTask, senderTask];
+  List<Object?> get props => [id, title, text, createdAt, importance];
 
 }

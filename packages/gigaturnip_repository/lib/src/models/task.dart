@@ -1,45 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Task;
 
 part 'task.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@HiveType(typeId: 0)
 class Task extends Equatable {
-  @HiveField(0)
   final int id;
-  @HiveField(1)
   final String name;
-  @HiveField(2)
   final Map<String, dynamic>? schema;
-  @HiveField(3)
   final Map<String, dynamic>? uiSchema;
-  @HiveField(4)
   final Map<String, dynamic>? responses;
-  @HiveField(5)
   final bool complete;
-  @HiveField(6)
   final bool reopened;
-  @HiveField(7)
   final TaskStage stage;
-  @HiveField(8)
   final DateTime? createdAt;
-  @HiveField(9)
   final Map<String, dynamic>? cardJsonSchema;
-  @HiveField(10)
   final Map<String, dynamic>? cardUiSchema;
-  @HiveField(11)
   final List<Task> displayedPrevTasks;
-  @HiveField(12)
   final bool isIntegrated;
-  @HiveField(13)
   final List<Map<String, dynamic>>? dynamicSource;
-  @HiveField(14)
   final List<Map<String, dynamic>>? dynamicTarget;
-  @HiveField(15)
 
   const Task({
     required this.id,
