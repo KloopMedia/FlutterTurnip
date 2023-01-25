@@ -11,7 +11,6 @@ part 'tasks_state.dart';
 class TasksCubit extends Cubit<TasksState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final Campaign selectedCampaign;
-  late final Box _closedTasksBox;
 
   TasksCubit({
     required this.gigaTurnipRepository,
@@ -19,33 +18,21 @@ class TasksCubit extends Cubit<TasksState> {
   }) : super(const TasksState());
 
   void initialize() async {
-    openHiveBox();
-    refresh();
+    // refresh();
+    initialLoading();
     getUnreadNotifications();
   }
 
   void initializeCombined() async {
-    openHiveBox();
     refreshCombined();
     getUnreadNotifications();
-  }
-
-  void openHiveBox() async {
-    _closedTasksBox = await Hive.openBox<Task>(selectedCampaign.name);
   }
 
   void refreshCombined() async {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
-    final List<Task> closeTasks;
-    if (_closedTasksBox.isEmpty) {
-      closeTasks = await _writeDataToBox();
-    } else {
-      closeTasks = await _readDataFromBox();
-    }
-    final availableTasks =
-        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
 
@@ -59,18 +46,41 @@ class TasksCubit extends Cubit<TasksState> {
     ));
   }
 
+  void initialLoading() async {
+    emit(state.copyWith(status: TasksStatus.loading));
+    switch (state.selectedTab) {
+      case Tabs.assignedTasksTab:
+        await Hive.openBox<Task>(selectedCampaign.name);
+        final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+        final closeTasks = await _writeDataToBox();
+        emit(state.copyWith(
+          openTasks: openTasks,
+          closeTasks: closeTasks,
+        ));
+        break;
+      case Tabs.availableTasksTab:
+        final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+        final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+        final totalPages = gigaTurnipRepository.totalPages;
+
+        emit(state.copyWith(
+          totalPages: totalPages,
+          availableTasks: availableTasks,
+          creatableTasks: creatableTasks,
+        ));
+        break;
+    }
+    emit(state.copyWith(status: TasksStatus.initialized));
+  }
+
   void refresh() async {
     emit(state.copyWith(status: TasksStatus.loading));
     switch (state.selectedTab) {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
         // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
-        final List<Task> closeTasks;
-        if (_closedTasksBox.isEmpty) {
-          closeTasks = await _writeDataToBox();
-        } else {
-          closeTasks = await _readDataFromBox();
-        }
+        final closeTasks = await _readDataFromBox();
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
@@ -95,7 +105,7 @@ class TasksCubit extends Cubit<TasksState> {
   Future<List<Task>> _writeDataToBox() async {
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
     for(var task in closeTasks!) {
-      _closedTasksBox.put(task.id, task);
+      Hive.box<Task>(selectedCampaign.name).put(task.id, task);
     }
     final closedTasksFromBox = _readDataFromBox();
     return closedTasksFromBox;
@@ -103,15 +113,16 @@ class TasksCubit extends Cubit<TasksState> {
 
   Future<List<Task>> _readDataFromBox() async {
     final List<Task> closeTasks = [];
-    for (var key in _closedTasksBox.keys.toList().reversed) {
-      final task = await _closedTasksBox.get(key);
-      closeTasks.add(task);
+    final closedTasksBox = Hive.box<Task>(selectedCampaign.name);
+    for (var key in closedTasksBox.keys.toList().reversed) {
+      final task = closedTasksBox.get(key);
+      closeTasks.add(task!);
     }
     return closeTasks;
   }
 
   void closeHiveBox() {
-    _closedTasksBox.close();
+    Hive.box<Task>(selectedCampaign.name).close();
   }
 
   Future<void> getNextPage() async {
