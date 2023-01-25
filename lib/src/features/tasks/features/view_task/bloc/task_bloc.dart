@@ -15,7 +15,6 @@ import 'package:path/path.dart';
 // import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
-
 part 'task_state.dart';
 
 EventTransformer<T> debounce<T>(Duration duration) {
@@ -49,6 +48,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
     on<GenerateIntegratedForm>(_onGenerateIntegratedForm);
+    on<TriggerWebhook>(_onTriggerWebhook);
     on<UpdateIntegratedTask>(_onUpdateIntegratedTask,
         transformer: debounce(const Duration(milliseconds: 300)));
     final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
@@ -257,5 +257,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   void _onUpdateIntegratedTask(UpdateIntegratedTask event, Emitter<TaskState> emit) {
     _saveTask(event.task);
+  }
+
+  void _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {
+    await gigaTurnipRepository.triggerWebhook(state.id);
+    final task = await _getTask(state.id);
+    emit(state.copyWith(schema: {}, uiSchema: {}, taskStatus: TaskStatus.triggerWebhook, responses: task.responses));
+    emit(state.copyWith(taskStatus: TaskStatus.initialized));
   }
 }
