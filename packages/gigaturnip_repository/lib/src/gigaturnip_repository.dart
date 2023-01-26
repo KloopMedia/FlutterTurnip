@@ -31,8 +31,12 @@ class GigaTurnipRepository {
 
   int get totalPages => _totalPages;
 
-  Future<Response> deleteUser() async {
-    return await _gigaTurnipApiClient.deleteUser();
+  Future<Map<String, dynamic>> initiateUserDeletion() async {
+    return await _gigaTurnipApiClient.deleteUserInit();
+  }
+
+  Future<Map<String, dynamic>> deleteUser(int pk, String artifact) async {
+    return await _gigaTurnipApiClient.deleteUser(pk: pk, artifact: artifact);
   }
 
   GigaTurnipRepository({

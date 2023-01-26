@@ -6,6 +6,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
   static const baseUrl = 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com';
+
   // static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
 
   // static const baseUrl = 'http://127.0.0.1:8000';
@@ -16,8 +17,17 @@ class GigaTurnipApiClient {
       : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl));
 
   // User methods
-  Future<Response> deleteUser() async {
-    return await _httpClient.get(deleteUserRoute);
+  Future<Map<String, dynamic>> deleteUserInit() async {
+    final response = await _httpClient.get(deleteInitRoute);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> deleteUser({required int pk, required String artifact}) async {
+    final response = await _httpClient.post(
+      usersRoute + pk.toString() + deleteUserAction,
+      data: {"artifact": artifact},
+    );
+    return response.data;
   }
 
   // Campaign methods
@@ -424,12 +434,14 @@ class GigaTurnipApiClient {
     }
   }
 
-  Future<PaginationWrapper<Notification>> getLastTaskNotifications({Map<String, dynamic>? query}) async {
+  Future<PaginationWrapper<Notification>> getLastTaskNotifications(
+      {Map<String, dynamic>? query}) async {
     try {
-      final response = await _httpClient.get(lastTaskNotificationsActionRoute, queryParameters: query);
+      final response =
+          await _httpClient.get(lastTaskNotificationsActionRoute, queryParameters: query);
       return PaginationWrapper<Notification>.fromJson(
         response.data,
-            (json) => Notification.fromJson(json as Map<String, dynamic>),
+        (json) => Notification.fromJson(json as Map<String, dynamic>),
       );
     } on DioError catch (e) {
       print(e);

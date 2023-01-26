@@ -57,7 +57,7 @@
 
     "delete_account_button": "Delete account",
     "delete_account_dialog_title": "Are you sure you want to delete account?",
-    "delete_account_dialog_body": "This operation is irreversible. Write word 'Delete' for confirmation.",
+    "delete_account_dialog_body": "This operation is irreversible. Write your email or phone number for confirmation.",
     "delete_account_confirmation": "Delete",
 
     "settings": "Settings"

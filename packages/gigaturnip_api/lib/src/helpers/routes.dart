@@ -35,4 +35,6 @@ const lastTaskNotificationsActionRoute = '$notificationsRoute/last_task_notifica
 
 // Users routes
 const usersRoute = '/api/v1/users/';
-const deleteUserRoute = '$usersRoute/delete/';
+const deleteInitRoute = '$usersRoute/delete_init/';
+const deleteUserAction = '/delete_user/';
+

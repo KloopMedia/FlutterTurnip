@@ -45,9 +45,9 @@ class SettingsView extends StatelessWidget {
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
             onPressed: () async {
               final bloc = context.read<AppBloc>();
-              final shouldLogout = await deleteAccountDialog(context);
-              if (shouldLogout) {
-                bloc.add(DeleteAccountRequested());
+              final confirmation = await deleteAccountDialog(context);
+              if (confirmation != null) {
+                bloc.add(DeleteAccountRequested(confirmation));
               }
             },
             child: Text(
