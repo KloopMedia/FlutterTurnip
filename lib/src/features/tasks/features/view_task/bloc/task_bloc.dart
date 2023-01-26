@@ -261,14 +261,18 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   void _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {
-    await gigaTurnipRepository.triggerWebhook(state.id);
-    final task = await _getTask(state.id);
-    emit(state.copyWith(
-      schema: task.schema,
-      uiSchema: task.uiSchema,
-      taskStatus: TaskStatus.triggerWebhook,
-      responses: task.responses,
-    ));
-    emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
+
+    try {
+      final webhook = await gigaTurnipRepository.triggerWebhook(state.id);
+      emit(state.copyWith(
+        taskStatus: TaskStatus.triggerWebhook,
+        responses: webhook['responses'],
+      ));
+      emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    } catch (e) {
+      await Future.delayed(const Duration(seconds: 1));
+      emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    }
   }
 }

@@ -179,12 +179,15 @@ class _TaskViewState extends State<TaskView> {
           var hasCompleteChange = previousState.complete != currentState.complete;
           var hasSchemaChange =
               !(const DeepCollectionEquality().equals(previousState.schema, currentState.schema));
-          var isWebhookTriggered = currentState.taskStatus == TaskStatus.triggerWebhook;
+          var isWebhookTriggered = previousState.taskStatus != currentState.taskStatus;
           var shouldRebuild =
               hasPreviousTasksChange || hasCompleteChange || hasSchemaChange || isWebhookTriggered;
           return shouldRebuild;
         },
         builder: (context, state) {
+          if (state.taskStatus == TaskStatus.uninitialized) {
+            return const Center(child: CircularProgressIndicator());
+          }
           return ListView(
             children: [
               if (state.isIntegrated)
