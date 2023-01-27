@@ -24,7 +24,8 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   void initializeCombined() async {
-    refreshCombined();
+    // refreshCombined();
+    initialLoadingCombined();
     getUnreadNotifications();
   }
 
@@ -32,6 +33,24 @@ class TasksCubit extends Cubit<TasksState> {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+    final totalPages = gigaTurnipRepository.totalPages;
+
+    emit(state.copyWith(
+      totalPages: totalPages,
+      openTasks: openTasks,
+      closeTasks: closeTasks,
+      availableTasks: availableTasks,
+      creatableTasks: creatableTasks,
+      status: TasksStatus.initialized,
+    ));
+  }
+  void initialLoadingCombined() async {
+    emit(state.copyWith(status: TasksStatus.loading));
+    await Hive.openBox<Task>(selectedCampaign.name);
+    final closeTasks = await _writeDataToBox();
+    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
     final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
