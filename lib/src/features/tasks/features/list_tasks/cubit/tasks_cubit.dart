@@ -32,7 +32,8 @@ class TasksCubit extends Cubit<TasksState> {
   void refreshCombined() async {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final closeTasks = await _readDataFromBox();
+    // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
     final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
@@ -123,8 +124,10 @@ class TasksCubit extends Cubit<TasksState> {
 
   Future<List<Task>> _writeDataToBox() async {
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final closedTasksBox = Hive.box<Task>(selectedCampaign.name);
+    closedTasksBox.clear();
     for(var task in closeTasks!) {
-      Hive.box<Task>(selectedCampaign.name).put(task.id, task);
+      closedTasksBox.put(task.id, task);
     }
     final closedTasksFromBox = _readDataFromBox();
     return closedTasksFromBox;
