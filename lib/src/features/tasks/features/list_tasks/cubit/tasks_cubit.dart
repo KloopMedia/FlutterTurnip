@@ -52,7 +52,7 @@ class TasksCubit extends Cubit<TasksState> {
   void refreshCombined() async {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    final closeTasks = await _readDataFromBox();
+    final closeTasks = await _writeDataToBox();
     // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
     final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
@@ -86,7 +86,7 @@ class TasksCubit extends Cubit<TasksState> {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
         // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
-        final closeTasks = await _readDataFromBox();
+        final closeTasks = await _writeDataToBox();
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
