@@ -2,8 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-// import 'package:uniturnip/json_schema_ui.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:hive/hive.dart';
 
 part 'tasks_state.dart';
@@ -209,7 +207,7 @@ class TasksCubit extends Cubit<TasksState> {
       case Tabs.availableTasksTab:
         final availableTasks =
             await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
-        final creatableTasks = await _fetchCreatableTasks();
+        final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
         final totalPages = gigaTurnipRepository.totalPages;
         print('TOTAL: $totalPages');
         emit(state.copyWith(
