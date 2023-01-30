@@ -266,9 +266,13 @@ class _TaskViewState extends State<TaskView> {
                       final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
                       final pathList = path.split('.');
                       if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
-                        if (dynamicJsonMetadata.first['main'] == path || (dynamicJsonMetadata.first['foreign'] as List).contains(path)) {
                         // if (dynamicJsonMetadata.first['main'] == pathList || (dynamicJsonMetadata.first['foreign'] as List).contains(pathList)) {
-                          taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                        //   taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                        // }
+                        for (var metadata in dynamicJsonMetadata) {
+                          if (metadata['main'] == path || (metadata['foreign'] as List).contains(path)) {
+                            taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                          }
                         }
                       }
                     },
