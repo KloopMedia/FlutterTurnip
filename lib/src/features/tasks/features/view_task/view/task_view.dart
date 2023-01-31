@@ -6,6 +6,7 @@ import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/dialogs/form_validation_snackbar.dart';
+import 'package:gigaturnip/src/utilities/dialogs/logout_dialog.dart';
 import 'package:gigaturnip/src/widgets/richtext/richtext_view.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -265,9 +266,13 @@ class _TaskViewState extends State<TaskView> {
                       final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
                       final pathList = path.split('.');
                       if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
-                        if (dynamicJsonMetadata.first['main'] == pathList ||
-                            (dynamicJsonMetadata.first['foreign'] as List).contains(pathList)) {
-                          taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                        // if (dynamicJsonMetadata.first['main'] == pathList || (dynamicJsonMetadata.first['foreign'] as List).contains(pathList)) {
+                        //   taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                        // }
+                        for (var metadata in dynamicJsonMetadata) {
+                          if (metadata['main'] == path || (metadata['foreign'] as List).contains(path)) {
+                            taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                          }
                         }
                       }
                     },
