@@ -1,97 +1,61 @@
-import 'package:authentication_repository/src/cache_client.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:authentication_repository/authentication_repository.dart';
+
+import 'models/user.dart';
+
+enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
-  final CacheClient _cache;
-  final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
+  final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.standard();
 
-  AuthenticationRepository({
-    CacheClient? cache,
-    FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn,
-  })  : _cache = cache ?? CacheClient(),
-        _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
+  User _user(firebase_auth.User? user) => user?.toUser ?? User.empty;
 
-  bool isWeb = kIsWeb;
-  static const userCacheKey = '__user_cache_key__';
-  static const tokenCacheKey = '__token_cache_key__';
-
-  Stream<AuthUser> get user {
-    return _firebaseAuth.idTokenChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? AuthUser.empty : firebaseUser.toUser;
-      _cache.write<AuthUser>(key: userCacheKey, value: user);
-      return user;
-    });
+  Stream<User> get userStream {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) => _user(firebaseUser));
   }
 
-  Future<String> get token async {
-    final user = _firebaseAuth.currentUser;
-    return user != null ? await user.getIdToken() : '';
-  }
+  User get user => _user(_firebaseAuth.currentUser);
 
-  AuthUser get currentUser {
-    return _cache.read<AuthUser>(key: userCacheKey) ?? AuthUser.empty;
-  }
+  Future<String?> get token async => await _firebaseAuth.currentUser?.getIdToken();
 
   Future<void> logInWithGoogle() async {
-    try {
-      late final AuthCredential credential;
-      if (isWeb) {
-        final googleProvider = GoogleAuthProvider();
-        googleProvider.setCustomParameters({'prompt': 'select_account'});
-        await _firebaseAuth.signInWithPopup(googleProvider);
-      } else {
-        final googleUser = await _googleSignIn.signIn();
-        final googleAuth = await googleUser!.authentication;
-        credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        await _firebaseAuth.signInWithCredential(credential);
-      }
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      throw LogInWithGoogleFailure.fromCode(e.code);
-    } catch (_) {
-      print(_);
-      throw const LogInWithGoogleFailure();
+    late final firebase_auth.AuthCredential credential;
+    if (kIsWeb) {
+      final googleProvider = firebase_auth.GoogleAuthProvider();
+      googleProvider.setCustomParameters({'prompt': 'select_account'});
+      await _firebaseAuth.signInWithPopup(googleProvider);
+    } else {
+      final googleUser = await _googleSignIn.signIn();
+      final googleAuth = await googleUser!.authentication;
+      credential = firebase_auth.GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await _firebaseAuth.signInWithCredential(credential);
     }
   }
 
   Future<void> logInWithApple() async {
-    try {
-      final appleProvider = AppleAuthProvider();
-      if (isWeb) {
-        await FirebaseAuth.instance.signInWithPopup(appleProvider);
-      } else {
-        await FirebaseAuth.instance.signInWithProvider(appleProvider);
-      }
-    } catch (e) {
-      print(e);
-      rethrow;
+    final appleProvider = firebase_auth.AppleAuthProvider();
+    if (kIsWeb) {
+      await _firebaseAuth.signInWithPopup(appleProvider);
+    } else {
+      await _firebaseAuth.signInWithProvider(appleProvider);
     }
   }
 
   Future<void> logOut() async {
-    try {
-      await Future.wait([
-        _firebaseAuth.signOut(),
-        _googleSignIn.signOut(),
-      ]);
-    } catch (_) {
-      print(_);
-      throw LogOutFailure();
-    }
+    await Future.wait([
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+    ]);
   }
 }
 
-extension on User {
-  AuthUser get toUser {
-    return AuthUser(id: uid, email: email, name: displayName, photo: photoURL);
+extension on firebase_auth.User {
+  User get toUser {
+    return User(id: uid, email: email, name: displayName, photo: photoURL);
   }
 }
