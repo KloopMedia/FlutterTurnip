@@ -9,7 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart' show SettableMetadata, U
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 
 // import 'package:uniturnip/json_schema_ui.dart';
@@ -77,8 +77,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<int?> _saveTask(Task task) async {
-    final box = Hive.box<Task>(campaign.name);
-    box.put(task.id, task);
+    // final box = Hive.box<Task>(campaign.name);
+    // box.put(task.id, task);
     return await gigaTurnipRepository.updateTask(task);
   }
 

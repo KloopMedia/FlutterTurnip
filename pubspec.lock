@@ -450,9 +450,11 @@ packages:
   flutter_json_schema_form:
     dependency: "direct main"
     description:
-      path: "../flutter-jsonschema-form"
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: "3d2cd6c74d9c5d449ffdf94e584ee2855e24326c"
+      url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
+    source: git
     version: "0.0.1"
   flutter_launcher_icons:
     dependency: "direct main"
@@ -603,14 +605,14 @@ packages:
     source: hosted
     version: "2.2.0"
   hive:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: hive
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
   hive_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: hive_flutter
       url: "https://pub.dartlang.org"
