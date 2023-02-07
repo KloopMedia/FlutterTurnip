@@ -9,7 +9,6 @@ part 'tasks_state.dart';
 class TasksCubit extends Cubit<TasksState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final Campaign selectedCampaign;
-  final List<Task> closeTasks = [];
 
   TasksCubit({
     required this.gigaTurnipRepository,
@@ -33,7 +32,9 @@ class TasksCubit extends Cubit<TasksState> {
     // await Hive.openBox<Task>(selectedCampaign.name);
     // final closeTasks = await _writeDataToBox();
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
 
@@ -51,8 +52,9 @@ class TasksCubit extends Cubit<TasksState> {
     emit(state.copyWith(status: TasksStatus.loading));
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
     // final closeTasks = await _writeDataToBox();
-    // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
-    final availableTasks = await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
 
@@ -70,6 +72,8 @@ class TasksCubit extends Cubit<TasksState> {
     emit(state.copyWith(status: TasksStatus.loading));
     // await Hive.openBox<Task>(selectedCampaign.name);
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+
     // final closeTasks = await _writeDataToBox();
     emit(state.copyWith(
       openTasks: openTasks,
@@ -83,7 +87,8 @@ class TasksCubit extends Cubit<TasksState> {
     switch (state.selectedTab) {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-        // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        final closeTasks =
+            await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
         // final closeTasks = await _writeDataToBox();
         emit(state.copyWith(
           openTasks: openTasks,
@@ -187,7 +192,8 @@ class TasksCubit extends Cubit<TasksState> {
     switch (tab) {
       case Tabs.assignedTasksTab:
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
-        // final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        final closeTasks =
+            await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
         // final closeTasks = await _readDataFromBox();
         emit(state.copyWith(
           openTasks: openTasks,
