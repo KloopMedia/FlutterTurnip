@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart' show SettableMetadata, U
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+
 // import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -16,6 +17,7 @@ import 'package:rxdart/rxdart.dart';
 // import 'package:video_compress/video_compress.dart';
 
 part 'task_event.dart';
+
 part 'task_state.dart';
 
 EventTransformer<T> debounce<T>(Duration duration) {
@@ -243,10 +245,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
-    emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
-    final schema = await getDynamicJson(state.stage.id, state.id, event.response);
-    // print(schema);
-    emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+    if (!state.complete) {
+      emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
+      final schema = await getDynamicJson(state.stage.id, state.id, event.response);
+      emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+    }
   }
 
   void _onGenerateIntegratedForm(GenerateIntegratedForm event, Emitter<TaskState> emit) async {
