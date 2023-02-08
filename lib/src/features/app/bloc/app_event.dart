@@ -9,9 +9,13 @@ abstract class AppEvent extends Equatable {
 
 class AppLogoutRequested extends AppEvent {}
 
-class DeleteAccountRequested extends AppEvent {}
+class DeleteAccountRequested extends AppEvent {
+  final String email;
 
-enum LoginProvider {apple, google}
+  const DeleteAccountRequested(this.email);
+}
+
+enum LoginProvider { apple, google }
 
 class AppLoginRequested extends AppEvent {
   final LoginProvider provider;

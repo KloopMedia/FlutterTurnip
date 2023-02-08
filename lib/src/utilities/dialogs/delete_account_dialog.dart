@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
-Future<bool> deleteAccountDialog(BuildContext context) async {
-  final value = await showDialog<bool>(
+Future<String?> deleteAccountDialog(BuildContext context) async {
+  final value = await showDialog<String?>(
     context: context,
     builder: (context) {
       return const AlertDialogWithInputConfirmation();
     },
   );
-  return value ?? false;
+  return value;
 }
 
 class AlertDialogWithInputConfirmation extends StatefulWidget {
@@ -19,16 +19,7 @@ class AlertDialogWithInputConfirmation extends StatefulWidget {
 }
 
 class _AlertDialogWithInputConfirmationState extends State<AlertDialogWithInputConfirmation> {
-  late final confirmationValue = context.loc.delete_account_confirmation;
   String? value;
-
-  bool validateDeletion() {
-    if (value?.toLowerCase() == confirmationValue.toLowerCase()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +44,14 @@ class _AlertDialogWithInputConfirmationState extends State<AlertDialogWithInputC
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(false);
+            Navigator.of(context).pop(null);
           },
           child: Text(context.loc.cancel),
         ),
         ElevatedButton(
-          onPressed: validateDeletion()
-              ? () {
-                  Navigator.of(context).pop(true);
-                }
-              : null,
+          onPressed: () {
+            Navigator.of(context).pop(value);
+          },
           child: Text(context.loc.delete_account_confirmation),
         ),
       ],

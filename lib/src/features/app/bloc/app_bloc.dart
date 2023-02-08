@@ -6,10 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -161,10 +159,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
+  Future<int?> _initiateAccountDeletion() async {
+    final response = await _gigaTurnipRepository.initiateUserDeletion();
+    return response['delete_pk'];
+  }
+
   void _onDeleteAccount(DeleteAccountRequested event, Emitter<AppState> emit) async {
-    final response = await _gigaTurnipRepository.deleteUser();
-    if (response.statusCode == 200) {
-      unawaited(_authenticationRepository.logOut());
+    final pk = await _initiateAccountDeletion();
+    if (pk != null) {
+      try {
+        await _gigaTurnipRepository.deleteUser(pk, event.email);
+        unawaited(_authenticationRepository.logOut());
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

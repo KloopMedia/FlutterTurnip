@@ -55,8 +55,10 @@
     "task_returned": "Кайтарылды",
     "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз",
 
-    "delete_account_button": "Delete account",
-    "delete_account_dialog_title": "Are you sure you want to delete your account?",
-    "delete_account_dialog_body": "This operation is irreversible. Write word 'Delete' for confirmation",
-    "delete_account_confirmation": "Delete"
+    "delete_account_button": "Баракчаңы өчүрүү",
+    "delete_account_dialog_title": "Баракчаңыз өчүрүлсүнбү?",
+    "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс . Ырастоо үчүн «өчүрүү» деген сөздү жазыңыз.",
+    "delete_account_confirmation": "Өчүрүү",
+
+    "settings": "Настройки"
 }
