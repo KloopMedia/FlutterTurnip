@@ -277,26 +277,6 @@ class TasksCubit extends Cubit<TasksState> {
     }
   }
 
-  // Future<FileModel> getFile(path) async {
-  //   final ref = firebase_storage.FirebaseStorage.instance.ref(path);
-  //   final data = await ref.getMetadata();
-  //   final url = await ref.getDownloadURL();
-  //   final type = _getFileType(data.contentType);
-  //   return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
-  // }
-  //
-  // FileType _getFileType(String? contentType) {
-  //   final type = contentType?.split('/').first;
-  //   switch (type) {
-  //     case 'video':
-  //       return FileType.video;
-  //     case 'image':
-  //       return FileType.image;
-  //     default:
-  //       return FileType.any;
-  //   }
-  // }
-
   void getUnreadNotifications() async {
     try {
       List<Notifications>? unreadNotifications = [];

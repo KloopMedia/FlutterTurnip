@@ -14,7 +14,6 @@ class ImportantNotificationsCubit extends Cubit<ImportantNotificationsState> {
 
   void getNotifications() async {
     final notifications = await gigaTurnipRepository.getNotifications(selectedCampaign.id, false) ?? [];
-    print('getting notifications');
     emit(ImportantNotificationsLoaded(notifications));
   }
 
