@@ -8,11 +8,11 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
+  final GigaTurnipRepository _gigaTurnipRepository;
   late final StreamSubscription<AuthUser> userSubscription;
   AppLocales? sharedPrefsAppLocale;
 
@@ -20,6 +20,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
   })  : _authenticationRepository = authenticationRepository,
+        _gigaTurnipRepository = gigaTurnipRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty
               ? AppStateLoggedIn(user: authenticationRepository.currentUser)
@@ -32,6 +33,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
+    on<DeleteAccountRequested>(_onDeleteAccount);
 
     userSubscription = _authenticationRepository.user.listen(
       (user) => add(AppUserChanged(user)),
@@ -153,6 +155,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           break;
         case 'ky':
           sharedPrefsAppLocale = AppLocales.kyrgyz;
+      }
+    }
+  }
+
+  Future<int?> _initiateAccountDeletion() async {
+    final response = await _gigaTurnipRepository.initiateUserDeletion();
+    return response['delete_pk'];
+  }
+
+  void _onDeleteAccount(DeleteAccountRequested event, Emitter<AppState> emit) async {
+    final pk = await _initiateAccountDeletion();
+    if (pk != null) {
+      try {
+        await _gigaTurnipRepository.deleteUser(pk, event.email);
+        unawaited(_authenticationRepository.logOut());
+      } catch (e) {
+        print(e);
       }
     }
   }

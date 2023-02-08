@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
+import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:uniturnip/json_schema_ui.dart';
+// import 'package:uniturnip/json_schema_ui.dart';
 
 typedef CardCallback = void Function();
 
@@ -45,7 +44,7 @@ class _IdTitleCardFormState extends State<IdTitleCardForm> {
           title: Text(
             widget.title,
             textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           subtitle: Text('#${widget.task.id} ${widget.description}'),
           trailing: Row(
@@ -71,25 +70,37 @@ class _IdTitleCardFormState extends State<IdTitleCardForm> {
                 child: Column(
                   children: [
                     for (var task in widget.task.displayedPrevTasks)
-                      JSONSchemaUI(
+                      // JSONSchemaUI(
+                      //   schema: task.schema!,
+                      //   ui: task.uiSchema!,
+                      //   formController: UIModel(disabled: true, data: task.responses ?? {}),
+                      //   hideSubmitButton: true,
+                      // ),
+                      FlutterJsonSchemaForm(
                         schema: task.schema!,
-                        ui: task.uiSchema!,
-                        formController: UIModel(disabled: true, data: task.responses ?? {}),
-                        hideSubmitButton: true,
+                        uiSchema: task.uiSchema,
+                        formData: task.responses ?? {},
+                        disabled: true,
                       ),
                   ],
                 ),
               ),
-            JSONSchemaUI(
+            // JSONSchemaUI(
+            //   schema: widget.task.schema!,
+            //   ui: widget.task.uiSchema!,
+            //   formController: UIModel(
+            //     disabled: true,
+            //     data: widget.task.responses ?? {},
+            //     getFile: (path) {
+            //       return context.read<TasksCubit>().getFile(path);
+            //     },
+            //   ),
+            // ),
+            FlutterJsonSchemaForm(
               schema: widget.task.schema!,
-              ui: widget.task.uiSchema!,
-              formController: UIModel(
-                disabled: true,
-                data: widget.task.responses ?? {},
-                getFile: (path) {
-                  return context.read<TasksCubit>().getFile(path);
-                },
-              ),
+              uiSchema: widget.task.uiSchema,
+              formData: widget.task.responses ?? {},
+              disabled: true,
             ),
           ],
         ),

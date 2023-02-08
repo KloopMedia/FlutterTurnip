@@ -31,6 +31,14 @@ class GigaTurnipRepository {
 
   int get totalPages => _totalPages;
 
+  Future<Map<String, dynamic>> initiateUserDeletion() async {
+    return await _gigaTurnipApiClient.deleteUserInit();
+  }
+
+  Future<Map<String, dynamic>> deleteUser(int pk, String artifact) async {
+    return await _gigaTurnipApiClient.deleteUser(pk: pk, artifact: artifact);
+  }
+
   GigaTurnipRepository({
     AuthenticationRepository? authenticationRepository,
   }) {
@@ -292,6 +300,16 @@ class GigaTurnipRepository {
 
   Future<void> getOpenNotification(int id) async {
     await _gigaTurnipApiClient.openNotification(id: id);
+  }
+
+  Future<List<Notifications>> getLastTaskNotifications(int campaignId) async {
+    final notificationsData = await _gigaTurnipApiClient.getLastTaskNotifications(
+      query: {'campaign': campaignId},
+    );
+    final notifications = notificationsData.results.map((apiNotification) {
+      return Notifications.fromApiModel(apiNotification);
+    }).toList();
+    return notifications;
   }
 
   Future<Task> getTask(int id) async {
