@@ -452,7 +452,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "883812defad4302b7cade898ee08174595b96a0d"
+      resolved-ref: "817ebbab78a341a910c83bb4e521441bee3d51f0"
       url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
     source: git
     version: "0.0.1"
@@ -604,6 +604,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  hive:
+    dependency: transitive
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
+  hive_flutter:
+    dependency: transitive
+    description:
+      name: hive_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   html:
     dependency: transitive
     description:

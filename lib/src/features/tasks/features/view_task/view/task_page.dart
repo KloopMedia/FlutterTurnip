@@ -43,7 +43,7 @@ class TaskPage extends StatelessWidget {
                 selectedTask: snapshot.data!,
                 gigaTurnipRepository: context.read<GigaTurnipRepository>(),
                 user: context.read<AppBloc>().state.user!,
-                campaign: context.read<AppBloc>().state.selectedCampaign!.id,
+                campaign: context.read<AppBloc>().state.selectedCampaign!,
               ),
             ),
             BlocProvider<NotificationsCubit>(

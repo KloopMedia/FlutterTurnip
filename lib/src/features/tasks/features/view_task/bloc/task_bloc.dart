@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:rxdart/rxdart.dart';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cross_file/cross_file.dart';
@@ -9,7 +9,10 @@ import 'package:firebase_storage/firebase_storage.dart' show SettableMetadata, U
 import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:path/path.dart';
+
+// import 'package:hive/hive.dart';
+import 'package:rxdart/rxdart.dart';
+
 // import 'package:uniturnip/json_schema_ui.dart';
 // import 'package:video_compress/video_compress.dart';
 
@@ -24,7 +27,7 @@ EventTransformer<T> debounce<T>(Duration duration) {
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final AuthUser user;
-  final int campaign;
+  final Campaign campaign;
   Timer? timer;
   TaskState? _cache;
   firebase_storage.Reference? storage;
@@ -48,6 +51,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
     on<GenerateIntegratedForm>(_onGenerateIntegratedForm);
+    on<TriggerWebhook>(_onTriggerWebhook);
     on<UpdateIntegratedTask>(_onUpdateIntegratedTask,
         transformer: debounce(const Duration(milliseconds: 300)));
     final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
@@ -75,6 +79,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<int?> _saveTask(Task task) async {
+    // final box = Hive.box<Task>(campaign.name);
+    // box.put(task.id, task);
     return await gigaTurnipRepository.updateTask(task);
   }
 
@@ -239,10 +245,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
-    emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
-    final schema = await getDynamicJson(state.stage.id, state.id, event.response);
-    // print(schema);
-    emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+    if (!state.complete) {
+      emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
+      final schema = await getDynamicJson(state.stage.id, state.id, event.response);
+      emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+    }
   }
 
   void _onGenerateIntegratedForm(GenerateIntegratedForm event, Emitter<TaskState> emit) async {
@@ -254,5 +261,21 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   void _onUpdateIntegratedTask(UpdateIntegratedTask event, Emitter<TaskState> emit) {
     _saveTask(event.task);
+  }
+
+  void _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {
+    emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
+
+    try {
+      final webhook = await gigaTurnipRepository.triggerWebhook(state.id);
+      emit(state.copyWith(
+        taskStatus: TaskStatus.triggerWebhook,
+        responses: webhook['responses'],
+      ));
+      emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    } catch (e) {
+      await Future.delayed(const Duration(seconds: 1));
+      emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    }
   }
 }
