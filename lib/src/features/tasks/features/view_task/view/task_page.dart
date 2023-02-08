@@ -55,16 +55,6 @@ class TaskPage extends StatelessWidget {
           ],
           child: TaskView(simpleViewMode: simpleViewMode),
         );
-
-        // return BlocProvider<TaskBloc>(
-        //   create: (context) => TaskBloc(
-        //     selectedTask: snapshot.data!,
-        //     gigaTurnipRepository: context.read<GigaTurnipRepository>(),
-        //     user: context.read<AppBloc>().state.user!,
-        //     campaign: context.read<AppBloc>().state.selectedCampaign!.id,
-        //   ),
-        //   child: TaskView(simpleViewMode: simpleViewMode),
-        // );
       },
     );
   }
