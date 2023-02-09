@@ -6,9 +6,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 
 class GigaTurnipApiClient {
   // static const baseUrl = 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com';
-  //
   static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
-
   // static const baseUrl = 'http://127.0.0.1:8000';
 
   final Dio _httpClient;
@@ -359,7 +357,6 @@ class GigaTurnipApiClient {
         tasksRoute + id.toString() + triggerWebhookActionRoute,
         queryParameters: query,
       );
-      print(response.data);
       return response.data;
     } on DioError catch (e) {
       print(e);
