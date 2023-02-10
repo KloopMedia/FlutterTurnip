@@ -37,6 +37,7 @@ class TasksCubit extends Cubit<TasksState> {
         await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
+    final hasNextPage = gigaTurnipRepository.hasNextPage;
 
     emit(state.copyWith(
       totalPages: totalPages,
@@ -45,6 +46,7 @@ class TasksCubit extends Cubit<TasksState> {
       availableTasks: availableTasks,
       creatableTasks: creatableTasks,
       status: TasksStatus.initialized,
+      hasNextPage: hasNextPage,
     ));
   }
 
@@ -57,6 +59,7 @@ class TasksCubit extends Cubit<TasksState> {
         await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
+    final hasNextPage = gigaTurnipRepository.hasNextPage;
 
     emit(state.copyWith(
       totalPages: totalPages,
@@ -65,6 +68,7 @@ class TasksCubit extends Cubit<TasksState> {
       availableTasks: availableTasks,
       creatableTasks: creatableTasks,
       status: TasksStatus.initialized,
+      hasNextPage: hasNextPage,
     ));
   }
 
