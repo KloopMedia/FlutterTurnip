@@ -87,6 +87,11 @@ class CombinedTasksListView extends StatelessWidget {
           SliverToBoxAdapter(
             child: ExpansionTile(
               title: Text(context.loc.done),
+              trailing: const Icon(
+                Icons.arrow_drop_down,
+                size: 50,
+                color: Colors.blueAccent,
+              ),
               children: closedTasks
                   .map((item) => FormCard(
                         margin: const EdgeInsets.all(8),
@@ -103,12 +108,6 @@ class CombinedTasksListView extends StatelessWidget {
                   .toList(),
             ),
           ),
-          // SliverTaskList(
-          //   items: closedTasks,
-          //   onTap: onTap,
-          //   icon: iconDone,
-          //   emptyTitle: context.loc.no_completed_tasks,
-          // ),
           //SliverTaskListHeader(title: context.loc.receive),
           SliverTaskList(
             items: availableTasks,
@@ -210,15 +209,6 @@ class SliverTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(emptyTitle, style: Theme.of(context).textTheme.titleSmall),
-        ),
-      );
-    }
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
