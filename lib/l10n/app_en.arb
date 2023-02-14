@@ -61,5 +61,9 @@
     "delete_account_confirmation": "Delete",
 
     "settings": "Settings",
-    "form_submit_button": "Submit"
+    "form_submit_button": "Submit",
+    "form_divider": "Your form starts here",
+    "join_campaign": "Join campaign",
+    "yes": "Yes",
+    "no": "No"
 }

@@ -61,5 +61,9 @@
      "delete_account_confirmation": "Удалить",
 
      "settings": "Настройки",
-     "form_submit_button": "Отправить"
+     "form_submit_button": "Отправить",
+     "form_divider": "Ваша форма начинается здесь",
+     "join_campaign": "Присоединиться к кампании",
+     "yes": "Да",
+     "no": "Нет"
 }
