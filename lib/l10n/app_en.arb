@@ -60,5 +60,6 @@
     "delete_account_dialog_body": "This operation is irreversible. Write your email or phone number for confirmation.",
     "delete_account_confirmation": "Delete",
 
-    "settings": "Settings"
+    "settings": "Settings",
+    "form_submit_button": "Submit"
 }
