@@ -41,6 +41,7 @@ class CombinedTasksListView extends StatelessWidget {
   final IconData iconDone = Icons.assignment_turned_in_outlined;
 
   final query = 'simple=true';
+  final notificationLimit = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +52,6 @@ class CombinedTasksListView extends StatelessWidget {
       child: CustomScrollView(
         controller: scrollController,
         slivers: [
-          // BlocBuilder<ImportantNotificationsCubit, ImportantNotificationsState>(
-          //   builder: (context, state) {
-          //     return SliverList(
-          //       delegate: SliverChildBuilderDelegate(
-          //         (BuildContext context, int index) {
-          //           final item = state.notifications[index];
-          //           return ItemCard(
-          //               item: item,
-          //               onTap: (notification) {
-          //                 context.read<ImportantNotificationsCubit>().onReadNotification(notification.id);
-          //                 Navigator.of(context)
-          //                     .push(MaterialPageRoute(
-          //                         builder: (context) => NotificationView(notification: notification, campaignName: '')))
-          //                     .then((value) => context.read<ImportantNotificationsCubit>().getNotifications());
-          //               }
-          //           );
-          //         },
-          //         childCount: state.notifications.length,
-          //       ),
-          //     );
-          //   },
-          // ),
-
           CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
           //SliverTaskListHeader(title: context.loc.todo),
           SliverTaskList(
@@ -86,28 +64,49 @@ class CombinedTasksListView extends StatelessWidget {
             builder: (context, state) {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                      final item = state.notifications[index];
-                      return ItemCard(
-                        item: item,
-                        onTap: (notification) async {
-                          //context.read<AppBloc>().add(AppSelectedTaskChanged(item.receiverTask));
-                          final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-                          context.go('/campaign/${selectedCampaign.id}/tasks/${item.receiverTask}?$query');
-                        },
-                      );
+                  (BuildContext context, int index) {
+                    final item = state.notifications[index];
+                    return ItemCard(
+                      item: item,
+                      onTap: (notification) async {
+                        //context.read<AppBloc>().add(AppSelectedTaskChanged(item.receiverTask));
+                        final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+                        context.go(
+                            '/campaign/${selectedCampaign.id}/tasks/${item.receiverTask}?$query');
+                      },
+                    );
                   },
-                  childCount: (state.notifications.length < 5) ? state.notifications.length : 5,
+                  childCount: (state.notifications.length < notificationLimit)
+                      ? state.notifications.length
+                      : notificationLimit,
                 ),
               );
             },
           ),
           //SliverTaskListHeader(title: context.loc.done),
-          SliverTaskList(
-            items: closedTasks,
-            onTap: onTap,
-            icon: iconDone,
-            emptyTitle: context.loc.no_completed_tasks,
+          SliverToBoxAdapter(
+            child: ExpansionTile(
+              title: Text(context.loc.done),
+              trailing: const Icon(
+                Icons.arrow_drop_down,
+                size: 50,
+                color: Colors.blueAccent,
+              ),
+              children: closedTasks
+                  .map((item) => FormCard(
+                        margin: const EdgeInsets.all(8),
+                        id: item.id,
+                        title: item.name,
+                        description: item.stage.description,
+                        date: item.createdAt,
+                        status: item.complete,
+                        task: item,
+                        onTap: () {
+                          onTap(item);
+                        },
+                      ))
+                  .toList(),
+            ),
           ),
           //SliverTaskListHeader(title: context.loc.receive),
           SliverTaskList(
@@ -210,15 +209,6 @@ class SliverTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(emptyTitle, style: Theme.of(context).textTheme.titleSmall),
-        ),
-      );
-    }
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -256,45 +246,49 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         child: Material(
-          color: const Color.fromARGB(255, 239, 253, 222),
-          child: InkWell(
-              onTap: () {
-                onTap(item);
-              },
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          item.title,
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.headlineSmall,
+      color: const Color.fromARGB(255, 239, 253, 222),
+      child: InkWell(
+          onTap: () {
+            onTap(item);
+          },
+          child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      item.title,
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    subtitle: Text(item.text),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          '#${item.id}',
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        subtitle: Text(item.text),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              '#${item.id}',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            Text(
-                              DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ],
+                        Text(
+                          DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                          style: Theme.of(context).textTheme.caption,
                         ),
-                      ),
-                      const Text('Кененирээк...', style: TextStyle(decoration: TextDecoration.underline, color: Colors.lightBlue)),
-                      const SizedBox(height: 10.0,),
-                      Container(
-                        width: double.infinity,
-                        height: 1,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ],
-                  ))),
-        ));
+                      ],
+                    ),
+                  ),
+                  const Text('Кененирээк...',
+                      style:
+                          TextStyle(decoration: TextDecoration.underline, color: Colors.lightBlue)),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ],
+              ))),
+    ));
   }
 }

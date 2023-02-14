@@ -180,12 +180,6 @@ class _TaskViewState extends State<TaskView> {
                   child: Column(
                     children: [
                       for (var task in state.previousTasks)
-                        // JSONSchemaUI(
-                        //   schema: task.schema!,
-                        //   ui: task.uiSchema!,
-                        //   formController: UIModel(disabled: true, data: task.responses ?? {}),
-                        //   hideSubmitButton: true,
-                        // ),
                         FlutterJsonSchemaForm(
                           schema: task.schema!,
                           uiSchema: task.uiSchema,
@@ -193,6 +187,32 @@ class _TaskViewState extends State<TaskView> {
                           disabled: true,
                           storage: taskBloc.storage,
                         ),
+                      Row(children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                            child: const Divider(
+                              color: Colors.black,
+                              height: 36,
+                              thickness: 2,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          "End of background stages",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                            child: const Divider(
+                              color: Colors.black,
+                              height: 36,
+                              thickness: 2,
+                            ),
+                          ),
+                        ),
+                      ]),
                     ],
                   ),
                 ),
@@ -206,31 +226,34 @@ class _TaskViewState extends State<TaskView> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FlutterJsonSchemaForm(
-                    schema: state.schema!,
-                    uiSchema: state.uiSchema,
-                    formData: state.responses ?? {},
-                    disabled: state.complete,
-                    storage: taskBloc.storage,
-                    onChange: (Map<String, dynamic> data, String path) {
-                      taskBloc.add(UpdateTaskEvent(data));
-                      final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
-                      if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
-                        for (var metadata in dynamicJsonMetadata) {
-                          if (metadata['main'] == path || (metadata['foreign'] as List).contains(path)) {
-                            taskBloc.add(GetDynamicSchemaTaskEvent(data));
-                          }
+                  schema: state.schema!,
+                  uiSchema: state.uiSchema,
+                  formData: state.responses ?? {},
+                  disabled: state.complete,
+                  storage: taskBloc.storage,
+                  onChange: (Map<String, dynamic> data, String path) {
+                    taskBloc.add(UpdateTaskEvent(data));
+                    final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
+                    if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
+                      for (var metadata in dynamicJsonMetadata) {
+                        if (metadata['main'] == path ||
+                            (metadata['foreign'] as List).contains(path)) {
+                          taskBloc.add(GetDynamicSchemaTaskEvent(data));
                         }
                       }
-                    },
-                    onSubmit: (Map<String, dynamic> data) {
-                      taskBloc.add(SubmitTaskEvent(data));
-                    },
-                    onValidationFailed: () {
-                      showValidationFailedSnackBar(context: context);
-                    },
-                    onWebhookTrigger: () {
-                      context.read<TaskBloc>().add(TriggerWebhook());
-                    }),
+                    }
+                  },
+                  onSubmit: (Map<String, dynamic> data) {
+                    taskBloc.add(SubmitTaskEvent(data));
+                  },
+                  onValidationFailed: () {
+                    showValidationFailedSnackBar(context: context);
+                  },
+                  onWebhookTrigger: () {
+                    context.read<TaskBloc>().add(TriggerWebhook());
+                  },
+                  submitButtonText: const Text('Жөнөтүү / Отправить / Submit'),
+                ),
               ),
               if (widget.simpleViewMode)
                 BlocBuilder<NotificationsCubit, NotificationsState>(

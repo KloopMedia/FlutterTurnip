@@ -13,7 +13,8 @@ class ImportantNotificationsCubit extends Cubit<ImportantNotificationsState> {
   }) : super(const ImportantNotificationsInitial([]));
 
   void getNotifications() async {
-    final notifications = await gigaTurnipRepository.getNotifications(selectedCampaign.id, false) ?? [];
+    final notifications =
+        await gigaTurnipRepository.getNotifications(selectedCampaign.id, false) ?? [];
     emit(ImportantNotificationsLoaded(notifications));
   }
 
@@ -22,7 +23,9 @@ class ImportantNotificationsCubit extends Cubit<ImportantNotificationsState> {
   }
 
   void getLastTaskNotifications() async {
-    final lastTaskNotifications = await gigaTurnipRepository.getLastTaskNotifications(selectedCampaign.id);
-    emit(ImportantNotificationsLoaded(lastTaskNotifications));
+    final lastTaskNotifications =
+        await gigaTurnipRepository.getLastTaskNotifications(selectedCampaign.id);
+    final reversedNotifications = lastTaskNotifications.reversed.toList();
+    emit(ImportantNotificationsLoaded(reversedNotifications));
   }
 }

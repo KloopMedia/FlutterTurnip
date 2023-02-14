@@ -30,6 +30,7 @@ class GigaTurnipRepository {
   DateTime _userRelevantTaskStagesLastFetchTime = DateTime.fromMicrosecondsSinceEpoch(0);
 
   int get totalPages => _totalPages;
+  bool get hasNextPage => _hasNextAvailableTasks;
 
   Future<Map<String, dynamic>> initiateUserDeletion() async {
     return await _gigaTurnipApiClient.deleteUserInit();

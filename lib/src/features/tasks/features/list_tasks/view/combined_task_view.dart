@@ -28,6 +28,15 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
     context.read<TasksCubit>().initializeCombined();
     context.read<ImportantNotificationsCubit>().getLastTaskNotifications();
     _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      var nextPageTrigger = 0.99 * _scrollController.position.maxScrollExtent;
+
+      if (_scrollController.position.pixels > nextPageTrigger &&
+          context.read<TasksCubit>().state.status == TasksStatus.initialized &&
+          context.read<TasksCubit>().state.hasNextPage) {
+        context.read<TasksCubit>().getNextPage();
+      }
+    });
     super.initState();
   }
 
@@ -39,14 +48,6 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController.addListener(() {
-      var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
-
-      if (_scrollController.position.pixels > nextPageTrigger &&
-          context.read<TasksCubit>().state.status == TasksStatus.initialized) {
-        context.read<TasksCubit>().getNextPage();
-      }
-    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
