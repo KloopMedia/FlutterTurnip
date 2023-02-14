@@ -315,7 +315,7 @@ class GigaTurnipRepository {
       print("Is filtering");
       final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
         query: {
-          'response_contains' : text,
+          'responses_contains' : text,
           'stage__chain__campaign': selectedCampaign.id,
           'limit': _pageLimit,
           'offset': _pageOffset,
