@@ -60,5 +60,6 @@
      "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс. Ырастоо үчүн почтаңызды же телефон номериңизди жазыңыз.",
      "delete_account_confirmation": "Удалить",
 
-     "settings": "Настройки"
+     "settings": "Настройки",
+     "form_submit_button": "Отправить"
 }

@@ -60,5 +60,6 @@
     "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс . Ырастоо үчүн «өчүрүү» деген сөздү жазыңыз.",
     "delete_account_confirmation": "Өчүрүү",
 
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "form_submit_button": "Жөнөтүү"
 }
