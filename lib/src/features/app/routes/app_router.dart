@@ -57,6 +57,7 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
           return CampaignsPage(
+            key: UniqueKey(),
             simpleViewMode: simpleViewMode,
           );
         },

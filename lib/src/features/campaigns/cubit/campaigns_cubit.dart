@@ -20,10 +20,11 @@ class CampaignsCubit extends Cubit<CampaignsState> {
     try {
       final campaigns = await gigaTurnipRepository.getCampaigns(
         action: CampaignsActions.listUserCampaigns,
-        forceRefresh: forceRefresh,
+        forceRefresh: true,
       );
       final availableCampaigns = await gigaTurnipRepository.getCampaigns(
         action: CampaignsActions.listSelectableCampaigns,
+        forceRefresh: true,
       );
       emit(state.copyWith(
         campaigns: campaigns,

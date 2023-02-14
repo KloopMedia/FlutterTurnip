@@ -42,7 +42,7 @@ class _CampaignsViewState extends State<CampaignsView> {
         return CampaignsListView(
           onTap: (campaign, join) async {
             if (join) {
-              final shouldJoin = await joinCampaignDialog(context);
+              final shouldJoin = await joinCampaignDialog(context, campaign);
               if (!mounted || !shouldJoin) return;
               await context.read<CampaignsCubit>().joinCampaign(campaign);
             }
