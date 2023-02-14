@@ -61,5 +61,9 @@
     "delete_account_confirmation": "Өчүрүү",
 
     "settings": "Настройки",
-    "form_submit_button": "Жөнөтүү"
+    "form_submit_button": "Жөнөтүү",
+    "form_divider": "Сиздин формаңыз ушул жерден башталат",
+    "join_campaign": "Кампанияга кошулуу",
+    "yes": "Ооба",
+    "no": "Жок"
 }

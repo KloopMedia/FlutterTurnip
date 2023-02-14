@@ -199,9 +199,9 @@ class _TaskViewState extends State<TaskView> {
                             ),
                           ),
                         ),
-                        const Text(
-                          "End of background stages",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Text(
+                          context.loc.form_divider,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Expanded(
                           child: Container(
