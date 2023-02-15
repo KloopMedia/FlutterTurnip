@@ -36,19 +36,25 @@ class AppRouter {
     },
     routes: <GoRoute>[
       GoRoute(
-        name: Routes.login.name,
-        path: Routes.login.path,
+        path: loginRoute,
         builder: (BuildContext context, GoRouterState state) {
           return const LoginPage();
         },
       ),
       GoRoute(
-        name: Routes.campaign.name,
-        path: Routes.campaign.path,
+        path: campaignRoute,
         builder: (BuildContext context, GoRouterState state) {
           return const CampaignPage();
         },
-        routes: [],
+        routes: [
+          GoRoute(
+            path: taskRoute,
+            builder: (BuildContext context, GoRouterState state) {
+              final id = state.params['cid'];
+              throw UnimplementedError();
+            },
+          )
+        ],
       ),
     ],
   );

@@ -32,7 +32,7 @@ class CampaignView extends StatelessWidget {
             return _CampaignListView(
               data: state.data,
               onTap: (campaign) {
-                context.go('${Routes.campaign.path}/${campaign.id}');
+                context.go('$campaignRoute${campaign.id}');
               },
             );
           } else if (state is CampaignInfo) {
