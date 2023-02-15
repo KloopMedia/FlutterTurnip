@@ -9,6 +9,10 @@ abstract class CampaignEvent extends Equatable {
 
 class FetchCampaignData extends CampaignEvent {}
 
-class OpenCampaignInfo extends CampaignEvent {}
+class OpenCampaignInfo extends CampaignEvent {
+  final Campaign campaign;
+
+  const OpenCampaignInfo(this.campaign);
+}
 
 class JoinCampaign extends CampaignEvent {}

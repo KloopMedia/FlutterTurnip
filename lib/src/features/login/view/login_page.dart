@@ -19,29 +19,27 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class LoginView extends StatefulWidget {
+class LoginView extends StatelessWidget {
   const LoginView({Key? key}) : super(key: key);
 
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         // TODO: implement listener
       },
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            _GoogleLoginButton(),
-            SizedBox(height: 10),
-            _AppleLoginButton(),
-          ],
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              _GoogleLoginButton(),
+              SizedBox(height: 10),
+              _AppleLoginButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -55,7 +53,6 @@ class _GoogleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
-      key: const Key('loginForm_googleLogin_raisedButton'),
       label: Text(
         context.loc.sign_in_with_google,
         style: const TextStyle(color: Colors.white),
@@ -79,7 +76,6 @@ class _AppleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
-      key: const Key('loginForm_appleLogin_raisedButton'),
       label: Text(
         context.loc.sign_in_with_apple,
         style: const TextStyle(color: Colors.white),

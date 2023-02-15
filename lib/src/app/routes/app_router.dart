@@ -1,6 +1,10 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
+import 'package:gigaturnip/src/features/login/view/login_page.dart';
 import 'package:go_router/go_router.dart';
+
+import 'routes.dart';
 
 class AppRouter {
   final AuthenticationRepository _authenticationRepository;
@@ -32,17 +36,17 @@ class AppRouter {
     },
     routes: <GoRoute>[
       GoRoute(
-        name: 'login',
-        path: '/login',
+        name: Routes.login.name,
+        path: Routes.login.path,
         builder: (BuildContext context, GoRouterState state) {
-          throw UnimplementedError();
+          return const LoginPage();
         },
       ),
       GoRoute(
-        name: 'campaign',
-        path: '/',
+        name: Routes.campaign.name,
+        path: Routes.campaign.path,
         builder: (BuildContext context, GoRouterState state) {
-          throw UnimplementedError();
+          return const CampaignPage();
         },
         routes: [],
       ),

@@ -18,13 +18,23 @@ class CampaignFetchingError extends CampaignState {
   List<Object> get props => [error];
 }
 
-class CampaignLoaded extends CampaignState {
+abstract class CampaignInitialized extends CampaignState {
   final List<Campaign> data;
 
-  CampaignLoaded(this.data);
+  CampaignInitialized(this.data);
+
+  CampaignInitialized.clone(CampaignInitialized oldState) : this(oldState.data);
 
   @override
   List<Object> get props => [data];
 }
 
-class CampaignInfo extends CampaignState {}
+class CampaignLoaded extends CampaignInitialized {
+  CampaignLoaded(super.data);
+}
+
+class CampaignInfo extends CampaignInitialized {
+  final Campaign campaign;
+
+  CampaignInfo(CampaignInitialized oldState, this.campaign) : super.clone(oldState);
+}

@@ -1,26 +1,13 @@
-const Map<String, dynamic> routes = {
-  'loginRoute': {
-    'name': 'login',
-    'path': '/login',
-  },
-  'campaignsRoute': {
-    'name': 'campaigns',
-    'path': '/',
-  },
-  'tasksRoute': {
-    'name': 'tasks',
-    'path': '/campaign',
-  },
-  'createTasksRoute': {
-    'name': 'create',
-    'path': 'create',
-  },
-  'taskInstanceRoute': {
-    'name': 'task',
-    'path': '/task',
-  },
-  'notificationsRoute': {
-    'name': 'notifications',
-    'path': '/notificationsRoute',
-  },
-};
+class Routes {
+  static const login = _RouteInfo('login', '/login');
+  static const campaign = _RouteInfo('campaign', '/');
+  static const task = _RouteInfo('task', '/task');
+  static const notification = _RouteInfo('notification', '/notification');
+}
+
+class _RouteInfo {
+  final String name;
+  final String path;
+
+  const _RouteInfo(this.name, this.path);
+}

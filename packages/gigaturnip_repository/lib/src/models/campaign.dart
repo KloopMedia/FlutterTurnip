@@ -9,21 +9,32 @@ class Campaign extends Equatable {
   final int id;
   final String name;
   final String description;
+  final bool canJoin;
 
-  const Campaign({required this.id, required this.name, required this.description});
+  const Campaign({
+    required this.id,
+    required this.name,
+    required this.description,
+    this.canJoin = false,
+  });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
     return _$CampaignFromJson(json);
   }
 
-  factory Campaign.fromApiModel(api.Campaign model) {
+  Map<String, dynamic> toJson() {
+    return _$CampaignToJson(this);
+  }
+
+  factory Campaign.fromApiModel(api.Campaign model, bool canJoin) {
     return Campaign(
       id: model.id,
       name: model.name,
       description: model.description,
+      canJoin: canJoin,
     );
   }
 
   @override
-  List<Object?> get props => [id, name, description];
+  List<Object?> get props => [id, name, description, canJoin];
 }
