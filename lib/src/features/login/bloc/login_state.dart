@@ -1,5 +1,11 @@
 part of 'login_bloc.dart';
 
+enum AuthProvider {
+  google,
+  apple,
+  phone,
+}
+
 abstract class LoginState extends Equatable {
   const LoginState();
 }

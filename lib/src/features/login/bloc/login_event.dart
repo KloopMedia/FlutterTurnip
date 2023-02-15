@@ -5,7 +5,10 @@ abstract class LoginEvent extends Equatable {
 }
 
 class TryToLogin extends LoginEvent {
-  @override
-  List<Object> get props => [];
-}
+  final AuthProvider provider;
 
+  const TryToLogin(this.provider);
+
+  @override
+  List<Object> get props => [provider];
+}
