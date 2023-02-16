@@ -150,134 +150,136 @@ class _TaskViewState extends State<TaskView> {
           if (state.taskStatus == TaskStatus.uninitialized) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView(
-            children: [
-              if (state.isIntegrated)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      for (var task in state.integratedTasks)
-                        ExpansionCard(
-                          task: task,
-                          child: FlutterJsonSchemaForm(
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                if (state.isIntegrated)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        for (var task in state.integratedTasks)
+                          ExpansionCard(
+                            task: task,
+                            child: FlutterJsonSchemaForm(
+                              schema: task.schema!,
+                              uiSchema: task.uiSchema,
+                              formData: task.responses,
+                              disabled: task.complete,
+                              storage: taskBloc.storage,
+                              onChange: (Map<String, dynamic> data, String path) {
+                                final updatedTask = task.copyWith(responses: data);
+                                taskBloc.add(UpdateIntegratedTask(updatedTask));
+                              },
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                if (state.previousTasks.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        for (var task in state.previousTasks)
+                          FlutterJsonSchemaForm(
                             schema: task.schema!,
                             uiSchema: task.uiSchema,
                             formData: task.responses,
-                            disabled: task.complete,
+                            disabled: true,
                             storage: taskBloc.storage,
-                            onChange: (Map<String, dynamic> data, String path) {
-                              final updatedTask = task.copyWith(responses: data);
-                              taskBloc.add(UpdateIntegratedTask(updatedTask));
-                            },
                           ),
-                        ),
-                    ],
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                              child: const Divider(
+                                color: Colors.black,
+                                height: 36,
+                                thickness: 2,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            context.loc.form_divider,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                              child: const Divider(
+                                color: Colors.black,
+                                height: 36,
+                                thickness: 2,
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ],
+                    ),
                   ),
-                ),
-              if (state.previousTasks.isNotEmpty)
+                if (state.isIntegrated)
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<TaskBloc>().add(const GenerateIntegratedForm());
+                    },
+                    child: const Text('Generate form'),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      for (var task in state.previousTasks)
-                        FlutterJsonSchemaForm(
-                          schema: task.schema!,
-                          uiSchema: task.uiSchema,
-                          formData: task.responses,
-                          disabled: true,
-                          storage: taskBloc.storage,
-                        ),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-                            child: const Divider(
-                              color: Colors.black,
-                              height: 36,
-                              thickness: 2,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          context.loc.form_divider,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 20.0, right: 10.0),
-                            child: const Divider(
-                              color: Colors.black,
-                              height: 36,
-                              thickness: 2,
-                            ),
-                          ),
-                        ),
-                      ]),
-                    ],
-                  ),
-                ),
-              if (state.isIntegrated)
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<TaskBloc>().add(const GenerateIntegratedForm());
-                  },
-                  child: const Text('Generate form'),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FlutterJsonSchemaForm(
-                  schema: state.schema!,
-                  uiSchema: state.uiSchema,
-                  formData: state.responses ?? {},
-                  disabled: state.complete,
-                  storage: taskBloc.storage,
-                  onChange: (Map<String, dynamic> data, String path) {
-                    taskBloc.add(UpdateTaskEvent(data));
-                    final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
-                    if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
-                      for (var metadata in dynamicJsonMetadata) {
-                        if (metadata['main'] == path ||
-                            (metadata['foreign'] as List).contains(path)) {
-                          taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                  child: FlutterJsonSchemaForm(
+                    schema: state.schema!,
+                    uiSchema: state.uiSchema,
+                    formData: state.responses ?? {},
+                    disabled: state.complete,
+                    storage: taskBloc.storage,
+                    onChange: (Map<String, dynamic> data, String path) {
+                      taskBloc.add(UpdateTaskEvent(data));
+                      final dynamicJsonMetadata = taskBloc.state.stage.dynamicJsonsTarget;
+                      if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
+                        for (var metadata in dynamicJsonMetadata) {
+                          if (metadata['main'] == path ||
+                              (metadata['foreign'] as List).contains(path)) {
+                            taskBloc.add(GetDynamicSchemaTaskEvent(data));
+                          }
                         }
                       }
-                    }
-                  },
-                  onSubmit: (Map<String, dynamic> data) {
-                    taskBloc.add(SubmitTaskEvent(data));
-                  },
-                  onValidationFailed: () {
-                    showValidationFailedSnackBar(context: context);
-                  },
-                  onWebhookTrigger: () {
-                    context.read<TaskBloc>().add(TriggerWebhook());
-                  },
-                  submitButtonText: Text(context.loc.form_submit_button),
+                    },
+                    onSubmit: (Map<String, dynamic> data) {
+                      taskBloc.add(SubmitTaskEvent(data));
+                    },
+                    onValidationFailed: () {
+                      showValidationFailedSnackBar(context: context);
+                    },
+                    onWebhookTrigger: () {
+                      context.read<TaskBloc>().add(TriggerWebhook());
+                    },
+                    submitButtonText: Text(context.loc.form_submit_button),
+                  ),
                 ),
-              ),
-              if (widget.simpleViewMode)
-                BlocBuilder<NotificationsCubit, NotificationsState>(
-                  builder: (context, state) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          for (var notification in state.taskNotifications)
-                            ItemCard(
-                              item: notification,
-                              onTap: (notification) {
-                                final selectedCampaign =
-                                    context.read<AppBloc>().state.selectedCampaign!;
-                                context.go('/campaign/${selectedCampaign.id}/notifications');
-                              },
-                            ),
-                        ],
-                      ),
-                    );
-                  },
-                )
-            ],
+                if (widget.simpleViewMode)
+                  BlocBuilder<NotificationsCubit, NotificationsState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            for (var notification in state.taskNotifications)
+                              ItemCard(
+                                item: notification,
+                                onTap: (notification) {
+                                  final selectedCampaign =
+                                      context.read<AppBloc>().state.selectedCampaign!;
+                                  context.go('/campaign/${selectedCampaign.id}/notifications');
+                                },
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+              ],
+            ),
           );
         },
       ),
