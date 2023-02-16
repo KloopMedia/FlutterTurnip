@@ -6,10 +6,12 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+
 // import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'task_event.dart';
+
 part 'task_state.dart';
 
 EventTransformer<T> debounce<T>(Duration duration) {
@@ -148,6 +150,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
 
     try {
+      await _saveTask(state);
       final webhook = await gigaTurnipRepository.triggerWebhook(state.id);
       emit(state.copyWith(
         taskStatus: TaskStatus.triggerWebhook,
