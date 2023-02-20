@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/app/routes/routes.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_bloc.dart';
+import 'package:gigaturnip/src/helpers/app_drawer.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +25,7 @@ class CampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      endDrawer: AppDrawer(),
       body: BlocBuilder<CampaignBloc, CampaignState>(
         builder: (context, state) {
           if (state is CampaignFetching) {
