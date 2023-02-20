@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip/src/features/tasks/features/view_task/bloc/task_bloc.dart';
 import 'package:gigaturnip/src/utilities/dialogs/form_validation_snackbar.dart';
@@ -151,6 +152,16 @@ class _TaskViewState extends State<TaskView> {
           }
           return ListView(
             children: [
+              if (state.reopened && !state.complete)
+                Container(
+                    decoration: const BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.all(Radius.circular(10))),
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    width: double.infinity,
+                    child: Text(
+                        context.loc.task_returned,
+                        style: Theme.of(context).textTheme.headlineMedium)
+                ),
               if (state.isIntegrated)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
