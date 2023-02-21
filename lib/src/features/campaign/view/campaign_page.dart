@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/app/routes/routes.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_bloc.dart';
 import 'package:gigaturnip/src/helpers/app_drawer.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,7 +12,7 @@ class CampaignPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CampaignBloc(RepositoryProvider.of<GigaTurnipRepository>(context)),
+      create: (_) => CampaignBloc(context.read<GigaTurnipRepository>()),
       child: const CampaignView(),
     );
   }
@@ -34,7 +34,7 @@ class CampaignView extends StatelessWidget {
             return _CampaignListView(
               data: state.data,
               onTap: (campaign) {
-                context.go('$campaignRoute${campaign.id}');
+                context.go('${Constants.campaignRoute}${campaign.id}');
               },
             );
           } else if (state is CampaignInfo) {

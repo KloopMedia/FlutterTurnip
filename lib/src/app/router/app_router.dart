@@ -1,15 +1,16 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:go_router/go_router.dart';
 
-import 'routes.dart';
-
 class AppRouter {
+  final BuildContext context;
   final AuthenticationRepository _authenticationRepository;
 
-  AppRouter(this._authenticationRepository);
+  AppRouter(this.context) : _authenticationRepository = context.read<AuthenticationRepository>();
 
   get router => _router;
 
@@ -36,19 +37,19 @@ class AppRouter {
     },
     routes: <GoRoute>[
       GoRoute(
-        path: loginRoute,
+        path: Constants.loginRoute,
         builder: (BuildContext context, GoRouterState state) {
           return const LoginPage();
         },
       ),
       GoRoute(
-        path: campaignRoute,
+        path: Constants.campaignRoute,
         builder: (BuildContext context, GoRouterState state) {
           return const CampaignPage();
         },
         routes: [
           GoRoute(
-            path: taskRoute,
+            path: Constants.taskRoute,
             builder: (BuildContext context, GoRouterState state) {
               final id = state.params['cid'];
               throw UnimplementedError();
