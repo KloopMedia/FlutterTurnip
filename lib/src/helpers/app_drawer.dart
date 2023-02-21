@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -71,16 +70,11 @@ class DrawerBody extends StatelessWidget {
                         context.read<LocalizationBloc>().add(ChangeLocale(locale));
                       }
                     },
-                    items: AppLocalizations.supportedLocales
-                        .map(
-                          (locale) => DropdownMenuItem<Locale>(
-                        value: locale,
-                        child: Text(
-                          locale.languageCode,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                    )
+                    items: context.supportedLocales
+                        .map((locale) => DropdownMenuItem<Locale>(
+                              value: locale.value,
+                              child: Text(locale.key),
+                            ))
                         .toList(),
                   ),
                 ),

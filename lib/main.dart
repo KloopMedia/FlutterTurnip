@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -23,14 +21,10 @@ Future<void> main() async {
   final gigaTurnipApiClient = GigaTurnipApiClient(dio);
   final gigaTurnipRepository = GigaTurnipRepository(gigaTurnipApiClient);
   final sharedPreferences = await SharedPreferences.getInstance();
-  String appLocaleString;
+
   if (!kIsWeb) {
-    appLocaleString = sharedPreferences.getString('app_locale') ?? Platform.localeName;
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  } else {
-    appLocaleString = sharedPreferences.getString('app_locale') ?? 'ky';
   }
-  final locale = Locale(appLocaleString);
 
   runApp(
     MultiRepositoryProvider(
@@ -48,7 +42,7 @@ Future<void> main() async {
             create: (_) => AuthBloc(authenticationRepository: authenticationRepository),
           ),
           BlocProvider(
-            create: (_) => LocalizationBloc(locale),
+            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences),
           ),
           // TODO: Add blocs for localization, theme
         ],
