@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/features/notifications/view/notification_view.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/important_notifications_cubit.dart';
 import 'package:gigaturnip/src/widgets/cards/form_card.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../app/app.dart';
 
 typedef ItemCallback = void Function(dynamic item);
 typedef RefreshCallback = void Function();
@@ -39,6 +40,9 @@ class CombinedTasksListView extends StatelessWidget {
   final IconData iconToDo = Icons.today_rounded;
   final IconData iconDone = Icons.assignment_turned_in_outlined;
 
+  final query = 'simple=true';
+  final notificationLimit = 3;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -48,6 +52,14 @@ class CombinedTasksListView extends StatelessWidget {
       child: CustomScrollView(
         controller: scrollController,
         slivers: [
+          CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
+          //SliverTaskListHeader(title: context.loc.todo),
+          SliverTaskList(
+            items: openTasks,
+            onTap: onTap,
+            icon: iconToDo,
+            emptyTitle: context.loc.no_uncompleted_tasks,
+          ),
           BlocBuilder<ImportantNotificationsCubit, ImportantNotificationsState>(
             builder: (context, state) {
               return SliverList(
@@ -55,45 +67,53 @@ class CombinedTasksListView extends StatelessWidget {
                   (BuildContext context, int index) {
                     final item = state.notifications[index];
                     return ItemCard(
-                        item: item,
-                        onTap: (notification) {
-                          context
-                              .read<ImportantNotificationsCubit>()
-                              .onReadNotification(notification.id);
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (context) => NotificationView(
-                                      notification: notification, campaignName: '')))
-                              .then((value) =>
-                                  context.read<ImportantNotificationsCubit>().getNotifications());
-                        });
+                      item: item,
+                      onTap: (notification) async {
+                        //context.read<AppBloc>().add(AppSelectedTaskChanged(item.receiverTask));
+                        final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+                        context.go(
+                            '/campaign/${selectedCampaign.id}/tasks/${item.receiverTask}?$query');
+                      },
+                    );
                   },
-                  childCount: state.notifications.length,
+                  childCount: (state.notifications.length < notificationLimit)
+                      ? state.notifications.length
+                      : notificationLimit,
                 ),
               );
             },
           ),
-          CreatableTaskList(items: creatableTasks, onTap: onCreate, icon: iconToDo),
-          SliverTaskListHeader(title: context.loc.todo),
-          SliverTaskList(
-            items: openTasks,
-            onTap: onTap,
-            icon: iconToDo,
-            emptyTitle: context.loc.no_uncompleted_tasks,
+          //SliverTaskListHeader(title: context.loc.done),
+          SliverToBoxAdapter(
+            child: ExpansionTile(
+              title: Text(context.loc.done),
+              trailing: const Icon(
+                Icons.arrow_drop_down,
+                size: 50,
+                color: Colors.blueAccent,
+              ),
+              children: closedTasks
+                  .map((item) => FormCard(
+                        margin: const EdgeInsets.all(8),
+                        id: item.id,
+                        title: item.name,
+                        description: item.stage.description,
+                        date: item.createdAt,
+                        status: item.complete,
+                        task: item,
+                        onTap: () {
+                          onTap(item);
+                        },
+                      ))
+                  .toList(),
+            ),
           ),
-          SliverTaskListHeader(title: context.loc.receive),
+          //SliverTaskListHeader(title: context.loc.receive),
           SliverTaskList(
             items: availableTasks,
             onTap: onRequest,
             icon: iconDone,
             emptyTitle: context.loc.no_available_tasks,
-          ),
-          SliverTaskListHeader(title: context.loc.done),
-          SliverTaskList(
-            items: closedTasks,
-            onTap: onTap,
-            icon: iconDone,
-            emptyTitle: context.loc.no_completed_tasks,
           ),
           if (showLoader)
             const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
@@ -189,15 +209,6 @@ class SliverTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(emptyTitle, style: Theme.of(context).textTheme.titleSmall),
-        ),
-      );
-    }
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -234,43 +245,50 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        child: InkWell(
-            onTap: () {
-              onTap(item);
-            },
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        item.title,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      subtitle: Text(item.text),
-                      trailing: Column(
-                        children: [
-                          Text(
-                            '#${item.id}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        ],
-                      ),
+        child: Material(
+      color: const Color.fromARGB(255, 239, 253, 222),
+      child: InkWell(
+          onTap: () {
+            onTap(item);
+          },
+          child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      item.title,
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 1,
-                      color: Theme.of(context).colorScheme.secondary,
+                    subtitle: Text(item.text),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          '#${item.id}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        Text(
+                          DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ],
                     ),
-                  ],
-                ))));
+                  ),
+                  const Text('Кененирээк...',
+                      style:
+                          TextStyle(decoration: TextDecoration.underline, color: Colors.lightBlue)),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ],
+              ))),
+    ));
   }
 }

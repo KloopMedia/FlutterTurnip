@@ -31,3 +31,23 @@ class GetDynamicSchemaTaskEvent extends TaskEvent {
 
   GetDynamicSchemaTaskEvent(this.response);
 }
+
+class GenerateIntegratedForm extends TaskEvent {
+  const GenerateIntegratedForm();
+}
+
+class OpenWebView extends TaskEvent {
+  const OpenWebView();
+}
+
+class CloseWebView extends TaskEvent {
+  const CloseWebView();
+}
+
+class UpdateIntegratedTask extends TaskEvent {
+  final Task task;
+
+  UpdateIntegratedTask(this.task);
+}
+
+class TriggerWebhook extends TaskEvent {}

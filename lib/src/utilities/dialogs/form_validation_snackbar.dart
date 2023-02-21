@@ -22,3 +22,4 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showValidationFailedSn
   );
   return ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+

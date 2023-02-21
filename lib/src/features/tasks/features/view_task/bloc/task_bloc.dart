@@ -2,31 +2,36 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_storage/firebase_storage.dart' show SettableMetadata, UploadTask;
 import 'package:flutter/foundation.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:path/path.dart';
-import 'package:uniturnip/json_schema_ui.dart';
-// import 'package:video_compress/video_compress.dart';
+
+// import 'package:hive/hive.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'task_event.dart';
 
 part 'task_state.dart';
 
+EventTransformer<T> debounce<T>(Duration duration) {
+  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+}
+
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GigaTurnipRepository gigaTurnipRepository;
   final AuthUser user;
+  final Campaign campaign;
   Timer? timer;
   TaskState? _cache;
+  firebase_storage.Reference? storage;
 
   TaskBloc({
     required this.gigaTurnipRepository,
     required this.user,
+    required this.campaign,
     required Task selectedTask,
+    this.storage,
   }) : super(TaskState.fromTask(selectedTask, TaskStatus.initialized)) {
     timer = Timer.periodic(const Duration(seconds: 20), (timer) {
       if (_cache != state && !state.complete) {
@@ -39,10 +44,19 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<SubmitTaskEvent>(_onSubmitTask);
     on<ExitTaskEvent>(_onExitTask);
     on<GetDynamicSchemaTaskEvent>(_onGetDynamicSchema);
+    on<GenerateIntegratedForm>(_onGenerateIntegratedForm);
+    on<TriggerWebhook>(_onTriggerWebhook);
+    on<UpdateIntegratedTask>(_onUpdateIntegratedTask,
+        transformer: debounce(const Duration(milliseconds: 300)));
     final dynamicJsonMetadata = state.stage.dynamicJsonsTarget;
     if (dynamicJsonMetadata != null && dynamicJsonMetadata.isNotEmpty) {
       add(GetDynamicSchemaTaskEvent(state.responses ?? {}));
     }
+    storage = firebase_storage.FirebaseStorage.instance.ref('${state.stage.chain.campaign}/'
+        '${state.stage.chain.id}/'
+        '${state.stage.id}/'
+        '${user.id}/'
+        '${state.id}');
   }
 
   Future<Map<String, dynamic>> getDynamicJson(
@@ -50,11 +64,17 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     return await gigaTurnipRepository.getDynamicJsonTaskStage(id, taskId, data);
   }
 
+  Future<List<Task>> getIntegratedTasks(int id) async {
+    return await gigaTurnipRepository.getIntegratedTasks(id);
+  }
+
   Future<Task> _getTask(int id) async {
     return await gigaTurnipRepository.getTask(id);
   }
 
   Future<int?> _saveTask(Task task) async {
+    // final box = Hive.box<Task>(campaign.name);
+    // box.put(task.id, task);
     return await gigaTurnipRepository.updateTask(task);
   }
 
@@ -94,130 +114,52 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<void> _onInitializeTask(InitializeTaskEvent event, Emitter<TaskState> emit) async {
     final previousTasks = await _getPreviousTasks(state.id);
-    emit(state.copyWith(previousTasks: previousTasks));
+    final List<Task> integratedTasks = state.isIntegrated ? await getIntegratedTasks(state.id) : [];
+
+    emit(state.copyWith(previousTasks: previousTasks, integratedTasks: integratedTasks));
   }
 
-  Future<FileModel> getFile(path) async {
-    final ref = firebase_storage.FirebaseStorage.instance.ref(path);
-    final data = await ref.getMetadata();
-    final url = await ref.getDownloadURL();
-    final type = _getFileType(data.contentType);
-    return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
-  }
-
-  FileType _getFileType(String? contentType) {
-    final type = contentType?.split('/').first;
-    switch (type) {
-      case 'video':
-        return FileType.video;
-      case 'image':
-        return FileType.image;
-      default:
-        return FileType.any;
-    }
-  }
-
-  String? _getContentType(FileType type, String extension) {
-    switch (type) {
-      case FileType.video:
-        return 'video/$extension';
-      case FileType.image:
-        return 'image/$extension';
-      default:
-        return null;
-    }
-  }
-
-  Future<UploadTask?> uploadFile({
-    required XFile? file,
-    required String? path,
-    required FileType type,
-    required bool private,
-  }) async {
-    if (file == null) {
-      return null;
-    }
-    final rawFile = await file.readAsBytes();
-    final mimeType = file.mimeType ?? _getContentType(type, extension(file.name));
-
-    if (kIsWeb || path == null) {
-      return _uploadFile(
-        file: rawFile,
-        private: private,
-        filename: file.name,
-        mimeType: mimeType,
-      );
-    }
-
-    Uint8List? compressed = rawFile;
-
-    if (type == FileType.image) {
-      compressed = await _compressImage(file);
-    }
-    // else if (type == FileType.video) {
-    //   compressed = await _compressVideo(file);
-    // }
-    if (compressed != null) {
-      return _uploadFile(
-        file: compressed,
-        private: private,
-        filename: file.name,
-        mimeType: mimeType,
-      );
-    } else {
-      print('No compressed files');
-      return null;
-    }
-  }
-
-  Future<UploadTask?> _uploadFile({
-    required Uint8List file,
-    required bool private,
-    required String filename,
-    required String? mimeType,
-  }) async {
-    final prefix = private ? 'private' : 'public';
-    final storagePath = '$prefix/'
-        '${state.stage.chain.campaign}/'
-        '${state.stage.chain.id}/'
-        '${state.stage.id}/'
+  String createStoragePathFromTask(Task task) {
+    return '${task.stage.chain.campaign}/'
+        '${task.stage.chain.id}/'
+        '${task.stage.id}/'
         '${user.id}/'
-        '${state.id}/'
-        '$filename';
-
-    final metadata = SettableMetadata(contentType: mimeType);
-
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance.ref(storagePath);
-      UploadTask uploadTask;
-      if (kIsWeb) {
-        uploadTask = ref.putData(file, metadata);
-      } else {
-        uploadTask = ref.putData(file, metadata);
-      }
-      return Future.value(uploadTask);
-    } on firebase_storage.FirebaseException catch (e) {
-      print('FIlE UPLOAD ERROR ---> $e');
-      rethrow;
-    }
-  }
-
-  // Future<Uint8List?> _compressVideo(XFile file) async {
-  //   MediaInfo? mediaInfo = await VideoCompress.compressVideo(
-  //     file.path,
-  //     quality: VideoQuality.DefaultQuality,
-  //   );
-  //   return mediaInfo?.file?.readAsBytesSync();
-  // }
-
-  Future<Uint8List?> _compressImage(XFile file) async {
-    return await FlutterImageCompress.compressWithFile(file.path);
+        '${task.id}';
   }
 
   Future<void> _onGetDynamicSchema(GetDynamicSchemaTaskEvent event, Emitter<TaskState> emit) async {
+    if (!state.complete) {
+      emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
+      final schema = await getDynamicJson(state.stage.id, state.id, event.response);
+      emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+    }
+  }
+
+  void _onGenerateIntegratedForm(GenerateIntegratedForm event, Emitter<TaskState> emit) async {
+    await gigaTurnipRepository.triggerWebhook(state.id);
+    final task = await _getTask(state.id);
+    emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.triggerWebhook));
+    emit(state.copyWith(responses: task.responses, taskStatus: TaskStatus.initialized));
+  }
+
+  void _onUpdateIntegratedTask(UpdateIntegratedTask event, Emitter<TaskState> emit) {
+    _saveTask(event.task);
+  }
+
+  void _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {
     emit(state.copyWith(taskStatus: TaskStatus.uninitialized));
-    final schema = await getDynamicJson(state.stage.id, state.id, event.response);
-    // print(schema);
-    emit(state.copyWith(schema: schema, taskStatus: TaskStatus.initialized));
+
+    try {
+      await _saveTask(state);
+      final webhook = await gigaTurnipRepository.triggerWebhook(state.id);
+      emit(state.copyWith(
+        taskStatus: TaskStatus.triggerWebhook,
+        responses: webhook['responses'],
+      ));
+      emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    } catch (e) {
+      await Future.delayed(const Duration(seconds: 1));
+      emit(state.copyWith(taskStatus: TaskStatus.initialized));
+    }
   }
 }

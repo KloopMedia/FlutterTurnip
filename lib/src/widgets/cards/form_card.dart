@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/cubit/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:uniturnip/json_schema_ui.dart';
+// import 'package:uniturnip/json_schema_ui.dart';
+
+import '../../features/app/app.dart';
+import '../../features/tasks/features/view_task/bloc/task_bloc.dart';
 
 typedef CardCallback = void Function();
 
@@ -88,16 +92,22 @@ class CardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasCardData = task.cardJsonSchema != null && task.cardJsonSchema!.isNotEmpty;
-    return JSONSchemaUI(
-      schema: hasCardData ? task.cardJsonSchema! : task.schema!,
-      ui: hasCardData ? task.cardUiSchema! : task.uiSchema!,
-      formController: UIModel(
+    // return JSONSchemaUI(
+    //   schema: hasCardData ? task.cardJsonSchema! : task.schema!,
+    //   ui: hasCardData ? task.cardUiSchema! : task.uiSchema!,
+    //   formController: UIModel(
+    //     disabled: true,
+    //     data: task.responses ?? {},
+    //     getFile: (path) {
+    //       return context.read<TasksCubit>().getFile(path);
+    //     },
+    //   ),
+    // );
+    return FlutterJsonSchemaForm(
+        schema: hasCardData ? task.cardJsonSchema! : task.schema!,
+        uiSchema: hasCardData ? task.cardUiSchema! : task.uiSchema!,
+        formData: task.responses ?? {},
         disabled: true,
-        data: task.responses ?? {},
-        getFile: (path) {
-          return context.read<TasksCubit>().getFile(path);
-        },
-      ),
     );
   }
 }

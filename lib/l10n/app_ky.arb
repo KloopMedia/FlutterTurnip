@@ -29,7 +29,8 @@
     "rich_text_is_empty" : "Rich text is empty",
     "webview" : "Webview",
 
-    "sign_in" : "Google аркылуу катталуу",
+    "sign_in_with_google" : "Google аркылуу катталуу",
+    "sign_in_with_apple" : "Apple аркылуу катталуу",
     "failed_to_load_campaigns" : "Кампанияларды жүктөөдөгү ката",
     "failed_to_load_tasks" : "Тапшырманы жүктөөдөгү  ката",
     "fetching_error" : "Кампанияларды алуудагы ката",
@@ -53,5 +54,18 @@
 
     "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
     "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
-    "task_returned": "Кайтарылды"
+    "task_returned": "Кайтарылды",
+    "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз",
+
+    "delete_account_button": "Баракчаңы өчүрүү",
+    "delete_account_dialog_title": "Баракчаңыз өчүрүлсүнбү?",
+    "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс . Ырастоо үчүн «өчүрүү» деген сөздү жазыңыз.",
+    "delete_account_confirmation": "Өчүрүү",
+
+    "settings": "Жөндөөлөр",
+    "form_submit_button": "Жөнөтүү",
+    "form_divider": "Сиздин формаңыз ушул жерден башталат",
+    "join_campaign": "Кампанияга кошулуу?",
+    "yes": "Ооба",
+    "no": "Жок"
 }

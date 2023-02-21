@@ -149,6 +149,7 @@ class SliverTaskList extends StatelessWidget {
             icon: icon,
             date: item.createdAt,
             reopened: item.reopened,
+            complete: item.complete,
             onTap: () {
               onTap(item);
             },

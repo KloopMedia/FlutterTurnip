@@ -2,8 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/features/tasks/constants/status.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:uniturnip/json_schema_ui.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+// import 'package:hive/hive.dart';
 
 part 'tasks_state.dart';
 
@@ -17,23 +16,28 @@ class TasksCubit extends Cubit<TasksState> {
   }) : super(const TasksState());
 
   void initialize() async {
-    refresh();
+    // refresh();
+    initialLoading();
     getUnreadNotifications();
   }
 
   void initializeCombined() async {
-    refreshCombined();
+    // refreshCombined();
+    initialLoadingCombined();
     getUnreadNotifications();
   }
 
-  void refreshCombined() async {
+  void initialLoadingCombined() async {
     emit(state.copyWith(status: TasksStatus.loading));
+    // await Hive.openBox<Task>(selectedCampaign.name);
+    // final closeTasks = await _writeDataToBox();
     final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
     final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
     final availableTasks =
         await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
     final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
     final totalPages = gigaTurnipRepository.totalPages;
+    final hasNextPage = gigaTurnipRepository.hasNextPage;
 
     emit(state.copyWith(
       totalPages: totalPages,
@@ -42,7 +46,44 @@ class TasksCubit extends Cubit<TasksState> {
       availableTasks: availableTasks,
       creatableTasks: creatableTasks,
       status: TasksStatus.initialized,
+      hasNextPage: hasNextPage,
     ));
+  }
+
+  void refreshCombined() async {
+    emit(state.copyWith(status: TasksStatus.loading));
+    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    // final closeTasks = await _writeDataToBox();
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+    final availableTasks =
+        await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
+    final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
+    final totalPages = gigaTurnipRepository.totalPages;
+    final hasNextPage = gigaTurnipRepository.hasNextPage;
+
+    emit(state.copyWith(
+      totalPages: totalPages,
+      openTasks: openTasks,
+      closeTasks: closeTasks,
+      availableTasks: availableTasks,
+      creatableTasks: creatableTasks,
+      status: TasksStatus.initialized,
+      hasNextPage: hasNextPage,
+    ));
+  }
+
+  void initialLoading() async {
+    emit(state.copyWith(status: TasksStatus.loading));
+    // await Hive.openBox<Task>(selectedCampaign.name);
+    final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
+    final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+
+    // final closeTasks = await _writeDataToBox();
+    emit(state.copyWith(
+      openTasks: openTasks,
+      closeTasks: closeTasks,
+    ));
+    emit(state.copyWith(status: TasksStatus.initialized));
   }
 
   void refresh() async {
@@ -52,6 +93,7 @@ class TasksCubit extends Cubit<TasksState> {
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
         final closeTasks =
             await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        // final closeTasks = await _writeDataToBox();
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
@@ -72,6 +114,32 @@ class TasksCubit extends Cubit<TasksState> {
     }
     emit(state.copyWith(status: TasksStatus.initialized));
   }
+
+  // Future<List<Task>> _writeDataToBox() async {
+  //   final closeTasks = await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+  //   final closedTasksBox = Hive.box<Task>(selectedCampaign.name);
+  //   closedTasksBox.clear();
+  //   if (closeTasks != null && closeTasks.isNotEmpty) {
+  //     for(var task in closeTasks) {
+  //       closedTasksBox.put(task.id, task);
+  //     }
+  //   }
+  //   final closedTasksFromBox = _readDataFromBox();
+  //   return closedTasksFromBox;
+  // }
+  //
+  // Future<List<Task>> _readDataFromBox() async {
+  //   final closedTasksBox = Hive.box<Task>(selectedCampaign.name);
+  //   for (var key in closedTasksBox.keys.toList().reversed) {
+  //     final task = closedTasksBox.get(key);
+  //     closeTasks.add(task!);
+  //   }
+  //   return closeTasks;
+  // }
+  //
+  // void closeHiveBox() {
+  //   Hive.box<Task>(selectedCampaign.name).close();
+  // }
 
   Future<void> getNextPage() async {
     emit(state.copyWith(status: TasksStatus.loadingNextPage));
@@ -130,6 +198,7 @@ class TasksCubit extends Cubit<TasksState> {
         final openTasks = await _fetchData(action: TasksActions.listOpenTasks, forceRefresh: true);
         final closeTasks =
             await _fetchData(action: TasksActions.listClosedTasks, forceRefresh: true);
+        // final closeTasks = await _readDataFromBox();
         emit(state.copyWith(
           openTasks: openTasks,
           closeTasks: closeTasks,
@@ -138,7 +207,7 @@ class TasksCubit extends Cubit<TasksState> {
       case Tabs.availableTasksTab:
         final availableTasks =
             await _fetchData(action: TasksActions.listSelectableTasks, forceRefresh: true);
-        final creatableTasks = await _fetchCreatableTasks();
+        final creatableTasks = await _fetchCreatableTasks(forceRefresh: true);
         final totalPages = gigaTurnipRepository.totalPages;
         print('TOTAL: $totalPages');
         emit(state.copyWith(
@@ -209,26 +278,6 @@ class TasksCubit extends Cubit<TasksState> {
         return Tabs.availableTasksTab;
       default:
         throw Exception('Unknown index $index');
-    }
-  }
-
-  Future<FileModel> getFile(path) async {
-    final ref = firebase_storage.FirebaseStorage.instance.ref(path);
-    final data = await ref.getMetadata();
-    final url = await ref.getDownloadURL();
-    final type = _getFileType(data.contentType);
-    return FileModel(name: data.name, path: data.fullPath, type: type, url: url);
-  }
-
-  FileType _getFileType(String? contentType) {
-    final type = contentType?.split('/').first;
-    switch (type) {
-      case 'video':
-        return FileType.video;
-      case 'image':
-        return FileType.image;
-      default:
-        return FileType.any;
     }
   }
 

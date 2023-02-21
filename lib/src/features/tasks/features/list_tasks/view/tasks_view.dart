@@ -49,6 +49,7 @@ class _TasksViewState extends State<TasksView> {
         leading: BackButton(
           onPressed: () {
             context.read<AppBloc>().add(const AppSelectedCampaignChanged(null));
+            // context.read<TasksCubit>().closeHiveBox();
             context.pop();
           },
         ),
@@ -140,7 +141,8 @@ class _TasksViewState extends State<TasksView> {
                     context.go(
                         '/campaign/${selectedCampaign.id}/tasks/${task.id}');
                   } else {
-                    context.read<TasksCubit>().requestTask(item);
+                    await context.read<TasksCubit>().requestTask(item);
+                    if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
                     context.go(
                         '/campaign/${selectedCampaign.id}/tasks/${item.id}');

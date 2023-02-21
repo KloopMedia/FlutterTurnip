@@ -30,7 +30,8 @@
      "webview" : "Webview",
 
 
-     "sign_in" : "Зарегистрироваться через Google",
+     "sign_in_with_google" : "Зарегистрироваться через Google",
+     "sign_in_with_apple" : "Зарегистрироваться через Apple",
      "failed_to_load_campaigns" : "Не удалось загрузить кампании",
      "failed_to_load_tasks" : "Не удалось загрузить задания",
      "fetching_error" : "Ошибка при получении кампаний",
@@ -54,5 +55,18 @@
 
      "empty_richtext": "К заданию нет пояснений",
      "empty_form_fields": "В вашей форме есть пустые поля. Пожалуйста, исправьте их и отправьте снова",
-     "task_returned": "Возвращено"
+     "task_returned": "Возвращено",
+     "test_returned": "Возвращено. Пожалуйста снова ответьте на вопросы",
+
+     "delete_account_button": "Удалить аккаунт",
+     "delete_account_dialog_title": "Вы уверены, что хотите удалить свой аккаунт?",
+     "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс. Ырастоо үчүн почтаңызды же телефон номериңизди жазыңыз.",
+     "delete_account_confirmation": "Удалить",
+
+     "settings": "Настройки",
+     "form_submit_button": "Отправить",
+     "form_divider": "Ваша форма начинается здесь",
+     "join_campaign": "Присоединиться к кампании?",
+     "yes": "Да",
+     "no": "Нет"
 }

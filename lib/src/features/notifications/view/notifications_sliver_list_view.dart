@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:intl/intl.dart';
-import '../cubit/notifications_cubit.dart';
 
 typedef ItemCallback = void Function(Notifications item);
 typedef RefreshCallback = void Function();
@@ -86,47 +84,80 @@ class ItemCard extends StatelessWidget {
         onTap: () {
           onTap(item);
         },
-        child: BlocBuilder<NotificationsCubit, NotificationsState>(
-          builder: (context, state) {
-            return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    ListTile(
-                      minLeadingWidth: (!state.readNotifications.contains(item)) ? 15.0 : 0.0,
-                      leading: (item.importance < 3 && !state.readNotifications.contains(item))
-                          ? const Icon(Icons.notifications_active, color: Colors.orangeAccent)
-                          : const SizedBox.shrink(),
-                      visualDensity: const VisualDensity(horizontal: 4, vertical: 4),
-                      title: Text(
-                        item.title,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.headlineSmall,
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                ListTile(
+                  visualDensity: const VisualDensity(horizontal: 4, vertical: 4),
+                  title: Text(
+                    item.title,
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  subtitle: Text(item.text),
+                  trailing: Column(
+                    children: [
+                      Text(
+                        '#${item.id}',
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      subtitle: Text(item.text),
-                      trailing: Column(
-                        children: [
-                          Text(
-                            '#${item.id}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          Text(
-                            DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        ],
+                      const SizedBox(
+                        height: 25,
                       ),
-                    ),
-                    Divider(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ],
-                ));
-          }
-        )
+                      Text(
+                        DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ],
+            ))
+        // BlocBuilder<NotificationsCubit, NotificationsState>(
+        //   builder: (context, state) {
+        //     return Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: Column(
+        //           children: [
+        //             ListTile(
+        //               minLeadingWidth: (!state.readNotifications.contains(item)) ? 15.0 : 0.0,
+        //               leading: (item.importance < 3 && !state.readNotifications.contains(item))
+        //                   ? const Icon(Icons.notifications_active, color: Colors.orangeAccent)
+        //                   : const SizedBox.shrink(),
+        //               visualDensity: const VisualDensity(horizontal: 4, vertical: 4),
+        //               title: Text(
+        //                 item.title,
+        //                 textAlign: TextAlign.left,
+        //                 style: Theme.of(context).textTheme.headlineSmall,
+        //               ),
+        //               subtitle: Text(item.text),
+        //               trailing: Column(
+        //                 children: [
+        //                   Text(
+        //                     '#${item.id}',
+        //                     style: Theme.of(context).textTheme.bodySmall,
+        //                   ),
+        //                   const SizedBox(
+        //                     height: 25,
+        //                   ),
+        //                   Text(
+        //                     DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+        //                     style: Theme.of(context).textTheme.caption,
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //             Divider(
+        //               color: Theme.of(context).colorScheme.secondary,
+        //             ),
+        //           ],
+        //         ));
+        //   }
+        // )
       ),
     );
   }

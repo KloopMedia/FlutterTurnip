@@ -63,6 +63,20 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> logInWithApple() async {
+    try {
+      final appleProvider = AppleAuthProvider();
+      if (isWeb) {
+        await FirebaseAuth.instance.signInWithPopup(appleProvider);
+      } else {
+        await FirebaseAuth.instance.signInWithProvider(appleProvider);
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   Future<void> logOut() async {
     try {
       await Future.wait([
@@ -71,7 +85,6 @@ class AuthenticationRepository {
       ]);
     } catch (_) {
       print(_);
-      // TODO: Fix googleSignIn log out error
       throw LogOutFailure();
     }
   }

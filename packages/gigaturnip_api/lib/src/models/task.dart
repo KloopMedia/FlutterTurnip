@@ -16,6 +16,8 @@ class Task {
   final List<int> inTasks;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final List<Task>? displayedPrevTasks;
+  final Map<String, dynamic>? integratorGroup;
 
   const Task({
     required this.id,
@@ -29,6 +31,8 @@ class Task {
     required this.inTasks,
     required this.createdAt,
     required this.updatedAt,
+    required this.displayedPrevTasks,
+    required this.integratorGroup,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {

@@ -3,17 +3,21 @@ import 'package:gigaturnip/src/features/authentication/authentication.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final bool simpleViewMode;
+
+  const LoginPage({Key? key, this.simpleViewMode = false}) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: LoginPage());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.loc.login)),
-      body: const Padding(
-        padding: EdgeInsets.all(8),
-        child: LoginForm(),
+      appBar: (simpleViewMode)
+          ? AppBar(elevation: 0.0, backgroundColor: Colors.white)
+          : AppBar(title: Text(context.loc.login), centerTitle: true),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: LoginForm(simpleViewMode: simpleViewMode),
       ),
     );
   }

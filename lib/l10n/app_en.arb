@@ -29,7 +29,8 @@
     "rich_text_is_empty" : "Rich text is empty",
     "webview" : "Webview",
 
-    "sign_in" : "SIGN IN WITH GOOGLE",
+    "sign_in_with_google" : "SIGN IN WITH GOOGLE",
+    "sign_in_with_apple" : "SIGN IN WITH APPLE",
     "failed_to_load_campaigns" : "Failed to load campaigns",
     "failed_to_load_tasks" : "Failed to load tasks",
     "fetching_error" : "Error occurred while fetching campaigns",
@@ -53,5 +54,18 @@
 
     "empty_richtext": "No explanation for the task",
     "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
-    "task_returned": "Returned"
+    "task_returned": "Returned",
+    "test_returned": "Returned. Please answer the questions again",
+
+    "delete_account_button": "Delete account",
+    "delete_account_dialog_title": "Are you sure you want to delete account?",
+    "delete_account_dialog_body": "This operation is irreversible. Write your email or phone number for confirmation.",
+    "delete_account_confirmation": "Delete",
+
+    "settings": "Settings",
+    "form_submit_button": "Submit",
+    "form_divider": "Your form starts here",
+    "join_campaign": "Join campaign?",
+    "yes": "Yes",
+    "no": "No"
 }

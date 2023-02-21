@@ -29,10 +29,22 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     ));
   }
 
+  void getTaskNotifications(int taskId) async {
+    final notifications = await _getNotifications(false) ?? [];
+    final List<Notifications> taskNotifications = [];
+    for (var item in notifications) {
+      if (item.receiverTask == taskId) {
+        taskNotifications.add(item);
+      }
+    }
+    emit(state.copyWith(taskNotifications: taskNotifications));
+  }
+
   Future<List<Notifications>?> _getNotifications(bool viewed) async {
     try {
-      return await gigaTurnipRepository.getNotifications(
-          selectedCampaign.id, viewed);
+      final notifications =
+          await gigaTurnipRepository.getNotifications(selectedCampaign.id, viewed);
+      return notifications ?? [];
     } on GigaTurnipApiRequestException catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.error,
@@ -59,9 +71,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         emit(state.copyWith(readNotifications: readNotifications));
         break;
     }
-    emit(state.copyWith(selectedTab: tab,
-        tabIndex: index,
-        status: NotificationsStatus.initialized));
+    emit(
+        state.copyWith(selectedTab: tab, tabIndex: index, status: NotificationsStatus.initialized));
   }
 
   Tabs _getTabFromIndex(int index) {
@@ -78,5 +89,4 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   void onReadNotification(int id) async {
     await gigaTurnipRepository.getOpenNotification(id);
   }
-
 }

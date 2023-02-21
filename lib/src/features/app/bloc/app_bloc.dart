@@ -12,19 +12,20 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
+  final GigaTurnipRepository _gigaTurnipRepository;
   late final StreamSubscription<AuthUser> userSubscription;
   AppLocales? sharedPrefsAppLocale;
 
   AppBloc({
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
-  })
-      : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
+        _gigaTurnipRepository = gigaTurnipRepository,
         super(
-        authenticationRepository.currentUser.isNotEmpty
-            ? AppStateLoggedIn(user: authenticationRepository.currentUser)
-            : const AppStateLoggedOut(exception: null),
-      ) {
+          authenticationRepository.currentUser.isNotEmpty
+              ? AppStateLoggedIn(user: authenticationRepository.currentUser)
+              : const AppStateLoggedOut(exception: null),
+        ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLocaleChanged>(_onLocaleChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
@@ -32,9 +33,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppSelectedCampaignChanged>(_onSelectedCampaignChanged);
     on<AppSelectedTaskChanged>(_onSelectedTaskChanged);
     on<AppSelectedNotificationChanged>(_onSelectedNotificationChanged);
+    on<DeleteAccountRequested>(_onDeleteAccount);
 
     userSubscription = _authenticationRepository.user.listen(
-          (user) => add(AppUserChanged(user)),
+      (user) => add(AppUserChanged(user)),
     );
     _getLocaleFromSharedPrefs();
   }
@@ -68,12 +70,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onLoginRequested(AppLoginRequested event, Emitter<AppState> emit) async {
     emit(const AppStateLoggedOut(exception: null));
-    try {
-      await _authenticationRepository.logInWithGoogle();
-    } on LogInWithGoogleFailure catch (e) {
-      emit(AppStateLoggedOut(exception: e));
-    } catch (e) {
-      emit(const AppStateLoggedOut(exception: LogInWithGoogleFailure()));
+    if (event.provider == LoginProvider.google) {
+      try {
+        await _authenticationRepository.logInWithGoogle();
+      } on LogInWithGoogleFailure catch (e) {
+        emit(AppStateLoggedOut(exception: e));
+      } catch (e) {
+        emit(const AppStateLoggedOut(exception: LogInWithGoogleFailure()));
+      }
+    }
+    if (event.provider == LoginProvider.apple) {
+      try {
+        await _authenticationRepository.logInWithApple();
+      } catch (e) {
+        emit(AppStateLoggedOut(exception: LogInWithGoogleFailure()));
+      }
     }
   }
 
@@ -100,8 +111,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(state.copyWith(appLocale: sharedPrefsAppLocale ?? event.locale));
   }
 
-  void _onSelectedNotificationChanged(AppSelectedNotificationChanged event,
-      Emitter<AppState> emit) {
+  void _onSelectedNotificationChanged(
+      AppSelectedNotificationChanged event, Emitter<AppState> emit) {
     emit(state.copyWith(notification: event.notification));
   }
 
@@ -144,6 +155,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           break;
         case 'ky':
           sharedPrefsAppLocale = AppLocales.kyrgyz;
+      }
+    }
+  }
+
+  Future<int?> _initiateAccountDeletion() async {
+    final response = await _gigaTurnipRepository.initiateUserDeletion();
+    return response['delete_pk'];
+  }
+
+  void _onDeleteAccount(DeleteAccountRequested event, Emitter<AppState> emit) async {
+    final pk = await _initiateAccountDeletion();
+    if (pk != null) {
+      try {
+        await _gigaTurnipRepository.deleteUser(pk, event.email);
+        unawaited(_authenticationRepository.logOut());
+      } catch (e) {
+        print(e);
       }
     }
   }
