@@ -61,12 +61,15 @@ class AppRouter {
               final id = state.params['cid'];
               final simpleViewMode = state.queryParams['simple']?.toLowerCase() == 'true';
               final shouldJoinCampaign = state.queryParams['join']?.toLowerCase() == 'true';
+              final createTask = int.tryParse(state.queryParams['create_task'] ?? '');
 
               if (id != null) {
                 return TasksPage(
                   campaignId: int.parse(id),
                   simpleViewMode: simpleViewMode,
                   shouldJoinCampaign: shouldJoinCampaign,
+                  createTaskId: createTask,
+
                 );
               }
               return const TasksPage();

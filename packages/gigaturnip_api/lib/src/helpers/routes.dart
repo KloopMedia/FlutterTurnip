@@ -15,7 +15,7 @@ const createTaskActionRoute = '/create_task/';
 
 // Tasks routes
 const tasksRoute = '/api/v1/tasks/';
-  const selectableTasksRoute = '$tasksRoute/user_selectable/';
+const selectableTasksRoute = '$tasksRoute/user_selectable/';
 const relevantTasksRoute = '$tasksRoute/user_relevant/';
 
 // Specific task's actions

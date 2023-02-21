@@ -313,28 +313,28 @@ class GigaTurnipRepository {
       _isLoading = true;
 
       print("Is filtering");
+      print(selectedCampaign.id);
       final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
         query: {
-          'response_contains' : text,
+          'responses_contains' : text,
           'stage__chain__campaign': selectedCampaign.id,
           'limit': _pageLimit,
           'offset': _pageOffset,
         },
       );
 
-      print(availableTasksData.results);
+      print(availableTasksData.results.map((task) => task.id));
       _isLoading = false;
       _totalPages = (availableTasksData.count / _pageLimit).floor();
       _hasNextAvailableTasks = availableTasksData.hasNext;
 
-      final availableTasks = availableTasksData.results.map((apiTask) {
-        return Task.fromApiModel(apiTask);
-      }).toList();
+      final availableTasks = availableTasksData.results.map((apiTask) =>
+        Task.fromApiModel(apiTask)).toList();
 
-      // print(availableTasks);
 
       _availableTasks.addAll(availableTasks);
 
+      // print(_availableTasks.toString());
       return _availableTasks;
     }
     print("not filtering");

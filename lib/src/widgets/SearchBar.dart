@@ -19,12 +19,11 @@ class _SearchBarState extends State<SearchBar> {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: TextField(
+        child: TextFormField(
           controller: textController,
           focusNode: focusNode,
           textInputAction: TextInputAction.search,
-          onSubmitted: (val) {
-            print(val);
+          onFieldSubmitted: (val) {
             // showResults(context);
             // transfer query --> textController
             context.read<TasksCubit>().filterTask(val);
