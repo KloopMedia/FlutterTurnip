@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_bloc.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip/src/helpers/app_drawer.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:go_router/go_router.dart';
 
 class CampaignPage extends StatelessWidget {
@@ -11,8 +12,12 @@ class CampaignPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiClient = context.read<api.GigaTurnipApiClient>();
     return BlocProvider(
-      create: (_) => CampaignBloc(context.read<GigaTurnipRepository>()),
+      create: (_) => CampaignBloc(
+        UserCampaignRepository(apiClient),
+        SelectableCampaignRepository(apiClient),
+      ),
       child: const CampaignView(),
     );
   }
@@ -25,22 +30,20 @@ class CampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      endDrawer: AppDrawer(),
+      endDrawer: const AppDrawer(),
       body: BlocBuilder<CampaignBloc, CampaignState>(
         builder: (context, state) {
           if (state is CampaignFetching) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (state is CampaignLoaded) {
             return _CampaignListView(
               data: state.data,
-              onTap: (campaign) {
-                context.go('${Constants.campaignRoute}${campaign.id}');
-              },
+              onTap: (campaign) => context.go('${Constants.campaignRoute}${campaign.id}'),
             );
           } else if (state is CampaignInfo) {
             return _CampaignInfoView(campaign: state.campaign);
           } else {
-            return const SizedBox.shrink();
+            return const Text('Error: Unknown state!');
           }
         },
       ),
@@ -62,7 +65,7 @@ class _CampaignListView extends StatelessWidget {
         final campaign = data[index];
         return ListTile(
           title: Text(campaign.name),
-          subtitle: Text(campaign.id.toString()),
+          subtitle: Text('${campaign.id} ${campaign.canJoin}'),
           onTap: () {
             onTap(campaign);
           },

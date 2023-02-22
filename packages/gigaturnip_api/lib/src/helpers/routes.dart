@@ -1,22 +1,22 @@
 // Campaigns routes
-const campaignsRoute = '/campaigns';
-const userCampaignsRoute = '$campaignsRoute/list_user_campaigns/';
+const campaignsRoute = 'campaigns/';
+const userCampaignsRoute = '${campaignsRoute}list_user_campaigns/';
 const selectableCampaignsRoute = '$campaignsRoute/list_user_selectable/';
 
 // Campaigns actions
 const joinCampaignActionRoute = 'join_campaign/';
 
 // TaskStages routes
-const taskStagesRoute = '/taskstages';
-const userRelevantTaskStageRoute = '$taskStagesRoute/user_relevant/';
+const taskStagesRoute = 'taskstages/';
+const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
 
 // TaskStages actions
 const createTaskActionRoute = 'create_task/';
 
 // Tasks routes
-const tasksRoute = '/tasks';
-const selectableTasksRoute = '$tasksRoute/user_selectable/';
-const relevantTasksRoute = '$tasksRoute/user_relevant/';
+const tasksRoute = 'tasks/';
+const selectableTasksRoute = '${tasksRoute}user_selectable/';
+const relevantTasksRoute = '${tasksRoute}user_relevant/';
 
 // Specific task's actions
 const integratedTasksActionRoute = 'get_integrated_tasks/';
@@ -28,8 +28,8 @@ const triggerWebhookActionRoute = 'trigger_webhook/';
 const reopenTaskActionRoute = 'uncomplete/';
 
 // Notifications routes
-const notificationsRoute = '/notifications';
-const userNotificationsRoute = '$notificationsRoute/list_user_notifications/';
+const notificationsRoute = 'notifications/';
+const userNotificationsRoute = '${notificationsRoute}list_user_notifications/';
 
 // Notifications actions
 const openNotificationActionRoute = 'open_notification/';

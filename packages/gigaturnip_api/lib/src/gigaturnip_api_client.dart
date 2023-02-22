@@ -11,13 +11,17 @@ abstract class GigaTurnipApiClient {
   // Campaign methods
 
   @GET(campaignsRoute)
-  Future<PaginationWrapper<Campaign>> getCampaigns(@Queries() Map<String, dynamic> query);
+  Future<PaginationWrapper<Campaign>> getCampaigns({@Queries() Map<String, dynamic>? query});
 
   @GET(userCampaignsRoute)
-  Future<List<Campaign>> getUserCampaigns();
+  Future<List<Campaign>> getUserCampaigns({
+    @Queries() Map<String, dynamic>? query,
+  });
 
   @GET(selectableCampaignsRoute)
-  Future<List<Campaign>> getSelectableCampaigns();
+  Future<List<Campaign>> getSelectableCampaigns({
+    @Queries() Map<String, dynamic>? query,
+  });
 
   @GET("$campaignsRoute/{id}")
   Future<Campaign> getCampaignById(@Path("id") int id);
@@ -28,22 +32,28 @@ abstract class GigaTurnipApiClient {
   // Task methods
 
   @GET(tasksRoute)
-  Future<PaginationWrapper<Task>> getTasks(@Queries() Map<String, dynamic> query);
+  Future<PaginationWrapper<Task>> getTasks({@Queries() Map<String, dynamic>? query});
 
   @GET(selectableTasksRoute)
-  Future<PaginationWrapper<Task>> getUserSelectableTasks(@Queries() Map<String, dynamic> query);
+  Future<PaginationWrapper<Task>> getUserSelectableTasks({@Queries() Map<String, dynamic>? query});
 
   @GET(relevantTasksRoute)
-  Future<List<Task>> getUserRelevantTasks(@Queries() Map<String, dynamic> query);
+  Future<PaginationWrapper<Task>> getUserRelevantTasks({@Queries() Map<String, dynamic>? query});
 
   @GET("$tasksRoute/{id}")
   Future<Task> getTaskById(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$integratedTasksActionRoute")
-  Future<List<Task>> getIntegratedTasks(@Path("id") int id);
+  Future<List<Task>> getIntegratedTasks(
+    @Path("id") int id, {
+    @Queries() Map<String, dynamic>? query,
+  });
 
   @GET("$tasksRoute/{id}/$displayedPreviousTasksActionRoute")
-  Future<List<Task>> getDisplayedPreviousTasks(@Path("id") int id);
+  Future<List<Task>> getDisplayedPreviousTasks(
+    @Path("id") int id, {
+    @Queries() Map<String, dynamic>? query,
+  });
 
   @GET("$tasksRoute/{id}/$openPreviousTaskActionRoute")
   Future<Task> openPreviousTask(@Path("id") int id);
@@ -63,10 +73,14 @@ abstract class GigaTurnipApiClient {
   // Notification methods
 
   @GET(notificationsRoute)
-  Future<PaginationWrapper<Notification>> getNotifications(@Queries() Map<String, dynamic> query);
+  Future<PaginationWrapper<Notification>> getNotifications({
+    @Queries() Map<String, dynamic>? query,
+  });
 
   @GET(userNotificationsRoute)
-  Future<PaginationWrapper<Notification>> getUserNotifications(@Queries() Map<String, dynamic> query);
+  Future<PaginationWrapper<Notification>> getUserNotifications({
+    @Queries() Map<String, dynamic>? query,
+  });
 
   @GET("$notificationsRoute/{id}/$openNotificationActionRoute")
   Future<void> openNotification(@Path("id") int id);

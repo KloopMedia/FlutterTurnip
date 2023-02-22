@@ -9,19 +9,21 @@ part 'campaign_event.dart';
 part 'campaign_state.dart';
 
 class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
-  final GigaTurnipRepository _gigaTurnipRepository;
+  final UserCampaignRepository _userCampaignRepository;
+  final SelectableCampaignRepository _selectableCampaignRepository;
 
-  CampaignBloc(this._gigaTurnipRepository) : super(CampaignUninitialized()) {
+  CampaignBloc(this._userCampaignRepository, this._selectableCampaignRepository) : super(CampaignUninitialized()) {
     on<FetchCampaignData>(_onFetchCampaignData);
     on<OpenCampaignInfo>(_onOpenCampaignInfo);
     on<JoinCampaign>(_onJoinCampaign);
-    add(FetchCampaignData());
+    add(const FetchCampaignData(0));
   }
 
   Future<void> _onFetchCampaignData(FetchCampaignData event, Emitter<CampaignState> emit) async {
+    final page = event.page;
     try {
       emit(CampaignFetching());
-      final data = await _fetchData();
+      final data = await _fetchData(page);
       emit(CampaignLoaded(data));
     } on Exception catch (e) {
       print(e);
@@ -36,9 +38,9 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
 
   Future<void> _onJoinCampaign(JoinCampaign event, Emitter<CampaignState> emit) async {}
 
-  Future<List<Campaign>> _fetchData() async {
-    final userCampaigns = await _gigaTurnipRepository.campaign().getUserCampaigns();
-    final selectableCampaigns = await _gigaTurnipRepository.campaign().getSelectableCampaigns();
+  Future<List<Campaign>> _fetchData(int page) async {
+    final userCampaigns = await _userCampaignRepository.fetchDataOnPage(page);
+    final selectableCampaigns = await _selectableCampaignRepository.fetchDataOnPage(page);
     return [...userCampaigns, ...selectableCampaigns];
   }
 }

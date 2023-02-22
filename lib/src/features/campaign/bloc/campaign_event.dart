@@ -7,7 +7,11 @@ abstract class CampaignEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchCampaignData extends CampaignEvent {}
+class FetchCampaignData extends CampaignEvent {
+  final int page;
+
+  const FetchCampaignData(this.page);
+}
 
 class OpenCampaignInfo extends CampaignEvent {
   final Campaign campaign;

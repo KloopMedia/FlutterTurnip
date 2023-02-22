@@ -23,10 +23,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   String? baseUrl;
 
   @override
-  Future<PaginationWrapper<Campaign>> getCampaigns(query) async {
+  Future<PaginationWrapper<Campaign>> getCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(query);
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -37,7 +38,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/campaigns',
+              'campaigns/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -50,9 +51,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Campaign>> getUserCampaigns() async {
+  Future<List<Campaign>> getUserCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result =
@@ -63,7 +66,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/campaigns/list_user_campaigns/',
+              'campaigns/list_user_campaigns/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -75,9 +78,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Campaign>> getSelectableCampaigns() async {
+  Future<List<Campaign>> getSelectableCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result =
@@ -88,7 +93,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/campaigns/list_user_selectable/',
+              'campaigns//list_user_selectable/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -113,7 +118,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/campaigns/${id}',
+              'campaigns//${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -135,7 +140,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/campaigns/${id}/join_campaign/',
+          'campaigns//${id}/join_campaign/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -144,10 +149,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getTasks(query) async {
+  Future<PaginationWrapper<Task>> getTasks({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(query);
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -158,7 +164,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/tasks',
+              'tasks/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -171,10 +177,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getUserSelectableTasks(query) async {
+  Future<PaginationWrapper<Task>> getUserSelectableTasks({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(query);
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -185,7 +192,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/tasks/user_selectable/',
+              'tasks/user_selectable/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -198,28 +205,30 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Task>> getUserRelevantTasks(query) async {
+  Future<PaginationWrapper<Task>> getUserRelevantTasks({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(query);
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Task>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Task>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/tasks/user_relevant/',
+              'tasks/user_relevant/',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Task.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Task>.fromJson(
+      _result.data!,
+      (json) => Task.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
@@ -237,7 +246,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/tasks/${id}',
+              'tasks//${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -247,9 +256,14 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Task>> getIntegratedTasks(id) async {
+  Future<List<Task>> getIntegratedTasks(
+    id, {
+    query,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result =
@@ -260,7 +274,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/tasks/${id}/get_integrated_tasks/',
+              'tasks//${id}/get_integrated_tasks/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -272,9 +286,14 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Task>> getDisplayedPreviousTasks(id) async {
+  Future<List<Task>> getDisplayedPreviousTasks(
+    id, {
+    query,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result =
@@ -285,7 +304,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/tasks/${id}/list_displayed_previous/',
+              'tasks//${id}/list_displayed_previous/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -310,7 +329,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/tasks/${id}/open_previous/',
+              'tasks//${id}/open_previous/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -332,7 +351,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/tasks/${id}/release_assignment/',
+          'tasks//${id}/release_assignment/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -353,7 +372,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/tasks/${id}/request_assignment/',
+          'tasks//${id}/request_assignment/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -374,7 +393,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/tasks/${id}/trigger_webhook/',
+          'tasks//${id}/trigger_webhook/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -395,7 +414,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/tasks/${id}/uncomplete/',
+          'tasks//${id}/uncomplete/',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -404,10 +423,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Notification>> getNotifications(query) async {
+  Future<PaginationWrapper<Notification>> getNotifications({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(query);
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -418,7 +438,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/notifications',
+              'notifications/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -431,10 +451,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Notification>> getUserNotifications(query) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(query);
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -445,7 +466,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              '/notifications/list_user_notifications/',
+              'notifications/list_user_notifications/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -470,7 +491,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/notifications/${id}/open_notification/',
+          'notifications//${id}/open_notification/',
           queryParameters: queryParameters,
           data: _data,
         )
