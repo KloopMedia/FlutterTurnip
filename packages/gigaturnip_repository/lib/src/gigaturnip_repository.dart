@@ -194,6 +194,7 @@ class GigaTurnipRepository {
       );
       _isLoading = false;
       _totalPages = (availableTasksData.count / _pageLimit).floor();
+      // _totalPages = 0;
       _hasNextAvailableTasks = availableTasksData.hasNext;
 
       final availableTasks = availableTasksData.results.map((apiTask) {
@@ -337,6 +338,39 @@ class GigaTurnipRepository {
 
   Future<void> requestTask(int id) async {
     await _gigaTurnipApiClient.requestTask(id: id);
+  }
+
+  Future<List<Task>> filterTasks(Campaign selectedCampaign, String text) async {
+    if (_hasNextAvailableTasks && !_isLoading) {
+      _isLoading = true;
+
+      print("Is filtering");
+      print(selectedCampaign.id);
+      final availableTasksData = await _gigaTurnipApiClient.getUserSelectableTasks(
+        query: {
+          'responses_contains' : text,
+          'stage__chain__campaign': selectedCampaign.id,
+          'limit': _pageLimit,
+          'offset': _pageOffset,
+        },
+      );
+
+      print(availableTasksData.results.map((task) => task.id));
+      _isLoading = false;
+      _totalPages = (availableTasksData.count / _pageLimit).floor();
+      _hasNextAvailableTasks = availableTasksData.hasNext;
+
+      final availableTasks = availableTasksData.results.map((apiTask) =>
+        Task.fromApiModel(apiTask)).toList();
+
+
+      _availableTasks.addAll(availableTasks);
+
+      // print(_availableTasks.toString());
+      return _availableTasks;
+    }
+    print("not filtering");
+    return _availableTasks;
   }
 }
 

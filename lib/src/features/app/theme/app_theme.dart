@@ -20,6 +20,8 @@ final theme = ThemeData(
           fontWeight: FontWeight.w400,
           fontSize: 25,
         ),
+        // double tasks header
+
         titleLarge: const TextStyle(
           fontFamily: 'Open-Sans',
           fontWeight: FontWeight.w500,

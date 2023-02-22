@@ -8,10 +8,11 @@ import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/double_ta
 import 'package:gigaturnip/src/features/tasks/features/list_tasks/view/index.dart';
 import 'package:gigaturnip/src/utilities/dialogs/error_dialog.dart';
 import 'package:gigaturnip/src/widgets/drawers/app_drawer.dart';
-import 'package:gigaturnip/src/widgets/pagination/pagination.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../widgets/SearchBar.dart';
 import '../../../../../widgets/notification_icon.dart';
+import '../../../../../widgets/pagination/pagination.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({Key? key}) : super(key: key);
@@ -38,14 +39,6 @@ class _TasksViewState extends State<TasksView> {
 
   @override
   Widget build(BuildContext context) {
-    // _scrollController.addListener(() {
-    //   var nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
-    //
-    //   if (_scrollController.position.pixels > nextPageTrigger &&
-    //       context.read<TasksCubit>().state.status == TasksStatus.initialized) {
-    //     context.read<TasksCubit>().getNextPage();
-    //   }
-    // });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -63,7 +56,8 @@ class _TasksViewState extends State<TasksView> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+              final selectedCampaign =
+                  context.read<AppBloc>().state.selectedCampaign!;
               context.go('/campaign/${selectedCampaign.id}/notifications');
             },
             icon: const NotificationIcon(),
@@ -96,6 +90,7 @@ class _TasksViewState extends State<TasksView> {
               child: CircularProgressIndicator(),
             );
           }
+
           switch (state.selectedTab) {
             case Tabs.assignedTasksTab:
               return DoubleTasksListView(
@@ -108,8 +103,10 @@ class _TasksViewState extends State<TasksView> {
                 },
                 onTap: (task) async {
                   context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                  final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
-                  context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+                  final selectedCampaign =
+                      context.read<AppBloc>().state.selectedCampaign!;
+                  context
+                      .go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
                 },
               );
             case Tabs.availableTasksTab:
@@ -119,31 +116,39 @@ class _TasksViewState extends State<TasksView> {
                 headerOne: context.loc.create,
                 headerTwo: context.loc.receive,
                 scrollController: _scrollController,
-                showLoader: state.status == TasksStatus.loadingNextPage,
-                expand: true,
+                // Works when you click
                 pagination: Pagination(
                   total: state.totalPages,
                   onPageChange: (page) {
                     context.read<TasksCubit>().getPage(page);
+                    print("Pagination");
+                    print(state.totalPages);
                   },
                 ),
+                showLoader: state.status == TasksStatus.loadingNextPage,
+                expand: true,
                 onRefresh: () {
                   context.read<TasksCubit>().refresh();
                 },
                 onTap: (item) async {
-                  final selectedCampaign = context.read<AppBloc>().state.selectedCampaign!;
+                  final selectedCampaign =
+                      context.read<AppBloc>().state.selectedCampaign!;
                   if (item is TaskStage) {
-                    final task = await context.read<TasksCubit>().createTask(item);
+                    final task =
+                        await context.read<TasksCubit>().createTask(item);
                     if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(task));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${task.id}');
+                    context.go(
+                        '/campaign/${selectedCampaign.id}/tasks/${task.id}');
                   } else {
                     await context.read<TasksCubit>().requestTask(item);
                     if (!mounted) return;
                     context.read<AppBloc>().add(AppSelectedTaskChanged(item));
-                    context.go('/campaign/${selectedCampaign.id}/tasks/${item.id}');
+                    context.go(
+                        '/campaign/${selectedCampaign.id}/tasks/${item.id}');
                   }
                 },
+                search: const SearchBar(),
               );
           }
         },

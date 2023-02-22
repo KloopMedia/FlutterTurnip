@@ -25,7 +25,9 @@
     "sent" : "Жиберилди",
     "notsent" : "Жибериле элек",
     "opentosee" : "Тапшырманы көрүү/ачуу",
-    "close": "Жабуу",
+    "close" : "Жабуу",
+    "rich_text_is_empty" : "Rich text is empty",
+    "webview" : "Webview",
 
     "sign_in_with_google" : "Google аркылуу катталуу",
     "sign_in_with_apple" : "Apple аркылуу катталуу",
