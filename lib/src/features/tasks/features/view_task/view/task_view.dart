@@ -25,7 +25,7 @@ class TaskView extends StatefulWidget {
 
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
-
+  final ScrollController controller = ScrollController();
   late String richText;
   bool isRichTextViewed = true;
 
@@ -48,6 +48,10 @@ class _TaskViewState extends State<TaskView> {
   void dispose() {
     taskBloc.add(ExitTaskEvent());
     super.dispose();
+  }
+
+  void pageToTop() {
+    controller.animateTo(controller.position.minScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeOut);
   }
 
   void onWebviewClose() {
@@ -157,8 +161,19 @@ class _TaskViewState extends State<TaskView> {
             return const Center(child: CircularProgressIndicator());
           }
           return SingleChildScrollView(
+            controller: controller,
             child: Column(
               children: [
+                if (state.reopened && !state.complete)
+                  Container(
+                      decoration: const BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.all(Radius.circular(10))),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      width: double.infinity,
+                      child: Text(
+                          context.loc.task_returned,
+                          style: Theme.of(context).textTheme.headlineMedium)
+                  ),
                 if (state.isIntegrated)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -232,6 +247,7 @@ class _TaskViewState extends State<TaskView> {
                     },
                     onSubmit: (Map<String, dynamic> data) {
                       taskBloc.add(SubmitTaskEvent(data));
+                      pageToTop();
                     },
                     onValidationFailed: () {
                       showValidationFailedSnackBar(context: context);
