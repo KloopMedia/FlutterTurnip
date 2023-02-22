@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/widgets/richtext/mobile_richtext.dart'
@@ -18,13 +18,12 @@ class RichTextView extends StatefulWidget {
 
 class _RichTextViewState extends State<RichTextView> {
   late final String fullHtml;
-  final isWeb = kIsWeb;
 
   @override
   void initState() {
     fullHtml = '''
     <html>
-      <head>
+      <head>  
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />

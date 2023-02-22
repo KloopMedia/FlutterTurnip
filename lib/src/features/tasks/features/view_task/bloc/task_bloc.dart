@@ -93,7 +93,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final nextTaskId = await _saveTask(newState);
     if (nextTaskId != null) {
       final nextTask = await _getTask(nextTaskId);
-      emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask));
+      emit(newState.copyWith(taskStatus: TaskStatus.redirectToNextTask, nextTask: nextTask, complete: false));
     } else {
       emit(newState.copyWith(taskStatus: TaskStatus.redirectToTasksList));
     }

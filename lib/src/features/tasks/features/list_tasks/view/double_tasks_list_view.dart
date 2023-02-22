@@ -6,7 +6,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 typedef ItemCallback = void Function(dynamic item);
 typedef RefreshCallback = void Function();
 
-class DoubleTasksListView extends StatelessWidget {
+class DoubleTasksListView extends StatefulWidget {
   final ItemCallback onTap;
   final RefreshCallback onRefresh;
   final List<dynamic> firstList;
@@ -17,6 +17,7 @@ class DoubleTasksListView extends StatelessWidget {
   final bool showLoader;
   final bool expand;
   final Widget? pagination;
+  final Widget search;
 
   const DoubleTasksListView({
     Key? key,
@@ -30,37 +31,45 @@ class DoubleTasksListView extends StatelessWidget {
     this.showLoader = false,
     this.expand = false,
     this.pagination,
+    this.search = const SliverToBoxAdapter(),
   }) : super(key: key);
 
+  @override
+  State<DoubleTasksListView> createState() => _DoubleTasksListViewState();
+}
+
+class _DoubleTasksListViewState extends State<DoubleTasksListView> {
   final IconData iconToDo = Icons.today_rounded;
+
   final IconData iconDone = Icons.assignment_turned_in_outlined;
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        onRefresh();
+        widget.onRefresh();
       },
       child: CustomScrollView(
-        controller: scrollController,
+        controller: widget.scrollController,
         slivers: [
-          SliverTaskListHeader(title: headerOne),
+          widget.search,
+          SliverTaskListHeader(title: widget.headerOne),
           SliverTaskList(
-            items: firstList,
-            onTap: onTap,
+            items: widget.firstList,
+            onTap: widget.onTap,
             icon: iconToDo,
             expand: false,
           ),
-          SliverTaskListHeader(title: headerTwo),
+          SliverTaskListHeader(title: widget.headerTwo),
           SliverTaskList(
-            items: secondList,
-            onTap: onTap,
+            items: widget.secondList,
+            onTap: widget.onTap,
             icon: iconDone,
-            expand: expand,
+            expand: widget.expand,
           ),
-          if (showLoader)
+          if (widget.showLoader)
             const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
-          if (pagination != null) pagination!,
+          if (widget.pagination != null) widget.pagination!,
         ],
       ),
     );

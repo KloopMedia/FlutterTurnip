@@ -4,7 +4,8 @@ class Pagination extends StatefulWidget {
   final int total;
   final void Function(int page) onPageChange;
 
-  const Pagination({Key? key, required this.total, required this.onPageChange}) : super(key: key);
+  const Pagination({Key? key, required this.total, required this.onPageChange})
+      : super(key: key);
 
   @override
   State<Pagination> createState() => _PaginationState();

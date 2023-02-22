@@ -26,6 +26,8 @@
     "notsent" : "Not sent",
     "opentosee" : "View/Open",
     "close": "Close",
+    "rich_text_is_empty" : "Rich text is empty",
+    "webview" : "Webview",
 
     "sign_in_with_google" : "SIGN IN WITH GOOGLE",
     "sign_in_with_apple" : "SIGN IN WITH APPLE",
