@@ -5,13 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/firebase_options.dart';
-import 'package:gigaturnip/src/app/app.dart';
+import 'package:gigaturnip/src/app.dart';
 import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config.dart';
 import 'src/bloc/bloc.dart';
+import 'src/utilities/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ Future<void> main() async {
   final dio = DioProvider.instance(authenticationRepository);
   final gigaTurnipApiClient = GigaTurnipApiClient(dio, baseUrl: AppConfig.apiUrl);
   final sharedPreferences = await SharedPreferences.getInstance();
-
+  final router = AppRouter(authenticationRepository).router;
   if (!kIsWeb) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   }
@@ -45,7 +46,7 @@ Future<void> main() async {
           ),
           // TODO: Add blocs for localization, theme
         ],
-        child: const App(),
+        child: App(router: router),
       ),
     ),
   );
