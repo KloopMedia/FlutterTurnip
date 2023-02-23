@@ -15,8 +15,8 @@ class CampaignPage extends StatelessWidget {
     final apiClient = context.read<api.GigaTurnipApiClient>();
     return BlocProvider(
       create: (_) => CampaignBloc(
-        UserCampaignRepository(apiClient),
-        SelectableCampaignRepository(apiClient),
+        UserCampaignRepository(gigaTurnipApiClient: apiClient),
+        SelectableCampaignRepository(gigaTurnipApiClient: apiClient),
       ),
       child: const CampaignView(),
     );

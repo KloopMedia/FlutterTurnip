@@ -1,4 +1,4 @@
-import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 
 abstract class GigaTurnipRepository<Raw, Data> {
   int currentPage = 0;
@@ -37,7 +37,7 @@ abstract class GigaTurnipRepository<Raw, Data> {
     return parseData(data.results);
   }
 
-  Future<PaginationWrapper<Raw>> fetchData({Map<String, dynamic>? query});
+  Future<api.PaginationWrapper<Raw>> fetchData({Map<String, dynamic>? query});
 
   List<Data> parseData(List<Raw> data);
 }
