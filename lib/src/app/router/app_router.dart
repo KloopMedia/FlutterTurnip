@@ -15,26 +15,26 @@ class AppRouter {
   get router => _router;
 
   late final GoRouter _router = GoRouter(
-    refreshListenable: GoRouterRefreshStream(_authenticationRepository.userStream),
-    redirect: (routeState) {
-      final bool loggedIn = _authenticationRepository.user.isNotEmpty;
-      final bool loggingIn = routeState.subloc == '/login';
-
-      // bundle the location the user is coming from into a query parameter
-      final query = {...routeState.queryParams};
-      var queryString = Uri(queryParameters: query).query;
-      final fromp = routeState.subloc == '/' ? '' : '?from=${routeState.subloc}&$queryString';
-      if (!loggedIn) return loggingIn ? null : '/login$fromp';
-
-      // if the user is logged in, send them where they were going before (or
-      // home if they weren't going anywhere)
-      query.remove('from');
-      queryString = Uri(queryParameters: query).query;
-      if (loggingIn) return '${routeState.queryParams['from'] ?? '/'}?$queryString';
-
-      // no need to redirect at all
-      return null;
-    },
+    // refreshListenable: GoRouterRefreshStream(_authenticationRepository.userStream),
+    // redirect: (routeState) {
+    //   final bool loggedIn = _authenticationRepository.user.isNotEmpty;
+    //   final bool loggingIn = routeState.subloc == '/login';
+    //
+    //   // bundle the location the user is coming from into a query parameter
+    //   final query = {...routeState.queryParams};
+    //   var queryString = Uri(queryParameters: query).query;
+    //   final fromp = routeState.subloc == '/' ? '' : '?from=${routeState.subloc}&$queryString';
+    //   if (!loggedIn) return loggingIn ? null : '/login$fromp';
+    //
+    //   // if the user is logged in, send them where they were going before (or
+    //   // home if they weren't going anywhere)
+    //   query.remove('from');
+    //   queryString = Uri(queryParameters: query).query;
+    //   if (loggingIn) return '${routeState.queryParams['from'] ?? '/'}?$queryString';
+    //
+    //   // no need to redirect at all
+    //   return null;
+    // },
     routes: <GoRoute>[
       GoRoute(
         path: Constants.loginRoute,
