@@ -436,9 +436,11 @@ packages:
   flutter_json_schema_form:
     dependency: "direct main"
     description:
-      path: "../flutter-jsonschema-form"
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: "7438529412c61e3d3bc45ed85b8dd96f8a061aca"
+      url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
+    source: git
     version: "0.0.1"
   flutter_launcher_icons:
     dependency: "direct main"
