@@ -12,3 +12,9 @@ class FetchRelevantTaskData extends RelevantTaskEvent {
 
   const FetchRelevantTaskData(this.page);
 }
+
+class RefetchRelevantTaskData extends RelevantTaskEvent {
+  final int page;
+
+  const RefetchRelevantTaskData(this.page);
+}

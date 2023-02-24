@@ -16,6 +16,7 @@ class RelevantTaskBloc extends Bloc<RelevantTaskEvent, RelevantTaskState>
 
   RelevantTaskBloc(this._repository) : super(RelevantTaskUninitialized()) {
     on<FetchRelevantTaskData>(_onFetchRelevantTaskData);
+    on<RefetchRelevantTaskData>(_onRefetchRelevantTaskData);
     add(const FetchRelevantTaskData(0));
   }
 
@@ -39,6 +40,30 @@ class RelevantTaskBloc extends Bloc<RelevantTaskEvent, RelevantTaskState>
     } on Exception catch (e) {
       print(e);
       emit(RelevantTaskFetchingError(e.toString()));
+      emit(state);
+    }
+  }
+
+  Future<void> _onRefetchRelevantTaskData(
+    RefetchRelevantTaskData event,
+    Emitter<RelevantTaskState> emit,
+  ) async {
+    final page = event.page;
+    try {
+      emit(RelevantTaskRefetching.clone(state as RelevantTaskLoaded));
+
+      final data = await _repository.fetchDataOnPage(page);
+      final currentPage = _repository.currentPage;
+      final total = _repository.total;
+
+      emit(RelevantTaskLoaded(
+        data: data,
+        currentPage: currentPage,
+        total: total,
+      ));
+    } on Exception catch (e) {
+      print(e);
+      emit(RelevantTaskRefetchingError.clone(state as RelevantTaskLoaded, e.toString()));
       emit(state);
     }
   }
