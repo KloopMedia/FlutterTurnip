@@ -16,8 +16,8 @@ abstract class TaskRepository extends GigaTurnipRepository<api.Task, Task> {
   }
 }
 
-class CompleteTaskRepository extends TaskRepository {
-  CompleteTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
+class ClosedTaskRepository extends TaskRepository {
+  ClosedTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
 
   @override
   Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {

@@ -4,8 +4,11 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
+import 'package:gigaturnip/src/helpers/scaffold_with_bottom_navbar.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:go_router/go_router.dart';
+
+import '../features/task/view/task_page.dart';
 
 class AppRouter {
   final RouterNotifier _authRouterNotifier;
@@ -33,14 +36,50 @@ class AppRouter {
           return const CampaignPage();
         },
         routes: [
-          GoRoute(
-            name: Constants.taskRoute.name,
-            path: Constants.taskRoute.path,
-            builder: (BuildContext context, GoRouterState state) {
-              final id = state.params['cid'];
-              throw UnimplementedError();
+          ShellRoute(
+            builder: (BuildContext context, GoRouterState state, Widget child) {
+              final tabs = [
+                ScaffoldWithNavBarTabItem(
+                  initialLocation: Constants.taskRouteOpen.path,
+                  icon: const Icon(Icons.home),
+                  label: 'Relevant Tasks',
+                ),
+                ScaffoldWithNavBarTabItem(
+                  initialLocation: Constants.taskRouteAvailable.path,
+                  icon: const Icon(Icons.settings),
+                  label: 'Available Tasks',
+                ),
+              ];
+
+              return ScaffoldWithBottomNavBar(
+                tabs: tabs,
+                child: child,
+              );
             },
-          )
+            routes: [
+              GoRoute(
+                name: Constants.taskRouteOpen.name,
+                path: Constants.taskRouteOpen.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  final id = state.params['cid'];
+                  if (id == null) {
+                    return const Text('Unknown Page');
+                  }
+                  return RelevantTaskPage(
+                    campaignId: int.parse(id),
+                  );
+                },
+              ),
+              GoRoute(
+                name: Constants.taskRouteAvailable.name,
+                path: Constants.taskRouteAvailable.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  final id = state.params['cid'];
+                  throw UnimplementedError();
+                },
+              ),
+            ],
+          ),
         ],
       ),
     ],
@@ -87,7 +126,7 @@ class RouterNotifier extends ChangeNotifier {
 
 class Route {
   final String path;
-  final String? name;
+  final String name;
 
-  const Route({required this.path, this.name});
+  const Route({required this.path, required this.name});
 }

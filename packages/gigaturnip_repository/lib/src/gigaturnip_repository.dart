@@ -1,38 +1,48 @@
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 
 abstract class GigaTurnipRepository<Raw, Data> {
-  int currentPage = 0;
-  int pageLimit = 10;
-  int pageTotal = 0;
-  bool hasNextPage = false;
-  bool hasPreviousPage = false;
+  final int _pageLimit = 10;
+
+  int _currentPage = 0;
+  int _pageTotal = 0;
+  bool _hasNextPage = false;
+  bool _hasPreviousPage = false;
+
+  get currentPage => _currentPage;
+
+  get total => _pageTotal;
+
+  get hasNextPage => _hasNextPage;
+
+  get hasPreviousPage => _hasPreviousPage;
 
   int _calculateOffset(int page) {
-    return page * pageLimit;
+    return page * _pageLimit;
   }
 
   int _calculateTotalPage(int total) {
-    return (total / pageLimit).ceil();
+    return (total / _pageLimit).floor();
   }
 
   Future<List<Data>> fetchNextPage() {
-    return fetchDataOnPage(currentPage + 1);
+    return fetchDataOnPage(_currentPage + 1);
   }
 
   Future<List<Data>> fetchPreviousPage() {
-    return fetchDataOnPage(currentPage - 1);
+    return fetchDataOnPage(_currentPage - 1);
   }
 
   Future<List<Data>> fetchDataOnPage(int page) async {
     final paginationQuery = {
-      'limit': pageLimit,
+      'limit': _pageLimit,
       'offset': _calculateOffset(page),
     };
     final data = await fetchData(query: paginationQuery);
 
-    pageTotal = _calculateTotalPage(data.count);
-    hasNextPage = data.hasNext;
-    hasPreviousPage = data.hasPrevious;
+    _pageTotal = _calculateTotalPage(data.count);
+    _currentPage = page;
+    _hasNextPage = data.hasNext;
+    _hasPreviousPage = data.hasPrevious;
 
     return parseData(data.results);
   }
