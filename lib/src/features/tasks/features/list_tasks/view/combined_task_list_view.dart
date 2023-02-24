@@ -83,6 +83,7 @@ class CombinedTasksListView extends StatelessWidget {
               );
             },
           ),
+          const SliverPadding(padding: EdgeInsets.only(top: 20.0)),
           //SliverTaskListHeader(title: context.loc.done),
           SliverToBoxAdapter(
             child: ExpansionTile(
@@ -108,6 +109,7 @@ class CombinedTasksListView extends StatelessWidget {
                   .toList(),
             ),
           ),
+          const SliverPadding(padding: EdgeInsets.only(top: 40.0)),
           //SliverTaskListHeader(title: context.loc.receive),
           SliverTaskList(
             items: availableTasks,
@@ -270,7 +272,7 @@ class ItemCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
-                          DateFormat.Hm().add_d().add_MMM().format(item.createdAt),
+                          DateFormat.Hm().add_d().add_MMM().format(item.createdAt.toLocal()),
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ],
