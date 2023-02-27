@@ -55,7 +55,8 @@
     "empty_richtext": "No explanation for the task",
     "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
     "task_returned": "Returned",
-    "test_returned": "Returned. Please answer the questions again",
+    "more": "More...",
+    "add_file": "Add file",
 
     "delete_account_button": "Delete account",
     "delete_account_dialog_title": "Are you sure you want to delete account?",

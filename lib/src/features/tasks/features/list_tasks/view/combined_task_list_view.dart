@@ -278,9 +278,10 @@ class ItemCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Text('Кененирээк...',
-                      style:
-                          TextStyle(decoration: TextDecoration.underline, color: Colors.lightBlue)),
+                  Text(
+                    context.loc.more,
+                    style: const TextStyle(decoration: TextDecoration.underline, color: Colors.lightBlue)
+                  ),
                   const SizedBox(
                     height: 10.0,
                   ),
