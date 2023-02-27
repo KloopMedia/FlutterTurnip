@@ -257,6 +257,7 @@ class _TaskViewState extends State<TaskView> {
                       context.read<TaskBloc>().add(TriggerWebhook());
                     },
                     submitButtonText: Text(context.loc.form_submit_button),
+                    addFileText: Text(context.loc.add_file),
                   ),
                 ),
                 if (widget.simpleViewMode)
