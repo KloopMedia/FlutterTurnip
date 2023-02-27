@@ -25,7 +25,7 @@ class AppRouter {
       // bundle the location the user is coming from into a query parameter
       final query = {...routeState.queryParams};
       var queryString = Uri(queryParameters: query).query;
-      final fromp = routeState.subloc == '/' ? '' : '?from=${routeState.subloc}&$queryString';
+      final fromp = routeState.subloc == '/' ? ''  :'?from=${routeState.subloc}&$queryString';
       if (!loggedIn) return loggingIn ? null : '/login$fromp';
 
       // if the user is logged in, send them where they were going before (or

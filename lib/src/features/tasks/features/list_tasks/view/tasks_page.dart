@@ -16,14 +16,13 @@ class TasksPage extends StatelessWidget {
   final bool shouldJoinCampaign;
   final int? createTaskId;
 
-  const TasksPage({
-    Key? key,
-    this.campaignId,
-    this.simpleViewMode = false,
-    this.shouldJoinCampaign = false,
-    this.createTaskId
-
-  }) : super(key: key);
+  const TasksPage(
+      {Key? key,
+      this.campaignId,
+      this.simpleViewMode = false,
+      this.shouldJoinCampaign = false,
+      this.createTaskId})
+      : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: TasksPage());
 
@@ -31,28 +30,23 @@ class TasksPage extends StatelessWidget {
     await context.read<GigaTurnipRepository>().joinCampaign(id);
   }
 
-
   Future<dynamic> loadCampaign(BuildContext context) async {
     if (campaignId != null) {
       if (shouldJoinCampaign) {
         joinCampaign(context, campaignId!);
       }
-      if(createTaskId != null){
-        final newTask = await context.read<GigaTurnipRepository>().createTask(createTaskId!);
-
-        var location = Router.of(context).routeInformationProvider?.value.location;
-        var queryStartIndex = location?.indexOf('?') ?? -1;
-        String query;
-        if (queryStartIndex > 0) {
-          query = location?.substring(queryStartIndex) ?? '';
-        } else {
-          query = '';
-        }
-        // context.go('/campaign/${campaignId}/tasks/${newTask.id}$query');
+      // Creating form page
+      if (createTaskId != null) {
+        final newTask = await context
+            .read<GigaTurnipRepository>()
+            .createTask(createTaskId!);
+        context.go('/campaign/$campaignId/tasks/${newTask.id}');
         return newTask.id;
       }
       final appBloc = context.read<AppBloc>();
-      final campaign = await context.read<GigaTurnipRepository>().getCampaignById(campaignId!);
+      final campaign = await context
+          .read<GigaTurnipRepository>()
+          .getCampaignById(campaignId!);
       appBloc.add(AppSelectedCampaignChanged(campaign));
       return campaign;
     } else {
@@ -70,7 +64,9 @@ class TasksPage extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        if(snapshot.data != null && snapshot.data is Campaign){
+        if (snapshot.hasData &&
+            snapshot.data != null &&
+            snapshot.data is Campaign) {
           return MultiBlocProvider(
             providers: [
               BlocProvider<TasksCubit>(
@@ -86,10 +82,11 @@ class TasksPage extends StatelessWidget {
                 ),
               ),
             ],
-            child: simpleViewMode ? const CombinedTasksView() : const TasksView(),
+            child:
+                simpleViewMode ? const CombinedTasksView() : const TasksView(),
           );
         } else {
-          return TaskPage(taskId: snapshot.data);
+          return TaskPage(taskId: snapshot.data!);
         }
       },
     );
