@@ -18,3 +18,9 @@ class RefetchAvailableTaskData extends AvailableTaskEvent {
 
   const RefetchAvailableTaskData(this.page);
 }
+
+class RequestAvailableTaskAssignment extends AvailableTaskEvent {
+  final Task task;
+
+  const RequestAvailableTaskAssignment(this.task);
+}

@@ -54,4 +54,8 @@ class AvailableTaskRepository extends TaskRepository {
       },
     );
   }
+
+  Future<void> requestAssignment(int id) async {
+    return _gigaTurnipApiClient.requestTask(id);
+  }
 }

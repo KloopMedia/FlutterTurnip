@@ -70,3 +70,43 @@ class AvailableTaskRefetchingError extends AvailableTaskInitialized with RemoteD
   @override
   List<Object> get props => [...super.props, error];
 }
+
+class AvailableTaskRequestAssignment extends AvailableTaskInitialized {
+  final Task task;
+
+  AvailableTaskRequestAssignment({
+    required this.task,
+    required super.data,
+    required super.currentPage,
+    required super.total,
+  });
+
+  AvailableTaskRequestAssignment.clone(super.state, this.task) : super.clone();
+}
+
+class AvailableTaskRequestAssignmentSuccess extends AvailableTaskInitialized {
+  final Task task;
+
+  AvailableTaskRequestAssignmentSuccess({
+    required this.task,
+    required super.data,
+    required super.currentPage,
+    required super.total,
+  });
+
+  AvailableTaskRequestAssignmentSuccess.clone(super.state, this.task) : super.clone();
+}
+
+class AvailableTaskRequestAssignmentFailed extends AvailableTaskInitialized {
+  final String error;
+
+  AvailableTaskRequestAssignmentFailed({
+    required this.error,
+    required super.data,
+    required super.currentPage,
+    required super.total,
+  });
+
+  AvailableTaskRequestAssignmentFailed.clone(AvailableTaskInitialized state, this.error)
+      : super.clone(state);
+}

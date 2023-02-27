@@ -12,14 +12,14 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = RepositoryProvider.of<AuthenticationRepository>(context).user;
     final avatar = user.photo;
+    late final Widget userAvatar;
 
-    final Widget userAvatar;
-    if (avatar != null) {
+    try {
       userAvatar = CircleAvatar(
         radius: 52,
-        backgroundImage: NetworkImage(avatar),
+        backgroundImage: NetworkImage(avatar!),
       );
-    } else {
+    } catch (e) {
       userAvatar = const CircleAvatar(
         radius: 52,
         child: Icon(

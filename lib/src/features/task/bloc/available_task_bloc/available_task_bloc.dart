@@ -10,11 +10,12 @@ part 'available_task_event.dart';
 part 'available_task_state.dart';
 
 class AvailableTaskBloc extends Bloc<AvailableTaskEvent, AvailableTaskState> {
-  final TaskRepository _repository;
+  final AvailableTaskRepository _repository;
 
   AvailableTaskBloc(this._repository) : super(AvailableTaskUninitialized()) {
     on<FetchAvailableTaskData>(_onFetchAvailableTaskData);
     on<RefetchAvailableTaskData>(_onRefetchAvailableTaskData);
+    on<RequestAvailableTaskAssignment>(_onRequestAvailableTaskAssignment);
     add(const FetchAvailableTaskData(0));
   }
 
@@ -62,6 +63,27 @@ class AvailableTaskBloc extends Bloc<AvailableTaskEvent, AvailableTaskState> {
     } on Exception catch (e) {
       print(e);
       emit(AvailableTaskRefetchingError.clone(state as AvailableTaskLoaded, e.toString()));
+      emit(state);
+    }
+  }
+
+  Future<void> _onRequestAvailableTaskAssignment(
+    RequestAvailableTaskAssignment event,
+    Emitter<AvailableTaskState> emit,
+  ) async {
+    final task = event.task;
+    emit(AvailableTaskRequestAssignment.clone(state as AvailableTaskLoaded, task));
+    try {
+      await _repository.requestAssignment(task.id);
+      emit(AvailableTaskRequestAssignmentSuccess.clone(state as AvailableTaskLoaded, task));
+    } catch (e) {
+      print(e);
+      emit(
+        AvailableTaskRequestAssignmentFailed.clone(
+          state as AvailableTaskLoaded,
+          e.toString(),
+        ),
+      );
       emit(state);
     }
   }

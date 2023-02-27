@@ -39,7 +39,7 @@ class CampaignView extends StatelessWidget {
             return _CampaignListView(
               data: state.data,
               onTap: (campaign) => context.goNamed(
-                Constants.taskRouteOpen.name,
+                Constants.taskRouteRelevant.name,
                 params: {'cid': '${campaign.id}'},
               ),
             );

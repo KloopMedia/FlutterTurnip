@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/helpers/app_drawer.dart';
 import 'package:go_router/go_router.dart';
 
 class ScaffoldWithBottomNavBar extends StatefulWidget {
@@ -32,6 +33,8 @@ class _MainScaffoldState extends State<ScaffoldWithBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
+      endDrawer: const AppDrawer(),
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

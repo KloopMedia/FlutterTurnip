@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
 import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
+import 'package:gigaturnip/src/features/task_detail/view/task_detail_page.dart';
 import 'package:gigaturnip/src/helpers/scaffold_with_bottom_navbar.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,7 @@ class AppRouter {
 
               final tabs = [
                 ScaffoldWithNavBarTabItem(
-                  initialLocation: '/${Constants.taskRouteOpen.path.replaceFirst(':cid', id)}',
+                  initialLocation: '/${Constants.taskRouteRelevant.path.replaceFirst(':cid', id)}',
                   icon: const Icon(Icons.home),
                   label: 'Relevant Tasks',
                 ),
@@ -69,8 +70,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 parentNavigatorKey: _shellNavigatorKey,
-                name: Constants.taskRouteOpen.name,
-                path: Constants.taskRouteOpen.path,
+                name: Constants.taskRouteRelevant.name,
+                path: Constants.taskRouteRelevant.path,
                 builder: (BuildContext context, GoRouterState state) {
                   final id = state.params['cid'];
                   if (id == null) {
@@ -91,6 +92,18 @@ class AppRouter {
                     return const Text('Unknown Page');
                   }
                   return AvailableTaskPage(campaignId: int.parse(id));
+                },
+              ),
+              GoRoute(
+                parentNavigatorKey: _shellNavigatorKey,
+                name: Constants.taskDetailRoute.name,
+                path: Constants.taskDetailRoute.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  final tid = state.params['tid'];
+                  if (tid == null) {
+                    return const Text('Unknown Page');
+                  }
+                  return TaskDetailPage();
                 },
               ),
             ],
