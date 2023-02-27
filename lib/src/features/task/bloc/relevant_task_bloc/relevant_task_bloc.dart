@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:gigaturnip/src/utilities/remote_data_type.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'relevant_task_event.dart';

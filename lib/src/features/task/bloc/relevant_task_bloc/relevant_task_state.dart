@@ -1,12 +1,6 @@
 part of 'relevant_task_bloc.dart';
 
-mixin RemoteDataFetching on RelevantTaskState {}
-
-mixin RemoteDataSuccess on RelevantTaskState {}
-
-mixin RemoteDataError on RelevantTaskState {}
-
-abstract class RelevantTaskState extends Equatable {
+abstract class RelevantTaskState extends RemoteDataType {
   @override
   List<Object> get props => [];
 }

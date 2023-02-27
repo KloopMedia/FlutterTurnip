@@ -4,11 +4,12 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
+import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
 import 'package:gigaturnip/src/helpers/scaffold_with_bottom_navbar.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/task/view/task_page.dart';
+import '../features/task/view/relevant_task_page.dart';
 
 class AppRouter {
   final RouterNotifier _authRouterNotifier;
@@ -18,11 +19,16 @@ class AppRouter {
 
   get router => _router;
 
+  final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  final _shellNavigatorKey = GlobalKey<NavigatorState>();
+
   late final GoRouter _router = GoRouter(
     refreshListenable: _authRouterNotifier,
     redirect: _authRouterNotifier.redirect,
+    navigatorKey: _rootNavigatorKey,
     routes: <GoRoute>[
       GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
         name: Constants.loginRoute.name,
         path: Constants.loginRoute.path,
         builder: (BuildContext context, GoRouterState state) {
@@ -30,6 +36,7 @@ class AppRouter {
         },
       ),
       GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
         name: Constants.campaignRoute.name,
         path: Constants.campaignRoute.path,
         builder: (BuildContext context, GoRouterState state) {
@@ -37,15 +44,18 @@ class AppRouter {
         },
         routes: [
           ShellRoute(
+            navigatorKey: _shellNavigatorKey,
             builder: (BuildContext context, GoRouterState state, Widget child) {
+              final id = state.params['cid'] ?? '';
+
               final tabs = [
                 ScaffoldWithNavBarTabItem(
-                  initialLocation: Constants.taskRouteOpen.path,
+                  initialLocation: '/${Constants.taskRouteOpen.path.replaceFirst(':cid', id)}',
                   icon: const Icon(Icons.home),
                   label: 'Relevant Tasks',
                 ),
                 ScaffoldWithNavBarTabItem(
-                  initialLocation: Constants.taskRouteAvailable.path,
+                  initialLocation: '/${Constants.taskRouteAvailable.path.replaceFirst(':cid', id)}',
                   icon: const Icon(Icons.settings),
                   label: 'Available Tasks',
                 ),
@@ -58,6 +68,7 @@ class AppRouter {
             },
             routes: [
               GoRoute(
+                parentNavigatorKey: _shellNavigatorKey,
                 name: Constants.taskRouteOpen.name,
                 path: Constants.taskRouteOpen.path,
                 builder: (BuildContext context, GoRouterState state) {
@@ -71,11 +82,15 @@ class AppRouter {
                 },
               ),
               GoRoute(
+                parentNavigatorKey: _shellNavigatorKey,
                 name: Constants.taskRouteAvailable.name,
                 path: Constants.taskRouteAvailable.path,
                 builder: (BuildContext context, GoRouterState state) {
                   final id = state.params['cid'];
-                  throw UnimplementedError();
+                  if (id == null) {
+                    return const Text('Unknown Page');
+                  }
+                  return AvailableTaskPage(campaignId: int.parse(id));
                 },
               ),
             ],

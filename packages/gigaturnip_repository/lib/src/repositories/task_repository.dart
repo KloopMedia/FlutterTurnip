@@ -42,8 +42,8 @@ class OpenTaskRepository extends TaskRepository {
   }
 }
 
-class SelectableTaskRepository extends TaskRepository {
-  SelectableTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
+class AvailableTaskRepository extends TaskRepository {
+  AvailableTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
 
   @override
   Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
