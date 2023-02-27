@@ -161,6 +161,7 @@ class _TaskViewState extends State<TaskView> {
             return const Center(child: CircularProgressIndicator());
           }
           return SingleChildScrollView(
+            key: const PageStorageKey('pageKey'),
             controller: controller,
             child: Column(
               children: [
