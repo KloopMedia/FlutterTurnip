@@ -51,12 +51,7 @@ class _CombinedTasksViewState extends State<CombinedTasksView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        //centerTitle: true,
-        // automaticallyImplyLeading: false,
-        // title: Text(
-        //   context.loc.tasks,
-        //   style: Theme.of(context).textTheme.titleLarge,
-        // ),
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
             onPressed: () {

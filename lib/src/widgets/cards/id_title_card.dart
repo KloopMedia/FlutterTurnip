@@ -64,7 +64,7 @@ class IdTitleCard extends StatelessWidget {
                       ),
                       if (date != null)
                         Text(
-                          DateFormat.Hm().add_d().add_MMM().format(date!),
+                          DateFormat.Hm().add_d().add_MMM().format(date!.toLocal()),
                           style: Theme.of(context).textTheme.caption,
                         ),
                       Visibility(
