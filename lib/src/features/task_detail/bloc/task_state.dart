@@ -25,6 +25,8 @@ abstract class TaskInitialized extends TaskState {
 
   const TaskInitialized(this.data);
 
+  TaskInitialized.clone(TaskInitialized state) : this(state.data);
+
   @override
   List<Object> get props => [data];
 }
@@ -33,8 +35,18 @@ class TaskLoaded extends TaskInitialized {
   const TaskLoaded(super.data);
 }
 
-class TaskComplete extends TaskInitialized {
-  const TaskComplete(super.data);
+class TaskSubmitted extends TaskInitialized {
+  final int? nextTaskId;
+
+  const TaskSubmitted(super.data, {this.nextTaskId});
+}
+
+class TaskSubmitError extends TaskInitialized {
+  final String error;
+
+  const TaskSubmitError(super.data, this.error);
+
+  TaskSubmitError.clone(TaskInitialized state, this.error) : super.clone(state);
 }
 
 class TaskWebhookTriggered extends TaskInitialized {

@@ -255,7 +255,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<void> saveTaskById(
+  Future<TaskResponse> saveTaskById(
     id,
     data,
   ) async {
@@ -264,18 +264,21 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data);
-    await _dio.fetch<void>(_setStreamType<void>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TaskResponse>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          'tasks//${id}/',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .compose(
+              _dio.options,
+              'tasks//${id}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = TaskResponse.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -459,7 +462,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              'taskstages//${id}/load_schema_answers',
+              'taskstages//${id}/load_schema_answers/',
               queryParameters: queryParameters,
               data: _data,
             )

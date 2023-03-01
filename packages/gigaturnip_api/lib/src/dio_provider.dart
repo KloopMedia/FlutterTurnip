@@ -22,6 +22,8 @@ class ApiInterceptor extends Interceptor {
 
     options.headers['Authorization'] = 'JWT $accessToken';
 
+    options.contentType ??= Headers.jsonContentType;
+
     return handler.next(options);
   }
 }

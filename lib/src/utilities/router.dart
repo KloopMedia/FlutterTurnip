@@ -104,13 +104,19 @@ class AppRouter {
             builder: (BuildContext context, GoRouterState state) {
               final task = state.extra;
               final tid = state.params['tid'];
-              if (tid == null) {
+              final cid = state.params['cid'];
+
+              if (tid == null || cid == null) {
                 return const Text('Unknown Page');
               }
+
+              final taskId = int.parse(tid);
+              final campaignId = int.parse(cid);
+
               if (task != null && task is Task) {
-                return TaskDetailPage(taskId: int.parse(tid), task: task);
+                return TaskDetailPage(taskId: taskId, campaignId: campaignId, task: task);
               }
-              return TaskDetailPage(taskId: int.parse(tid));
+              return TaskDetailPage(key: UniqueKey(), taskId: taskId, campaignId: campaignId);
             },
           ),
         ],

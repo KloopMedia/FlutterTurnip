@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/task_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
@@ -44,7 +45,7 @@ abstract class GigaTurnipApiClient {
   Future<Task> getTaskById(@Path("id") int id);
 
   @PATCH("$tasksRoute/{id}/")
-  Future<void> saveTaskById(@Path("id") int id, @Body() Map<String, dynamic> data);
+  Future<TaskResponse> saveTaskById(@Path("id") int id, @Body() Map<String, dynamic> data);
 
   @GET("$tasksRoute/{id}/$integratedTasksActionRoute")
   Future<List<Task>> getIntegratedTasks(

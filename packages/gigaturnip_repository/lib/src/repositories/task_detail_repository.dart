@@ -13,7 +13,7 @@ class TaskDetailRepository {
     return Task.fromApiModel(task);
   }
 
-  Future<void> saveData(int id, Map<String, dynamic> data) {
+  Future<TaskResponse> saveData(int id, Map<String, dynamic> data) {
     return _gigaTurnipApiClient.saveTaskById(id, data);
   }
 
