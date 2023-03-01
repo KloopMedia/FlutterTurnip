@@ -12,6 +12,7 @@ const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
 
 // TaskStages actions
 const createTaskActionRoute = 'create_task/';
+const loadDynamicSchema = 'load_schema_answers/';
 
 // Tasks routes
 const tasksRoute = 'tasks/';

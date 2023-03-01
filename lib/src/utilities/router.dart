@@ -94,19 +94,19 @@ class AppRouter {
                   return AvailableTaskPage(campaignId: int.parse(id));
                 },
               ),
-              GoRoute(
-                parentNavigatorKey: _shellNavigatorKey,
-                name: Constants.taskDetailRoute.name,
-                path: Constants.taskDetailRoute.path,
-                builder: (BuildContext context, GoRouterState state) {
-                  final tid = state.params['tid'];
-                  if (tid == null) {
-                    return const Text('Unknown Page');
-                  }
-                  return TaskDetailPage();
-                },
-              ),
             ],
+          ),
+          GoRoute(
+            parentNavigatorKey: _rootNavigatorKey,
+            name: Constants.taskDetailRoute.name,
+            path: Constants.taskDetailRoute.path,
+            builder: (BuildContext context, GoRouterState state) {
+              final tid = state.params['tid'];
+              if (tid == null) {
+                return const Text('Unknown Page');
+              }
+              return TaskDetailPage(taskId: int.parse(tid));
+            },
           ),
         ],
       ),
