@@ -47,13 +47,14 @@ class TaskView extends StatelessWidget {
 
   const TaskView({Key? key, required this.campaignId}) : super(key: key);
 
-  void redirect(BuildContext context, int taskId) {
+  void redirect(BuildContext context, Task task) {
     context.goNamed(
       Constants.taskDetailRoute.name,
       params: {
         'cid': '$campaignId',
-        'tid': '$taskId',
+        'tid': '${task.id}',
       },
+      extra: task,
     );
   }
 
@@ -66,14 +67,14 @@ class TaskView extends StatelessWidget {
             bloc: context.read<OpenTaskBloc>(),
             header: const Text('Open tasks'),
             onTap: (task) {
-              redirect(context, task.id);
+              redirect(context, task);
             },
           ),
           RelevantTaskListView(
             bloc: context.read<ClosedTaskBloc>(),
             header: const Text('Closed tasks'),
             onTap: (task) {
-              redirect(context, task.id);
+              redirect(context, task);
             },
           ),
         ],

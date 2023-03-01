@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
 import 'package:gigaturnip/src/features/task_detail/view/task_detail_page.dart';
 import 'package:gigaturnip/src/helpers/scaffold_with_bottom_navbar.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/task/view/relevant_task_page.dart';
@@ -101,9 +102,13 @@ class AppRouter {
             name: Constants.taskDetailRoute.name,
             path: Constants.taskDetailRoute.path,
             builder: (BuildContext context, GoRouterState state) {
+              final task = state.extra;
               final tid = state.params['tid'];
               if (tid == null) {
                 return const Text('Unknown Page');
+              }
+              if (task != null && task is Task) {
+                return TaskDetailPage(taskId: int.parse(tid), task: task);
               }
               return TaskDetailPage(taskId: int.parse(tid));
             },
