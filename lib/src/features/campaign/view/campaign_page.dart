@@ -35,6 +35,18 @@ class CampaignView extends StatelessWidget {
         builder: (context, state) {
           if (state is CampaignFetching) {
             return const Center(child: CircularProgressIndicator());
+          } else if (state is CampaignFetchingError) {
+            return Column(
+              children: [
+                Text(state.error),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<CampaignBloc>().add(const FetchCampaignData(0));
+                  },
+                  child: const Text("Refetch"),
+                ),
+              ],
+            );
           } else if (state is CampaignLoaded) {
             return _CampaignListView(
               data: state.data,
