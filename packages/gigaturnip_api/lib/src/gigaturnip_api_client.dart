@@ -54,7 +54,7 @@ abstract class GigaTurnipApiClient {
   });
 
   @GET("$tasksRoute/{id}/$displayedPreviousTasksActionRoute")
-  Future<List<Task>> getDisplayedPreviousTasks(
+  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
     @Path("id") int id, {
     @Queries() Map<String, dynamic>? query,
   });

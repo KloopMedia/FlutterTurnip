@@ -312,7 +312,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Task>> getDisplayedPreviousTasks(
+  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
     id, {
     query,
   }) async {
@@ -322,8 +322,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Task>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Task>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -335,9 +335,10 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Task.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Task>.fromJson(
+      _result.data!,
+      (json) => Task.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
