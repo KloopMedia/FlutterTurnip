@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gigaturnip/src/features/app/app.dart';
-import 'package:gigaturnip/src/features/app/routes/app_router.dart';
-import 'package:gigaturnip/src/features/app/theme/app_theme.dart';
 import 'package:gigaturnip/src/features/app/theme/ombudsman_theme.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-
-import '../theme/ombudsman_theme.dart';
+import 'package:go_router/go_router.dart';
 
 class App extends StatelessWidget {
+  final GoRouter router;
+
   const App({
     Key? key,
     required AuthenticationRepository authenticationRepository,
     required GigaTurnipRepository gigaTurnipRepository,
+    required this.router,
   })  : _authenticationRepository = authenticationRepository,
         _gigaTurnipRepository = gigaTurnipRepository,
         super(key: key);
@@ -26,8 +26,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final router = AppRouter(_authenticationRepository).router;
-
+    print('app');
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthenticationRepository>(
