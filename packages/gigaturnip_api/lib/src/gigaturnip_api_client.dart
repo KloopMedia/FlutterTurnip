@@ -15,12 +15,12 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Campaign>> getCampaigns({@Queries() Map<String, dynamic>? query});
 
   @GET(userCampaignsRoute)
-  Future<List<Campaign>> getUserCampaigns({
+  Future<PaginationWrapper<Campaign>> getUserCampaigns({
     @Queries() Map<String, dynamic>? query,
   });
 
   @GET(selectableCampaignsRoute)
-  Future<List<Campaign>> getSelectableCampaigns({
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({
     @Queries() Map<String, dynamic>? query,
   });
 

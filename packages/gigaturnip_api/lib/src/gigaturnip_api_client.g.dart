@@ -51,15 +51,15 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Campaign>> getUserCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getUserCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Campaign>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Campaign>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -71,22 +71,23 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Campaign.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Campaign>.fromJson(
+      _result.data!,
+      (json) => Campaign.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
   @override
-  Future<List<Campaign>> getSelectableCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Campaign>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Campaign>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -98,9 +99,10 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Campaign.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Campaign>.fromJson(
+      _result.data!,
+      (json) => Campaign.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
