@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/features/app/app.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gigaturnip/src/features/app/routes/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ Future<void> main() async {
   await authenticationRepository.user.first;
   final gigaTurnipRepository = GigaTurnipRepository();
   await SharedPreferences.getInstance();
+  final router = AppRouter(authenticationRepository).router;
 
   if (!kIsWeb) {
     await Permission.microphone.request();
@@ -26,6 +28,7 @@ Future<void> main() async {
     App(
       authenticationRepository: authenticationRepository,
       gigaTurnipRepository: gigaTurnipRepository,
+      router: router,
     ),
   );
 }
