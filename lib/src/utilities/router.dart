@@ -28,7 +28,7 @@ class AppRouter {
     refreshListenable: _authRouterNotifier,
     redirect: _authRouterNotifier.redirect,
     navigatorKey: _rootNavigatorKey,
-    routes: <GoRoute>[
+    routes: [
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         name: Constants.loginRoute.name,
@@ -44,82 +44,80 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const CampaignPage();
         },
+      ),
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          final id = state.params['cid'] ?? '';
+
+          final tabs = [
+            ScaffoldWithNavBarTabItem(
+              initialLocation: '/${Constants.taskRouteRelevant.path.replaceFirst(':cid', id)}',
+              icon: const Icon(Icons.home),
+              label: 'Relevant Tasks',
+            ),
+            ScaffoldWithNavBarTabItem(
+              initialLocation: '/${Constants.taskRouteAvailable.path.replaceFirst(':cid', id)}',
+              icon: const Icon(Icons.settings),
+              label: 'Available Tasks',
+            ),
+          ];
+
+          return ScaffoldWithBottomNavBar(
+            tabs: tabs,
+            child: child,
+          );
+        },
         routes: [
-          ShellRoute(
-            navigatorKey: _shellNavigatorKey,
-            builder: (BuildContext context, GoRouterState state, Widget child) {
-              final id = state.params['cid'] ?? '';
-
-              final tabs = [
-                ScaffoldWithNavBarTabItem(
-                  initialLocation: '/${Constants.taskRouteRelevant.path.replaceFirst(':cid', id)}',
-                  icon: const Icon(Icons.home),
-                  label: 'Relevant Tasks',
-                ),
-                ScaffoldWithNavBarTabItem(
-                  initialLocation: '/${Constants.taskRouteAvailable.path.replaceFirst(':cid', id)}',
-                  icon: const Icon(Icons.settings),
-                  label: 'Available Tasks',
-                ),
-              ];
-
-              return ScaffoldWithBottomNavBar(
-                tabs: tabs,
-                child: child,
-              );
-            },
-            routes: [
-              GoRoute(
-                parentNavigatorKey: _shellNavigatorKey,
-                name: Constants.taskRouteRelevant.name,
-                path: Constants.taskRouteRelevant.path,
-                builder: (BuildContext context, GoRouterState state) {
-                  final id = state.params['cid'];
-                  if (id == null) {
-                    return const Text('Unknown Page');
-                  }
-                  return RelevantTaskPage(
-                    campaignId: int.parse(id),
-                  );
-                },
-              ),
-              GoRoute(
-                parentNavigatorKey: _shellNavigatorKey,
-                name: Constants.taskRouteAvailable.name,
-                path: Constants.taskRouteAvailable.path,
-                builder: (BuildContext context, GoRouterState state) {
-                  final id = state.params['cid'];
-                  if (id == null) {
-                    return const Text('Unknown Page');
-                  }
-                  return AvailableTaskPage(campaignId: int.parse(id));
-                },
-              ),
-            ],
-          ),
           GoRoute(
-            parentNavigatorKey: _rootNavigatorKey,
-            name: Constants.taskDetailRoute.name,
-            path: Constants.taskDetailRoute.path,
+            parentNavigatorKey: _shellNavigatorKey,
+            name: Constants.taskRouteRelevant.name,
+            path: Constants.taskRouteRelevant.path,
             builder: (BuildContext context, GoRouterState state) {
-              final task = state.extra;
-              final tid = state.params['tid'];
-              final cid = state.params['cid'];
-
-              if (tid == null || cid == null) {
+              final id = state.params['cid'];
+              if (id == null) {
                 return const Text('Unknown Page');
               }
-
-              final taskId = int.parse(tid);
-              final campaignId = int.parse(cid);
-
-              if (task != null && task is Task) {
-                return TaskDetailPage(taskId: taskId, campaignId: campaignId, task: task);
+              return RelevantTaskPage(
+                campaignId: int.parse(id),
+              );
+            },
+          ),
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            name: Constants.taskRouteAvailable.name,
+            path: Constants.taskRouteAvailable.path,
+            builder: (BuildContext context, GoRouterState state) {
+              final id = state.params['cid'];
+              if (id == null) {
+                return const Text('Unknown Page');
               }
-              return TaskDetailPage(key: UniqueKey(), taskId: taskId, campaignId: campaignId);
+              return AvailableTaskPage(campaignId: int.parse(id));
             },
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        name: Constants.taskDetailRoute.name,
+        path: Constants.taskDetailRoute.path,
+        builder: (BuildContext context, GoRouterState state) {
+          final task = state.extra;
+          final tid = state.params['tid'];
+          final cid = state.params['cid'];
+
+          if (tid == null || cid == null) {
+            return const Text('Unknown Page');
+          }
+
+          final taskId = int.parse(tid);
+          final campaignId = int.parse(cid);
+
+          if (task != null && task is Task) {
+            return TaskDetailPage(key: ValueKey(tid), taskId: taskId, campaignId: campaignId, task: task);
+          }
+          return TaskDetailPage(key: ValueKey(tid), taskId: taskId, campaignId: campaignId);
+        },
       ),
     ],
   );

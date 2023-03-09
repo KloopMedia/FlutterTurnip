@@ -33,6 +33,8 @@ abstract class TaskInitialized extends TaskState {
 
 class TaskLoaded extends TaskInitialized {
   const TaskLoaded(super.data);
+
+  TaskLoaded.clone(TaskInitialized state) : super.clone(state);
 }
 
 class TaskSubmitted extends TaskInitialized {
@@ -52,3 +54,11 @@ class TaskSubmitError extends TaskInitialized {
 class TaskWebhookTriggered extends TaskInitialized {
   const TaskWebhookTriggered(super.data);
 }
+
+class TaskInfoOpened extends TaskInitialized {
+  const TaskInfoOpened(super.data);
+
+  TaskInfoOpened.clone(TaskInitialized state) : super.clone(state);
+}
+
+class TaskClosed extends TaskState {}

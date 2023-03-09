@@ -5,6 +5,7 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/task_detail/bloc/previous_task_bloc/previous_task_bloc.dart';
 import 'package:gigaturnip/src/features/task_detail/bloc/task_bloc/task_bloc.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
+import 'package:gigaturnip/src/helpers/webview/webview.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -15,8 +16,12 @@ class TaskDetailPage extends StatelessWidget {
   final int campaignId;
   final Task? task;
 
-  const TaskDetailPage({Key? key, required this.taskId, this.task, required this.campaignId})
-      : super(key: key);
+  const TaskDetailPage({
+    Key? key,
+    required this.taskId,
+    this.task,
+    required this.campaignId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,21 +72,51 @@ class TaskView extends StatelessWidget {
     }
   }
 
+  void openWebView(BuildContext context) {
+    final bloc = context.read<TaskBloc>();
+    final state = bloc.state as TaskInitialized;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => WebView(
+          html: state.data.stage.richText,
+          onCloseCallback: () {
+            bloc.add(CloseTaskInfo());
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<TaskBloc>().add(OpenTaskInfo());
+            },
+            icon: const Icon(Icons.text_snippet),
+          )
+        ],
+      ),
       body: BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
           if (state is TaskSubmitted) {
             redirect(context, state.nextTaskId);
           }
+          if (state is TaskClosed) {
+            redirect(context, null);
+          }
+          if (state is TaskInfoOpened) {
+            openWebView(context);
+          }
         },
         child: SingleChildScrollView(
           child: Column(
-            children: [
-              const PreviousTaskView(),
-              TaskDivider(label: context.loc.form_divider),
-              const TaskDetailView(),
+            children: const [
+              PreviousTaskView(),
+              TaskDetailView(),
             ],
           ),
         ),
@@ -115,7 +150,6 @@ class PreviousTaskView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlutterJsonSchemaForm(
-                      key: UniqueKey(),
                       schema: task.schema ?? {},
                       uiSchema: task.uiSchema,
                       formData: task.responses,
@@ -146,18 +180,22 @@ class TaskDetailView extends StatelessWidget {
         if (state is TaskFetchingError) {
           return Text(state.error);
         }
-        if (state is TaskInitialized) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FlutterJsonSchemaForm(
-              key: UniqueKey(),
-              schema: state.data.schema ?? {},
-              uiSchema: state.data.uiSchema,
-              formData: state.data.responses,
-              disabled: state.data.complete,
-              onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
-              onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
-            ),
+        if (state is TaskLoaded) {
+          return Column(
+            children: [
+              TaskDivider(label: context.loc.form_divider),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FlutterJsonSchemaForm(
+                  schema: state.data.schema ?? {},
+                  uiSchema: state.data.uiSchema,
+                  formData: state.data.responses,
+                  disabled: state.data.complete,
+                  onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
+                  onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
+                ),
+              ),
+            ],
           );
         }
         return const SizedBox.shrink();

@@ -7,7 +7,7 @@ abstract class TaskEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchTask extends TaskEvent {}
+class InitializeTask extends TaskEvent {}
 
 class UpdateTask extends TaskEvent {
   final Map<String, dynamic> formData;
@@ -16,9 +16,13 @@ class UpdateTask extends TaskEvent {
 }
 
 class SubmitTask extends TaskEvent {
-  final Map<String, dynamic> formData;
+  final Map<String, dynamic>? formData;
 
   const SubmitTask(this.formData);
 }
 
 class TriggerWebhook extends TaskEvent {}
+
+class OpenTaskInfo extends TaskEvent {}
+
+class CloseTaskInfo extends TaskEvent {}
