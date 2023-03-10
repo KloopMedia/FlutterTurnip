@@ -31,21 +31,16 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
-  @override
-  void initState() {
-    print('init tasks');
-    if (widget.createTaskId != null) {
-      try {
-        final repository = context.read<GigaTurnipRepository>();
-        print('create task');
-        repository
-            .createTask(widget.createTaskId!)
-            .then((newTask) => context.go('/campaign/${widget.campaignId}/tasks/${newTask.id}'));
-      } catch (e) {
-        print(e);
-      }
+  Future<void> createTask() async {
+    try {
+      final repository = context.read<GigaTurnipRepository>();
+      final newTask = await repository.createTask(widget.createTaskId!);
+      if (!mounted) return;
+      context.go('/campaign/${widget.campaignId}/tasks/${newTask.id}');
+    } catch (e) {
+      print(e);
+      context.go('/campaign/${widget.campaignId}');
     }
-    super.initState();
   }
 
   Future<dynamic> loadCampaign(BuildContext context) async {
@@ -67,6 +62,24 @@ class _TasksPageState extends State<TasksPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.createTaskId != null) {
+      return Center(
+        child: SizedBox(
+          width: 200,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
+            onPressed: () {
+              createTask();
+            },
+            child: const Text(
+              'Суу көйгөйү жөнүндө билдирүү / Рассказать о проблеме воды',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
+
     return FutureBuilder<dynamic>(
       future: loadCampaign(context),
       builder: (context, snapshot) {
