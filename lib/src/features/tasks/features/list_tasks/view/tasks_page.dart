@@ -64,11 +64,18 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     if (widget.createTaskId != null) {
       return Center(
-        child: ElevatedButton(
-          onPressed: () {
-            createTask();
-          },
-          child: const Text('Суу көйгөйү жөнүндө билдирүү / Рассказать о проблеме воды'),
+        child: SizedBox(
+          width: 200,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
+            onPressed: () {
+              createTask();
+            },
+            child: const Text(
+              'Суу көйгөйү жөнүндө билдирүү / Рассказать о проблеме воды',
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
       );
     }
