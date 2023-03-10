@@ -35,9 +35,6 @@ class _TaskViewState extends State<TaskView> {
     taskBloc.add(InitializeTaskEvent());
     richText = taskBloc.state.stage.richText ?? '';
 
-    print(richText);
-    print(taskBloc.state.stage);
-
     if (isRichTextViewed && richText.isNotEmpty) {
       _showRichText();
     }
