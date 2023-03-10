@@ -52,12 +52,12 @@ class AppRouter {
 
           final tabs = [
             ScaffoldWithNavBarTabItem(
-              initialLocation: '/${Constants.taskRouteRelevant.path.replaceFirst(':cid', id)}',
+              initialLocation: Constants.taskRouteRelevant.path.replaceFirst(':cid', id),
               icon: const Icon(Icons.home),
               label: 'Relevant Tasks',
             ),
             ScaffoldWithNavBarTabItem(
-              initialLocation: '/${Constants.taskRouteAvailable.path.replaceFirst(':cid', id)}',
+              initialLocation: Constants.taskRouteAvailable.path.replaceFirst(':cid', id),
               icon: const Icon(Icons.settings),
               label: 'Available Tasks',
             ),
