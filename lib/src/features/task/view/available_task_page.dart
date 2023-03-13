@@ -18,6 +18,14 @@ class AvailableTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => CreatableTaskBloc(
+            CreatableTaskRepository(
+              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              campaignId: campaignId,
+            ),
+          ),
+        ),
         BlocProvider<AvailableTaskBloc>(
           create: (context) => AvailableTaskBloc(
             AvailableTaskRepository(
@@ -39,45 +47,125 @@ class TaskView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AvailableTaskBloc, AvailableTaskState>(
-      listener: (context, state) {
-        if (state is AvailableTaskRequestAssignmentSuccess) {
-          context.goNamed(
-            Constants.taskDetailRoute.name,
-            params: {
-              'cid': '$campaignId',
-              'tid': '${state.task.id}',
-            },
-          );
-        }
-      },
-      child: SingleChildScrollView(
-        child: AvailableTaskListView(
-          bloc: context.read<AvailableTaskBloc>(),
-          header: const Text('Available tasks'),
-          onTap: (task) {
-            context.read<AvailableTaskBloc>().add(RequestAvailableTaskAssignment(task));
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AvailableTaskBloc, AvailableTaskState>(
+          listener: (context, state) {
+            if (state is AvailableTaskRequestAssignmentSuccess) {
+              context.goNamed(
+                Constants.taskDetailRoute.name,
+                params: {
+                  'cid': '$campaignId',
+                  'tid': '${state.task.id}',
+                },
+              );
+            }
           },
+        ),
+        BlocListener<CreatableTaskBloc, CreatableTaskState>(
+          listener: (context, state) {
+            if (state is TaskCreating) {
+              context.goNamed(
+                Constants.taskDetailRoute.name,
+                params: {
+                  "cid": "$campaignId",
+                  "tid": state.createdTaskId.toString(),
+                },
+              );
+            }
+          },
+        ),
+      ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CreatableTaskListView(
+              bloc: context.read<CreatableTaskBloc>(),
+              onTap: (task) {
+                context.read<CreatableTaskBloc>().add(CreateTask(task));
+              },
+            ),
+            AvailableTaskListView(
+              bloc: context.read<AvailableTaskBloc>(),
+              onTap: (task) {
+                context.read<AvailableTaskBloc>().add(RequestAvailableTaskAssignment(task));
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
+class CreatableTaskListView extends StatelessWidget {
+  final CreatableTaskBloc bloc;
+  final void Function(TaskStage task) onTap;
+
+  const CreatableTaskListView({
+    Key? key,
+    required this.bloc,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BlocBuilder(
+          bloc: bloc,
+          builder: (context, state) {
+            if (state is RemoteDataFetching) {
+              return const CircularProgressIndicator();
+            }
+            if (state is TaskCreatingError) {
+              return Text(state.error);
+            }
+            if (state is CreatableTaskLoaded) {
+              return ListView.builder(
+                shrinkWrap: true,
+                // scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final task = state.data[index];
+                  return ListTile(
+                    title: Text(task.name),
+                    onTap: () => onTap(task),
+                  );
+                },
+                itemCount: state.data.length,
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+        BlocBuilder(
+          bloc: bloc,
+          builder: (context, state) {
+            return Pagination(
+              currentPage: state is AvailableTaskInitialized ? state.currentPage : 0,
+              total: state is AvailableTaskInitialized ? state.total : 0,
+              onChanged: (page) => bloc.add(RefetchCreatableTaskData(page)),
+              enabled: state is! RemoteDataFetching,
+            );
+          },
+        )
+      ],
+    );
+  }
+}
+
 class AvailableTaskListView extends StatelessWidget {
   final AvailableTaskBloc bloc;
-  final Text header;
   final void Function(Task task) onTap;
 
-  const AvailableTaskListView(
-      {Key? key, required this.bloc, required this.header, required this.onTap})
+  const AvailableTaskListView({Key? key, required this.bloc, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        header,
+        const Text('Available tasks'),
         BlocBuilder(
           bloc: bloc,
           builder: (context, state) {

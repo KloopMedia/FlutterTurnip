@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/create_task_response.dart';
 import 'package:gigaturnip_api/src/models/task_response.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -81,6 +82,14 @@ abstract class GigaTurnipApiClient {
     @Path("id") int id, {
     @Queries() required Map<String, dynamic> query,
   });
+
+  @GET(userRelevantTaskStageRoute)
+  Future<PaginationWrapper<TaskStage>> getUserRelevantTaskStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @POST("$taskStagesRoute/{id}/$createTaskActionRoute")
+  Future<CreateTaskResponse> createTaskFromStageId(@Path("id") int id);
 
   // Notification methods
 
