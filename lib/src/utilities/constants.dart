@@ -16,11 +16,11 @@ class Constants {
     name: 'home',
   );
   static const relevantTaskRoute = Route(
-    path: '/campaign/:cid/relevant',
+    path: '/campaign/:cid/task/relevant',
     name: 'taskRelevant',
   );
   static const availableTaskRoute = Route(
-    path: '/campaign/:cid/available',
+    path: '/campaign/:cid/task/available',
     name: 'taskAvailable',
   );
   static const taskDetailRoute = Route(
