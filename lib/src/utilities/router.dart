@@ -4,14 +4,15 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
+import 'package:gigaturnip/src/features/notification/view/closed_notification_page.dart';
+import 'package:gigaturnip/src/features/notification/view/open_notification_page.dart';
 import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
+import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/features/task_detail/view/task_detail_page.dart';
 import 'package:gigaturnip/src/helpers/scaffold_with_bottom_navbar.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-
-import '../features/task/view/relevant_task_page.dart';
 
 class AppRouter {
   final RouterNotifier _authRouterNotifier;
@@ -22,7 +23,8 @@ class AppRouter {
   get router => _router;
 
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  final _shellNavigatorKey = GlobalKey<NavigatorState>();
+  final _taskPageShellNavigatorKey = GlobalKey<NavigatorState>();
+  final _notificationPageShellNavigatorKey = GlobalKey<NavigatorState>();
 
   late final GoRouter _router = GoRouter(
     refreshListenable: _authRouterNotifier,
@@ -46,18 +48,18 @@ class AppRouter {
         },
       ),
       ShellRoute(
-        navigatorKey: _shellNavigatorKey,
+        navigatorKey: _taskPageShellNavigatorKey,
         builder: (BuildContext context, GoRouterState state, Widget child) {
           final id = state.params['cid'] ?? '';
 
           final tabs = [
             ScaffoldWithNavBarTabItem(
-              initialLocation: Constants.taskRouteRelevant.path.replaceFirst(':cid', id),
+              initialLocation: Constants.relevantTaskRoute.path.replaceFirst(':cid', id),
               icon: const Icon(Icons.home),
               label: 'Relevant Tasks',
             ),
             ScaffoldWithNavBarTabItem(
-              initialLocation: Constants.taskRouteAvailable.path.replaceFirst(':cid', id),
+              initialLocation: Constants.availableTaskRoute.path.replaceFirst(':cid', id),
               icon: const Icon(Icons.settings),
               label: 'Available Tasks',
             ),
@@ -70,9 +72,9 @@ class AppRouter {
         },
         routes: [
           GoRoute(
-            parentNavigatorKey: _shellNavigatorKey,
-            name: Constants.taskRouteRelevant.name,
-            path: Constants.taskRouteRelevant.path,
+            parentNavigatorKey: _taskPageShellNavigatorKey,
+            name: Constants.relevantTaskRoute.name,
+            path: Constants.relevantTaskRoute.path,
             builder: (BuildContext context, GoRouterState state) {
               final id = state.params['cid'];
               if (id == null) {
@@ -84,9 +86,9 @@ class AppRouter {
             },
           ),
           GoRoute(
-            parentNavigatorKey: _shellNavigatorKey,
-            name: Constants.taskRouteAvailable.name,
-            path: Constants.taskRouteAvailable.path,
+            parentNavigatorKey: _taskPageShellNavigatorKey,
+            name: Constants.availableTaskRoute.name,
+            path: Constants.availableTaskRoute.path,
             builder: (BuildContext context, GoRouterState state) {
               final id = state.params['cid'];
               if (id == null) {
@@ -114,11 +116,64 @@ class AppRouter {
           final campaignId = int.parse(cid);
 
           if (task != null && task is Task) {
-            return TaskDetailPage(key: ValueKey(tid), taskId: taskId, campaignId: campaignId, task: task);
+            return TaskDetailPage(
+                key: ValueKey(tid), taskId: taskId, campaignId: campaignId, task: task);
           }
           return TaskDetailPage(key: ValueKey(tid), taskId: taskId, campaignId: campaignId);
         },
       ),
+      ShellRoute(
+        navigatorKey: _notificationPageShellNavigatorKey,
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          final id = state.params['cid'] ?? '';
+
+          final tabs = [
+            ScaffoldWithNavBarTabItem(
+              initialLocation: Constants.openNotificationRoute.path.replaceFirst(':cid', id),
+              icon: const Icon(Icons.home),
+              label: 'Open notifications',
+            ),
+            ScaffoldWithNavBarTabItem(
+              initialLocation: Constants.closedNotificationRoute.path.replaceFirst(':cid', id),
+              icon: const Icon(Icons.settings),
+              label: 'Closed notifications',
+            ),
+          ];
+
+          return ScaffoldWithBottomNavBar(
+            tabs: tabs,
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            parentNavigatorKey: _notificationPageShellNavigatorKey,
+            name: Constants.openNotificationRoute.name,
+            path: Constants.openNotificationRoute.path,
+            builder: (BuildContext context, GoRouterState state) {
+              final id = state.params['cid'];
+              if (id == null) {
+                return const Text('Unknown Page');
+              }
+              return OpenNotificationPage(
+                campaignId: int.parse(id),
+              );
+            },
+          ),
+          GoRoute(
+            parentNavigatorKey: _notificationPageShellNavigatorKey,
+            name: Constants.closedNotificationRoute.name,
+            path: Constants.closedNotificationRoute.path,
+            builder: (BuildContext context, GoRouterState state) {
+              final id = state.params['cid'];
+              if (id == null) {
+                return const Text('Unknown Page');
+              }
+              return ClosedNotificationPage(campaignId: int.parse(id));
+            },
+          ),
+        ],
+      )
     ],
   );
 }

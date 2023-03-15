@@ -64,7 +64,7 @@ class TaskView extends StatelessWidget {
       );
     } else {
       context.goNamed(
-        Constants.taskRouteRelevant.name,
+        Constants.relevantTaskRoute.name,
         params: {
           'cid': '$campaignId',
         },

@@ -4,14 +4,14 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Notification;
 part 'notification.g.dart';
 
 @JsonSerializable()
-class Notifications extends Equatable {
+class Notification extends Equatable {
   final int id;
   final String title;
   final String text;
   final DateTime createdAt;
   final int importance;
 
-  const Notifications({
+  const Notification({
     required this.id,
     required this.title,
     required this.text,
@@ -19,12 +19,12 @@ class Notifications extends Equatable {
     required this.importance,
   });
 
-  factory Notifications.fromJson(Map<String, dynamic> json) {
-    return _$NotificationsFromJson(json);
+  factory Notification.fromJson(Map<String, dynamic> json) {
+    return _$NotificationFromJson(json);
   }
 
-  factory Notifications.fromApiModel(api.Notification model) {
-    return Notifications(
+  factory Notification.fromApiModel(api.Notification model) {
+    return Notification(
       id: model.id,
       title: model.title,
       text: model.text,
