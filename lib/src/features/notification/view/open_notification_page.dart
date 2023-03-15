@@ -37,7 +37,7 @@ class NotificationView extends StatelessWidget {
       Constants.notificationDetailRoute.name,
       params: {
         'cid': '$campaignId',
-        'tid': '${notification.id}',
+        'nid': '${notification.id}',
       },
       extra: Notification,
     );

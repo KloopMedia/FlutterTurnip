@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
 import 'package:gigaturnip/src/features/notification/view/closed_notification_page.dart';
 import 'package:gigaturnip/src/features/notification/view/open_notification_page.dart';
+import 'package:gigaturnip/src/features/notification_detail/view/notification_detail_page.dart';
 import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
 import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/features/task_detail/view/task_detail_page.dart';
@@ -173,7 +174,38 @@ class AppRouter {
             },
           ),
         ],
-      )
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        name: Constants.notificationDetailRoute.name,
+        path: Constants.notificationDetailRoute.path,
+        builder: (BuildContext context, GoRouterState state) {
+          final notification = state.extra;
+          final nid = state.params['nid'];
+          final cid = state.params['cid'];
+
+          if (nid == null || cid == null) {
+            return const Text('Unknown Page');
+          }
+
+          final notificationId = int.parse(nid);
+          final campaignId = int.parse(cid);
+
+          if (notification != null && notification is Notification) {
+            return NotificationDetailPage(
+              key: ValueKey(nid),
+              notificationId: notificationId,
+              campaignId: campaignId,
+              notification: notification,
+            );
+          }
+          return NotificationDetailPage(
+            key: ValueKey(nid),
+            notificationId: notificationId,
+            campaignId: campaignId,
+          );
+        },
+      ),
     ],
   );
 }
