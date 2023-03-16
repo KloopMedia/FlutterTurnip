@@ -46,6 +46,14 @@ class CampaignView extends StatelessWidget {
       );
     }
 
+    void redirectToCampaignDetail(BuildContext context, int id, Campaign campaign) {
+      context.goNamed(
+        Constants.campaignDetailRoute.name,
+        params: {'cid': '$id'},
+        extra: campaign,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(),
       endDrawer: const AppDrawer(),
@@ -68,7 +76,7 @@ class CampaignView extends StatelessWidget {
                 return ListTile(
                   title: Text(item.name),
                   subtitle: Text("${item.id}"),
-                  onTap: () {},
+                  onTap: () => redirectToCampaignDetail(context, item.id, item),
                 );
               },
             ),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
+import 'package:gigaturnip/src/features/campaign_detail/view/campaign_detail_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
 import 'package:gigaturnip/src/features/notification/view/closed_notification_page.dart';
 import 'package:gigaturnip/src/features/notification/view/open_notification_page.dart';
@@ -46,6 +47,26 @@ class AppRouter {
         path: Constants.campaignRoute.path,
         builder: (BuildContext context, GoRouterState state) {
           return const CampaignPage();
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        name: Constants.campaignDetailRoute.name,
+        path: Constants.campaignDetailRoute.path,
+        builder: (BuildContext context, GoRouterState state) {
+          final campaign = state.extra;
+          final cid = state.params['cid'] ?? '';
+
+          final campaignId = int.parse(cid);
+
+          if (campaign != null && campaign is Campaign) {
+            return CampaignDetailPage(
+              key: ValueKey(cid),
+              campaignId: campaignId,
+              campaign: campaign,
+            );
+          }
+          return CampaignDetailPage(key: ValueKey(cid), campaignId: campaignId);
         },
       ),
       ShellRoute(
