@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/notification/bloc/notification_bloc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/notification/bloc/notification_cubit.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
-import 'package:gigaturnip/src/utilities/remote_data_type.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -15,13 +15,13 @@ class OpenNotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OpenNotificationBloc>(
-      create: (context) => NotificationBloc(
+    return BlocProvider<OpenNotificationCubit>(
+      create: (context) => NotificationCubit(
         OpenNotificationRepository(
           gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
           campaignId: campaignId,
         ),
-      ),
+      )..initialize(),
       child: NotificationView(campaignId: campaignId),
     );
   }
@@ -46,7 +46,7 @@ class NotificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NotificationListView(
-      bloc: context.read<OpenNotificationBloc>(),
+      bloc: context.read<OpenNotificationCubit>(),
       onTap: (notification) {
         redirect(context, notification);
       },
@@ -54,8 +54,8 @@ class NotificationView extends StatelessWidget {
   }
 }
 
-class NotificationListView<NotificationBloc extends Bloc> extends StatelessWidget {
-  final NotificationBloc bloc;
+class NotificationListView extends StatelessWidget {
+  final OpenNotificationCubit bloc;
   final void Function(Notification notification) onTap;
 
   const NotificationListView({Key? key, required this.bloc, required this.onTap})
@@ -68,10 +68,10 @@ class NotificationListView<NotificationBloc extends Bloc> extends StatelessWidge
         BlocBuilder(
           bloc: bloc,
           builder: (context, state) {
-            if (state is RemoteDataFetching) {
+            if (state is RemoteDataLoading) {
               return const CircularProgressIndicator();
             }
-            if (state is NotificationLoaded) {
+            if (state is RemoteDataLoaded) {
               return ListView.builder(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -92,9 +92,9 @@ class NotificationListView<NotificationBloc extends Bloc> extends StatelessWidge
           bloc: bloc,
           builder: (context, state) {
             return Pagination(
-              currentPage: state is NotificationInitialized ? state.currentPage : 0,
-              total: state is NotificationInitialized ? state.total : 0,
-              onChanged: (page) => bloc.add(RefetchNotificationData(page)),
+              currentPage: state is RemoteDataInitialized ? state.currentPage : 0,
+              total: state is RemoteDataInitialized ? state.total : 0,
+              onChanged: (page) => bloc.fetchData(page),
               enabled: state is! RemoteDataFetching,
             );
           },

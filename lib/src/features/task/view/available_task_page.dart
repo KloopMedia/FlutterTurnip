@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
-import 'package:gigaturnip/src/utilities/remote_data_type.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -19,20 +19,20 @@ class AvailableTaskPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CreatableTaskBloc(
+          create: (context) => CreatableTaskCubit(
             CreatableTaskRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
               campaignId: campaignId,
             ),
-          ),
+          )..initialize(),
         ),
-        BlocProvider<AvailableTaskBloc>(
-          create: (context) => AvailableTaskBloc(
+        BlocProvider(
+          create: (context) => AvailableTaskCubit(
             AvailableTaskRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
               campaignId: campaignId,
             ),
-          ),
+          )..initialize(),
         ),
       ],
       child: TaskView(campaignId: campaignId),
@@ -49,7 +49,7 @@ class TaskView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<AvailableTaskBloc, AvailableTaskState>(
+        BlocListener<AvailableTaskCubit, RemoteDataState>(
           listener: (context, state) {
             if (state is AvailableTaskRequestAssignmentSuccess) {
               context.goNamed(
@@ -62,7 +62,7 @@ class TaskView extends StatelessWidget {
             }
           },
         ),
-        BlocListener<CreatableTaskBloc, CreatableTaskState>(
+        BlocListener<CreatableTaskCubit, RemoteDataState>(
           listener: (context, state) {
             if (state is TaskCreating) {
               context.goNamed(
@@ -80,15 +80,15 @@ class TaskView extends StatelessWidget {
         child: Column(
           children: [
             CreatableTaskListView(
-              bloc: context.read<CreatableTaskBloc>(),
+              bloc: context.read<CreatableTaskCubit>(),
               onTap: (task) {
-                context.read<CreatableTaskBloc>().add(CreateTask(task));
+                context.read<CreatableTaskCubit>().createTask(task);
               },
             ),
             AvailableTaskListView(
-              bloc: context.read<AvailableTaskBloc>(),
+              bloc: context.read<AvailableTaskCubit>(),
               onTap: (task) {
-                context.read<AvailableTaskBloc>().add(RequestAvailableTaskAssignment(task));
+                context.read<AvailableTaskCubit>().requestTaskAssignment(task);
               },
             ),
           ],
@@ -99,7 +99,7 @@ class TaskView extends StatelessWidget {
 }
 
 class CreatableTaskListView extends StatelessWidget {
-  final CreatableTaskBloc bloc;
+  final CreatableTaskCubit bloc;
   final void Function(TaskStage task) onTap;
 
   const CreatableTaskListView({
@@ -115,13 +115,13 @@ class CreatableTaskListView extends StatelessWidget {
         BlocBuilder(
           bloc: bloc,
           builder: (context, state) {
-            if (state is RemoteDataFetching) {
+            if (state is RemoteDataLoading) {
               return const CircularProgressIndicator();
             }
-            if (state is TaskCreatingError) {
+            if (state is RemoteDataFailed) {
               return Text(state.error);
             }
-            if (state is CreatableTaskLoaded) {
+            if (state is RemoteDataLoaded) {
               return ListView.builder(
                 shrinkWrap: true,
                 // scrollDirection: Axis.horizontal,
@@ -142,9 +142,9 @@ class CreatableTaskListView extends StatelessWidget {
           bloc: bloc,
           builder: (context, state) {
             return Pagination(
-              currentPage: state is AvailableTaskInitialized ? state.currentPage : 0,
-              total: state is AvailableTaskInitialized ? state.total : 0,
-              onChanged: (page) => bloc.add(RefetchCreatableTaskData(page)),
+              currentPage: state is RemoteDataInitialized ? state.currentPage : 0,
+              total: state is RemoteDataInitialized ? state.total : 0,
+              onChanged: (page) => bloc.fetchData(page),
               enabled: state is! RemoteDataFetching,
             );
           },
@@ -155,7 +155,7 @@ class CreatableTaskListView extends StatelessWidget {
 }
 
 class AvailableTaskListView extends StatelessWidget {
-  final AvailableTaskBloc bloc;
+  final AvailableTaskCubit bloc;
   final void Function(Task task) onTap;
 
   const AvailableTaskListView({Key? key, required this.bloc, required this.onTap})
@@ -169,10 +169,10 @@ class AvailableTaskListView extends StatelessWidget {
         BlocBuilder(
           bloc: bloc,
           builder: (context, state) {
-            if (state is RemoteDataFetching) {
+            if (state is RemoteDataLoading) {
               return const CircularProgressIndicator();
             }
-            if (state is AvailableTaskLoaded) {
+            if (state is RemoteDataLoaded) {
               return ListView.builder(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -193,10 +193,10 @@ class AvailableTaskListView extends StatelessWidget {
           bloc: bloc,
           builder: (context, state) {
             return Pagination(
-              currentPage: state is AvailableTaskInitialized ? state.currentPage : 0,
-              total: state is AvailableTaskInitialized ? state.total : 0,
-              onChanged: (page) => bloc.add(RefetchAvailableTaskData(page)),
-              enabled: state is! RemoteDataFetching,
+              currentPage: state is RemoteDataInitialized ? state.currentPage : 0,
+              total: state is RemoteDataInitialized ? state.total : 0,
+              onChanged: (page) => bloc.fetchData(page),
+              enabled: state is! RemoteDataLoading,
             );
           },
         )

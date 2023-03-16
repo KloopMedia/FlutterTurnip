@@ -41,6 +41,6 @@ class CampaignBloc extends Bloc<CampaignEvent, CampaignState> {
   Future<List<Campaign>> _fetchData(int page) async {
     final userCampaigns = await _userCampaignRepository.fetchDataOnPage(page);
     final selectableCampaigns = await _selectableCampaignRepository.fetchDataOnPage(page);
-    return [...userCampaigns, ...selectableCampaigns];
+    return [...userCampaigns.data, ...selectableCampaigns.data];
   }
 }

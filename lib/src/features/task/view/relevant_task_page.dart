@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/bloc/remote_data_bloc/remote_data_cubit.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
-import 'package:gigaturnip/src/utilities/remote_data_type.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -18,21 +18,21 @@ class RelevantTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<OpenTaskBloc>(
-          create: (context) => RelevantTaskBloc(
+        BlocProvider<OpenTaskCubit>(
+          create: (context) => RelevantTaskCubit(
             OpenTaskRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
               campaignId: campaignId,
             ),
-          ),
+          )..initialize(),
         ),
-        BlocProvider<ClosedTaskBloc>(
-          create: (context) => RelevantTaskBloc(
+        BlocProvider<ClosedTaskCubit>(
+          create: (context) => RelevantTaskCubit(
             ClosedTaskRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
               campaignId: campaignId,
             ),
-          ),
+          )..initialize(),
         ),
       ],
       child: TaskView(
@@ -64,14 +64,14 @@ class TaskView extends StatelessWidget {
       child: Column(
         children: [
           RelevantTaskListView(
-            bloc: context.read<OpenTaskBloc>(),
+            bloc: context.read<OpenTaskCubit>() as RelevantTaskCubit,
             header: const Text('Open tasks'),
             onTap: (task) {
               redirect(context, task);
             },
           ),
           RelevantTaskListView(
-            bloc: context.read<ClosedTaskBloc>(),
+            bloc: context.read<ClosedTaskCubit>() as RelevantTaskCubit,
             header: const Text('Closed tasks'),
             onTap: (task) {
               redirect(context, task);
@@ -83,8 +83,8 @@ class TaskView extends StatelessWidget {
   }
 }
 
-class RelevantTaskListView<TaskBloc extends Bloc> extends StatelessWidget {
-  final TaskBloc bloc;
+class RelevantTaskListView extends StatelessWidget {
+  final RelevantTaskCubit bloc;
   final Text header;
   final void Function(Task task) onTap;
 
@@ -100,10 +100,10 @@ class RelevantTaskListView<TaskBloc extends Bloc> extends StatelessWidget {
         BlocBuilder(
           bloc: bloc,
           builder: (context, state) {
-            if (state is RemoteDataFetching) {
+            if (state is RemoteDataLoading) {
               return const CircularProgressIndicator();
             }
-            if (state is RelevantTaskLoaded) {
+            if (state is RemoteDataLoaded) {
               return ListView.builder(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -124,10 +124,12 @@ class RelevantTaskListView<TaskBloc extends Bloc> extends StatelessWidget {
           bloc: bloc,
           builder: (context, state) {
             return Pagination(
-              currentPage: state is RelevantTaskInitialized ? state.currentPage : 0,
-              total: state is RelevantTaskInitialized ? state.total : 0,
-              onChanged: (page) => bloc.add(RefetchRelevantTaskData(page)),
-              enabled: state is! RemoteDataFetching,
+              currentPage: state is RemoteDataInitialized ? state.currentPage : 0,
+              total: state is RemoteDataInitialized ? state.total : 0,
+              onChanged: (page) {
+                bloc.fetchData(page);
+              },
+              enabled: state is! RemoteDataLoading,
             );
           },
         )
