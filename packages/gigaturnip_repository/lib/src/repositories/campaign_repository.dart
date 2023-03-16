@@ -30,8 +30,4 @@ class SelectableCampaignRepository extends CampaignRepository {
   Future<api.PaginationWrapper<api.Campaign>> fetchData({Map<String, dynamic>? query}) async {
     return _gigaTurnipApiClient.getSelectableCampaigns(query: query);
   }
-
-  Future<void> joinCampaign(int id) async {
-    await _gigaTurnipApiClient.joinCampaign(id);
-  }
 }
