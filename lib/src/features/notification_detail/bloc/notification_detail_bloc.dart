@@ -46,7 +46,7 @@ class NotificationDetailBloc extends Bloc<NotificationDetailEvent, NotificationD
     Emitter<NotificationDetailState> emit,
   ) async {
     try {
-      await _repository.marNotificationAsViewed(notificationId);
+      await _repository.markNotificationAsViewed(notificationId);
     } catch (e, s) {
       print(e);
       print(s);

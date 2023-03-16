@@ -9,11 +9,11 @@ class NotificationDetailRepository {
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   Future<Notification> fetchData(int id) async {
-    final task = await _gigaTurnipApiClient.getNotificationById(id);
-    return Notification.fromApiModel(task);
+    final notification = await _gigaTurnipApiClient.getNotificationById(id);
+    return Notification.fromApiModel(notification);
   }
 
-  Future<void> marNotificationAsViewed(int id) {
+  Future<void> markNotificationAsViewed(int id) {
     return _gigaTurnipApiClient.openNotification(id);
   }
 }
