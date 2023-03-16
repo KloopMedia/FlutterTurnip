@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/utilities/constants.dart';
+import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +37,7 @@ class CampaignDetailView extends StatelessWidget {
 
   void redirectToTaskMenu(BuildContext context, int id) {
     context.goNamed(
-      Constants.relevantTaskRoute.name,
+      TaskRelevantRoute.name,
       params: {
         'cid': "$id",
       },

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:gigaturnip/src/utilities/constants.dart';
+import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 class CampaignPage extends StatelessWidget {
@@ -41,14 +41,14 @@ class CampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     void redirectToTaskMenu(BuildContext context, int id) {
       context.goNamed(
-        Constants.relevantTaskRoute.name,
+        TaskRelevantRoute.name,
         params: {'cid': '$id'},
       );
     }
 
     void redirectToCampaignDetail(BuildContext context, int id, Campaign campaign) {
       context.goNamed(
-        Constants.campaignDetailRoute.name,
+        CampaignDetailRoute.name,
         params: {'cid': '$id'},
         extra: campaign,
       );

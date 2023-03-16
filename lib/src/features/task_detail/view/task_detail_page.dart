@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/task_detail/bloc/previous_task_bloc/previous_task_bloc.dart';
 import 'package:gigaturnip/src/features/task_detail/bloc/task_bloc/task_bloc.dart';
 import 'package:gigaturnip/src/helpers/webview/webview.dart';
-import 'package:gigaturnip/src/utilities/constants.dart';
+import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +56,7 @@ class TaskView extends StatelessWidget {
   void redirect(BuildContext context, int? nextTaskId) {
     if (nextTaskId != null) {
       context.goNamed(
-        Constants.taskDetailRoute.name,
+        TaskDetailRoute.name,
         params: {
           'tid': '$nextTaskId',
           'cid': '$campaignId',
@@ -64,7 +64,7 @@ class TaskView extends StatelessWidget {
       );
     } else {
       context.goNamed(
-        Constants.relevantTaskRoute.name,
+        TaskRelevantRoute.name,
         params: {
           'cid': '$campaignId',
         },
@@ -124,5 +124,3 @@ class TaskView extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
-import 'package:gigaturnip/src/utilities/constants.dart';
+import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,7 +13,7 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
 
   void redirectToNotification(BuildContext context, Notification notification) {
     context.goNamed(
-      Constants.notificationDetailRoute.name,
+      NotificationDetailRoute.name,
       params: {
         'cid': '$campaignId',
         'nid': '${notification.id}',
