@@ -56,6 +56,9 @@ class Pagination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (total == 0) {
+      return const SizedBox.shrink();
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
