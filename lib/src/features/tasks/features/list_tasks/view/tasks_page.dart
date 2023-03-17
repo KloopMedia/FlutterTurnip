@@ -34,6 +34,9 @@ class _TasksPageState extends State<TasksPage> {
   Future<void> createTask() async {
     try {
       final repository = context.read<GigaTurnipRepository>();
+      if (widget.shouldJoinCampaign) {
+        await repository.joinCampaign(widget.campaignId!);
+      }
       final newTask = await repository.createTask(widget.createTaskId!);
       if (!mounted) return;
       context.go('/campaign/${widget.campaignId}/tasks/${newTask.id}');
