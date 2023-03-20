@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -103,7 +104,7 @@ class DrawerBody extends StatelessWidget {
                 onPressed: () async {
                   // final shouldLogout = await showLogOutDialog(context);
                   // if (shouldLogout) {
-                  //   bloc.add(AppLogoutRequested());
+                  context.read<AuthBloc>().add(AuthLogoutRequested());
                   // }
                 },
                 child: Text(
