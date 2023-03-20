@@ -505,8 +505,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: "20545d6ba279543e4a3b0717ab528d2b2f23953a"
+      ref: reverted_theme
+      resolved-ref: "02b71029da949b30a06cf60d41f5705421073364"
       url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
     source: git
     version: "0.0.1"

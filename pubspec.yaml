@@ -56,7 +56,7 @@ dependencies:
 #    path: ../flutter-jsonschema-form
     git:
       url: https://github.com/KloopMedia/flutter-jsonschema-form.git
-      ref: master
+      ref: reverted_theme
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   shared_preferences: ^2.0.18
