@@ -26,6 +26,7 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   late TaskBloc taskBloc;
   final ScrollController controller = ScrollController();
+  final pageStorageKey = const PageStorageKey('pageKey');
   late String richText;
   bool isRichTextViewed = true;
 
@@ -165,7 +166,7 @@ class _TaskViewState extends State<TaskView> {
             thumbVisibility: true,
             scrollbarOrientation: ScrollbarOrientation.right,
             child: SingleChildScrollView(
-              key: const PageStorageKey('pageKey'),
+              key: pageStorageKey,
               controller: controller,
               child: Column(
                 children: [
@@ -188,6 +189,7 @@ class _TaskViewState extends State<TaskView> {
                             ExpansionCard(
                               task: task,
                               child: FlutterJsonSchemaForm(
+                                key: pageStorageKey,
                                 schema: task.schema!,
                                 uiSchema: task.uiSchema,
                                 formData: task.responses,
@@ -210,6 +212,7 @@ class _TaskViewState extends State<TaskView> {
                           for (var task in state.previousTasks) ...[
                             _Divider(label: task.name),
                             FlutterJsonSchemaForm(
+                              key: pageStorageKey,
                               schema: task.schema!,
                               uiSchema: task.uiSchema,
                               formData: task.responses,
@@ -233,6 +236,7 @@ class _TaskViewState extends State<TaskView> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlutterJsonSchemaForm(
+                      key: pageStorageKey,
                       schema: state.schema!,
                       uiSchema: state.uiSchema,
                       formData: state.responses ?? {},
