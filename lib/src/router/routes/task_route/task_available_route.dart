@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
 import 'package:go_router/go_router.dart';
@@ -8,14 +10,17 @@ class TaskAvailableRoute {
   static String path = "/campaign/:cid/task/available";
 
   final GlobalKey<NavigatorState> parentKey;
+  final FutureOr<String?> Function(BuildContext context, GoRouterState state)? redirect;
 
-  TaskAvailableRoute({required this.parentKey});
+
+  TaskAvailableRoute({required this.parentKey, this.redirect});
 
   GoRoute get route {
     return GoRoute(
       parentNavigatorKey: parentKey,
       name: name,
       path: path,
+      redirect: redirect,
       builder: (BuildContext context, GoRouterState state) {
         final id = state.params['cid'];
         if (id == null) {

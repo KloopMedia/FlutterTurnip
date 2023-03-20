@@ -506,7 +506,7 @@ packages:
     description:
       path: "."
       ref: reverted_theme
-      resolved-ref: "02b71029da949b30a06cf60d41f5705421073364"
+      resolved-ref: "946f7d9b9d94a87c4bb27e196a66b954eaf84f44"
       url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
     source: git
     version: "0.0.1"
