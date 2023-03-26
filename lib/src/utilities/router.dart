@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:gigaturnip/src/features/login/view/login_page.dart';
 import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
@@ -54,12 +55,12 @@ class AppRouter {
                 ScaffoldWithNavBarTabItem(
                   initialLocation: '/${Constants.taskRouteRelevant.path.replaceFirst(':cid', id)}',
                   icon: const Icon(Icons.home),
-                  label: 'Relevant Tasks',
+                  label: context.loc.relevant_tasks,
                 ),
                 ScaffoldWithNavBarTabItem(
                   initialLocation: '/${Constants.taskRouteAvailable.path.replaceFirst(':cid', id)}',
                   icon: const Icon(Icons.settings),
-                  label: 'Available Tasks',
+                  label: context.loc.available_tasks,
                 ),
               ];
 
@@ -76,7 +77,7 @@ class AppRouter {
                 builder: (BuildContext context, GoRouterState state) {
                   final id = state.params['cid'];
                   if (id == null) {
-                    return const Text('Unknown Page');
+                    return Text(context.loc.unknown_page);
                   }
                   return RelevantTaskPage(
                     campaignId: int.parse(id),
@@ -90,7 +91,7 @@ class AppRouter {
                 builder: (BuildContext context, GoRouterState state) {
                   final id = state.params['cid'];
                   if (id == null) {
-                    return const Text('Unknown Page');
+                    return Text(context.loc.unknown_page);
                   }
                   return AvailableTaskPage(campaignId: int.parse(id));
                 },
@@ -107,7 +108,7 @@ class AppRouter {
               final cid = state.params['cid'];
 
               if (tid == null || cid == null) {
-                return const Text('Unknown Page');
+                return Text(context.loc.unknown_page);
               }
 
               final taskId = int.parse(tid);

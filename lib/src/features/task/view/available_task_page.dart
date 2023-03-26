@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip/src/utilities/remote_data_type.dart';
@@ -54,7 +55,7 @@ class TaskView extends StatelessWidget {
       child: SingleChildScrollView(
         child: AvailableTaskListView(
           bloc: context.read<AvailableTaskBloc>(),
-          header: const Text('Available tasks'),
+          header: Text(context.loc.available_tasks),
           onTap: (task) {
             context.read<AvailableTaskBloc>().add(RequestAvailableTaskAssignment(task));
           },
@@ -91,7 +92,7 @@ class AvailableTaskListView extends StatelessWidget {
                   final task = state.data[index];
                   return ListTile(
                     title: Text(task.name),
-                    subtitle: Text('ID: ${task.id} ${task.complete ? 'closed' : 'open'}'),
+                    subtitle: Text('ID: ${task.id} ${task.complete ? context.loc.closed : context.loc.opened}'),
                     onTap: () => onTap(task),
                   );
                 },

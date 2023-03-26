@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip/src/helpers/app_drawer.dart';
@@ -46,7 +47,7 @@ class CampaignView extends StatelessWidget {
           } else if (state is CampaignInfo) {
             return _CampaignInfoView(campaign: state.campaign);
           } else {
-            return const Text('Error: Unknown state!');
+            return Text(context.loc.unknown_state);
           }
         },
       ),
@@ -91,7 +92,7 @@ class _CampaignInfoView extends StatelessWidget {
         if (campaign.canJoin)
           ElevatedButton(
             onPressed: () {},
-            child: const Text('Yes'),
+            child: Text(context.loc.yes),
           ),
       ],
     );

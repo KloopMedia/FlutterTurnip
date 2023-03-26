@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/helpers/helpers.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip/src/utilities/remote_data_type.dart';
@@ -12,7 +13,8 @@ import '../bloc/bloc.dart';
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
 
-  const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
+  const RelevantTaskPage({Key? key, required this.campaignId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +67,14 @@ class TaskView extends StatelessWidget {
         children: [
           RelevantTaskListView(
             bloc: context.read<OpenTaskBloc>(),
-            header: const Text('Open tasks'),
+            header: Text(context.loc.closed_tasks),
             onTap: (task) {
               redirect(context, task);
             },
           ),
           RelevantTaskListView(
             bloc: context.read<ClosedTaskBloc>(),
-            header: const Text('Closed tasks'),
+            header: Text(context.loc.open_tasks),
             onTap: (task) {
               redirect(context, task);
             },
@@ -110,7 +112,10 @@ class RelevantTaskListView<TaskBloc extends Bloc> extends StatelessWidget {
                   final task = state.data[index];
                   return ListTile(
                     title: Text(task.name),
-                    subtitle: Text(task.complete ? 'closed' : 'open'),
+                    subtitle: Text(task.complete
+                        ? context.loc.closed
+                        : context.loc.opened
+                    ),
                     onTap: () => onTap(task),
                   );
                 },
@@ -124,7 +129,8 @@ class RelevantTaskListView<TaskBloc extends Bloc> extends StatelessWidget {
           bloc: bloc,
           builder: (context, state) {
             return Pagination(
-              currentPage: state is RelevantTaskInitialized ? state.currentPage : 0,
+              currentPage:
+                  state is RelevantTaskInitialized ? state.currentPage : 0,
               total: state is RelevantTaskInitialized ? state.total : 0,
               onChanged: (page) => bloc.add(RefetchRelevantTaskData(page)),
               enabled: state is! RemoteDataFetching,

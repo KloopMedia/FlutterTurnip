@@ -65,5 +65,15 @@
     "form_divider": "Your form starts here",
     "join_campaign": "Join campaign?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+
+    "unknown_state" : "Error: Unknown state!",
+    "available_tasks" : "Available tasks",
+    "closed" : "closed",
+    "opened" : "open",
+    "open_tasks" : "Open tasks",
+    "closed_tasks" : "Closed tasks",
+    "relevant_tasks" : "Relevant Tasks",
+    "unknown_page" : "Unknown Page"
+
 }
