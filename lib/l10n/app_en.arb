@@ -74,6 +74,12 @@
     "open_tasks" : "Open tasks",
     "closed_tasks" : "Closed tasks",
     "relevant_tasks" : "Relevant Tasks",
-    "unknown_page" : "Unknown Page"
+    "unknown_page" : "Unknown Page",
+    "open_campaigns" : "Open campaigns",
+    "available_campaigns" : "Available campaigns",
+    "join" : "Join",
+    "complete" : "Complete",
+    "open_notification" : "Open notification",
+    "closed_notification" : "Closed notification"
 
 }

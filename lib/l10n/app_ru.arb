@@ -74,5 +74,11 @@
      "open_tasks" : "Открытые задания",
      "closed_tasks" : "Закрытые задания",
      "relevant_tasks" : "Соответствующие задания",
-     "unknown_page" : "Неизвестная страница"
+     "unknown_page" : "Неизвестная страница",
+     "open_campaigns" : "Открытые кампании",
+     "available_campaigns" : "Доступные кампании",
+     "join" : "Присоединиться",
+     "complete" : "Законченный",
+     "open_notification" : "Открытые уведомления",
+     "closed_notification" : "Закрытые уведомления"
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/create_task_response.dart';
 import 'package:gigaturnip_api/src/models/task_response.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -15,12 +16,12 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Campaign>> getCampaigns({@Queries() Map<String, dynamic>? query});
 
   @GET(userCampaignsRoute)
-  Future<List<Campaign>> getUserCampaigns({
+  Future<PaginationWrapper<Campaign>> getUserCampaigns({
     @Queries() Map<String, dynamic>? query,
   });
 
   @GET(selectableCampaignsRoute)
-  Future<List<Campaign>> getSelectableCampaigns({
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({
     @Queries() Map<String, dynamic>? query,
   });
 
@@ -54,7 +55,7 @@ abstract class GigaTurnipApiClient {
   });
 
   @GET("$tasksRoute/{id}/$displayedPreviousTasksActionRoute")
-  Future<List<Task>> getDisplayedPreviousTasks(
+  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
     @Path("id") int id, {
     @Queries() Map<String, dynamic>? query,
   });
@@ -82,6 +83,14 @@ abstract class GigaTurnipApiClient {
     @Queries() required Map<String, dynamic> query,
   });
 
+  @GET(userRelevantTaskStageRoute)
+  Future<PaginationWrapper<TaskStage>> getUserRelevantTaskStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @POST("$taskStagesRoute/{id}/$createTaskActionRoute")
+  Future<CreateTaskResponse> createTaskFromStageId(@Path("id") int id);
+
   // Notification methods
 
   @GET(notificationsRoute)
@@ -93,6 +102,9 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Notification>> getUserNotifications({
     @Queries() Map<String, dynamic>? query,
   });
+
+  @GET("$notificationsRoute/{id}")
+  Future<Notification> getNotificationById(@Path("id") int id);
 
   @GET("$notificationsRoute/{id}/$openNotificationActionRoute")
   Future<void> openNotification(@Path("id") int id);

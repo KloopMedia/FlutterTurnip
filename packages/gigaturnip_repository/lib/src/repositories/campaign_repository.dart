@@ -19,10 +19,7 @@ class UserCampaignRepository extends CampaignRepository {
 
   @override
   Future<api.PaginationWrapper<api.Campaign>> fetchData({Map<String, dynamic>? query}) async {
-    // return await _gigaTurnipApiClient.getUserCampaigns(query: query);
-    final results = await _gigaTurnipApiClient.getUserCampaigns(query: query);
-    final wrapper = api.PaginationWrapper(count: results.length, results: results);
-    return wrapper;
+    return _gigaTurnipApiClient.getUserCampaigns(query: query);
   }
 }
 
@@ -31,12 +28,6 @@ class SelectableCampaignRepository extends CampaignRepository {
 
   @override
   Future<api.PaginationWrapper<api.Campaign>> fetchData({Map<String, dynamic>? query}) async {
-    final results = await _gigaTurnipApiClient.getSelectableCampaigns(query: query);
-    final wrapper = api.PaginationWrapper(count: results.length, results: results);
-    return wrapper;
-  }
-
-  Future<void> joinCampaign(int id) async {
-    await _gigaTurnipApiClient.joinCampaign(id);
+    return _gigaTurnipApiClient.getSelectableCampaigns(query: query);
   }
 }

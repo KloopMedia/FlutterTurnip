@@ -29,7 +29,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PaginationWrapper<Campaign>>(Options(
       method: 'GET',
@@ -51,15 +51,15 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Campaign>> getUserCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getUserCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Campaign>>(Options(
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Campaign>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -71,22 +71,23 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Campaign.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Campaign>.fromJson(
+      _result.data!,
+      (json) => Campaign.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
   @override
-  Future<List<Campaign>> getSelectableCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Campaign>>(Options(
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Campaign>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -98,9 +99,10 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Campaign.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Campaign>.fromJson(
+      _result.data!,
+      (json) => Campaign.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
@@ -109,7 +111,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<Campaign>(Options(
       method: 'GET',
@@ -118,7 +120,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              'campaigns//${id}',
+              'campaigns/${id}/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -132,7 +134,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'GET',
       headers: _headers,
@@ -154,7 +156,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PaginationWrapper<Task>>(Options(
       method: 'GET',
@@ -182,7 +184,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PaginationWrapper<Task>>(Options(
       method: 'GET',
@@ -210,7 +212,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PaginationWrapper<Task>>(Options(
       method: 'GET',
@@ -236,7 +238,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<Task>(Options(
       method: 'GET',
@@ -291,7 +293,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<List<dynamic>>(_setStreamType<List<Task>>(Options(
       method: 'GET',
@@ -312,7 +314,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<List<Task>> getDisplayedPreviousTasks(
+  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
     id, {
     query,
   }) async {
@@ -321,9 +323,9 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Task>>(Options(
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Task>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -335,9 +337,10 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => Task.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PaginationWrapper<Task>.fromJson(
+      _result.data!,
+      (json) => Task.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
@@ -346,7 +349,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<Task>(Options(
       method: 'GET',
@@ -369,7 +372,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'GET',
       headers: _headers,
@@ -389,7 +392,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'GET',
       headers: _headers,
@@ -409,7 +412,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'GET',
       headers: _headers,
@@ -429,7 +432,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'GET',
       headers: _headers,
@@ -453,7 +456,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<DynamicSchema>(Options(
       method: 'GET',
@@ -472,13 +475,65 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
+  Future<PaginationWrapper<TaskStage>> getUserRelevantTaskStages(
+      {query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<TaskStage>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'taskstages/user_relevant/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PaginationWrapper<TaskStage>.fromJson(
+      _result.data!,
+      (json) => TaskStage.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<CreateTaskResponse> createTaskFromStageId(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CreateTaskResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'taskstages//${id}/create_task/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CreateTaskResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<PaginationWrapper<Notification>> getNotifications({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PaginationWrapper<Notification>>(Options(
       method: 'GET',
@@ -506,7 +561,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     queryParameters.addAll(query ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<PaginationWrapper<Notification>>(Options(
       method: 'GET',
@@ -528,11 +583,34 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
+  Future<Notification> getNotificationById(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<Notification>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'notifications/${id}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = Notification.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<void> openNotification(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'GET',
       headers: _headers,

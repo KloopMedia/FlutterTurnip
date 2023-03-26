@@ -1,40 +1,23 @@
-part of 'campaign_bloc.dart';
+part of 'campaign_cubit.dart';
 
-abstract class CampaignState extends Equatable {
-  @override
-  List<Object> get props => [];
+class CampaignLoaded extends RemoteDataInitialized<Campaign> {
+  CampaignLoaded({
+    required super.data,
+    required super.currentPage,
+    required super.total,
+  });
 }
 
-class CampaignUninitialized extends CampaignState {}
-
-class CampaignFetching extends CampaignState {}
-
-class CampaignFetchingError extends CampaignState {
-  final String error;
-
-  CampaignFetchingError(this.error);
-
-  @override
-  List<Object> get props => [error];
-}
-
-abstract class CampaignInitialized extends CampaignState {
-  final List<Campaign> data;
-
-  CampaignInitialized(this.data);
-
-  CampaignInitialized.clone(CampaignInitialized oldState) : this(oldState.data);
-
-  @override
-  List<Object> get props => [data];
-}
-
-class CampaignLoaded extends CampaignInitialized {
-  CampaignLoaded(super.data);
-}
-
-class CampaignInfo extends CampaignInitialized {
+class CampaignInfo extends RemoteDataInitialized<Campaign> {
   final Campaign campaign;
 
-  CampaignInfo(CampaignInitialized oldState, this.campaign) : super.clone(oldState);
+  CampaignInfo({
+    required this.campaign,
+    required super.data,
+    required super.currentPage,
+    required super.total,
+  });
+
+  CampaignInfo.clone(RemoteDataInitialized<Campaign> oldState, this.campaign)
+      : super.clone(oldState);
 }

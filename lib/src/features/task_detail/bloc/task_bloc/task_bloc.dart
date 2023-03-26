@@ -19,22 +19,28 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     Task? task,
   })  : _repository = repository,
         super(task != null ? TaskLoaded(task) : TaskUninitialized()) {
-    on<FetchTask>(_onFetchTask);
-    on<UpdateTask>(_onUpdateTask, transformer: debounce(const Duration(seconds: 1)));
+    on<InitializeTask>(_onInitializeTask);
+    on<UpdateTask>(_onUpdateTask, transformer: debounce(const Duration(seconds: 2)));
     on<SubmitTask>(_onSubmitTask);
     on<TriggerWebhook>(_onTriggerWebhook);
-    if (state is TaskUninitialized) {
-      add(FetchTask());
-    }
+    on<OpenTaskInfo>(_onOpenTaskInfo);
+    on<CloseTaskInfo>(_onCloseTaskInfo);
+    add(InitializeTask());
   }
 
-  Future<void> _onFetchTask(FetchTask event, Emitter<TaskState> emit) async {
-    emit(TaskFetching());
-    try {
-      final data = await _repository.fetchData(taskId);
-      emit(TaskLoaded(data));
-    } catch (e) {
-      emit(TaskFetchingError(e.toString()));
+  Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
+    if (state is TaskUninitialized) {
+      emit(TaskFetching());
+      try {
+        final data = await _repository.fetchData(taskId);
+        emit(TaskLoaded(data));
+      } catch (e) {
+        emit(TaskFetchingError(e.toString()));
+      }
+    }
+    final task = state;
+    if (task is TaskInitialized && (task.data.stage.richText?.isNotEmpty ?? false)) {
+      add(OpenTaskInfo());
     }
   }
 
@@ -60,7 +66,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final task = (state as TaskInitialized).data;
     final formData = event.formData;
 
-    emit(TaskFetching());
     try {
       final data = {'responses': formData, 'complete': true};
       final response = await _repository.saveData(taskId, data);
@@ -75,4 +80,24 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {}
+
+  Future<void> _onOpenTaskInfo(OpenTaskInfo event, Emitter<TaskState> emit) async {
+    final task = state;
+    if (task is TaskInitialized) {
+      emit(TaskInfoOpened.clone(task));
+    }
+  }
+
+  Future<void> _onCloseTaskInfo(CloseTaskInfo event, Emitter<TaskState> emit) async {
+    emit(TaskLoaded.clone(state as TaskInitialized));
+    final task = (state as TaskInitialized).data;
+    final isSchemaEmpty = task.schema?.isEmpty ?? true;
+    if (!task.complete && isSchemaEmpty) {
+      add(SubmitTask(task.responses));
+    } else {
+      if (isSchemaEmpty) {
+        emit(TaskClosed());
+      }
+    }
+  }
 }
