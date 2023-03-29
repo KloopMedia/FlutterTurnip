@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/helpers/app_drawer.dart';
-import 'package:gigaturnip/src/router/routes/campaign_route.dart';
+import 'package:gigaturnip/src/router/routes/campaign_route/campaign_available_route.dart';
 import 'package:go_router/go_router.dart';
 
 class TaskPageScaffold extends StatefulWidget {
@@ -33,7 +33,7 @@ class _MainScaffoldState extends State<TaskPageScaffold> {
 
   void _redirectToCampaignPage(BuildContext context) {
     final routeState = GoRouterState.of(context);
-    context.goNamed(CampaignRoute.name, queryParams: routeState.queryParams);
+    context.goNamed(CampaignAvailableRoute.name, queryParams: routeState.queryParams);
   }
 
   @override

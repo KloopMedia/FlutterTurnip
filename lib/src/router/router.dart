@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
@@ -15,6 +16,7 @@ class AppRouter {
       : _authRouterNotifier = RouterNotifier(authenticationRepository);
 
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  final _campaignShellNavigatorKey = GlobalKey<NavigatorState>();
   final _taskPageShellNavigatorKey = GlobalKey<NavigatorState>();
   final _notificationPageShellNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -48,6 +50,7 @@ class AppRouter {
 
   get router {
     return GoRouter(
+      initialLocation: CampaignAvailableRoute.path,
       refreshListenable: _authRouterNotifier,
       redirect: (BuildContext context, GoRouterState state) async {
         final authenticationService = context.read<AuthenticationRepository>();
@@ -75,7 +78,7 @@ class AppRouter {
       navigatorKey: _rootNavigatorKey,
       routes: [
         LoginRoute(parentKey: _rootNavigatorKey).route,
-        CampaignRoute(parentKey: _rootNavigatorKey).route,
+        CampaignShellRoute(navigatorKey: _campaignShellNavigatorKey).route,
         CampaignDetailRoute(parentKey: _rootNavigatorKey).route,
         TaskShellRoute(navigatorKey: _taskPageShellNavigatorKey).route,
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,

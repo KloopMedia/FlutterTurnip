@@ -45,9 +45,16 @@ class CampaignDetailView extends StatelessWidget {
     );
   }
 
+  void redirectToCampaigns(BuildContext context) {
+    context.goNamed(CampaignAvailableRoute.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(onPressed: () => redirectToCampaigns(context)),
+      ),
       body: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
         listener: (context, state) {
           if (state is CampaignJoinSuccess) {

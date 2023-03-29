@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
+import 'package:gigaturnip/src/features/campaign/view/available_campaign_page.dart';
 import 'package:go_router/go_router.dart';
 
-class CampaignRoute {
-  static String name = "home";
+class CampaignAvailableRoute {
+  static String name = "availableCampaign";
 
-  static String path = "/";
+  static String path = "/campaign/available";
 
   final GlobalKey<NavigatorState> parentKey;
 
-  CampaignRoute({required this.parentKey});
+  CampaignAvailableRoute({required this.parentKey});
 
   GoRoute get route {
     return GoRoute(
@@ -17,7 +17,7 @@ class CampaignRoute {
       name: name,
       path: path,
       builder: (BuildContext context, GoRouterState state) {
-        return const CampaignPage();
+        return const AvailableCampaignPage();
       },
     );
   }
