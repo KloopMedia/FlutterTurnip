@@ -15,6 +15,8 @@ class AppRouter {
   AppRouter(AuthenticationRepository authenticationRepository)
       : _authRouterNotifier = RouterNotifier(authenticationRepository);
 
+  final _initialLocation = CampaignAvailableRoute.path;
+
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
   final _campaignShellNavigatorKey = GlobalKey<NavigatorState>();
   final _taskPageShellNavigatorKey = GlobalKey<NavigatorState>();
@@ -24,7 +26,7 @@ class AppRouter {
     final query = {...state.queryParams};
 
     final queryString = toQueryString(query);
-    final fromPage = state.subloc == '/' ? '' : '?from=${state.subloc}&$queryString';
+    final fromPage = state.subloc == _initialLocation ? '' : '?from=${state.subloc}&$queryString';
     return LoginRoute.path + fromPage;
   }
 
@@ -32,7 +34,7 @@ class AppRouter {
     final query = {...state.queryParams};
 
     final queryString = toQueryString(query, 'from');
-    return '${state.queryParams['from'] ?? '/'}?$queryString';
+    return '${state.queryParams['from'] ?? _initialLocation}?$queryString';
   }
 
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
@@ -50,7 +52,7 @@ class AppRouter {
 
   get router {
     return GoRouter(
-      initialLocation: CampaignAvailableRoute.path,
+      initialLocation: _initialLocation,
       refreshListenable: _authRouterNotifier,
       redirect: (BuildContext context, GoRouterState state) async {
         final authenticationService = context.read<AuthenticationRepository>();
