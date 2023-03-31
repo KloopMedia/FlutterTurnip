@@ -1,4 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'campaign_card/campaign_card.dart';
+import 'campaign_card/card_description.dart';
+
+const _shadows = [
+  BoxShadow(
+    offset: Offset(0, 1),
+    blurRadius: 3,
+    color: Color(0x1A454545),
+  ),
+  BoxShadow(
+    offset: Offset(0, 4),
+    blurRadius: 8,
+    spreadRadius: 3,
+    color: Color(0x1A454545),
+  ),
+];
+
+// const _shadowsHover = [
+//   BoxShadow(
+//     offset: Offset(0, 2),
+//     blurRadius: 4,
+//     color: Color(0x1A454545),
+//   ),
+//   BoxShadow(
+//     offset: Offset(0, 6),
+//     blurRadius: 10,
+//     spreadRadius: 6,
+//     color: Color(0x1A454545),
+//   ),
+// ];
 
 class CampaignListItem extends StatelessWidget {
   final String tag;
@@ -16,49 +48,20 @@ class CampaignListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: SizedBox(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 4, 10, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Chip(
-                            backgroundColor: Colors.grey[200],
-                            visualDensity: VisualDensity.compact,
-                            label: Text(
-                              tag,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ),
-                          Text(title, style: Theme.of(context).textTheme.titleMedium),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 54,
-                      height: 54,
-                      child: Image.network(
-                        'https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1',
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                if (description != null)
-                  Text(description!, style: Theme.of(context).textTheme.bodyMedium),
-              ],
-            ),
-          ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        boxShadow: _shadows,
+        borderRadius: BorderRadius.circular(15.r),
+      ),
+      child: GestureDetector(
+        onTap: onTap,
+        child: CampaignCard(
+          tag: tag,
+          title: title,
+          body: CardDescription(description),
+          imageUrl:
+              'https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1',
         ),
       ),
     );

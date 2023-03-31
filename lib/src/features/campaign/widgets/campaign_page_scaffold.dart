@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/src/features/campaign/widgets/appbar/tag_bar.dart';
 import 'package:go_router/go_router.dart';
+
+import 'appbar/search_bar.dart';
 
 class CampaignPageScaffold extends StatefulWidget {
   final Widget child;
@@ -36,15 +40,27 @@ class _MainScaffoldState extends State<CampaignPageScaffold> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            elevation: 0,
             backgroundColor: Colors.white,
-            flexibleSpace: Column(
-              children: const [
-                SearchBar(),
-              ],
+            toolbarHeight: 125.h,
+            flexibleSpace: Padding(
+              padding: EdgeInsets.all(12.h),
+              child: SizedBox(
+                height: 110.h,
+                child: Column(
+                  children: [
+                    SearchBar(),
+                    SizedBox(height: 15.h),
+                    TagBar(),
+                  ],
+                ),
+              ),
             ),
             bottom: TabBar(
-              labelColor: Theme.of(context).primaryColor,
-              unselectedLabelColor: Colors.grey,
+              labelColor: Theme.of(context).colorScheme.primary,
+              labelStyle: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+              unselectedLabelColor: Theme.of(context).colorScheme.outlineVariant,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               onTap: (index) => _onItemTapped(context, index),
               tabs: widget.tabs,
             ),
@@ -75,71 +91,4 @@ class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
     required Widget icon,
     String? label,
   }) : super(icon: icon, label: label);
-}
-
-class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
-      child: Material(
-        elevation: 1,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(
-                    Icons.search,
-                    size: 24,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    autofocus: true,
-                    obscureText: false,
-                    decoration: InputDecoration.collapsed(
-                      hintText: 'Кампании, ключевые слова',
-                      hintStyle: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                  child: VerticalDivider(
-                    thickness: 2,
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    print('Button pressed ...');
-                  },
-                  child: Text(
-                    'Фильтр',
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

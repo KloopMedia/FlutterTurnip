@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
+import 'package:gigaturnip/src/features/campaign/widgets/campaign_list_item_with_progress.dart';
 import 'package:gigaturnip/src/helpers/sliver_list_view_with_pagination.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-
-import '../widgets/campaign_list_item.dart';
 
 class UserCampaignPage extends StatelessWidget {
   const UserCampaignPage({Key? key}) : super(key: key);
@@ -38,8 +38,9 @@ class UserCampaignView extends StatelessWidget {
     }
 
     return SliverListViewWithPagination<Campaign, UserCampaignCubit>(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       itemBuilder: (context, index, item) {
-        return CampaignListItem(
+        return CampaignListItemWithProgress(
           tag: 'Test tag',
           title: item.name,
           description: item.description,

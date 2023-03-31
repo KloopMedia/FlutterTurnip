@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
 import 'package:gigaturnip/src/features/campaign/widgets/campaign_list_item.dart';
 import 'package:gigaturnip/src/helpers/sliver_list_view_with_pagination.dart';
@@ -38,15 +39,13 @@ class AvailableCampaignView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverListViewWithPagination<Campaign, SelectableCampaignCubit>(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       itemBuilder: (context, index, item) {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: CampaignListItem(
-            tag: 'Test tag',
-            title: item.name,
-            description: item.description,
-            onTap: () => redirectToCampaignDetail(context, item.id, item),
-          ),
+        return CampaignListItem(
+          tag: 'Test tag',
+          title: item.name,
+          description: item.description,
+          onTap: () => redirectToCampaignDetail(context, item.id, item),
         );
       },
     );

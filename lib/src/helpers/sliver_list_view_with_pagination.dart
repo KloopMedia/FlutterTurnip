@@ -7,11 +7,13 @@ import 'helpers.dart';
 class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     extends StatelessWidget {
   final Widget? header;
+  final EdgeInsetsGeometry padding;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
 
   const SliverListViewWithPagination({
     Key? key,
     this.header,
+    this.padding = EdgeInsets.zero,
     required this.itemBuilder,
   }) : super(key: key);
 
@@ -29,10 +31,13 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(child: header),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => itemBuilder(context, index, state.data[index]),
-                  childCount: state.data.length,
+              SliverPadding(
+                padding: padding,
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => itemBuilder(context, index, state.data[index]),
+                    childCount: state.data.length,
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
