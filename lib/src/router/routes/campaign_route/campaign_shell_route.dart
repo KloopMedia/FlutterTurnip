@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/campaign/widgets/campaign_page_scaffold.dart';
+import 'package:gigaturnip/src/widgets/tab_with_location.dart';
 import 'package:go_router/go_router.dart';
 
 import 'campaign_available_route.dart';
@@ -16,11 +17,11 @@ class CampaignShellRoute {
       navigatorKey: navigatorKey,
       builder: (BuildContext context, GoRouterState state, Widget child) {
         final tabs = [
-          ScaffoldTabItem(
+          TabWithLocation(
             initialLocation: CampaignAvailableRoute.path,
             label: context.loc.available_campaigns,
           ),
-          ScaffoldTabItem(
+          TabWithLocation(
             initialLocation: CampaignUserRoute.path,
             label: context.loc.campaigns,
           ),

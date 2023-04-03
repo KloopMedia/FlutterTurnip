@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/features/campaign/widgets/appbar/tag_bar.dart';
+import 'package:gigaturnip/src/widgets/tab_with_location.dart';
 import 'package:go_router/go_router.dart';
 
 import 'appbar/search_bar.dart';
 
 class CampaignPageScaffold extends StatefulWidget {
   final Widget child;
-  final List<ScaffoldTabItem> tabs;
+  final List<TabWithLocation> tabs;
 
   const CampaignPageScaffold({
     Key? key,
@@ -72,16 +73,6 @@ class _MainScaffoldState extends State<CampaignPageScaffold> {
   }
 }
 
-class ScaffoldTabItem extends Tab {
-  final String initialLocation;
-
-  const ScaffoldTabItem({
-    super.key,
-    required this.initialLocation,
-    Widget? icon,
-    String? label,
-  }) : super(icon: icon, text: label);
-}
 
 class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
   final String initialLocation;

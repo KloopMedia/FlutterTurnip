@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/helpers/app_drawer.dart';
 import 'package:go_router/go_router.dart';
+
+import 'app_drawer.dart';
+import 'bottom_nav_bar_item_with_location.dart';
 
 class ScaffoldWithBottomNavBar extends StatefulWidget {
   final Widget child;
-  final List<ScaffoldWithNavBarTabItem> tabs;
+  final List<BottomNavBarItemWithLocation> tabs;
 
   const ScaffoldWithBottomNavBar({
     Key? key,
@@ -43,14 +45,4 @@ class _MainScaffoldState extends State<ScaffoldWithBottomNavBar> {
       ),
     );
   }
-}
-
-class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
-  final String initialLocation;
-
-  const ScaffoldWithNavBarTabItem({
-    required this.initialLocation,
-    required Widget icon,
-    String? label,
-  }) : super(icon: icon, label: label);
 }

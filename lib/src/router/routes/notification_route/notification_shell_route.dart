@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/helpers/helpers.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class NotificationShellRoute {
@@ -16,12 +16,12 @@ class NotificationShellRoute {
         final id = state.params['cid'] ?? '';
 
         final tabs = [
-          ScaffoldWithNavBarTabItem(
+          BottomNavBarItemWithLocation(
             initialLocation: NotificationOpenRoute.path.replaceFirst(':cid', id),
             icon: const Icon(Icons.home),
             label: context.loc.open_notification,
           ),
-          ScaffoldWithNavBarTabItem(
+          BottomNavBarItemWithLocation(
             initialLocation: NotificationClosedRoute.path.replaceFirst(':cid', id),
             icon: const Icon(Icons.settings),
             label: context.loc.closed_notification,
