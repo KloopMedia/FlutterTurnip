@@ -30,6 +30,12 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       dynamicTarget: (json['dynamicTarget'] as List<dynamic>?)
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
+      startPeriod: json['startPeriod'] == null
+          ? null
+          : DateTime.parse(json['startPeriod'] as String),
+      endPeriod: json['endPeriod'] == null
+          ? null
+          : DateTime.parse(json['endPeriod'] as String),
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -49,4 +55,6 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'isIntegrated': instance.isIntegrated,
       'dynamicSource': instance.dynamicSource,
       'dynamicTarget': instance.dynamicTarget,
+      'startPeriod': instance.startPeriod?.toIso8601String(),
+      'endPeriod': instance.endPeriod?.toIso8601String(),
     };

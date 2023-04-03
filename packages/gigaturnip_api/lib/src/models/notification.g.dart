@@ -20,8 +20,14 @@ Notification _$NotificationFromJson(Map<String, dynamic> json) =>
           title: $checkedConvert('title', (v) => v as String),
           text: $checkedConvert('text', (v) => v as String),
           importance: $checkedConvert('importance', (v) => v as int),
+          senderTask: $checkedConvert('sender_task', (v) => v as int?),
+          receiverTask: $checkedConvert('receiver_task', (v) => v as int?),
         );
         return val;
       },
-      fieldKeyMap: const {'createdAt': 'created_at'},
+      fieldKeyMap: const {
+        'createdAt': 'created_at',
+        'senderTask': 'sender_task',
+        'receiverTask': 'receiver_task'
+      },
     );

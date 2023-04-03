@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Notification;
+
 part 'notification.g.dart';
 
 @JsonSerializable()
@@ -10,6 +11,8 @@ class Notification extends Equatable {
   final String text;
   final DateTime createdAt;
   final int importance;
+  final int? senderTask;
+  final int? receiverTask;
 
   const Notification({
     required this.id,
@@ -17,6 +20,8 @@ class Notification extends Equatable {
     required this.text,
     required this.createdAt,
     required this.importance,
+    required this.senderTask,
+    required this.receiverTask,
   });
 
   factory Notification.fromJson(Map<String, dynamic> json) {
@@ -29,11 +34,12 @@ class Notification extends Equatable {
       title: model.title,
       text: model.text,
       createdAt: model.createdAt,
-      importance: model.importance
+      importance: model.importance,
+      senderTask: model.senderTask,
+      receiverTask: model.receiverTask,
     );
   }
 
   @override
-  List<Object?> get props => [id, title, text, createdAt, importance];
-
+  List<Object?> get props => [id, title, text, createdAt, importance, senderTask, receiverTask];
 }

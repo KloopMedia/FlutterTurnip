@@ -9,6 +9,8 @@ class Notification {
   final String title;
   final String text;
   final int importance;
+  final int? senderTask;
+  final int? receiverTask;
 
   Notification({
     required this.id,
@@ -16,6 +18,8 @@ class Notification {
     required this.title,
     required this.text,
     required this.importance,
+    required this.senderTask,
+    required this.receiverTask,
   });
 
   factory Notification.fromJson(Map<String, dynamic> json) {

@@ -22,6 +22,8 @@ class Task extends Equatable {
   final bool isIntegrated;
   final List<Map<String, dynamic>>? dynamicSource;
   final List<Map<String, dynamic>>? dynamicTarget;
+  final DateTime? startPeriod;
+  final DateTime? endPeriod;
 
   const Task({
     required this.id,
@@ -39,6 +41,8 @@ class Task extends Equatable {
     required this.isIntegrated,
     required this.dynamicSource,
     required this.dynamicTarget,
+    required this.startPeriod,
+    required this.endPeriod,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -63,6 +67,8 @@ class Task extends Equatable {
       isIntegrated: model.integratorGroup != null,
       dynamicSource: model.stage.dynamicJsonsSource,
       dynamicTarget: model.stage.dynamicJsonsTarget,
+      startPeriod: model.startPeriod,
+      endPeriod: model.endPeriod,
     );
   }
 
@@ -85,6 +91,8 @@ class Task extends Equatable {
       complete: complete ?? this.complete,
       dynamicSource: dynamicSource,
       dynamicTarget: dynamicTarget,
+      startPeriod: startPeriod,
+      endPeriod: endPeriod,
     );
   }
 

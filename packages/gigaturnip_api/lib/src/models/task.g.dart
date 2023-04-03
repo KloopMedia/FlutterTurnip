@@ -39,6 +39,10 @@ Task _$TaskFromJson(Map<String, dynamic> json) => $checkedCreate(
                   .toList()),
           integratorGroup: $checkedConvert(
               'integrator_group', (v) => v as Map<String, dynamic>?),
+          startPeriod: $checkedConvert('start_period',
+              (v) => v == null ? null : DateTime.parse(v as String)),
+          endPeriod: $checkedConvert('end_period',
+              (v) => v == null ? null : DateTime.parse(v as String)),
         );
         return val;
       },
@@ -48,6 +52,8 @@ Task _$TaskFromJson(Map<String, dynamic> json) => $checkedCreate(
         'createdAt': 'created_at',
         'updatedAt': 'updated_at',
         'displayedPrevTasks': 'displayed_prev_tasks',
-        'integratorGroup': 'integrator_group'
+        'integratorGroup': 'integrator_group',
+        'startPeriod': 'start_period',
+        'endPeriod': 'end_period'
       },
     );

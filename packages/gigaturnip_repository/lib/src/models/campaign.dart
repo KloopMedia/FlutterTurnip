@@ -10,11 +10,17 @@ class Campaign extends Equatable {
   final String name;
   final String description;
   final bool canJoin;
+  final bool smsLoginAllow;
+  final String? descriptor;
+  final String logo;
 
   const Campaign({
     required this.id,
     required this.name,
     required this.description,
+    required this.descriptor,
+    required this.logo,
+    required this.smsLoginAllow,
     this.canJoin = false,
   });
 
@@ -32,6 +38,9 @@ class Campaign extends Equatable {
       name: model.name,
       description: model.description,
       canJoin: canJoin,
+      descriptor: model.descriptor,
+      logo: model.logo,
+      smsLoginAllow: model.smsLoginAllow,
     );
   }
 
