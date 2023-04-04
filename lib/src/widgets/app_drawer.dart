@@ -31,12 +31,68 @@ class AppDrawer extends StatelessWidget {
     }
 
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DrawerHeader(userAvatar: userAvatar, user: user),
-          DrawerBody(),
+          ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.language),
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                ),
+                value: context.read<LocalizationBloc>().state.locale.languageCode.split('_').first,
+                onChanged: (locale) {
+                  if (locale != null) {
+                    context.read<LocalizationBloc>().add(ChangeLocale(Locale(locale)));
+                  }
+                },
+                items: const [
+                  DropdownMenuItem(
+                    value: 'en',
+                    child: Text('English'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'ky',
+                    child: Text('Кыргыз тили'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'ru',
+                    child: Text('Русский'),
+                  ),
+                ]),
+          ),
+          Container(
+            margin: const EdgeInsets.all(5),
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                context.push('/settings');
+              },
+              child: Text(
+                context.loc.settings,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(5),
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                // final shouldLogout = await showLogOutDialog(context);
+                // if (shouldLogout) {
+                context.read<AuthBloc>().add(AuthLogoutRequested());
+                // }
+              },
+              child: Text(
+                context.loc.logout,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -50,72 +106,67 @@ class DrawerBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButtonFormField<Locale>(
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.language),
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                    ),
-                    value: context.read<LocalizationBloc>().state.locale,
-                    onChanged: (locale) {
-                      if (locale != null) {
-                        context.read<LocalizationBloc>().add(ChangeLocale(locale));
-                      }
-                    },
-                    items: context.supportedLocales
-                        .map((locale) => DropdownMenuItem<Locale>(
-                              value: locale.value,
-                              child: Text(locale.key),
-                            ))
-                        .toList(),
-                  ),
+    return Column(
+      children: [
+        ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.language),
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+              ),
+              value: context.read<LocalizationBloc>().state.locale.languageCode,
+              onChanged: (locale) {
+                if (locale != null) {
+                  context.read<LocalizationBloc>().add(ChangeLocale(Locale(locale)));
+                }
+              },
+              items: const [
+                DropdownMenuItem(
+                  value: 'en',
+                  child: Text('English'),
                 ),
-                Container(
-                  margin: const EdgeInsets.all(5),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      context.push('/settings');
-                    },
-                    child: Text(
-                      context.loc.settings,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
+                DropdownMenuItem(
+                  value: 'ky',
+                  child: Text('Кыргыз тили'),
                 ),
-              ],
+                DropdownMenuItem(
+                  value: 'ru',
+                  child: Text('Русский'),
+                ),
+              ]),
+        ),
+        Container(
+          margin: const EdgeInsets.all(5),
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () async {
+              context.push('/settings');
+            },
+            child: Text(
+              context.loc.settings,
+              style: const TextStyle(fontSize: 20),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.all(5),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // final shouldLogout = await showLogOutDialog(context);
-                  // if (shouldLogout) {
-                  context.read<AuthBloc>().add(AuthLogoutRequested());
-                  // }
-                },
-                child: Text(
-                  context.loc.logout,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(5),
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () async {
+              // final shouldLogout = await showLogOutDialog(context);
+              // if (shouldLogout) {
+              context.read<AuthBloc>().add(AuthLogoutRequested());
+              // }
+            },
+            child: Text(
+              context.loc.logout,
+              style: const TextStyle(fontSize: 20),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
