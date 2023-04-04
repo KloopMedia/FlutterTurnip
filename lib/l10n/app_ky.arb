@@ -25,9 +25,7 @@
     "sent" : "Жиберилди",
     "notsent" : "Жибериле элек",
     "opentosee" : "Тапшырманы көрүү/ачуу",
-    "close" : "Жабуу",
-    "rich_text_is_empty" : "Rich text is empty",
-    "webview" : "Webview",
+    "close": "Жабуу",
 
     "sign_in_with_google" : "Google аркылуу катталуу",
     "sign_in_with_apple" : "Apple аркылуу катталуу",
@@ -55,8 +53,7 @@
     "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
     "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
     "task_returned": "Кайтарылды",
-    "more": "Кененирээк...",
-    "add_file": "Файл кошуу",
+    "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз",
 
     "delete_account_button": "Баракчаңы өчүрүү",
     "delete_account_dialog_title": "Баракчаңыз өчүрүлсүнбү?",
@@ -66,7 +63,22 @@
     "settings": "Жөндөөлөр",
     "form_submit_button": "Жөнөтүү",
     "form_divider": "Сиздин формаңыз ушул жерден башталат",
-    "join_campaign": "Кампанияга кошулуу",
+    "join_campaign": "Кампанияга кошулуу?",
     "yes": "Ооба",
-    "no": "Жок"
+    "no": "Жок",
+
+    "unknown_state" : "Ката: Белгисиз абал!",
+    "available_tasks" : "Жеткиликтүү тапшырмалар",
+    "closed" : "жабык",
+    "opened" : "ачык",
+    "open_tasks" : "Ачык тапшырмалар",
+    "closed_tasks" : "Жабык тапшырмалар",
+    "relevant_tasks" : "Тиешелүү тапшырмалар",
+    "unknown_page" : "Белгисиз бет",
+    "open_campaigns" : "Ачык кампаниялар",
+    "available_campaigns" : "Жеткиликтүү кампаниялар",
+    "join" : "Кошулуу",
+    "complete" : "Толук",
+    "open_notification" : "Ачык билдирүү",
+    "closed_notification" : "Жабык билдирүү"
 }

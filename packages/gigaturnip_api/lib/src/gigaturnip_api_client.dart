@@ -1,451 +1,109 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:retrofit/retrofit.dart';
 
-class GigaTurnipApiClient {
-  // static const baseUrl = 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com';
-  static const baseUrl = 'https://journal-bb5e3.uc.r.appspot.com';
-  // static const baseUrl = 'http://127.0.0.1:8000';
+part 'gigaturnip_api_client.g.dart';
 
-  final Dio _httpClient;
-
-  GigaTurnipApiClient({Dio? httpClient})
-      : _httpClient = httpClient ?? Dio(BaseOptions(baseUrl: baseUrl));
-
-  // User methods
-  Future<Map<String, dynamic>> deleteUserInit() async {
-    final response = await _httpClient.get(deleteInitRoute);
-    return response.data;
-  }
-
-  Future<Map<String, dynamic>> deleteUser({required int pk, required String artifact}) async {
-    final response = await _httpClient.post(
-      usersRoute + pk.toString() + deleteUserAction,
-      data: {"artifact": artifact},
-    );
-    return response.data;
-  }
+@RestApi(baseUrl: "https://journal-bb5e3.uc.r.appspot.com/api/v1/")
+abstract class GigaTurnipApiClient {
+  factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _GigaTurnipApiClient;
 
   // Campaign methods
-  Future<PaginationWrapper<Campaign>> getCampaigns({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(campaignsRoute, queryParameters: query);
 
-      return PaginationWrapper<Campaign>.fromJson(
-        response.data,
-        (json) => Campaign.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET(campaignsRoute)
+  Future<PaginationWrapper<Campaign>> getCampaigns({@Queries() Map<String, dynamic>? query});
 
-  Future<List<Campaign>> getUserCampaigns({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(userCampaignsRoute, queryParameters: query);
-      List<Campaign> list = (response.data as List)
-          .map((json) => Campaign.fromJson(json as Map<String, dynamic>))
-          .toList();
+  @GET(userCampaignsRoute)
+  Future<PaginationWrapper<Campaign>> getUserCampaigns({
+    @Queries() Map<String, dynamic>? query,
+  });
 
-      return list;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET(selectableCampaignsRoute)
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({
+    @Queries() Map<String, dynamic>? query,
+  });
 
-  Future<List<Campaign>> getSelectableCampaigns({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(selectableCampaignsRoute, queryParameters: query);
-      List<Campaign> list = (response.data as List)
-          .map((json) => Campaign.fromJson(json as Map<String, dynamic>))
-          .toList();
+  @GET("$campaignsRoute/{id}")
+  Future<Campaign> getCampaignById(@Path("id") int id);
 
-      return list;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET("$campaignsRoute/{id}/$joinCampaignActionRoute")
+  Future<void> joinCampaign(@Path("id") int id);
 
-  Future<Campaign> getCampaignById(int id) async {
-    try {
-      final response = await _httpClient.get('$campaignsRoute$id/');
-      return Campaign.fromJson(response.data);
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  // Task methods
 
-  Future<void> joinCampaign(int id) async {
-    try {
-      await _httpClient.post(campaignsRoute + id.toString() + joinCampaignActionRoute);
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET(tasksRoute)
+  Future<PaginationWrapper<Task>> getTasks({@Queries() Map<String, dynamic>? query});
+
+  @GET(selectableTasksRoute)
+  Future<PaginationWrapper<Task>> getUserSelectableTasks({@Queries() Map<String, dynamic>? query});
+
+  @GET(relevantTasksRoute)
+  Future<PaginationWrapper<Task>> getUserRelevantTasks({@Queries() Map<String, dynamic>? query});
+
+  @GET("$tasksRoute/{id}/")
+  Future<Task> getTaskById(@Path("id") int id);
+
+  @PATCH("$tasksRoute/{id}/")
+  Future<TaskResponse> saveTaskById(@Path("id") int id, @Body() Map<String, dynamic> data);
+
+  @GET("$tasksRoute/{id}/$integratedTasksActionRoute")
+  Future<List<Task>> getIntegratedTasks(
+    @Path("id") int id, {
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET("$tasksRoute/{id}/$displayedPreviousTasksActionRoute")
+  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
+    @Path("id") int id, {
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET("$tasksRoute/{id}/$openPreviousTaskActionRoute")
+  Future<Task> openPreviousTask(@Path("id") int id);
+
+  @GET("$tasksRoute/{id}/$releaseTaskActionRoute")
+  Future<void> releaseTask(@Path("id") int id);
+
+  @GET("$tasksRoute/{id}/$requestTaskActionRoute")
+  Future<void> requestTask(@Path("id") int id);
+
+  @GET("$tasksRoute/{id}/$triggerWebhookActionRoute")
+  Future<void> triggerTaskWebhook(@Path("id") int id);
+
+  @GET("$tasksRoute/{id}/$reopenTaskActionRoute")
+  Future<void> reopenTask(@Path("id") int id);
 
   // TaskStage methods
-  Future<List<TaskStage>> getUserRelevantTaskStages({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(userRelevantTaskStageRoute, queryParameters: query);
-      List<TaskStage> list = (response.data as List)
-          .map((json) => TaskStage.fromJson(json as Map<String, dynamic>))
-          .toList();
 
-      return list;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET("$taskStagesRoute/{id}/$loadDynamicSchema")
+  Future<DynamicSchema> getDynamicSchema(
+    @Path("id") int id, {
+    @Queries() required Map<String, dynamic> query,
+  });
 
-  Future<Map<String, dynamic>> getDynamicJsonTaskStage(
-      {Map<String, dynamic>? query,
-      required int id,
-      required int taskId,
-      Map<String, dynamic>? formData}) async {
-    try {
-      final jsonFormData = jsonEncode(formData);
-      final response = await _httpClient.get(
-        '$taskStagesRoute$id/load_schema_answers/?current_task=$taskId&responses=$jsonFormData',
-        queryParameters: query,
-      );
-      return response.data['schema'];
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET(userRelevantTaskStageRoute)
+  Future<PaginationWrapper<TaskStage>> getUserRelevantTaskStages({
+    @Queries() Map<String, dynamic>? query,
+  });
 
-  /// Request task creation and on success return task's id.
-  Future<int> createTask({required int id}) async {
-    try {
-      final response = await _httpClient.post(
-        taskStagesRoute + id.toString() + createTaskActionRoute,
-      );
-      final taskId = response.data['id'];
-      if (taskId == null) {
-        throw Exception("Task creation error: Id of created task can't be null");
-      }
-      return taskId;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  //Task methods
-  Future<PaginationWrapper<Task>> getTasks({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(tasksRoute, queryParameters: query);
-
-      return PaginationWrapper.fromJson(
-        response.data,
-        (json) => Task.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<PaginationWrapper<Task>> getUserSelectableTasks({Map<String, dynamic>? query}) async {
-    try {
-      print('getting data');
-      final response = await _httpClient.get(
-        selectableTasksRoute,
-        queryParameters: query,
-      );
-
-      return PaginationWrapper.fromJson(
-        response.data,
-        (json) => Task.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<List<Task>> getUserRelevantTasks({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(
-        relevantTasksRoute,
-        queryParameters: query,
-      );
-      List<Task> list = (response.data as List)
-          .map((json) => Task.fromJson(json as Map<String, dynamic>))
-          .toList();
-
-      return list;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<Task> getTaskById({Map<String, dynamic>? query, required int id}) async {
-    try {
-      final response = await _httpClient.get(
-        '$tasksRoute$id/',
-        queryParameters: query,
-      );
-
-      return Task.fromJson(response.data);
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<Map<String, dynamic>> updateTaskById({
-    required int id,
-    required Map<String, dynamic> data,
-  }) async {
-    try {
-      Map formData = {
-        "responses": data['responses'],
-        "complete": data['complete'],
-      };
-      final response = await _httpClient.patch('$tasksRoute$id/', data: formData);
-      return response.data;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print('CATCH: $e');
-      rethrow;
-    }
-  }
-
-  Future<List<Task>> getIntegratedTasks({Map<String, dynamic>? query, required int id}) async {
-    try {
-      final response = await _httpClient.get(
-        tasksRoute + id.toString() + integratedTasksActionRoute,
-        queryParameters: query,
-      );
-      List<Task> list = (response.data as List)
-          .map((json) => Task.fromJson(json as Map<String, dynamic>))
-          .toList();
-
-      return list;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<List<Task>> getDisplayedPreviousTasks(
-      {Map<String, dynamic>? query, required int id}) async {
-    try {
-      final response = await _httpClient.get(
-        tasksRoute + id.toString() + displayedPreviousTasksActionRoute,
-        queryParameters: query,
-      );
-      List<Task> list = (response.data as List)
-          .map((json) => Task.fromJson(json as Map<String, dynamic>))
-          .toList();
-
-      return list;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<Task> openPreviousTask({Map<String, dynamic>? query, required int id}) async {
-    try {
-      final response = await _httpClient.get(
-        tasksRoute + id.toString() + openPreviousTaskActionRoute,
-        queryParameters: query,
-      );
-
-      return Task.fromJson(response.data);
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<void> releaseTask({Map<String, dynamic>? query, required int id}) async {
-    try {
-      await _httpClient.get(
-        tasksRoute + id.toString() + releaseTaskActionRoute,
-        queryParameters: query,
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<void> requestTask({Map<String, dynamic>? query, required int id}) async {
-    try {
-      await _httpClient.get(
-        tasksRoute + id.toString() + requestTaskActionRoute,
-        queryParameters: query,
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<Map<String, dynamic>> triggerTaskWebhook({
-    Map<String, dynamic>? query,
-    required int id,
-  }) async {
-    try {
-      final response = await _httpClient.get(
-        tasksRoute + id.toString() + triggerWebhookActionRoute,
-        queryParameters: query,
-      );
-      return response.data;
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-
-  Future<void> reopenTask({Map<String, dynamic>? query, required int id}) async {
-    try {
-      await _httpClient.get(
-        tasksRoute + id.toString() + reopenTaskActionRoute,
-        queryParameters: query,
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @POST("$taskStagesRoute/{id}/$createTaskActionRoute")
+  Future<CreateTaskResponse> createTaskFromStageId(@Path("id") int id);
 
   // Notification methods
-  Future<PaginationWrapper<Notification>> getNotifications({Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(notificationsRoute, queryParameters: query);
-      return PaginationWrapper<Notification>.fromJson(
-        response.data,
-        (json) => Notification.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
 
-  Future<PaginationWrapper<Notification>> getUserNotifications(
-      {Map<String, dynamic>? query}) async {
-    try {
-      final response = await _httpClient.get(userNotificationsRoute, queryParameters: query);
-      return PaginationWrapper<Notification>.fromJson(
-        response.data,
-        (json) => Notification.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET(notificationsRoute)
+  Future<PaginationWrapper<Notification>> getNotifications({
+    @Queries() Map<String, dynamic>? query,
+  });
 
-  Future<void> openNotification({Map<String, dynamic>? query, required int id}) async {
-    try {
-      await _httpClient.get(
-        notificationsRoute + id.toString() + openNotificationActionRoute,
-        queryParameters: query,
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET(userNotificationsRoute)
+  Future<PaginationWrapper<Notification>> getUserNotifications({
+    @Queries() Map<String, dynamic>? query,
+  });
 
-  Future<PaginationWrapper<Notification>> getLastTaskNotifications(
-      {Map<String, dynamic>? query}) async {
-    try {
-      final response =
-          await _httpClient.get(lastTaskNotificationsActionRoute, queryParameters: query);
-      return PaginationWrapper<Notification>.fromJson(
-        response.data,
-        (json) => Notification.fromJson(json as Map<String, dynamic>),
-      );
-    } on DioError catch (e) {
-      print(e);
-      throw GigaTurnipApiRequestException.fromDioError(e);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  @GET("$notificationsRoute/{id}")
+  Future<Notification> getNotificationById(@Path("id") int id);
+
+  @GET("$notificationsRoute/{id}/$openNotificationActionRoute")
+  Future<void> openNotification(@Path("id") int id);
 }

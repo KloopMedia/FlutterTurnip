@@ -6,3 +6,6 @@ export 'notification.dart';
 export 'conditional_stage.dart';
 export 'task_stage.dart';
 export 'case.dart';
+export 'dynamic_schema.dart';
+export 'task_response.dart';
+export 'create_task_response.dart';

@@ -18,6 +18,8 @@ class Task {
   final DateTime? updatedAt;
   final List<Task>? displayedPrevTasks;
   final Map<String, dynamic>? integratorGroup;
+  final DateTime? startPeriod;
+  final DateTime? endPeriod;
 
   const Task({
     required this.id,
@@ -33,6 +35,8 @@ class Task {
     required this.updatedAt,
     required this.displayedPrevTasks,
     required this.integratorGroup,
+    required this.startPeriod,
+    required this.endPeriod,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {

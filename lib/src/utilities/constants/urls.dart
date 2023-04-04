@@ -1,1 +1,0 @@
-const richTextWebviewUrl = 'https://kloopmedia.github.io/richtext_webview/';

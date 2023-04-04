@@ -5,21 +5,21 @@ part 'notification.g.dart';
 @JsonSerializable()
 class Notification {
   final int id;
-  final int? receiverTask;
-  final int? senderTask;
   final DateTime createdAt;
   final String title;
   final String text;
   final int importance;
+  final int? senderTask;
+  final int? receiverTask;
 
   Notification({
     required this.id,
-    this.receiverTask,
-    this.senderTask,
     required this.createdAt,
     required this.title,
     required this.text,
     required this.importance,
+    required this.senderTask,
+    required this.receiverTask,
   });
 
   factory Notification.fromJson(Map<String, dynamic> json) {
