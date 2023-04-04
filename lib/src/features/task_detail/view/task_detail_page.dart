@@ -91,6 +91,9 @@ class TaskView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => redirect(context, null),
+        ),
         actions: [
           IconButton(
             onPressed: () {
