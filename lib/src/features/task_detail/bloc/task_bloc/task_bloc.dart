@@ -18,14 +18,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required this.taskId,
     Task? task,
   })  : _repository = repository,
-        super(task != null ? TaskLoaded(task) : TaskUninitialized()) {
+        super(TaskUninitialized()) {
     on<InitializeTask>(_onInitializeTask);
     on<UpdateTask>(_onUpdateTask, transformer: debounce(const Duration(seconds: 2)));
     on<SubmitTask>(_onSubmitTask);
     on<TriggerWebhook>(_onTriggerWebhook);
     on<OpenTaskInfo>(_onOpenTaskInfo);
     on<CloseTaskInfo>(_onCloseTaskInfo);
-    add(InitializeTask());
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -33,7 +32,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       emit(TaskFetching());
       try {
         final data = await _repository.fetchData(taskId);
-        emit(TaskLoaded(data));
+        final previousTasks = await _repository.fetchPreviousTaskData(taskId);
+        emit(TaskLoaded(data, previousTasks));
       } catch (e) {
         emit(TaskFetchingError(e.toString()));
       }
@@ -45,25 +45,25 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onUpdateTask(UpdateTask event, Emitter<TaskState> emit) async {
-    final task = (state as TaskInitialized).data;
+    final _state = state as TaskInitialized;
     final formData = event.formData;
 
     final data = {'responses': formData};
     await _repository.saveData(taskId, data);
 
-    if (task.isDynamic) {
+    if (_state.data.isDynamic) {
       final newSchema = await _repository.getDynamicSchema(
-        taskId: task.id,
-        stageId: task.stage.id,
+        taskId: _state.data.id,
+        stageId: _state.data.stage.id,
         data: data,
       );
-      final updatedTask = task.copyWith(schema: newSchema);
-      emit(TaskLoaded(updatedTask));
+      final updatedTask = _state.data.copyWith(schema: newSchema);
+      emit(TaskLoaded(updatedTask, _state.previousTasks));
     }
   }
 
   Future<void> _onSubmitTask(SubmitTask event, Emitter<TaskState> emit) async {
-    final task = (state as TaskInitialized).data;
+    final _state = state as TaskInitialized;
     final formData = event.formData;
 
     try {
@@ -71,20 +71,35 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final response = await _repository.saveData(taskId, data);
       final nextTaskId = response.nextDirectId;
 
-      final updatedTask = task.copyWith(responses: formData, complete: true);
-      emit(TaskSubmitted(updatedTask, nextTaskId: nextTaskId));
+      final updatedTask = _state.data.copyWith(responses: formData, complete: true);
+      emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
     } catch (e) {
       print(e);
       emit(TaskSubmitError.clone(state as TaskLoaded, e.toString()));
     }
   }
 
-  Future<void> _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {}
+  Future<void> _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {
+    final _state = state;
+    if (_state is TaskInitialized && !_state.data.complete) {
+      emit(TaskFetching());
+      try {
+        final data = {'responses': _state.data.responses};
+        await _repository.saveData(taskId, data);
+        final responses = await _repository.triggerWebhook(taskId);
+        final task = _state.data.copyWith(responses: responses);
+        emit(TaskLoaded(task, _state.previousTasks));
+      } catch (e) {
+        print(e);
+        emit(TaskWebhookTriggerError.clone(_state, e.toString()));
+      }
+    }
+  }
 
   Future<void> _onOpenTaskInfo(OpenTaskInfo event, Emitter<TaskState> emit) async {
-    final task = state;
-    if (task is TaskInitialized) {
-      emit(TaskInfoOpened.clone(task));
+    final _state = state;
+    if (_state is TaskInitialized) {
+      emit(TaskInfoOpened.clone(_state));
     }
   }
 

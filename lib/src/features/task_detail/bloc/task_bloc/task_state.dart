@@ -22,17 +22,18 @@ class TaskFetchingError extends TaskState {
 
 abstract class TaskInitialized extends TaskState {
   final Task data;
+  final List<Task> previousTasks;
 
-  const TaskInitialized(this.data);
+  const TaskInitialized(this.data, this.previousTasks);
 
-  TaskInitialized.clone(TaskInitialized state) : this(state.data);
+  TaskInitialized.clone(TaskInitialized state) : this(state.data, state.previousTasks);
 
   @override
   List<Object> get props => [data];
 }
 
 class TaskLoaded extends TaskInitialized {
-  const TaskLoaded(super.data);
+  const TaskLoaded(super.data, super.previousTasks);
 
   TaskLoaded.clone(TaskInitialized state) : super.clone(state);
 }
@@ -40,23 +41,31 @@ class TaskLoaded extends TaskInitialized {
 class TaskSubmitted extends TaskInitialized {
   final int? nextTaskId;
 
-  const TaskSubmitted(super.data, {this.nextTaskId});
+  const TaskSubmitted(super.data, super.previousTasks, {this.nextTaskId});
 }
 
 class TaskSubmitError extends TaskInitialized {
   final String error;
 
-  const TaskSubmitError(super.data, this.error);
+  const TaskSubmitError(super.data, super.previousTasks, this.error);
 
   TaskSubmitError.clone(TaskInitialized state, this.error) : super.clone(state);
 }
 
 class TaskWebhookTriggered extends TaskInitialized {
-  const TaskWebhookTriggered(super.data);
+  const TaskWebhookTriggered(super.data, super.previousTasks);
+}
+
+class TaskWebhookTriggerError extends TaskInitialized {
+  final String error;
+
+  const TaskWebhookTriggerError(super.data, super.previousTasks, this.error);
+
+  TaskWebhookTriggerError.clone(TaskInitialized state, this.error) : super.clone(state);
 }
 
 class TaskInfoOpened extends TaskInitialized {
-  const TaskInfoOpened(super.data);
+  const TaskInfoOpened(super.data, super.previousTasks);
 
   TaskInfoOpened.clone(TaskInitialized state) : super.clone(state);
 }

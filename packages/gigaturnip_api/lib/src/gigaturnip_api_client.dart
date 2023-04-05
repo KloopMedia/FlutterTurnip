@@ -68,7 +68,7 @@ abstract class GigaTurnipApiClient {
   Future<void> requestTask(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$triggerWebhookActionRoute")
-  Future<void> triggerTaskWebhook(@Path("id") int id);
+  Future<WebhookResponse> triggerTaskWebhook(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$reopenTaskActionRoute")
   Future<void> reopenTask(@Path("id") int id);

@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/app.dart';
-import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

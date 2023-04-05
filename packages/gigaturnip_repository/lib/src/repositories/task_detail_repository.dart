@@ -22,8 +22,9 @@ class TaskDetailRepository {
     return _gigaTurnipApiClient.saveTaskById(id, data);
   }
 
-  Future<void> triggerWebhook(int id) {
-    return _gigaTurnipApiClient.triggerTaskWebhook(id);
+  Future<Map<String, dynamic>> triggerWebhook(int id) async {
+    final response = await _gigaTurnipApiClient.triggerTaskWebhook(id);
+    return response.responses;
   }
 
   Future<Map<String, dynamic>> getDynamicSchema({
