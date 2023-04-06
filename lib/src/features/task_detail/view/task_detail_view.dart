@@ -1,9 +1,15 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/utilities/download_service.dart';
 import 'package:gigaturnip/src/utilities/functions.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -23,6 +29,38 @@ class TaskDetailView extends StatefulWidget {
 
 class _TaskDetailViewState extends State<TaskDetailView> {
   final _pageStorageKey = const PageStorageKey('pageKey');
+  ReceivePort _port = ReceivePort();
+
+  @override
+  void initState() {
+    if (!kIsWeb) {
+
+      IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+      _port.listen((dynamic data) {
+        // String id = data[0];
+        // DownloadTaskStatus status = data[1];
+        // int progress = data[2];
+        setState(() {});
+      });
+
+      FlutterDownloader.registerCallback(downloadCallback);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (!kIsWeb) {
+      IsolateNameServer.removePortNameMapping('downloader_send_port');
+    }
+    super.dispose();
+  }
+
+  @pragma('vm:entry-point')
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
+    send?.send([id, status, progress]);
+  }
 
   void redirect(BuildContext context, int? nextTaskId) {
     if (nextTaskId != null) {
@@ -134,6 +172,7 @@ class _CurrentTask extends StatelessWidget {
         onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
         onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
         onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
+        onDownloadFile: (url) => DownloadService().download(url: url),
       ),
     );
   }
@@ -163,6 +202,7 @@ class _PreviousTask extends StatelessWidget {
             disabled: true,
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
+            onDownloadFile: (url) => DownloadService().download(url: url),
           ),
         ),
       ],

@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/app.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
@@ -21,8 +22,13 @@ Future<void> main() async {
   final gigaTurnipApiClient = GigaTurnipApiClient(dio, baseUrl: AppConfig.apiUrl);
   final sharedPreferences = await SharedPreferences.getInstance();
   final router = AppRouter(authenticationRepository).router;
+
   if (!kIsWeb) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    await FlutterDownloader.initialize(
+        debug: true, // optional: set to false to disable printing logs to console (default: true)
+        ignoreSsl: true // option: set to false to disable working with http links (default: false)
+    );
   }
 
   runApp(

@@ -53,10 +53,10 @@ dependencies:
   gigaturnip_api:
     path: packages/gigaturnip_api
   flutter_json_schema_form:
-#    path: ../flutter-jsonschema-form
-    git:
-      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
-      ref: reverted_theme
+    path: ../flutter-jsonschema-form
+#    git:
+#      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
+#      ref: master
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   shared_preferences: ^2.0.18
@@ -67,6 +67,11 @@ dependencies:
   webview_flutter: ^4.0.5
   rxdart: ^0.27.7
   flutter_screenutil: ^5.7.0
+  sliver_tools: ^0.2.9
+  universal_html: ^2.2.1
+  flutter_downloader: ^1.10.2
+  path_provider: ^2.0.14
+  dio: ^5.1.1
 
 dev_dependencies:
   flutter_test:
