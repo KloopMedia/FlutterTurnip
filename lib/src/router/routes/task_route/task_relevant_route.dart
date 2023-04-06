@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/task/view/combined_task_view.dart';
 import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,7 +27,7 @@ class TaskRelevantRoute {
         if (id == null) {
           return Text(context.loc.unknown_page);
         }
-        return RelevantTaskPage(
+        return CombinedTasksView(
           campaignId: int.parse(id),
         );
       },
