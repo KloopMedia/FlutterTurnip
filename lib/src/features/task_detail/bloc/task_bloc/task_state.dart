@@ -21,8 +21,8 @@ class TaskFetchingError extends TaskState {
 }
 
 abstract class TaskInitialized extends TaskState {
-  final Task data;
-  final List<Task> previousTasks;
+  final TaskDetail data;
+  final List<TaskDetail> previousTasks;
 
   const TaskInitialized(this.data, this.previousTasks);
 

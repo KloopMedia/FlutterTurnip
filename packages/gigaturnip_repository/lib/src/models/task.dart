@@ -9,8 +9,6 @@ part 'task.g.dart';
 class Task extends Equatable {
   final int id;
   final String name;
-  final Map<String, dynamic>? schema;
-  final Map<String, dynamic>? uiSchema;
   final Map<String, dynamic>? responses;
   final bool complete;
   final bool reopened;
@@ -18,12 +16,6 @@ class Task extends Equatable {
   final DateTime? createdAt;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
-  final List<Task> displayedPrevTasks;
-  final bool isIntegrated;
-  final List<Map<String, dynamic>>? dynamicSource;
-  final List<Map<String, dynamic>>? dynamicTarget;
-  final DateTime? startPeriod;
-  final DateTime? endPeriod;
 
   const Task({
     required this.id,
@@ -33,16 +25,8 @@ class Task extends Equatable {
     required this.reopened,
     required this.stage,
     required this.createdAt,
-    required this.schema,
-    required this.uiSchema,
     required this.cardJsonSchema,
     required this.cardUiSchema,
-    required this.displayedPrevTasks,
-    required this.isIntegrated,
-    required this.dynamicSource,
-    required this.dynamicTarget,
-    required this.startPeriod,
-    required this.endPeriod,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -57,18 +41,9 @@ class Task extends Equatable {
       complete: model.complete,
       reopened: model.reopened ?? false,
       createdAt: model.createdAt,
-      schema: model.stage.jsonSchema,
-      uiSchema: model.stage.uiSchema,
       cardJsonSchema: model.stage.cardJsonSchema,
       cardUiSchema: model.stage.cardUiSchema,
       stage: TaskStage.fromApiModel(model.stage),
-      displayedPrevTasks:
-          model.displayedPrevTasks?.map((task) => Task.fromApiModel(task)).toList() ?? [],
-      isIntegrated: model.integratorGroup != null,
-      dynamicSource: model.stage.dynamicJsonsSource,
-      dynamicTarget: model.stage.dynamicJsonsTarget,
-      startPeriod: model.startPeriod,
-      endPeriod: model.endPeriod,
     );
   }
 
@@ -81,23 +56,13 @@ class Task extends Equatable {
       reopened: reopened,
       createdAt: createdAt,
       stage: stage,
-      schema: schema ?? this.schema,
-      uiSchema: uiSchema,
       cardJsonSchema: cardJsonSchema,
       cardUiSchema: cardUiSchema,
-      displayedPrevTasks: displayedPrevTasks,
-      isIntegrated: isIntegrated,
       responses: responses ?? this.responses,
       complete: complete ?? this.complete,
-      dynamicSource: dynamicSource,
-      dynamicTarget: dynamicTarget,
-      startPeriod: startPeriod,
-      endPeriod: endPeriod,
     );
   }
 
   @override
   List<Object?> get props => [id, responses, complete, reopened, stage];
-
-  bool get isDynamic => dynamicTarget != null && (dynamicTarget?.isNotEmpty ?? false);
 }

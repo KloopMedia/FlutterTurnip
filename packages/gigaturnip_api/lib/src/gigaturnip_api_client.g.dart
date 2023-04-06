@@ -234,13 +234,13 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Task> getTaskById(id) async {
+  Future<TaskDetail> getTaskById(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Task>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TaskDetail>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -252,7 +252,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = Task.fromJson(_result.data!);
+    final value = TaskDetail.fromJson(_result.data!);
     return value;
   }
 
@@ -314,7 +314,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
+  Future<PaginationWrapper<TaskDetail>> getDisplayedPreviousTasks(
     id, {
     query,
   }) async {
@@ -325,7 +325,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PaginationWrapper<Task>>(Options(
+        _setStreamType<PaginationWrapper<TaskDetail>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -337,9 +337,9 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PaginationWrapper<Task>.fromJson(
+    final value = PaginationWrapper<TaskDetail>.fromJson(
       _result.data!,
-      (json) => Task.fromJson(json as Map<String, dynamic>),
+      (json) => TaskDetail.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

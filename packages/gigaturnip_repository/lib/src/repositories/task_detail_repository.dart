@@ -8,14 +8,14 @@ class TaskDetailRepository {
     required api.GigaTurnipApiClient gigaTurnipApiClient,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
-  Future<Task> fetchData(int id) async {
+  Future<TaskDetail> fetchData(int id) async {
     final task = await _gigaTurnipApiClient.getTaskById(id);
-    return Task.fromApiModel(task);
+    return TaskDetail.fromApiModel(task);
   }
 
-  Future<List<Task>> fetchPreviousTaskData(int id) async {
+  Future<List<TaskDetail>> fetchPreviousTaskData(int id) async {
     final tasks = await _gigaTurnipApiClient.getDisplayedPreviousTasks(id);
-    return tasks.results.map(Task.fromApiModel).toList();
+    return tasks.results.map(TaskDetail.fromApiModel).toList();
   }
 
   Future<TaskResponse> saveData(int id, Map<String, dynamic> data) {

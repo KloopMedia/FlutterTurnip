@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/task_detail.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
@@ -41,7 +42,7 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Task>> getUserRelevantTasks({@Queries() Map<String, dynamic>? query});
 
   @GET("$tasksRoute/{id}/")
-  Future<Task> getTaskById(@Path("id") int id);
+  Future<TaskDetail> getTaskById(@Path("id") int id);
 
   @PATCH("$tasksRoute/{id}/")
   Future<TaskResponse> saveTaskById(@Path("id") int id, @Body() Map<String, dynamic> data);
@@ -53,7 +54,7 @@ abstract class GigaTurnipApiClient {
   });
 
   @GET("$tasksRoute/{id}/$displayedPreviousTasksActionRoute")
-  Future<PaginationWrapper<Task>> getDisplayedPreviousTasks(
+  Future<PaginationWrapper<TaskDetail>> getDisplayedPreviousTasks(
     @Path("id") int id, {
     @Queries() Map<String, dynamic>? query,
   });

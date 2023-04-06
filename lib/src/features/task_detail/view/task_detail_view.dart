@@ -149,7 +149,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 }
 
 class _CurrentTask extends StatelessWidget {
-  final Task task;
+  final TaskDetail task;
   final PageStorageKey pageStorageKey;
 
   const _CurrentTask({
@@ -179,7 +179,7 @@ class _CurrentTask extends StatelessWidget {
 }
 
 class _PreviousTask extends StatelessWidget {
-  final Task task;
+  final TaskDetail task;
   final PageStorageKey pageStorageKey;
 
   const _PreviousTask({
