@@ -49,7 +49,7 @@ class CampaignDetailView extends StatelessWidget {
   }
 
   void redirectToCampaigns(BuildContext context) {
-    context.goNamed(CampaignAvailableRoute.name);
+    context.goNamed(CampaignRoute.name);
   }
 
   @override
@@ -188,52 +188,57 @@ class _CampaignCard extends StatelessWidget {
             topRight: Radius.circular(30.w),
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: 60.h),
-            Text(
-              data.name,
-              style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.w600,
-                color: theme.primary,
-              ),
-            ),
-            Expanded(
-              child: Text(
-                data.description,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 21.w),
+          child: Column(
+            children: [
+              SizedBox(height: 60.h),
+              Text(
+                data.name,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: theme.neutral40,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w600,
+                  color: theme.primary,
                 ),
               ),
-            ),
-            if (data.canJoin)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 45.h),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52.h,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.w),
-                      ),
-                    ),
-                    onPressed: () {
-                      context.read<CampaignDetailBloc>().add(JoinCampaign());
-                    },
-                    child: Text(
-                      context.loc.join_campaign,
-                      style: TextStyle(fontSize: 16.sp),
-                    ),
+              SizedBox(height: 25.h),
+              Expanded(
+                child: Text(
+                  data.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: theme.neutral40,
                   ),
                 ),
               ),
-          ],
+              if (data.canJoin)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 45.h),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 52.h,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.w),
+                        ),
+                      ),
+                      onPressed: () {
+                        context.read<CampaignDetailBloc>().add(JoinCampaign());
+                      },
+                      child: Text(
+                        context.loc.join_campaign,
+                        style: TextStyle(fontSize: 16.sp),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

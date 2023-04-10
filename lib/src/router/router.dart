@@ -15,10 +15,10 @@ class AppRouter {
   AppRouter(AuthenticationRepository authenticationRepository)
       : _authRouterNotifier = RouterNotifier(authenticationRepository);
 
-  final _initialLocation = CampaignAvailableRoute.path;
+  final _initialLocation = CampaignRoute.path;
 
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  final _campaignShellNavigatorKey = GlobalKey<NavigatorState>();
+  // final _campaignShellNavigatorKey = GlobalKey<NavigatorState>();
   final _taskPageShellNavigatorKey = GlobalKey<NavigatorState>();
   final _notificationPageShellNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -80,7 +80,8 @@ class AppRouter {
       navigatorKey: _rootNavigatorKey,
       routes: [
         LoginRoute(parentKey: _rootNavigatorKey).route,
-        CampaignShellRoute(navigatorKey: _campaignShellNavigatorKey).route,
+        // CampaignShellRoute(navigatorKey: _campaignShellNavigatorKey).route,
+        CampaignRoute(parentKey: _rootNavigatorKey).route,
         CampaignDetailRoute(parentKey: _rootNavigatorKey).route,
         TaskShellRoute(navigatorKey: _taskPageShellNavigatorKey).route,
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
