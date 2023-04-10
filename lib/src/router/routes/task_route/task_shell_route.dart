@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/features/task/widgets/task_page_scaffold.dart';
+import 'package:gigaturnip/src/features/task/view/task_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
@@ -83,7 +83,7 @@ class TaskShellRoute {
           ),
         ];
 
-        return TaskPageScaffold(
+        return TaskPage(
           tabs: tabs,
           child: child,
         );

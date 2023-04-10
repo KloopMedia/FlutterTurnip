@@ -49,7 +49,7 @@ class CampaignDetailView extends StatelessWidget {
   }
 
   void redirectToCampaigns(BuildContext context) {
-    context.goNamed(CampaignAvailableRoute.name);
+    context.goNamed(CampaignRoute.name);
   }
 
   @override
