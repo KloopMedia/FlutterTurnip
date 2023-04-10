@@ -23,6 +23,7 @@ class App extends StatelessWidget {
           routerDelegate: router.routerDelegate,
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
+          themeMode: ThemeMode.light,
           darkTheme: darkTheme,
           locale: context.watch<LocalizationBloc>().state.locale,
           supportedLocales: AppLocalizations.supportedLocales,

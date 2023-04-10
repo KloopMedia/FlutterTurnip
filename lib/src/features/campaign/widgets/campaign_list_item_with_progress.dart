@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/src/theme/theme.dart';
 
 import 'campaign_card/campaign_card.dart';
 import 'campaign_card/card_message.dart';
@@ -24,20 +25,21 @@ class CampaignListItemWithProgress extends StatelessWidget {
   final String tag;
   final String title;
   final String? description;
-  final String image =
-      'https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1';
+  final String image;
   final void Function()? onTap;
 
   const CampaignListItemWithProgress({
     Key? key,
     required this.tag,
     required this.title,
+    required this.image,
     this.description,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
       decoration: BoxDecoration(
@@ -49,16 +51,16 @@ class CampaignListItemWithProgress extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
-          color: Theme.of(context).colorScheme.primaryContainer,
+          color: theme.isLight ? theme.primaryContainer : theme.secondaryContainer,
           child: Column(
             children: [
               CampaignCard(
                 tag: tag,
                 title: title,
                 elevation: 0,
+                color: theme.isLight ? Colors.white : theme.onSecondary,
                 body: const CardMessage('У вас 1 непрочитанное сообщение'),
-                imageUrl:
-                    'https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1',
+                imageUrl: image,
               ),
               Padding(
                 padding: EdgeInsets.all(10.h),
@@ -67,7 +69,7 @@ class CampaignListItemWithProgress extends StatelessWidget {
                   children: [
                     Text(
                       'Осталось 4 задания до следующего уровня!',
-                      style: TextStyle(fontSize: 14.sp),
+                      style: TextStyle(fontSize: 14.sp, color: theme.onSurfaceVariant),
                     ),
                     Row(
                       children: [

@@ -44,6 +44,7 @@ class UserCampaignView extends StatelessWidget {
           tag: 'Test tag',
           title: item.name,
           description: item.description,
+          image: item.logo,
           onTap: () => redirectToTaskMenu(context, item.id),
         );
       },

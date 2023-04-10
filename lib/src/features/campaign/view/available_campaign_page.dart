@@ -45,6 +45,7 @@ class AvailableCampaignView extends StatelessWidget {
           tag: 'Test tag',
           title: item.name,
           description: item.description,
+          image: item.logo,
           onTap: () => redirectToCampaignDetail(context, item.id, item),
         );
       },

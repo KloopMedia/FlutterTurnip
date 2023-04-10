@@ -57,8 +57,8 @@ const darkColorScheme = ColorScheme(
   primaryContainer: Color(0xFF0039B4),
   onPrimaryContainer: Color(0xFFDCE1FF),
   secondary: Color(0xFFB7C4FF),
-  onSecondary: Color(0xFF0D2878),
-  secondaryContainer: Color(0xFF2A4190),
+  onSecondary: Color(0xFF232427),
+  secondaryContainer: Color(0xff37373C),
   onSecondaryContainer: Color(0xFFDDE1FF),
   tertiary: Color(0xFF85DB60),
   onTertiary: Color(0xFF0F3900),
@@ -83,3 +83,35 @@ const darkColorScheme = ColorScheme(
   surfaceVariant: Color(0xFF45464F),
   onSurfaceVariant: Color(0xFFC6C5D0),
 );
+
+extension Neutral on ColorScheme {
+  get isLight => brightness == Brightness.light;
+
+  get isDark => brightness == Brightness.dark;
+
+  get neutral0 => const Color(0xFF000000);
+
+  get neutral10 => const Color(0xFF191C1D);
+
+  get neutral20 => const Color(0xFF2E3132);
+
+  get neutral30 => const Color(0xFF444748);
+
+  get neutral40 => const Color(0xFF5C5F5F);
+
+  get neutral50 => const Color(0xFF747878);
+
+  get neutral60 => const Color(0xFF8E9192);
+
+  get neutral70 => const Color(0xFFA9ACAC);
+
+  get neutral80 => const Color(0xFFC4C7C7);
+
+  get neutral90 => const Color(0xFFE1E3E3);
+
+  get neutral95 => const Color(0xFFEFF1F1);
+
+  get neutral99 => const Color(0xFFFAFDFD);
+
+  get neutral100 => const Color(0xFFFFFFFF);
+}
