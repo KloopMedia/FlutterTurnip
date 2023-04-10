@@ -40,12 +40,15 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Pagination(
-                  currentPage: state.currentPage,
-                  total: state.total,
-                  onChanged: (page) => context.read<Cubit>().fetchData(page),
-                  enabled: state is! RemoteDataLoading,
+              SliverPadding(
+                padding: padding,
+                sliver: SliverToBoxAdapter(
+                  child: Pagination(
+                    currentPage: state.currentPage,
+                    total: state.total,
+                    onChanged: (page) => context.read<Cubit>().fetchData(page),
+                    enabled: state is! RemoteDataLoading,
+                  ),
                 ),
               ),
             ],
