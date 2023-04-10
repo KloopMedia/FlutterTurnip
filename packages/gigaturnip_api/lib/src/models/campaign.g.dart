@@ -24,12 +24,16 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           defaultTrack: $checkedConvert('default_track', (v) => v as int?),
           managers: $checkedConvert('managers',
               (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          smsLoginAllow: $checkedConvert('sms_login_allow', (v) => v as bool),
+          logo: $checkedConvert('logo', (v) => v as String),
+          descriptor: $checkedConvert('descriptor', (v) => v as String?),
         );
         return val;
       },
       fieldKeyMap: const {
         'createdAt': 'created_at',
         'updatedAt': 'updated_at',
-        'defaultTrack': 'default_track'
+        'defaultTrack': 'default_track',
+        'smsLoginAllow': 'sms_login_allow'
       },
     );
