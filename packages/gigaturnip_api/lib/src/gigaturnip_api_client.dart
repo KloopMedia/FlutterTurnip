@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
-import 'package:gigaturnip_api/src/models/task_detail.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
