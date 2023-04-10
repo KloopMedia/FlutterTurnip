@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/theme/shadows.dart';
+import 'package:gigaturnip/src/theme/theme.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -51,14 +54,28 @@ class CampaignDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(onPressed: () => redirectToCampaigns(context)),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(167.h),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () => redirectToCampaigns(context),
+            color: theme.neutral40,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 20.w,
+            ),
+          ),
+        ),
       ),
       body: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
         listener: (context, state) {
           if (state is CampaignJoinSuccess) {
-            redirectToTaskMenu(context, state.data.id);
+            showDialog(context: context, builder: (context) => const _AlertDialog())
+                .then((value) => redirectToTaskMenu(context, state.data.id));
           }
         },
         builder: (context, state) {
@@ -72,31 +89,152 @@ class CampaignDetailView extends StatelessWidget {
             return Center(child: Text(state.error));
           }
           if (state is CampaignLoaded) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    state.data.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    state.data.description,
-                    textAlign: TextAlign.center,
-                  ),
-                  if (state.data.canJoin)
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<CampaignDetailBloc>().add(JoinCampaign());
-                      },
-                      child: Text(context.loc.join),
+            return Stack(
+              children: [
+                _CampaignCard(data: state.data),
+                if (state.data.logo.isNotEmpty)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      height: 100.w,
+                      width: 100.w,
+                      child: Image.network(state.data.logo),
                     ),
-                ],
-              ),
+                  ),
+              ],
             );
           }
           return const SizedBox.shrink();
         },
+      ),
+    );
+  }
+}
+
+class _AlertDialog extends StatelessWidget {
+  const _AlertDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+
+    return AlertDialog(
+      actionsPadding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.w),
+      ),
+      title: Text(
+        'Вы присоединились!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w500,
+          color: const Color(0xFF191C1B),
+        ),
+      ),
+      content: Text(
+        'Кампании к которым вы присоединились можете найти во вкладке “Мои кампании”',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: "Inter",
+          fontSize: 16.sp,
+          color: theme.neutral40,
+        ),
+      ),
+      actions: [
+        SizedBox(
+          height: 52.h,
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Понятно'),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _CampaignCard extends StatelessWidget {
+  final Campaign data;
+
+  const _CampaignCard({Key? key, required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    return Container(
+      margin: EdgeInsets.only(top: 50.h),
+      decoration: BoxDecoration(
+        boxShadow: Shadows.elevation3,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.w),
+          topRight: Radius.circular(30.w),
+        ),
+      ),
+      child: Card(
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.w),
+            topRight: Radius.circular(30.w),
+          ),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 60.h),
+            Text(
+              data.name,
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.w600,
+                color: theme.primary,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                data.description,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: theme.neutral40,
+                ),
+              ),
+            ),
+            if (data.canJoin)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 45.h),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 52.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.w),
+                      ),
+                    ),
+                    onPressed: () {
+                      context.read<CampaignDetailBloc>().add(JoinCampaign());
+                    },
+                    child: Text(
+                      context.loc.join_campaign,
+                      style: TextStyle(fontSize: 16.sp),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
