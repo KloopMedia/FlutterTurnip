@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
+import '../bloc/bloc.dart';
+import 'available_task_page.dart';
+import 'relevant_task_page.dart';
 
 class TaskPage extends StatefulWidget {
-  final Widget child;
-  final List<ScaffoldWithNavBarTabItem> tabs;
+  final int campaignId;
 
   const TaskPage({
     Key? key,
-    required this.tabs,
-    required this.child,
+    required this.campaignId,
   }) : super(key: key);
 
   @override
@@ -19,18 +24,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  int get _currentIndex => _locationToTabIndex(GoRouter.of(context).location);
-
-  int _locationToTabIndex(String location) {
-    final index = widget.tabs.indexWhere((t) => location.startsWith(t.initialLocation));
-    return index < 0 ? 0 : index;
-  }
-
-  void _onItemTapped(BuildContext context, int tabIndex) {
-    if (tabIndex != _currentIndex) {
-      context.go(widget.tabs[tabIndex].initialLocation);
-    }
-  }
+  int _currentIndex = 0;
 
   void _redirectToCampaignPage(BuildContext context) {
     final routeState = GoRouterState.of(context);
@@ -48,22 +42,69 @@ class _TaskPageState extends State<TaskPage> {
         ),
       ),
       endDrawer: const AppDrawer(),
-      body: widget.child,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<OpenTaskCubit>(
+            create: (context) => RelevantTaskCubit(
+              OpenTaskRepository(
+                gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+                campaignId: widget.campaignId,
+              ),
+            )..initialize(),
+          ),
+          BlocProvider<ClosedTaskCubit>(
+            create: (context) => RelevantTaskCubit(
+              ClosedTaskRepository(
+                gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+                campaignId: widget.campaignId,
+              ),
+            )..initialize(),
+          ),
+          BlocProvider(
+            create: (context) => CreatableTaskCubit(
+              CreatableTaskRepository(
+                gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+                campaignId: widget.campaignId,
+              ),
+            )..initialize(),
+          ),
+          BlocProvider(
+            create: (context) => AvailableTaskCubit(
+              AvailableTaskRepository(
+                gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+                campaignId: widget.campaignId,
+              ),
+            )..initialize(),
+          ),
+        ],
+        child: Builder(
+          builder: (context) {
+            if (_currentIndex == 0) {
+              return RelevantTaskPage(campaignId: widget.campaignId);
+            }
+            if (_currentIndex == 1) {
+              return AvailableTaskPage(campaignId: widget.campaignId);
+            }
+            return Text('Unknown index $_currentIndex');
+          },
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        items: widget.tabs,
-        onTap: (index) => _onItemTapped(context, index),
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home),
+            label: context.loc.relevant_tasks,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.settings),
+            label: context.loc.available_tasks,
+          ),
+        ],
+        onTap: (index) => setState(() {
+          _currentIndex = index;
+        }),
       ),
     );
   }
-}
-
-class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
-  final String initialLocation;
-
-  const ScaffoldWithNavBarTabItem({
-    required this.initialLocation,
-    required Widget icon,
-    String? label,
-  }) : super(icon: icon, label: label);
 }

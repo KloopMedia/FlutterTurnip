@@ -32,7 +32,7 @@ class UserCampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     void redirectToTaskMenu(BuildContext context, int id) {
       context.goNamed(
-        TaskRelevantRoute.name,
+        TaskRoute.name,
         params: {'cid': '$id'},
       );
     }

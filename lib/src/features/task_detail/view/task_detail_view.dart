@@ -73,7 +73,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       );
     } else {
       context.goNamed(
-        TaskRelevantRoute.name,
+        TaskRoute.name,
         params: {
           'cid': '${widget.campaignId}',
         },
