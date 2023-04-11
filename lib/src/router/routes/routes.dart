@@ -12,3 +12,5 @@ export 'campaign_route/campaign_available_route.dart';
 export 'campaign_route/campaign_shell_route.dart';
 export 'campaign_route/campaign_user_route.dart';
 export 'campaign_route.dart';
+export 'task_route.dart';
+export 'notification_route.dart';

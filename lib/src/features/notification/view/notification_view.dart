@@ -24,7 +24,7 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
 
   @override
   Widget build(BuildContext context) {
-    return ListViewWithPagination<Notification, NotificationCubit>(
+    return SliverListViewWithPagination<Notification, NotificationCubit>(
       itemBuilder: (context, index, item) {
         return ListTile(
           title: Text(item.title),

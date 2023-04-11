@@ -5,6 +5,7 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/campaign/view/available_campaign_page.dart';
 import 'package:gigaturnip/src/features/campaign/view/user_campaign_page.dart';
+import 'package:gigaturnip/src/features/campaign/widgets/appbar/tab_bar.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
@@ -88,22 +89,14 @@ class _CampaignPageState extends State<CampaignPage> {
                 //     ),
                 //   ),
                 // ),
-                bottom: showTabs
-                    ? TabBar(
-                        labelColor: theme.primary,
-                        labelStyle: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                        unselectedLabelColor: theme.outlineVariant,
-                        indicatorColor: theme.primary,
-                        tabs: [
-                          Tab(
-                            text: context.loc.available_campaigns,
-                          ),
-                          Tab(
-                            text: context.loc.campaigns,
-                          ),
-                        ],
-                      )
-                    : null,
+                bottom: CampaignTabBar(
+                  hidden: !showTabs,
+                  size: const Size.fromHeight(45),
+                  tabs: [
+                    Tab(text: context.loc.available_campaigns),
+                    Tab(text: context.loc.campaigns),
+                  ],
+                ),
               ),
               body: showTabs
                   ? const TabBarView(

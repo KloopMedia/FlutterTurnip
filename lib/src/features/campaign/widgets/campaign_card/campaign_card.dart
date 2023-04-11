@@ -41,6 +41,7 @@ class CampaignCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _CardChip(tag),
+                      SizedBox(height: 10.h),
                       _CardTitle(title),
                     ],
                   ),
@@ -65,10 +66,18 @@ class _CardChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    return Chip(
-      backgroundColor: theme.isLight ? const Color(0xFFF1F0FA) : const Color(0xFF2F3038),
-      visualDensity: VisualDensity.compact,
-      label: Text(text, style: TextStyle(fontSize: 14.sp)),
+    final fontColor = theme.isLight ? theme.neutral40 : theme.neutral80;
+    final backgroundColor = theme.isLight ? theme.neutral95 : theme.neutral20;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.r),
+        color: backgroundColor,
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
+        child: Text(text, style: TextStyle(fontSize: 14.sp, color: fontColor)),
+      ),
     );
   }
 }

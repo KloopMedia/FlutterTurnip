@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 class CampaignDetailRoute {
   static String name = 'campaignDetail';
 
-  static String path = "/campaign/:cid";
+  static String path = "/campaign/:cid/about";
 
   final GlobalKey<NavigatorState> parentKey;
 

@@ -84,11 +84,13 @@ const darkColorScheme = ColorScheme(
   onSurfaceVariant: Color(0xFFC6C5D0),
 );
 
-extension Neutral on ColorScheme {
+extension ThemeVariant on ColorScheme {
   get isLight => brightness == Brightness.light;
 
   get isDark => brightness == Brightness.dark;
+}
 
+extension Neutral on ColorScheme {
   get neutral0 => const Color(0xFF000000);
 
   get neutral10 => const Color(0xFF191C1D);
@@ -114,4 +116,32 @@ extension Neutral on ColorScheme {
   get neutral99 => const Color(0xFFFAFDFD);
 
   get neutral100 => const Color(0xFFFFFFFF);
+}
+
+extension NeutralVariant on ColorScheme {
+  get neutralVariant0 => const Color(0xFF000000);
+
+  get neutralVariant10 => const Color(0xFF1A1B23);
+
+  get neutralVariant20 => const Color(0xFF2F3038);
+
+  get neutralVariant30 => const Color(0xFF45464F);
+
+  get neutralVariant40 => const Color(0xFF5D5E67);
+
+  get neutralVariant50 => const Color(0xFF767680);
+
+  get neutralVariant60 => const Color(0xFF90909A);
+
+  get neutralVariant70 => const Color(0xFFABAAB4);
+
+  get neutralVariant80 => const Color(0xFFC6C5D0);
+
+  get neutralVariant90 => const Color(0xFFE2E1EC);
+
+  get neutralVariant95 => const Color(0xFFF1F0FA);
+
+  get neutralVariant99 => const Color(0xFFFEFBFF);
+
+  get neutralVariant100 => const Color(0xFFF1F3FF);
 }

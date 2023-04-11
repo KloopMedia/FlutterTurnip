@@ -3,7 +3,7 @@ import 'package:gigaturnip/src/features/campaign/view/campaign_page.dart';
 import 'package:go_router/go_router.dart';
 
 class CampaignRoute {
-  static String name = 'campaign';
+  static String name = 'campaigns';
 
   static String path = "/";
 

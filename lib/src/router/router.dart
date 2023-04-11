@@ -16,11 +16,7 @@ class AppRouter {
       : _authRouterNotifier = RouterNotifier(authenticationRepository);
 
   final _initialLocation = CampaignRoute.path;
-
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  // final _campaignShellNavigatorKey = GlobalKey<NavigatorState>();
-  final _taskPageShellNavigatorKey = GlobalKey<NavigatorState>();
-  final _notificationPageShellNavigatorKey = GlobalKey<NavigatorState>();
 
   String redirectToLoginPage(BuildContext context, GoRouterState state) {
     final query = {...state.queryParams};
@@ -44,7 +40,7 @@ class AppRouter {
     try {
       final campaignId = int.parse(query['join_campaign']!);
       await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
-      return '${TaskRelevantRoute.path.replaceFirst(':cid', '$campaignId')}/?$queryString';
+      return '${TaskRoute.path.replaceFirst(':cid', '$campaignId')}/?$queryString';
     } on FormatException {
       return '${state.subloc}?$queryString';
     }
@@ -83,9 +79,11 @@ class AppRouter {
         // CampaignShellRoute(navigatorKey: _campaignShellNavigatorKey).route,
         CampaignRoute(parentKey: _rootNavigatorKey).route,
         CampaignDetailRoute(parentKey: _rootNavigatorKey).route,
-        TaskShellRoute(navigatorKey: _taskPageShellNavigatorKey).route,
+        // TaskShellRoute(navigatorKey: _taskPageShellNavigatorKey).route,
+        TaskRoute(parentKey: _rootNavigatorKey).route,
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
-        NotificationShellRoute(navigatorKey: _notificationPageShellNavigatorKey).route,
+        // NotificationShellRoute(navigatorKey: _notificationPageShellNavigatorKey).route,
+        NotificationRoute(parentKey: _rootNavigatorKey).route,
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,
       ],
     );

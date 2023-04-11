@@ -15,7 +15,7 @@ class CardMessage extends StatelessWidget {
     return Row(
       children: [
         Icon(Icons.mail, color: Theme.of(context).colorScheme.tertiary),
-        SizedBox(width: 8.w),
+        const SizedBox(width: 8),
         Text(
           text!,
           style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 16.sp),
