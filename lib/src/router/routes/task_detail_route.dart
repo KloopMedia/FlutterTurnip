@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 class TaskDetailRoute {
   static String name = 'taskDetail';
 
-  static String path = "/campaign/:cid/task/:tid";
+  static String path = "/campaign/:cid/tasks/:tid";
 
   final GlobalKey<NavigatorState> parentKey;
 
