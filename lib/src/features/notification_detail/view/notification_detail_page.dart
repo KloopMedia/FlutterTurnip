@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/features/notification_detail/bloc/notification_detail_bloc.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../router/routes/routes.dart';
 
 class NotificationDetailPage extends StatelessWidget {
   final int notificationId;
@@ -26,17 +30,26 @@ class NotificationDetailPage extends StatelessWidget {
         notificationId: notificationId,
         notification: notification,
       ),
-      child: const NotificationDetailView(),
+      child: NotificationDetailView(campaignId: campaignId),
     );
   }
 }
 
 class NotificationDetailView extends StatelessWidget {
-  const NotificationDetailView({Key? key}) : super(key: key);
+  final int campaignId;
+
+  const NotificationDetailView({Key? key, required this.campaignId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            context.goNamed(TaskRoute.name, params: {'cid': '$campaignId'});
+          },
+        ),
+      ),
       body: BlocConsumer<NotificationDetailBloc, NotificationDetailState>(
         listener: (context, state) {
           if (state is NotificationMarkingAsViewedError) {
@@ -51,7 +64,26 @@ class NotificationDetailView extends StatelessWidget {
             return Center(child: Text(state.error));
           }
           if (state is NotificationLoaded) {
-            return Text(state.data.text);
+            return Center(
+              child: SizedBox(
+                height: 300.w,
+                width: 300.w,
+                child: Card(
+                  child: Column(
+                    children: [
+                      Text(
+                        state.data.title,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Text(state.data.text),
+                    ],
+                  ),
+                ),
+              ),
+            );
           }
           return const SizedBox.shrink();
         },

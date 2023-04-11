@@ -9,7 +9,7 @@ class NotificationDetailRoute {
   static String name = 'notificationDetail';
 
   
-  static String path = "/campaign/:cid/notification/:nid";
+  static String path = "/campaign/:cid/notifications/:nid";
 
   
   final GlobalKey<NavigatorState> parentKey;
