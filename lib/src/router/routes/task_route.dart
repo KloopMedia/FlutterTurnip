@@ -3,7 +3,7 @@ import 'package:gigaturnip/src/features/task/view/task_page.dart';
 import 'package:go_router/go_router.dart';
 
 class TaskRoute {
-  static String name = 'task';
+  static String name = 'tasks';
 
   static String path = "/campaign/:cid";
 

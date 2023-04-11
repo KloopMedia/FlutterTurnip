@@ -16,9 +16,7 @@ class AppRouter {
       : _authRouterNotifier = RouterNotifier(authenticationRepository);
 
   final _initialLocation = CampaignRoute.path;
-
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  final _notificationPageShellNavigatorKey = GlobalKey<NavigatorState>();
 
   String redirectToLoginPage(BuildContext context, GoRouterState state) {
     final query = {...state.queryParams};
@@ -84,7 +82,8 @@ class AppRouter {
         // TaskShellRoute(navigatorKey: _taskPageShellNavigatorKey).route,
         TaskRoute(parentKey: _rootNavigatorKey).route,
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
-        NotificationShellRoute(navigatorKey: _notificationPageShellNavigatorKey).route,
+        // NotificationShellRoute(navigatorKey: _notificationPageShellNavigatorKey).route,
+        NotificationRoute(parentKey: _rootNavigatorKey).route,
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,
       ],
     );
