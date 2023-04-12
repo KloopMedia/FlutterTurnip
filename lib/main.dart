@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/app.dart';
+import 'package:gigaturnip/src/bloc/theme_bloc/theme_cubit.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +29,7 @@ Future<void> main() async {
     await FlutterDownloader.initialize(
         debug: true, // optional: set to false to disable printing logs to console (default: true)
         ignoreSsl: true // option: set to false to disable working with http links (default: false)
-    );
+        );
   }
 
   runApp(
@@ -49,7 +50,9 @@ Future<void> main() async {
           BlocProvider(
             create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences),
           ),
-          // TODO: Add blocs for localization, theme
+          BlocProvider(
+            create: (_) => ThemeCubit(sharedPreferences: sharedPreferences),
+          )
         ],
         child: App(router: router),
       ),

@@ -7,24 +7,6 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
-class UserCampaignPage extends StatelessWidget {
-  const UserCampaignPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // return BlocProvider<UserCampaignCubit>(
-    //   create: (context) => CampaignCubit(
-    //     UserCampaignRepository(
-    //       gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-    //     ),
-    //   )..initialize(),
-    //   child: const UserCampaignView(),
-    // );
-
-    return const UserCampaignView();
-  }
-}
-
 class UserCampaignView extends StatelessWidget {
   const UserCampaignView({Key? key}) : super(key: key);
 
@@ -41,10 +23,7 @@ class UserCampaignView extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10.h),
       itemBuilder: (context, index, item) {
         return CampaignListItemWithProgress(
-          tag: 'Test tag',
-          title: item.name,
-          description: item.description,
-          image: item.logo,
+          data: item,
           onTap: () => redirectToTaskMenu(context, item.id),
         );
       },
