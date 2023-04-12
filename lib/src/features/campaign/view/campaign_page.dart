@@ -11,6 +11,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 
 import '../bloc/campaign_cubit.dart';
+import '../widgets/drawer/campaign_drawer.dart';
 
 class CampaignPage extends StatefulWidget {
   const CampaignPage({Key? key}) : super(key: key);
@@ -56,7 +57,7 @@ class _CampaignPageState extends State<CampaignPage> {
           child: SafeArea(
             child: Scaffold(
               backgroundColor: theme.background,
-              drawer: const Drawer(),
+              drawer: const CampaignDrawer(),
               appBar: AppBar(
                 elevation: 0,
                 iconTheme: IconThemeData(
