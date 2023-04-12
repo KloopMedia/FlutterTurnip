@@ -76,13 +76,10 @@ class AppRouter {
       navigatorKey: _rootNavigatorKey,
       routes: [
         LoginRoute(parentKey: _rootNavigatorKey).route,
-        // CampaignShellRoute(navigatorKey: _campaignShellNavigatorKey).route,
         CampaignRoute(parentKey: _rootNavigatorKey).route,
         CampaignDetailRoute(parentKey: _rootNavigatorKey).route,
-        // TaskShellRoute(navigatorKey: _taskPageShellNavigatorKey).route,
         TaskRoute(parentKey: _rootNavigatorKey).route,
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
-        // NotificationShellRoute(navigatorKey: _notificationPageShellNavigatorKey).route,
         NotificationRoute(parentKey: _rootNavigatorKey).route,
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,
       ],

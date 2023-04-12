@@ -7,24 +7,6 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
-class AvailableCampaignPage extends StatelessWidget {
-  const AvailableCampaignPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // return BlocProvider<SelectableCampaignCubit>(
-    //   create: (context) => CampaignCubit(
-    //     SelectableCampaignRepository(
-    //       gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-    //     ),
-    //   )..initialize(),
-    //   child: const AvailableCampaignView(),
-    // );
-
-    return const AvailableCampaignView();
-  }
-}
-
 class AvailableCampaignView extends StatelessWidget {
   const AvailableCampaignView({Key? key}) : super(key: key);
 

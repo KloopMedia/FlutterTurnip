@@ -1,37 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/src/theme/shadows.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
 
 import 'campaign_card/campaign_card.dart';
 import 'campaign_card/card_description.dart';
-
-const _shadows = [
-  BoxShadow(
-    offset: Offset(0, 1),
-    blurRadius: 3,
-    color: Color(0x1A454545),
-  ),
-  BoxShadow(
-    offset: Offset(0, 4),
-    blurRadius: 8,
-    spreadRadius: 3,
-    color: Color(0x1A454545),
-  ),
-];
-
-// const _shadowsHover = [
-//   BoxShadow(
-//     offset: Offset(0, 2),
-//     blurRadius: 4,
-//     color: Color(0x1A454545),
-//   ),
-//   BoxShadow(
-//     offset: Offset(0, 6),
-//     blurRadius: 10,
-//     spreadRadius: 6,
-//     color: Color(0x1A454545),
-//   ),
-// ];
 
 class CampaignListItem extends StatelessWidget {
   final String tag;
@@ -55,7 +28,7 @@ class CampaignListItem extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
       decoration: BoxDecoration(
-        boxShadow: _shadows,
+        boxShadow: Shadows.elevation3,
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: GestureDetector(

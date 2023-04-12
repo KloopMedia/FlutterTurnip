@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 
-import 'widgets.dart';
+import 'pagination.dart';
 
 class ListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget {
   final Widget? header;

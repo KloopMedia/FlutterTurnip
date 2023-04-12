@@ -3,26 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/src/theme/shadows.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient, PaginationWrapper;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart' as repository;
 
 import 'campaign_card/campaign_card.dart';
 import 'campaign_card/card_message.dart';
-
-const _shadows = [
-  BoxShadow(
-    offset: Offset(0, 1),
-    blurRadius: 3,
-    color: Color(0x1A454545),
-  ),
-  BoxShadow(
-    offset: Offset(0, 4),
-    blurRadius: 8,
-    spreadRadius: 3,
-    color: Color(0x1A454545),
-  ),
-];
 
 class CampaignListItemWithProgress extends StatelessWidget {
   final repository.Campaign data;
@@ -40,7 +27,7 @@ class CampaignListItemWithProgress extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
       decoration: BoxDecoration(
-        boxShadow: _shadows,
+        boxShadow: Shadows.elevation3,
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: GestureDetector(
