@@ -6,6 +6,8 @@ import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
+import 'bloc/theme_bloc/theme_cubit.dart';
+
 class App extends StatelessWidget {
   final GoRouter router;
 
@@ -23,8 +25,8 @@ class App extends StatelessWidget {
           routerDelegate: router.routerDelegate,
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
-          themeMode: ThemeMode.light,
           darkTheme: darkTheme,
+          themeMode: context.watch<ThemeCubit>().state.themeMode,
           locale: context.watch<LocalizationBloc>().state.locale,
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
