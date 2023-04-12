@@ -34,6 +34,7 @@ class CampaignListItemWithProgress extends StatelessWidget {
         onTap: onTap,
         child: Card(
           margin: EdgeInsets.zero,
+          elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
           color: theme.isLight ? theme.primaryContainer : theme.secondaryContainer,
           child: Column(
@@ -41,7 +42,6 @@ class CampaignListItemWithProgress extends StatelessWidget {
               CampaignCard(
                 tag: 'Placeholder',
                 title: data.name,
-                elevation: 0,
                 color: theme.isLight ? Colors.white : theme.onSecondary,
                 imageUrl: data.logo,
                 body: FutureBuilder(

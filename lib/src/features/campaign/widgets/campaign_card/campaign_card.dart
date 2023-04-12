@@ -6,21 +6,21 @@ class CampaignCard extends StatelessWidget {
   final String tag;
   final String imageUrl;
   final String title;
-  final double? elevation;
+  final double elevation;
   final Widget? body;
   final Color? color;
   final void Function()? onTap;
 
-  const CampaignCard(
-      {Key? key,
-      required this.tag,
-      required this.imageUrl,
-      required this.title,
-      this.body,
-      this.onTap,
-      this.elevation,
-      this.color})
-      : super(key: key);
+  const CampaignCard({
+    Key? key,
+    required this.tag,
+    required this.imageUrl,
+    required this.title,
+    this.body,
+    this.onTap,
+    this.elevation = 0,
+    this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -60,9 +60,8 @@ class _CampaignPageState extends State<CampaignPage> {
               drawer: const AppDrawer(),
               appBar: AppBar(
                 elevation: 0,
-                iconTheme: IconThemeData(
-                  color: theme.isLight ? theme.neutral30 : theme.neutral90,
-                ),
+                titleSpacing: 0,
+                iconTheme: IconThemeData(color: theme.isLight ? theme.neutral30 : theme.neutral90),
                 backgroundColor: theme.surface,
                 title: Text(
                   context.loc.campaigns,
@@ -75,7 +74,7 @@ class _CampaignPageState extends State<CampaignPage> {
                 actions: [
                   // TODO: Replace icons
                   IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.tune_rounded))
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.tune_rounded)),
                 ],
                 // flexibleSpace: Padding(
                 //   padding: EdgeInsets.all(12.h),
