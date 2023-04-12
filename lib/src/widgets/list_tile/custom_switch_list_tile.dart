@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_list_tile.dart';
 
 class CustomSwitchListTile extends StatelessWidget {
+  final bool cupertinoVariant;
   final Widget? leading;
   final Widget? title;
   final EdgeInsets? contentPadding;
@@ -17,6 +19,7 @@ class CustomSwitchListTile extends StatelessWidget {
     this.contentPadding,
     this.leadingPadding,
     this.onChanged,
+    this.cupertinoVariant = false,
     required this.value,
   }) : super(key: key);
 
@@ -30,10 +33,20 @@ class CustomSwitchListTile extends StatelessWidget {
       onTap: onChanged != null ? () => onChanged!(!value) : null,
       trailing: SizedBox(
         width: 38,
-        child: Switch(
-          value: value,
-          onChanged: onChanged != null ? (newValue) => onChanged!(newValue) : null,
-        ),
+        child: Builder(builder: (context) {
+          if (cupertinoVariant) {
+            return CupertinoSwitch(
+              value: value,
+              activeColor: Theme.of(context).colorScheme.primary,
+              onChanged: onChanged != null ? (newValue) => onChanged!(newValue) : null,
+            );
+          }
+          return Switch(
+            value: value,
+            activeColor: Theme.of(context).colorScheme.primary,
+            onChanged: onChanged != null ? (newValue) => onChanged!(newValue) : null,
+          );
+        }),
       ),
     );
   }
