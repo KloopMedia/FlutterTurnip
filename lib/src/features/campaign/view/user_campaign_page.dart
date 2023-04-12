@@ -41,10 +41,7 @@ class UserCampaignView extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10.h),
       itemBuilder: (context, index, item) {
         return CampaignListItemWithProgress(
-          tag: 'Test tag',
-          title: item.name,
-          description: item.description,
-          image: item.logo,
+          data: item,
           onTap: () => redirectToTaskMenu(context, item.id),
         );
       },
