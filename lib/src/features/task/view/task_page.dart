@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient, PaginationWrapper;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart' hide Notification;
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
@@ -31,6 +31,11 @@ class _TaskPageState extends State<TaskPage> {
     context.goNamed(CampaignRoute.name, queryParams: routeState.queryParams);
   }
 
+  void _redirectToNotificationPage(BuildContext context) {
+    final params = GoRouterState.of(context).params;
+    context.goNamed(NotificationRoute.name, params: params);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +45,28 @@ class _TaskPageState extends State<TaskPage> {
             _redirectToCampaignPage(context);
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _redirectToNotificationPage(context);
+            },
+            icon: FutureBuilder<PaginationWrapper>(
+              future: context.read<GigaTurnipApiClient>().getUserNotifications(query: {
+                'campaign': widget.campaignId,
+                'viewed': false,
+              }),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data!.count > 0) {
+                  return Badge(
+                    label: Text('${snapshot.data!.count}'),
+                    child: const Icon(Icons.notifications),
+                  );
+                }
+                return const Icon(Icons.notifications);
+              },
+            ),
+          ),
+        ],
       ),
       endDrawer: const AppDrawer(),
       body: MultiBlocProvider(

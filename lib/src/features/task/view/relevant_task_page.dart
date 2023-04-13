@@ -4,6 +4,7 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -30,6 +31,38 @@ class RelevantTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        FutureBuilder<api.PaginationWrapper<api.Notification>>(
+          future: context.read<api.GigaTurnipApiClient>().getUserNotifications(query: {
+            'campaign': campaignId,
+            'viewed': false,
+            'importance': 0,
+          }),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = snapshot.data!.results[index];
+                    return ListTile(
+                      leading: const Icon(Icons.notifications_active),
+                      tileColor: Colors.lightBlueAccent,
+                      title: Text(item.title),
+                      onTap: () {
+                        final params = GoRouterState.of(context).params;
+                        context.goNamed(
+                          NotificationDetailRoute.name,
+                          params: {...params, 'nid': '${item.id}'},
+                        );
+                      },
+                    );
+                  },
+                  childCount: snapshot.data!.results.length,
+                ),
+              );
+            }
+            return const SliverToBoxAdapter();
+          },
+        ),
         BlocBuilder<OpenTaskCubit, RemoteDataState<Task>>(
           builder: (context, state) {
             if (state is RemoteDataLoading<Task>) {

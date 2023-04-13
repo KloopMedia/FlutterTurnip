@@ -65,20 +65,20 @@ class NotificationDetailView extends StatelessWidget {
           }
           if (state is NotificationLoaded) {
             return Center(
-              child: SizedBox(
-                height: 300.w,
-                width: 300.w,
-                child: Card(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Text(
                         state.data.title,
                         style: Theme.of(context).textTheme.titleLarge,
+                        textAlign: TextAlign.center,
                       ),
                       SizedBox(
                         height: 20.h,
                       ),
-                      Text(state.data.text),
+                      Text(state.data.text, textAlign: TextAlign.center),
                     ],
                   ),
                 ),
