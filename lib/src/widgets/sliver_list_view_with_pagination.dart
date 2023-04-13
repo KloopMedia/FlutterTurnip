@@ -33,13 +33,27 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
               SliverToBoxAdapter(child: header),
               SliverPadding(
                 padding: padding,
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => itemBuilder(context, index, state.data[index]),
-                    childCount: state.data.length,
+                /// mobile
+                // sliver: SliverList(
+                //   delegate: SliverChildBuilderDelegate(
+                //     (context, index) => itemBuilder(context, index, state.data[index]),
+                //     childCount: state.data.length,
+                //   ),
+                // ),
+
+                /// desktop
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 2,
+                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) =>
+                      itemBuilder(context, index, state.data[index]),
+                      childCount: state.data.length,
                   ),
                 ),
               ),
+
               SliverPadding(
                 padding: padding,
                 sliver: SliverToBoxAdapter(

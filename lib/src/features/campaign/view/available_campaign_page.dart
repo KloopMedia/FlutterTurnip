@@ -9,6 +9,8 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../widgets/desktop/web_campaign_card/web_campaign_list_item.dart';
+
 class AvailableCampaignPage extends StatelessWidget {
   const AvailableCampaignPage({Key? key}) : super(key: key);
 
@@ -39,9 +41,11 @@ class AvailableCampaignView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverListViewWithPagination<Campaign, SelectableCampaignCubit>(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      // padding: EdgeInsets.symmetric(vertical: 10.h), /// mobile
+      padding: EdgeInsets.symmetric(horizontal: 10.h), /// desktop
       itemBuilder: (context, index, item) {
-        return CampaignListItem(
+        // return CampaignListItem( /// mobile
+        return WebCampaignListItem( /// desktop
           tag: 'Test tag',
           title: item.name,
           description: item.description,

@@ -18,7 +18,7 @@ final darkTheme = ThemeData(
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF2D54CD),
+  primary: Color(0xFF5E81FB),
   onPrimary: Color(0xFFFFFFFF),
   primaryContainer: Color(0xFFDCE1FF),
   onPrimaryContainer: Color(0xFF001551),
@@ -26,7 +26,7 @@ const lightColorScheme = ColorScheme(
   onSecondary: Color(0xFFFFFFFF),
   secondaryContainer: Color(0xFFDDE1FF),
   onSecondaryContainer: Color(0xFF001552),
-  tertiary: Color(0xFF236D00),
+  tertiary: Color(0xFF4B9627),
   onTertiary: Color(0xFFFFFFFF),
   tertiaryContainer: Color(0xFFA0F879),
   onTertiaryContainer: Color(0xFF062100),

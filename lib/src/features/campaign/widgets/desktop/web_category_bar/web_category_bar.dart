@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WebCategoryBar extends StatefulWidget {
-  const WebCategoryBar({super.key});
+  final String title;
+
+  const WebCategoryBar({super.key, required this.title});
 
   @override
   State<WebCategoryBar> createState() => _WebCategoryBarState();
@@ -16,13 +18,34 @@ class _WebCategoryBarState extends State<WebCategoryBar> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Категория',
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.sp, color: const Color(0xFF5C5F5F)),
+        Container(
+          width: MediaQuery.of(context).size.width / 5,
+          padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 0.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.sp,
+                    color: const Color(0xFF5C5F5F) ///neutral40
+                ),
+              ),
+              Text(
+                'Очистить',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    color: const Color(0xFFFFB4AB) ///error80
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(height: 10.h),
         SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
+          width: MediaQuery.of(context).size.width / 5,
           child: DropdownButtonFormField<String>(
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(15.h),
@@ -30,14 +53,18 @@ class _WebCategoryBarState extends State<WebCategoryBar> {
               filled: true,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15.r),
-                borderSide: const BorderSide(style: BorderStyle.none)// Theme.of(context).colorScheme.onInverseSurface),
+                borderSide: const BorderSide(style: BorderStyle.none),
               )
             ),
             hint: Text(
               'Выберите',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16.sp, color: const Color(0xFFC4C7C7)),
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.sp,
+                  color: const Color(0xFFC4C7C7) ///neutral-variant40
+              ),
             ),
-            icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF5E81FB)),
+            icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.primary),
             onChanged: (String? value) {
               print('Button pressed ...');
             },

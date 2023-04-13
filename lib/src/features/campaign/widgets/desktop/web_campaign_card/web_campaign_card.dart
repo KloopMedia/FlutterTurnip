@@ -63,7 +63,7 @@ class _CardChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 3.h),
       backgroundColor: const Color(0xffF1F0FA),
       visualDensity: VisualDensity.compact,
       label: Text(text, style: TextStyle(fontSize: 14.sp)),

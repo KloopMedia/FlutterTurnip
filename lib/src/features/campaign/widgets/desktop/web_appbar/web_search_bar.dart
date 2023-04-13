@@ -4,45 +4,68 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class WebSearchBar extends StatelessWidget {
   const WebSearchBar({Key? key}) : super(key: key);
 
+  ///without SearchField
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-              margin: EdgeInsets.zero,
-              width: 680.h,
-              height: 52.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.r),
-                boxShadow: const [
-                  BoxShadow(
-                    offset: Offset(0, 2),
-                    blurRadius: 6,
-                    spreadRadius: 2,
-                    color: Color(0x1A454545),
-                  ),
-                  BoxShadow(
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
-                    color: Color(0x1A454545),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: const [
-                  _WebSearchIcon(),
-                  _WebSearchField(),
-                  _WebSearchButton(),
-                ],
-              ),
+        Expanded(
+          child: Text(
+            'Кампании',
+            style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF444748) ///neutral50
             ),
+          ),
+        ),
+        const _WebSearchIcon(),
+        SizedBox(width: 10.h),
         const _WebFilterBar(),
       ],
     );
   }
+
+  /// with SearchField
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Container(
+  //             margin: EdgeInsets.zero,
+  //             width: 680.h,
+  //             height: 52.h,
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.circular(20.r),
+  //               boxShadow: const [
+  //                 BoxShadow(
+  //                   offset: Offset(0, 2),
+  //                   blurRadius: 6,
+  //                   spreadRadius: 2,
+  //                   color: Color(0x1A454545),
+  //                 ),
+  //                 BoxShadow(
+  //                   offset: Offset(0, 1),
+  //                   blurRadius: 2,
+  //                   color: Color(0x1A454545),
+  //                 ),
+  //               ],
+  //             ),
+  //             child: Row(
+  //               mainAxisSize: MainAxisSize.max,
+  //               children: const [
+  //                 _WebSearchIcon(),
+  //                 _WebSearchField(),
+  //                 _WebSearchButton(),
+  //               ],
+  //             ),
+  //           ),
+  //       const _WebFilterBar(),
+  //     ],
+  //   );
+  // }
 }
 
 class _WebSearchIcon extends StatelessWidget {
@@ -55,7 +78,7 @@ class _WebSearchIcon extends StatelessWidget {
       child: Icon(
           Icons.search,
           size: 7.w,
-          color: const Color(0xFF5C5F5F),
+          color: const Color(0xFF444748) ///neutral50
       ),
     );
   }
@@ -95,7 +118,7 @@ class _WebSearchButton extends StatelessWidget {
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),//r
           padding: EdgeInsets.symmetric(horizontal: 24.sp, vertical: 14.sp),
-          backgroundColor: const Color(0xFF5E81FB), //Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
         ),
         onPressed: () {
@@ -119,7 +142,7 @@ class _WebFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 52.h,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -127,7 +150,7 @@ class _WebFilterBar extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 50.sp, vertical: 14.sp),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          side: const BorderSide(color: Color(0xFF5E81FB), width: 2),
+          side: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2), ///primary
         ),
         onPressed: () {
           print('Button pressed ...');
@@ -139,9 +162,9 @@ class _WebFilterBar extends StatelessWidget {
               width: 24.h,
               height: 24.h,
               margin: EdgeInsets.zero,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF4B9627),
+                color: Theme.of(context).colorScheme.tertiary
               ),
               child: Center(
                 child: Text(
@@ -158,7 +181,7 @@ class _WebFilterBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF5E81FB),//Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ],

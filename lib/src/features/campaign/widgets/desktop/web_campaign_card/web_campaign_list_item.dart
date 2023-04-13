@@ -35,7 +35,7 @@ class WebCampaignListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200.h,
-      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+      margin: EdgeInsets.symmetric(horizontal: 10.h, vertical: 15.h),
       decoration: BoxDecoration(
         boxShadow: _shadows,
         borderRadius: BorderRadius.circular(15.r),
