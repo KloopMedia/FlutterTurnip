@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
-import 'widgets.dart';
+import '../../../../widgets/pagination.dart';
 
-class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
+class WebSliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     extends StatelessWidget {
   final Widget? header;
   final EdgeInsetsGeometry padding;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
 
-  const SliverListViewWithPagination({
+  const WebSliverGridViewWithPagination({
     Key? key,
     this.header,
     this.padding = EdgeInsets.zero,
@@ -32,9 +32,13 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
               SliverToBoxAdapter(child: header),
               SliverPadding(
                 padding: padding,
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => itemBuilder(context, index, state.data[index]),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 2,
+                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) =>
+                      itemBuilder(context, index, state.data[index]),
                     childCount: state.data.length,
                   ),
                 ),

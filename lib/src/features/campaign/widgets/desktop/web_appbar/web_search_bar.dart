@@ -75,10 +75,15 @@ class _WebSearchIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(15.sp, 5.sp, 12.sp, 0.sp),
-      child: Icon(
-          Icons.search,
-          size: 7.w,
-          color: const Color(0xFF444748) ///neutral50
+      child: IconButton(
+        onPressed: () {
+          print('Button pressed...');
+        },
+        icon: Icon(
+            Icons.search,
+            size: 7.w,
+            color: const Color(0xFF444748) ///neutral50
+        ),
       ),
     );
   }

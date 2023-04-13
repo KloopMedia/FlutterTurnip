@@ -32,12 +32,17 @@ class _WebCategoryBarState extends State<WebCategoryBar> {
                     color: const Color(0xFF5C5F5F) ///neutral40
                 ),
               ),
-              Text(
-                'Очистить',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: const Color(0xFFFFB4AB) ///error80
+              TextButton(
+                onPressed: () {
+                  print('Button pressed...');
+                },
+                child: Text(
+                  'Очистить',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: const Color(0xFFFFB4AB) ///error80
+                  ),
                 ),
               ),
             ],

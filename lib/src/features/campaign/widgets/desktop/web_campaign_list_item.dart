@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'web_campaign_card.dart';
-import 'web_campaign_description.dart';
+import 'web_campaign_card/web_campaign_card.dart';
+import 'web_campaign_card/web_campaign_description.dart';
 
 const _shadows = [
   BoxShadow(

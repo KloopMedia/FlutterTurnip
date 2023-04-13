@@ -8,8 +8,8 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-
-import '../widgets/desktop/web_campaign_card/web_campaign_list_item.dart';
+import '../widgets/desktop/web_campaign_list_item.dart';
+import '../widgets/desktop/web_sliver_grid_view_with_pagination.dart';
 
 class AvailableCampaignPage extends StatelessWidget {
   const AvailableCampaignPage({Key? key}) : super(key: key);
@@ -40,12 +40,24 @@ class AvailableCampaignView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverListViewWithPagination<Campaign, SelectableCampaignCubit>(
-      // padding: EdgeInsets.symmetric(vertical: 10.h), /// mobile
-      padding: EdgeInsets.symmetric(horizontal: 10.h), /// desktop
+    /// mobile
+  //   return SliverListViewWithPagination<Campaign, SelectableCampaignCubit>(
+  //   padding: EdgeInsets.symmetric(vertical: 10.h),
+  //   itemBuilder: (context, index, item) {
+  //   return CampaignListItem( /// mobile
+  //         tag: 'Test tag',
+  //         title: item.name,
+  //         description: item.description,
+  //         onTap: () => redirectToCampaignDetail(context, item.id, item),
+  //       );
+  //     },
+  //   );
+
+    /// desktop
+    return WebSliverGridViewWithPagination<Campaign, SelectableCampaignCubit>(
+      padding: EdgeInsets.symmetric(horizontal: 10.h),
       itemBuilder: (context, index, item) {
-        // return CampaignListItem( /// mobile
-        return WebCampaignListItem( /// desktop
+        return WebCampaignListItem(
           tag: 'Test tag',
           title: item.name,
           description: item.description,
@@ -53,5 +65,6 @@ class AvailableCampaignView extends StatelessWidget {
         );
       },
     );
+
   }
 }

@@ -30,53 +30,81 @@ class WebMenuBar extends StatelessWidget {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 30.h),
-          child: userAvatar,
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 10.h),
-          child: Text(
-            'Willy Wonka',
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.sp,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+    return Expanded(
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 30.h),
+                  child: userAvatar,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 10.h),
+                  child: const WebMenuBarText(text: 'Willy Wonka'),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 5.h),
+                  child: Text(
+                    'willy.wonka@gmail.com',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14.sp,
+                        color: const Color(0xFF747878), /// neutral50
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 10.h, bottom: 5.h),
+                  child: const WebMenuBarLanguageButton(),
+                ),
+                Container(height: 0.1.h, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 22.h),
+                  child: const WebMenuBarCompanyButton(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 40.h, right: 24.h),
+                  child: const WebMenuBarNotificationsButton(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 30.h, right: 12.h),
+                  child: const WebMenuBarThemeSwitch(),
+                ),
+              ],
             ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 5.h),
-          child: Text(
-            'willy.wonka@gmail.com',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14.sp,
-                color: const Color(0xFF747878), /// neutral50
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 0.h, right: 24.h, bottom: 30.h),
+                  child: Row(
+                    children: [
+                      const WebMenuBarIcon(icon: Icons.help_outline),
+                      SizedBox(width: 15.h),
+                      const WebMenuBarTextButton(text: 'Получить помощь'),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 24.h, top: 0.h, right: 24.h, bottom: 47.h),
+                  child: Row(
+                    children: [
+                      const WebMenuBarIcon(icon: Icons.exit_to_app_rounded),
+                      SizedBox(width: 15.h),
+                      const WebMenuBarTextButton(text: 'Выход'),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
+          ],
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 10.h, bottom: 5.h),
-          child: const WebMenuBarLanguageButton(),
-        ),
-        Container(height: 0.1.h, color: Theme.of(context).colorScheme.onPrimaryContainer),
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 20.h),
-          child: const WebMenuBarCompanyButton(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 40.h, right: 24.h),
-          child: const WebMenuBarNotificationsButton(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 24.h, top: 30.h, right: 12.h),
-          child: const WebMenuBarThemeSwitch(),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -102,6 +130,40 @@ class WebMenuBarIcon extends StatelessWidget {
   }
 }
 
+class WebMenuBarTextButton extends StatelessWidget {
+  final String text;
+
+  const WebMenuBarTextButton({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        print('Button pressed...');
+      },
+      child: WebMenuBarText(text: text),
+    );
+  }
+}
+
+class WebMenuBarText extends StatelessWidget {
+  final String text;
+
+  const WebMenuBarText({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+        text,
+        style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            color: Theme.of(context).colorScheme.onSurfaceVariant
+        )
+    );
+  }
+}
+
 class WebMenuBarLanguageButton extends StatelessWidget {
   const WebMenuBarLanguageButton({Key? key}) : super(key: key);
 
@@ -110,9 +172,7 @@ class WebMenuBarLanguageButton extends StatelessWidget {
     return Row(
       children: [
         const WebMenuBarIcon(icon: Icons.language),
-        SizedBox(
-          width: 12.h,
-        ),
+        SizedBox(width: 12.h),
         Expanded(
           child: DropdownButtonFormField<String>(
             decoration: InputDecoration(
@@ -122,14 +182,7 @@ class WebMenuBarLanguageButton extends StatelessWidget {
                   borderSide: BorderSide(style: BorderStyle.none),
                 )
             ),
-            hint: Text(
-              'Русский',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.sp,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
+            hint: const WebMenuBarText(text: 'Русский'),
             icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF5E81FB)),
             onChanged: (String? value) {
               print('Button pressed ...');
@@ -156,22 +209,8 @@ class WebMenuBarCompanyButton extends StatelessWidget {
     return Row(
       children: [
         const WebMenuBarIcon(icon: Icons.window_outlined),
-        SizedBox(
-          width: 15.h,
-        ),
-        TextButton(
-          onPressed: () {
-            print('Button pressed...');
-          },
-          child: Text(
-              'Кампании',
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-              )
-          ),
-        )
+        SizedBox(width: 15.h),
+        const WebMenuBarTextButton(text: 'Кампании'),
       ],
     );
   }
@@ -188,22 +227,8 @@ class WebMenuBarNotificationsButton extends StatelessWidget {
         Row(
           children: [
             const WebMenuBarIcon(icon: Icons.notifications_outlined),
-            SizedBox(
-              width: 15.h,
-            ),
-            TextButton(
-              onPressed: () {
-                print('Button pressed...');
-              },
-              child: Text(
-                  'Уведомления',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant
-                  )
-              ),
-            ),
+            SizedBox(width: 15.h),
+            const WebMenuBarTextButton(text: 'Уведомления'),
           ],
         ),
         Container(
@@ -251,17 +276,8 @@ class _WebMenuBarThemeSwitchState extends State<WebMenuBarThemeSwitch> {
                 WebMenuBarIcon(icon: Icons.star_border_outlined, size: 15.sp),
               ],
             ),
-            SizedBox(
-              width: 12.h,
-            ),
-            Text(
-                'Темная тема',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant
-                )
-            ),
+            SizedBox(width: 12.h),
+            const WebMenuBarText(text: 'Темная тема'),
           ],
         ),
         Switch.adaptive(

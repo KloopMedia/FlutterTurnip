@@ -8,8 +8,8 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-
-import '../widgets/desktop/web_campaign_card/web_campaign_list_item_with_progress.dart';
+import '../widgets/desktop/web_campaign_list_item_with_progress.dart';
+import '../widgets/desktop/web_sliver_grid_view_with_pagination.dart';
 
 class UserCampaignPage extends StatelessWidget {
   const UserCampaignPage({Key? key}) : super(key: key);
@@ -39,12 +39,24 @@ class UserCampaignView extends StatelessWidget {
       );
     }
 
-    return SliverListViewWithPagination<Campaign, UserCampaignCubit>(
-      // padding: EdgeInsets.symmetric(vertical: 10.h), /// mobile
-      padding: EdgeInsets.symmetric(horizontal: 10.h), ///desktop
+    /// mobile
+    // return SliverListViewWithPagination<Campaign, UserCampaignCubit>(
+    //   padding: EdgeInsets.symmetric(vertical: 10.h), /// mobile
+    //   itemBuilder: (context, index, item) {
+    //     return CampaignListItemWithProgress(
+    //       tag: 'Test tag',
+    //       title: item.name,
+    //       description: item.description,
+    //       onTap: () => redirectToTaskMenu(context, item.id),
+    //     );
+    //   },
+    // );
+
+    /// desktop
+    return WebSliverGridViewWithPagination<Campaign, UserCampaignCubit>(
+      padding: EdgeInsets.symmetric(horizontal: 10.h),
       itemBuilder: (context, index, item) {
-        // return CampaignListItemWithProgress( /// mobile
-        return WebCampaignListItemWithProgress( /// desktop
+        return WebCampaignListItemWithProgress(
           tag: 'Test tag',
           title: item.name,
           description: item.description,
@@ -52,5 +64,6 @@ class UserCampaignView extends StatelessWidget {
         );
       },
     );
+
   }
 }

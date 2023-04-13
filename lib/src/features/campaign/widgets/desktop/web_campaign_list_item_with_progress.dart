@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/features/campaign/widgets/desktop/web_campaign_card/web_campaign_card.dart';
-import '../../campaign_card/card_message.dart';
+import '../campaign_card/card_message.dart';
 
 const _shadows = [
   BoxShadow(
