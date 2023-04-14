@@ -10,6 +10,10 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 
 import '../bloc/campaign_cubit.dart';
+import '../desktop/web_appbar/web_category_bar.dart';
+import '../desktop/web_appbar/web_menu_bar.dart';
+import '../desktop/web_appbar/web_search_bar.dart';
+import '../widgets/appbar/tag_bar.dart';
 import 'available_campaign_view.dart';
 import 'user_campaign_view.dart';
 
@@ -57,55 +61,133 @@ class _CampaignPageState extends State<CampaignPage> {
           child: SafeArea(
             child: Scaffold(
               backgroundColor: theme.background,
-              drawer: const AppDrawer(),
-              appBar: AppBar(
-                elevation: 0,
-                titleSpacing: 0,
-                iconTheme: IconThemeData(color: theme.isLight ? theme.neutral30 : theme.neutral90),
-                backgroundColor: theme.surface,
-                title: Text(
-                  context.loc.campaigns,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20.sp,
-                    color: theme.isLight ? theme.neutral30 : theme.neutral90,
+              /// mobile
+              // drawer: const AppDrawer(),
+              // appBar: AppBar(
+              //   elevation: 0,
+              //   titleSpacing: 0,
+              //   iconTheme: IconThemeData(color: theme.isLight ? theme.neutral30 : theme.neutral90),
+              //   backgroundColor: theme.surface,
+              //   title: Text(
+              //     context.loc.campaigns,
+              //     style: TextStyle(
+              //       fontWeight: FontWeight.w500,
+              //       fontSize: 20.sp,
+              //       color: theme.isLight ? theme.neutral30 : theme.neutral90,
+              //     ),
+              //   ),
+              //   actions: [
+              //     // TODO: Replace icons
+              //     IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              //     IconButton(onPressed: () {}, icon: const Icon(Icons.tune_rounded)),
+              //   ],
+              //   // flexibleSpace: Padding(
+              //   //   padding: EdgeInsets.all(12.h),
+              //   //   child: SizedBox(
+              //   //     height: 110.h,
+              //   //     child: Column(
+              //   //       children: [
+              //   //         // SearchBar(),
+              //   //         SizedBox(height: 15.h),
+              //   //         TagBar(),
+              //   //       ],
+              //   //     ),
+              //   //   ),
+              //   // ),
+              //   bottom: CampaignTabBar(
+              //     hidden: !showTabs,
+              //     size: const Size.fromHeight(45),
+              //     tabs: [
+              //       Tab(text: context.loc.available_campaigns),
+              //       Tab(text: context.loc.campaigns),
+              //     ],
+              //   ),
+              // ),
+              // body: showTabs
+              //     ? const TabBarView(
+              //         children: [
+              //           AvailableCampaignView(),
+              //           UserCampaignView(),
+              //         ],
+              //       )
+              //     : const UserCampaignView(),
+
+              /// desktop
+              body: Row(
+                children: [
+                  const Drawer(
+                    elevation: 2,
+                    child: WebMenuBar(),
                   ),
-                ),
-                actions: [
-                  // TODO: Replace icons
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.tune_rounded)),
+                  Expanded(
+                    child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20.h, 30.h, 24.h, 0.h),
+                            child: const WebSearchBar(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20.h, 30.h, 24.h, 0.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                WebCategoryBar(title: 'Категория'),
+                                WebCategoryBar(title: 'Страна'),
+                                WebCategoryBar(title: 'Язык'),
+                              ],
+                            ),
+                          ),
+                          Stack(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0.h, 30.h, 24.h, 0.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width / 3,
+                                      height: 50.h,
+                                      child: CampaignTabBar(
+                                        size: const Size.fromHeight(45),
+                                        tabs: [
+                                          Tab(text: context.loc.available_campaigns),
+                                          Tab(text: context.loc.campaigns),
+                                        ],
+                                        hidden: !showTabs,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width: MediaQuery.of(context).size.width / 4,
+                                        height: 50.h,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: 10.h),
+                                          child: const TagBar(),
+                                        )
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 70.h),
+                                child: const Divider(),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: showTabs
+                                ? const TabBarView(
+                                    children: [
+                                      AvailableCampaignView(),
+                                      UserCampaignView(),
+                                    ],
+                                  )
+                                : const UserCampaignView(),
+                          ),
+                        ]
+                    ),
+                  )
                 ],
-                // flexibleSpace: Padding(
-                //   padding: EdgeInsets.all(12.h),
-                //   child: SizedBox(
-                //     height: 110.h,
-                //     child: Column(
-                //       children: [
-                //         // SearchBar(),
-                //         SizedBox(height: 15.h),
-                //         TagBar(),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                bottom: CampaignTabBar(
-                  hidden: !showTabs,
-                  size: const Size.fromHeight(45),
-                  tabs: [
-                    Tab(text: context.loc.available_campaigns),
-                    Tab(text: context.loc.campaigns),
-                  ],
-                ),
               ),
-              body: showTabs
-                  ? const TabBarView(
-                      children: [
-                        AvailableCampaignView(),
-                        UserCampaignView(),
-                      ],
-                    )
-                  : const UserCampaignView(),
             ),
           ),
         ),
