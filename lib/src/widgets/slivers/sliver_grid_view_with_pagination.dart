@@ -9,7 +9,6 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
   final Widget? header;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry contentPadding;
-  final SliverGridDelegate gridDelegate;
   final int crossAxisCount;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
 
@@ -19,7 +18,6 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     this.padding = EdgeInsets.zero,
     this.contentPadding = EdgeInsets.zero,
     required this.itemBuilder,
-    required this.gridDelegate,
     required this.crossAxisCount,
   }) : super(key: key);
 
