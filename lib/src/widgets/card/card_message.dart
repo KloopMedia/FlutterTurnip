@@ -16,9 +16,11 @@ class CardMessage extends StatelessWidget {
       children: [
         Icon(Icons.mail, color: Theme.of(context).colorScheme.tertiary),
         const SizedBox(width: 8),
-        Text(
-          text!,
-          style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 16.sp),
+        Expanded(
+          child: Text(
+            text!,
+            style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 16.sp),
+          ),
         ),
       ],
     );

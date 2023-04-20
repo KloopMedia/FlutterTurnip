@@ -27,6 +27,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           smsLoginAllow: $checkedConvert('sms_login_allow', (v) => v as bool),
           logo: $checkedConvert('logo', (v) => v as String),
           descriptor: $checkedConvert('descriptor', (v) => v as String?),
+          notificationsCount:
+              $checkedConvert('notifications_count', (v) => v as int),
         );
         return val;
       },
@@ -34,6 +36,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
         'createdAt': 'created_at',
         'updatedAt': 'updated_at',
         'defaultTrack': 'default_track',
-        'smsLoginAllow': 'sms_login_allow'
+        'smsLoginAllow': 'sms_login_allow',
+        'notificationsCount': 'notifications_count'
       },
     );

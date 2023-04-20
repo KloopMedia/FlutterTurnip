@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserAvatar extends StatelessWidget {
   final String? url;
@@ -14,7 +13,7 @@ class UserAvatar extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            radius: 30.r,
+            radius: 30,
             backgroundImage: url != null ? NetworkImage(url!) : null,
             child: url != null ? null : const Icon(Icons.person),
           ),

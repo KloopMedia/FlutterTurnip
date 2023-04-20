@@ -1,79 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+const _shadowColor1 = Color.fromRGBO(69, 69, 69, 0.1);
+const _shadowColor2 = Color.fromRGBO(69, 69, 69, 0.15);
 
 class Shadows {
-  static final List<BoxShadow> elevation1 = [
+  static const List<BoxShadow> elevation1 = [
     BoxShadow(
-      offset: const Offset(0, 1),
-      blurRadius: 3.r,
-      spreadRadius: 1.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+      offset: Offset(0, 1),
+      blurRadius: 3,
+      spreadRadius: 1,
+      color: _shadowColor1,
     ),
     BoxShadow(
-      offset: const Offset(0, 1),
-      blurRadius: 2.r,
-      spreadRadius: 0.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+      offset: Offset(0, 1),
+      blurRadius: 2,
+      spreadRadius: 0,
+      color: _shadowColor1,
     )
   ];
 
-  static final List<BoxShadow> elevation2 = [
+  static const List<BoxShadow> elevation2 = [
     BoxShadow(
-      offset: const Offset(0, 2),
-      blurRadius: 6.r,
-      spreadRadius: 2.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+      offset: Offset(0, 2),
+      blurRadius: 6,
+      spreadRadius: 2,
+      color: _shadowColor1,
     ),
     BoxShadow(
-      offset: const Offset(0, 1),
-      blurRadius: 2.r,
-      spreadRadius: 0.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+        offset: Offset(0, 1),
+        blurRadius: 2,
+        spreadRadius: 0,
+        // color: Color(0x0A454545),
+        color: _shadowColor1)
+  ];
+
+  static const List<BoxShadow> elevation3 = [
+    BoxShadow(
+      offset: Offset(0, 1),
+      blurRadius: 3,
+      spreadRadius: 0,
+      color: _shadowColor1,
+    ),
+    BoxShadow(
+      offset: Offset(0, 4),
+      blurRadius: 8,
+      spreadRadius: 3,
+      color: _shadowColor1,
     )
   ];
 
-  static final List<BoxShadow> elevation3 = [
+  static const List<BoxShadow> elevation4 = [
     BoxShadow(
-      offset: const Offset(0, 1),
-      blurRadius: 3.r,
-      spreadRadius: 0.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+      offset: Offset(0, 2),
+      blurRadius: 3,
+      spreadRadius: 0,
+      color: _shadowColor1,
     ),
     BoxShadow(
-      offset: const Offset(0, 4),
-      blurRadius: 8.r,
-      spreadRadius: 3.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+      offset: Offset(0, 6),
+      blurRadius: 10,
+      spreadRadius: 4,
+      color: _shadowColor2,
     )
   ];
 
-  static final List<BoxShadow> elevation4 = [
+  static const List<BoxShadow> elevation5 = [
     BoxShadow(
-      offset: const Offset(0, 2),
-      blurRadius: 3.r,
-      spreadRadius: 0.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
+      offset: Offset(0, 2),
+      blurRadius: 4,
+      spreadRadius: 0,
+      color: _shadowColor1,
     ),
     BoxShadow(
-      offset: const Offset(0, 6),
-      blurRadius: 10.r,
-      spreadRadius: 4.r,
-      color: const Color(0xFF454545).withOpacity(0.15),
-    )
-  ];
-
-  static final List<BoxShadow> elevation5 = [
-    BoxShadow(
-      offset: const Offset(0, 2),
-      blurRadius: 4.r,
-      spreadRadius: 0.r,
-      color: const Color(0xFF454545).withOpacity(0.1),
-    ),
-    BoxShadow(
-      offset: const Offset(0, 6),
-      blurRadius: 10.r,
-      spreadRadius: 6.r,
-      color: const Color(0xFF454545).withOpacity(0.15),
+      offset: Offset(0, 6),
+      blurRadius: 10,
+      spreadRadius: 6,
+      color: _shadowColor2,
     )
   ];
 }

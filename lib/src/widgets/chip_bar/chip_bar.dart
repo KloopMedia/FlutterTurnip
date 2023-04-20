@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TagBar extends StatelessWidget {
-  const TagBar({Key? key}) : super(key: key);
+class ChipBar extends StatelessWidget {
+  const ChipBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +11,9 @@ class TagBar extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: 13,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.w),
-            child: const _TagChip('Test tag'),
+          return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: _Chip('Test tag'),
           );
         },
       ),
@@ -21,16 +21,16 @@ class TagBar extends StatelessWidget {
   }
 }
 
-class _TagChip extends StatelessWidget {
+class _Chip extends StatelessWidget {
   final String text;
 
-  const _TagChip(this.text, {Key? key}) : super(key: key);
+  const _Chip(this.text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Chip(
       backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       visualDensity: VisualDensity.compact,
       label: Text(
         text,
