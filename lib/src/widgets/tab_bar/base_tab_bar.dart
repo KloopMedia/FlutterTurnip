@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gigaturnip/src/theme/theme.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 
-class CampaignTabBar extends StatelessWidget with PreferredSizeWidget {
-  final Size size;
+class BaseTabBar extends StatelessWidget {
   final List<Widget> tabs;
   final bool hidden;
+  final Border? border;
+  final Decoration? indicator;
 
-  const CampaignTabBar({Key? key, required this.size, required this.tabs, this.hidden = false})
-      : super(key: key);
+  const BaseTabBar({
+    Key? key,
+    required this.tabs,
+    this.hidden = false,
+    this.border,
+    this.indicator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +26,10 @@ class CampaignTabBar extends StatelessWidget with PreferredSizeWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
-            width: 2,
-          ),
-        ),
+        border: border,
       ),
       child: TabBar(
+        indicator: indicator,
         labelColor: theme.primary,
         labelStyle: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
         unselectedLabelColor: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
@@ -36,7 +38,4 @@ class CampaignTabBar extends StatelessWidget with PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => hidden ? Size.zero : size;
 }

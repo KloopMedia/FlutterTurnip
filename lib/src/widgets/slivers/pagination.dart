@@ -202,7 +202,7 @@ class _PaginationNavigationButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isActive ? Theme.of(context).colorScheme.onSecondary : const Color(0x4DC2C0C0),
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: isActive ? _shadows : null,
       ),
       child: IconButton(
@@ -231,7 +231,7 @@ class _PaginationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       visualDensity: VisualDensity.compact,
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       onPressed: onTap,
       icon: Text(
         '${page + 1}',

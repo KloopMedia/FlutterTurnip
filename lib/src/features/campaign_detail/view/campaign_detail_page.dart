@@ -57,7 +57,7 @@ class CampaignDetailView extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(167.h),
+        preferredSize: Size.fromHeight(167),
         child: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -66,7 +66,7 @@ class CampaignDetailView extends StatelessWidget {
             color: theme.neutral40,
             icon: Icon(
               Icons.arrow_back_ios,
-              size: 20.w,
+              size: 20,
             ),
           ),
         ),
@@ -96,8 +96,8 @@ class CampaignDetailView extends StatelessWidget {
                   Align(
                     alignment: Alignment.topCenter,
                     child: SizedBox(
-                      height: 100.w,
-                      width: 100.w,
+                      height: 100,
+                      width: 100,
                       child: Image.network(state.data.logo),
                     ),
                   ),
@@ -119,9 +119,9 @@ class _AlertDialog extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
 
     return AlertDialog(
-      actionsPadding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
+      actionsPadding: EdgeInsets.fromLTRB(24, 0, 24, 24),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.w),
+        borderRadius: BorderRadius.circular(20),
       ),
       title: Text(
         'Вы присоединились!',
@@ -143,12 +143,12 @@ class _AlertDialog extends StatelessWidget {
       ),
       actions: [
         SizedBox(
-          height: 52.h,
+          height: 52,
           width: double.infinity,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.r),
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
             onPressed: () {
@@ -171,12 +171,12 @@ class _CampaignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.only(top: 50.h),
+      margin: EdgeInsets.only(top: 50),
       decoration: BoxDecoration(
         boxShadow: Shadows.elevation3,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.w),
-          topRight: Radius.circular(30.w),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
       ),
       child: Card(
@@ -184,15 +184,15 @@ class _CampaignCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30.w),
-            topRight: Radius.circular(30.w),
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 21.w),
+          padding: EdgeInsets.symmetric(horizontal: 21),
           child: Column(
             children: [
-              SizedBox(height: 60.h),
+              SizedBox(height: 60),
               Text(
                 data.name,
                 textAlign: TextAlign.center,
@@ -202,7 +202,7 @@ class _CampaignCard extends StatelessWidget {
                   color: theme.primary,
                 ),
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 25),
               Expanded(
                 child: Text(
                   data.description,
@@ -216,15 +216,15 @@ class _CampaignCard extends StatelessWidget {
               ),
               if (data.canJoin)
                 Padding(
-                  padding: EdgeInsets.only(bottom: 45.h),
+                  padding: EdgeInsets.only(bottom: 45),
                   child: SizedBox(
                     width: double.infinity,
-                    height: 52.h,
+                    height: 52,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.primary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.w),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       onPressed: () {

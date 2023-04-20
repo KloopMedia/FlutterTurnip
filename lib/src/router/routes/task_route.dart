@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/task/view/create_task_page.dart';
 import 'package:gigaturnip/src/features/task/view/task_page.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
@@ -54,15 +55,15 @@ class TaskRoute {
     final query = {...state.queryParams};
 
     final joinCampaignQueryValue = query['join']?.toLowerCase() == 'true';
-    final createTaskIdQueryValue = query['create_task'];
+    // final createTaskIdQueryValue = query['create_task'];
 
     if (joinCampaignQueryValue) {
       return await joinCampaign(context, state);
     }
 
-    if (createTaskIdQueryValue != null) {
-      return await createTask(context, state);
-    }
+    // if (createTaskIdQueryValue != null) {
+    //   return await createTask(context, state);
+    // }
 
     return null;
   }
@@ -75,10 +76,17 @@ class TaskRoute {
       redirect: redirect,
       builder: (BuildContext context, GoRouterState state) {
         final id = state.params['cid'] ?? '';
+        final createTaskIdQueryValue = state.queryParams['create_task'] ?? '';
+
 
         final campaignId = int.tryParse(id);
         if (campaignId == null) {
           return const Text('Error: Failed to parse id');
+        }
+
+        final createTaskId = int.tryParse(createTaskIdQueryValue);
+        if (createTaskId != null) {
+          return CreateTaskPage(taskId: createTaskId);
         }
 
         return TaskPage(campaignId: campaignId);

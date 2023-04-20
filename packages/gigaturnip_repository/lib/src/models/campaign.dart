@@ -13,6 +13,7 @@ class Campaign extends Equatable {
   final bool smsLoginAllow;
   final String? descriptor;
   final String logo;
+  final int unreadNotifications;
 
   const Campaign({
     required this.id,
@@ -21,6 +22,7 @@ class Campaign extends Equatable {
     required this.descriptor,
     required this.logo,
     required this.smsLoginAllow,
+    required this.unreadNotifications,
     this.canJoin = false,
   });
 
@@ -41,6 +43,7 @@ class Campaign extends Equatable {
       descriptor: model.descriptor,
       logo: model.logo,
       smsLoginAllow: model.smsLoginAllow,
+      unreadNotifications: model.notificationsCount,
     );
   }
 

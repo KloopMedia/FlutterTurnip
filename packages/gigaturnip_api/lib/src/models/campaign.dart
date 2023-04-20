@@ -15,6 +15,7 @@ class Campaign {
   final bool smsLoginAllow;
   final String? descriptor;
   final String logo;
+  final int notificationsCount;
 
   Campaign({
     required this.id,
@@ -28,6 +29,7 @@ class Campaign {
     required this.smsLoginAllow,
     required this.logo,
     required this.descriptor,
+    required this.notificationsCount,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
