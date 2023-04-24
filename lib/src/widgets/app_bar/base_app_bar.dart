@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BaseAppBar extends StatelessWidget {
   final Widget? title;
-  final Widget? leading;
+  final List<Widget>? leading;
   final List<Widget>? actions;
   final Widget? middle;
   final Widget? bottom;
@@ -40,7 +40,7 @@ class BaseAppBar extends StatelessWidget {
               data: iconTheme ?? const IconThemeData.fallback(),
               child: Row(
                 children: [
-                  if (leading != null) leading!,
+                  if (leading != null) ...leading!,
                   Expanded(
                     child: title != null
                         ? Padding(
