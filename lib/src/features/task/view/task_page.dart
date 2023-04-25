@@ -26,6 +26,8 @@ class TaskPage extends StatefulWidget {
 class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
+    final isGridView = context.isDesktop || context.isTablet;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -42,6 +44,7 @@ class _TaskPageState extends State<TaskPage> {
             AllTaskRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
               campaignId: widget.campaignId,
+              limit: isGridView ? 9 : 10,
             ),
           )..initialize(),
         ),

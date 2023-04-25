@@ -22,12 +22,15 @@ class CampaignPage extends StatefulWidget {
 class _CampaignPageState extends State<CampaignPage> {
   @override
   Widget build(BuildContext context) {
+    final isGridView = context.isDesktop || context.isTablet;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<SelectableCampaignCubit>(
           create: (context) => CampaignCubit(
             SelectableCampaignRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              limit: isGridView ? 9 : 10,
             ),
           )..initialize(),
         ),
@@ -35,6 +38,7 @@ class _CampaignPageState extends State<CampaignPage> {
           create: (context) => CampaignCubit(
             UserCampaignRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              limit: isGridView ? 9 : 10,
             ),
           )..initialize(),
         ),
