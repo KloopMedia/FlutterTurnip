@@ -44,7 +44,7 @@ class BaseCard extends StatelessWidget {
               child: Card(
                 margin: EdgeInsets.zero,
                 elevation: 0,
-                color: color,
+                color: theme.onSecondary,
                 shape: shape,
                 child: Padding(
                   padding: const EdgeInsets.all(10),

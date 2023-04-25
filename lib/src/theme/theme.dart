@@ -90,6 +90,17 @@ extension ThemeVariant on ColorScheme {
   get isDark => brightness == Brightness.dark;
 }
 
+extension CustomColors on ColorScheme {
+  get statusGreen =>
+      isLight ? const Color.fromRGBO(75, 150, 39, 1) : const Color.fromRGBO(133, 219, 96, 1);
+
+  get statusYellow =>
+      isLight ? const Color.fromRGBO(206, 186, 9, 1) : const Color.fromRGBO(255, 237, 171, 1);
+
+  get statusRed =>
+      isLight ? const Color.fromRGBO(212, 103, 103, 1) : const Color.fromRGBO(255, 180, 171, 1);
+}
+
 extension Neutral on ColorScheme {
   get neutral0 => const Color(0xFF000000);
 

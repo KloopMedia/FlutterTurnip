@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 import '../bloc/bloc.dart';
 
@@ -29,121 +25,66 @@ class RelevantTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
     return CustomScrollView(
       slivers: [
-        FutureBuilder<api.PaginationWrapper<api.Notification>>(
-          future: context.read<api.GigaTurnipApiClient>().getUserNotifications(query: {
-            'campaign': campaignId,
-            'viewed': false,
-            'importance': 0,
-          }),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = snapshot.data!.results[index];
-                    return ListTile(
-                      leading: const Icon(Icons.notifications_active),
-                      tileColor: Colors.lightBlueAccent,
-                      title: Text(item.title),
-                      onTap: () {
-                        final params = GoRouterState.of(context).params;
-                        context.goNamed(
-                          NotificationDetailRoute.name,
-                          params: {...params, 'nid': '${item.id}'},
-                        );
-                      },
-                    );
-                  },
-                  childCount: snapshot.data!.results.length,
-                ),
+        AdaptiveListView<Task, RelevantTaskCubit>(
+          padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+          itemBuilder: (context, index, item) {
+            final cardBody = CardDate(date: item.createdAt);
+
+            if (context.isDesktop || context.isTablet) {
+              return CardWithTitle(
+                chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
+                title: item.name,
+                size: const Size.fromHeight(165),
+                flex: 1,
+                onTap: () => redirectToTask(context, item),
+                body: cardBody,
+              );
+            } else {
+              return CardWithTitle(
+                chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
+                title: item.name,
+                onTap: () => redirectToTask(context, item),
+                body: cardBody,
               );
             }
-            return const SliverToBoxAdapter();
-          },
-        ),
-        BlocBuilder<OpenTaskCubit, RemoteDataState<Task>>(
-          builder: (context, state) {
-            if (state is RemoteDataLoading<Task>) {
-              return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
-            }
-            if (state is RemoteDataFailed<Task>) {
-              return SliverToBoxAdapter(child: Center(child: Text(state.error)));
-            }
-            if (state is RemoteDataLoaded<Task>) {
-              return MultiSliver(
-                children: [
-                  Text(
-                    context.loc.open_tasks,
-                    textAlign: TextAlign.center,
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final item = state.data[index];
-                        return ListTile(
-                          title: Text(item.name),
-                          subtitle: Text("${item.id} | ${context.loc.complete}: ${item.complete}"),
-                          onTap: () => redirectToTask(context, item),
-                        );
-                      },
-                      childCount: state.data.length,
-                    ),
-                  ),
-                  Pagination(
-                    currentPage: state.currentPage,
-                    total: state.total,
-                    onChanged: (page) => context.read<OpenTaskCubit>().fetchData(page),
-                    enabled: state is! RemoteDataLoading,
-                  ),
-                ],
-              );
-            }
-            return const SliverToBoxAdapter(child: SizedBox.shrink());
-          },
-        ),
-        BlocBuilder<ClosedTaskCubit, RemoteDataState<Task>>(
-          builder: (context, state) {
-            if (state is RemoteDataLoading<Task>) {
-              return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
-            }
-            if (state is RemoteDataFailed<Task>) {
-              return SliverToBoxAdapter(child: Center(child: Text(state.error)));
-            }
-            if (state is RemoteDataLoaded<Task>) {
-              return MultiSliver(
-                children: [
-                  Text(
-                    context.loc.closed_tasks,
-                    textAlign: TextAlign.center,
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final item = state.data[index];
-                        return ListTile(
-                          title: Text(item.name),
-                          subtitle: Text("${item.id} | ${context.loc.complete}: ${item.complete}"),
-                          onTap: () => redirectToTask(context, item),
-                        );
-                      },
-                      childCount: state.data.length,
-                    ),
-                  ),
-                  Pagination(
-                    currentPage: state.currentPage,
-                    total: state.total,
-                    onChanged: (page) => context.read<ClosedTaskCubit>().fetchData(page),
-                    enabled: state is! RemoteDataLoading,
-                  ),
-                ],
-              );
-            }
-            return const SliverToBoxAdapter(child: SizedBox.shrink());
           },
         ),
       ],
     );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  final Task item;
+
+  const _StatusChip(this.item, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    final fontColor = theme.isLight ? Colors.white : Colors.black;
+
+    if (item.complete) {
+      return CardChip(
+        'Отправлено',
+        fontColor: fontColor,
+        backgroundColor: theme.statusGreen,
+      );
+    } else if (item.reopened) {
+      return CardChip(
+        'Возвращено',
+        fontColor: fontColor,
+        backgroundColor: theme.statusYellow,
+      );
+    } else {
+      return CardChip(
+        'Не отправлено',
+        fontColor: fontColor,
+        backgroundColor: theme.statusRed,
+      );
+    }
   }
 }

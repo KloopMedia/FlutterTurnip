@@ -11,7 +11,15 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
   final double contentPadding;
   final Widget Function(BuildContext context, int index, Data item) itemBuilder;
 
-  const AdaptiveListView({Key? key, required this.itemBuilder, this.padding = EdgeInsets.zero, this.crossAxisCount = 3, this.mainAxisSpacing = 8,  this.crossAxisSpacing = 8, this.contentPadding = 10}) : super(key: key);
+  const AdaptiveListView({
+    Key? key,
+    required this.itemBuilder,
+    this.padding = EdgeInsets.zero,
+    this.crossAxisCount = 3,
+    this.mainAxisSpacing = 30,
+    this.crossAxisSpacing = 20,
+    this.contentPadding = 10,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
