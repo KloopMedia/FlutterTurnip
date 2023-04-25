@@ -31,6 +31,14 @@ class _TaskPageState extends State<TaskPage> {
     context.goNamed(NotificationRoute.name, params: params);
   }
 
+  void _redirectToCampaignDetail(BuildContext context) {
+    context.pushNamed(
+      CampaignDetailRoute.name,
+      params: {'cid': '${widget.campaignId}'},
+      extra: widget.campaign,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isDesktop || context.isTablet;
@@ -78,8 +86,19 @@ class _TaskPageState extends State<TaskPage> {
             return DefaultAppBar(
               title: Text(state.data.name),
               leading: [
-                if ((context.isDesktop || context.isTablet) & state.data.logo.isNotEmpty)
-                  IconButton(onPressed: () {}, icon: Image.network(state.data.logo))
+                if (context.isDesktop || context.isTablet)
+                  IconButton(
+                    onPressed: () => _redirectToCampaignDetail(context),
+                    icon: Builder(
+                      builder: (context) {
+                        if (state.data.logo.isNotEmpty) {
+                          return Image.network(state.data.logo);
+                        } else {
+                          return const Icon(Icons.campaign);
+                        }
+                      },
+                    ),
+                  ),
               ],
               actions: [
                 IconButton(

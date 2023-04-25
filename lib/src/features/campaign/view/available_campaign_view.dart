@@ -10,7 +10,7 @@ class AvailableCampaignView extends StatelessWidget {
   const AvailableCampaignView({Key? key}) : super(key: key);
 
   void redirectToCampaignDetail(BuildContext context, Campaign campaign) {
-    context.goNamed(
+    context.pushNamed(
       CampaignDetailRoute.name,
       params: {'cid': '${campaign.id}'},
       extra: campaign,

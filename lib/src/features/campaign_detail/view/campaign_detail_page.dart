@@ -48,26 +48,19 @@ class CampaignDetailView extends StatelessWidget {
     );
   }
 
-  void redirectToCampaigns(BuildContext context) {
-    context.goNamed(CampaignRoute.name);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(167),
+        preferredSize: const Size.fromHeight(167),
         child: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            onPressed: () => redirectToCampaigns(context),
+            onPressed: () => context.pop(),
             color: theme.neutral40,
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-            ),
+            icon: const Icon(Icons.arrow_back_ios, size: 20),
           ),
         ),
       ),
@@ -119,7 +112,7 @@ class _AlertDialog extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
 
     return AlertDialog(
-      actionsPadding: EdgeInsets.fromLTRB(24, 0, 24, 24),
+      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -171,8 +164,8 @@ class _CampaignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.only(top: 50),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.only(top: 50),
+      decoration: const BoxDecoration(
         boxShadow: Shadows.elevation3,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
@@ -182,17 +175,17 @@ class _CampaignCard extends StatelessWidget {
       child: Card(
         elevation: 0,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 21),
+          padding: const EdgeInsets.symmetric(horizontal: 21),
           child: Column(
             children: [
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
               Text(
                 data.name,
                 textAlign: TextAlign.center,
@@ -202,7 +195,7 @@ class _CampaignCard extends StatelessWidget {
                   color: theme.primary,
                 ),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               Expanded(
                 child: Text(
                   data.description,
@@ -216,7 +209,7 @@ class _CampaignCard extends StatelessWidget {
               ),
               if (data.canJoin)
                 Padding(
-                  padding: EdgeInsets.only(bottom: 45),
+                  padding: const EdgeInsets.only(bottom: 45),
                   child: SizedBox(
                     width: double.infinity,
                     height: 52,

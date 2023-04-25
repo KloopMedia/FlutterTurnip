@@ -42,7 +42,7 @@ class DefaultAppBar extends StatelessWidget {
                     children: [
                       _DefaultAppBar(
                         title: title,
-                        leading: const [],
+                        leading: leading,
                         actions: actions,
                         bottom: bottom,
                         automaticallyImplyLeading: false,
