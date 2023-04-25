@@ -24,14 +24,18 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
 
   @override
   Widget build(BuildContext context) {
-    return SliverListViewWithPagination<Notification, NotificationCubit>(
-      itemBuilder: (context, index, item) {
-        return ListTile(
-          title: Text(item.title),
-          subtitle: Text('${item.id}'),
-          onTap: () => redirectToNotification(context, item),
-        );
-      },
+    return CustomScrollView(
+      slivers: [
+        SliverListViewWithPagination<Notification, NotificationCubit>(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          itemBuilder: (context, index, item) {
+            return CardWithTitle(
+              title: item.title,
+              onTap: () => redirectToNotification(context, item),
+            );
+          },
+        )
+      ],
     );
   }
 }

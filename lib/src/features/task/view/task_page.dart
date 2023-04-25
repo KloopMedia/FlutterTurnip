@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
+import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart' hide Notification;
+import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import 'relevant_task_page.dart';
@@ -24,6 +26,11 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  void _redirectToNotificationPage(BuildContext context) {
+    final params = GoRouterState.of(context).params;
+    context.goNamed(NotificationRoute.name, params: params);
+  }
+
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isDesktop || context.isTablet;
@@ -73,6 +80,12 @@ class _TaskPageState extends State<TaskPage> {
               leading: [
                 if ((context.isDesktop || context.isTablet) & state.data.logo.isNotEmpty)
                   IconButton(onPressed: () {}, icon: Image.network(state.data.logo))
+              ],
+              actions: [
+                IconButton(
+                  onPressed: () => _redirectToNotificationPage(context),
+                  icon: const Icon(Icons.notifications_outlined),
+                )
               ],
               child: RelevantTaskPage(
                 campaignId: widget.campaignId,
