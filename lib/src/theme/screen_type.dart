@@ -18,4 +18,10 @@ extension Screen on BuildContext {
     if (deviceWidth > _FormFactor.tablet) return FormFactor.tablet;
     return FormFactor.mobile;
   }
+
+  bool get isDesktop => formFactor == FormFactor.desktop;
+
+  bool get isTablet => formFactor == FormFactor.tablet;
+
+  bool get isMobile => formFactor == FormFactor.mobile;
 }

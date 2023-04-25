@@ -48,7 +48,7 @@ class _CampaignPageState extends State<CampaignPage> {
           length: 2,
           child: SafeArea(
             child: DefaultAppBar(
-              title: context.loc.campaigns,
+              title: Text(context.loc.campaigns),
               actions: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),

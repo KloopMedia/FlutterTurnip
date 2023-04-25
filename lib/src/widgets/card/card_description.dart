@@ -18,6 +18,7 @@ class CardDescription extends StatelessWidget {
         fontSize: 16.sp,
         color: const Color(0xFF45464F),
       ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

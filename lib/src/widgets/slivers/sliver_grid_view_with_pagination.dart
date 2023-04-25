@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import 'index.dart';
 
@@ -8,7 +9,8 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     extends StatelessWidget {
   final Widget? header;
   final EdgeInsetsGeometry padding;
-  final EdgeInsetsGeometry contentPadding;
+  final double mainAxisSpacing;
+  final double crossAxisSpacing;
   final int crossAxisCount;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
 
@@ -16,7 +18,8 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     Key? key,
     this.header,
     this.padding = EdgeInsets.zero,
-    this.contentPadding = EdgeInsets.zero,
+    this.mainAxisSpacing = 8,
+    this.crossAxisSpacing = 8,
     required this.itemBuilder,
     required this.crossAxisCount,
   }) : super(key: key);
@@ -26,52 +29,60 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     return BlocBuilder<Cubit, RemoteDataState<Data>>(
       builder: (context, state) {
         if (state is RemoteDataLoading<Data>) {
-          return const Center(child: CircularProgressIndicator());
+          return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
         }
         if (state is RemoteDataFailed<Data>) {
-          return Center(child: Text(state.error));
+          return SliverToBoxAdapter(child: Center(child: Text(state.error)));
         }
         if (state is RemoteDataLoaded<Data>) {
           final data = state.data.splitBeforeIndexed((i, v) => i % 3 == 0).toList();
-          return CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(child: header),
-              SliverPadding(
-                padding: padding,
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Row(
-                        children: List.generate(
-                          data[index].length,
-                          (i) => Expanded(
+          return MultiSliver(children: [
+            SliverToBoxAdapter(child: header),
+            SliverPadding(
+              padding: padding,
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, rowIndex) {
+                    final rowCount = data[rowIndex].length;
+                    return Row(
+                      children: List.generate(
+                        rowCount,
+                        (columnIndex) {
+                          final verticalPadding = mainAxisSpacing / 2;
+                          final horizontalPadding = crossAxisSpacing / 2;
+                          return Expanded(
                             child: Padding(
-                              padding: contentPadding,
-                              child: itemBuilder(context, index, data[index][i])!,
+                              padding: EdgeInsets.only(
+                                top: rowIndex == 0 ? 0 : verticalPadding,
+                                bottom: rowIndex == data.length - 1 ? 0 : verticalPadding,
+                                left: columnIndex == 0 ? 0 : horizontalPadding,
+                                right: columnIndex == rowCount - 1 ? 0 : horizontalPadding,
+                              ),
+                              child: itemBuilder(context, rowIndex, data[rowIndex][columnIndex])!,
                             ),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: data.length,
-                  ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  childCount: data.length,
                 ),
               ),
-              SliverPadding(
-                padding: padding,
-                sliver: SliverToBoxAdapter(
-                  child: Pagination(
-                    currentPage: state.currentPage,
-                    total: state.total,
-                    onChanged: (page) => context.read<Cubit>().fetchData(page),
-                    enabled: state is! RemoteDataLoading,
-                  ),
+            ),
+            SliverPadding(
+              padding: padding,
+              sliver: SliverToBoxAdapter(
+                child: Pagination(
+                  currentPage: state.currentPage,
+                  total: state.total,
+                  onChanged: (page) => context.read<Cubit>().fetchData(page),
+                  enabled: state is! RemoteDataLoading,
                 ),
               ),
-            ],
-          );
+            ),
+          ]);
         }
-        return const SizedBox.shrink();
+        return const SliverToBoxAdapter(child: SizedBox.shrink());
       },
     );
   }

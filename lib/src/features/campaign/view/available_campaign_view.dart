@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-
-import 'campaign_list_view.dart';
 
 class AvailableCampaignView extends StatelessWidget {
   const AvailableCampaignView({Key? key}) : super(key: key);
@@ -20,9 +19,45 @@ class AvailableCampaignView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CampaignListView<Campaign, SelectableCampaignCubit>(
-      onTap: (context, item) => redirectToCampaignDetail(context, item),
-      bodyBuilder: (item) => CardDescription(item.description),
+    final theme = Theme.of(context).colorScheme;
+    final color = theme.isLight ? Colors.white : theme.onSecondary;
+    final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+
+    return CustomScrollView(
+      slivers: [
+        AdaptiveListView<Campaign, SelectableCampaignCubit>(
+          padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+          mainAxisSpacing: 30,
+          crossAxisSpacing: 20,
+          crossAxisCount: 3,
+          contentPadding: 10,
+          itemBuilder: (context, index, item) {
+            final cardBody = CardDescription(item.description);
+
+            if (context.isDesktop || context.isTablet) {
+              return CardWithChipAndTitle(
+                tag: 'Placeholder',
+                title: item.name,
+                size: const Size.fromHeight(250),
+                color: color,
+                imageUrl: item.logo,
+                flex: 1,
+                onTap: () => redirectToCampaignDetail(context, item),
+                body: cardBody,
+              );
+            } else {
+              return CardWithChipAndTitle(
+                tag: 'Placeholder',
+                title: item.name,
+                color: color,
+                imageUrl: item.logo,
+                onTap: () => redirectToCampaignDetail(context, item),
+                body: cardBody,
+              );
+            }
+          },
+        )
+      ],
     );
   }
 }
