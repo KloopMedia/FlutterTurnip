@@ -120,7 +120,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              'campaigns//${id}',
+              'campaigns//${id}/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -599,7 +599,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              'notifications//${id}',
+              'notifications//${id}/',
               queryParameters: queryParameters,
               data: _data,
             )

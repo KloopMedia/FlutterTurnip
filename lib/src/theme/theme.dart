@@ -85,63 +85,74 @@ const darkColorScheme = ColorScheme(
 );
 
 extension ThemeVariant on ColorScheme {
-  get isLight => brightness == Brightness.light;
+  bool get isLight => brightness == Brightness.light;
 
-  get isDark => brightness == Brightness.dark;
+  bool get isDark => brightness == Brightness.dark;
+}
+
+extension CustomColors on ColorScheme {
+  Color get statusGreen =>
+      isLight ? const Color.fromRGBO(75, 150, 39, 1) : const Color.fromRGBO(133, 219, 96, 1);
+
+  Color get statusYellow =>
+      isLight ? const Color.fromRGBO(206, 186, 9, 1) : const Color.fromRGBO(255, 237, 171, 1);
+
+  Color get statusRed =>
+      isLight ? const Color.fromRGBO(212, 103, 103, 1) : const Color.fromRGBO(255, 180, 171, 1);
 }
 
 extension Neutral on ColorScheme {
-  get neutral0 => const Color(0xFF000000);
+  Color get neutral0 => const Color(0xFF000000);
 
-  get neutral10 => const Color(0xFF191C1D);
+  Color get neutral10 => const Color(0xFF191C1D);
 
-  get neutral20 => const Color(0xFF2E3132);
+  Color get neutral20 => const Color(0xFF2E3132);
 
-  get neutral30 => const Color(0xFF444748);
+  Color get neutral30 => const Color(0xFF444748);
 
-  get neutral40 => const Color(0xFF5C5F5F);
+  Color get neutral40 => const Color(0xFF5C5F5F);
 
-  get neutral50 => const Color(0xFF747878);
+  Color get neutral50 => const Color(0xFF747878);
 
-  get neutral60 => const Color(0xFF8E9192);
+  Color get neutral60 => const Color(0xFF8E9192);
 
-  get neutral70 => const Color(0xFFA9ACAC);
+  Color get neutral70 => const Color(0xFFA9ACAC);
 
-  get neutral80 => const Color(0xFFC4C7C7);
+  Color get neutral80 => const Color(0xFFC4C7C7);
 
-  get neutral90 => const Color(0xFFE1E3E3);
+  Color get neutral90 => const Color(0xFFE1E3E3);
 
-  get neutral95 => const Color(0xFFEFF1F1);
+  Color get neutral95 => const Color(0xFFEFF1F1);
 
-  get neutral99 => const Color(0xFFFAFDFD);
+  Color get neutral99 => const Color(0xFFFAFDFD);
 
-  get neutral100 => const Color(0xFFFFFFFF);
+  Color get neutral100 => const Color(0xFFFFFFFF);
 }
 
 extension NeutralVariant on ColorScheme {
-  get neutralVariant0 => const Color(0xFF000000);
+  Color get neutralVariant0 => const Color(0xFF000000);
 
-  get neutralVariant10 => const Color(0xFF1A1B23);
+  Color get neutralVariant10 => const Color(0xFF1A1B23);
 
-  get neutralVariant20 => const Color(0xFF2F3038);
+  Color get neutralVariant20 => const Color(0xFF2F3038);
 
-  get neutralVariant30 => const Color(0xFF45464F);
+  Color get neutralVariant30 => const Color(0xFF45464F);
 
-  get neutralVariant40 => const Color(0xFF5D5E67);
+  Color get neutralVariant40 => const Color(0xFF5D5E67);
 
-  get neutralVariant50 => const Color(0xFF767680);
+  Color get neutralVariant50 => const Color(0xFF767680);
 
-  get neutralVariant60 => const Color(0xFF90909A);
+  Color get neutralVariant60 => const Color(0xFF90909A);
 
-  get neutralVariant70 => const Color(0xFFABAAB4);
+  Color get neutralVariant70 => const Color(0xFFABAAB4);
 
-  get neutralVariant80 => const Color(0xFFC6C5D0);
+  Color get neutralVariant80 => const Color(0xFFC6C5D0);
 
-  get neutralVariant90 => const Color(0xFFE2E1EC);
+  Color get neutralVariant90 => const Color(0xFFE2E1EC);
 
-  get neutralVariant95 => const Color(0xFFF1F0FA);
+  Color get neutralVariant95 => const Color(0xFFF1F0FA);
 
-  get neutralVariant99 => const Color(0xFFFEFBFF);
+  Color get neutralVariant99 => const Color(0xFFFEFBFF);
 
-  get neutralVariant100 => const Color(0xFFF1F3FF);
+  Color get neutralVariant100 => const Color(0xFFF1F3FF);
 }

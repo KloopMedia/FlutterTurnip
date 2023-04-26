@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/router/routes/campaign_route.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 import 'language_select.dart';
 import 'theme_switch.dart';
@@ -78,7 +80,7 @@ class AppDrawer extends StatelessWidget {
                 leadingPadding: iconPadding,
                 leading: Icon(Icons.grid_view, color: theme.primary),
                 title: Text('Кампании', style: titleTextStyle),
-                onTap: () {},
+                onTap: () => context.goNamed(CampaignRoute.name),
               ),
               CustomListTile(
                 contentPadding: contentPadding,

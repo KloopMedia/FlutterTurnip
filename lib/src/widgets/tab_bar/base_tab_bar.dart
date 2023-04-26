@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
+double calculateTabWidth(BuildContext context) {
+  final formFactor = context.formFactor;
+  final deviceWidth = MediaQuery.of(context).size.width;
+  if (formFactor == FormFactor.desktop) {
+    return deviceWidth / 3;
+  } else if (formFactor == FormFactor.tablet) {
+    return deviceWidth / 2;
+  } else {
+    return double.infinity;
+  }
+}
+
 class BaseTabBar extends StatelessWidget {
   final List<Widget> tabs;
   final bool hidden;

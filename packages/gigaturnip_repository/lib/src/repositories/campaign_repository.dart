@@ -6,6 +6,7 @@ abstract class CampaignRepository extends GigaTurnipRepository<api.Campaign, Cam
 
   CampaignRepository({
     required api.GigaTurnipApiClient gigaTurnipApiClient,
+    super.limit,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
@@ -15,7 +16,7 @@ abstract class CampaignRepository extends GigaTurnipRepository<api.Campaign, Cam
 }
 
 class UserCampaignRepository extends CampaignRepository {
-  UserCampaignRepository({required super.gigaTurnipApiClient});
+  UserCampaignRepository({required super.gigaTurnipApiClient, super.limit});
 
   @override
   Future<api.PaginationWrapper<api.Campaign>> fetchData({Map<String, dynamic>? query}) async {
@@ -24,7 +25,7 @@ class UserCampaignRepository extends CampaignRepository {
 }
 
 class SelectableCampaignRepository extends CampaignRepository {
-  SelectableCampaignRepository({required super.gigaTurnipApiClient});
+  SelectableCampaignRepository({required super.gigaTurnipApiClient, super.limit});
 
   @override
   Future<api.PaginationWrapper<api.Campaign>> fetchData({Map<String, dynamic>? query}) async {

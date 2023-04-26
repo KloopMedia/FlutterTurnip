@@ -8,11 +8,28 @@ abstract class TaskRepository extends GigaTurnipRepository<api.Task, Task> {
   TaskRepository({
     required api.GigaTurnipApiClient gigaTurnipApiClient,
     required this.campaignId,
+    super.limit,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
   List<Task> parseData(List<api.Task> data) {
     return data.map(Task.fromApiModel).toList();
+  }
+}
+
+class AllTaskRepository extends TaskRepository {
+  AllTaskRepository({
+    required super.gigaTurnipApiClient,
+    required super.campaignId,
+    super.limit,
+  });
+
+  @override
+  Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
+    return _gigaTurnipApiClient.getUserRelevantTasks(query: {
+      'stage__chain__campaign': campaignId,
+      ...?query,
+    });
   }
 }
 

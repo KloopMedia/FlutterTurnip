@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../bloc/campaign_cubit.dart';
-import 'campaign_view.dart';
+import 'available_campaign_view.dart';
+import 'user_campaign_view.dart';
 
 class CampaignPage extends StatefulWidget {
   const CampaignPage({Key? key}) : super(key: key);
@@ -18,7 +22,7 @@ class CampaignPage extends StatefulWidget {
 class _CampaignPageState extends State<CampaignPage> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
+    final isGridView = context.isDesktop || context.isTablet;
 
     return MultiBlocProvider(
       providers: [
@@ -26,6 +30,7 @@ class _CampaignPageState extends State<CampaignPage> {
           create: (context) => CampaignCubit(
             SelectableCampaignRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              limit: isGridView ? 9 : 10,
             ),
           )..initialize(),
         ),
@@ -33,38 +38,58 @@ class _CampaignPageState extends State<CampaignPage> {
           create: (context) => CampaignCubit(
             UserCampaignRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              limit: isGridView ? 9 : 10,
             ),
           )..initialize(),
         ),
       ],
-      child: DefaultTabController(
-        length: 2,
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: theme.background,
-            drawerEnableOpenDragGesture: false,
-            drawer: const AppDrawer(),
-            body: Builder(
-              builder: (context) {
-                final formFactor = context.formFactor;
+      child: Builder(builder: (context) {
+        final theme = Theme.of(context).colorScheme;
+        final state = context.read<SelectableCampaignCubit>().state;
+        final hasAvailableCampaigns = state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty;
 
-                if (formFactor == FormFactor.desktop) {
-                  return Row(
-                    children: const [
-                      AppDrawer(),
-                      Expanded(
-                        child: CampaignView(),
+        return DefaultTabController(
+          length: 2,
+          child: SafeArea(
+            child: DefaultAppBar(
+              title: Text(context.loc.campaigns),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                ),
+                FilterButton(
+                  onPressed: () {},
+                ),
+              ],
+              bottom: BaseTabBar(
+                hidden: !hasAvailableCampaigns,
+                width: calculateTabWidth(context),
+                border: context.formFactor == FormFactor.mobile
+                    ? Border(
+                        bottom: BorderSide(
+                          color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
+                          width: 2,
+                        ),
                       )
-                    ],
-                  );
-                } else {
-                  return const CampaignView();
-                }
-              },
+                    : null,
+                tabs: [
+                  Tab(text: context.loc.available_campaigns),
+                  Tab(text: context.loc.campaigns),
+                ],
+              ),
+              child: hasAvailableCampaigns
+                  ? const TabBarView(
+                      children: [
+                        AvailableCampaignView(),
+                        UserCampaignView(),
+                      ],
+                    )
+                  : const UserCampaignView(),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
