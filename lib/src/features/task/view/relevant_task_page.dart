@@ -6,6 +6,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
+import '../widgets/filter_bar.dart';
 
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
@@ -28,6 +29,19 @@ class RelevantTaskPage extends StatelessWidget {
     final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: FilterBar(
+            onChanged: (value) {},
+            filters: const [
+              'Активные',
+              'Возвращенные',
+              'Отправленные',
+              'Не отправленные',
+              'Все',
+              'Памятки'
+            ],
+          ),
+        ),
         AdaptiveListView<Task, RelevantTaskCubit>(
           padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
           itemBuilder: (context, index, item) {
