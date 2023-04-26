@@ -15,10 +15,11 @@ abstract class GigaTurnipRepository<Raw, Data> {
     return (totalWithOffset / limit).floor();
   }
 
-  Future<PageData<Data>> fetchDataOnPage(int page) async {
+  Future<PageData<Data>> fetchDataOnPage(int page, [Map<String, dynamic>? query]) async {
     final paginationQuery = {
       'limit': limit,
       'offset': _calculateOffset(page),
+      ...?query,
     };
     final data = await fetchData(query: paginationQuery);
 

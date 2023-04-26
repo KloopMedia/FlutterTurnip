@@ -5,18 +5,12 @@ class CampaignLoaded extends RemoteDataInitialized<Campaign> {
     required super.data,
     required super.currentPage,
     required super.total,
+    required super.query,
   });
 }
 
 class CampaignInfo extends RemoteDataInitialized<Campaign> {
   final Campaign campaign;
-
-  CampaignInfo({
-    required this.campaign,
-    required super.data,
-    required super.currentPage,
-    required super.total,
-  });
 
   CampaignInfo.clone(RemoteDataInitialized<Campaign> oldState, this.campaign)
       : super.clone(oldState);

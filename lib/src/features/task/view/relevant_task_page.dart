@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -31,15 +32,10 @@ class RelevantTaskPage extends StatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: FilterBar(
-            onChanged: (value) {},
-            filters: const [
-              'Активные',
-              'Возвращенные',
-              'Отправленные',
-              'Не отправленные',
-              'Все',
-              'Памятки'
-            ],
+            onChanged: (value) {
+              context.read<RelevantTaskCubit>().refetchWithFilter(0, value);
+            },
+            filters: taskFilterMap,
           ),
         ),
         AdaptiveListView<Task, RelevantTaskCubit>(

@@ -23,7 +23,7 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage> {
   }
 
   @override
-  Future<PageData<TaskStage>> fetchAndParseData(int page) {
+  Future<PageData<TaskStage>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
     return _repository.fetchDataOnPage(page);
   }
 }
