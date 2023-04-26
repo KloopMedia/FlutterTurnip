@@ -72,6 +72,7 @@ dependencies:
   flutter_downloader: ^1.10.2
   path_provider: ^2.0.14
   dio: ^5.1.1
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:

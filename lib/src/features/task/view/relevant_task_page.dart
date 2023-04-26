@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/task/widgets/task_chain/chain_lines.dart';
+import 'package:gigaturnip/src/features/task/widgets/task_chain/task_chain.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
@@ -136,6 +138,116 @@ class RelevantTaskPage extends StatelessWidget {
                     total: state.total,
                     onChanged: (page) => context.read<ClosedTaskCubit>().fetchData(page),
                     enabled: state is! RemoteDataLoading,
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                          final item = ['sdfghj fhg fghjk fghjk fgjjhgkkjh gjghhjghgk','sdfghj fhg fghjk fghjk fgjjhgkkjh gjghhjghgk','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj','sdfghj',];
+                          // final item = state.data[index];
+                          if (index == 0) {
+                            return Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  color: Colors.cyan,
+                                  height: 150.0,
+                                  child: TaskChain(
+                                    // title: item.stage.name,
+                                    // complete: item.complete,
+                                    title: item[index],
+                                    complete: true,
+                                    lessonNum: index + 1,
+                                    even: index % 2 == 0 ? true : false,
+                                    start: index == 0 ? true : false,
+                                    end: 6 == index + 1 ? true : false,
+                                    // end: state.data.length == index + 1 ? true : false,
+                                  ),
+                                ),
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.flag,
+                                      color: Color(0xFFDFC902),
+                                      size: 50.0,
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(width: 40.0),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          } else if (3 == index + 1) {
+                            return Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  color: Colors.cyan,
+                                  height: 150.0,
+                                  child: TaskChain(
+                                    // title: item.stage.name,
+                                    // complete: item.complete,
+                                    title: item[index],
+                                    complete: true,
+                                    lessonNum: index + 1,
+                                    even: index % 2 == 0 ? true : false,
+                                    start: index == 0 ? true : false,
+                                    end: 6 == index + 1 ? true : false,
+                                    // end: state.data.length == index + 1 ? true : false,
+                                  ),
+                                ),
+
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 40.0),
+                                    straightLine,
+                                    const Icon(
+                                      Icons.star,
+                                      color: Color(0xFFE1E3E3),
+                                      size: 50.0,
+                                    ),
+
+                                    // (index % 2 == 0)
+                                    //   ? const Icon(
+                                    //     Icons.star,
+                                    //     color: Color(0xFFE1E3E3),
+                                    //     size: 50.0,
+                                    //   )
+                                    //   : const SizedBox(width: 40.0),
+                                    // straightLine,
+                                    // (index % 2 != 0)
+                                    //   ? const SizedBox(width: 40.0)
+                                    //   : const Icon(
+                                    //     Icons.star,
+                                    //     color: Color(0xFFE1E3E3),
+                                    //     size: 50.0,
+                                    //   )
+                                  ],
+                                ),
+                              ],
+                            );
+                          } else {
+                            return TaskChain(
+                              // title: item.stage.name,
+                              // complete: item.complete,
+                              title: item[index],
+                              complete: true,
+                              lessonNum: index + 1,
+                              even: index % 2 == 0 ? true : false,
+                              start: index == 0 ? true : false,
+                              end: 6 == index + 1 ? true : false,
+                              // end: state.data.length == index + 1 ? true : false,
+                            );
+                          }
+                        },
+                        // childCount: state.data.length,
+                        childCount: 3,
+                      ),
+                    ),
                   ),
                 ],
               );
