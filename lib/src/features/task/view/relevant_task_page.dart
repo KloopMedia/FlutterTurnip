@@ -5,6 +5,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
@@ -29,10 +30,72 @@ class RelevantTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+    final appBarColor = Theme.of(context).colorScheme.isLight
+        ? const Color.fromRGBO(241, 243, 255, 1)
+        : const Color.fromRGBO(40, 41, 49, 1);
+
+    if (context.isMobile) {
+      return Container(
+        color: Theme.of(context).colorScheme.background,
+        child: CustomScrollView(
+          slivers: [
+            SliverStack(children: [
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: appBarColor,
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(
+                child: PageHeader(
+                  padding: EdgeInsets.only(top: 30, bottom: 20),
+                ),
+              ),
+            ]),
+            SliverToBoxAdapter(
+              child: FilterBar(
+                onChanged: (query) {
+                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
+                },
+                value: taskFilterMap.keys.first,
+                filters: taskFilterMap,
+              ),
+            ),
+            AdaptiveListView<Task, RelevantTaskCubit>(
+              padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+              itemBuilder: (context, index, item) {
+                final cardBody = CardDate(date: item.createdAt);
+
+                if (context.isDesktop || context.isTablet) {
+                  return CardWithTitle(
+                    chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
+                    title: item.name,
+                    size: const Size.fromHeight(165),
+                    flex: 1,
+                    onTap: () => redirectToTask(context, item),
+                    body: cardBody,
+                  );
+                } else {
+                  return CardWithTitle(
+                    chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
+                    title: item.name,
+                    onTap: () => redirectToTask(context, item),
+                    body: cardBody,
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
         const SliverToBoxAdapter(
-          child: PageHeader(),
+          child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
         ),
         SliverToBoxAdapter(
           child: FilterBar(

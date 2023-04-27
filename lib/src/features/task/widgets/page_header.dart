@@ -5,14 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 
 class PageHeader extends StatelessWidget {
-  const PageHeader({Key? key}) : super(key: key);
+  final EdgeInsetsGeometry padding;
+
+  const PageHeader({Key? key, this.padding = EdgeInsets.zero}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      padding: padding,
       child: Column(
         children: [
           BlocBuilder<CampaignDetailBloc, CampaignDetailState>(

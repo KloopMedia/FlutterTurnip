@@ -42,6 +42,9 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isDesktop || context.isTablet;
+    final appBarColor = Theme.of(context).colorScheme.isLight
+        ? const Color.fromRGBO(241, 243, 255, 1)
+        : const Color.fromRGBO(40, 41, 49, 1);
 
     return MultiBlocProvider(
       providers: [
@@ -84,6 +87,8 @@ class _TaskPageState extends State<TaskPage> {
         builder: (context, state) {
           if (state is CampaignInitialized) {
             return DefaultAppBar(
+              color: context.isMobile ? appBarColor : null,
+              boxShadow: context.isDesktop || context.isTablet ? Shadows.elevation1 : null,
               title: Text(state.data.name),
               leading: [
                 if (context.isDesktop || context.isTablet)
