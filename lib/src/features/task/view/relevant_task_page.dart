@@ -32,9 +32,10 @@ class RelevantTaskPage extends StatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: FilterBar(
-            onChanged: (value) {
-              context.read<RelevantTaskCubit>().refetchWithFilter(0, value);
+            onChanged: (query) {
+              context.read<RelevantTaskCubit>().refetchWithFilter(query);
             },
+            value: taskFilterMap.keys.first,
             filters: taskFilterMap,
           ),
         ),

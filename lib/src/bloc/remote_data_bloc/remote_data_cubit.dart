@@ -8,17 +8,18 @@ part 'remote_data_state.dart';
 abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
   RemoteDataCubit() : super(RemoteDataUninitialized());
 
-  Future<void> initialize() async {
+  Future<void> initialize({Map<String, dynamic>? query}) async {
     try {
       emit(RemoteDataFetching());
 
-      final pageData = await fetchAndParseData(0);
+      final pageData = await fetchAndParseData(0, query);
 
       emit(
         RemoteDataLoaded(
           data: pageData.data,
           currentPage: pageData.currentPage,
           total: pageData.total,
+          query: query,
         ),
       );
     } on Exception catch (e, c) {
@@ -69,6 +70,11 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
         ),
       );
     }
+  }
+
+  void refetchWithFilter(Map<String, dynamic>? query) {
+    setFilter(query);
+    fetchData(0);
   }
 
   Future<PageData<Data>> fetchAndParseData(int page, [Map<String, dynamic>? query]);

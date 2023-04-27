@@ -15,31 +15,11 @@ class RelevantTaskCubit extends RemoteDataCubit<Task> with OpenTaskCubit, Closed
   Future<PageData<Task>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
     return _repository.fetchDataOnPage(page, query);
   }
-
-  void refetchWithFilter(int page, TaskFilterOptions filter) {
-    Map<String, dynamic>? query;
-    switch (filter) {
-      case TaskFilterOptions.incomplete:
-        query = {'complete': false};
-        break;
-      case TaskFilterOptions.complete:
-        query = {'complete': true};
-        break;
-      case TaskFilterOptions.returned:
-        break;
-      case TaskFilterOptions.all:
-        break;
-    }
-    super.setFilter(query);
-    super.fetchData(page);
-  }
 }
 
-enum TaskFilterOptions { incomplete, complete, returned, all }
-
 const taskFilterMap = {
-  TaskFilterOptions.incomplete: 'Активные',
-  TaskFilterOptions.returned: 'Возвращенные',
-  TaskFilterOptions.complete: 'Отправленные',
-  TaskFilterOptions.all: 'Все',
+  'Активные': {'complete': false},
+  'Возвращенные': null,
+  'Отправленные': {'complete': true},
+  'Все': null,
 };
