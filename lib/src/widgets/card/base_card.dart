@@ -24,7 +24,7 @@ class BaseCard extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final borderRadius = BorderRadius.circular(15);
     final shape = RoundedRectangleBorder(borderRadius: borderRadius);
-    final backgroundColor = theme.isLight ? theme.primaryContainer : theme.secondaryContainer;
+    final backgroundColor = theme.isLight ? theme.onSecondary : theme.onSecondary;
 
     return GestureDetector(
       onTap: onTap,
