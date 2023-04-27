@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
+import '../widgets/page_header.dart';
 
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
@@ -30,6 +31,9 @@ class RelevantTaskPage extends StatelessWidget {
     final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
     return CustomScrollView(
       slivers: [
+        const SliverToBoxAdapter(
+          child: PageHeader(),
+        ),
         SliverToBoxAdapter(
           child: FilterBar(
             onChanged: (query) {
