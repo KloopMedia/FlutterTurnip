@@ -30,50 +30,6 @@ class RelevantTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
 
-    if (context.isMobile) {
-      return Container(
-        color: Theme.of(context).colorScheme.background,
-        child: CustomScrollView(
-          slivers: [
-            const SliverToBoxAdapter(child: PageHeader()),
-            SliverToBoxAdapter(
-              child: FilterBar(
-                onChanged: (query) {
-                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
-                },
-                value: taskFilterMap.keys.first,
-                filters: taskFilterMap,
-              ),
-            ),
-            AdaptiveListView<Task, RelevantTaskCubit>(
-              padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
-              itemBuilder: (context, index, item) {
-                final cardBody = CardDate(date: item.createdAt);
-
-                if (context.isDesktop || context.isTablet) {
-                  return CardWithTitle(
-                    chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
-                    title: item.name,
-                    size: const Size.fromHeight(165),
-                    flex: 1,
-                    onTap: () => redirectToTask(context, item),
-                    body: cardBody,
-                  );
-                } else {
-                  return CardWithTitle(
-                    chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
-                    title: item.name,
-                    onTap: () => redirectToTask(context, item),
-                    body: cardBody,
-                  );
-                }
-              },
-            ),
-          ],
-        ),
-      );
-    }
-
     return CustomScrollView(
       slivers: [
         const SliverToBoxAdapter(
@@ -93,58 +49,17 @@ class RelevantTaskPage extends StatelessWidget {
           itemBuilder: (context, index, item) {
             final cardBody = CardDate(date: item.createdAt);
 
-            if (context.isDesktop || context.isTablet) {
-              return CardWithTitle(
-                chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
-                title: item.name,
-                size: const Size.fromHeight(165),
-                flex: 1,
-                onTap: () => redirectToTask(context, item),
-                body: cardBody,
-              );
-            } else {
-              return CardWithTitle(
-                chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
-                title: item.name,
-                onTap: () => redirectToTask(context, item),
-                body: cardBody,
-              );
-            }
+            return CardWithTitle(
+              chips: [const CardChip('Placeholder'), const Spacer(), StatusCardChip(item)],
+              title: item.name,
+              size: context.isMobile ? null : const Size.fromHeight(165),
+              flex: context.isMobile ? 0 : 1,
+              onTap: () => redirectToTask(context, item),
+              body: cardBody,
+            );
           },
         ),
       ],
     );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  final Task item;
-
-  const _StatusChip(this.item, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-    final fontColor = theme.isLight ? Colors.white : Colors.black;
-
-    if (item.complete) {
-      return CardChip(
-        'Отправлено',
-        fontColor: fontColor,
-        backgroundColor: theme.statusGreen,
-      );
-    } else if (item.reopened) {
-      return CardChip(
-        'Возвращено',
-        fontColor: fontColor,
-        backgroundColor: theme.statusYellow,
-      );
-    } else {
-      return CardChip(
-        'Не отправлено',
-        fontColor: fontColor,
-        backgroundColor: theme.statusRed,
-      );
-    }
   }
 }
