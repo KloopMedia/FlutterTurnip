@@ -99,7 +99,7 @@ class _TaskPageState extends State<TaskPage> {
                         if (state.data.logo.isNotEmpty) {
                           return Image.network(state.data.logo);
                         } else {
-                          return const Icon(Icons.campaign);
+                          return const Icon(Icons.info_outline);
                         }
                       },
                     ),
