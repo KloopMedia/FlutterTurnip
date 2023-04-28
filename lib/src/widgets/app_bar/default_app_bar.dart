@@ -9,6 +9,8 @@ class DefaultAppBar extends StatelessWidget {
   final Widget? bottom;
   final List<Widget>? leading;
   final List<Widget>? actions;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool automaticallyImplyLeading;
   final Color? color;
   final Color? backgroundColor;
@@ -20,6 +22,8 @@ class DefaultAppBar extends StatelessWidget {
     required this.title,
     this.leading,
     this.actions,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.bottom,
     this.automaticallyImplyLeading = true,
     this.color,
@@ -37,6 +41,8 @@ class DefaultAppBar extends StatelessWidget {
       backgroundColor: backgroundColor ?? theme.background,
       drawerEnableOpenDragGesture: false,
       drawer: const AppDrawer(),
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
       body: Builder(
         builder: (context) {
           if (formFactor == FormFactor.desktop) {

@@ -38,7 +38,7 @@ class AvailableTaskPage extends StatelessWidget {
         ),
         BlocListener<CreatableTaskCubit, RemoteDataState>(
           listener: (context, state) {
-            if (state is TaskCreating) {
+            if (state is TaskCreated) {
               redirectToTask(context, state.createdTaskId);
             }
           },

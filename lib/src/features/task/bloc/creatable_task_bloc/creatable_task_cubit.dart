@@ -12,7 +12,7 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage> {
   Future<void> createTask(TaskStage task) async {
     try {
       final createdTaskId = await _repository.createTask(task.id);
-      emit(TaskCreating.clone(state as RemoteDataLoaded<TaskStage>, createdTaskId));
+      emit(TaskCreated.clone(state as RemoteDataLoaded<TaskStage>, createdTaskId));
     } catch (e, c) {
       if (kDebugMode) {
         print(e);

@@ -1,9 +1,9 @@
 part of 'creatable_task_cubit.dart';
 
-class TaskCreating extends RemoteDataInitialized<TaskStage> {
+class TaskCreated extends RemoteDataInitialized<TaskStage> {
   final int createdTaskId;
 
-  TaskCreating.clone(RemoteDataInitialized<TaskStage> state, this.createdTaskId)
+  TaskCreated.clone(RemoteDataInitialized<TaskStage> state, this.createdTaskId)
       : super.clone(state);
 
   @override

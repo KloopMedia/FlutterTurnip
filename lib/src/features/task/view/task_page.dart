@@ -9,6 +9,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart' hide Notificat
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
+import '../widgets/task_page_floating_action_button.dart';
 import 'relevant_task_page.dart';
 
 class TaskPage extends StatefulWidget {
@@ -42,7 +43,8 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isDesktop || context.isTablet;
-    final appBarColor = Theme.of(context).colorScheme.isLight
+    final theme = Theme.of(context).colorScheme;
+    final appBarColor = theme.isLight
         ? const Color.fromRGBO(241, 243, 255, 1)
         : const Color.fromRGBO(40, 41, 49, 1);
 
@@ -111,6 +113,7 @@ class _TaskPageState extends State<TaskPage> {
                   icon: const Icon(Icons.notifications_outlined),
                 )
               ],
+              floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
               child: RelevantTaskPage(
                 campaignId: widget.campaignId,
               ),
