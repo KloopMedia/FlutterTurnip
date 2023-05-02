@@ -27,8 +27,8 @@
     "opentosee" : "View/Open",
     "close": "Close",
 
-    "sign_in_with_google" : "SIGN IN WITH GOOGLE",
-    "sign_in_with_apple" : "SIGN IN WITH APPLE",
+    "sign_in_with_google" : "Sign in with Google account",
+    "sign_in_with_apple" : "Sign in with Apple ID account",
     "failed_to_load_campaigns" : "Failed to load campaigns",
     "failed_to_load_tasks" : "Failed to load tasks",
     "fetching_error" : "Error occurred while fetching campaigns",

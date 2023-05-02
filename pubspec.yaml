@@ -72,6 +72,8 @@ dependencies:
   flutter_downloader: ^1.10.2
   path_provider: ^2.0.14
   dio: ^5.1.1
+  intl_phone_number_input: ^0.7.3+1
+  pinput: ^2.2.31
 
 dev_dependencies:
   flutter_test:
@@ -101,9 +103,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icon/face_id_icon.png
+    - assets/icon/google_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
