@@ -67,9 +67,9 @@ class _Content extends StatelessWidget {
                 const placeholder =
                     'https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1';
                 if (state is CampaignLoaded && state.data.logo.isNotEmpty) {
-                  return Image.network(state.data.logo, width: 100, height: 100);
+                  return _Avatar(state.data.logo);
                 } else {
-                  return Image.network(placeholder, width: 100, height: 100);
+                  return const _Avatar(placeholder);
                 }
               },
             ),
@@ -83,6 +83,27 @@ class _Content extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Avatar extends StatelessWidget {
+  final String url;
+
+  const _Avatar(this.url, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        boxShadow: Shadows.elevation1,
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: NetworkImage(url),
         ),
       ),
     );

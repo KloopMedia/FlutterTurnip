@@ -9,11 +9,12 @@ const joinCampaignActionRoute = 'join_campaign/';
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';
 const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
+const selectableTaskStageRoute = '${taskStagesRoute}selectable_stages/';
+
 
 // TaskStages actions
 const createTaskActionRoute = 'create_task/';
 const loadDynamicSchema = 'load_schema_answers/';
-const selectableStages = 'selectable_stages/';
 
 // Tasks routes
 const tasksRoute = 'tasks/';

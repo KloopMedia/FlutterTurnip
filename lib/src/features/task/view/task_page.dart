@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
+import 'package:gigaturnip/src/features/task/bloc/selectable_task_stage_bloc/selectable_task_stage_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
@@ -48,12 +49,14 @@ class _TaskPageState extends State<TaskPage> {
         ? const Color.fromRGBO(241, 243, 255, 1)
         : const Color.fromRGBO(40, 41, 49, 1);
 
+    final apiClient = context.read<GigaTurnipApiClient>();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => CampaignDetailBloc(
             repository: CampaignDetailRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              gigaTurnipApiClient: apiClient,
             ),
             campaignId: widget.campaignId,
             campaign: widget.campaign,
@@ -62,7 +65,7 @@ class _TaskPageState extends State<TaskPage> {
         BlocProvider(
           create: (context) => RelevantTaskCubit(
             AllTaskRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
               limit: isGridView ? 9 : 10,
             ),
@@ -71,19 +74,19 @@ class _TaskPageState extends State<TaskPage> {
         BlocProvider(
           create: (context) => CreatableTaskCubit(
             CreatableTaskRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
           )..initialize(),
         ),
-        // BlocProvider(
-        //   create: (context) => AvailableTaskCubit(
-        //     AvailableTaskRepository(
-        //       gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-        //       campaignId: widget.campaignId,
-        //     ),
-        //   )..initialize(),
-        // ),
+        BlocProvider(
+          create: (context) => SelectableTaskStageCubit(
+            SelectableTaskStageRepository(
+              gigaTurnipApiClient: apiClient,
+              campaignId: widget.campaignId,
+            ),
+          )..initialize(),
+        ),
       ],
       child: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
         builder: (context, state) {

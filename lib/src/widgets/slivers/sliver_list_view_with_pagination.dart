@@ -30,7 +30,7 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
         if (state is RemoteDataFailed<Data>) {
           return SliverToBoxAdapter(child: Center(child: Text(state.error)));
         }
-        if (state is RemoteDataLoaded<Data>) {
+        if (state is RemoteDataInitialized<Data>) {
           return MultiSliver(children: [
             SliverToBoxAdapter(child: header),
             SliverPadding(

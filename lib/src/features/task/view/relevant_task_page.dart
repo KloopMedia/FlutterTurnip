@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -16,13 +17,20 @@ class RelevantTaskPage extends StatelessWidget {
   const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
 
   void redirectToTask(BuildContext context, Task task) {
-    context.goNamed(
+    context.pushNamed(
       TaskDetailRoute.name,
       params: {
         'cid': '$campaignId',
         'tid': '${task.id}',
       },
       extra: task,
+    );
+  }
+
+  void redirectToAvailableTasks(BuildContext context, TaskStage task) {
+    context.goNamed(
+      AvailableTaskRoute.name,
+      params: {'cid': '$campaignId', 'tid': '${task.id}'},
     );
   }
 
@@ -34,6 +42,9 @@ class RelevantTaskPage extends StatelessWidget {
       slivers: [
         const SliverToBoxAdapter(
           child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
+        ),
+        AvailableTaskStages(
+          onTap: (item) => redirectToAvailableTasks(context, item),
         ),
         SliverToBoxAdapter(
           child: FilterBar(
