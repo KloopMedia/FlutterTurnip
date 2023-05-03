@@ -113,16 +113,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
           minVerticalPadding: 15.0,
           contentPadding: const EdgeInsets.all(0.0),
           title: Text(
-            'Добро пожаловать!',
+            context.loc.welcome,
             style: titleTextStyle,
           ),
           subtitle: Text(
-            'Авторизуйтесь или зарегистрируйтесь, чтобы продолжить',
+            context.loc.sign_in_or_sign_up,
             style: subtitleTextStyle,
           ),
         ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              context.loc.enter_phone_number,
+              style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: theme.neutral30
+              ),
+            ),
+            const SizedBox(height: 15.0),
             Row(
               children: <Widget>[
                 Expanded(
@@ -130,7 +140,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     padding: const EdgeInsets.all(6.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(15.0),
                       color: theme.neutral95,
                     ),
                     child: Stack(
@@ -159,8 +169,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                         ),
                         Positioned(
-                          left: 8,
-                          top: 12,
+                          left: 8.0,
+                          top: 12.0,
                           child: Icon(
                             Icons.keyboard_arrow_down,
                             size: 24.0,
@@ -181,7 +191,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 13.0),
                     child: Text(
-                      'или',
+                      context.loc.or,
                       style: dividerTextStyle,
                     ),
                   ),
@@ -190,14 +200,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             ),
             _GoogleLoginButton(),
-            const SizedBox(height: 15),
+            const SizedBox(height: 15.0),
             _AppleLoginButton(),
           ],
         ),
         Column(
           children: [
             SignUpButton(onPressed: null),
-            const SizedBox(height: 20),
+            const SizedBox(height: 20.0),
             SignInButton(onPressed: null),
           ],
         ),
@@ -214,8 +224,8 @@ class _GoogleLoginButton extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final textStyle = TextStyle(
       fontSize: 16.sp,
-      fontWeight: FontWeight.w400,
-      color: theme.neutral30,
+      fontWeight: FontWeight.w500,
+      color: theme.neutral0.withOpacity(0.5),
     );
 
     return
@@ -225,27 +235,26 @@ class _GoogleLoginButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
           style: ElevatedButton.styleFrom(
-            elevation: 0.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
             side: BorderSide(
-              color: const Color(0xFF0E222F).withOpacity(0.2),
+              color: theme.neutral0.withOpacity(0.5),
             ),
             backgroundColor: theme.onPrimary,
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/icon/google_icon.png',
                 height: 24.0,
               ),
-              Expanded(
-                child: Text(
-                  context.loc.sign_in_with_google,
-                  style: textStyle,
-                  textAlign: TextAlign.center,
-                ),
+              const SizedBox(width: 15.0),
+              Text(
+                context.loc.continue_with_google,
+                style: textStyle,
+                textAlign: TextAlign.center,
               )
             ],
           )
@@ -262,8 +271,8 @@ class _AppleLoginButton extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final textStyle = TextStyle(
       fontSize: 16.sp,
-      fontWeight: FontWeight.w400,
-      color: theme.neutral30,
+      fontWeight: FontWeight.w500,
+      color: theme.neutral100,
     );
 
     return SizedBox(
@@ -271,28 +280,24 @@ class _AppleLoginButton extends StatelessWidget {
       height: 52.0,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          elevation: 0.0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(15.0),
           ),
-          side:  BorderSide(
-            color: const Color(0xFF0E222F).withOpacity(0.2),
-          ),
-          backgroundColor: theme.onPrimary,
+          backgroundColor: theme.neutral0.withOpacity(0.9),
         ),
         onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/icon/face_id_icon.png',
+              'assets/icon/apple_icon.png',
               height: 24.0,
             ),
-            Expanded(
-              child: Text(
-                context.loc.sign_in_with_apple,
-                style: textStyle,
-                textAlign: TextAlign.center,
-              ),
+            const SizedBox(width: 15.0),
+            Text(
+              context.loc.continue_with_apple,
+              style: textStyle,
+              textAlign: TextAlign.center,
             ),
           ],
         ),

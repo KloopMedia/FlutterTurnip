@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 class SignInButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class SignInButton extends StatelessWidget {
         text: TextSpan(
             children: [
               TextSpan(
-                text: 'У Вас уже есть аккаунт? ',
+                text: context.loc.have_an_account,
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
@@ -24,7 +25,7 @@ class SignInButton extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                  text: 'Авторизуйтесь',
+                  text: context.loc.sign_in,
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w400,

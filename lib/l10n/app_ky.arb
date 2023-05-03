@@ -1,4 +1,18 @@
 {
+    "welcome": "Кош келиңиз!",
+    "sign_in_or_sign_up": "Улантуу үчүн кириңиз же катталыңыз",
+    "sign_in": "Кириңиз",
+    "continue_with_google": "Google менен улантуу",
+    "continue_with_apple": "Apple менен улантуу",
+    "have_an_account": "Сиздин аккаунтуңуз барбы? ",
+    "enter_phone_number": "Телефон номериңизди киргизиңиз",
+    "phone_number_verification": "Телефон номерин текшерүү",
+    "enter_code": "Номериңизге жөнөтүлгөн 4 орундуу кодду киргизиңиз",
+    "received_code": "Код алынган жокпу?",
+    "resend_code": "Кайра жөнөтүү",
+    "further": "Андан ары",
+    "or": "же",
+
     "login" : "Кирүү",
     "logout_from_email" : "Почтадан Чыгуу",
     "home" : "Башкы бет",

@@ -1,3 +1,4 @@
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +52,7 @@ class _VerificationPageState extends State<StatefulWidget> {
     final textButtonStyle = TextStyle(
       fontSize: 14.sp,
       fontWeight: FontWeight.w400,
-      color: theme.neutral70,
+      color: theme.primary,
     );
     final defaultPinTheme = PinTheme(
       height: 54,
@@ -69,15 +70,17 @@ class _VerificationPageState extends State<StatefulWidget> {
       padding: const EdgeInsets.only(top: 15.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Подтверждение номера телефона',
+            context.loc.phone_number_verification,
             style: titleTextStyle,
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Введите 4-значный код, отправленный на Ваш номер',
+                context.loc.enter_code,
                 style: textStyle,
               ),
               const SizedBox(height: 15.0),
@@ -107,12 +110,12 @@ class _VerificationPageState extends State<StatefulWidget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 14.0),
+              const SizedBox(height: 10.0),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Не пришел код?',
+                      context.loc.received_code,
                       style: subtitleTextStyle,
                     ),
                     TextButton(
@@ -121,7 +124,7 @@ class _VerificationPageState extends State<StatefulWidget> {
                         padding: MaterialStatePropertyAll(EdgeInsets.all(0.0)),
                       ),
                       child: Text(
-                        'Отправить повторно 45 сек.',
+                        context.loc.resend_code,
                         style: textButtonStyle,
                       ),
                     ),
