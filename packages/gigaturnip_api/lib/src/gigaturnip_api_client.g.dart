@@ -522,7 +522,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
             .compose(
               _dio.options,
-              'taskstages/selectable_stages/',
+              'taskstages/selectable/',
               queryParameters: queryParameters,
               data: _data,
             )
