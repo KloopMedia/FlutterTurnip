@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
+import 'package:gigaturnip/src/features/task/bloc/selectable_task_stage_bloc/selectable_task_stage_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
@@ -9,6 +10,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart' hide Notificat
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
+import '../widgets/task_page_floating_action_button.dart';
 import 'relevant_task_page.dart';
 
 class TaskPage extends StatefulWidget {
@@ -42,13 +44,19 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isDesktop || context.isTablet;
+    final theme = Theme.of(context).colorScheme;
+    final appBarColor = theme.isLight
+        ? const Color.fromRGBO(241, 243, 255, 1)
+        : const Color.fromRGBO(40, 41, 49, 1);
+
+    final apiClient = context.read<GigaTurnipApiClient>();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => CampaignDetailBloc(
             repository: CampaignDetailRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              gigaTurnipApiClient: apiClient,
             ),
             campaignId: widget.campaignId,
             campaign: widget.campaign,
@@ -57,24 +65,24 @@ class _TaskPageState extends State<TaskPage> {
         BlocProvider(
           create: (context) => RelevantTaskCubit(
             AllTaskRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
               limit: isGridView ? 9 : 10,
             ),
-          )..initialize(),
+          )..initialize(query: taskFilterMap.values.first),
         ),
         BlocProvider(
           create: (context) => CreatableTaskCubit(
             CreatableTaskRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
           )..initialize(),
         ),
         BlocProvider(
-          create: (context) => AvailableTaskCubit(
-            AvailableTaskRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+          create: (context) => SelectableTaskStageCubit(
+            SelectableTaskStageRepository(
+              gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
           )..initialize(),
@@ -84,6 +92,8 @@ class _TaskPageState extends State<TaskPage> {
         builder: (context, state) {
           if (state is CampaignInitialized) {
             return DefaultAppBar(
+              color: context.isMobile ? appBarColor : null,
+              boxShadow: context.isDesktop || context.isTablet ? Shadows.elevation1 : null,
               title: Text(state.data.name),
               leading: [
                 if (context.isDesktop || context.isTablet)
@@ -94,7 +104,7 @@ class _TaskPageState extends State<TaskPage> {
                         if (state.data.logo.isNotEmpty) {
                           return Image.network(state.data.logo);
                         } else {
-                          return const Icon(Icons.campaign);
+                          return const Icon(Icons.info_outline);
                         }
                       },
                     ),
@@ -106,6 +116,7 @@ class _TaskPageState extends State<TaskPage> {
                   icon: const Icon(Icons.notifications_outlined),
                 )
               ],
+              floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
               child: RelevantTaskPage(
                 campaignId: widget.campaignId,
               ),

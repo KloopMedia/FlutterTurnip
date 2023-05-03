@@ -16,7 +16,7 @@ class CardDescription extends StatelessWidget {
       text!,
       style: TextStyle(
         fontSize: 16.sp,
-        color: const Color(0xFF45464F),
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
       overflow: TextOverflow.ellipsis,
     );

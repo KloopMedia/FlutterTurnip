@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/task/widgets/task_chain/chain_lines.dart';
 import 'package:gigaturnip/src/features/task/widgets/task_chain/task_chain.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
+import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -8,6 +11,8 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
+import '../widgets/filter_bar.dart';
+import '../widgets/page_header.dart';
 
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
@@ -15,7 +20,7 @@ class RelevantTaskPage extends StatelessWidget {
   const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
 
   void redirectToTask(BuildContext context, Task task) {
-    context.goNamed(
+    context.pushNamed(
       TaskDetailRoute.name,
       params: {
         'cid': '$campaignId',
@@ -25,33 +30,47 @@ class RelevantTaskPage extends StatelessWidget {
     );
   }
 
+  void redirectToAvailableTasks(BuildContext context, TaskStage task) {
+    context.goNamed(
+      AvailableTaskRoute.name,
+      params: {'cid': '$campaignId', 'tid': '${task.id}'},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+
     return CustomScrollView(
       slivers: [
+        const SliverToBoxAdapter(
+          child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
+        ),
+        AvailableTaskStages(
+          onTap: (item) => redirectToAvailableTasks(context, item),
+        ),
+        SliverToBoxAdapter(
+          child: FilterBar(
+            onChanged: (query) {
+              context.read<RelevantTaskCubit>().refetchWithFilter(query);
+            },
+            value: taskFilterMap.keys.first,
+            filters: taskFilterMap,
+          ),
+        ),
         AdaptiveListView<Task, RelevantTaskCubit>(
           padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
           itemBuilder: (context, index, item) {
             final cardBody = CardDate(date: item.createdAt);
 
-            if (context.isDesktop || context.isTablet) {
-              return CardWithTitle(
-                chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
-                title: item.name,
-                size: const Size.fromHeight(165),
-                flex: 1,
-                onTap: () => redirectToTask(context, item),
-                body: cardBody,
-              );
-            } else {
-              return CardWithTitle(
-                chips: [const CardChip('Placeholder'), const Spacer(), _StatusChip(item)],
-                title: item.name,
-                onTap: () => redirectToTask(context, item),
-                body: cardBody,
-              );
-            }
+            return CardWithTitle(
+              chips: [const CardChip('Placeholder'), const Spacer(), StatusCardChip(item)],
+              title: item.name,
+              size: context.isMobile ? null : const Size.fromHeight(165),
+              flex: context.isMobile ? 0 : 1,
+              onTap: () => redirectToTask(context, item),
+              body: cardBody,
+            );
           },
         ),
         SliverPadding(
@@ -119,37 +138,5 @@ class RelevantTaskPage extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  final Task item;
-
-  const _StatusChip(this.item, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-    final fontColor = theme.isLight ? Colors.white : Colors.black;
-
-    if (item.complete) {
-      return CardChip(
-        'Отправлено',
-        fontColor: fontColor,
-        backgroundColor: theme.statusGreen,
-      );
-    } else if (item.reopened) {
-      return CardChip(
-        'Возвращено',
-        fontColor: fontColor,
-        backgroundColor: theme.statusYellow,
-      );
-    } else {
-      return CardChip(
-        'Не отправлено',
-        fontColor: fontColor,
-        backgroundColor: theme.statusRed,
-      );
-    }
   }
 }

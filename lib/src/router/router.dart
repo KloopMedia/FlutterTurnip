@@ -79,6 +79,7 @@ class AppRouter {
         CampaignRoute(parentKey: _rootNavigatorKey).route,
         CampaignDetailRoute(parentKey: _rootNavigatorKey).route,
         TaskRoute(parentKey: _rootNavigatorKey).route,
+        AvailableTaskRoute(parentKey: _rootNavigatorKey).route,
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
         NotificationRoute(parentKey: _rootNavigatorKey).route,
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,

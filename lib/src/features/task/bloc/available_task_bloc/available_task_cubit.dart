@@ -25,7 +25,7 @@ class AvailableTaskCubit extends RemoteDataCubit<Task> {
   }
 
   @override
-  Future<PageData<Task>> fetchAndParseData(int page) {
+  Future<PageData<Task>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
     return _repository.fetchDataOnPage(page);
   }
 }

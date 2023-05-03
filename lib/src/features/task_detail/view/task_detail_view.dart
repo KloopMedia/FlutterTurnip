@@ -34,7 +34,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   @override
   void initState() {
     if (!kIsWeb) {
-
       IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
       _port.listen((dynamic data) {
         // String id = data[0];
@@ -72,12 +71,16 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         },
       );
     } else {
-      context.goNamed(
-        TaskRoute.name,
-        params: {
-          'cid': '${widget.campaignId}',
-        },
-      );
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.goNamed(
+          TaskRoute.name,
+          params: {
+            'cid': '${widget.campaignId}',
+          },
+        );
+      }
     }
   }
 

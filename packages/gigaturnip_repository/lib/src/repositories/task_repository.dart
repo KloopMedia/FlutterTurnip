@@ -60,12 +60,19 @@ class OpenTaskRepository extends TaskRepository {
 }
 
 class AvailableTaskRepository extends TaskRepository {
-  AvailableTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
+  final int stageId;
+
+  AvailableTaskRepository({
+    required super.gigaTurnipApiClient,
+    required super.campaignId,
+    required this.stageId,
+  });
 
   @override
   Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
     return _gigaTurnipApiClient.getUserSelectableTasks(
       query: {
+        'stage': stageId,
         'stage__chain__campaign': campaignId,
         ...?query,
       },
@@ -104,5 +111,30 @@ class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskSt
   Future<int> createTask(int id) async {
     final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
     return response.id;
+  }
+}
+
+class SelectableTaskStageRepository extends GigaTurnipRepository<api.TaskStage, TaskStage> {
+  final api.GigaTurnipApiClient _gigaTurnipApiClient;
+  final int campaignId;
+
+  SelectableTaskStageRepository({
+    required api.GigaTurnipApiClient gigaTurnipApiClient,
+    required this.campaignId,
+  }) : _gigaTurnipApiClient = gigaTurnipApiClient;
+
+  @override
+  Future<api.PaginationWrapper<api.TaskStage>> fetchData({Map<String, dynamic>? query}) {
+    return _gigaTurnipApiClient.getSelectableTaskStages(
+      query: {
+        'chain__campaign': campaignId,
+        ...?query,
+      },
+    );
+  }
+
+  @override
+  List<TaskStage> parseData(List<api.TaskStage> data) {
+    return data.map(TaskStage.fromApiModel).toList();
   }
 }

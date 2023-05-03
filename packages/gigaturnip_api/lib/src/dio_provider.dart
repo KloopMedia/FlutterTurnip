@@ -24,6 +24,10 @@ class ApiInterceptor extends Interceptor {
 
     options.contentType ??= Headers.jsonContentType;
 
+    if (!options.path.endsWith('/')) {
+      options.path = '${options.path}/';
+    }
+
     return handler.next(options);
   }
 }

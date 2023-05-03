@@ -9,7 +9,12 @@ class DefaultAppBar extends StatelessWidget {
   final Widget? bottom;
   final List<Widget>? leading;
   final List<Widget>? actions;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool automaticallyImplyLeading;
+  final Color? color;
+  final Color? backgroundColor;
+  final List<BoxShadow>? boxShadow;
   final Widget child;
 
   const DefaultAppBar({
@@ -17,8 +22,13 @@ class DefaultAppBar extends StatelessWidget {
     required this.title,
     this.leading,
     this.actions,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.bottom,
     this.automaticallyImplyLeading = true,
+    this.color,
+    this.backgroundColor,
+    this.boxShadow,
     required this.child,
   }) : super(key: key);
 
@@ -28,9 +38,11 @@ class DefaultAppBar extends StatelessWidget {
     final formFactor = context.formFactor;
 
     return Scaffold(
-      backgroundColor: theme.background,
+      backgroundColor: backgroundColor ?? theme.background,
       drawerEnableOpenDragGesture: false,
       drawer: const AppDrawer(),
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
       body: Builder(
         builder: (context) {
           if (formFactor == FormFactor.desktop) {
@@ -46,6 +58,8 @@ class DefaultAppBar extends StatelessWidget {
                         actions: actions,
                         bottom: bottom,
                         automaticallyImplyLeading: false,
+                        color: color,
+                        boxShadow: boxShadow,
                       ),
                       Expanded(
                         child: child,
@@ -64,6 +78,8 @@ class DefaultAppBar extends StatelessWidget {
                   actions: actions,
                   bottom: bottom,
                   automaticallyImplyLeading: automaticallyImplyLeading,
+                  color: color,
+                  boxShadow: boxShadow,
                 ),
                 Expanded(
                   child: child,
@@ -83,6 +99,8 @@ class _DefaultAppBar extends StatelessWidget {
   final List<Widget>? leading;
   final List<Widget>? actions;
   final bool automaticallyImplyLeading;
+  final Color? color;
+  final List<BoxShadow>? boxShadow;
 
   const _DefaultAppBar({
     Key? key,
@@ -91,11 +109,14 @@ class _DefaultAppBar extends StatelessWidget {
     this.leading,
     this.actions,
     this.automaticallyImplyLeading = true,
+    this.color,
+    this.boxShadow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final defaultAppBarColor = theme.isLight ? Colors.white : theme.background;
 
     final defaultLeadingButton = automaticallyImplyLeading
         ? IconButton(
@@ -108,10 +129,13 @@ class _DefaultAppBar extends StatelessWidget {
 
     return BaseAppBar(
       iconTheme: IconThemeData(color: theme.isLight ? theme.neutral30 : theme.neutral90),
-      backgroundColor: theme.surface,
+      backgroundColor: color ?? defaultAppBarColor,
+      boxShadow: boxShadow,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      titleSpacing: context.formFactor == FormFactor.mobile ? 23 : 17,
-      border: const Border(bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
+      titleSpacing: context.isMobile ? 23 : 17,
+      border: context.isDesktop || context.isTablet
+          ? const Border(bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1))
+          : null,
       leading: [if (defaultLeadingButton != null) defaultLeadingButton, ...?leading],
       title: DefaultTextStyle(
         style: TextStyle(
