@@ -5,38 +5,21 @@ Widget straightLine = Expanded(
   child: Row(
     children: List.generate(19, (index) => Expanded(
       child: Container(
-        // color: index % 2 == 0
-        //     ? Colors.transparent
-        //     : Colors.blueAccent,
+        //grey line => light=neutral90, dark=neutral20
+        color: index % 2 == 0
+            ? Colors.transparent
+            : const Color(0xFF96ADFF), //dark=DFE6FF
         height: 5,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: index % 2 == 0
-              ? Colors.transparent
-              : Colors.blueAccent,
-        ),
+        // decoration: BoxDecoration(
+        //   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        //   color: index % 2 == 0
+        //       ? Colors.transparent
+        //       : const Color(0xFF96ADFF),
+        // ),
       ),
     )),
   ),
 );
-
-// class StraightLineWithPadding extends StatelessWidget {
-//   final bool rightPadding;
-//
-//   const StraightLineWithPadding({Key? key, required this.rightPadding}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         if (rightPadding) const SizedBox(width: 40.0),
-//         straightLine,
-//         if (!rightPadding) const SizedBox(width: 40.0),
-//       ],
-//     );
-//   }
-// }
-
 
 class CurveLeftLine extends CustomPainter {
   @override

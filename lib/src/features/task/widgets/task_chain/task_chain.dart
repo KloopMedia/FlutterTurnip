@@ -10,8 +10,6 @@ class TaskChain extends StatelessWidget {
   final bool complete;
   final int lessonNum;
   final bool even;
-  final bool start;
-  final bool end;
 
   const TaskChain({
     Key? key,
@@ -19,8 +17,6 @@ class TaskChain extends StatelessWidget {
     required this.complete,
     required this.lessonNum,
     required this.even,
-    required this.start,
-    required this.end,
   }) : super(key: key);
 
   @override
@@ -36,9 +32,8 @@ class TaskChain extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       children: [
         even ? rightSide : leftSide,
-        Container(
+        SizedBox(
           height: 90.0,
-          // color: Colors.black26,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
@@ -90,11 +85,8 @@ class LessonIcon extends StatelessWidget {
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
             colors: [
-              Colors.blueAccent,
-              Colors.lightBlueAccent
-              // light/dark
-              // Color[0xFFC0CEFF],
-              // Color[0xFF94A9F0],
+              Color(0xFFC0CEFF),
+              Color(0xFF94A9F0),
             ],
           )
       ),
@@ -108,7 +100,7 @@ class LessonIcon extends StatelessWidget {
                 width: 37.0,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  color: Color(0xFF748AD9),// light/dark
+                  color: Color(0xFF748AD9),
                 ),
               ),
             ),
@@ -124,35 +116,39 @@ class LessonIcon extends StatelessWidget {
   }
 }
 
-Widget rightSide = Row(
-  mainAxisAlignment: MainAxisAlignment.end,
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    const SizedBox(width: 40.0),
-    straightLine,
-    Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: CustomPaint(
-        size: const Size(40, 120),
-        painter: CurveRightLine(),
-      ),
+Widget flagIcon = Row(
+  children: const [
+    Icon(
+      Icons.flag,
+      color: Color(0xFFDFC902),
+      size: 50.0,
+    ),
+    Expanded(
+      child: SizedBox(width: 40.0),
     ),
   ],
 );
 
-Widget leftSide =  Row(
-  mainAxisAlignment: MainAxisAlignment.start,
-  crossAxisAlignment: CrossAxisAlignment.start,
+Widget leftStarIcon = Row(
   children: [
-    Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: CustomPaint(
-        size: const Size(40, 120),
-        painter: CurveLeftLine(),
-      ),
+    const Icon(
+      Icons.star,
+      color: Color(0xFF5D5E67),
+      size: 50.0,
     ),
     straightLine,
     const SizedBox(width: 40.0),
   ],
 );
 
+Widget rightStarIcon = Row(
+  children: [
+    const SizedBox(width: 40.0),
+    straightLine,
+    const Icon(
+      Icons.star,
+      color: Color(0xFF5D5E67),
+      size: 50.0,
+    )
+  ],
+);

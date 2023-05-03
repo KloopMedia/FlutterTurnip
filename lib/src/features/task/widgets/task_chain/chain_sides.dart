@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'chain_lines.dart';
 
 Widget rightSide = Row(

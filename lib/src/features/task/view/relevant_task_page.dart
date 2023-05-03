@@ -67,7 +67,6 @@ class RelevantTaskPage extends StatelessWidget {
                     children: [
                       Container(
                         alignment: Alignment.bottomCenter,
-                        color: Colors.cyan,
                         height: 150.0,
                         child: TaskChain(
                           // title: item.stage.name,
@@ -76,23 +75,9 @@ class RelevantTaskPage extends StatelessWidget {
                           complete: true,
                           lessonNum: index + 1,
                           even: index % 2 == 0 ? true : false,
-                          start: index == 0 ? true : false,
-                          end: 6 == index + 1 ? true : false,
-                          // end: state.data.length == index + 1 ? true : false,
                         ),
                       ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.flag,
-                            color: Color(0xFFDFC902),
-                            size: 50.0,
-                          ),
-                          Expanded(
-                            child: SizedBox(width: 40.0),
-                          ),
-                        ],
-                      ),
+                      flagIcon,
                     ],
                   );
                 } else if (3 == index + 1) {
@@ -101,7 +86,6 @@ class RelevantTaskPage extends StatelessWidget {
                     children: [
                       Container(
                         alignment: Alignment.topCenter,
-                        color: Colors.cyan,
                         height: 150.0,
                         child: TaskChain(
                           // title: item.stage.name,
@@ -110,39 +94,11 @@ class RelevantTaskPage extends StatelessWidget {
                           complete: true,
                           lessonNum: index + 1,
                           even: index % 2 == 0 ? true : false,
-                          start: index == 0 ? true : false,
-                          end: 6 == index + 1 ? true : false,
-                          // end: state.data.length == index + 1 ? true : false,
                         ),
                       ),
 
-                      Row(
-                        children: [
-                          const SizedBox(width: 40.0),
-                          straightLine,
-                          const Icon(
-                            Icons.star,
-                            color: Color(0xFFE1E3E3),
-                            size: 50.0,
-                          ),
-
-                          // (index % 2 == 0)
-                          //   ? const Icon(
-                          //     Icons.star,
-                          //     color: Color(0xFFE1E3E3),
-                          //     size: 50.0,
-                          //   )
-                          //   : const SizedBox(width: 40.0),
-                          // straightLine,
-                          // (index % 2 != 0)
-                          //   ? const SizedBox(width: 40.0)
-                          //   : const Icon(
-                          //     Icons.star,
-                          //     color: Color(0xFFE1E3E3),
-                          //     size: 50.0,
-                          //   )
-                        ],
-                      ),
+                      if (index % 2 == 0) leftStarIcon,
+                      if (index % 2 != 0) rightStarIcon,
                     ],
                   );
                 } else {
@@ -153,9 +109,6 @@ class RelevantTaskPage extends StatelessWidget {
                     complete: true,
                     lessonNum: index + 1,
                     even: index % 2 == 0 ? true : false,
-                    start: index == 0 ? true : false,
-                    end: 6 == index + 1 ? true : false,
-                    // end: state.data.length == index + 1 ? true : false,
                   );
                 }
               },
