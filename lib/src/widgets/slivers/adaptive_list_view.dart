@@ -9,6 +9,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
   final double mainAxisSpacing;
   final double crossAxisSpacing;
   final double contentPadding;
+  final bool fillRow;
   final Widget Function(BuildContext context, int index, Data item) itemBuilder;
 
   const AdaptiveListView({
@@ -19,6 +20,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
     this.mainAxisSpacing = 30,
     this.crossAxisSpacing = 20,
     this.contentPadding = 10,
+    this.fillRow = false,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
         crossAxisSpacing: crossAxisSpacing,
         crossAxisCount: crossAxisCount,
         itemBuilder: itemBuilder,
+        fillRow: fillRow,
       );
     } else {
       return SliverListViewWithPagination<Data, Cubit>(

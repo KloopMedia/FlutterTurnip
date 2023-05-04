@@ -71,11 +71,21 @@ class _TaskPageState extends State<TaskPage> {
             ),
           )..initialize(query: taskFilterMap.values.first),
         ),
-        BlocProvider(
+        BlocProvider<ReactiveTasks>(
           create: (context) => CreatableTaskCubit(
             CreatableTaskRepository(
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
+              isProactive: false,
+            ),
+          )..initialize(),
+        ),
+        BlocProvider<ProactiveTasks>(
+          create: (context) => CreatableTaskCubit(
+            CreatableTaskRepository(
+              gigaTurnipApiClient: apiClient,
+              campaignId: widget.campaignId,
+              isProactive: true,
             ),
           )..initialize(),
         ),

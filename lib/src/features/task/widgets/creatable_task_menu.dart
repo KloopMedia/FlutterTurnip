@@ -33,7 +33,7 @@ class CreatableTaskMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          BlocConsumer<CreatableTaskCubit, RemoteDataState<TaskStage>>(
+          BlocConsumer<ProactiveTasks, RemoteDataState<TaskStage>>(
             listener: (context, state) {
               if (state is TaskCreated) {
                 redirectToTask(context, state.createdTaskId);

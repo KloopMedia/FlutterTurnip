@@ -24,7 +24,7 @@ class TaskPageFloatingActionButton extends StatelessWidget {
               context: context,
               builder: (_) {
                 return BlocProvider.value(
-                  value: context.read<CreatableTaskCubit>(),
+                  value: context.read<ProactiveTasks>(),
                   child: CreatableTaskMenu(campaignId: campaignId),
                 );
               });
