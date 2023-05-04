@@ -1,10 +1,13 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/features/login/widget/login_provider_button.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../widgets/button/sign_in_button.dart';
 import '../../../widgets/button/sign_up_button.dart';
 import '../bloc/login_bloc.dart';
@@ -44,32 +47,8 @@ class LoginView extends StatelessWidget {
   }
 }
 
-class RegistrationPage extends StatefulWidget {
+class RegistrationPage extends StatelessWidget {
   const RegistrationPage({Key? key}) : super(key: key);
-
-  @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
-}
-
-class _RegistrationPageState extends State<RegistrationPage> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  final TextEditingController controller = TextEditingController();
-  PhoneNumber number = PhoneNumber(isoCode: 'KG');
-
-  // void getPhoneNumber(String phoneNumber) async {
-  //   PhoneNumber number = await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
-  //
-  //   setState(() {
-  //     this.number = number;
-  //   });
-  // }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +57,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       fontSize: 16.sp,
       fontWeight: FontWeight.w400,
       color: theme.neutral30,
-    );
-    final selectorTextStyle = TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w400,
-      color: theme.neutral40,
-    );
-    final hintStyle = TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w400,
-      color: theme.neutral80,
     );
     final dividerTextStyle = TextStyle(
       fontSize: 12.sp,
@@ -100,10 +69,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       color: theme.neutral30,
     );
     final divider = Expanded(
-      child: Divider(
-          thickness: 1.5,
-          color: const Color(0xFF0E222F).withOpacity(0.1)
-      ),
+      child: Divider(thickness: 1.5, color: const Color(0xFF0E222F).withOpacity(0.1)),
     );
 
     return Column(
@@ -121,93 +87,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
             style: subtitleTextStyle,
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.loc.enter_phone_number,
-              style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: theme.neutral30
-              ),
-            ),
-            const SizedBox(height: 15.0),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: theme.neutral95,
-                    ),
-                    child: Stack(
-                      children: [
-                        InternationalPhoneNumberInput(
-                          onInputChanged: (PhoneNumber number) {},
-                          onInputValidated: (bool value) {},
-                          onSaved: (PhoneNumber number) {},
-                          selectorConfig: const SelectorConfig(
-                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                            trailingSpace: false,
-                            leadingPadding: 40.0,
-                          ),
-                          selectorTextStyle: selectorTextStyle,
-                          initialValue: number,
-                          textFieldController: controller,
-                          maxLength: 11,
-                          inputDecoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(bottom: 13.0),
-                            border: InputBorder.none,
-                            hintText: 'xxx-xxx-xxx',
-                            hintStyle: hintStyle,
-                          ),
-                          spaceBetweenSelectorAndTextField: 0.0,
-                          textStyle: selectorTextStyle,
-                          keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                        ),
-                        Positioned(
-                          left: 8.0,
-                          top: 12.0,
-                          child: Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 24.0,
-                            color: theme.neutral30,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+        const PhoneNumberField(),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Row(
+            children: [
+              divider,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                child: Text(
+                  context.loc.or,
+                  style: dividerTextStyle,
                 ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: Row(
-                children: [
-                  divider,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 13.0),
-                    child: Text(
-                      context.loc.or,
-                      style: dividerTextStyle,
-                    ),
-                  ),
-                  divider,
-                ],
               ),
-            ),
-            _GoogleLoginButton(),
-            const SizedBox(height: 15.0),
-            _AppleLoginButton(),
-          ],
+              divider,
+            ],
+          ),
         ),
+        const LoginProviderButtons(),
+        const Spacer(),
         Column(
-          children: [
+          children: const [
             SignUpButton(onPressed: null),
-            const SizedBox(height: 20.0),
+            SizedBox(height: 20.0),
             SignInButton(onPressed: null),
           ],
         ),
@@ -216,92 +118,135 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 }
 
-class _GoogleLoginButton extends StatelessWidget {
-  const _GoogleLoginButton();
+class LoginProviderButtons extends StatelessWidget {
+  const LoginProviderButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
     final textStyle = TextStyle(
       fontSize: 16.sp,
       fontWeight: FontWeight.w500,
-      color: theme.neutral0.withOpacity(0.5),
     );
 
-    return
-      SizedBox(
-        width: double.infinity,
-        height: 52.0,
-        child: ElevatedButton(
+    return Column(
+      children: [
+        LoginProviderButton(
+          color: Colors.white,
           onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+          icon: Image.asset('assets/icon/google_icon.png', height: 24.0),
+          child: Text(
+            context.loc.continue_with_google,
+            style: textStyle.copyWith(
+              fontFamily: 'Roboto',
+              color: Colors.black.withOpacity(0.54),
             ),
-            side: BorderSide(
-              color: theme.neutral0.withOpacity(0.5),
-            ),
-            backgroundColor: theme.onPrimary,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/icon/google_icon.png',
-                height: 24.0,
-              ),
-              const SizedBox(width: 15.0),
-              Text(
-                context.loc.continue_with_google,
-                style: textStyle,
-                textAlign: TextAlign.center,
-              )
-            ],
-          )
         ),
-      );
+        const SizedBox(height: 20.0),
+        LoginProviderButton(
+          color: Colors.black,
+          onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
+          icon: Image.asset('assets/icon/apple_icon.png', height: 24.0),
+          child: Text(
+            context.loc.continue_with_apple,
+            style: textStyle.copyWith(
+              fontFamily: 'SF Pro Display',
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
-class _AppleLoginButton extends StatelessWidget {
-  const _AppleLoginButton();
+class PhoneNumberField extends StatefulWidget {
+  const PhoneNumberField({Key? key}) : super(key: key);
+
+  @override
+  State<PhoneNumberField> createState() => _PhoneNumberFieldState();
+}
+
+class _PhoneNumberFieldState extends State<PhoneNumberField> {
+  String? selectedCode = '+996';
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final textStyle = TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w500,
-      color: theme.neutral100,
+
+    final textStyle = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400);
+    final selectorTextStyle = textStyle.copyWith(color: theme.neutral40);
+    final titleStyle = textStyle.copyWith(color: theme.neutral30, fontWeight: FontWeight.w500);
+    final boxDecoration = BoxDecoration(
+      color: theme.neutral95,
+      borderRadius: BorderRadius.circular(15),
     );
 
-    return SizedBox(
-      width: double.infinity,
-      height: 52.0,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          backgroundColor: theme.neutral0.withOpacity(0.9),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.loc.enter_phone_number,
+          style: titleStyle,
         ),
-        onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
-        child: Row(
+        const SizedBox(height: 15.0),
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/icon/apple_icon.png',
-              height: 24.0,
+            Container(
+              height: 54,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              margin: const EdgeInsets.only(right: 8),
+              decoration: boxDecoration,
+              child: CountryCodePicker(
+                onChanged: (code) {
+                  setState(() {
+                    selectedCode = code.dialCode;
+                  });
+                },
+                initialSelection: selectedCode,
+                favorite: const ['KG'],
+                showCountryOnly: false,
+                showOnlyCountryWhenClosed: true,
+                hideMainText: true,
+                flagDecoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                padding: EdgeInsets.zero,
+                builder: (code) {
+                  return Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5), // Image border
+                        child: Image.asset(
+                          code!.flagUri!,
+                          package: 'country_code_picker',
+                          height: 24,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      const Icon(Icons.keyboard_arrow_down)
+                    ],
+                  );
+                },
+              ),
             ),
-            const SizedBox(width: 15.0),
-            Text(
-              context.loc.continue_with_apple,
-              style: textStyle,
-              textAlign: TextAlign.center,
+            Expanded(
+              child: CupertinoTextField(
+                prefix: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(selectedCode ?? "", style: selectorTextStyle),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17.5),
+                decoration: boxDecoration,
+                style: selectorTextStyle,
+                placeholder: 'xxx-xxx-xxx',
+                keyboardType: TextInputType.phone,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }
