@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BaseAppBar extends StatelessWidget {
   final Widget? title;
-  final Widget? leading;
+  final List<Widget>? leading;
   final List<Widget>? actions;
   final Widget? middle;
   final Widget? bottom;
@@ -12,6 +12,7 @@ class BaseAppBar extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? titleSpacing;
   final Border? border;
+  final List<BoxShadow>? boxShadow;
 
   const BaseAppBar({
     Key? key,
@@ -26,12 +27,13 @@ class BaseAppBar extends StatelessWidget {
     this.iconTheme,
     this.titleSpacing,
     this.border,
+    this.boxShadow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: backgroundColor, border: border),
+      decoration: BoxDecoration(color: backgroundColor, border: border, boxShadow: boxShadow),
       child: Column(
         children: [
           Padding(
@@ -40,7 +42,7 @@ class BaseAppBar extends StatelessWidget {
               data: iconTheme ?? const IconThemeData.fallback(),
               child: Row(
                 children: [
-                  if (leading != null) leading!,
+                  if (leading != null) ...leading!,
                   Expanded(
                     child: title != null
                         ? Padding(

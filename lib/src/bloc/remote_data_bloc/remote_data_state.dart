@@ -2,7 +2,7 @@ part of 'remote_data_cubit.dart';
 
 abstract class RemoteDataState<Data> extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 mixin RemoteDataLoading<Data> on RemoteDataState<Data> {}
@@ -21,25 +21,32 @@ class RemoteDataFetchingError<Data> extends RemoteDataState<Data> with RemoteDat
   }
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 }
 
 abstract class RemoteDataInitialized<Data> extends RemoteDataState<Data> {
   final List<Data> data;
   final int currentPage;
   final int total;
+  final Map<String, dynamic>? query;
 
   RemoteDataInitialized({
     required this.data,
     required this.currentPage,
     required this.total,
+    required this.query,
   });
 
   RemoteDataInitialized.clone(RemoteDataInitialized<Data> state)
-      : this(data: state.data, currentPage: state.currentPage, total: state.total);
+      : this(
+          data: state.data,
+          currentPage: state.currentPage,
+          total: state.total,
+          query: state.query,
+        );
 
   @override
-  List<Object> get props => [data, currentPage, total];
+  List<Object?> get props => [data, currentPage, total, query];
 }
 
 class RemoteDataLoaded<Data> extends RemoteDataInitialized<Data> {
@@ -47,6 +54,7 @@ class RemoteDataLoaded<Data> extends RemoteDataInitialized<Data> {
     required super.data,
     required super.currentPage,
     required super.total,
+    super.query,
   });
 }
 
@@ -55,6 +63,7 @@ class RemoteDataRefetching<Data> extends RemoteDataInitialized<Data> with Remote
     required super.data,
     required super.currentPage,
     required super.total,
+    super.query,
   });
 
   RemoteDataRefetching.clone(RemoteDataInitialized<Data> state) : super.clone(state);
@@ -67,6 +76,7 @@ class RemoteDataRefetchingError<Data> extends RemoteDataInitialized<Data>
     required super.data,
     required super.currentPage,
     required super.total,
+    super.query,
   }) {
     this.error = error;
   }
@@ -77,5 +87,5 @@ class RemoteDataRefetchingError<Data> extends RemoteDataInitialized<Data>
   }
 
   @override
-  List<Object> get props => [...super.props, error];
+  List<Object?> get props => [...super.props, error];
 }

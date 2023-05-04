@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gigaturnip/src/theme/theme.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 
-import 'base_card.dart';
+import 'index.dart';
 
-class CardWithChipAndTitle extends StatelessWidget {
-  final String tag;
+class CardWithTitle extends StatelessWidget {
+  final List<Widget> chips;
   final String imageUrl;
   final String title;
   final double elevation;
   final Widget? body;
   final Widget? bottom;
-  final Color? color;
   final Size? size;
   final int flex;
   final void Function()? onTap;
 
-  const CardWithChipAndTitle({
+  const CardWithTitle({
     Key? key,
-    required this.tag,
-    required this.imageUrl,
+    this.imageUrl = '',
     required this.title,
+    this.chips = const [],
     this.body,
     this.bottom,
     this.onTap,
     this.elevation = 0,
-    this.color,
     this.size,
     this.flex = 0,
   }) : super(key: key);
@@ -36,10 +34,10 @@ class CardWithChipAndTitle extends StatelessWidget {
     final titleStyle = TextStyle(
       fontSize: 18.sp,
       fontWeight: FontWeight.w500,
-      color: theme.primary,
+      color: theme.isLight ? theme.neutral40 : theme.neutral90,
       overflow: TextOverflow.ellipsis,
-
     );
+
     return BaseCard(
       size: size,
       flex: flex,
@@ -52,7 +50,7 @@ class CardWithChipAndTitle extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _CardChip(tag),
+                    Row(children: chips),
                     const SizedBox(height: 10),
                     Text(title, maxLines: 2, style: titleStyle),
                   ],
@@ -71,30 +69,6 @@ class CardWithChipAndTitle extends StatelessWidget {
         ],
       ),
       bottom: bottom,
-    );
-  }
-}
-
-class _CardChip extends StatelessWidget {
-  final String text;
-
-  const _CardChip(this.text, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-    final fontColor = theme.isLight ? theme.neutral40 : theme.neutral80;
-    final backgroundColor = theme.isLight ? theme.neutral95 : theme.neutral20;
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: backgroundColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-        child: Text(text, style: TextStyle(fontSize: 14.sp, color: fontColor)),
-      ),
     );
   }
 }

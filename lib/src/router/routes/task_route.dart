@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/task/view/create_task_page.dart';
 import 'package:gigaturnip/src/features/task/view/task_page.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../utilities.dart';
@@ -76,8 +77,8 @@ class TaskRoute {
       redirect: redirect,
       builder: (BuildContext context, GoRouterState state) {
         final id = state.params['cid'] ?? '';
+        final campaign = state.extra;
         final createTaskIdQueryValue = state.queryParams['create_task'] ?? '';
-
 
         final campaignId = int.tryParse(id);
         if (campaignId == null) {
@@ -87,6 +88,10 @@ class TaskRoute {
         final createTaskId = int.tryParse(createTaskIdQueryValue);
         if (createTaskId != null) {
           return CreateTaskPage(taskId: createTaskId);
+        }
+
+        if (campaign != null && campaign is Campaign) {
+          return TaskPage(campaignId: campaignId, campaign: campaign);
         }
 
         return TaskPage(campaignId: campaignId);

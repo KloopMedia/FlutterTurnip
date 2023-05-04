@@ -9,6 +9,8 @@ const joinCampaignActionRoute = 'join_campaign/';
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';
 const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
+const selectableTaskStageRoute = '${taskStagesRoute}selectable/';
+
 
 // TaskStages actions
 const createTaskActionRoute = 'create_task/';
