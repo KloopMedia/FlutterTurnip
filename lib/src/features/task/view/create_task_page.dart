@@ -23,6 +23,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         final repository = CreatableTaskRepository(
           gigaTurnipApiClient: api,
           campaignId: int.parse(campaignId),
+          isProactive: false,
         );
         final newTaskId = await repository.createTask(widget.taskId);
         if (!mounted) return;
