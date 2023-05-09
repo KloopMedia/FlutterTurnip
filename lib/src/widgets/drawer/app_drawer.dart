@@ -48,6 +48,7 @@ class AppDrawer extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               UserAvatar(
                 url: avatar,
@@ -55,19 +56,21 @@ class AppDrawer extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 10, 24, 2),
-                child: Row(
-                  children: [
-                    Text(user.name ?? user.id, style: titleTextStyle),
-                  ],
+                child: Text(
+                  user.name ?? user.id,
+                  style: titleTextStyle,
+                  overflow: TextOverflow.fade,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
-                child: Row(
-                  children: [
-                    if (user.email != null) Text(user.email!, style: subtitleTextStyle),
-                  ],
-                ),
+                child: user.email != null
+                    ? Text(
+                        user.email!,
+                        style: subtitleTextStyle,
+                        overflow: TextOverflow.fade,
+                      )
+                    : null,
               ),
               LanguageSelect(
                 contentPadding: contentPadding,

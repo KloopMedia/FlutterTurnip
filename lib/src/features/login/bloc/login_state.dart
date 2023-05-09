@@ -3,7 +3,6 @@ part of 'login_bloc.dart';
 enum AuthProvider {
   google,
   apple,
-  phone,
 }
 
 abstract class LoginState extends Equatable {
@@ -27,4 +26,14 @@ class LoginFailed extends LoginState {
 
   @override
   List<Object> get props => [];
+}
+
+class OTPCodeSend extends LoginState {
+  final String verificationId;
+  final int? resendToken;
+
+  const OTPCodeSend(this.verificationId, this.resendToken);
+
+  @override
+  List<Object?> get props => [verificationId, resendToken];
 }

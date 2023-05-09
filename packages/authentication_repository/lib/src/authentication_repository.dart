@@ -20,6 +20,10 @@ class AuthenticationRepository {
 
   Future<String?> get token async => await _firebaseAuth.currentUser?.getIdToken();
 
+  Future<void> signInWithCredential(firebase_auth.AuthCredential credential) async {
+    await _firebaseAuth.signInWithCredential(credential);
+  }
+
   Future<void> logInWithGoogle() async {
     late final firebase_auth.AuthCredential credential;
     if (kIsWeb) {
@@ -44,6 +48,26 @@ class AuthenticationRepository {
     } else {
       await _firebaseAuth.signInWithProvider(appleProvider);
     }
+  }
+
+  Future<void> logInWithPhone({
+    required String phoneNumber,
+    required void Function(firebase_auth.PhoneAuthCredential) verificationCompleted,
+    required void Function(firebase_auth.FirebaseAuthException) verificationFailed,
+    required void Function(String, int?) codeSent,
+    required void Function(String) codeAutoRetrievalTimeout,
+  }) async {
+    _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
+  }
+
+  Future<firebase_auth.ConfirmationResult> logInWithPhoneWeb(String phoneNumber) async {
+    return await _firebaseAuth.signInWithPhoneNumber(phoneNumber);
   }
 
   Future<void> logOut() async {
