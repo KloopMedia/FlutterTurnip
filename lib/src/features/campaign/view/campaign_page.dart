@@ -43,9 +43,19 @@ class _CampaignPageState extends State<CampaignPage> {
           )..initialize(),
         ),
       ],
-      child: Builder(builder: (context) {
+      child: const CampaignView(),
+    );
+  }
+}
+
+class CampaignView extends StatelessWidget {
+  const CampaignView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
+      builder: (context, state) {
         final theme = Theme.of(context).colorScheme;
-        final state = context.read<SelectableCampaignCubit>().state;
         final hasAvailableCampaigns = state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty;
 
         return DefaultTabController(
@@ -89,7 +99,7 @@ class _CampaignPageState extends State<CampaignPage> {
             ),
           ),
         );
-      }),
+      },
     );
   }
 }
