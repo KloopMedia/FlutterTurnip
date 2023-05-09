@@ -1,16 +1,17 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/features/login/widget/login_provider_button.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import '../../../widgets/button/sign_in_button.dart';
-import '../../../widgets/button/sign_up_button.dart';
+import 'package:gigaturnip/src/widgets/widgets.dart';
+
 import '../bloc/login_bloc.dart';
+import '../widget/phone_number_field.dart';
+import '../widget/provider_buttons.dart';
+import 'otp_verification.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -31,15 +32,33 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
-      child: const SafeArea(
-        child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.all(24.0),
-            child: RegistrationPage(),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: BlocConsumer<LoginBloc, LoginState>(
+            listener: (context, state) {
+              if (state is LoginFailed) {
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return Dialog(
+                //       child: Text(state.errorMessage),
+                //     );
+                //   },
+                // );
+              }
+            },
+            builder: (context, state) {
+              if (state is OTPCodeSend) {
+                return VerificationPage(
+                  onConfirm: (smsCode) {
+                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+                  },
+                );
+              }
+              return const RegistrationPage();
+            },
           ),
         ),
       ),
@@ -47,8 +66,37 @@ class LoginView extends StatelessWidget {
   }
 }
 
-class RegistrationPage extends StatelessWidget {
+class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
+
+  @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  String _phoneNumber = "";
+
+  void loginWithPhone() async {
+    final authenticationRepository = context.read<AuthenticationRepository>();
+    final bloc = context.read<LoginBloc>();
+
+    if (kIsWeb) {
+      final result = await authenticationRepository.logInWithPhoneWeb(_phoneNumber);
+      bloc.add(SendOTP(result.verificationId, null));
+    } else {
+      await authenticationRepository.logInWithPhone(
+        phoneNumber: _phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          bloc.add(CompleteVerification(credential));
+        },
+        verificationFailed: (FirebaseAuthException e) async {},
+        codeSent: (String verificationId, int? resendToken) async {
+          bloc.add(SendOTP(verificationId, resendToken));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) async {},
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +135,11 @@ class RegistrationPage extends StatelessWidget {
             style: subtitleTextStyle,
           ),
         ),
-        const PhoneNumberField(),
+        PhoneNumberField(onChanged: (phoneNumber) {
+          setState(() {
+            _phoneNumber = phoneNumber;
+          });
+        }),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Row(
@@ -107,143 +159,10 @@ class RegistrationPage extends StatelessWidget {
         const LoginProviderButtons(),
         const Spacer(),
         Column(
-          children: const [
-            SignUpButton(onPressed: null),
-            SizedBox(height: 20.0),
-            SignInButton(onPressed: null),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class LoginProviderButtons extends StatelessWidget {
-  const LoginProviderButtons({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w500,
-    );
-
-    return Column(
-      children: [
-        LoginProviderButton(
-          color: Colors.white,
-          onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
-          icon: Image.asset('assets/icon/google_icon.png', height: 24.0),
-          child: Text(
-            context.loc.continue_with_google,
-            style: textStyle.copyWith(
-              fontFamily: 'Roboto',
-              color: Colors.black.withOpacity(0.54),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20.0),
-        LoginProviderButton(
-          color: Colors.black,
-          onPressed: () => context.read<LoginBloc>().add(const TryToLogin(AuthProvider.google)),
-          icon: Image.asset('assets/icon/apple_icon.png', height: 24.0),
-          child: Text(
-            context.loc.continue_with_apple,
-            style: textStyle.copyWith(
-              fontFamily: 'SF Pro Display',
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class PhoneNumberField extends StatefulWidget {
-  const PhoneNumberField({Key? key}) : super(key: key);
-
-  @override
-  State<PhoneNumberField> createState() => _PhoneNumberFieldState();
-}
-
-class _PhoneNumberFieldState extends State<PhoneNumberField> {
-  String? selectedCode = '+996';
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-
-    final textStyle = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400);
-    final selectorTextStyle = textStyle.copyWith(color: theme.neutral40);
-    final titleStyle = textStyle.copyWith(color: theme.neutral30, fontWeight: FontWeight.w500);
-    final boxDecoration = BoxDecoration(
-      color: theme.neutral95,
-      borderRadius: BorderRadius.circular(15),
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.loc.enter_phone_number,
-          style: titleStyle,
-        ),
-        const SizedBox(height: 15.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height: 54,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              margin: const EdgeInsets.only(right: 8),
-              decoration: boxDecoration,
-              child: CountryCodePicker(
-                onChanged: (code) {
-                  setState(() {
-                    selectedCode = code.dialCode;
-                  });
-                },
-                initialSelection: selectedCode,
-                favorite: const ['KG'],
-                showCountryOnly: false,
-                showOnlyCountryWhenClosed: true,
-                hideMainText: true,
-                flagDecoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                padding: EdgeInsets.zero,
-                builder: (code) {
-                  return Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5), // Image border
-                        child: Image.asset(
-                          code!.flagUri!,
-                          package: 'country_code_picker',
-                          height: 24,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      const Icon(Icons.keyboard_arrow_down)
-                    ],
-                  );
-                },
-              ),
-            ),
-            Expanded(
-              child: CupertinoTextField(
-                prefix: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text(selectedCode ?? "", style: selectorTextStyle),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17.5),
-                decoration: boxDecoration,
-                style: selectorTextStyle,
-                placeholder: 'xxx-xxx-xxx',
-                keyboardType: TextInputType.phone,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              ),
-            ),
+            SignUpButton(onPressed: () {
+              loginWithPhone();
+            }),
           ],
         ),
       ],
