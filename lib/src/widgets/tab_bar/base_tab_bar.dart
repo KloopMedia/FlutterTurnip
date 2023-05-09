@@ -38,19 +38,24 @@ class BaseTabBar extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: border,
-      ),
+    return Container(
+      alignment: Alignment.centerLeft,
       child: SizedBox(
         width: width,
-        child: TabBar(
-          indicator: indicator,
-          labelColor: theme.primary,
-          labelStyle: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-          unselectedLabelColor: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
-          indicatorColor: theme.primary,
-          tabs: tabs,
+        child: Stack(
+          fit: StackFit.passthrough,
+          alignment: Alignment.bottomLeft,
+          children: [
+            Container(decoration: BoxDecoration(border: border)),
+            TabBar(
+              indicator: indicator,
+              labelColor: theme.primary,
+              labelStyle: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+              unselectedLabelColor: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
+              indicatorColor: theme.primary,
+              tabs: tabs,
+            )
+          ],
         ),
       ),
     );
