@@ -9,8 +9,11 @@ part of 'chain.dart';
 Chain _$ChainFromJson(Map<String, dynamic> json) => Chain(
       id: json['id'] as int,
       name: json['name'] as String,
-      description: json['description'] as String,
-      campaign: json['campaign'] as int,
+      description: json['description'] as String?,
+      campaign: json['campaign'] as int?,
+      stagesData: (json['stagesData'] as List<dynamic>?)
+          ?.map((e) => TaskStageChainInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ChainToJson(Chain instance) => <String, dynamic>{
@@ -18,4 +21,5 @@ Map<String, dynamic> _$ChainToJson(Chain instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'campaign': instance.campaign,
+      'stagesData': instance.stagesData?.map((e) => e.toJson()).toList(),
     };

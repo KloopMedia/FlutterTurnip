@@ -29,6 +29,11 @@ abstract class GigaTurnipApiClient {
   @GET("$campaignsRoute/{id}/$joinCampaignActionRoute")
   Future<void> joinCampaign(@Path("id") int id);
 
+  // Chain methods
+
+  @GET(taskStageChainRoute)
+  Future<PaginationWrapper<Chain>> getTaskStageChain({@Queries() Map<String, dynamic>? query});
+
   // Task methods
 
   @GET(tasksRoute)

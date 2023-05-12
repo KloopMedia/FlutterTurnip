@@ -3,20 +3,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'chain_lines.dart';
 import 'chain_sides.dart';
-import 'status_tag.dart';
 
-class TaskChain extends StatelessWidget {
+class TaskStageChain extends StatelessWidget {
   final String title;
-  final bool complete;
+  final String? status;
   final int lessonNum;
   final bool even;
+  final Color lineColor;
+  // final void Function()? onTap;
 
-  const TaskChain({
+  const TaskStageChain({
     Key? key,
     required this.title,
-    required this.complete,
+    required this.status,
     required this.lessonNum,
     required this.even,
+    required this.lineColor,
+    // this.onTap,
   }) : super(key: key);
 
   @override
@@ -28,66 +31,107 @@ class TaskChain extends StatelessWidget {
       color: theme.isLight ? theme.neutral40 : theme.neutral70,
     );
 
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        even ? rightSide : leftSide,
-        SizedBox(
-          height: 90.0,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              children: [
-                if (!even) LessonIcon(lessonNum: lessonNum),
-                Expanded(
-                    child: Text(
-                      title,
-                      style: titleTextStyle,
-                      textAlign: even ? TextAlign.end : TextAlign.start,
+    return SizedBox(
+      // width: 420.0,///
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          ChainSide(color: lineColor, even: even),
+          SizedBox(
+            height: 90.0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  if (!even) LessonIcon(lessonNum: lessonNum, status: status),
+                  Expanded(
+                      // child: TextButton(
+                      //   onPressed: (status == 'Неотправлено') ? null : onTap,
+                        child: Text(
+                          title,
+                          style: titleTextStyle,
+                          textAlign: even ? TextAlign.end : TextAlign.start,
+                        ),
+                      // ),
                     ),
-                  ),
-                if (even) LessonIcon(lessonNum: lessonNum),
-              ],
+                  if (even) LessonIcon(lessonNum: lessonNum, status: status),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class LessonIcon extends StatelessWidget {
   final int lessonNum;
+  final String? status;
 
-  const LessonIcon({Key? key, required this.lessonNum}) : super(key: key);
+  LessonIcon({Key? key, required this.lessonNum, required this.status}) : super(key: key);
+  // List<Color> circleColor() {
+  //   if (status == 'Отправлено') {
+  //     return [const Color(0xFFC0CEFF), const Color(0xFF94A9F0)];
+  //   } else if (status == 'Возвращено') {
+  //     return [const Color(0xFFDFC902), const Color(0xFFDFC902), const Color(0xFFBFAE0E)];
+  //   } else /*if (status == 'Неотправлено')*/ {
+  //     return [const Color(0xFFE1E3E3)];
+  //   }
+  // }
+  int getStatusIndexOfIconColor() {
+    if (status == 'Отправлено') {
+      return 0;
+    } else if (status == 'Возвращено') {
+      return 1;
+    } else {
+      return 2;
+    }
+  }
+
+  final circleColorList = [
+    [const Color(0xFFC0CEFF), const Color(0xFF94A9F0)],
+    [const Color(0xFFDFC902), const Color(0xFFDFC902), const Color(0xFFBFAE0E)],
+    [const Color(0xFFE1E3E3),const Color(0xFFE1E3E3)]
+    // theme.isLight ? [const Color(0xFFE1E3E3),const Color(0xFFE1E3E3)] : [const Color(0xFF5D5E67)]/*variant40*/
+  ];
+
+  final rombColorList = [
+    const Color(0xFF748AD9),
+    const Color(0xFFEAD620),
+    const Color(0xFFEFF0F0)
+    // theme.isLight ? const Color(0xFFEFF0F0) : const Color(0xFF767680)
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // light/dark
-    // yellow romb = EAD620
-    // yellow box = DFC902, DFC902, BFAE0E
-
     final theme = Theme.of(context).colorScheme;
     final lessonNumTextStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 20.sp,
       color: theme.onPrimary,
     );
+    final index = getStatusIndexOfIconColor();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15.0),
       width: 60.0,
       height: 60.0,
-      decoration: const BoxDecoration(
+      decoration:
+      BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.blueAccent,
           gradient: LinearGradient(
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
-            colors: [
-              Color(0xFFC0CEFF),
-              Color(0xFF94A9F0),
-            ],
+            colors: circleColorList[index],
+            // switch (status) {
+              //   case('Отправлено') :
+              //     return [const Color(0xFFC0CEFF), const Color(0xFF94A9F0)];
+              //   case('Возвращено') :
+              //     return [const Color(0xFFBFAE0E), const Color(0xFFDFC902), const Color(0xFFDFC902)];
+              //   case('Неотправлено') :
+              //     return theme.isLight ? [const Color(0xFFE1E3E3)] : [const Color(0xFF5D5E67)]/*variant40*/;
+              // },
           )
       ),
       child: Stack(
@@ -95,13 +139,13 @@ class LessonIcon extends StatelessWidget {
           children: [
             Transform.rotate(
               angle: 0.8,
-              child: Container(
+              child: Container( ///Romb
                 height: 37.0,
                 width: 37.0,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  color: Color(0xFF748AD9),
-                ),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  color: rombColorList[index],
+                 ),
               ),
             ),
             Center(
@@ -116,39 +160,43 @@ class LessonIcon extends StatelessWidget {
   }
 }
 
-Widget flagIcon = Row(
-  children: const [
-    Icon(
+/*Widget flagIcon = Row(
+  children: [
+    const Icon(
       Icons.flag,
       color: Color(0xFFDFC902),
       size: 50.0,
     ),
-    Expanded(
-      child: SizedBox(width: 40.0),
-    ),
-  ],
-);
-
-Widget leftStarIcon = Row(
-  children: [
-    const Icon(
-      Icons.star,
-      color: Color(0xFF5D5E67),
-      size: 50.0,
-    ),
-    straightLine,
+    straightLine,///add color
     const SizedBox(width: 40.0),
   ],
-);
+);*/
 
-Widget rightStarIcon = Row(
-  children: [
-    const SizedBox(width: 40.0),
-    straightLine,
-    const Icon(
-      Icons.star,
-      color: Color(0xFF5D5E67),
-      size: 50.0,
-    )
-  ],
-);
+
+
+//dark theme star = neutral-variant40
+// Widget leftStarIcon = Row(
+//   children: const [
+//     Icon(
+//       Icons.star,
+//       color: Color(0xFFD9D9D9),
+//       size: 50.0,
+//     ),
+//     Spacer()
+//     // straightLine,
+//     // const SizedBox(width: 40.0),
+//   ],
+// );
+//
+// Widget rightStarIcon = Row(
+//   children: const [
+//     Spacer(),
+//     // const SizedBox(width: 40.0),
+//     // straightLine,
+//     Icon(
+//       Icons.star,
+//       color: Color(0xFFD9D9D9),
+//       size: 50.0,
+//     )
+//   ],
+// );
