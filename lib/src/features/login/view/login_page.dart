@@ -109,11 +109,11 @@ class LoginView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      children: const [
                         Flexible(
                           child: LoginPanel(
                             padding: EdgeInsets.all(20),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
+import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -100,6 +101,7 @@ class RelevantTaskPage extends StatelessWidget {
               );
             },
           ),
+          TaskStageChainView(),
         ],
       ),
     );
