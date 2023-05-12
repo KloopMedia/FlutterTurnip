@@ -93,10 +93,12 @@ extension ThemeVariant on ColorScheme {
 }
 
 extension CustomColors on ColorScheme {
-  TonalPalette get primaryTonalPalette {
-    final color = Hct.fromInt(primary.value);
-    return TonalPalette.of(color.hue, color.chroma);
+  TonalPalette _tonalPaletteFromColor(Color color) {
+    final hctColor = Hct.fromInt(color.value);
+    return TonalPalette.of(hctColor.hue, hctColor.chroma);
   }
+
+  Color getPrimaryTonalColor(int tone) => Color(_tonalPaletteFromColor(primary).get(tone));
 
   Color get statusGreen =>
       isLight ? const Color.fromRGBO(75, 150, 39, 1) : const Color.fromRGBO(133, 219, 96, 1);
