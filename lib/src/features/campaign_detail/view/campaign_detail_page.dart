@@ -168,7 +168,7 @@ class _CampaignCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      if (context.isDesktop || context.isTablet) {
+      if (context.isExtraLarge || context.isLarge) {
         return _Content(data: data);
       } else {
         return Container(
@@ -237,7 +237,7 @@ class _Content extends StatelessWidget {
               color: theme.neutral40,
             ),
           ),
-          (context.isDesktop || context.isTablet) ? const SizedBox(height: 40.0) : const Spacer(),
+          (context.isExtraLarge || context.isLarge) ? const SizedBox(height: 40.0) : const Spacer(),
           if (data.canJoin)
             Padding(
               padding: const EdgeInsets.only(bottom: 45),

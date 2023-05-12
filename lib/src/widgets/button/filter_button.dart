@@ -11,7 +11,7 @@ class FilterButton extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final formFactor = context.formFactor;
 
-    if (formFactor == FormFactor.mobile) {
+    if (formFactor == FormFactor.small) {
       return IconButton(onPressed: () {}, icon: const Icon(Icons.tune_rounded));
     } else {
       return OutlinedButton.icon(

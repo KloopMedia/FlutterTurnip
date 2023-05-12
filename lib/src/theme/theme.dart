@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:material_color_utilities/hct/hct.dart';
+import 'package:material_color_utilities/palettes/tonal_palette.dart';
 
 final lightTheme = ThemeData(
   fontFamily: 'Inter',
@@ -91,6 +93,13 @@ extension ThemeVariant on ColorScheme {
 }
 
 extension CustomColors on ColorScheme {
+  TonalPalette _tonalPaletteFromColor(Color color) {
+    final hctColor = Hct.fromInt(color.value);
+    return TonalPalette.of(hctColor.hue, hctColor.chroma);
+  }
+
+  Color getPrimaryTonalColor(int tone) => Color(_tonalPaletteFromColor(primary).get(tone));
+
   Color get statusGreen =>
       isLight ? const Color.fromRGBO(75, 150, 39, 1) : const Color.fromRGBO(133, 219, 96, 1);
 

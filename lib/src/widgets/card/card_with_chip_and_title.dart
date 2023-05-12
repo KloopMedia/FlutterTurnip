@@ -60,12 +60,12 @@ class CardWithTitle extends StatelessWidget {
                 SizedBox(width: 54, height: 54, child: Image.network(imageUrl)),
             ],
           ),
-          if (flex != 0) const Spacer(),
           if (body != null)
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: body!,
             ),
+          if (flex != 0) const Spacer(),
         ],
       ),
       bottom: bottom,

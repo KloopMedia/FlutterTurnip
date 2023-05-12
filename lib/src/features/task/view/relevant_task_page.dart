@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -10,7 +11,6 @@ import 'package:go_router/go_router.dart';
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/page_header.dart';
-import '../widgets/task_chain/task_stage_chain_page.dart';
 
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
@@ -28,20 +28,34 @@ class RelevantTaskPage extends StatelessWidget {
     );
   }
 
-  void redirectToAvailableTasks(BuildContext context, TaskStage task) {
+  void redirectToTaskWithId(BuildContext context, int id) {
+    context.pushNamed(
+      TaskDetailRoute.name,
+      params: {
+        'cid': '$campaignId',
+        'tid': '$id',
+      },
+    );
+  }
+
+  void redirectToAvailableTasks(BuildContext context, TaskStage stage) {
     context.goNamed(
       AvailableTaskRoute.name,
-      params: {'cid': '$campaignId', 'tid': '${task.id}'},
+      params: {'cid': '$campaignId', 'tid': '${stage.id}'},
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+    final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
 
-    return Scaffold(
-      body: CustomScrollView(
-      // return CustomScrollView(
+    return BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
+      listener: (context, state) {
+        if (state is TaskCreated) {
+          redirectToTaskWithId(context, state.createdTaskId);
+        }
+      },
+      child: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(
             child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
@@ -58,6 +72,19 @@ class RelevantTaskPage extends StatelessWidget {
               filters: taskFilterMap,
             ),
           ),
+          AdaptiveListView<TaskStage, ReactiveTasks>(
+            showLoader: false,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            itemBuilder: (context, index, item) {
+              return CardWithTitle(
+                chips: const [CardChip('Placeholder')],
+                title: item.name,
+                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                flex: context.isSmall || context.isMedium ? 0 : 1,
+                onTap: () => context.read<CreatableTaskCubit>().createTask(item),
+              );
+            },
+          ),
           AdaptiveListView<Task, RelevantTaskCubit>(
             padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
             itemBuilder: (context, index, item) {
@@ -66,15 +93,12 @@ class RelevantTaskPage extends StatelessWidget {
               return CardWithTitle(
                 chips: [const CardChip('Placeholder'), const Spacer(), StatusCardChip(item)],
                 title: item.name,
-                size: context.isMobile ? null : const Size.fromHeight(165),
-                flex: context.isMobile ? 0 : 1,
+                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                flex: context.isSmall || context.isMedium ? 0 : 1,
                 onTap: () => redirectToTask(context, item),
-                body: cardBody,
+                bottom: cardBody,
               );
             },
-          ),
-          TaskStageChainView(
-            // onTap: (context, item) => redirectToTask(context, item),
           ),
         ],
       ),

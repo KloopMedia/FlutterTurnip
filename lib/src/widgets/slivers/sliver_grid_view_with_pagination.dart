@@ -13,6 +13,8 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
   final double crossAxisSpacing;
   final int crossAxisCount;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
+  final bool fillRow;
+  final bool showLoader;
 
   const SliverGridViewWithPagination({
     Key? key,
@@ -22,20 +24,22 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     this.crossAxisSpacing = 8,
     required this.itemBuilder,
     required this.crossAxisCount,
+    this.fillRow = false,
+    this.showLoader = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit, RemoteDataState<Data>>(
       builder: (context, state) {
-        if (state is RemoteDataLoading<Data>) {
+        if (state is RemoteDataLoading<Data> && showLoader) {
           return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
         }
         if (state is RemoteDataFailed<Data>) {
           return SliverToBoxAdapter(child: Center(child: Text(state.error)));
         }
-        if (state is RemoteDataLoaded<Data>) {
-          final data = state.data.splitBeforeIndexed((i, v) => i % 3 == 0).toList();
+        if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
+          final data = state.data.splitBeforeIndexed((i, v) => i % crossAxisCount == 0).toList();
           return MultiSliver(children: [
             SliverToBoxAdapter(child: header),
             SliverPadding(
@@ -43,13 +47,20 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, rowIndex) {
-                    final rowCount = data[rowIndex].length;
+                    final rowCount = fillRow ? data[rowIndex].length : crossAxisCount;
                     return Row(
                       children: List.generate(
                         rowCount,
                         (columnIndex) {
                           final verticalPadding = mainAxisSpacing / 2;
                           final horizontalPadding = crossAxisSpacing / 2;
+                          var item;
+                          try {
+                            item = itemBuilder(context, rowIndex, data[rowIndex][columnIndex])!;
+                          } catch (e) {
+                            item = const SizedBox();
+                          }
+
                           return Expanded(
                             child: Padding(
                               padding: EdgeInsets.only(
@@ -58,7 +69,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
                                 left: columnIndex == 0 ? 0 : horizontalPadding,
                                 right: columnIndex == rowCount - 1 ? 0 : horizontalPadding,
                               ),
-                              child: itemBuilder(context, rowIndex, data[rowIndex][columnIndex])!,
+                              child: item,
                             ),
                           );
                         },

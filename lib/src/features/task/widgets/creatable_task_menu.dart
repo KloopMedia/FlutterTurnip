@@ -33,7 +33,7 @@ class CreatableTaskMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          BlocConsumer<CreatableTaskCubit, RemoteDataState<TaskStage>>(
+          BlocConsumer<ProactiveTasks, RemoteDataState<TaskStage>>(
             listener: (context, state) {
               if (state is TaskCreated) {
                 redirectToTask(context, state.createdTaskId);
@@ -75,7 +75,7 @@ class CreatableTaskMenu extends StatelessWidget {
             },
           ),
           Padding(
-            padding: EdgeInsets.only(top: 17, bottom: context.isMobile ? 42 : 76),
+            padding: EdgeInsets.only(top: 17, bottom: context.isSmall || context.isMedium ? 42 : 76),
             child: FloatingActionButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),

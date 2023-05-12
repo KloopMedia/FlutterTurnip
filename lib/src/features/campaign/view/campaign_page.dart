@@ -22,7 +22,7 @@ class CampaignPage extends StatefulWidget {
 class _CampaignPageState extends State<CampaignPage> {
   @override
   Widget build(BuildContext context) {
-    final isGridView = context.isDesktop || context.isTablet;
+    final isGridView = context.isExtraLarge || context.isLarge;
 
     return MultiBlocProvider(
       providers: [
@@ -43,9 +43,19 @@ class _CampaignPageState extends State<CampaignPage> {
           )..initialize(),
         ),
       ],
-      child: Builder(builder: (context) {
+      child: const CampaignView(),
+    );
+  }
+}
+
+class CampaignView extends StatelessWidget {
+  const CampaignView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
+      builder: (context, state) {
         final theme = Theme.of(context).colorScheme;
-        final state = context.read<SelectableCampaignCubit>().state;
         final hasAvailableCampaigns = state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty;
 
         return DefaultTabController(
@@ -54,18 +64,13 @@ class _CampaignPageState extends State<CampaignPage> {
             child: DefaultAppBar(
               title: Text(context.loc.campaigns),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                ),
-                FilterButton(
-                  onPressed: () {},
-                ),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                FilterButton(onPressed: () {}),
               ],
               bottom: BaseTabBar(
                 hidden: !hasAvailableCampaigns,
                 width: calculateTabWidth(context),
-                border: context.formFactor == FormFactor.mobile
+                border: context.formFactor == FormFactor.small
                     ? Border(
                         bottom: BorderSide(
                           color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
@@ -89,7 +94,7 @@ class _CampaignPageState extends State<CampaignPage> {
             ),
           ),
         );
-      }),
+      },
     );
   }
 }

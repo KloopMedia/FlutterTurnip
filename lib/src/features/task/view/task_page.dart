@@ -43,7 +43,7 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isGridView = context.isDesktop || context.isTablet;
+    final isGridView = context.isExtraLarge || context.isLarge;
     final theme = Theme.of(context).colorScheme;
     final appBarColor = theme.isLight
         ? const Color.fromRGBO(241, 243, 255, 1)
@@ -71,11 +71,21 @@ class _TaskPageState extends State<TaskPage> {
             ),
           )..initialize(query: taskFilterMap.values.first),
         ),
-        BlocProvider(
+        BlocProvider<ReactiveTasks>(
           create: (context) => CreatableTaskCubit(
             CreatableTaskRepository(
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
+              isProactive: false,
+            ),
+          )..initialize(),
+        ),
+        BlocProvider<ProactiveTasks>(
+          create: (context) => CreatableTaskCubit(
+            CreatableTaskRepository(
+              gigaTurnipApiClient: apiClient,
+              campaignId: widget.campaignId,
+              isProactive: true,
             ),
           )..initialize(),
         ),
@@ -100,11 +110,13 @@ class _TaskPageState extends State<TaskPage> {
         builder: (context, state) {
           if (state is CampaignInitialized) {
             return DefaultAppBar(
-              color: context.isMobile ? appBarColor : null,
-              boxShadow: context.isDesktop || context.isTablet ? Shadows.elevation1 : null,
+              color: context.isSmall || context.isMedium ? appBarColor : null,
+              boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
               title: Text(state.data.name),
+              titleSpacing: 0,
               leading: [
-                if (context.isDesktop || context.isTablet)
+                const SizedBox(width: 20),
+                if (!context.isSmall || context.isMedium)
                   IconButton(
                     onPressed: () => _redirectToCampaignDetail(context),
                     icon: Builder(

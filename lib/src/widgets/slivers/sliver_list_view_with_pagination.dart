@@ -11,6 +11,7 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry contentPadding;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
+  final bool showLoader;
 
   const SliverListViewWithPagination({
     Key? key,
@@ -18,19 +19,20 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     this.padding = EdgeInsets.zero,
     this.contentPadding = EdgeInsets.zero,
     required this.itemBuilder,
+    this.showLoader = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit, RemoteDataState<Data>>(
       builder: (context, state) {
-        if (state is RemoteDataLoading<Data>) {
+        if (state is RemoteDataLoading<Data> && showLoader) {
           return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
         }
         if (state is RemoteDataFailed<Data>) {
           return SliverToBoxAdapter(child: Center(child: Text(state.error)));
         }
-        if (state is RemoteDataInitialized<Data>) {
+        if (state is RemoteDataInitialized<Data> && state.data.isNotEmpty) {
           return MultiSliver(children: [
             SliverToBoxAdapter(child: header),
             SliverPadding(

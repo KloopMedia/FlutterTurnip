@@ -87,10 +87,12 @@ class AvailableTaskRepository extends TaskRepository {
 class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskStage> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
+  final bool? isProactive;
 
   CreatableTaskRepository({
     required api.GigaTurnipApiClient gigaTurnipApiClient,
     required this.campaignId,
+    this.isProactive,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
@@ -98,6 +100,7 @@ class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskSt
     return _gigaTurnipApiClient.getUserRelevantTaskStages(
       query: {
         'chain__campaign': campaignId,
+        'is_proactive': isProactive,
         ...?query,
       },
     );

@@ -17,7 +17,7 @@ class PageHeader extends StatelessWidget {
         ? const Color.fromRGBO(241, 243, 255, 1)
         : const Color.fromRGBO(40, 41, 49, 1);
 
-    if (context.isMobile) {
+    if (context.isSmall || context.isMedium) {
       return Stack(children: [
         Container(
           height: 120,
