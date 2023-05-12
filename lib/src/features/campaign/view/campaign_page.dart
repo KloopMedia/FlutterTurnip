@@ -64,13 +64,8 @@ class CampaignView extends StatelessWidget {
             child: DefaultAppBar(
               title: Text(context.loc.campaigns),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                ),
-                FilterButton(
-                  onPressed: () {},
-                ),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                FilterButton(onPressed: () {}),
               ],
               bottom: BaseTabBar(
                 hidden: !hasAvailableCampaigns,
