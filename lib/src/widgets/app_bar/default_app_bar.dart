@@ -15,6 +15,7 @@ class DefaultAppBar extends StatelessWidget {
   final Color? color;
   final Color? backgroundColor;
   final List<BoxShadow>? boxShadow;
+  final double titleSpacing;
   final Widget child;
 
   const DefaultAppBar({
@@ -29,6 +30,7 @@ class DefaultAppBar extends StatelessWidget {
     this.color,
     this.backgroundColor,
     this.boxShadow,
+    this.titleSpacing = 20.0,
     required this.child,
   }) : super(key: key);
 
@@ -45,7 +47,7 @@ class DefaultAppBar extends StatelessWidget {
       floatingActionButtonLocation: floatingActionButtonLocation,
       body: Builder(
         builder: (context) {
-          if (formFactor == FormFactor.desktop) {
+          if (formFactor == FormFactor.extraLarge) {
             return Row(
               children: [
                 const AppDrawer(),
@@ -60,6 +62,7 @@ class DefaultAppBar extends StatelessWidget {
                         automaticallyImplyLeading: false,
                         color: color,
                         boxShadow: boxShadow,
+                        titleSpacing: titleSpacing,
                       ),
                       Expanded(
                         child: child,
@@ -80,6 +83,7 @@ class DefaultAppBar extends StatelessWidget {
                   automaticallyImplyLeading: automaticallyImplyLeading,
                   color: color,
                   boxShadow: boxShadow,
+                  titleSpacing: titleSpacing,
                 ),
                 Expanded(
                   child: child,
@@ -101,6 +105,7 @@ class _DefaultAppBar extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final Color? color;
   final List<BoxShadow>? boxShadow;
+  final double titleSpacing;
 
   const _DefaultAppBar({
     Key? key,
@@ -111,6 +116,7 @@ class _DefaultAppBar extends StatelessWidget {
     this.automaticallyImplyLeading = true,
     this.color,
     this.boxShadow,
+    this.titleSpacing = 20.0,
   }) : super(key: key);
 
   @override
@@ -132,8 +138,8 @@ class _DefaultAppBar extends StatelessWidget {
       backgroundColor: color ?? defaultAppBarColor,
       boxShadow: boxShadow,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      titleSpacing: context.isMobile ? 23 : 17,
-      border: context.isDesktop || context.isTablet
+      titleSpacing: titleSpacing,
+      border: context.isExtraLarge || context.isLarge
           ? const Border(bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1))
           : null,
       leading: [if (defaultLeadingButton != null) defaultLeadingButton, ...?leading],

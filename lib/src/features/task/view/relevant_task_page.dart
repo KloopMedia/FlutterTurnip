@@ -47,7 +47,7 @@ class RelevantTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+    final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
 
     return BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
       listener: (context, state) {
@@ -73,13 +73,14 @@ class RelevantTaskPage extends StatelessWidget {
             ),
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(
-            padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+            showLoader: false,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             itemBuilder: (context, index, item) {
               return CardWithTitle(
                 chips: const [CardChip('Placeholder')],
                 title: item.name,
-                size: context.isMobile ? null : const Size.fromHeight(165),
-                flex: context.isMobile ? 0 : 1,
+                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                flex: context.isSmall || context.isMedium ? 0 : 1,
                 onTap: () => context.read<CreatableTaskCubit>().createTask(item),
               );
             },
@@ -92,10 +93,10 @@ class RelevantTaskPage extends StatelessWidget {
               return CardWithTitle(
                 chips: [const CardChip('Placeholder'), const Spacer(), StatusCardChip(item)],
                 title: item.name,
-                size: context.isMobile ? null : const Size.fromHeight(165),
-                flex: context.isMobile ? 0 : 1,
+                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                flex: context.isSmall || context.isMedium ? 0 : 1,
                 onTap: () => redirectToTask(context, item),
-                body: cardBody,
+                bottom: cardBody,
               );
             },
           ),

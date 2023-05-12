@@ -75,7 +75,7 @@ class CreatableTaskMenu extends StatelessWidget {
             },
           ),
           Padding(
-            padding: EdgeInsets.only(top: 17, bottom: context.isMobile ? 42 : 76),
+            padding: EdgeInsets.only(top: 17, bottom: context.isSmall || context.isMedium ? 42 : 76),
             child: FloatingActionButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),

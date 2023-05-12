@@ -19,7 +19,7 @@ class RelevantTaskCubit extends RemoteDataCubit<Task> with OpenTaskCubit, Closed
 
 const taskFilterMap = {
   'Активные': {'complete': false},
-  'Возвращенные': null,
+  'Возвращенные': {'reopened': true, 'complete': false},
   'Отправленные': {'complete': true},
   'Все': null,
 };

@@ -22,7 +22,7 @@ class CampaignPage extends StatefulWidget {
 class _CampaignPageState extends State<CampaignPage> {
   @override
   Widget build(BuildContext context) {
-    final isGridView = context.isDesktop || context.isTablet;
+    final isGridView = context.isExtraLarge || context.isLarge;
 
     return MultiBlocProvider(
       providers: [
@@ -75,7 +75,7 @@ class CampaignView extends StatelessWidget {
               bottom: BaseTabBar(
                 hidden: !hasAvailableCampaigns,
                 width: calculateTabWidth(context),
-                border: context.formFactor == FormFactor.mobile
+                border: context.formFactor == FormFactor.small
                     ? Border(
                         bottom: BorderSide(
                           color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
