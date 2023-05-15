@@ -200,6 +200,7 @@ class _CurrentTask extends StatelessWidget {
         onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
         onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
         onDownloadFile: (url) => DownloadService().download(url: url),
+        submitButtonText: Text(context.loc.form_submit_button),
       ),
     );
   }
