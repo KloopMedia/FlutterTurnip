@@ -9,24 +9,24 @@ import 'chain_lines.dart';
 import 'task_chain.dart';
 
 class TaskStageChainView extends StatelessWidget {
-  final Function(BuildContext context, Map /*TaskStageChainView*/ item)? onTap;
+  final Function(BuildContext context, TaskStageChainView item)? onTap;
 
   const TaskStageChainView({Key? key, this.onTap}) : super(key: key);
 
-  // String? getTaskStatus(TaskStageChainInfo? item) {
-  //   if (item != null) {
-  //     if (item.completeCount == 0 && item.totalCount == 0) {
-  //       return  'Неотправлено';
-  //     } else if (item.completeCount < item.totalCount) {
-  //       return 'Возвращено';
-  //     } else if (item.completeCount > 0 && item.totalCount > 0 &&
-  //         item.completeCount == item.totalCount) {
-  //       return 'Отправлено';
-  //     }
-  //   }
-  //   return null;
-  // }
-  String? getTaskStatus(Map<String, dynamic>? item) {
+  String? getTaskStatus(TaskStageChainInfo? item) {
+    if (item != null) {
+      if (item.completeCount == 0 && item.totalCount == 0) {
+        return  'Неотправлено';
+      } else if (item.completeCount < item.totalCount) {
+        return 'Возвращено';
+      } else if (item.completeCount > 0 && item.totalCount > 0 &&
+          item.completeCount == item.totalCount) {
+        return 'Отправлено';
+      }
+    }
+    return null;
+  }
+ /* String? getTaskStatus(Map<String, dynamic>? item) {
     // String? getTaskStatus(TaskStageChainInfo? item) {
     if (item != null) {
       if (item['completeCount'] == 0 && item['totalCount'] == 0) {
@@ -39,7 +39,7 @@ class TaskStageChainView extends StatelessWidget {
       }
     }
     return null;
-  }
+  }*/
   // if (item != null) {
   //   if (item.completeCount == 0 && item.totalCount == 0) {
   //     return  theme.isLight ? theme.neutral20 : theme.neutral90;
@@ -78,30 +78,30 @@ class TaskStageChainView extends StatelessWidget {
 
     return BlocBuilder<TaskStageChainCubit, RemoteDataState<Chain>>(
       builder: (context, state) {
-        // if (state is RemoteDataLoaded<Chain> && state.data.isNotEmpty) {
-        final list = [
-          {
-            'name': 'AudioTest Seasons',
-            'completeCount': 1,
-            'totalCount': 1,
-          },
-          {
-            'name': 'AudioTest Seasons',
-            'completeCount': 0,
-            'totalCount': 1,
-          },
-          {
-            'name': 'AudioTest Seasons',
-            'completeCount': 0,
-            'totalCount': 0,
-          },
-        ];
+        if (state is RemoteDataLoaded<Chain> && state.data.isNotEmpty) {
+        // final list = [
+        //   {
+        //     'name': 'AudioTest Seasons',
+        //     'completeCount': 1,
+        //     'totalCount': 1,
+        //   },
+        //   {
+        //     'name': 'AudioTest Seasons',
+        //     'completeCount': 0,
+        //     'totalCount': 1,
+        //   },
+        //   {
+        //     'name': 'AudioTest Seasons',
+        //     'completeCount': 0,
+        //     'totalCount': 0,
+        //   },
+        // ];
           return SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                  final item = list[index];
-                  // final item = state.data[0].stagesData?[index];
+                  // final item = list[index];
+                  final item = state.data[0].stagesData?[index];
                   final status = getTaskStatus(item);
 
                   final lineColor = (status == 'Отправлено')
@@ -110,10 +110,8 @@ class TaskStageChainView extends StatelessWidget {
                       : theme.isLight
                         ? const Color(0xFFE1E3E3) : theme.neutral20;//const Color(0xFF2E3132);
 
-                  // print('>>> completeCount 5 = ${state.data[0].stagesData?[5].completeCount} || totalCount = ${state.data[0].stagesData?[5].totalCount}');
-                  // print('>>> name 5 = ${state.data[0].stagesData?[5].name}');
-                  // print('>>> completeCount 6 = ${state.data[0].stagesData?[6].completeCount} || totalCount = ${state.data[0].stagesData?[6].totalCount}');
-                  // print('>>> name 6 = ${state.data[0].stagesData?[6].name}');
+                  print('>>> completeCount  = ${state.data[0].stagesData?[0].completeCount} || totalCount = ${state.data[0].stagesData?[0].totalCount}');
+                  print('>>> name  = ${state.data[0].stagesData?[0].name}');
 
                   if (index == 0) {
                     return Stack(
@@ -123,8 +121,8 @@ class TaskStageChainView extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           height: 150.0,
                           child: TaskStageChain(
-                            // title: item!.name,
-                            title: '${item['name']}',
+                            title: item!.name,
+                            // title: '${item['name']}',
                             status: status,
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
@@ -139,19 +137,20 @@ class TaskStageChainView extends StatelessWidget {
                               color: Color(0xFFDFC902),
                               size: 50.0,
                             ),
-                            StraightLine(color: lineColor),
-                            // CustomPaint(
-                            //   size: const Size(200, 120),
-                            //   painter: StraightLine(color: lineColor),
-                            // ),
-                            const SizedBox(width: 40.0),
+                            Expanded(
+                              child: CustomPaint(
+                                size: const Size(0, 5),
+                                painter: StraightLine(color: lineColor),
+                              ),
+                            ),
+                            const SizedBox(width: 65.0),
                           ],
                         )
                         // flagIcon,
                       ],
                     );
-                  // } else if (state.data[0].stagesData?.length == index + 1) {
-                  } else if (list.length == index + 1) {
+                  } else if (state.data[0].stagesData?.length == index + 1) {
+                  // } else if (list.length == index + 1) {
                     return Stack(
                       alignment: Alignment.bottomCenter,
                       children: [
@@ -159,8 +158,8 @@ class TaskStageChainView extends StatelessWidget {
                           alignment: Alignment.topCenter,
                           height: 150.0,
                           child: TaskStageChain(
-                            // title: item!.name,
-                            title: '${item['name']}',
+                            title: item!.name,
+                            // title: '${item['name']}',
                             status: status,
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
@@ -175,8 +174,8 @@ class TaskStageChainView extends StatelessWidget {
                     );
                   } else {
                     return TaskStageChain(
-                      // title: item!.name,
-                      title: '${item['name']}',
+                      title: item!.name,
+                      // title: '${item['name']}',
                       status: status,
                       lessonNum: index + 1,
                       even: index % 2 == 0 ? true : false,
@@ -185,13 +184,13 @@ class TaskStageChainView extends StatelessWidget {
                     );
                   }
                 },
-                childCount: list.length,
-                // childCount: state.data[0].stagesData?.length,
+                // childCount: list.length,
+                childCount: state.data[0].stagesData?.length,
               ),
             ),
           );
-        // }
-        // return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+        return const SliverToBoxAdapter(child: SizedBox.shrink());
       },
     );
   }

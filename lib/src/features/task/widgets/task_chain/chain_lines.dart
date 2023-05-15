@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-class StraightLine extends StatelessWidget {
+/*class StraightLine extends StatelessWidget {
   final Color color;
 
   const StraightLine({Key? key, required this.color}) : super(key: key);
@@ -28,7 +28,7 @@ class StraightLine extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 
 /*Widget straightLine = Expanded(
@@ -50,45 +50,35 @@ class StraightLine extends StatelessWidget {
   ),
 );*/
 
-/*class StraightLine extends CustomPainter {
+class StraightLine extends CustomPainter {
   final Color color;
 
   const StraightLine({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.red
+    double dashWidth = 10, dashSpace = 9, startX = 0;
+
+    final paint = Paint()
+      ..color = color
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 5;
 
-    _drawDashedLine(canvas, size, paint);
+    while (startX < size.width) {
+      canvas.drawLine(
+          Offset(startX, 0),
+          Offset(startX + dashWidth, 0),
+          paint
+      );
+      startX += dashWidth + dashSpace;
+    }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
   }
-
-  void _drawDashedLine(Canvas canvas, Size size, Paint paint) {
-    const int dashWidth = 15;
-    const int dashSpace = 10;
-
-    double startX = 0;
-    double y = 0;
-
-    // Repeat drawing until we reach the right edge.
-    // In our example, size.with = 300 (from the SizedBox)
-    while (startX < size.width) {
-      canvas.drawLine(
-          Offset(startX, y),
-          Offset(startX + dashWidth, y),
-          paint
-      );
-      startX += dashWidth + dashSpace;
-    }
-  }
-}*/
+}
 
 class CurveLeftLine extends CustomPainter {
   final Color color;
@@ -101,6 +91,7 @@ class CurveLeftLine extends CustomPainter {
     Paint paint = Paint()
       ..color = color //const Color(0xFF2754F3)
       ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
       ..strokeWidth = 5.0;
 
     var startPoint = Offset(size.width, size.height - 120);
@@ -118,7 +109,7 @@ class CurveLeftLine extends CustomPainter {
     canvas.drawPath(
       dashPath(
         path,
-        dashArray: CircularIntervalList<double>(<double>[15.0, 10.5]),
+        dashArray: CircularIntervalList<double>(<double>[11.0, 9.0]),
       ),
       paint,
     );
@@ -141,6 +132,7 @@ class CurveRightLine extends CustomPainter {
     Paint paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
       ..strokeWidth = 5.0;
 
     var startPoint = Offset(0, size.height - 120);
@@ -158,7 +150,7 @@ class CurveRightLine extends CustomPainter {
     canvas.drawPath(
       dashPath(
         path,
-        dashArray: CircularIntervalList<double>(<double>[15.0, 10.5]),
+        dashArray: CircularIntervalList<double>(<double>[10.0, 9.0]),
       ),
       paint,
     );

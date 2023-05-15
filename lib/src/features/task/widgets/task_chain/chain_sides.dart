@@ -20,16 +20,18 @@ class ChainSide extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const SizedBox(width: 40.0),
-          StraightLine(color: color),
-          // CustomPaint(
-          //   size: const Size(200, 120),
-          //   painter: StraightLine(color: color),
-          // ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
+          const SizedBox(width: 60.0),
+          Expanded(
             child: CustomPaint(
-              size: const Size(40, 120),
+              size: const Size(0, 5),
+              painter: StraightLine(color: color),
+            ),
+          ),
+          Container(
+            // color: Colors.green,
+            padding: const EdgeInsets.only(bottom: 5.0, left: 5.0),
+            child: CustomPaint(
+              size: const Size(50, 120),
               painter: CurveRightLine(color: color),
             ),
           ),
@@ -40,19 +42,21 @@ class ChainSide extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
+          Container(
+            // color: Colors.yellow,
+            padding: const EdgeInsets.only(bottom: 6.0, right: 10.0),
             child: CustomPaint(
-              size: const Size(40, 120),
+              size: const Size(50, 120),
               painter: CurveLeftLine(color: color),
             ),
           ),
-          StraightLine(color: color),
-          // CustomPaint(
-          //   size: const Size(200, 120),
-          //   painter: StraightLine(color: color),
-          // ),
-          const SizedBox(width: 40.0),
+          Expanded(
+            child: CustomPaint(
+              size: const Size(0, 5),
+              painter: StraightLine(color: color),
+            ),
+          ),
+          const SizedBox(width: 60.0),
         ],
       );
     }
