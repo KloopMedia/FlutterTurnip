@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/utilities/download_service.dart';
 import 'package:gigaturnip/src/utilities/functions.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
@@ -40,10 +41,15 @@ class AvailableTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+
     return DefaultAppBar(
       automaticallyImplyLeading: false,
       leading: [BackButton(onPressed: () => redirectToTaskMenu(context))],
-      title: const Text('Доступные задания'),
+      title: Text(
+        'Доступные задания',
+        style: TextStyle(color: theme.isLight ? theme.neutral30 : theme.neutral90),
+      ),
       child: BlocProvider(
         create: (context) => AvailableTaskCubit(
           AvailableTaskRepository(
