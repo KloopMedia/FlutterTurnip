@@ -103,8 +103,8 @@
     "drawer_exit": "Чыгуу",
 
     "task_status_returned": "Кайтарылды",
-    "task_status_not_submitted": "Жиберилбеген",
-    "task_status_submitted": "Жиберилген",
+    "task_status_not_submitted": "Жөнөтүлгөн жок",
+    "task_status_submitted": "Жөнөтүлдү",
 
     "task_filter_active": "Активдүү",
     "task_filter_returned": "Кайтарылган",
