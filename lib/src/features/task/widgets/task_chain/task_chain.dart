@@ -10,7 +10,7 @@ class TaskStageChain extends StatelessWidget {
   final int lessonNum;
   final bool even;
   final Color lineColor;
-  // final void Function()? onTap;
+  final void Function()? onTap;
 
   const TaskStageChain({
     Key? key,
@@ -19,7 +19,7 @@ class TaskStageChain extends StatelessWidget {
     required this.lessonNum,
     required this.even,
     required this.lineColor,
-    // this.onTap,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -28,7 +28,9 @@ class TaskStageChain extends StatelessWidget {
     final titleTextStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
-      color: theme.isLight ? theme.neutral40 : theme.neutral70,
+      color: theme.isLight
+          ? status == 'Неотправлено' ? theme.neutral90 : theme.neutral40
+          : status == 'Неотправлено' ? theme.neutralVariant40 : theme.neutral70,
     );
 
     return SizedBox(
@@ -45,14 +47,14 @@ class TaskStageChain extends StatelessWidget {
                 children: [
                   if (!even) LessonIcon(lessonNum: lessonNum, status: status),
                   Expanded(
-                      // child: TextButton(
-                      //   onPressed: (status == 'Неотправлено') ? null : onTap,
+                      child: TextButton(
+                        onPressed: (status == 'Неотправлено') ? null : onTap,
                         child: Text(
                           title,
                           style: titleTextStyle,
                           textAlign: even ? TextAlign.end : TextAlign.start,
                         ),
-                      // ),
+                      ),
                     ),
                   if (even) LessonIcon(lessonNum: lessonNum, status: status),
                 ],
@@ -69,16 +71,8 @@ class LessonIcon extends StatelessWidget {
   final int lessonNum;
   final String? status;
 
-  LessonIcon({Key? key, required this.lessonNum, required this.status}) : super(key: key);
-  // List<Color> circleColor() {
-  //   if (status == 'Отправлено') {
-  //     return [const Color(0xFFC0CEFF), const Color(0xFF94A9F0)];
-  //   } else if (status == 'Возвращено') {
-  //     return [const Color(0xFFDFC902), const Color(0xFFDFC902), const Color(0xFFBFAE0E)];
-  //   } else /*if (status == 'Неотправлено')*/ {
-  //     return [const Color(0xFFE1E3E3)];
-  //   }
-  // }
+  const LessonIcon({Key? key, required this.lessonNum, required this.status}) : super(key: key);
+
   int getStatusIndexOfIconColor() {
     if (status == 'Отправлено') {
       return 0;
@@ -89,29 +83,27 @@ class LessonIcon extends StatelessWidget {
     }
   }
 
-  final circleColorList = [
-    [const Color(0xFFC0CEFF), const Color(0xFF94A9F0)],
-    [const Color(0xFFDFC902), const Color(0xFFDFC902), const Color(0xFFBFAE0E)],
-    [const Color(0xFFE1E3E3),const Color(0xFFE1E3E3)]
-    // theme.isLight ? [const Color(0xFFE1E3E3),const Color(0xFFE1E3E3)] : [const Color(0xFF5D5E67)]/*variant40*/
-  ];
-
-  final rombColorList = [
-    const Color(0xFF748AD9),
-    const Color(0xFFEAD620),
-    const Color(0xFFEFF0F0)
-    // theme.isLight ? const Color(0xFFEFF0F0) : const Color(0xFF767680)
-  ];
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final lessonNumTextStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 20.sp,
-      color: theme.onPrimary,
+      color: theme.isLight
+          ? theme.onPrimary
+          : (status == 'Неотправлено') ? theme.neutralVariant40 : theme.neutral100,
     );
     final index = getStatusIndexOfIconColor();
+    final circleColorList = [
+      [const Color(0xFF94A9F0), const Color(0xFFC0CEFF)],
+      [const Color(0xFFBFAE0E), const Color(0xFFDFC902), const Color(0xFFDFC902)],
+      theme.isLight ? [const Color(0xFFE1E3E3),const Color(0xFFE1E3E3)] : [const Color(0xFF5D5E67), const Color(0xFF5D5E67)]/*variant40*/
+    ];
+    final rombColorList = [
+      const Color(0xFF748AD9),
+      const Color(0xFFEAD620),
+      theme.isLight ? const Color(0xFFEFF0F0) : const Color(0xFF767680)
+    ];
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -124,14 +116,6 @@ class LessonIcon extends StatelessWidget {
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
             colors: circleColorList[index],
-            // switch (status) {
-              //   case('Отправлено') :
-              //     return [const Color(0xFFC0CEFF), const Color(0xFF94A9F0)];
-              //   case('Возвращено') :
-              //     return [const Color(0xFFBFAE0E), const Color(0xFFDFC902), const Color(0xFFDFC902)];
-              //   case('Неотправлено') :
-              //     return theme.isLight ? [const Color(0xFFE1E3E3)] : [const Color(0xFF5D5E67)]/*variant40*/;
-              // },
           )
       ),
       child: Stack(
@@ -159,44 +143,3 @@ class LessonIcon extends StatelessWidget {
     );
   }
 }
-
-/*Widget flagIcon = Row(
-  children: [
-    const Icon(
-      Icons.flag,
-      color: Color(0xFFDFC902),
-      size: 50.0,
-    ),
-    straightLine,///add color
-    const SizedBox(width: 40.0),
-  ],
-);*/
-
-
-
-//dark theme star = neutral-variant40
-// Widget leftStarIcon = Row(
-//   children: const [
-//     Icon(
-//       Icons.star,
-//       color: Color(0xFFD9D9D9),
-//       size: 50.0,
-//     ),
-//     Spacer()
-//     // straightLine,
-//     // const SizedBox(width: 40.0),
-//   ],
-// );
-//
-// Widget rightStarIcon = Row(
-//   children: const [
-//     Spacer(),
-//     // const SizedBox(width: 40.0),
-//     // straightLine,
-//     Icon(
-//       Icons.star,
-//       color: Color(0xFFD9D9D9),
-//       size: 50.0,
-//     )
-//   ],
-// );

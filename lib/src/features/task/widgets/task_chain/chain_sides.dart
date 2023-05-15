@@ -23,13 +23,12 @@ class ChainSide extends StatelessWidget {
           const SizedBox(width: 60.0),
           Expanded(
             child: CustomPaint(
-              size: const Size(0, 5),
+              size: const Size(0.0, 0.0),
               painter: StraightLine(color: color),
             ),
           ),
-          Container(
-            // color: Colors.green,
-            padding: const EdgeInsets.only(bottom: 5.0, left: 5.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
             child: CustomPaint(
               size: const Size(50, 120),
               painter: CurveRightLine(color: color),
@@ -42,9 +41,8 @@ class ChainSide extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            // color: Colors.yellow,
-            padding: const EdgeInsets.only(bottom: 6.0, right: 10.0),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
             child: CustomPaint(
               size: const Size(50, 120),
               painter: CurveLeftLine(color: color),
@@ -52,7 +50,7 @@ class ChainSide extends StatelessWidget {
           ),
           Expanded(
             child: CustomPaint(
-              size: const Size(0, 5),
+              size: const Size(0.0, 0.0),
               painter: StraightLine(color: color),
             ),
           ),
@@ -62,36 +60,3 @@ class ChainSide extends StatelessWidget {
     }
   }
 }
-
-
-// Widget rightSide = Row(
-//   mainAxisAlignment: MainAxisAlignment.end,
-//   crossAxisAlignment: CrossAxisAlignment.start,
-//   children: [
-//     const SizedBox(width: 40.0),
-//     straightLine,
-//     Padding(
-//       padding: const EdgeInsets.only(top: 5.0),
-//       child: CustomPaint(
-//         size: const Size(40, 120),
-//         painter: CurveRightLine(),
-//       ),
-//     ),
-//   ],
-// );
-//
-// Widget leftSide =  Row(
-//   mainAxisAlignment: MainAxisAlignment.start,
-//   crossAxisAlignment: CrossAxisAlignment.start,
-//   children: [
-//     Padding(
-//       padding: const EdgeInsets.only(top: 5.0),
-//       child: CustomPaint(
-//         size: const Size(40, 120),
-//         painter: CurveLeftLine(),
-//       ),
-//     ),
-//     straightLine,
-//     const SizedBox(width: 40.0),
-//   ],
-// );
