@@ -18,7 +18,7 @@ class UserCampaignView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+    final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
 
     return CustomScrollView(
       slivers: [
@@ -29,7 +29,7 @@ class UserCampaignView extends StatelessWidget {
                 ? CardMessage('У вас ${item.unreadNotifications} непрочитанное сообщение')
                 : null;
 
-            if (context.isDesktop || context.isTablet) {
+            if (context.isExtraLarge || context.isLarge) {
               return CardWithTitle(
                 chips: const [CardChip('Placeholder')],
                 title: item.name,

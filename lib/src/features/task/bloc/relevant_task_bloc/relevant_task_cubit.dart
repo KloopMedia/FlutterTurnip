@@ -16,10 +16,3 @@ class RelevantTaskCubit extends RemoteDataCubit<Task> with OpenTaskCubit, Closed
     return _repository.fetchDataOnPage(page, query);
   }
 }
-
-const taskFilterMap = {
-  'Активные': {'complete': false},
-  'Возвращенные': null,
-  'Отправленные': {'complete': true},
-  'Все': null,
-};

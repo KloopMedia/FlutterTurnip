@@ -5,9 +5,9 @@ import 'package:gigaturnip/src/theme/index.dart';
 double calculateTabWidth(BuildContext context) {
   final formFactor = context.formFactor;
   final deviceWidth = MediaQuery.of(context).size.width;
-  if (formFactor == FormFactor.desktop) {
+  if (formFactor == FormFactor.extraLarge) {
     return deviceWidth / 3;
-  } else if (formFactor == FormFactor.tablet) {
+  } else if (formFactor == FormFactor.medium) {
     return deviceWidth / 2;
   } else {
     return double.infinity;

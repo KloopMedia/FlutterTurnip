@@ -74,6 +74,10 @@ dependencies:
   dio: ^5.1.1
   pinput: ^2.2.31
   country_code_picker: ^3.0.0
+  material_color_utilities: ^0.2.0
+
+dependency_overrides:
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -106,6 +110,7 @@ flutter:
   assets:
     - assets/icon/google_icon.png
     - assets/icon/apple_icon.png
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 class AvatarButton extends StatelessWidget {
-  final String url;
+  final String? url;
   final String text;
   final void Function() onTap;
 
@@ -17,6 +17,9 @@ class AvatarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final image = (url != null
+        ? NetworkImage(url!)
+        : const AssetImage('assets/images/placeholder.png')) as ImageProvider;
 
     return InkWell(
       onTap: onTap,
@@ -31,7 +34,7 @@ class AvatarButton extends StatelessWidget {
                 boxShadow: Shadows.elevation3,
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: NetworkImage(url),
+                  image: image,
                 ),
               ),
             ),
@@ -40,10 +43,13 @@ class AvatarButton extends StatelessWidget {
               text,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style:
-                  TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: theme.neutral30),
               textAlign: TextAlign.center,
-            )
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: theme.isLight ? theme.neutral30 : theme.onSurfaceVariant,
+              ),
+            ),
           ],
         ),
       ),

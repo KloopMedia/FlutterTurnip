@@ -14,6 +14,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
   final int crossAxisCount;
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
   final bool fillRow;
+  final bool showLoader;
 
   const SliverGridViewWithPagination({
     Key? key,
@@ -24,19 +25,20 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     required this.itemBuilder,
     required this.crossAxisCount,
     this.fillRow = false,
+    this.showLoader = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit, RemoteDataState<Data>>(
       builder: (context, state) {
-        if (state is RemoteDataLoading<Data>) {
+        if (state is RemoteDataLoading<Data> && showLoader) {
           return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
         }
         if (state is RemoteDataFailed<Data>) {
           return SliverToBoxAdapter(child: Center(child: Text(state.error)));
         }
-        if (state is RemoteDataLoaded<Data>) {
+        if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
           final data = state.data.splitBeforeIndexed((i, v) => i % crossAxisCount == 0).toList();
           return MultiSliver(children: [
             SliverToBoxAdapter(child: header),
@@ -56,7 +58,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
                           try {
                             item = itemBuilder(context, rowIndex, data[rowIndex][columnIndex])!;
                           } catch (e) {
-                            item = SizedBox();
+                            item = const SizedBox();
                           }
 
                           return Expanded(
@@ -79,7 +81,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
               ),
             ),
             SliverPadding(
-              padding: padding,
+              padding: state.total == 0 ? EdgeInsets.zero : padding,
               sliver: SliverToBoxAdapter(
                 child: Pagination(
                   currentPage: state.currentPage,

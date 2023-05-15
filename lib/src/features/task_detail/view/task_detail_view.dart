@@ -9,8 +9,10 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/utilities/download_service.dart';
 import 'package:gigaturnip/src/utilities/functions.dart';
+import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -101,53 +103,75 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => redirect(context, null),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.read<TaskBloc>().add(OpenTaskInfo());
-            },
-            icon: const Icon(Icons.text_snippet),
-          )
-        ],
-      ),
-      body: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) {
-        if (state is TaskSubmitted) {
-          redirect(context, state.nextTaskId);
-        }
-        if (state is TaskClosed) {
-          redirect(context, null);
-        }
-        if (state is TaskInfoOpened) {
-          openWebView(context);
-        }
-      }, builder: (context, state) {
-        if (state is TaskFetching) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is TaskFetchingError) {
-          return Center(child: Text(state.error));
-        }
-        if (state is TaskLoaded) {
-          return SingleChildScrollView(
-            key: _pageStorageKey,
-            child: Column(
-              children: [
-                for (final task in state.previousTasks)
-                  _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                if (state.previousTasks.isNotEmpty) TaskDivider(label: context.loc.form_divider),
-                _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
-              ],
+    return BlocConsumer<TaskBloc, TaskState>(listener: (context, state) {
+      if (state is TaskSubmitted) {
+        redirect(context, state.nextTaskId);
+      }
+      if (state is TaskClosed) {
+        redirect(context, null);
+      }
+      if (state is TaskInfoOpened) {
+        openWebView(context);
+      }
+    }, builder: (context, state) {
+      if (state is TaskFetching) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (state is TaskFetchingError) {
+        return Center(child: Text(state.error));
+      }
+      if (state is TaskInitialized) {
+        return DefaultAppBar(
+          title: Text(
+            state.data.name,
+            overflow: TextOverflow.ellipsis,
+          ),
+          automaticallyImplyLeading: false,
+          leading: [
+            BackButton(
+              onPressed: () => redirect(context, null),
+            )
+          ],
+          actions: [
+            IconButton(
+              onPressed: () {
+                context.read<TaskBloc>().add(OpenTaskInfo());
+              },
+              icon: const Icon(Icons.text_snippet),
+            )
+          ],
+          child: Center(
+            child: SingleChildScrollView(
+              key: _pageStorageKey,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: Shadows.elevation3,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                margin: EdgeInsets.symmetric(
+                  vertical: 40,
+                  horizontal: context.isSmall || context.isMedium
+                      ? 0
+                      : MediaQuery.of(context).size.width / 5,
+                ),
+                child: Column(
+                  children: [
+                    for (final task in state.previousTasks)
+                      _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
+                    if (state.previousTasks.isNotEmpty)
+                      TaskDivider(label: context.loc.form_divider),
+                    _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
+                  ],
+                ),
+              ),
             ),
-          );
-        }
-        return const SizedBox.shrink();
-      }),
-    );
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }
 
@@ -176,6 +200,7 @@ class _CurrentTask extends StatelessWidget {
         onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
         onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
         onDownloadFile: (url) => DownloadService().download(url: url),
+        submitButtonText: Text(context.loc.form_submit_button),
       ),
     );
   }

@@ -94,5 +94,22 @@
     "join" : "Кошулуу",
     "complete" : "Толук",
     "open_notification" : "Ачык билдирүү",
-    "closed_notification" : "Жабык билдирүү"
+    "closed_notification" : "Жабык билдирүү",
+
+    "drawer_campaigns": "Кампаниялар",
+    "drawer_notifications": "Билдирүүлөр",
+    "drawer_theme": "Темная тема",
+    "drawer_help": "Жардам алуу",
+    "drawer_exit": "Чыгуу",
+
+    "task_status_returned": "Кайтарылды",
+    "task_status_not_submitted": "Жиберилбеген",
+    "task_status_submitted": "Жиберилген",
+
+    "task_filter_active": "Активдүү",
+    "task_filter_returned": "Кайтарылган",
+    "task_filter_submitted": "Жөнөтүлгөн",
+    "task_filter_all": "Бардыгы",
+
+    "task_available": "Жеткиликтүү тапшырмалар"
 }

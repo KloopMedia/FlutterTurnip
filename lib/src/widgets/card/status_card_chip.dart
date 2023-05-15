@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
@@ -16,19 +17,19 @@ class StatusCardChip extends StatelessWidget {
 
     if (item.complete) {
       return CardChip(
-        'Отправлено',
+        context.loc.task_status_submitted,
         fontColor: fontColor,
         backgroundColor: theme.statusGreen,
       );
     } else if (item.reopened) {
       return CardChip(
-        'Возвращено',
+        context.loc.task_status_returned,
         fontColor: fontColor,
         backgroundColor: theme.statusYellow,
       );
     } else {
       return CardChip(
-        'Не отправлено',
+        context.loc.task_status_not_submitted,
         fontColor: fontColor,
         backgroundColor: theme.statusRed,
       );

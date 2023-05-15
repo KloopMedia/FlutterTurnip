@@ -43,7 +43,7 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isGridView = context.isDesktop || context.isTablet;
+    final isGridView = context.isExtraLarge || context.isLarge;
     final theme = Theme.of(context).colorScheme;
     final appBarColor = theme.isLight
         ? const Color.fromRGBO(241, 243, 255, 1)
@@ -69,7 +69,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               limit: isGridView ? 9 : 10,
             ),
-          )..initialize(query: taskFilterMap.values.first),
+          )..initialize(query: {'complete': false}),
         ),
         BlocProvider<ReactiveTasks>(
           create: (context) => CreatableTaskCubit(
@@ -102,11 +102,13 @@ class _TaskPageState extends State<TaskPage> {
         builder: (context, state) {
           if (state is CampaignInitialized) {
             return DefaultAppBar(
-              color: context.isMobile ? appBarColor : null,
-              boxShadow: context.isDesktop || context.isTablet ? Shadows.elevation1 : null,
-              title: Text(state.data.name),
+              color: context.isSmall || context.isMedium ? appBarColor : null,
+              boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
+              title: Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1),
+              titleSpacing: 0,
               leading: [
-                if (context.isDesktop || context.isTablet)
+                const SizedBox(width: 20),
+                if (!context.isSmall || context.isMedium)
                   IconButton(
                     onPressed: () => _redirectToCampaignDetail(context),
                     icon: Builder(

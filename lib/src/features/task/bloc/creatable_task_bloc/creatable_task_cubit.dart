@@ -4,14 +4,19 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 part 'creatable_task_state.dart';
 
-mixin ReactiveTasks on RemoteDataCubit<TaskStage> {}
-mixin ProactiveTasks on RemoteDataCubit<TaskStage> {}
+mixin ReactiveTasks on RemoteDataCubit<TaskStage> {
+  Future<void> createTask(TaskStage task);
+}
+mixin ProactiveTasks on RemoteDataCubit<TaskStage> {
+  Future<void> createTask(TaskStage task);
+}
 
 class CreatableTaskCubit extends RemoteDataCubit<TaskStage> with ReactiveTasks, ProactiveTasks {
   final CreatableTaskRepository _repository;
 
   CreatableTaskCubit(this._repository);
 
+  @override
   Future<void> createTask(TaskStage task) async {
     try {
       final createdTaskId = await _repository.createTask(task.id);

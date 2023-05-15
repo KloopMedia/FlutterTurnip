@@ -25,7 +25,7 @@ class DefaultChip extends StatelessWidget {
 
     if (theme.isLight) {
       defaultBackgroundColor = theme.neutral95;
-      activeBackgroundColor = theme.primary;
+      activeBackgroundColor = theme.getPrimaryTonalColor(70);
       defaultFontColor = theme.neutral40;
       activeFontColor = Colors.white;
     } else {

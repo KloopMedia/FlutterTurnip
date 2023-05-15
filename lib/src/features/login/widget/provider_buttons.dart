@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 
 import '../bloc/login_bloc.dart';
 import 'login_provider_button.dart';
@@ -16,7 +17,7 @@ class LoginProviderButtons extends StatelessWidget {
       fontWeight: FontWeight.w500,
     );
 
-    return Column(
+    return CustomWrap(
       children: [
         LoginProviderButton(
           color: Colors.white,
@@ -31,7 +32,7 @@ class LoginProviderButtons extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 20.0),
+        const SizedBox(width: 20.0, height: 20,),
         LoginProviderButton(
           color: Colors.black,
           onPressed: () =>
@@ -47,5 +48,20 @@ class LoginProviderButtons extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class CustomWrap extends StatelessWidget {
+  final List<Widget> children;
+
+  const CustomWrap({Key? key, required this.children}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (context.isSmall || context.isMedium) {
+      return Column(children: children);
+    } else {
+      return Row(children: children);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
@@ -47,7 +48,21 @@ class RelevantTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double verticalPadding = (context.isDesktop || context.isTablet) ? 30 : 20;
+    final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
+
+    const taskFilterMap = {
+      'Активные': {'complete': false},
+      'Возвращенные': {'reopened': true, 'complete': false},
+      'Отправленные': {'complete': true},
+      'Все': null,
+    };
+
+    var filterNames = [
+      context.loc.task_filter_active,
+      context.loc.task_filter_returned,
+      context.loc.task_filter_submitted,
+      context.loc.task_filter_all,
+    ];
 
     return BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
       listener: (context, state) {
@@ -70,17 +85,19 @@ class RelevantTaskPage extends StatelessWidget {
               },
               value: taskFilterMap.keys.first,
               filters: taskFilterMap,
+              names: filterNames,
             ),
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(
-            padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+            showLoader: false,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             itemBuilder: (context, index, item) {
               return CardWithTitle(
                 chips: const [CardChip('Placeholder')],
                 title: item.name,
-                size: context.isMobile ? null : const Size.fromHeight(165),
-                flex: context.isMobile ? 0 : 1,
-                onTap: () => context.read<CreatableTaskCubit>().createTask(item),
+                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                flex: context.isSmall || context.isMedium ? 0 : 1,
+                onTap: () => context.read<ReactiveTasks>().createTask(item),
               );
             },
           ),
@@ -92,10 +109,10 @@ class RelevantTaskPage extends StatelessWidget {
               return CardWithTitle(
                 chips: [const CardChip('Placeholder'), const Spacer(), StatusCardChip(item)],
                 title: item.name,
-                size: context.isMobile ? null : const Size.fromHeight(165),
-                flex: context.isMobile ? 0 : 1,
+                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                flex: context.isSmall || context.isMedium ? 0 : 1,
                 onTap: () => redirectToTask(context, item),
-                body: cardBody,
+                bottom: cardBody,
               );
             },
           ),
