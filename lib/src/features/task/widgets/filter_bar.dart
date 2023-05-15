@@ -4,10 +4,16 @@ import 'package:gigaturnip/src/widgets/chip_bar/index.dart';
 class FilterBar extends StatefulWidget {
   final String value;
   final Map<String, Map<String, dynamic>?> filters;
+  final List<String> names;
   final void Function(Map<String, dynamic>? value) onChanged;
 
-  const FilterBar({Key? key, required this.value, required this.onChanged, required this.filters})
-      : super(key: key);
+  const FilterBar({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+    required this.filters,
+    required this.names,
+  }) : super(key: key);
 
   @override
   State<FilterBar> createState() => _FilterBarState();
@@ -18,18 +24,21 @@ class _FilterBarState extends State<FilterBar> {
 
   @override
   Widget build(BuildContext context) {
+    final keys = widget.filters.keys.toList();
+    final values = widget.filters.values.toList();
+
     return FixedChipBar(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       children: [
-        for (final filter in widget.filters.entries)
+        for (var i = 0; i < widget.filters.length; i++)
           DefaultChip(
-            label: filter.key,
-            active: filter.key == _activeFilter,
+            label: widget.names[i],
+            active: keys[i] == _activeFilter,
             onPressed: () {
               setState(() {
-                _activeFilter = filter.key;
+                _activeFilter = keys[i];
               });
-              widget.onChanged(filter.value);
+              widget.onChanged(values[i]);
             },
           ),
       ],

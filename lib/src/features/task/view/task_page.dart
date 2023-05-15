@@ -69,7 +69,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               limit: isGridView ? 9 : 10,
             ),
-          )..initialize(query: taskFilterMap.values.first),
+          )..initialize(query: {'complete': false}),
         ),
         BlocProvider<ReactiveTasks>(
           create: (context) => CreatableTaskCubit(

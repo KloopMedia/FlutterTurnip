@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/campaign_route.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -83,35 +84,35 @@ class AppDrawer extends StatelessWidget {
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,
                 leading: Icon(Icons.grid_view, color: theme.primary),
-                title: Text('Кампании', style: titleTextStyle),
+                title: Text(context.loc.drawer_campaigns, style: titleTextStyle),
                 onTap: () => context.goNamed(CampaignRoute.name),
               ),
               CustomListTile(
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,
                 leading: Icon(Icons.notifications_outlined, color: theme.primary),
-                title: Text('Уведомления', style: titleTextStyle),
+                title: Text(context.loc.drawer_notifications, style: titleTextStyle),
                 onTap: () {},
               ),
               ThemeSwitch(
                 contentPadding: contentPadding,
                 iconPadding: iconPadding,
                 icon: Icon(Icons.mode_night_outlined, color: theme.primary),
-                title: Text('Темная тема', style: titleTextStyle),
+                title: Text(context.loc.drawer_theme, style: titleTextStyle),
               ),
               const Spacer(),
               CustomListTile(
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,
                 leading: Icon(Icons.help_outline, color: theme.primary),
-                title: Text('Получить помощь', style: titleTextStyle),
+                title: Text(context.loc.drawer_help, style: titleTextStyle),
                 onTap: () {},
               ),
               CustomListTile(
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,
                 leading: Icon(Icons.logout, color: theme.primary),
-                title: Text('Выход', style: titleTextStyle),
+                title: Text(context.loc.drawer_exit, style: titleTextStyle),
                 onTap: () {
                   context.read<AuthBloc>().add(AuthLogoutRequested());
                 },
