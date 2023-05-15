@@ -151,7 +151,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 margin: EdgeInsets.symmetric(
-                  vertical: 40,
+                  vertical: context.isSmall || context.isMedium ? 0 : 40,
                   horizontal: context.isSmall || context.isMedium
                       ? 0
                       : MediaQuery.of(context).size.width / 5,
