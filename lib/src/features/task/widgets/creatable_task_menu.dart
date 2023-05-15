@@ -61,7 +61,7 @@ class CreatableTaskMenu extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            context.read<CreatableTaskCubit>().createTask(item);
+                            context.read<ProactiveTasks>().createTask(item);
                           },
                           child: Text(item.name, overflow: TextOverflow.ellipsis),
                         ),
