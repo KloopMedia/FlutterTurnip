@@ -81,7 +81,7 @@ class RelevantTaskPage extends StatelessWidget {
                 title: item.name,
                 size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                 flex: context.isSmall || context.isMedium ? 0 : 1,
-                onTap: () => context.read<CreatableTaskCubit>().createTask(item),
+                onTap: () => context.read<ReactiveTasks>().createTask(item),
               );
             },
           ),
