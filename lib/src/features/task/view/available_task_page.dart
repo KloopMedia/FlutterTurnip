@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -47,7 +48,7 @@ class AvailableTaskPage extends StatelessWidget {
       automaticallyImplyLeading: false,
       leading: [BackButton(onPressed: () => redirectToTaskMenu(context))],
       title: Text(
-        'Доступные задания',
+        context.loc.task_available,
         style: TextStyle(color: theme.isLight ? theme.neutral30 : theme.neutral90),
       ),
       child: BlocProvider(
@@ -78,7 +79,7 @@ class AvailableTaskPage extends StatelessWidget {
                         onPressed: () {
                           context.read<AvailableTaskCubit>().requestTaskAssignment(item);
                         },
-                        child: const Text('Открыть'),
+                        child: Text(context.loc.opentosee),
                       ),
                     ],
                     title: item.name,

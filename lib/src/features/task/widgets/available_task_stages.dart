@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -26,7 +27,7 @@ class AvailableTaskStages extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24),
                 child: Text(
-                  'Доступные задания',
+                  context.loc.task_available,
                   style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w500,
