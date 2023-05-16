@@ -121933,11 +121933,11 @@ break
 case 1:return A.n(q,r)}})
 return A.o($async$Us,r)}}
 A.Ap.prototype={
-lf(a){var s=A.w(t.N,t.z)
-s.n(0,"chain__campaign",this.c)
-s.n(0,"is_proactive",this.d)
-s.L(0,a)
-return this.b.DQ(s)},
+lf(a){var s=this.d?"PR":"AC",r=A.w(t.N,t.z)
+r.n(0,"chain__campaign",this.c)
+r.n(0,"stage_type",s)
+r.L(0,a)
+return this.b.DQ(r)},
 CS(a){return J.ex(a,A.bpE(),t.TX).cT(0)},
 m1(a){return this.aHI(a)},
 aHI(a){var s=0,r=A.p(t.S),q,p=this
