@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_color_utilities/hct/hct.dart';
 import 'package:material_color_utilities/palettes/tonal_palette.dart';
+
+import 'typography.dart';
 
 final lightTheme = ThemeData(
   fontFamily: 'Inter',
   colorScheme: lightColorScheme,
-  textTheme: Typography.englishLike2021
-      .apply(fontSizeFactor: 1.sp)
-      .apply(bodyColor: lightColorScheme.onSurfaceVariant)
-      .apply(displayColor: lightColorScheme.onSurfaceVariant),
+  textTheme: textTheme,
 );
 
 final darkTheme = ThemeData(
   fontFamily: 'Inter',
   colorScheme: darkColorScheme,
-  textTheme: Typography.englishLike2021.apply(fontSizeFactor: 1.sp),
+  textTheme: textTheme,
 );
 
 const lightColorScheme = ColorScheme(
@@ -24,11 +22,11 @@ const lightColorScheme = ColorScheme(
   onPrimary: Color(0xFFFFFFFF),
   primaryContainer: Color(0xFFDCE1FF),
   onPrimaryContainer: Color(0xFF001551),
-  secondary: Color(0xFF595D72),
+  secondary: Color(0xFF4459A9),
   onSecondary: Color(0xFFFFFFFF),
   secondaryContainer: Color(0xFFDEE1F9),
   onSecondaryContainer: Color(0xFF161B2C),
-  tertiary: Color(0xFF4B9627),
+  tertiary: Color(0xFF74BF3B),
   onTertiary: Color(0xFFFFFFFF),
   tertiaryContainer: Color(0xFFA0F879),
   onTertiaryContainer: Color(0xFF062100),
@@ -54,12 +52,12 @@ const lightColorScheme = ColorScheme(
 
 const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
-  primary: Color(0xFF9BB1FF),
+  primary: Color(0xFFB7C4FF),
   onPrimary: Color(0xFF002780),
   primaryContainer: Color(0xFF153CA8),
   onPrimaryContainer: Color(0xFFDCE1FF),
   secondary: Color(0xFFC2C5DD),
-  onSecondary: Color(0xFF232427),
+  onSecondary: Color(0xFF2B3042),
   secondaryContainer: Color(0xFF424659),
   onSecondaryContainer: Color(0xFFDEE1F9),
   tertiary: Color(0xFF85DB60),

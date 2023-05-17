@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
 import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
@@ -50,6 +51,20 @@ class RelevantTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
 
+    const taskFilterMap = {
+      'Активные': {'complete': false},
+      'Возвращенные': {'reopened': true, 'complete': false},
+      'Отправленные': {'complete': true},
+      'Все': null,
+    };
+
+    var filterNames = [
+      context.loc.task_filter_active,
+      context.loc.task_filter_returned,
+      context.loc.task_filter_submitted,
+      context.loc.task_filter_all,
+    ];
+
     return BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
       listener: (context, state) {
         if (state is TaskCreated) {
@@ -71,6 +86,7 @@ class RelevantTaskPage extends StatelessWidget {
               },
               value: taskFilterMap.keys.first,
               filters: taskFilterMap,
+              names: filterNames,
             ),
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(

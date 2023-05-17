@@ -81,7 +81,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
               ),
             ),
             SliverPadding(
-              padding: padding,
+              padding: state.total == 0 ? EdgeInsets.zero : padding,
               sliver: SliverToBoxAdapter(
                 child: Pagination(
                   currentPage: state.currentPage,

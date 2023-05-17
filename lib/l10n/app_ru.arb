@@ -94,5 +94,22 @@
      "join" : "Присоединиться",
      "complete" : "Законченный",
      "open_notification" : "Открытые уведомления",
-     "closed_notification" : "Закрытые уведомления"
+     "closed_notification" : "Закрытые уведомления",
+
+     "drawer_campaigns": "Кампании",
+     "drawer_notifications": "Уведомления",
+     "drawer_theme": "Темная тема",
+     "drawer_help": "Получить помощь",
+     "drawer_exit": "Выход",
+
+     "task_status_returned": "Возвращено",
+     "task_status_not_submitted": "Не отправлено",
+     "task_status_submitted": "Отправлено",
+
+     "task_filter_active": "Активные",
+     "task_filter_returned": "Возвращенные",
+     "task_filter_submitted": "Отправленные",
+     "task_filter_all": "Все",
+
+     "task_available": "Доступные задания"
 }

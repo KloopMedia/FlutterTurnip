@@ -97,10 +97,17 @@ class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskSt
 
   @override
   Future<api.PaginationWrapper<api.TaskStage>> fetchData({Map<String, dynamic>? query}) {
+    final String? stageType;
+    if (isProactive != null) {
+      stageType = isProactive! ? "PR" : "AC";
+    } else {
+      stageType = null;
+    }
+
     return _gigaTurnipApiClient.getUserRelevantTaskStages(
       query: {
         'chain__campaign': campaignId,
-        'is_proactive': isProactive,
+        'stage_type': stageType,
         ...?query,
       },
     );

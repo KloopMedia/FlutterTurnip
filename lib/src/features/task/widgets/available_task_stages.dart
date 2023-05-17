@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -15,6 +17,8 @@ class AvailableTaskStages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+
     return BlocBuilder<SelectableTaskStageCubit, RemoteDataState<TaskStage>>(
       builder: (context, state) {
         if (state is RemoteDataLoaded<TaskStage> && state.data.isNotEmpty) {
@@ -23,11 +27,11 @@ class AvailableTaskStages extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24),
                 child: Text(
-                  'Доступные задания',
+                  context.loc.task_available,
                   style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                      color: theme.isLight ? theme.neutral30 : theme.neutral90),
                 ),
               ),
               SizedBox(
@@ -40,8 +44,7 @@ class AvailableTaskStages extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: AvatarButton(
-                        url:
-                            'https://is4-ssl.mzstatic.com/image/thumb/Purple116/v4/77/29/8a/77298a50-f7d9-07a4-9c17-d55b57a1e812/logo_gsa_ios_color-0-1x_U007emarketing-0-0-0-6-0-0-0-85-220-0.png/246x0w.webp',
+                        url: null,
                         text: item.name,
                         onTap: () => onTap(item),
                       ),

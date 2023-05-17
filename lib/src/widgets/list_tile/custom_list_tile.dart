@@ -4,9 +4,9 @@ class CustomListTile extends StatelessWidget {
   final Widget? leading;
   final Widget? title;
   final Widget? trailing;
-  final EdgeInsets? contentPadding;
-  final EdgeInsets? leadingPadding;
-  final EdgeInsets? trailingPadding;
+  final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsetsGeometry? leadingPadding;
+  final EdgeInsetsGeometry? trailingPadding;
   final void Function()? onTap;
 
   const CustomListTile({

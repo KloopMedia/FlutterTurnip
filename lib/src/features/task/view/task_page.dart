@@ -69,7 +69,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               limit: isGridView ? 9 : 10,
             ),
-          )..initialize(query: taskFilterMap.values.first),
+          )..initialize(query: {'complete': false}),
         ),
         BlocProvider<ReactiveTasks>(
           create: (context) => CreatableTaskCubit(
@@ -112,7 +112,7 @@ class _TaskPageState extends State<TaskPage> {
             return DefaultAppBar(
               color: context.isSmall || context.isMedium ? appBarColor : null,
               boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
-              title: Text(state.data.name),
+              title: Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1),
               titleSpacing: 0,
               leading: [
                 const SizedBox(width: 20),

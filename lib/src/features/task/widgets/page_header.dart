@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
@@ -53,8 +52,6 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -63,25 +60,24 @@ class _Content extends StatelessWidget {
           children: [
             BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
               builder: (context, state) {
-                // TODO: Replace placeholder
-                const placeholder =
-                    'https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1';
                 if (state is CampaignLoaded && state.data.logo.isNotEmpty) {
-                  return _Avatar(state.data.logo);
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: _Avatar(state.data.logo),
+                  );
                 } else {
-                  return const _Avatar(placeholder);
+                  return const SizedBox.shrink();
                 }
               },
             ),
-            const SizedBox(height: 10),
-            Text(
-              'Уровень: Продвинутый',
-              style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.w600,
-                color: theme.onSurfaceVariant,
-              ),
-            ),
+            // Text(
+            //   'Уровень: Продвинутый',
+            //   style: TextStyle(
+            //     fontSize: 22.sp,
+            //     fontWeight: FontWeight.w600,
+            //     color: theme.onSurfaceVariant,
+            //   ),
+            // ),
           ],
         ),
       ),
