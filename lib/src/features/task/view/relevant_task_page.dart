@@ -101,7 +101,11 @@ class RelevantTaskPage extends StatelessWidget {
               );
             },
           ),
-          TaskStageChainView(),
+          TaskStageChainView(
+            onTap: (item) {
+              ///TODO: create task
+            }
+          ),
         ],
       ),
     );

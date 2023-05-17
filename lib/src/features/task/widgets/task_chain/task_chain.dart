@@ -9,8 +9,9 @@ class TaskStageChain extends StatelessWidget {
   final String? status;
   final int lessonNum;
   final bool even;
+  final bool isFirstTaskNotOpen;
   final Color lineColor;
-  final void Function()? onTap;
+  final void Function() onTap;
 
   const TaskStageChain({
     Key? key,
@@ -18,8 +19,9 @@ class TaskStageChain extends StatelessWidget {
     required this.status,
     required this.lessonNum,
     required this.even,
+    this.isFirstTaskNotOpen = false,
     required this.lineColor,
-    this.onTap,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -29,12 +31,11 @@ class TaskStageChain extends StatelessWidget {
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
       color: theme.isLight
-          ? status == 'Неотправлено' ? theme.neutral90 : theme.neutral40
-          : status == 'Неотправлено' ? theme.neutralVariant40 : theme.neutral70,
+          ? (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutral90 : theme.neutral40
+          : (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutralVariant40 : theme.neutral70,
     );
 
     return SizedBox(
-      // width: 420.0,///
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
@@ -45,10 +46,14 @@ class TaskStageChain extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
-                  if (!even) LessonIcon(lessonNum: lessonNum, status: status),
+                  if (!even) LessonIcon(
+                    lessonNum: lessonNum,
+                    status: status,
+                    isFirstTaskNotOpen: isFirstTaskNotOpen,
+                  ),
                   Expanded(
                       child: TextButton(
-                        onPressed: (status == 'Неотправлено') ? null : onTap,
+                        onPressed: (status == 'Неотправлено' && !isFirstTaskNotOpen) ? null : onTap,
                         child: Text(
                           title,
                           style: titleTextStyle,
@@ -56,7 +61,11 @@ class TaskStageChain extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (even) LessonIcon(lessonNum: lessonNum, status: status),
+                  if (even) LessonIcon(
+                    lessonNum: lessonNum,
+                    status: status,
+                    isFirstTaskNotOpen: isFirstTaskNotOpen,
+                  ),
                 ],
               ),
             ),
@@ -70,13 +79,19 @@ class TaskStageChain extends StatelessWidget {
 class LessonIcon extends StatelessWidget {
   final int lessonNum;
   final String? status;
+  final bool isFirstTaskNotOpen;
 
-  const LessonIcon({Key? key, required this.lessonNum, required this.status}) : super(key: key);
+  const LessonIcon({
+    Key? key,
+    required this.lessonNum,
+    required this.status,
+    required this.isFirstTaskNotOpen,
+  }) : super(key: key);
 
   int getStatusIndexOfIconColor() {
     if (status == 'Отправлено') {
       return 0;
-    } else if (status == 'Возвращено') {
+    } else if ((status == 'Возвращено') || (status == 'Неотправлено' && isFirstTaskNotOpen)){
       return 1;
     } else {
       return 2;
@@ -123,7 +138,7 @@ class LessonIcon extends StatelessWidget {
           children: [
             Transform.rotate(
               angle: 0.8,
-              child: Container( ///Romb
+              child: Container(
                 height: 37.0,
                 width: 37.0,
                 decoration: BoxDecoration(

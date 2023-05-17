@@ -9,9 +9,9 @@ import 'chain_lines.dart';
 import 'task_chain.dart';
 
 class TaskStageChainView extends StatelessWidget {
-  final Function(BuildContext context, TaskStageChainInfo item)? onTap;
+  final Function(TaskStageChainInfo item) onTap;
 
-  const TaskStageChainView({Key? key, this.onTap}) : super(key: key);
+  const TaskStageChainView({Key? key, required this.onTap}) : super(key: key);
 
   String? getTaskStatus(TaskStageChainInfo? item) {
     if (item != null) {
@@ -80,8 +80,9 @@ class TaskStageChainView extends StatelessWidget {
                             status: status,
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
+                            isFirstTaskNotOpen: (status == 'Неотправлено') ? true : false,
                             lineColor: lineColor,
-                            onTap: onTap!(context, item),
+                            onTap: () => onTap(item),
                           ),
                         ),
                         Row(
@@ -114,7 +115,7 @@ class TaskStageChainView extends StatelessWidget {
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
                             lineColor: lineColor,
-                            onTap: onTap!(context, item),
+                            onTap: () => onTap(item),
                           ),
                         ),
 
@@ -129,7 +130,7 @@ class TaskStageChainView extends StatelessWidget {
                       lessonNum: index + 1,
                       even: index % 2 == 0 ? true : false,
                       lineColor: lineColor,
-                      onTap: onTap!(context, item),
+                      onTap: () => onTap(item),
                     );
                   }
                 },
