@@ -20,8 +20,7 @@ Chain _$ChainFromJson(Map<String, dynamic> json) => $checkedCreate(
           stagesData: $checkedConvert(
               'stages_data',
               (v) => (v as List<dynamic>?)
-                  ?.map((e) =>
-                      TaskStageChainInfo.fromJson(e as Map<String, dynamic>))
+                  ?.map((e) => TaskStage.fromJson(e as Map<String, dynamic>))
                   .toList()),
         );
         return val;

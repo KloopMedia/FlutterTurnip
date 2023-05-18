@@ -117,11 +117,35 @@ class RelevantTaskPage extends StatelessWidget {
               );
             },
           ),
-          TaskStageChainView(
-            onTap: (item) {
-              ///TODO: create task
-            }
-          ),
+          BlocConsumer<TaskStageChainCubit, RemoteDataState<TaskStage>>(
+            listener: (context, state) {
+              if (state is TaskChainCreated) {
+                redirectToTaskWithId(context, state.createdTaskId);
+              }
+            },
+            buildWhen: (previous, current) {
+              print('>>> buildwhen = ${current is TaskChainCreated}');
+              return current is TaskChainCreated;
+            },
+            builder: (context, state) {
+              return TaskStageChainView(
+                  onTap: (item, status) {
+                    redirectToTaskWithId(context, 412292);
+
+                    // if (state is TaskChainCreated) {
+                    //   print('>>> task = ${state.createdTaskId}');
+                    //   if (status == 'Отправлено' || status == 'Возвращено') {
+                    //     print('>>> 1');
+                    //     redirectToTaskWithId(context, state.createdTaskId);
+                    //   }
+                    // } else {
+                    //   print('>>> 2');
+                    //   context.read<TaskStageChainCubit>().createTask(item);
+                    // }
+                  }
+              );
+            },
+          )
         ],
       ),
     );

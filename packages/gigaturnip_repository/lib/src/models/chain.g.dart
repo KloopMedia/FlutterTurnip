@@ -12,7 +12,7 @@ Chain _$ChainFromJson(Map<String, dynamic> json) => Chain(
       description: json['description'] as String?,
       campaign: json['campaign'] as int?,
       stagesData: (json['stagesData'] as List<dynamic>?)
-          ?.map((e) => TaskStageChainInfo.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => TaskStage.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

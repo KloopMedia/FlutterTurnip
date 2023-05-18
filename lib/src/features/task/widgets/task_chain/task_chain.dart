@@ -31,8 +31,10 @@ class TaskStageChain extends StatelessWidget {
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
       color: theme.isLight
-          ? (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutral90 : theme.neutral40
-          : (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutralVariant40 : theme.neutral70,
+          ? (status == 'Неотправлено') ? theme.neutral90 : theme.neutral40
+          : (status == 'Неотправлено') ? theme.neutralVariant40 : theme.neutral70,
+          // ? (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutral90 : theme.neutral40
+          // : (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutralVariant40 : theme.neutral70,
     );
 
     return SizedBox(
@@ -53,7 +55,8 @@ class TaskStageChain extends StatelessWidget {
                   ),
                   Expanded(
                       child: TextButton(
-                        onPressed: (status == 'Неотправлено' && !isFirstTaskNotOpen) ? null : onTap,
+                        onPressed: (status == 'Неотправлено') ? null : onTap,
+                        // onPressed: (status == 'Неотправлено' && !isFirstTaskNotOpen) ? null : onTap,
                         child: Text(
                           title,
                           style: titleTextStyle,
@@ -88,10 +91,20 @@ class LessonIcon extends StatelessWidget {
     required this.isFirstTaskNotOpen,
   }) : super(key: key);
 
+  // int getStatusIndexOfIconColor() {
+  //   if (status == 'Отправлено') {
+  //     return 0;
+  //   } else if ((status == 'Возвращено') || (status == 'Неотправлено' && isFirstTaskNotOpen)){
+  //     return 1;
+  //   } else {
+  //     return 2;
+  //   }
+  // }
+
   int getStatusIndexOfIconColor() {
     if (status == 'Отправлено') {
       return 0;
-    } else if ((status == 'Возвращено') || (status == 'Неотправлено' && isFirstTaskNotOpen)){
+    } else if (status == 'Возвращено' || status == 'Активно'){
       return 1;
     } else {
       return 2;

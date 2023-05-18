@@ -102,7 +102,7 @@ class _TaskPageState extends State<TaskPage> {
             TaskStageChainRepository(
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
-            )
+            ),
           )..initialize(),
         ),
       ],

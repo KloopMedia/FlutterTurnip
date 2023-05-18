@@ -9,7 +9,7 @@ class Chain {
   final String name;
   final String? description;
   final int? campaign;
-  final List<TaskStageChainInfo>? stagesData;
+  final List<TaskStage>? stagesData;
 
   const Chain({
     required this.id,

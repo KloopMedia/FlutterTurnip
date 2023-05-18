@@ -149,7 +149,7 @@ class SelectableTaskStageRepository extends GigaTurnipRepository<api.TaskStage, 
   }
 }
 
-class TaskStageChainRepository extends GigaTurnipRepository<api.Chain, Chain> {
+class TaskStageChainRepository extends GigaTurnipRepository<api.Chain, TaskStage> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
 
@@ -162,6 +162,7 @@ class TaskStageChainRepository extends GigaTurnipRepository<api.Chain, Chain> {
   Future<api.PaginationWrapper<api.Chain>> fetchData({Map<String, dynamic>? query}) {
     return _gigaTurnipApiClient.getTaskStageChain(
       query: {
+        // 'id': chainId,
         'campaign': campaignId,
         'is_individual': true,
         ...?query,
@@ -170,7 +171,16 @@ class TaskStageChainRepository extends GigaTurnipRepository<api.Chain, Chain> {
   }
 
   @override
-  List<Chain> parseData(List<api.Chain> data) {
-    return data.map(Chain.fromApiModel).toList();
+  List<TaskStage> parseData(List<api.Chain> data) {
+    // return data.map(Chain.fromApiModel).toList();
+    final chainsList =  data.map(Chain.fromApiModel).toList();
+    final stagesData =  chainsList.first.stagesData;
+    print('>>> repo $stagesData');
+    return stagesData ?? [];
+  }
+
+  Future<int> createTask(int id) async {
+    final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
+    return response.id;
   }
 }

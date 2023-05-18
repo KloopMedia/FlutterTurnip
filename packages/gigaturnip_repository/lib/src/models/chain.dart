@@ -11,7 +11,7 @@ class Chain extends Equatable {
   final String name;
   final String? description;
   final int? campaign;
-  final List<TaskStageChainInfo>? stagesData;
+  final List<TaskStage>? stagesData;
 
   const Chain({
     required this.id,
@@ -31,7 +31,7 @@ class Chain extends Equatable {
       name: model.name,
       description: model.description,
       campaign: model.campaign,
-      stagesData: model.stagesData?.map(TaskStageChainInfo.fromApiModel).toList(),
+      stagesData: model.stagesData?.map(TaskStage.fromApiModel).toList(),
     );
   }
 
