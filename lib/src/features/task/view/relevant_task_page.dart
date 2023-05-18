@@ -11,7 +11,6 @@ import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
-import '../widgets/page_header.dart';
 
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
@@ -72,9 +71,9 @@ class RelevantTaskPage extends StatelessWidget {
       },
       child: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(
-            child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
-          ),
+          // const SliverToBoxAdapter(
+          //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
+          // ),
           AvailableTaskStages(
             onTap: (item) => redirectToAvailableTasks(context, item),
           ),
