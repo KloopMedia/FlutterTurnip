@@ -112,6 +112,8 @@ extension Neutral on ColorScheme {
 
   Color get neutral10 => const Color(0xFF191C1D);
 
+  Color get neutral12 => const Color(0xFF1D2021);
+
   Color get neutral20 => const Color(0xFF2E3132);
 
   Color get neutral30 => const Color(0xFF444748);

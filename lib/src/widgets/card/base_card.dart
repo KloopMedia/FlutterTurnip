@@ -31,11 +31,12 @@ class _BaseCardState extends State<BaseCard> {
     final theme = Theme.of(context).colorScheme;
     final borderRadius = BorderRadius.circular(15);
     final shape = RoundedRectangleBorder(borderRadius: borderRadius);
-    final backgroundColor = theme.isLight ? theme.onSecondary : theme.onSecondary;
+    final backgroundColor = theme.isLight ? theme.onSecondary : theme.neutral12;
 
     return GestureDetector(
       onTap: widget.onTap,
       child: MouseRegion(
+        cursor: SystemMouseCursors.click,
         onEnter: (details) => setState(() {
           isHover = true;
         }),
@@ -58,7 +59,7 @@ class _BaseCardState extends State<BaseCard> {
                 child: Card(
                   margin: EdgeInsets.zero,
                   elevation: 0,
-                  color: theme.onSecondary,
+                  color: backgroundColor,
                   shape: shape,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
