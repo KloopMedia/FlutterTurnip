@@ -7,8 +7,8 @@ class CustomSwitchListTile extends StatelessWidget {
   final bool cupertinoVariant;
   final Widget? leading;
   final Widget? title;
-  final EdgeInsets? contentPadding;
-  final EdgeInsets? leadingPadding;
+  final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsetsGeometry? leadingPadding;
   final void Function(bool)? onChanged;
   final bool value;
 

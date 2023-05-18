@@ -74,7 +74,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       );
     } else {
       if (context.canPop()) {
-        context.pop();
+        context.pop(true);
       } else {
         context.goNamed(
           TaskRoute.name,
@@ -140,31 +140,29 @@ class _TaskDetailViewState extends State<TaskDetailView> {
               icon: const Icon(Icons.text_snippet),
             )
           ],
-          child: Center(
-            child: SingleChildScrollView(
-              key: _pageStorageKey,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: Shadows.elevation3,
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                margin: EdgeInsets.symmetric(
-                  vertical: context.isSmall || context.isMedium ? 0 : 40,
-                  horizontal: context.isSmall || context.isMedium
-                      ? 0
-                      : MediaQuery.of(context).size.width / 5,
-                ),
-                child: Column(
-                  children: [
-                    for (final task in state.previousTasks)
-                      _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                    if (state.previousTasks.isNotEmpty)
-                      TaskDivider(label: context.loc.form_divider),
-                    _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
-                  ],
-                ),
+          child: SingleChildScrollView(
+            key: _pageStorageKey,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: Shadows.elevation3,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: EdgeInsets.symmetric(
+                vertical: context.isSmall || context.isMedium ? 0 : 40,
+                horizontal: context.isSmall || context.isMedium
+                    ? 0
+                    : MediaQuery.of(context).size.width / 5,
+              ),
+              child: Column(
+                children: [
+                  for (final task in state.previousTasks)
+                    _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
+                  if (state.previousTasks.isNotEmpty)
+                    TaskDivider(label: context.loc.form_divider),
+                  _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
+                ],
               ),
             ),
           ),

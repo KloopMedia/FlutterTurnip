@@ -11,15 +11,23 @@ import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
-import '../widgets/page_header.dart';
 
 class RelevantTaskPage extends StatelessWidget {
   final int campaignId;
 
   const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
 
-  void redirectToTask(BuildContext context, Task task) {
-    context.pushNamed(
+  void refreshAllTasks(BuildContext context, bool? refresh) {
+    if (refresh ?? false) {
+      context.read<RelevantTaskCubit>().refetch();
+      context.read<SelectableTaskStageCubit>().refetch();
+      context.read<ReactiveTasks>().refetch();
+      context.read<ProactiveTasks>().refetch();
+    }
+  }
+
+  void redirectToTask(BuildContext context, Task task) async {
+    final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
         'cid': '$campaignId',
@@ -27,16 +35,22 @@ class RelevantTaskPage extends StatelessWidget {
       },
       extra: task,
     );
+    if (context.mounted) {
+      refreshAllTasks(context, result);
+    }
   }
 
-  void redirectToTaskWithId(BuildContext context, int id) {
-    context.pushNamed(
+  void redirectToTaskWithId(BuildContext context, int id) async {
+    final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
         'cid': '$campaignId',
         'tid': '$id',
       },
     );
+    if (context.mounted) {
+      refreshAllTasks(context, result);
+    }
   }
 
   void redirectToAvailableTasks(BuildContext context, TaskStage stage) {
@@ -72,9 +86,9 @@ class RelevantTaskPage extends StatelessWidget {
       },
       child: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(
-            child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
-          ),
+          // const SliverToBoxAdapter(
+          //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
+          // ),
           AvailableTaskStages(
             onTap: (item) => redirectToAvailableTasks(context, item),
           ),

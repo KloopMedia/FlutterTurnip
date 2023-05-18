@@ -44,10 +44,10 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
-    final theme = Theme.of(context).colorScheme;
-    final appBarColor = theme.isLight
-        ? const Color.fromRGBO(241, 243, 255, 1)
-        : const Color.fromRGBO(40, 41, 49, 1);
+    // final theme = Theme.of(context).colorScheme;
+    // final appBarColor = theme.isLight
+    //     ? const Color.fromRGBO(241, 243, 255, 1)
+    //     : const Color.fromRGBO(40, 41, 49, 1);
 
     final apiClient = context.read<GigaTurnipApiClient>();
 
@@ -102,7 +102,7 @@ class _TaskPageState extends State<TaskPage> {
         builder: (context, state) {
           if (state is CampaignInitialized) {
             return DefaultAppBar(
-              color: context.isSmall || context.isMedium ? appBarColor : null,
+              // color: context.isSmall || context.isMedium ? appBarColor : null,
               boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
               title: Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1),
               titleSpacing: 0,

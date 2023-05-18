@@ -22,18 +22,16 @@ class ThemeSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
-        return Padding(
-          padding: contentPadding ?? EdgeInsets.zero,
-          child: CustomSwitchListTile(
-            cupertinoVariant: true,
-            leadingPadding: iconPadding,
-            leading: icon,
-            title: title,
-            value: state.isDark,
-            onChanged: (value) {
-              context.read<ThemeCubit>().switchTheme(value);
-            },
-          ),
+        return CustomSwitchListTile(
+          cupertinoVariant: true,
+          leadingPadding: iconPadding,
+          contentPadding: contentPadding ?? EdgeInsets.zero,
+          leading: icon,
+          title: title,
+          value: state.isDark,
+          onChanged: (value) {
+            context.read<ThemeCubit>().switchTheme(value);
+          },
         );
       },
     );

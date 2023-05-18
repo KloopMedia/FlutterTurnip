@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
-import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../bloc/bloc.dart';
@@ -20,7 +19,7 @@ class TaskPageFloatingActionButton extends StatelessWidget {
       builder: (context, state) {
         if (state is RemoteDataInitialized<TaskStage> && state.data.isNotEmpty) {
           return Padding(
-            padding: EdgeInsets.only(bottom: context.isSmall || context.isMedium ? 50 : 84, right: 8),
+            padding: const EdgeInsets.only(bottom: 10, right: 8),
             child: FloatingActionButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               backgroundColor: theme.primary,
