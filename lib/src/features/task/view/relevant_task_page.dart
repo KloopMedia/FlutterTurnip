@@ -17,8 +17,17 @@ class RelevantTaskPage extends StatelessWidget {
 
   const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
 
-  void redirectToTask(BuildContext context, Task task) {
-    context.pushNamed(
+  void refreshAllTasks(BuildContext context, bool? refresh) {
+    if (refresh ?? false) {
+      context.read<RelevantTaskCubit>().refetch();
+      context.read<SelectableTaskStageCubit>().refetch();
+      context.read<ReactiveTasks>().refetch();
+      context.read<ProactiveTasks>().refetch();
+    }
+  }
+
+  void redirectToTask(BuildContext context, Task task) async {
+    final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
         'cid': '$campaignId',
@@ -26,16 +35,22 @@ class RelevantTaskPage extends StatelessWidget {
       },
       extra: task,
     );
+    if (context.mounted) {
+      refreshAllTasks(context, result);
+    }
   }
 
-  void redirectToTaskWithId(BuildContext context, int id) {
-    context.pushNamed(
+  void redirectToTaskWithId(BuildContext context, int id) async {
+    final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
         'cid': '$campaignId',
         'tid': '$id',
       },
     );
+    if (context.mounted) {
+      refreshAllTasks(context, result);
+    }
   }
 
   void redirectToAvailableTasks(BuildContext context, TaskStage stage) {

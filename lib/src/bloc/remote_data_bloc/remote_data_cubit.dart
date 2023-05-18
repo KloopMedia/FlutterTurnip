@@ -34,7 +34,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
 
   Future<void> fetchData(int page) async {
     try {
-      emit(RemoteDataRefetching.clone(state as RemoteDataLoaded<Data>));
+      emit(RemoteDataRefetching.clone(state as RemoteDataInitialized<Data>));
 
       final query = (state as RemoteDataInitialized).query;
 
@@ -53,7 +53,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
         print(e);
         print(c);
       }
-      emit(RemoteDataRefetchingError.clone(state as RemoteDataLoaded<Data>, e.toString()));
+      emit(RemoteDataRefetchingError.clone(state as RemoteDataInitialized<Data>, e.toString()));
       emit(state);
     }
   }
@@ -75,6 +75,11 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
   void refetchWithFilter(Map<String, dynamic>? query) {
     setFilter(query);
     fetchData(0);
+  }
+
+  void refetch() {
+    final _state = state as RemoteDataInitialized<Data>;
+    fetchData(_state.currentPage);
   }
 
   Future<PageData<Data>> fetchAndParseData(int page, [Map<String, dynamic>? query]);
