@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_color_utilities/hct/hct.dart';
 import 'package:material_color_utilities/palettes/tonal_palette.dart';
-
-import 'typography.dart';
 
 final lightTheme = ThemeData(
   fontFamily: 'Inter',
   colorScheme: lightColorScheme,
-  textTheme: textTheme,
+  textTheme: Typography.englishLike2021.apply(fontSizeFactor: 1.sp),
 );
 
 final darkTheme = ThemeData(
   fontFamily: 'Inter',
   colorScheme: darkColorScheme,
-  textTheme: textTheme,
+  textTheme: Typography.englishLike2021.apply(fontSizeFactor: 1.sp),
 );
 
 const lightColorScheme = ColorScheme(
@@ -112,6 +111,8 @@ extension Neutral on ColorScheme {
   Color get neutral0 => const Color(0xFF000000);
 
   Color get neutral10 => const Color(0xFF191C1D);
+
+  Color get neutral12 => const Color(0xFF1D2021);
 
   Color get neutral20 => const Color(0xFF2E3132);
 
