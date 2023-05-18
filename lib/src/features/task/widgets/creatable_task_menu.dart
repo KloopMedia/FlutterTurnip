@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
-import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,8 +40,7 @@ class CreatableTaskMenu extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is RemoteDataLoaded<TaskStage>) {
-                final data =
-                    state.data.length > 4 ? state.data.getRange(0, 4).toList() : state.data;
+                final data = state.data;
                 return ListView.separated(
                   shrinkWrap: true,
                   separatorBuilder: (context, index) {
@@ -75,7 +73,7 @@ class CreatableTaskMenu extends StatelessWidget {
             },
           ),
           Padding(
-            padding: EdgeInsets.only(top: 17, bottom: context.isSmall || context.isMedium ? 42 : 76),
+            padding: const EdgeInsets.only(top: 17, bottom: 2),
             child: FloatingActionButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
