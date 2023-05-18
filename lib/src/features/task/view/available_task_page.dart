@@ -23,14 +23,17 @@ class AvailableTaskPage extends StatelessWidget {
   const AvailableTaskPage({Key? key, required this.campaignId, required this.stageId})
       : super(key: key);
 
-  void redirectToTask(BuildContext context, Task item) {
-    context.pushNamed(
+  void redirectToTask(BuildContext context, Task item) async {
+    final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
         "cid": "$campaignId",
         "tid": "${item.id}",
       },
     );
+    if (context.mounted && (result ?? false)) {
+      context.read<AvailableTaskCubit>().refetch();
+    }
   }
 
   void redirectToTaskMenu(BuildContext context) {
