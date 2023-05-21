@@ -58,6 +58,7 @@ class _DefaultChipState extends State<DefaultChip> {
         borderRadius: borderRadius,
         onTap: widget.onPressed,
         child: MouseRegion(
+          cursor: SystemMouseCursors.click,
           onEnter: (details) => setState(() {
             isHover = true;
           }),

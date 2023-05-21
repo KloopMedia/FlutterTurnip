@@ -79,8 +79,12 @@ class CampaignView extends StatelessWidget {
                       )
                     : null,
                 tabs: [
-                  Tab(text: context.loc.available_campaigns),
-                  Tab(text: context.loc.campaigns),
+                  Tab(
+                    child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
+                  ),
+                  Tab(
+                    child: Text(context.loc.campaigns, overflow: TextOverflow.ellipsis),
+                  ),
                 ],
               ),
               child: hasAvailableCampaigns
