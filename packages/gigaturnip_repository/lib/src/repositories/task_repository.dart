@@ -59,6 +59,19 @@ class OpenTaskRepository extends TaskRepository {
   }
 }
 
+class IndividualTaskRepository extends TaskRepository {
+  IndividualTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
+
+  @override
+  Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
+    return _gigaTurnipApiClient.getUserRelevantTasks(query: {
+      'stage__chain__is_individual': true,
+      'stage__chain__campaign': campaignId,
+      ...?query,
+    });
+  }
+}
+
 class AvailableTaskRepository extends TaskRepository {
   final int stageId;
 
@@ -175,7 +188,7 @@ class TaskStageChainRepository extends GigaTurnipRepository<api.Chain, TaskStage
     // return data.map(Chain.fromApiModel).toList();
     final chainsList =  data.map(Chain.fromApiModel).toList();
     final stagesData =  chainsList.first.stagesData;
-    print('>>> repo $stagesData');
+    // print('>>> repo $stagesData');
     return stagesData ?? [];
   }
 

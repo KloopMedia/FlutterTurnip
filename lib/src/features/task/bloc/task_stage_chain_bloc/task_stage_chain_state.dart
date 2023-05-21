@@ -2,12 +2,16 @@ part of 'task_stage_chain_cubit.dart';
 
 class TaskChainCreated extends RemoteDataInitialized<TaskStage> {
   final int createdTaskId;
+  final int taskStageId;
 
-  TaskChainCreated.clone(RemoteDataInitialized<TaskStage> state, this.createdTaskId)
-      : super.clone(state);
+  TaskChainCreated.clone(
+      RemoteDataInitialized<TaskStage> state,
+      this.createdTaskId,
+      this.taskStageId,
+  ) : super.clone(state);
 
   @override
-  List<Object?> get props => [...super.props, createdTaskId];
+  List<Object?> get props => [...super.props, createdTaskId, taskStageId];
 }
 
 class TaskChainCreatingError extends RemoteDataInitialized<TaskStage> {

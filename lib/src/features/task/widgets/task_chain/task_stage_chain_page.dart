@@ -102,11 +102,10 @@ class TaskStageChainView extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           height: 150.0,
                           child: TaskStageChain(
-                            title: item!.name,
+                            title: item.name,
                             status: status,
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
-                            // isFirstTaskNotOpen: (status == 'Неотправлено') ? true : false,
                             lineColor: lineColor,
                             onTap: () => onTap(item, status!),
                           ),
@@ -137,7 +136,7 @@ class TaskStageChainView extends StatelessWidget {
                           alignment: Alignment.topCenter,
                           height: 150.0,
                           child: TaskStageChain(
-                            title: item!.name,
+                            title: item.name,
                             status: status,
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
@@ -152,7 +151,7 @@ class TaskStageChainView extends StatelessWidget {
                     );
                   } else {
                     return TaskStageChain(
-                      title: item!.name,
+                      title: item.name,
                       status: status,
                       lessonNum: index + 1,
                       even: index % 2 == 0 ? true : false,

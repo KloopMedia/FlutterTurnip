@@ -131,37 +131,90 @@ class RelevantTaskPage extends StatelessWidget {
               );
             },
           ),
-          BlocConsumer<TaskStageChainCubit, RemoteDataState<TaskStage>>(
+          BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
             listener: (context, state) {
-              if (state is TaskChainCreated) {
+              if (state is TaskCreated) {
                 redirectToTaskWithId(context, state.createdTaskId);
               }
             },
-            buildWhen: (previous, current) {
-              print('>>> buildwhen = ${current is TaskChainCreated}');
-              return current is TaskChainCreated;
-            },
-            builder: (context, state) {
-              return TaskStageChainView(
+            child: AdaptiveTaskChainView(
+              itemBuilder: (context, task) {
+                return TaskStageChainView(
+                  onTap: (stageId, status) {
+                    if (status == 'Отправлено' || status == 'Возвращено') {
+                      print('>>> redirectToTask 1');
+                      redirectToTaskWithId(context, task.id);
+                    } else {
+                      print('>>> createTask');
+                      context.read<ReactiveTasks>().createTask(stageId);
+                    }
+                  },
+                );
+              },
+            )
+            /*child: BlocBuilder<RelevantTaskCubit, RemoteDataState<Task>> (
+              builder: (context, state) {
+                return TaskStageChainView(
                   onTap: (item, status) {
-                    redirectToTaskWithId(context, 412292);
+                    if (status == 'Отправлено' || status == 'Возвращено') {
+                      print('>>> redirectToTask 1');
+                      if (state is RemoteDataLoaded<Task>) {
+                        final task = state.data.where((t) => item.id == t.stage.id);
+                        print('>>> redirectToTask id = ${task.first.id}');
+                        redirectToTaskWithId(context, task.first.id);
+                      }
+                    } else {
+                      print('>>> createTask');
+                      context.read<ReactiveTasks>().createTask(item);
+                    }
+                  },
+                );
+              }
+            ),*/
 
-                    // if (state is TaskChainCreated) {
-                    //   print('>>> task = ${state.createdTaskId}');
-                    //   if (status == 'Отправлено' || status == 'Возвращено') {
-                    //     print('>>> 1');
-                    //     redirectToTaskWithId(context, state.createdTaskId);
-                    //   }
-                    // } else {
-                    //   print('>>> 2');
-                    //   context.read<TaskStageChainCubit>().createTask(item);
-                    // }
-                  }
-              );
-            },
-          )
+              // child: BlocBuilder<RelevantTaskCubit, RemoteDataState<Task>>(
+              //   builder: (context, state) {
+              //   return TaskStageChainView(onTap: (item, status) {
+              //   // if (state is TaskCreated) {}
+              //
+              //   if (status == 'Отправлено' || status == 'Возвращено') {
+              //     if (state is RemoteDataLoaded<Task> && state.data.isNotEmpty) {
+              //       final data = state.data.toList();
+              //       print('>>> redirectToTask = $data');
+              //       // redirectToTaskWithId(context, state.createdTaskId);
+              //     }
+              //   } else {
+              //     print('>>> createTask');
+              //     context.read<ReactiveTasks>().createTask(item);
+              //   }
+              //   });
+              // }
+              // )
+          ),
         ],
       ),
     );
   }
+}
+
+class AdaptiveTaskChainView extends StatelessWidget {
+  final Widget Function(BuildContext context, Task item) itemBuilder;
+
+  const AdaptiveTaskChainView({
+    Key? key,
+    required this.itemBuilder,
+  }) : super(key: key)
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RelevantTaskCubit, RemoteDataState<Task>>(
+      builder: (context, state) {
+        if (state is RemoteDataLoaded<Task>) {
+          final data = state.data;
+
+        }
+      }
+    );
+  }
+
 }
