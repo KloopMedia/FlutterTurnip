@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/button/index.dart';
@@ -53,12 +53,12 @@ class _LoginPanelState extends State<LoginPanel> {
     final theme = Theme.of(context).colorScheme;
 
     final subtitleTextStyle = TextStyle(
-      fontSize: 16.sp,
+      fontSize: 16,
       fontWeight: FontWeight.w400,
       color: theme.neutral30,
     );
     final titleTextStyle = TextStyle(
-      fontSize: 25.sp,
+      fontSize: 25,
       fontWeight: FontWeight.w500,
       color: theme.neutral30,
     );

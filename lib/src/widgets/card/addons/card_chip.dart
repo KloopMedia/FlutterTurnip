@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/src/theme/index.dart';
 
 class CardChip extends StatelessWidget {
@@ -22,7 +22,7 @@ class CardChip extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-        child: Text(text, style: TextStyle(fontSize: 14.sp, color: fontColor ?? _fontColor)),
+        child: Text(text, style: TextStyle(fontSize: 14, color: fontColor ?? _fontColor)),
       ),
     );
   }

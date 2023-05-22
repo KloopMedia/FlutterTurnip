@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
@@ -29,7 +29,7 @@ class AvailableTaskStages extends StatelessWidget {
                 child: Text(
                   context.loc.task_available,
                   style: TextStyle(
-                      fontSize: 20.sp,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: theme.isLight ? theme.neutral30 : theme.neutral90),
                 ),

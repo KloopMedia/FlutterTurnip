@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_color_utilities/hct/hct.dart';
 import 'package:material_color_utilities/palettes/tonal_palette.dart';
 
 final lightTheme = ThemeData(
   fontFamily: 'Inter',
   colorScheme: lightColorScheme,
-  textTheme: Typography.englishLike2021.apply(fontSizeFactor: 1.sp),
+  textTheme: Typography.englishLike2021,
 );
 
 final darkTheme = ThemeData(
   fontFamily: 'Inter',
   colorScheme: darkColorScheme,
-  textTheme: Typography.englishLike2021.apply(fontSizeFactor: 1.sp),
+  textTheme: Typography.englishLike2021,
 );
 
 const lightColorScheme = ColorScheme(

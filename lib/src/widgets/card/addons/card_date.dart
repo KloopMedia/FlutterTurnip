@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +24,7 @@ class CardDate extends StatelessWidget {
           '${date!.day} ${DateFormat.MMMM().format(date!)}',
           style: TextStyle(
             color: theme.neutral70,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -35,7 +35,7 @@ class CardDate extends StatelessWidget {
           DateFormat.Hm().format(date!),
           style: TextStyle(
             color: theme.neutral70,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
         ),

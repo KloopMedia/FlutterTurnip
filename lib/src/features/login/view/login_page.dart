@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -87,7 +87,7 @@ class LoginView extends StatelessWidget {
                               Text(
                                 'Присоединяйтесь к сообществу проактивных людей!',
                                 style: TextStyle(
-                                  fontSize: 30.sp,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
                                 ),
@@ -96,7 +96,7 @@ class LoginView extends StatelessWidget {
                               Text(
                                 'Здесь люди объединяются и решают общественно значимые проблемы вместе',
                                 style: TextStyle(
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                   color: Colors.white,
                                 ),
                               ),

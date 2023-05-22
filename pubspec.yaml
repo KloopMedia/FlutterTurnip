@@ -66,7 +66,6 @@ dependencies:
   permission_handler: ^10.2.0
   webview_flutter: ^4.0.5
   rxdart: ^0.27.7
-  flutter_screenutil: ^5.7.0
   sliver_tools: ^0.2.9
   universal_html: ^2.2.1
   flutter_downloader: ^1.10.2

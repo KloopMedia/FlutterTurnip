@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class CardProgressIndicator extends StatelessWidget {
   final EdgeInsetsGeometry? _padding;
@@ -19,7 +19,7 @@ class CardProgressIndicator extends StatelessWidget {
         children: [
           Text(
             'Осталось 4 задания до следующего уровня!',
-            style: TextStyle(fontSize: 14.sp, color: theme.onSurfaceVariant),
+            style: TextStyle(fontSize: 14, color: theme.onSurfaceVariant),
           ),
           Row(
             children: const [

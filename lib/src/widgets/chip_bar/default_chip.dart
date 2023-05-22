@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 class DefaultChip extends StatefulWidget {
@@ -77,7 +76,7 @@ class _DefaultChipState extends State<DefaultChip> {
             child: Text(
               widget.label,
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 16,
                 color: isHover ? hoverFontColor : fontColor,
               ),
             ),

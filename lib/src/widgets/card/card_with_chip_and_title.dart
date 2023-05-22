@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/src/theme/index.dart';
 
 import 'index.dart';
@@ -32,7 +32,7 @@ class CardWithTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final titleStyle = TextStyle(
-      fontSize: 18.sp,
+      fontSize: 18,
       fontWeight: FontWeight.w500,
       color: theme.isLight ? theme.neutral40 : theme.neutral90,
       overflow: TextOverflow.ellipsis,

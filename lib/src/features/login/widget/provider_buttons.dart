@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -13,7 +13,7 @@ class LoginProviderButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
-      fontSize: 16.sp,
+      fontSize: 16,
       fontWeight: FontWeight.w500,
     );
 

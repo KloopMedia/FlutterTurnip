@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class DividerWithLabel extends StatelessWidget {
   final String label;
@@ -18,7 +18,7 @@ class DividerWithLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = TextStyle(
-      fontSize: 12.sp,
+      fontSize: 12,
       fontWeight: FontWeight.w400,
       color: const Color(0xFF0E222F).withOpacity(0.6),
     );

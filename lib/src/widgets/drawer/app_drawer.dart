@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/campaign_route.dart';
@@ -31,12 +31,12 @@ class AppDrawer extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final titleTextStyle = TextStyle(
       color: theme.onSurfaceVariant,
-      fontSize: 16.sp,
+      fontSize: 16,
       fontWeight: FontWeight.w500,
     );
     final subtitleTextStyle = TextStyle(
       color: theme.isLight ? theme.neutral50 : theme.neutral60,
-      fontSize: 14.sp,
+      fontSize: 14,
     );
     const iconPadding = EdgeInsets.only(right: 20);
     const contentPadding = EdgeInsets.symmetric(horizontal: 24);

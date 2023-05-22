@@ -73,7 +73,7 @@ class _Content extends StatelessWidget {
             // Text(
             //   'Уровень: Продвинутый',
             //   style: TextStyle(
-            //     fontSize: 22.sp,
+            //     fontSize: 22,
             //     fontWeight: FontWeight.w600,
             //     color: theme.onSurfaceVariant,
             //   ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class CardMessage extends StatelessWidget {
   final String? text;
@@ -19,7 +19,7 @@ class CardMessage extends StatelessWidget {
         Expanded(
           child: Text(
             text!,
-            style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 16.sp),
+            style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 16),
           ),
         ),
       ],
