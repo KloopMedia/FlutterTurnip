@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'bloc/theme_bloc/theme_cubit.dart';
 
@@ -21,8 +22,14 @@ class App extends StatelessWidget {
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: ThemeData(
+        colorScheme: lightColorScheme,
+        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+      ),
+      darkTheme: ThemeData(
+        colorScheme: darkColorScheme,
+        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+      ),
       themeMode: context.watch<ThemeCubit>().state.themeMode,
       locale: context.watch<LocalizationBloc>().state.locale,
       supportedLocales: AppLocalizations.supportedLocales,

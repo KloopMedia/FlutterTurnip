@@ -74,6 +74,7 @@ dependencies:
   pinput: ^2.2.31
   country_code_picker: ^3.0.0
   material_color_utilities: ^0.2.0
+  google_fonts: ^4.0.4
 
 dependency_overrides:
   intl: ^0.18.1
