@@ -27,6 +27,13 @@ class App extends StatelessWidget {
       locale: context.watch<LocalizationBloc>().state.locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
+      builder: (context, child) {
+        final MediaQueryData data = MediaQuery.of(context);
+        return MediaQuery(
+          data: data.copyWith(textScaleFactor: 0.9),
+          child: child!,
+        );
+      },
     );
   }
 }
