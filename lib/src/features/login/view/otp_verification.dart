@@ -7,12 +7,12 @@ import 'package:pinput/pinput.dart';
 
 class VerificationPage extends StatefulWidget {
   final void Function(String code) onConfirm;
-  final void Function()? onResend;
+  final void Function() onResend;
 
   const VerificationPage({
     super.key,
     required this.onConfirm,
-    this.onResend,
+    required this.onResend,
   });
 
   @override
@@ -62,7 +62,7 @@ class _VerificationPageState extends State<VerificationPage> {
     );
 
     return Container(
-      padding: const EdgeInsets.only(top: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +110,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   style: subtitleTextStyle,
                 ),
                 TextButton(
-                  onPressed: widget.onResend,
+                  onPressed: () => widget.onResend(),
                   style: const ButtonStyle(
                     padding: MaterialStatePropertyAll(EdgeInsets.all(0.0)),
                   ),

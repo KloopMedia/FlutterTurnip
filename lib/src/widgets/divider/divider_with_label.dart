@@ -20,7 +20,7 @@ class DividerWithLabel extends StatelessWidget {
     final style = TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w400,
-      color: const Color(0xFF0E222F).withOpacity(0.6),
+      color: color.withOpacity(0.6),
     );
 
     final divider = Expanded(

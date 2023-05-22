@@ -3,6 +3,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 
 class LoginProviderButton extends StatelessWidget {
   final Color? color;
+  final BorderSide? border;
   final void Function()? onPressed;
   final Widget icon;
   final Widget child;
@@ -13,6 +14,7 @@ class LoginProviderButton extends StatelessWidget {
     this.onPressed,
     required this.icon,
     required this.child,
+    this.border,
   }) : super(key: key);
 
   @override
@@ -26,9 +28,7 @@ class LoginProviderButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            side: BorderSide(
-              color: Colors.black.withOpacity(0.5),
-            ),
+            side: border,
             backgroundColor: color,
           ),
           onPressed: onPressed,

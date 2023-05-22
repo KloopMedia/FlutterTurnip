@@ -1,71 +1,46 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/button/index.dart';
 import 'package:gigaturnip/src/widgets/divider/divider_with_label.dart';
 
-import '../bloc/login_bloc.dart';
 import 'phone_number_field.dart';
 import 'provider_buttons.dart';
 
-class LoginPanel extends StatefulWidget {
+class LoginPanel extends StatelessWidget {
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry padding;
+  final void Function() onSubmit;
+  final void Function(String phoneNumber) onChange;
 
-  const LoginPanel({Key? key, this.padding = EdgeInsets.zero, this.constraints}) : super(key: key);
-
-  @override
-  State<LoginPanel> createState() => _LoginPanelState();
-}
-
-class _LoginPanelState extends State<LoginPanel> {
-  String _phoneNumber = "";
-
-  void loginWithPhone() async {
-    final authenticationRepository = context.read<AuthenticationRepository>();
-    final bloc = context.read<LoginBloc>();
-
-    if (kIsWeb) {
-      final result = await authenticationRepository.logInWithPhoneWeb(_phoneNumber);
-      bloc.add(SendOTP(result.verificationId, null));
-    } else {
-      await authenticationRepository.logInWithPhone(
-        phoneNumber: _phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          bloc.add(CompleteVerification(credential));
-        },
-        verificationFailed: (FirebaseAuthException e) async {},
-        codeSent: (String verificationId, int? resendToken) async {
-          bloc.add(SendOTP(verificationId, resendToken));
-        },
-        codeAutoRetrievalTimeout: (String verificationId) async {},
-      );
-    }
-  }
+  const LoginPanel({
+    Key? key,
+    this.padding = EdgeInsets.zero,
+    this.constraints,
+    required this.onChange,
+    required this.onSubmit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
+    final fontColor = theme.isLight ? theme.neutral30 : theme.neutral90;
+
     final subtitleTextStyle = TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w400,
-      color: theme.neutral30,
+      color: fontColor,
     );
     final titleTextStyle = TextStyle(
       fontSize: 25,
       fontWeight: FontWeight.w500,
-      color: theme.neutral30,
+      color: fontColor,
     );
 
     return Container(
-      margin: widget.padding,
-      constraints: widget.constraints,
+      margin: padding,
+      constraints: constraints,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -90,24 +65,15 @@ class _LoginPanelState extends State<LoginPanel> {
           ),
           Column(
             children: [
-              PhoneNumberField(onChanged: (phoneNumber) {
-                setState(() {
-                  _phoneNumber = phoneNumber;
-                });
-              }),
+              PhoneNumberField(onChanged: onChange),
+              const SizedBox(height: 20),
+              SignUpButton(onPressed: onSubmit),
               DividerWithLabel(
                 label: context.loc.or,
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                padding: const EdgeInsets.symmetric(vertical: 47.0),
+                color: theme.isLight ? theme.neutral90 : theme.neutral40,
               ),
               const LoginProviderButtons(),
-            ],
-          ),
-          // const Spacer(),
-          Column(
-            children: [
-              SignUpButton(onPressed: () {
-                loginWithPhone();
-              }),
             ],
           ),
         ],
