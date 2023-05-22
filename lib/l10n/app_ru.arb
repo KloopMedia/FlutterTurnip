@@ -10,6 +10,12 @@
      "enter_code": "Введите 6-значный код, отправленный на Ваш номер",
      "received_code": "Не пришел код?",
      "resend_code": "Отправить повторно",
+     "resend_code_count" : "Отправить повторно {count} сек.",
+     "@pageHomeInboxCount" : {
+          "placeholders": {
+               "count": {}
+          }
+     },
      "further": "Продолжить",
      "or": "или",
 

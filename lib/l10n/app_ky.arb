@@ -10,6 +10,12 @@
     "enter_code": "Номериңизге жөнөтүлгөн 6 орундуу кодду киргизиңиз",
     "received_code": "Код алынган жокпу?",
     "resend_code": "Кайра жөнөтүү",
+    "resend_code_count" : "Кайра жөнөтүү {count} сек.",
+    "@pageHomeInboxCount" : {
+        "placeholders": {
+            "count": {}
+        }
+    },
     "further": "Андан ары",
     "or": "же",
 
