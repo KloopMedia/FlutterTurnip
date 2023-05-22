@@ -56,6 +56,7 @@ class AuthenticationRepository {
     required void Function(firebase_auth.FirebaseAuthException) verificationFailed,
     required void Function(String, int?) codeSent,
     required void Function(String) codeAutoRetrievalTimeout,
+    int? forceResendingToken,
   }) async {
     _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -63,6 +64,7 @@ class AuthenticationRepository {
       verificationFailed: verificationFailed,
       codeSent: codeSent,
       codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+      forceResendingToken: forceResendingToken,
     );
   }
 

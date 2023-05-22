@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class SignUpButton extends StatelessWidget {
@@ -26,10 +26,9 @@ class SignUpButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           context.loc.further,
-          style: TextStyle(
-            fontSize: 14.sp,
+          style: const TextStyle(
+            fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: theme.onPrimary,
           ),
         ),
       ),

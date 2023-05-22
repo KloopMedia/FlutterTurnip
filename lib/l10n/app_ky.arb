@@ -7,9 +7,15 @@
     "have_an_account": "Сиздин аккаунтуңуз барбы? ",
     "enter_phone_number": "Телефон номериңизди киргизиңиз",
     "phone_number_verification": "Телефон номерин текшерүү",
-    "enter_code": "Номериңизге жөнөтүлгөн 4 орундуу кодду киргизиңиз",
+    "enter_code": "Номериңизге жөнөтүлгөн 6 орундуу кодду киргизиңиз",
     "received_code": "Код алынган жокпу?",
     "resend_code": "Кайра жөнөтүү",
+    "resend_code_count" : "Кайра жөнөтүү {count} сек.",
+    "@pageHomeInboxCount" : {
+        "placeholders": {
+            "count": {}
+        }
+    },
     "further": "Андан ары",
     "or": "же",
 
