@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/shadows.dart';
@@ -125,7 +125,7 @@ class _AlertDialog extends StatelessWidget {
         'Вы присоединились!',
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 20.sp,
+          fontSize: 20,
           fontWeight: FontWeight.w500,
           color: const Color(0xFF191C1B),
         ),
@@ -135,7 +135,7 @@ class _AlertDialog extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: "Inter",
-          fontSize: 16.sp,
+          fontSize: 16,
           color: theme.neutral40,
         ),
       ),
@@ -222,7 +222,7 @@ class _Content extends StatelessWidget {
             data.name,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 22.sp,
+              fontSize: 22,
               fontWeight: FontWeight.w600,
               color: theme.primary,
             ),
@@ -232,7 +232,7 @@ class _Content extends StatelessWidget {
             data.description,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16,
               fontWeight: FontWeight.w500,
               color: theme.neutral40,
             ),
@@ -256,7 +256,7 @@ class _Content extends StatelessWidget {
                   },
                   child: Text(
                     context.loc.join_campaign,
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ),

@@ -2,7 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -22,11 +22,13 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
-    final textStyle = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400);
-    final selectorTextStyle = textStyle.copyWith(color: theme.neutral40);
-    final titleStyle = textStyle.copyWith(color: theme.neutral30, fontWeight: FontWeight.w500);
+    const textStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+    final selectorTextStyle =
+        textStyle.copyWith(color: theme.isLight ? theme.neutral40 : theme.neutral90);
+    final titleStyle = textStyle.copyWith(
+        color: theme.isLight ? theme.neutral30 : theme.neutral90, fontWeight: FontWeight.w500);
     final boxDecoration = BoxDecoration(
-      color: theme.neutral95,
+      color: theme.isLight ? theme.neutral95 : theme.onSecondary,
       borderRadius: BorderRadius.circular(15),
     );
 

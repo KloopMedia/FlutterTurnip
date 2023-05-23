@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/src/theme/index.dart';
 
 class AvatarButton extends StatelessWidget {
@@ -45,7 +45,7 @@ class AvatarButton extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: theme.isLight ? theme.neutral30 : theme.onSurfaceVariant,
               ),

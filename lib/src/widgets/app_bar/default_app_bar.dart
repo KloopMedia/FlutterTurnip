@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../widgets.dart';
@@ -148,7 +148,7 @@ class _DefaultAppBar extends StatelessWidget {
       title: DefaultTextStyle(
         style: TextStyle(
           fontWeight: FontWeight.w500,
-          fontSize: 20.sp,
+          fontSize: 20,
           color: theme.isLight ? theme.neutral30 : theme.neutral90,
         ),
         child: title ?? const SizedBox.shrink(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 final textTheme = Typography.englishLike2021.copyWith(
   displayLarge: const TextStyle(
@@ -30,4 +30,4 @@ final textTheme = Typography.englishLike2021.copyWith(
     fontWeight: FontWeight.w400,
     fontSize: 14,
   ),
-).apply(fontSizeFactor: 1.sp);
+);

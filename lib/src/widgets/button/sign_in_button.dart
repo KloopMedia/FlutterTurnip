@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -19,7 +19,7 @@ class SignInButton extends StatelessWidget {
               TextSpan(
                 text: context.loc.have_an_account,
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: theme.neutral30,
                 ),
@@ -27,7 +27,7 @@ class SignInButton extends StatelessWidget {
               TextSpan(
                   text: context.loc.sign_in,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: theme.primary,
                   ),

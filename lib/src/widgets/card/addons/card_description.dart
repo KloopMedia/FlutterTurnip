@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class CardDescription extends StatelessWidget {
   final String? text;
@@ -15,7 +15,7 @@ class CardDescription extends StatelessWidget {
     return Text(
       text!,
       style: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 16,
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
       overflow: TextOverflow.ellipsis,

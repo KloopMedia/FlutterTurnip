@@ -7,9 +7,15 @@
      "have_an_account": "У Вас уже есть аккаунт? ",
      "enter_phone_number": "Введите Ваш номер телефона",
      "phone_number_verification": "Подтверждение номера телефона",
-     "enter_code": "Введите 4-значный код, отправленный на Ваш номер",
+     "enter_code": "Введите 6-значный код, отправленный на Ваш номер",
      "received_code": "Не пришел код?",
      "resend_code": "Отправить повторно",
+     "resend_code_count" : "Отправить повторно {count} сек.",
+     "@pageHomeInboxCount" : {
+          "placeholders": {
+               "count": {}
+          }
+     },
      "further": "Продолжить",
      "or": "или",
 

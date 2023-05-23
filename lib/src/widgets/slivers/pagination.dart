@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class Pagination extends StatelessWidget {
   final int currentPage;
@@ -236,7 +236,7 @@ class _PaginationButton extends StatelessWidget {
       icon: Text(
         '${page + 1}',
         style: TextStyle(
-          fontSize: 16.sp,
+          fontSize: 16,
           color: isActive ? Theme.of(context).colorScheme.primary : const Color(0xFF5D5E67),
         ),
       ),

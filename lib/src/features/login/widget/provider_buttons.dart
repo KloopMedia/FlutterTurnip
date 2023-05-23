@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -12,15 +13,20 @@ class LoginProviderButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(
-      fontSize: 16.sp,
+    final theme = Theme.of(context).colorScheme;
+
+    const textStyle = TextStyle(
+      fontSize: 16,
       fontWeight: FontWeight.w500,
     );
 
     return CustomWrap(
       children: [
         LoginProviderButton(
-          color: Colors.white,
+          color: theme.isLight ? Colors.white : Colors.black,
+          border: BorderSide(
+            color: theme.isLight ? Colors.black.withOpacity(0.5) : theme.neutral90,
+          ),
           onPressed: () =>
               context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.google)),
           icon: Image.asset('assets/icon/google_icon.png', height: 24.0),
@@ -28,22 +34,30 @@ class LoginProviderButtons extends StatelessWidget {
             context.loc.continue_with_google,
             style: textStyle.copyWith(
               fontFamily: 'Roboto',
-              color: Colors.black.withOpacity(0.54),
+              color: theme.isLight ? Colors.black.withOpacity(0.54) : theme.neutral90,
             ),
           ),
         ),
-        const SizedBox(width: 20.0, height: 20,),
+        const SizedBox(
+          width: 20.0,
+          height: 20,
+        ),
         LoginProviderButton(
-          color: Colors.black,
+          color: theme.isLight ? Colors.black : Colors.white,
           onPressed: () =>
               context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.google)),
-          icon: Image.asset('assets/icon/apple_icon.png', height: 24.0),
+          icon: Image.asset(
+            'assets/icon/apple_icon.png',
+            height: 24.0,
+            color: theme.isLight ? Colors.white : Colors.black,
+          ),
           child: Text(
             context.loc.continue_with_apple,
-            style: textStyle.copyWith(
-              fontFamily: 'SF Pro Display',
-              color: Colors.white,
-            ),
+            style: const CupertinoTextThemeData().textStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: theme.isLight ? Colors.white : theme.neutral30,
+                ),
           ),
         ),
       ],

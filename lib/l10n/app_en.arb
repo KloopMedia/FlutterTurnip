@@ -7,9 +7,15 @@
     "have_an_account": "Do you already have an account? ",
     "enter_phone_number": "Enter your phone number",
     "phone_number_verification": "Phone number verification",
-    "enter_code": "Enter the 4-digit code sent to your number",
+    "enter_code": "Enter the 6-digit code sent to your number",
     "received_code": "Code not received?",
-    "resend_code": "Resend",
+    "resend_code": "Resend code",
+    "resend_code_count" : "Resend code in {count} sec.",
+    "@pageHomeInboxCount" : {
+        "placeholders": {
+            "count": {}
+        }
+    },
     "further": "Continue",
     "or": "or",
 
