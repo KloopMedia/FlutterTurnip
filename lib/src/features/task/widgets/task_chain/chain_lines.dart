@@ -3,17 +3,25 @@ import 'package:path_drawing/path_drawing.dart';
 
 class StraightLine extends CustomPainter {
   final Color color;
+  final double dashWidth;
+  final double dashSpace;
+  final double strokeWidth;
 
-  const StraightLine({required this.color});
+  const StraightLine({
+    required this.color,
+    required this.dashWidth,
+    required this.dashSpace,
+    required this.strokeWidth,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    double dashWidth = 16.0, dashSpace = 12.0, startX = 0.0;
+    double startX = 0.0;
 
     final paint = Paint()
       ..color = color
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 7.0;
+      ..strokeWidth = strokeWidth;
 
     while (startX < size.width) {
       canvas.drawLine(
@@ -33,17 +41,25 @@ class StraightLine extends CustomPainter {
 
 class CurveLeftLine extends CustomPainter {
   final Color color;
+  final double dashWidth;
+  final double dashSpace;
+  final double strokeWidth;
 
-  const CurveLeftLine({required this.color});
+  const CurveLeftLine({
+    required this.color,
+    required this.dashWidth,
+    required this.dashSpace,
+    required this.strokeWidth,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
 
     Paint paint = Paint()
-      ..color = color //const Color(0xFF2754F3)
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 7.0;
+      ..strokeWidth = strokeWidth;
 
     var startPoint = Offset(size.width, size.height - 120);
     var controlPoint1 = Offset(0, size.height / 6);
@@ -60,7 +76,7 @@ class CurveLeftLine extends CustomPainter {
     canvas.drawPath(
       dashPath(
         path,
-        dashArray: CircularIntervalList<double>(<double>[16.0, 12.0]),
+        dashArray: CircularIntervalList<double>(<double>[dashWidth, dashSpace]),
       ),
       paint,
     );
@@ -74,8 +90,16 @@ class CurveLeftLine extends CustomPainter {
 
 class CurveRightLine extends CustomPainter {
   final Color color;
+  final double dashWidth;
+  final double dashSpace;
+  final double strokeWidth;
 
-  const CurveRightLine({required this.color});
+  const CurveRightLine({
+    required this.color,
+    required this.dashWidth,
+    required this.dashSpace,
+    required this.strokeWidth,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -84,7 +108,7 @@ class CurveRightLine extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 7.0;
+      ..strokeWidth = strokeWidth;
 
     var startPoint = Offset(0, size.height - 120);
     var controlPoint1 = Offset(size.width, size.height / 6);
@@ -101,7 +125,7 @@ class CurveRightLine extends CustomPainter {
     canvas.drawPath(
       dashPath(
         path,
-        dashArray: CircularIntervalList<double>(<double>[16.0, 12.0]),
+        dashArray: CircularIntervalList<double>(<double>[dashWidth, dashSpace]),
       ),
       paint,
     );

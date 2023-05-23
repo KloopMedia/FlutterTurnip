@@ -13,19 +13,7 @@ class TaskStageChainView extends StatelessWidget {
 
   const TaskStageChainView({Key? key, required this.onTap}) : super(key: key);
 
-  // String? getTaskStatus(TaskStage item, TaskStage? previousItem) {
-  //   if (item.completeCount == 0 && item.totalCount == 0) {
-  //     return  'Неотправлено';
-  //   } else if (item.completeCount! < item.totalCount!) {
-  //     return 'Возвращено';
-  //   } else if (item.completeCount! > 0 && item.totalCount! > 0 &&
-  //       item.completeCount == item.totalCount) {
-  //     return 'Отправлено';
-  //   }
-  //   return null;
-  // }
-
-  String? getTaskStatus(TaskStage item, TaskStage? previousItem) {
+  String getTaskStatus(TaskStage item, TaskStage? previousItem) {
     if (previousItem != null) {
       if (item.completeCount! > 0 && item.totalCount! > 0 &&
           item.completeCount == item.totalCount) {
@@ -48,7 +36,7 @@ class TaskStageChainView extends StatelessWidget {
         return 'Активно';
       }
     }
-    return null;
+    return '';
   }
 
   @override
@@ -76,23 +64,30 @@ class TaskStageChainView extends StatelessWidget {
       ],
     );
 
-    return BlocBuilder<TaskStageChainCubit, RemoteDataState<TaskStage>>(
+    return BlocBuilder<TaskStageChainCubit, RemoteDataState<Chain>>(
       builder: (context, state) {
-        if (state is RemoteDataLoaded<TaskStage> && state.data.isNotEmpty) {
-          return SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                  // final item = state.data[0].stagesData?[index];
-                  final item = state.data[index];
-                  final previousItem = (index == 0) ? null : state.data[index - 1];
-                  final status = getTaskStatus(item, previousItem);
-                  print('>>> status = $status');
+        if (state is RemoteDataLoaded<Chain> && state.data.isNotEmpty) {
+          final individualChains = state.data;
+          List<Widget> tasks = [];
+          for (var chain in individualChains) {
+            tasks.add(Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: context.isSmall || context.isMedium
+                    ? 5
+                    : MediaQuery.of(context).size.width / 6,
+              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final item = chain.stagesData?[index];
+                  final previousItem = (index == 0) ? null : chain.stagesData?[index - 1];
+                  final status = getTaskStatus(item!, previousItem);
                   final lineColor = (status == 'Отправлено')
                       ? theme.isLight
-                        ? const Color(0xFF2754F3) : const Color(0xFF7694FF)
+                      ? const Color(0xFF2754F3) : const Color(0xFF7694FF)
                       : theme.isLight
-                        ? const Color(0xFFE1E3E3) : theme.neutral20;//const Color(0xFF2E3132);
+                      ? const Color(0xFFE1E3E3) : theme.neutral20;//const Color(0xFF2E3132);
 
                   if (index == 0) {
                     return Stack(
@@ -107,7 +102,7 @@ class TaskStageChainView extends StatelessWidget {
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
                             lineColor: lineColor,
-                            onTap: () => onTap(item, status!),
+                            onTap: () => onTap(item, status),
                           ),
                         ),
                         Row(
@@ -119,7 +114,12 @@ class TaskStageChainView extends StatelessWidget {
                             Expanded(
                               child: CustomPaint(
                                 size: const Size(0.0, 0.0),
-                                painter: StraightLine(color: lineColor),
+                                painter: StraightLine(
+                                    color: lineColor,
+                                    dashWidth: context.isSmall ? 10.0 : 16.0,
+                                    dashSpace: context.isSmall ? 10.0 : 12.0,
+                                    strokeWidth: context.isSmall ? 6.0 : 7.0
+                                ),
                               ),
                             ),
                             const SizedBox(width: 60.0),
@@ -127,8 +127,7 @@ class TaskStageChainView extends StatelessWidget {
                         )
                       ],
                     );
-                  // } else if (state.data[0].stagesData?.length == index + 1) {
-                  } else if (state.data.length == index + 1) {
+                  } else if (chain.stagesData?.length == index + 1) {
                     return Stack(
                       alignment: Alignment.bottomCenter,
                       children: [
@@ -141,7 +140,7 @@ class TaskStageChainView extends StatelessWidget {
                             lessonNum: index + 1,
                             even: index % 2 == 0 ? true : false,
                             lineColor: lineColor,
-                            onTap: () => onTap(item, status!),
+                            onTap: () => onTap(item, status),
                           ),
                         ),
 
@@ -156,14 +155,16 @@ class TaskStageChainView extends StatelessWidget {
                       lessonNum: index + 1,
                       even: index % 2 == 0 ? true : false,
                       lineColor: lineColor,
-                      onTap: () => onTap(item, status!),
+                      onTap: () => onTap(item, status),
                     );
                   }
                 },
-                // childCount: state.data[0].stagesData?.length,
-                childCount: state.data.length,
-              ),
-            ),
+                itemCount: chain.stagesData?.length,
+                ),
+            ));
+          }
+          return SliverToBoxAdapter(
+            child: Column(children: tasks)
           );
         }
         return const SliverToBoxAdapter(child: SizedBox.shrink());

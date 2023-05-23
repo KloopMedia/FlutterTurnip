@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'chain_lines.dart';
 import 'chain_sides.dart';
 
 class TaskStageChain extends StatelessWidget {
@@ -29,12 +27,10 @@ class TaskStageChain extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final titleTextStyle = TextStyle(
       fontWeight: FontWeight.w500,
-      fontSize: 16.sp,
+      fontSize: 16.0,
       color: theme.isLight
           ? (status == 'Неотправлено') ? theme.neutral90 : theme.neutral40
           : (status == 'Неотправлено') ? theme.neutralVariant40 : theme.neutral70,
-          // ? (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutral90 : theme.neutral40
-          // : (status == 'Неотправлено' && !isFirstTaskNotOpen) ? theme.neutralVariant40 : theme.neutral70,
     );
 
     return SizedBox(
@@ -56,7 +52,6 @@ class TaskStageChain extends StatelessWidget {
                   Expanded(
                       child: TextButton(
                         onPressed: (status == 'Неотправлено') ? null : onTap,
-                        // onPressed: (status == 'Неотправлено' && !isFirstTaskNotOpen) ? null : onTap,
                         child: Text(
                           title,
                           style: titleTextStyle,
@@ -91,16 +86,6 @@ class LessonIcon extends StatelessWidget {
     required this.isFirstTaskNotOpen,
   }) : super(key: key);
 
-  // int getStatusIndexOfIconColor() {
-  //   if (status == 'Отправлено') {
-  //     return 0;
-  //   } else if ((status == 'Возвращено') || (status == 'Неотправлено' && isFirstTaskNotOpen)){
-  //     return 1;
-  //   } else {
-  //     return 2;
-  //   }
-  // }
-
   int getStatusIndexOfIconColor() {
     if (status == 'Отправлено') {
       return 0;
@@ -116,7 +101,7 @@ class LessonIcon extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final lessonNumTextStyle = TextStyle(
       fontWeight: FontWeight.w500,
-      fontSize: 20.sp,
+      fontSize: 20.0,
       color: theme.isLight
           ? theme.onPrimary
           : (status == 'Неотправлено') ? theme.neutralVariant40 : theme.neutral100,

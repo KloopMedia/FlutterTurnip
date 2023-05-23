@@ -150,6 +150,34 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
+  Future<PaginationWrapper<Chain>> getChains({query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Chain>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'chains/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PaginationWrapper<Chain>.fromJson(
+      _result.data!,
+      (json) => Chain.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<PaginationWrapper<Chain>> getTaskStageChain({query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

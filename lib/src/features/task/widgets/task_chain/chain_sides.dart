@@ -14,6 +14,9 @@ class ChainSide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dashWidth = context.isSmall ? 10.0 : 16.0;
+    final dashSpace = context.isSmall ? 10.0 : 12.0;
+    final strokeWidth = context.isSmall ? 6.0 : 7.0;
 
     if (even) {
       return Row(
@@ -24,14 +27,24 @@ class ChainSide extends StatelessWidget {
           Expanded(
             child: CustomPaint(
               size: const Size(0.0, 0.0),
-              painter: StraightLine(color: color),
+              painter: StraightLine(
+                color: color,
+                dashWidth: dashWidth,
+                dashSpace: dashSpace,
+                strokeWidth: strokeWidth
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: CustomPaint(
               size: const Size(50, 120),
-              painter: CurveRightLine(color: color),
+              painter: CurveRightLine(
+                  color: color,
+                  dashWidth: dashWidth,
+                  dashSpace: dashSpace,
+                  strokeWidth: strokeWidth
+              ),
             ),
           ),
         ],
@@ -45,13 +58,23 @@ class ChainSide extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: CustomPaint(
               size: const Size(50, 120),
-              painter: CurveLeftLine(color: color),
+              painter: CurveLeftLine(
+                  color: color,
+                  dashWidth: dashWidth,
+                  dashSpace: dashSpace,
+                  strokeWidth: strokeWidth
+              ),
             ),
           ),
           Expanded(
             child: CustomPaint(
               size: const Size(0.0, 0.0),
-              painter: StraightLine(color: color),
+              painter: StraightLine(
+                  color: color,
+                  dashWidth: dashWidth,
+                  dashSpace: dashSpace,
+                  strokeWidth: strokeWidth
+              ),
             ),
           ),
           const SizedBox(width: 60.0),

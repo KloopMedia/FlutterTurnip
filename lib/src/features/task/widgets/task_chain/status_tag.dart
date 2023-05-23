@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StatusTag extends StatelessWidget {
   final bool complete;
@@ -18,7 +17,7 @@ class StatusTag extends StatelessWidget {
       label: Text(
         complete ? 'Выполнено' : 'Текущее',
         style: TextStyle(
-          fontSize: 14.sp,
+          fontSize: 14.0,
           fontWeight: FontWeight.w400,
           color: Theme.of(context).colorScheme.onPrimary,
         ),
