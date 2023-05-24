@@ -151,7 +151,7 @@ class RelevantTaskPage extends StatelessWidget {
                       final task = tasks.where((element) => element.stage.id == item.id);
                       redirectToTaskWithId(context, task.first.id);
                     } else {
-                      context.read<ReactiveTasks>().createTask(item);
+                      context.read<ReactiveTasks>().createTaskById(item.id);
                     }
                  },
               );

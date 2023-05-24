@@ -7,3 +7,4 @@ export 'page_data.dart';
 export 'task_detail.dart';
 export 'task_stage_detail.dart';
 export 'task_stage_chain_info.dart';
+export 'individual_chain.dart';

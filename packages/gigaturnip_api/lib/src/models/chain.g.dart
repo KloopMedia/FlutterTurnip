@@ -15,15 +15,9 @@ Chain _$ChainFromJson(Map<String, dynamic> json) => $checkedCreate(
         final val = Chain(
           id: $checkedConvert('id', (v) => v as int),
           name: $checkedConvert('name', (v) => v as String),
-          description: $checkedConvert('description', (v) => v as String?),
-          campaign: $checkedConvert('campaign', (v) => v as int?),
-          stagesData: $checkedConvert(
-              'stages_data',
-              (v) => (v as List<dynamic>?)
-                  ?.map((e) => TaskStage.fromJson(e as Map<String, dynamic>))
-                  .toList()),
+          description: $checkedConvert('description', (v) => v as String),
+          campaign: $checkedConvert('campaign', (v) => v as int),
         );
         return val;
       },
-      fieldKeyMap: const {'stagesData': 'stages_data'},
     );

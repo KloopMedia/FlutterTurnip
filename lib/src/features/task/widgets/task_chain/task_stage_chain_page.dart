@@ -9,27 +9,27 @@ import 'chain_lines.dart';
 import 'task_chain.dart';
 
 class TaskStageChainView extends StatelessWidget {
-  final Function(TaskStage item, String status) onTap;
+  final Function(TaskStageChainInfo item, String status) onTap;
 
   const TaskStageChainView({Key? key, required this.onTap}) : super(key: key);
 
-  String getTaskStatus(TaskStage item, TaskStage? previousItem) {
+  String getTaskStatus(TaskStageChainInfo item, TaskStageChainInfo? previousItem) {
     if (previousItem != null) {
-      if (item.completeCount! > 0 && item.totalCount! > 0 &&
+      if (item.completeCount> 0 && item.totalCount> 0 &&
           item.completeCount == item.totalCount) {
         return 'Отправлено';
-      } else if (item.completeCount! < item.totalCount!) {
+      } else if (item.completeCount< item.totalCount) {
         return 'Возвращено';
-      } else if (previousItem.completeCount! > 0 && previousItem.totalCount! > 0 &&
+      } else if (previousItem.completeCount> 0 && previousItem.totalCount> 0 &&
           previousItem.completeCount == previousItem.totalCount) {
         return 'Активно';
       } else if (item.completeCount == 0 && item.totalCount == 0) {
         return 'Неотправлено';
       }
     } else {
-      if (item.completeCount! < item.totalCount!) {
+      if (item.completeCount< item.totalCount) {
         return 'Возвращено';
-      } else if (item.completeCount! > 0 && item.totalCount! > 0 &&
+      } else if (item.completeCount> 0 && item.totalCount> 0 &&
           item.completeCount == item.totalCount) {
         return 'Отправлено';
       } else if (item.completeCount == 0 && item.totalCount == 0) {
@@ -64,9 +64,9 @@ class TaskStageChainView extends StatelessWidget {
       ],
     );
 
-    return BlocBuilder<TaskStageChainCubit, RemoteDataState<Chain>>(
+    return BlocBuilder<IndividualChainCubit, RemoteDataState<IndividualChain>>(
       builder: (context, state) {
-        if (state is RemoteDataLoaded<Chain> && state.data.isNotEmpty) {
+        if (state is RemoteDataLoaded<IndividualChain> && state.data.isNotEmpty) {
           final individualChains = state.data;
           List<Widget> tasks = [];
           for (var chain in individualChains) {
@@ -80,9 +80,9 @@ class TaskStageChainView extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final item = chain.stagesData?[index];
-                  final previousItem = (index == 0) ? null : chain.stagesData?[index - 1];
-                  final status = getTaskStatus(item!, previousItem);
+                  final item = chain.stagesData[index];
+                  final previousItem = (index == 0) ? null : chain.stagesData[index - 1];
+                  final status = getTaskStatus(item, previousItem);
                   final lineColor = (status == 'Отправлено')
                       ? theme.isLight
                       ? const Color(0xFF2754F3) : const Color(0xFF7694FF)
@@ -127,7 +127,7 @@ class TaskStageChainView extends StatelessWidget {
                         )
                       ],
                     );
-                  } else if (chain.stagesData?.length == index + 1) {
+                  } else if (chain.stagesData.length == index + 1) {
                     return Stack(
                       alignment: Alignment.bottomCenter,
                       children: [
@@ -159,7 +159,7 @@ class TaskStageChainView extends StatelessWidget {
                     );
                   }
                 },
-                itemCount: chain.stagesData?.length,
+                itemCount: chain.stagesData.length,
                 ),
             ));
           }

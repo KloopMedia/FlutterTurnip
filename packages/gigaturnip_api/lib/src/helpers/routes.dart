@@ -8,7 +8,7 @@ const joinCampaignActionRoute = 'join_campaign/';
 
 // Chain routes
 const chainsRoute = 'chains/';
-const taskStageChainRoute = '${chainsRoute}individuals/';
+const individualChainsRoute = '${chainsRoute}individuals/';
 
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';

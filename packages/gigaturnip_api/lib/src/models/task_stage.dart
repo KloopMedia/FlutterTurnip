@@ -9,17 +9,12 @@ class TaskStage {
   final int id;
   final String name;
   final String? description;
-  final int? chain;
-  final int? campaign;
+  final int chain;
+  final int campaign;
   @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
   final Map<String, dynamic> cardJsonSchema;
   @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
   final Map<String, dynamic> cardUiSchema;
-  final String? assignType;
-  final List<int?>? inStages;
-  final List<int?>? outStages;
-  final int? totalCount;
-  final int? completeCount;
 
   TaskStage({
     required this.id,
@@ -29,11 +24,6 @@ class TaskStage {
     required this.campaign,
     required this.cardJsonSchema,
     required this.cardUiSchema,
-    required this.assignType,
-    required this.inStages,
-    required this.outStages,
-    required this.totalCount,
-    required this.completeCount,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {

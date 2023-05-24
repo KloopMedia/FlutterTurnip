@@ -98,8 +98,8 @@ class _TaskPageState extends State<TaskPage> {
           )..initialize(),
         ),
         BlocProvider(
-          create: (context) => TaskStageChainCubit(
-            TaskStageChainRepository(
+          create: (context) => IndividualChainCubit(
+            IndividualChainRepository(
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),

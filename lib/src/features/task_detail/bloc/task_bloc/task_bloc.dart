@@ -12,11 +12,9 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final int taskId;
   final TaskDetailRepository _repository;
-  final IndividualChainRepository chainRepository;
 
   TaskBloc({
     required TaskDetailRepository repository,
-    required this.chainRepository,
     required this.taskId,
     Task? task,
   })  : _repository = repository,
@@ -35,14 +33,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       try {
         final data = await _repository.fetchData(taskId);
         final previousTasks = await _repository.fetchPreviousTaskData(taskId);
-        final chainsData = chainRepository.fetchData();
-        final parsedChains = chainsData.then((value) => value.results.map(Chain.fromApiModel).toList());
-        final chains = await parsedChains;
-        print('>>> chains = $chains');
-        final chain = chains.where((element) => element.id == data.stage.chain);
-        final isIndividual = chain.first.id == data.stage.chain;
-        print('>>> isIndividual = $isIndividual');
-        emit(TaskLoaded(data, previousTasks, isIndividual));
+        emit(TaskLoaded(data, previousTasks));
       } catch (e) {
         emit(TaskFetchingError(e.toString()));
       }
@@ -67,7 +58,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         data: data,
       );
       final updatedTask = _state.data.copyWith(schema: newSchema);
-      emit(TaskLoaded(updatedTask, _state.previousTasks, _state.isIndividual));
+      emit(TaskLoaded(updatedTask, _state.previousTasks));
     }
   }
 
@@ -81,7 +72,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final nextTaskId = response.nextDirectId;
 
       final updatedTask = _state.data.copyWith(responses: formData, complete: true);
-      emit(TaskSubmitted(updatedTask, _state.previousTasks, _state.isIndividual, nextTaskId: nextTaskId));
+      emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
     } catch (e) {
       print(e);
       emit(TaskSubmitError.clone(state as TaskLoaded, e.toString()));
@@ -97,7 +88,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         await _repository.saveData(taskId, data);
         final responses = await _repository.triggerWebhook(taskId);
         final task = _state.data.copyWith(responses: responses);
-        emit(TaskLoaded(task, _state.previousTasks, _state.isIndividual));
+        emit(TaskLoaded(task, _state.previousTasks));
       } catch (e) {
         print(e);
         emit(TaskWebhookTriggerError.clone(_state, e.toString()));

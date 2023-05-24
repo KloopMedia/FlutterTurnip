@@ -178,7 +178,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Chain>> getTaskStageChain({query}) async {
+  Future<PaginationWrapper<IndividualChain>> getIndividualChains(
+      {query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -186,7 +187,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<PaginationWrapper<Chain>>(Options(
+        _setStreamType<PaginationWrapper<IndividualChain>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -198,9 +199,9 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = PaginationWrapper<Chain>.fromJson(
+    final value = PaginationWrapper<IndividualChain>.fromJson(
       _result.data!,
-      (json) => Chain.fromJson(json as Map<String, dynamic>),
+      (json) => IndividualChain.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

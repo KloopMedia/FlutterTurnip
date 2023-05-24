@@ -9,15 +9,10 @@ class TaskStage extends Equatable {
   final int id;
   final String name;
   final String? description;
-  final int? chain;
-  final int? campaign;
+  final int chain;
+  final int campaign;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
-  final String? assignType;
-  final List<int?>? inStages;
-  final List<int?>? outStages;
-  final int? totalCount;
-  final int? completeCount;
 
   const TaskStage({
     required this.id,
@@ -27,11 +22,6 @@ class TaskStage extends Equatable {
     required this.campaign,
     required this.cardJsonSchema,
     required this.cardUiSchema,
-    required this.assignType,
-    required this.inStages,
-    required this.outStages,
-    required this.totalCount,
-    required this.completeCount,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
@@ -47,26 +37,11 @@ class TaskStage extends Equatable {
       campaign: model.campaign,
       cardJsonSchema: model.cardJsonSchema,
       cardUiSchema: model.cardUiSchema,
-      assignType: model.assignType,
-      inStages: model.inStages,
-      outStages: model.outStages,
-      totalCount: model.totalCount,
-      completeCount: model.completeCount,
     );
   }
 
   Map<String, dynamic> toJson() => _$TaskStageToJson(this);
 
   @override
-  List<Object?> get props => [
-    id,
-    name,
-    description,
-    chain,
-    assignType,
-    inStages,
-    outStages,
-    totalCount,
-    completeCount,
-  ];
+  List<Object?> get props => [id, name, description, chain];
 }
