@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-class StraightLine extends CustomPainter {
+class PaintStyle {
   final Color color;
   final double dashWidth;
   final double dashSpace;
   final double strokeWidth;
 
-  const StraightLine({
+  PaintStyle({
     required this.color,
     required this.dashWidth,
     required this.dashSpace,
     required this.strokeWidth,
   });
+}
+
+class StraightLine extends CustomPainter {
+  final PaintStyle style;
+
+  const StraightLine({required this.style});
 
   @override
   void paint(Canvas canvas, Size size) {
     double startX = 0.0;
 
     final paint = Paint()
-      ..color = color
+      ..color = style.color
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
+      ..strokeWidth = style.strokeWidth;
 
     while (startX < size.width) {
-      canvas.drawLine(
-          Offset(startX, 0.0),
-          Offset(startX + dashWidth, 0.0),
-          paint
-      );
-      startX += dashWidth + dashSpace;
+      canvas.drawLine(Offset(startX, 0.0), Offset(startX + style.dashWidth, 0.0), paint);
+      startX += style.dashWidth + style.dashSpace;
     }
   }
 
@@ -39,45 +41,41 @@ class StraightLine extends CustomPainter {
   }
 }
 
-class CurveLeftLine extends CustomPainter {
-  final Color color;
-  final double dashWidth;
-  final double dashSpace;
-  final double strokeWidth;
+abstract class CurveLine extends CustomPainter {
+  final PaintStyle style;
 
-  const CurveLeftLine({
-    required this.color,
-    required this.dashWidth,
-    required this.dashSpace,
-    required this.strokeWidth,
-  });
+  const CurveLine._({required this.style});
+
+  factory CurveLine.right({required PaintStyle style}) => _CurveRightLine(style: style);
+
+  factory CurveLine.left({required PaintStyle style}) => _CurveLeftLine(style: style);
+
+  (Offset start, Offset control1, Offset control2, Offset end) _calculatePath(Size size);
 
   @override
   void paint(Canvas canvas, Size size) {
-
-    Paint paint = Paint()
-      ..color = color
+    final Paint paint = Paint()
+      ..color = style.color
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
+      ..strokeWidth = style.strokeWidth;
 
-    var startPoint = Offset(size.width, size.height - 120);
-    var controlPoint1 = Offset(0, size.height / 6);
-    var controlPoint2 = Offset(0, 5 * size.height / 6);
-    var endPoint = Offset(size.width, size.height);
+    final (startPoint, controlPoint1, controlPoint2, endPoint) = _calculatePath(size);
 
-    var path = Path();
+    final path = Path();
     path.moveTo(startPoint.dx, startPoint.dy);
     path.cubicTo(
-        controlPoint1.dx, controlPoint1.dy,
-        controlPoint2.dx, controlPoint2.dy,
-        endPoint.dx, endPoint.dy);
+      controlPoint1.dx,
+      controlPoint1.dy,
+      controlPoint2.dx,
+      controlPoint2.dy,
+      endPoint.dx,
+      endPoint.dy,
+    );
 
+    final dashArray = CircularIntervalList<double>(<double>[style.dashWidth, style.dashSpace]);
     canvas.drawPath(
-      dashPath(
-        path,
-        dashArray: CircularIntervalList<double>(<double>[dashWidth, dashSpace]),
-      ),
+      dashPath(path, dashArray: dashArray),
       paint,
     );
   }
@@ -88,51 +86,30 @@ class CurveLeftLine extends CustomPainter {
   }
 }
 
-class CurveRightLine extends CustomPainter {
-  final Color color;
-  final double dashWidth;
-  final double dashSpace;
-  final double strokeWidth;
-
-  const CurveRightLine({
-    required this.color,
-    required this.dashWidth,
-    required this.dashSpace,
-    required this.strokeWidth,
-  });
+class _CurveLeftLine extends CurveLine {
+  _CurveLeftLine({required PaintStyle style}) : super._(style: style);
 
   @override
-  void paint(Canvas canvas, Size size) {
+  (Offset, Offset, Offset, Offset) _calculatePath(Size size) {
+    var startPoint = Offset(size.width, size.height - 120);
+    var controlPoint1 = Offset(0, size.height / 6);
+    var controlPoint2 = Offset(0, 5 * size.height / 6);
+    var endPoint = Offset(size.width, size.height);
 
-    Paint paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
+    return (startPoint, controlPoint1, controlPoint2, endPoint);
+  }
+}
 
+class _CurveRightLine extends CurveLine {
+  _CurveRightLine({required PaintStyle style}) : super._(style: style);
+
+  @override
+  (Offset, Offset, Offset, Offset) _calculatePath(Size size) {
     var startPoint = Offset(0, size.height - 120);
     var controlPoint1 = Offset(size.width, size.height / 6);
     var controlPoint2 = Offset(size.width, 5 * size.height / 6);
     var endPoint = Offset(0, size.height);
 
-    var path = Path();
-    path.moveTo(startPoint.dx, startPoint.dy);
-    path.cubicTo(
-        controlPoint1.dx, controlPoint1.dy,
-        controlPoint2.dx, controlPoint2.dy,
-        endPoint.dx, endPoint.dy);
-
-    canvas.drawPath(
-      dashPath(
-        path,
-        dashArray: CircularIntervalList<double>(<double>[dashWidth, dashSpace]),
-      ),
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return (startPoint, controlPoint1, controlPoint2, endPoint);
   }
 }
