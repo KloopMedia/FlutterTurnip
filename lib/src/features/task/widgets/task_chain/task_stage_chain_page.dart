@@ -8,35 +8,25 @@ import '../../../../bloc/bloc.dart';
 import 'chain_lines.dart';
 import 'task_chain.dart';
 
+enum ChainInfoStatus {
+  complete,
+  active,
+  notStarted,
+}
+
 class TaskStageChainView extends StatelessWidget {
-  final Function(TaskStageChainInfo item, String status) onTap;
+  final Function(TaskStageChainInfo item, ChainInfoStatus status) onTap;
 
   const TaskStageChainView({Key? key, required this.onTap}) : super(key: key);
 
-  String getTaskStatus(TaskStageChainInfo item, TaskStageChainInfo? previousItem) {
-    if (previousItem != null) {
-      if (item.completeCount> 0 && item.totalCount> 0 &&
-          item.completeCount == item.totalCount) {
-        return 'Отправлено';
-      } else if (item.completeCount< item.totalCount) {
-        return 'Возвращено';
-      } else if (previousItem.completeCount> 0 && previousItem.totalCount> 0 &&
-          previousItem.completeCount == previousItem.totalCount) {
-        return 'Активно';
-      } else if (item.completeCount == 0 && item.totalCount == 0) {
-        return 'Неотправлено';
-      }
+  ChainInfoStatus getTaskStatus(TaskStageChainInfo item) {
+    if (item.totalCount == 0) {
+      return ChainInfoStatus.notStarted;
+    } else if (item.completeCount < item.totalCount) {
+      return ChainInfoStatus.active;
     } else {
-      if (item.completeCount< item.totalCount) {
-        return 'Возвращено';
-      } else if (item.completeCount> 0 && item.totalCount> 0 &&
-          item.completeCount == item.totalCount) {
-        return 'Отправлено';
-      } else if (item.completeCount == 0 && item.totalCount == 0) {
-        return 'Активно';
-      }
+      return ChainInfoStatus.complete;
     }
-    return '';
   }
 
   @override
@@ -73,21 +63,21 @@ class TaskStageChainView extends StatelessWidget {
             tasks.add(Container(
               margin: EdgeInsets.symmetric(
                 vertical: 20,
-                horizontal: context.isSmall || context.isMedium
-                    ? 5
-                    : MediaQuery.of(context).size.width / 6,
+                horizontal:
+                    context.isSmall || context.isMedium ? 5 : MediaQuery.of(context).size.width / 6,
               ),
               child: ListView.builder(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   final item = chain.stagesData[index];
-                  final previousItem = (index == 0) ? null : chain.stagesData[index - 1];
-                  final status = getTaskStatus(item, previousItem);
-                  final lineColor = (status == 'Отправлено')
+                  final status = getTaskStatus(item);
+                  final lineColor = (status == ChainInfoStatus.complete)
                       ? theme.isLight
-                      ? const Color(0xFF2754F3) : const Color(0xFF7694FF)
+                          ? const Color(0xFF2754F3)
+                          : const Color(0xFF7694FF)
                       : theme.isLight
-                      ? const Color(0xFFE1E3E3) : theme.neutral20;//const Color(0xFF2E3132);
+                          ? const Color(0xFFE1E3E3)
+                          : theme.neutral20;
 
                   if (index == 0) {
                     return Stack(
@@ -118,8 +108,7 @@ class TaskStageChainView extends StatelessWidget {
                                     color: lineColor,
                                     dashWidth: context.isSmall ? 10.0 : 16.0,
                                     dashSpace: context.isSmall ? 10.0 : 12.0,
-                                    strokeWidth: context.isSmall ? 6.0 : 7.0
-                                ),
+                                    strokeWidth: context.isSmall ? 6.0 : 7.0),
                               ),
                             ),
                             const SizedBox(width: 60.0),
@@ -143,7 +132,6 @@ class TaskStageChainView extends StatelessWidget {
                             onTap: () => onTap(item, status),
                           ),
                         ),
-
                         if (index % 2 == 0) leftStarIcon,
                         if (index % 2 != 0) rightStarIcon,
                       ],
@@ -160,12 +148,10 @@ class TaskStageChainView extends StatelessWidget {
                   }
                 },
                 itemCount: chain.stagesData.length,
-                ),
+              ),
             ));
           }
-          return SliverToBoxAdapter(
-            child: Column(children: tasks)
-          );
+          return SliverToBoxAdapter(child: Column(children: tasks));
         }
         return const SliverToBoxAdapter(child: SizedBox.shrink());
       },

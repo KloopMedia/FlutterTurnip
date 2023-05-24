@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'chain_sides.dart';
 
 class TaskStageChain extends StatelessWidget {
   final String title;
-  final String? status;
+  final ChainInfoStatus status;
   final int lessonNum;
   final bool even;
   final bool isFirstTaskNotOpen;
@@ -29,8 +30,8 @@ class TaskStageChain extends StatelessWidget {
       fontWeight: FontWeight.w500,
       fontSize: 16.0,
       color: theme.isLight
-          ? (status == 'Неотправлено') ? theme.neutral90 : theme.neutral40
-          : (status == 'Неотправлено') ? theme.neutralVariant40 : theme.neutral70,
+          ? (status == ChainInfoStatus.notStarted) ? theme.neutral90 : theme.neutral40
+          : (status == ChainInfoStatus.notStarted) ? theme.neutralVariant40 : theme.neutral70,
     );
 
     return SizedBox(
@@ -76,7 +77,7 @@ class TaskStageChain extends StatelessWidget {
 
 class LessonIcon extends StatelessWidget {
   final int lessonNum;
-  final String? status;
+  final ChainInfoStatus status;
   final bool isFirstTaskNotOpen;
 
   const LessonIcon({
@@ -87,9 +88,9 @@ class LessonIcon extends StatelessWidget {
   }) : super(key: key);
 
   int getStatusIndexOfIconColor() {
-    if (status == 'Отправлено') {
+    if (status ==  ChainInfoStatus.complete) {
       return 0;
-    } else if (status == 'Возвращено' || status == 'Активно'){
+    } else if (status == ChainInfoStatus.active){
       return 1;
     } else {
       return 2;
@@ -104,7 +105,7 @@ class LessonIcon extends StatelessWidget {
       fontSize: 20.0,
       color: theme.isLight
           ? theme.onPrimary
-          : (status == 'Неотправлено') ? theme.neutralVariant40 : theme.neutral100,
+          : (status == ChainInfoStatus.notStarted) ? theme.neutralVariant40 : theme.neutral100,
     );
     final index = getStatusIndexOfIconColor();
     final circleColorList = [
