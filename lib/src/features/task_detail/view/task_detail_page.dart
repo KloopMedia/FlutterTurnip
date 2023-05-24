@@ -24,6 +24,10 @@ class TaskDetailPage extends StatelessWidget {
         repository: TaskDetailRepository(
           gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
         ),
+        chainRepository: IndividualChainRepository(
+          gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+          campaignId: campaignId,
+        ),
         taskId: taskId,
         task: task,
       )..add(InitializeTask()),

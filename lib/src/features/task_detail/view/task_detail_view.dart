@@ -161,7 +161,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                     _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
                   if (state.previousTasks.isNotEmpty)
                     TaskDivider(label: context.loc.form_divider),
-                  _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
+                  _CurrentTask(task: state.data, isIndividual: state.isIndividual, pageStorageKey: _pageStorageKey),
                 ],
               ),
             ),
@@ -175,23 +175,26 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
 class _CurrentTask extends StatelessWidget {
   final TaskDetail task;
+  final bool isIndividual;
   final PageStorageKey pageStorageKey;
 
   const _CurrentTask({
     Key? key,
     required this.task,
+    required this.isIndividual,
     required this.pageStorageKey,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('>>> task = $isIndividual');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: FlutterJsonSchemaForm(
         schema: task.schema ?? {},
         uiSchema: task.uiSchema,
         formData: task.responses,
-        disabled: task.complete,
+        disabled: isIndividual ? false : task.complete,
         pageStorageKey: pageStorageKey,
         storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
         onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
