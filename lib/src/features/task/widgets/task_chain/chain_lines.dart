@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-class PaintStyle {
-  final Color color;
-  final double dashWidth;
-  final double dashSpace;
-  final double strokeWidth;
-
-  PaintStyle({
-    required this.color,
-    required this.dashWidth,
-    required this.dashSpace,
-    required this.strokeWidth,
-  });
-}
+import 'types.dart';
 
 class StraightLine extends CustomPainter {
   final PaintStyle style;

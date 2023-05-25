@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum ChainInfoStatus {
   complete,
   active,
@@ -15,3 +17,16 @@ class Position {
   const Position({this.top, this.bottom, this.left, this.right});
 }
 
+class PaintStyle {
+  final Color color;
+  final double dashWidth;
+  final double dashSpace;
+  final double strokeWidth;
+
+  PaintStyle({
+    required this.color,
+    required this.dashWidth,
+    required this.dashSpace,
+    required this.strokeWidth,
+  });
+}
