@@ -13,12 +13,18 @@ import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
+import '../widgets/task_chain/types.dart';
 
-class RelevantTaskPage extends StatelessWidget {
+class RelevantTaskPage extends StatefulWidget {
   final int campaignId;
 
   const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
 
+  @override
+  State<RelevantTaskPage> createState() => _RelevantTaskPageState();
+}
+
+class _RelevantTaskPageState extends State<RelevantTaskPage> {
   void refreshAllTasks(BuildContext context, bool? refresh) {
     if (refresh ?? false) {
       context.read<RelevantTaskCubit>().refetch();
@@ -32,7 +38,7 @@ class RelevantTaskPage extends StatelessWidget {
     final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
-        'cid': '$campaignId',
+        'cid': '${widget.campaignId}',
         'tid': '${task.id}',
       },
       extra: task,
@@ -46,7 +52,7 @@ class RelevantTaskPage extends StatelessWidget {
     final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
-        'cid': '$campaignId',
+        'cid': '${widget.campaignId}',
         'tid': '$id',
       },
     );
@@ -58,7 +64,7 @@ class RelevantTaskPage extends StatelessWidget {
   void redirectToAvailableTasks(BuildContext context, TaskStage stage) {
     context.goNamed(
       AvailableTaskRoute.name,
-      params: {'cid': '$campaignId', 'tid': '${stage.id}'},
+      params: {'cid': '${widget.campaignId}', 'tid': '${stage.id}'},
     );
   }
 
@@ -132,31 +138,28 @@ class RelevantTaskPage extends StatelessWidget {
               );
             },
           ),
-          BlocConsumer<ReactiveTasks, RemoteDataState<TaskStage>>(
-              listener: (context, state) {
-                if (state is TaskCreated) {
-                  redirectToTaskWithId(context, state.createdTaskId);
+          BlocConsumer<ReactiveTasks, RemoteDataState<TaskStage>>(listener: (context, state) {
+            if (state is TaskCreated) {
+              redirectToTaskWithId(context, state.createdTaskId);
+            }
+          }, builder: (context, state) {
+            return TaskStageChainView(
+              onTap: (item, status) async {
+                if (status == ChainInfoStatus.complete || status == ChainInfoStatus.active) {
+                  final repo = AllTaskRepository(
+                    gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+                    campaignId: widget.campaignId,
+                  );
+                  final data = await repo.fetchData(query: {'stage': item.id});
+                  final task = data.results.where((element) => element.stage.id == item.id);
+                  if (!mounted) return;
+                  redirectToTaskWithId(context, task.first.id);
+                } else {
+                  context.read<ReactiveTasks>().createTaskById(item.id);
                 }
               },
-              builder: (context, state) {
-                return TaskStageChainView(
-                  onTap: (item, status) async {
-                    if (status == 'Отправлено' || status == 'Возвращено') {
-                      final repo = AllTaskRepository(
-                          gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-                          campaignId: campaignId);
-                      final data = repo.fetchData(query: {'stage': item.id});
-                      final parsedData = data.then((value) => value.results.map(Task.fromApiModel).toList());
-                      final tasks = await parsedData;
-                      final task = tasks.where((element) => element.stage.id == item.id);
-                      redirectToTaskWithId(context, task.first.id);
-                    } else {
-                      context.read<ReactiveTasks>().createTaskById(item.id);
-                    }
-                 },
-              );
-            }
-          ),
+            );
+          }),
         ],
       ),
     );
