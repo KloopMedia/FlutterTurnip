@@ -6,6 +6,10 @@ const selectableCampaignsRoute = '$campaignsRoute/list_user_selectable/';
 // Campaigns actions
 const joinCampaignActionRoute = 'join_campaign/';
 
+// Chain routes
+const chainsRoute = 'chains/';
+const individualChainsRoute = '${chainsRoute}individuals/';
+
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';
 const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';

@@ -6,9 +6,11 @@ part 'creatable_task_state.dart';
 
 mixin ReactiveTasks on RemoteDataCubit<TaskStage> {
   Future<void> createTask(TaskStage task);
+  Future<void> createTaskById(int id);
 }
 mixin ProactiveTasks on RemoteDataCubit<TaskStage> {
   Future<void> createTask(TaskStage task);
+  Future<void> createTaskById(int id);
 }
 
 class CreatableTaskCubit extends RemoteDataCubit<TaskStage> with ReactiveTasks, ProactiveTasks {
@@ -20,6 +22,20 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage> with ReactiveTasks, 
   Future<void> createTask(TaskStage task) async {
     try {
       final createdTaskId = await _repository.createTask(task.id);
+      emit(TaskCreated.clone(state as RemoteDataLoaded<TaskStage>, createdTaskId));
+    } catch (e, c) {
+      if (kDebugMode) {
+        print(e);
+        print(c);
+      }
+      emit(TaskCreatingError.clone(state as RemoteDataLoaded<TaskStage>, e.toString()));
+    }
+  }
+
+  @override
+  Future<void> createTaskById(int id) async {
+    try {
+      final createdTaskId = await _repository.createTask(id);
       emit(TaskCreated.clone(state as RemoteDataLoaded<TaskStage>, createdTaskId));
     } catch (e, c) {
       if (kDebugMode) {
