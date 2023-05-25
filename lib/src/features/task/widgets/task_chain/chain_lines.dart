@@ -89,14 +89,12 @@ abstract class CurveLine extends CustomPainter {
 class _CurveLeftLine extends CurveLine {
   _CurveLeftLine({required PaintStyle style}) : super._(style: style);
 
-  final offset = 25.0;
-
   @override
   (Offset, Offset, Offset, Offset) _calculatePath(Size size) {
-    var startPoint = Offset(size.width - offset, size.height - 120);
-    var controlPoint1 = Offset(0 - offset / 2, size.height / 6);
-    var controlPoint2 = Offset(0 - offset / 2, 5 * size.height / 6);
-    var endPoint = Offset(size.width - offset, size.height);
+    var startPoint = Offset(size.width, size.height - 120);
+    var controlPoint1 = Offset(0, size.height / 6);
+    var controlPoint2 = Offset(0, 5 * size.height / 6);
+    var endPoint = Offset(size.width, size.height);
 
     return (startPoint, controlPoint1, controlPoint2, endPoint);
   }
@@ -105,14 +103,12 @@ class _CurveLeftLine extends CurveLine {
 class _CurveRightLine extends CurveLine {
   _CurveRightLine({required PaintStyle style}) : super._(style: style);
 
-  final offset = 25.0;
-
   @override
   (Offset, Offset, Offset, Offset) _calculatePath(Size size) {
-    var startPoint = Offset(0 + offset, size.height - 120);
-    var controlPoint1 = Offset(size.width + offset / 2, size.height / 6);
-    var controlPoint2 = Offset(size.width + offset / 2, 5 * size.height / 6);
-    var endPoint = Offset(0 + offset, size.height);
+    var startPoint = Offset(0, size.height - 120);
+    var controlPoint1 = Offset(size.width, size.height / 6);
+    var controlPoint2 = Offset(size.width, 5 * size.height / 6);
+    var endPoint = Offset(0, size.height);
 
     return (startPoint, controlPoint1, controlPoint2, endPoint);
   }

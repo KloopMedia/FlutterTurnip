@@ -21,16 +21,13 @@ class ChainSide extends StatelessWidget {
     final curveLine = isEven ? CurveLine.right(style: style) : CurveLine.left(style: style);
 
     const curveWidth = 50.0;
-    const offset = curveWidth / 2 + 10;
-
-    final startOffset = position == ChainPosition.start ? offset + 25 : offset;
-    final endOffset = position == ChainPosition.end ? offset + 25 : offset;
+    const offset = curveWidth + 5;
 
     return Stack(
       alignment: Alignment.topCenter,
       children: [
         Positioned(
-          left: startOffset,
+          left: offset,
           right: offset,
           child: CustomPaint(
             size: const Size(double.infinity, 0.0),
@@ -47,8 +44,8 @@ class ChainSide extends StatelessWidget {
         if (position == ChainPosition.end)
           Positioned(
             bottom: 0,
-            left: isEven ? endOffset : offset,
-            right: isEven ? offset : endOffset,
+            left: offset,
+            right: offset,
             child: CustomPaint(
               size: const Size(double.infinity, 0.0),
               painter: StraightLine(style: style),
