@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+
+import 'types.dart';
 
 class LessonIcon extends StatelessWidget {
   final int lessonNum;

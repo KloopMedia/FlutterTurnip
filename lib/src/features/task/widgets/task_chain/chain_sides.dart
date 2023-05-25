@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 
 import 'chain_lines.dart';
+import 'types.dart';
 
 class ChainSide extends StatelessWidget {
   final PaintStyle style;

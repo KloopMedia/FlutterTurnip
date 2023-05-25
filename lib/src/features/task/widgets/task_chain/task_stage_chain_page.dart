@@ -8,12 +8,7 @@ import '../../../../bloc/bloc.dart';
 import 'chain_lines.dart';
 import 'chain_sides.dart';
 import 'task_chain.dart';
-
-enum ChainInfoStatus {
-  complete,
-  active,
-  notStarted,
-}
+import 'types.dart';
 
 class TaskStageChainView extends StatelessWidget {
   final Function(TaskStageChainInfo item, ChainInfoStatus status) onTap;
@@ -74,17 +69,6 @@ class TaskStageChainView extends StatelessWidget {
     );
   }
 }
-
-class Position {
-  final double? top;
-  final double? bottom;
-  final double? left;
-  final double? right;
-
-  const Position({this.top, this.bottom, this.left, this.right});
-}
-
-enum ChainPosition { start, middle, end }
 
 class ChainRow extends StatelessWidget {
   final int index;
