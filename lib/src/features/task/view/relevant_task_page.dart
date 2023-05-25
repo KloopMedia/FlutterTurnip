@@ -68,6 +68,21 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     );
   }
 
+  void onChainTap(item, status) async {
+    if (status == ChainInfoStatus.complete || status == ChainInfoStatus.active) {
+      final repo = AllTaskRepository(
+        gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+        campaignId: widget.campaignId,
+      );
+      final data = await repo.fetchData(query: {'stage': item.id});
+      final task = data.results.where((element) => element.stage.id == item.id);
+      if (!mounted) return;
+      redirectToTaskWithId(context, task.first.id);
+    } else {
+      context.read<ReactiveTasks>().createTaskById(item.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
@@ -138,28 +153,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               );
             },
           ),
-          BlocConsumer<ReactiveTasks, RemoteDataState<TaskStage>>(listener: (context, state) {
-            if (state is TaskCreated) {
-              redirectToTaskWithId(context, state.createdTaskId);
-            }
-          }, builder: (context, state) {
-            return TaskStageChainView(
-              onTap: (item, status) async {
-                if (status == ChainInfoStatus.complete || status == ChainInfoStatus.active) {
-                  final repo = AllTaskRepository(
-                    gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-                    campaignId: widget.campaignId,
-                  );
-                  final data = await repo.fetchData(query: {'stage': item.id});
-                  final task = data.results.where((element) => element.stage.id == item.id);
-                  if (!mounted) return;
-                  redirectToTaskWithId(context, task.first.id);
-                } else {
-                  context.read<ReactiveTasks>().createTaskById(item.id);
-                }
-              },
-            );
-          }),
+          TaskStageChainView(onTap: onChainTap),
         ],
       ),
     );

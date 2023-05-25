@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../../../bloc/bloc.dart';
 import 'chain_row.dart';
@@ -11,6 +12,30 @@ class TaskStageChainView extends StatelessWidget {
   final Function(TaskStageChainInfo item, ChainInfoStatus status) onTap;
 
   const TaskStageChainView({Key? key, required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<IndividualChainCubit, RemoteDataState<IndividualChain>>(
+      builder: (context, state) {
+        if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
+          final chains = state.data
+              .map((data) => IndividualChainBuilder(data: data.stagesData, onTap: onTap))
+              .toList();
+
+          return MultiSliver(children: chains);
+        }
+        return const SliverToBoxAdapter(child: SizedBox.shrink());
+      },
+    );
+  }
+}
+
+class IndividualChainBuilder extends StatelessWidget {
+  final List<TaskStageChainInfo> data;
+  final Function(TaskStageChainInfo item, ChainInfoStatus status) onTap;
+
+  const IndividualChainBuilder({Key? key, required this.data, required this.onTap})
+      : super(key: key);
 
   ChainInfoStatus getTaskStatus(TaskStageChainInfo item) {
     if (item.totalCount == 0) {
@@ -24,45 +49,34 @@ class TaskStageChainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<IndividualChainCubit, RemoteDataState<IndividualChain>>(
-      builder: (context, state) {
-        if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
-          final individualChains = state.data;
-          List<Widget> tasks = [];
-          for (var chain in individualChains) {
-            tasks.add(Container(
-              margin: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: chain.stagesData.length,
-                itemBuilder: (context, index) {
-                  final item = chain.stagesData[index];
-                  final status = getTaskStatus(item);
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final item = data[index];
+            final status = getTaskStatus(item);
 
-                  ChainPosition position;
-                  if (index == 0) {
-                    position = ChainPosition.start;
-                  } else if (index == chain.stagesData.length - 1) {
-                    position = ChainPosition.end;
-                  } else {
-                    position = ChainPosition.middle;
-                  }
+            ChainPosition position;
+            if (index == 0) {
+              position = ChainPosition.start;
+            } else if (index == data.length - 1) {
+              position = ChainPosition.end;
+            } else {
+              position = ChainPosition.middle;
+            }
 
-                  return ChainRow(
-                    position: position,
-                    title: item.name,
-                    index: index,
-                    status: status,
-                    onTap: status == ChainInfoStatus.notStarted ? null : () => onTap(item, status),
-                  );
-                },
-              ),
-            ));
-          }
-          return SliverToBoxAdapter(child: Column(children: tasks));
-        }
-        return const SliverToBoxAdapter(child: SizedBox.shrink());
-      },
+            return ChainRow(
+              position: position,
+              title: item.name,
+              index: index,
+              status: status,
+              onTap: status == ChainInfoStatus.notStarted ? null : () => onTap(item, status),
+            );
+          },
+          childCount: data.length,
+        ),
+      ),
     );
   }
 }
