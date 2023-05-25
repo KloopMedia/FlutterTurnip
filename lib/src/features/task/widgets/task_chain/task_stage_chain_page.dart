@@ -134,39 +134,44 @@ class ChainRow extends StatelessWidget {
       color: status == ChainInfoStatus.notStarted ? notStartedColor : activeColor,
     );
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: const BorderRadius.all(Radius.elliptical(50, 80)),
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              title,
-              style: titleTextStyle,
-              textAlign: isEven ? TextAlign.right : TextAlign.left,
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Align(
+          alignment: isEven ? Alignment.centerRight : Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 120.0),
+            child: GestureDetector(
+              onTap: onTap,
+              child: Text(
+                title,
+                style: titleTextStyle,
+                textAlign: isEven ? TextAlign.right : TextAlign.left,
+              ),
             ),
           ),
-          Align(
-            alignment: isEven ? Alignment.centerRight : Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
+        ),
+        Align(
+          alignment: isEven ? Alignment.centerRight : Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: GestureDetector(
+              onTap: onTap,
               child: LessonIcon(
                 lessonNum: index,
                 status: status,
               ),
             ),
           ),
-          ChainSide(
-            style: style,
-            isEven: isEven,
-            position: position,
-          ),
-          ChainRowIcon(position: position, isEven: isEven),
-        ],
-      ),
+        ),
+        ChainSide(
+          style: style,
+          isEven: isEven,
+          position: position,
+        ),
+        ChainRowIcon(position: position, isEven: isEven),
+      ],
     );
   }
 }
