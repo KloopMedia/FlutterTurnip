@@ -61,7 +61,7 @@ class TaskStageChainView extends StatelessWidget {
                     title: item.name,
                     index: index,
                     status: status,
-                    onTap: () => onTap(item, status),
+                    onTap: status == ChainInfoStatus.notStarted ? null : () => onTap(item, status),
                   );
                 },
               ),
