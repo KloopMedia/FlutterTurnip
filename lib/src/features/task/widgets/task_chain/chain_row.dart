@@ -32,7 +32,11 @@ class ChainRow extends StatelessWidget {
     final notStartedLineColor = theme.isLight ? const Color(0xFFE1E3E3) : theme.neutral20;
 
     final lineColor =
-        (status == ChainInfoStatus.complete) ? completeLineColor : notStartedLineColor;
+        status == ChainInfoStatus.notStarted ? notStartedLineColor : completeLineColor;
+
+    final endLineColor = status == ChainInfoStatus.active || status == ChainInfoStatus.notStarted
+        ? notStartedLineColor
+        : completeLineColor;
 
     final dashWidth = context.isSmall ? 10.0 : 16.0;
     final dashSpace = context.isSmall ? 10.0 : 12.0;
@@ -94,6 +98,7 @@ class ChainRow extends StatelessWidget {
         ),
         ChainSide(
           style: style,
+          endStyle: style.copyWith(color: endLineColor),
           isEven: isEven,
           position: position,
         ),

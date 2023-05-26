@@ -5,12 +5,14 @@ import 'types.dart';
 
 class ChainSide extends StatelessWidget {
   final PaintStyle style;
+  final PaintStyle endStyle;
   final bool isEven;
   final ChainPosition position;
 
   const ChainSide({
     Key? key,
     required this.style,
+    required this.endStyle,
     required this.isEven,
     required this.position,
   }) : super(key: key);
@@ -48,7 +50,7 @@ class ChainSide extends StatelessWidget {
             right: offset,
             child: CustomPaint(
               size: const Size(double.infinity, 0.0),
-              painter: StraightLine(style: style),
+              painter: StraightLine(style: endStyle),
             ),
           ),
       ],

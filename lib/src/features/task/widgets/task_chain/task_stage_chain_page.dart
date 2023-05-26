@@ -40,6 +40,8 @@ class IndividualChainBuilder extends StatelessWidget {
   ChainInfoStatus getTaskStatus(TaskStageChainInfo item) {
     if (item.totalCount == 0) {
       return ChainInfoStatus.notStarted;
+    } else if (item.completeCount > 0 && item.completeCount < item.totalCount) {
+      return ChainInfoStatus.returned;
     } else if (item.completeCount < item.totalCount) {
       return ChainInfoStatus.active;
     } else {
