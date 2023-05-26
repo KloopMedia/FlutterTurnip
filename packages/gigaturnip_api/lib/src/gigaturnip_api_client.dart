@@ -4,7 +4,8 @@ import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
 
-@RestApi(baseUrl: "https://journal-bb5e3.uc.r.appspot.com/api/v1/")
+@RestApi(baseUrl: "https://front-test-dot-journal-bb5e3.uc.r.appspot.com/api/v1/")
+// @RestApi(baseUrl: "https://journal-bb5e3.uc.r.appspot.com/api/v1/")
 abstract class GigaTurnipApiClient {
   factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _GigaTurnipApiClient;
 
@@ -28,6 +29,9 @@ abstract class GigaTurnipApiClient {
 
   @GET("$campaignsRoute/{id}/$joinCampaignActionRoute")
   Future<void> joinCampaign(@Path("id") int id);
+
+  @GET(campaignCategories)
+  Future<PaginationWrapper<Category>> getCampaignCategories({@Queries() Map<String, dynamic>? query});
 
   // Task methods
 

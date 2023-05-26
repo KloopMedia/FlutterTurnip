@@ -19,7 +19,7 @@ class LanguageSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      padding: contentPadding,
+      // padding: contentPadding,
       style: style,
       decoration: InputDecoration(
         prefixIconConstraints: const BoxConstraints(minWidth: 20, maxHeight: 48),
