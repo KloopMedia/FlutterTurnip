@@ -54,6 +54,13 @@ class ChainRow extends StatelessWidget {
       color: status == ChainInfoStatus.notStarted ? notStartedColor : activeColor,
     );
 
+    void Function()? _onTap() {
+      if (status == ChainInfoStatus.notStarted) {
+        return null;
+      }
+      return onTap;
+    }
+
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -63,7 +70,7 @@ class ChainRow extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 120.0),
             child: GestureDetector(
-              onTap: onTap,
+              onTap: _onTap(),
               child: Text(
                 title,
                 style: titleTextStyle,
@@ -77,7 +84,7 @@ class ChainRow extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: GestureDetector(
-              onTap: onTap,
+              onTap: _onTap(),
               child: LessonIcon(
                 lessonNum: index,
                 status: status,
