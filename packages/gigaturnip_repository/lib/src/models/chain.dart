@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Chain;
+import 'package:json_annotation/json_annotation.dart';
 
 part 'chain.g.dart';
 

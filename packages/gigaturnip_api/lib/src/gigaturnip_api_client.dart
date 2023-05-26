@@ -30,6 +30,14 @@ abstract class GigaTurnipApiClient {
   @GET("$campaignsRoute/{id}/$joinCampaignActionRoute")
   Future<void> joinCampaign(@Path("id") int id);
 
+  // Chain methods
+
+  @GET(chainsRoute)
+  Future<PaginationWrapper<Chain>> getChains({@Queries() Map<String, dynamic>? query});
+
+  @GET(individualChainsRoute)
+  Future<PaginationWrapper<IndividualChain>> getIndividualChains({@Queries() Map<String, dynamic>? query});
+
   @GET(campaignCategories)
   Future<PaginationWrapper<Category>> getCampaignCategories({@Queries() Map<String, dynamic>? query});
 

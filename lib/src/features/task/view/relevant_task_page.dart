@@ -3,20 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
+import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
+import '../widgets/task_chain/types.dart';
 
-class RelevantTaskPage extends StatelessWidget {
+class RelevantTaskPage extends StatefulWidget {
   final int campaignId;
 
   const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
 
+  @override
+  State<RelevantTaskPage> createState() => _RelevantTaskPageState();
+}
+
+class _RelevantTaskPageState extends State<RelevantTaskPage> {
   void refreshAllTasks(BuildContext context, bool? refresh) {
     if (refresh ?? false) {
       context.read<RelevantTaskCubit>().refetch();
@@ -30,7 +38,7 @@ class RelevantTaskPage extends StatelessWidget {
     final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
-        'cid': '$campaignId',
+        'cid': '${widget.campaignId}',
         'tid': '${task.id}',
       },
       extra: task,
@@ -44,7 +52,7 @@ class RelevantTaskPage extends StatelessWidget {
     final result = await context.pushNamed<bool>(
       TaskDetailRoute.name,
       params: {
-        'cid': '$campaignId',
+        'cid': '${widget.campaignId}',
         'tid': '$id',
       },
     );
@@ -56,8 +64,23 @@ class RelevantTaskPage extends StatelessWidget {
   void redirectToAvailableTasks(BuildContext context, TaskStage stage) {
     context.goNamed(
       AvailableTaskRoute.name,
-      params: {'cid': '$campaignId', 'tid': '${stage.id}'},
+      params: {'cid': '${widget.campaignId}', 'tid': '${stage.id}'},
     );
+  }
+
+  void onChainTap(item, status) async {
+    if (status == ChainInfoStatus.complete || status == ChainInfoStatus.active) {
+      final repo = AllTaskRepository(
+        gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+        campaignId: widget.campaignId,
+      );
+      final data = await repo.fetchData(query: {'stage': item.id});
+      final task = data.results.where((element) => element.stage.id == item.id);
+      if (!mounted) return;
+      redirectToTaskWithId(context, task.first.id);
+    } else {
+      context.read<ReactiveTasks>().createTaskById(item.id);
+    }
   }
 
   @override
@@ -130,6 +153,7 @@ class RelevantTaskPage extends StatelessWidget {
               );
             },
           ),
+          TaskStageChainView(onTap: onChainTap),
         ],
       ),
     );
