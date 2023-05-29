@@ -40,11 +40,20 @@ class IndividualChainBuilder extends StatelessWidget {
   ChainInfoStatus getTaskStatus(TaskStageChainInfo item) {
     if (item.totalCount == 0) {
       return ChainInfoStatus.notStarted;
+    } else if (item.completeCount > 0 && item.completeCount < item.totalCount) {
+      return ChainInfoStatus.returned;
     } else if (item.completeCount < item.totalCount) {
       return ChainInfoStatus.active;
     } else {
       return ChainInfoStatus.complete;
     }
+  }
+
+  Function? handleTap(int index, ChainInfoStatus status, TaskStageChainInfo item) {
+    if (index == 0 || status == ChainInfoStatus.active || status == ChainInfoStatus.complete) {
+      return onTap(item, status);
+    }
+    return null;
   }
 
   @override
@@ -66,12 +75,20 @@ class IndividualChainBuilder extends StatelessWidget {
               position = ChainPosition.middle;
             }
 
+            final secondElement = data.elementAtOrNull(1);
+            final secondsElementStatus =
+                secondElement != null ? getTaskStatus(secondElement) : ChainInfoStatus.notStarted;
+
+            final itemStatus = index == 0 && secondsElementStatus == ChainInfoStatus.notStarted
+                ? ChainInfoStatus.active
+                : status;
+
             return ChainRow(
               position: position,
               title: item.name,
               index: index,
-              status: status,
-              onTap: status == ChainInfoStatus.notStarted ? null : () => onTap(item, status),
+              status: itemStatus,
+              onTap: () => onTap(item, status),
             );
           },
           childCount: data.length,

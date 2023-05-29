@@ -28,6 +28,11 @@ class LessonIcon extends StatelessWidget {
         const Color(0xFFC0CEFF),
         const Color(0xFF94A9F0),
       ],
+      ChainInfoStatus.returned: [
+        const Color(0xFFDFC902),
+        const Color(0xFFDFC902),
+        const Color(0xFFBFAE0E)
+      ],
       ChainInfoStatus.active: [
         const Color(0xFFDFC902),
         const Color(0xFFDFC902),
@@ -41,6 +46,7 @@ class LessonIcon extends StatelessWidget {
     final rhombusColorSchema = {
       ChainInfoStatus.complete: const Color(0xFF748AD9),
       ChainInfoStatus.active: const Color(0xFFEAD620),
+      ChainInfoStatus.returned: const Color(0xFFEAD620),
       ChainInfoStatus.notStarted: theme.isLight ? const Color(0xFFEFF0F0) : const Color(0xFF767680)
     };
 

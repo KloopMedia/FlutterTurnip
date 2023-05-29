@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum ChainInfoStatus {
   complete,
   active,
+  returned,
   notStarted,
 }
 
@@ -29,4 +30,18 @@ class PaintStyle {
     required this.dashSpace,
     required this.strokeWidth,
   });
+
+  PaintStyle copyWith({
+    Color? color,
+    double? dashWidth,
+    double? dashSpace,
+    double? strokeWidth,
+  }) {
+    return PaintStyle(
+      color: color ?? this.color,
+      dashWidth: dashWidth ?? this.dashWidth,
+      dashSpace: dashSpace ?? this.dashSpace,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+    );
+  }
 }
