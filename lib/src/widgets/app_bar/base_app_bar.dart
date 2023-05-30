@@ -35,6 +35,7 @@ class BaseAppBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: backgroundColor, border: border, boxShadow: boxShadow),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: padding ?? EdgeInsets.zero,

@@ -7,13 +7,13 @@ part 'category.g.dart';
 @JsonSerializable()
 class Category extends Equatable {
   final int? id;
-  final String? name;
-  final String? outCategories;
+  final String name;
+  final List<int?> outCategories;
 
   const Category({
     required this.id,
     required this.name,
-    required this.outCategories,
+    required this.outCategories
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -28,10 +28,10 @@ class Category extends Equatable {
     return Category(
       id: model.id,
       name: model.name,
-      outCategories: model.outCategories,
+      outCategories: model.outCategories
     );
   }
 
   @override
-  List<Object?> get props => [id, name, outCategories];
+  List<Object?> get props => [id, name];
 }

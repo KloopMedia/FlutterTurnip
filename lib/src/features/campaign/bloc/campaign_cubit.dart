@@ -17,6 +17,6 @@ class CampaignCubit extends RemoteDataCubit<Campaign> with UserCampaignCubit, Se
 
   @override
   Future<PageData<Campaign>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
-    return _repository.fetchDataOnPage(page);
+    return _repository.fetchDataOnPage(page, query);
   }
 }

@@ -14,8 +14,9 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => $checkedCreate(
       ($checkedConvert) {
         final val = Category(
           id: $checkedConvert('id', (v) => v as int?),
-          name: $checkedConvert('name', (v) => v as String?),
-          outCategories: $checkedConvert('out_categories', (v) => v as String?),
+          name: $checkedConvert('name', (v) => v as String),
+          outCategories: $checkedConvert('out_categories',
+              (v) => (v as List<dynamic>).map((e) => e as int?).toList()),
         );
         return val;
       },

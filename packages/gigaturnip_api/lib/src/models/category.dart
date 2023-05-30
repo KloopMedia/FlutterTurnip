@@ -5,8 +5,8 @@ part 'category.g.dart';
 @JsonSerializable()
 class Category {
   final int? id;
-  final String? name;
-  final String? outCategories;
+  final String name;
+  final List<int?> outCategories;
 
   const Category({
     required this.id,
