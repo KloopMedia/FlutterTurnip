@@ -79,7 +79,7 @@ class CampaignView extends StatelessWidget {
               ],
               middle: const FilterBarWidget(),
               bottom: BaseTabBar(
-                hidden: !hasAvailableCampaigns,
+                hidden: !hasAvailableCampaigns && false,
                 width: calculateTabWidth(context),
                 border: context.formFactor == FormFactor.small
                     ? Border(
@@ -98,7 +98,7 @@ class CampaignView extends StatelessWidget {
                   ),
                 ],
               ),
-              child: hasAvailableCampaigns
+              child: hasAvailableCampaigns && true
                   ? const TabBarView(
                       children: [
                         AvailableCampaignView(),

@@ -23,7 +23,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   String? baseUrl;
 
   @override
-  Future<PaginationWrapper<Campaign>> getCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getCampaigns(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -51,7 +52,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Campaign>> getUserCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getUserCampaigns(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -79,7 +81,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -107,7 +110,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Campaign> getCampaignById(id) async {
+  Future<Campaign> getCampaignById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -130,7 +133,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<void> joinCampaign(id) async {
+  Future<void> joinCampaign(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -150,7 +153,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Chain>> getChains({query}) async {
+  Future<PaginationWrapper<Chain>> getChains(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -179,7 +183,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<PaginationWrapper<IndividualChain>> getIndividualChains(
-      {query}) async {
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -207,7 +211,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Category>> getCampaignCategories({query}) async {
+  Future<PaginationWrapper<Category>> getCampaignCategories(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -235,7 +240,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getTasks({query}) async {
+  Future<PaginationWrapper<Task>> getTasks(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -263,7 +269,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getUserSelectableTasks({query}) async {
+  Future<PaginationWrapper<Task>> getUserSelectableTasks(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -291,7 +298,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getUserRelevantTasks({query}) async {
+  Future<PaginationWrapper<Task>> getUserRelevantTasks(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -319,7 +327,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<TaskDetail> getTaskById(id) async {
+  Future<TaskDetail> getTaskById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -343,8 +351,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<TaskResponse> saveTaskById(
-    id,
-    data,
+    int id,
+    Map<String, dynamic> data,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -370,8 +378,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<List<Task>> getIntegratedTasks(
-    id, {
-    query,
+    int id, {
+    Map<String, dynamic>? query,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -400,8 +408,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<PaginationWrapper<TaskDetail>> getDisplayedPreviousTasks(
-    id, {
-    query,
+    int id, {
+    Map<String, dynamic>? query,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -430,7 +438,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Task> openPreviousTask(id) async {
+  Future<Task> openPreviousTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -453,7 +461,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<void> releaseTask(id) async {
+  Future<void> releaseTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -473,7 +481,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<void> requestTask(id) async {
+  Future<void> requestTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -493,7 +501,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<WebhookResponse> triggerTaskWebhook(id) async {
+  Future<WebhookResponse> triggerTaskWebhook(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -516,7 +524,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<void> reopenTask(id) async {
+  Future<void> reopenTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -537,8 +545,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<DynamicSchema> getDynamicSchema(
-    id, {
-    required query,
+    int id, {
+    required Map<String, dynamic> query,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -564,7 +572,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<PaginationWrapper<TaskStage>> getUserRelevantTaskStages(
-      {query}) async {
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -592,7 +600,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<TaskStage>> getSelectableTaskStages({query}) async {
+  Future<PaginationWrapper<TaskStage>> getSelectableTaskStages(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -620,7 +629,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<CreateTaskResponse> createTaskFromStageId(id) async {
+  Future<CreateTaskResponse> createTaskFromStageId(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -643,7 +652,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Notification>> getNotifications({query}) async {
+  Future<PaginationWrapper<Notification>> getNotifications(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -671,7 +681,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Notification>> getUserNotifications({query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -699,7 +710,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Notification> getNotificationById(id) async {
+  Future<Notification> getNotificationById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -722,7 +733,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<void> openNotification(id) async {
+  Future<void> openNotification(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
