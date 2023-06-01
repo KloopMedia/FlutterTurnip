@@ -1,7 +1,7 @@
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-abstract class TaskRepository extends GigaTurnipRepository<api.Task, Task> {
+abstract class TaskRepository extends GigaTurnipRepository<Task> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
 
@@ -11,7 +11,6 @@ abstract class TaskRepository extends GigaTurnipRepository<api.Task, Task> {
     super.limit,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
-  @override
   List<Task> parseData(List<api.Task> data) {
     return data.map(Task.fromApiModel).toList();
   }
@@ -25,11 +24,12 @@ class AllTaskRepository extends TaskRepository {
   });
 
   @override
-  Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
-    return _gigaTurnipApiClient.getUserRelevantTasks(query: {
+  Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
       'stage__chain__campaign': campaignId,
       ...?query,
     });
+    return data.copyWith<Task>(results: parseData(data.results));
   }
 }
 
@@ -37,12 +37,13 @@ class ClosedTaskRepository extends TaskRepository {
   ClosedTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
 
   @override
-  Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
-    return _gigaTurnipApiClient.getUserRelevantTasks(query: {
+  Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
       'complete': true,
       'stage__chain__campaign': campaignId,
       ...?query,
     });
+    return data.copyWith<Task>(results: parseData(data.results));
   }
 }
 
@@ -50,12 +51,13 @@ class OpenTaskRepository extends TaskRepository {
   OpenTaskRepository({required super.gigaTurnipApiClient, required super.campaignId});
 
   @override
-  Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
-    return _gigaTurnipApiClient.getUserRelevantTasks(query: {
+  Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
       'complete': false,
       'stage__chain__campaign': campaignId,
       ...?query,
     });
+    return data.copyWith<Task>(results: parseData(data.results));
   }
 }
 
@@ -69,14 +71,15 @@ class AvailableTaskRepository extends TaskRepository {
   });
 
   @override
-  Future<api.PaginationWrapper<api.Task>> fetchData({Map<String, dynamic>? query}) {
-    return _gigaTurnipApiClient.getUserSelectableTasks(
+  Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getUserSelectableTasks(
       query: {
         'stage': stageId,
         'stage__chain__campaign': campaignId,
         ...?query,
       },
     );
+    return data.copyWith<Task>(results: parseData(data.results));
   }
 
   Future<void> requestAssignment(int id) async {
@@ -84,7 +87,7 @@ class AvailableTaskRepository extends TaskRepository {
   }
 }
 
-class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskStage> {
+class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
   final bool? isProactive;
@@ -96,7 +99,7 @@ class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskSt
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
-  Future<api.PaginationWrapper<api.TaskStage>> fetchData({Map<String, dynamic>? query}) {
+  Future<api.PaginationWrapper<TaskStage>> fetchAndParseData({Map<String, dynamic>? query}) async {
     final String? stageType;
     if (isProactive != null) {
       stageType = isProactive! ? "PR" : "AC";
@@ -104,16 +107,17 @@ class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskSt
       stageType = null;
     }
 
-    return _gigaTurnipApiClient.getUserRelevantTaskStages(
+    final data = await _gigaTurnipApiClient.getUserRelevantTaskStages(
       query: {
         'chain__campaign': campaignId,
         'stage_type': stageType,
         ...?query,
       },
     );
+
+    return data.copyWith<TaskStage>(results: parseData(data.results));
   }
 
-  @override
   List<TaskStage> parseData(List<api.TaskStage> data) {
     return data.map(TaskStage.fromApiModel).toList();
   }
@@ -124,7 +128,7 @@ class CreatableTaskRepository extends GigaTurnipRepository<api.TaskStage, TaskSt
   }
 }
 
-class SelectableTaskStageRepository extends GigaTurnipRepository<api.TaskStage, TaskStage> {
+class SelectableTaskStageRepository extends GigaTurnipRepository<TaskStage> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
 
@@ -134,16 +138,16 @@ class SelectableTaskStageRepository extends GigaTurnipRepository<api.TaskStage, 
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
-  Future<api.PaginationWrapper<api.TaskStage>> fetchData({Map<String, dynamic>? query}) {
-    return _gigaTurnipApiClient.getSelectableTaskStages(
+  Future<api.PaginationWrapper<TaskStage>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getSelectableTaskStages(
       query: {
         'chain__campaign': campaignId,
         ...?query,
       },
     );
+    return data.copyWith<TaskStage>(results: parseData(data.results));
   }
 
-  @override
   List<TaskStage> parseData(List<api.TaskStage> data) {
     return data.map(TaskStage.fromApiModel).toList();
   }
