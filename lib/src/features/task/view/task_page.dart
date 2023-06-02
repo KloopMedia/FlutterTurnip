@@ -106,50 +106,43 @@ class _TaskPageState extends State<TaskPage> {
           )..initialize(),
         ),
       ],
-      child: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-        builder: (context, state) {
-          if (state is CampaignInitialized) {
-            return DefaultAppBar(
-              // color: context.isSmall || context.isMedium ? appBarColor : null,
-              boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
-              title: Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1),
-              titleSpacing: 0,
-              leading: [
-                const SizedBox(width: 20),
-                if (!context.isSmall || context.isMedium)
-                  IconButton(
-                    onPressed: () => _redirectToCampaignDetail(context),
-                    icon: Builder(
-                      builder: (context) {
-                        if (state.data.logo.isNotEmpty) {
-                          return Image.network(state.data.logo);
-                        } else {
-                          return const Icon(Icons.info_outline);
-                        }
-                      },
-                    ),
-                  ),
-              ],
-              actions: [
-                IconButton(
-                  onPressed: () => _redirectToNotificationPage(context),
-                  icon: const Icon(Icons.notifications_outlined),
-                )
-              ],
-              floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-              child: RelevantTaskPage(
-                campaignId: widget.campaignId,
+      child: DefaultAppBar(
+        boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
+        title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+          builder: (context, state) {
+            if (state is CampaignInitialized) {
+              return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+        titleSpacing: 0,
+        leading: [
+          const SizedBox(width: 20),
+          if (!context.isSmall || context.isMedium)
+            IconButton(
+              onPressed: () => _redirectToCampaignDetail(context),
+              icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+                builder: (context, state) {
+                  if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
+                    return Image.network(state.data.logo);
+                  } else {
+                    return const Icon(Icons.info_outline);
+                  }
+                },
               ),
-            );
-          }
-          if (state is CampaignFetching) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is CampaignFetchingError) {
-            return Center(child: Text(state.error));
-          }
-          return const SizedBox.shrink();
-        },
+            ),
+        ],
+        actions: [
+          IconButton(
+            onPressed: () => _redirectToNotificationPage(context),
+            icon: const Icon(Icons.notifications_outlined),
+          )
+        ],
+        floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
+        child: RelevantTaskPage(
+          campaignId: widget.campaignId,
+        ),
       ),
     );
   }

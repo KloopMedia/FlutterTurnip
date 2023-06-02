@@ -1,5 +1,6 @@
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:local_database/local_database.dart' as db;
 
 abstract class TaskRepository extends GigaTurnipRepository<Task> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
@@ -25,11 +26,28 @@ class AllTaskRepository extends TaskRepository {
 
   @override
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
-    final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
-      'stage__chain__campaign': campaignId,
-      ...?query,
-    });
-    return data.copyWith<Task>(results: parseData(data.results));
+    try {
+      final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
+        'stage__chain__campaign': campaignId,
+        ...?query,
+      });
+      final parsed = parseData(data.results);
+
+      for (final item in parsed) {
+        final entity = item.toDB();
+        await db.LocalDatabase.insertTaskStage(item.stage.toDB());
+        await db.LocalDatabase.insertTask(entity);
+      }
+
+      return data.copyWith<Task>(results: parsed);
+    } catch (e) {
+      final data = await db.LocalDatabase.getTasks();
+      final parsed = await Future.wait(data.map((model) async {
+        final stage = await db.LocalDatabase.getSingleTaskStage(model.stage);
+        return Task.fromDB(model, stage);
+      }));
+      return api.PaginationWrapper(count: parsed.length, results: parsed);
+    }
   }
 }
 
