@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show TaskStage;
 import 'package:json_annotation/json_annotation.dart';
+import 'package:local_database/local_database.dart' as db;
 
 part 'task_stage.g.dart';
 
@@ -37,6 +41,28 @@ class TaskStage extends Equatable {
       campaign: model.campaign,
       cardJsonSchema: model.cardJsonSchema,
       cardUiSchema: model.cardUiSchema,
+    );
+  }
+
+  db.TaskStageCompanion toDB() {
+    return db.TaskStageCompanion.insert(
+      id: Value(id),
+      name: name,
+      description: Value(description),
+      chain: chain,
+      campaign: campaign,
+    );
+  }
+
+  factory TaskStage.fromDB(db.TaskStageData model) {
+    return TaskStage(
+      id: model.id,
+      name: model.name,
+      description: model.description,
+      cardJsonSchema: jsonDecode(model.cardJsonSchema ?? "{}"),
+      cardUiSchema: jsonDecode(model.cardUiSchema ?? "{}"),
+      chain: model.chain,
+      campaign: model.campaign,
     );
   }
 

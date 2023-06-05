@@ -1,6 +1,8 @@
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Campaign;
+import 'package:local_database/local_database.dart' as db;
 
 part 'campaign.g.dart';
 
@@ -34,6 +36,16 @@ class Campaign extends Equatable {
     return _$CampaignToJson(this);
   }
 
+  db.CampaignCompanion toDB() {
+    return db.CampaignCompanion.insert(
+      id: Value(id),
+      name: name,
+      description: description,
+      descriptor: Value(descriptor),
+      logo: logo,
+    );
+  }
+
   factory Campaign.fromApiModel(api.Campaign model, bool canJoin) {
     return Campaign(
       id: model.id,
@@ -44,6 +56,18 @@ class Campaign extends Equatable {
       logo: model.logo,
       smsLoginAllow: model.smsLoginAllow,
       unreadNotifications: model.notificationsCount,
+    );
+  }
+
+  factory Campaign.fromDB(db.CampaignData model) {
+    return Campaign(
+      id: model.id,
+      name: model.name,
+      description: model.description,
+      descriptor: model.descriptor,
+      logo: model.logo,
+      smsLoginAllow: false,
+      unreadNotifications: 0,
     );
   }
 

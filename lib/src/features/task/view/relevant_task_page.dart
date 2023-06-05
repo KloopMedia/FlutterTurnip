@@ -74,7 +74,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
         gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
         campaignId: widget.campaignId,
       );
-      final data = await repo.fetchData(query: {'stage': item.id});
+      final data = await repo.fetchAndParseData(query: {'stage': item.id});
       final task = data.results.where((element) => element.stage.id == item.id);
       if (!mounted) return;
       redirectToTaskWithId(context, task.first.id);
