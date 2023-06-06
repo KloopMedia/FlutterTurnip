@@ -27,7 +27,7 @@ class _CustomWebViewState extends State<CustomWebView> {
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
-            return NavigationDecision.prevent;
+            return NavigationDecision.navigate;
           },
         ),
       )
