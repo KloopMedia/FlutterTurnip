@@ -14,3 +14,6 @@ export 'task_detail.dart';
 export 'task_stage_detail.dart';
 export 'task_stage_chain_info.dart';
 export 'individual_chain.dart';
+export 'category.dart';
+export 'country.dart';
+export 'language.dart';

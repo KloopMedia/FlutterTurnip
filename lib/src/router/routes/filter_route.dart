@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../widgets/button/filter_button.dart';
+import '../../widgets/button/filter_button/mobile_filter/filter_page.dart';
 
 class FilterRoute {
   static String name = 'filter';
