@@ -30,7 +30,7 @@ class FilterButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
         ),
-        onPressed: () {},
+        onPressed: () => onPressed,
         icon: const Icon(Icons.filter_list),
         label: const Text('Фильтр'),
       );

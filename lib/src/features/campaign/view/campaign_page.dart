@@ -8,7 +8,11 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
+import '../../../widgets/button/filter_button/web_filter/country_filter_field.dart';
 import '../bloc/campaign_cubit.dart';
+import '../bloc/category_bloc/category_cubit.dart';
+import '../bloc/country_bloc/country_cubit.dart';
+import '../bloc/language_bloc/language_cubit.dart';
 import 'available_campaign_view.dart';
 import 'user_campaign_view.dart';
 
@@ -42,14 +46,41 @@ class _CampaignPageState extends State<CampaignPage> {
             ),
           )..initialize(),
         ),
+        BlocProvider(
+          create: (context) => CategoryCubit(
+            CategoryRepository(
+              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+            ),
+          )..initialize(),
+        ),
+        BlocProvider(
+          create: (context) => CountryCubit(
+            CountryRepository(
+              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+            ),
+          )..initialize(),
+        ),
+        BlocProvider(
+          create: (context) => LanguageCubit(
+            LanguageRepository(
+              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+            ),
+          )..initialize(),
+        ),
       ],
       child: const CampaignView(),
     );
   }
 }
-
-class CampaignView extends StatelessWidget {
+class CampaignView extends StatefulWidget {
   const CampaignView({Key? key}) : super(key: key);
+
+  @override
+  State<CampaignView> createState() => _CampaignViewState();
+}
+
+class _CampaignViewState extends State<CampaignView> {
+  bool showFilters = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +96,19 @@ class CampaignView extends StatelessWidget {
               title: Text(context.loc.campaigns),
               actions: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                FilterButton(onPressed: () {}),
+                FilterButton(onPressed: () {
+                  setState((){
+                    showFilters = true;
+                  });
+                }),
               ],
+              subActions: (showFilters)
+                ? [
+                CountryFilterField(),
+                // CategoryFilterField(),
+                // LanguageFilterField(),
+                ]
+               : null,
               bottom: BaseTabBar(
                 hidden: !hasAvailableCampaigns,
                 width: calculateTabWidth(context),

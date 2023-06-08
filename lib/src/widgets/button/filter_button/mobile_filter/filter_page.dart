@@ -16,8 +16,26 @@ class FilterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isGridView = context.isExtraLarge || context.isLarge;
+
     return MultiBlocProvider(
       providers: [
+        BlocProvider<SelectableCampaignCubit>(
+          create: (context) => CampaignCubit(
+            SelectableCampaignRepository(
+              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              limit: isGridView ? 9 : 10,
+            ),
+          )..initialize(),
+        ),
+        BlocProvider<UserCampaignCubit>(
+          create: (context) => CampaignCubit(
+            UserCampaignRepository(
+              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              limit: isGridView ? 9 : 10,
+            ),
+          )..initialize(),
+        ),
         BlocProvider(
           create: (context) => CategoryCubit(
             CategoryRepository(
@@ -72,9 +90,6 @@ class _FilterViewState extends State<FilterView> {
     final theme = Theme.of(context).colorScheme;
     final backgroundColor = theme.isLight ? Colors.white : theme.background;
     final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
-    // final dropdownValueColor = theme.isLight ? theme.neutral40 : theme.neutral90;
-    // final hintTextColor = theme.isLight ? theme.neutral80 : theme.neutral50;
-
 
     return Scaffold(
       appBar: AppBar(
@@ -89,13 +104,8 @@ class _FilterViewState extends State<FilterView> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: textColor,
-          ),
-          onPressed: () {
-            redirect();
-          },
+          icon: Icon(Icons.arrow_back_ios, color: textColor,),
+          onPressed: () => redirect(),
         ),
       ),
       body: Container(
@@ -105,6 +115,8 @@ class _FilterViewState extends State<FilterView> {
           crossAxisAlignment:  CrossAxisAlignment.start,
           children: [
             const CountryFilter(),
+            // const CategoryFilter(),
+            // const LanguageFilter(),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
@@ -121,6 +133,7 @@ class _FilterViewState extends State<FilterView> {
                   onPressed: () {
                     context.read<SelectableCampaignCubit>().refetchWithFilter(query);
                     context.read<UserCampaignCubit>().refetchWithFilter(query);
+                    redirect();
                   },
                   child: Text(
                     'Применить фильтр',

@@ -9,6 +9,7 @@ class DefaultAppBar extends StatelessWidget {
   final Widget? bottom;
   final List<Widget>? leading;
   final List<Widget>? actions;
+  final List<Widget>? subActions;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool automaticallyImplyLeading;
@@ -23,6 +24,7 @@ class DefaultAppBar extends StatelessWidget {
     required this.title,
     this.leading,
     this.actions,
+    this.subActions,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.bottom,
@@ -59,6 +61,7 @@ class DefaultAppBar extends StatelessWidget {
                           title: title,
                           leading: leading,
                           actions: actions,
+                          subActions: subActions,
                           bottom: bottom,
                           automaticallyImplyLeading: false,
                           color: color,
@@ -80,6 +83,7 @@ class DefaultAppBar extends StatelessWidget {
                     title: title,
                     leading: leading,
                     actions: actions,
+                    subActions: subActions,
                     bottom: bottom,
                     automaticallyImplyLeading: automaticallyImplyLeading,
                     color: color,
@@ -104,6 +108,7 @@ class _DefaultAppBar extends StatelessWidget {
   final Widget? bottom;
   final List<Widget>? leading;
   final List<Widget>? actions;
+  final List<Widget>? subActions;
   final bool automaticallyImplyLeading;
   final Color? color;
   final List<BoxShadow>? boxShadow;
@@ -115,6 +120,7 @@ class _DefaultAppBar extends StatelessWidget {
     this.bottom,
     this.leading,
     this.actions,
+    this.subActions,
     this.automaticallyImplyLeading = true,
     this.color,
     this.boxShadow,
@@ -154,6 +160,7 @@ class _DefaultAppBar extends StatelessWidget {
         child: title ?? const SizedBox.shrink(),
       ),
       actions: actions,
+      subActions: subActions,
       bottom: bottom,
     );
   }

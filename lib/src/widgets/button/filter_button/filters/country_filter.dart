@@ -4,7 +4,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../../bloc/bloc.dart';
-import '../../../../features/campaign/bloc/language_bloc/language_cubit.dart';
+import '../../../../features/campaign/bloc/country_bloc/country_cubit.dart';
 
 class CountryFilter extends StatefulWidget {
   const CountryFilter({Key? key}) : super(key: key);
@@ -15,9 +15,7 @@ class CountryFilter extends StatefulWidget {
 
 class _CountryFilterState extends State<CountryFilter> {
   String? dropdownValue;
-  Map<String, dynamic> query = {};
-  List<String> filterData = [];
-  List<String> items = ['A', 'B', 'C', 'D'];
+  // Map<String, dynamic> query = {};
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +24,10 @@ class _CountryFilterState extends State<CountryFilter> {
     final dropdownValueColor = theme.isLight ? theme.neutral40 : theme.neutral90;
     final hintTextColor = theme.isLight ? theme.neutral80 : theme.neutral50;
 
-    return BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
+    return BlocBuilder<CountryCubit, RemoteDataState<Country>>(
       builder: (context, state) {
-        if (state is RemoteDataLoaded<Language> && state.data.isNotEmpty) {
+        if (state is RemoteDataLoaded<Country> && state.data.isNotEmpty) {
+          final data = state.data;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -47,12 +46,8 @@ class _CountryFilterState extends State<CountryFilter> {
                 style: ElevatedButton.styleFrom(
                   elevation: 0.0,
                   minimumSize: const Size.fromHeight(54.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  side: BorderSide(
-                      color: dropdownValue != null ? theme.primary : theme.neutral95
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                  side: BorderSide(color: dropdownValue != null ? theme.primary : theme.neutral95),
                   backgroundColor: theme.isLight ? theme.neutral95 : theme.onSecondary,
                   textStyle: TextStyle(
                     color: dropdownValue != null ? dropdownValueColor : hintTextColor,
@@ -79,13 +74,20 @@ class _CountryFilterState extends State<CountryFilter> {
                 onPressed: () {
                   showModalBottomSheet(
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25.0),
-                        ),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
                       ),
                       context: context,
                       builder: (context) {
-                        return Container(
+                        return FilterBottomSheet(
+                          data: data,
+                          onTap: (value) {
+                            setState(() {
+                              dropdownValue = value;
+                            });
+                          },
+                          value: dropdownValue,///?? from state
+                        );
+                        /*return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           height: 500.0,
                           child: Column(
@@ -96,10 +98,7 @@ class _CountryFilterState extends State<CountryFilter> {
                                 padding: const EdgeInsets.symmetric(vertical: 30.0),
                                 child: Row(
                                   children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.arrow_back_ios),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
+                                    IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: () => goBack()),
                                     Text(
                                       'Страна',
                                       style: TextStyle(
@@ -113,27 +112,31 @@ class _CountryFilterState extends State<CountryFilter> {
                               ),
                               Expanded(
                                 child: ListView.separated(
-                                    itemCount: items.length,
-                                    separatorBuilder: (context, _) {
-                                      return const Divider();
-                                    },
+                                    itemCount: data.length,
+                                    separatorBuilder: (context, _) => const Divider(),
                                     itemBuilder: (context, index) {
+                                      final item = data[index];
                                       return StatefulBuilder(
                                           builder: (context, setSBState) {
                                             return CheckboxListTile(
                                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                               contentPadding: const EdgeInsets.all(0.0),
-                                              value: filterData.contains(items[index]),
-                                              title: Text(items[index]),
+                                              value: filterData.contains(item.name),
+                                              title: Text(item.name),
                                               onChanged: (value) {
-                                                if (filterData.contains(items[index])) {
-                                                  filterData.remove(items[index]);
+                                                if (filterData.contains(item.name)) {
+                                                  filterData.remove(item.name);
+                                                  setSBState(() {
+                                                    dropdownValue = null;
+                                                    // query['countries__name'] = null;
+                                                  });
                                                 } else {
-                                                  filterData.add(items[index]);
+                                                  filterData.add(item.name);
+                                                  setSBState(() {
+                                                    dropdownValue = item.name;
+                                                    // query['countries__name'] = item.name;
+                                                  });
                                                 }
-                                                setSBState(() {
-                                                  query['countries__name'] = items[index];
-                                                });
                                               },
                                             );
                                           }
@@ -155,8 +158,9 @@ class _CountryFilterState extends State<CountryFilter> {
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        dropdownValue = query['countries__name'];
-                                        Navigator.pop(context);
+                                        onTap(dropdownValue);
+                                        // dropdownValue = query['countries__name'];
+                                        goBack();
                                       });
                                     },
                                     child: Text(
@@ -172,7 +176,7 @@ class _CountryFilterState extends State<CountryFilter> {
                               ),
                             ],
                           ),
-                        );
+                        );*/
                       }
                   );
                 },
@@ -185,3 +189,142 @@ class _CountryFilterState extends State<CountryFilter> {
     );
   }
 }
+
+class FilterBottomSheet extends StatelessWidget {
+  final List<Country> data;
+  final Function(String? value) onTap;
+  final String? value;///from state
+  final List<String> filterData = [];
+
+  FilterBottomSheet({
+    Key? key,
+    required this.data,
+    required this.onTap,
+    required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
+    if (value != null) {
+      filterData.add(value!);
+    }
+    String? dropdownValue;
+
+    goBack() {
+      Navigator.pop(context);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      height: 500.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30.0),
+            child: Row(
+              children: [
+                IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: () => goBack()),
+                Text(
+                  'Страна',
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: FilterValueList(
+                data: data,
+                onChanged: (value) {
+                  dropdownValue = value;
+                },
+                filterData: filterData,
+            )
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30.0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 52.0,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                ),
+                onPressed: () {
+                  onTap(dropdownValue);
+                  goBack();
+                },
+                child: Text(
+                  'Применить',
+                  style: TextStyle(
+                    color: theme.isLight ? theme.onPrimary : theme.neutral0,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilterValueList extends StatelessWidget {
+  final List<Country> data;
+  final Function(String? value) onChanged;
+  final List<String> filterData;
+
+  const FilterValueList({
+    Key? key,
+    required this.data,
+    required this.onChanged,
+    required this.filterData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        itemCount: data.length,
+        separatorBuilder: (context, _) => const Divider(),
+        itemBuilder: (context, index) {
+          final item = data[index];
+          return StatefulBuilder(
+              builder: (context, setSBState) {
+                return CheckboxListTile(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  contentPadding: const EdgeInsets.all(0.0),
+                  value: filterData.contains(item.name),
+                  title: Text(item.name),
+                  onChanged: (value) {
+                    if (filterData.contains(item.name)) {
+                      filterData.remove(item.name);
+                      setSBState(() {
+                        onChanged(null);
+                      });
+                    } else {
+                      filterData.add(item.name);
+                      setSBState(() {
+                        onChanged(item.name);
+                      });
+                    }
+                  },
+                );
+              }
+          );
+        }
+    );
+  }
+}
+
