@@ -8,7 +8,7 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../../widgets/button/filter_button/web_filter/country_filter_field.dart';
+import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
@@ -103,22 +103,17 @@ class _CampaignViewState extends State<CampaignView> {
                     context.read<UserCampaignCubit>().refetchWithFilter(
                         {'countries__name': 'Кыргызстан'});
                   },
-                  onPressedWeb: () {
-                  setState((){
-                    showFilters = true;
-                  });
+                  openCloseFilter: (openClose) {
+                    setState((){
+                      showFilters = openClose;
+                    });
                 }),
               ],
               subActions: (showFilters)
                 ? [
-                  CountryFilterField(
-                    // onPressed: (query) {
-                    //   context.read<SelectableCampaignCubit>().refetchWithFilter(query);
-                    //   context.read<UserCampaignCubit>().refetchWithFilter(query);
-                    // }
-                  ),
-                // CategoryFilterField(),
-                // LanguageFilterField(),
+                  const WebFilter<Country, CountryCubit>(title: 'Страна'),
+                  const WebFilter<Category, CategoryCubit>(title: 'Категории'),
+                  const WebFilter<Language, LanguageCubit>(title: 'Язык'),
                 ]
                 : null,
               bottom: BaseTabBar(

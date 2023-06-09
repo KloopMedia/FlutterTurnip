@@ -9,7 +9,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import '../../../../features/campaign/bloc/category_bloc/category_cubit.dart';
 import '../../../../features/campaign/bloc/country_bloc/country_cubit.dart';
 import '../../../../features/campaign/bloc/language_bloc/language_cubit.dart';
-import '../filters/country_filter.dart';
+import 'country_filter.dart';
 
 class FilterPage extends StatelessWidget {
   final Function() onTap;
