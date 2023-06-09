@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.kloop.gigaturnip",
+    "sha256_cert_fingerprints":
+    ["F6:CB:5B:33:5B:AE:EA:69:AA:69:93:46:37:AF:6D:F6:35:A1:E7:87:46:AE:92:07:F7:95:C1:E8:55:F8:10:53"]
+  }
+}]
