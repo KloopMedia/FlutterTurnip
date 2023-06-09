@@ -12,7 +12,8 @@ import '../../../../features/campaign/bloc/language_bloc/language_cubit.dart';
 import '../filters/country_filter.dart';
 
 class FilterPage extends StatelessWidget {
-  const FilterPage({Key? key}) : super(key: key);
+  final Function() onTap;
+  const FilterPage({Key? key, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +59,15 @@ class FilterPage extends StatelessWidget {
           )..initialize(),
         ),
       ],
-      child: const FilterView(),
+      child: FilterView(onTap: () => onTap(),),
     );
   }
 }
 
 
 class FilterView extends StatefulWidget {
-  const FilterView({Key? key}) : super(key: key);
+  final Function() onTap;
+  const FilterView({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<FilterView> createState() => _FilterViewState();
@@ -105,7 +107,7 @@ class _FilterViewState extends State<FilterView> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: textColor,),
-          onPressed: () => redirect(),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Container(
@@ -131,9 +133,8 @@ class _FilterViewState extends State<FilterView> {
                     ),
                   ),
                   onPressed: () {
-                    context.read<SelectableCampaignCubit>().refetchWithFilter(query);
-                    context.read<UserCampaignCubit>().refetchWithFilter(query);
-                    redirect();
+                    widget.onTap();
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Применить фильтр',

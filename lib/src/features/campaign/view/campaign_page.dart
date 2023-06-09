@@ -96,7 +96,14 @@ class _CampaignViewState extends State<CampaignView> {
               title: Text(context.loc.campaigns),
               actions: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                FilterButton(onPressed: () {
+                FilterButton(
+                  onPressedMobile: () {
+                    context.read<SelectableCampaignCubit>().refetchWithFilter(
+                        {'countries__name': 'Кыргызстан'});
+                    context.read<UserCampaignCubit>().refetchWithFilter(
+                        {'countries__name': 'Кыргызстан'});
+                  },
+                  onPressedWeb: () {
                   setState((){
                     showFilters = true;
                   });
@@ -104,11 +111,16 @@ class _CampaignViewState extends State<CampaignView> {
               ],
               subActions: (showFilters)
                 ? [
-                CountryFilterField(),
+                  CountryFilterField(
+                    // onPressed: (query) {
+                    //   context.read<SelectableCampaignCubit>().refetchWithFilter(query);
+                    //   context.read<UserCampaignCubit>().refetchWithFilter(query);
+                    // }
+                  ),
                 // CategoryFilterField(),
                 // LanguageFilterField(),
                 ]
-               : null,
+                : null,
               bottom: BaseTabBar(
                 hidden: !hasAvailableCampaigns,
                 width: calculateTabWidth(context),

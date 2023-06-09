@@ -15,7 +15,7 @@ class CountryFilter extends StatefulWidget {
 
 class _CountryFilterState extends State<CountryFilter> {
   String? dropdownValue;
-  // Map<String, dynamic> query = {};
+  Map<String, dynamic> query = {};
 
   @override
   Widget build(BuildContext context) {
@@ -85,98 +85,8 @@ class _CountryFilterState extends State<CountryFilter> {
                               dropdownValue = value;
                             });
                           },
-                          value: dropdownValue,///?? from state
+                          value: dropdownValue,
                         );
-                        /*return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          height: 500.0,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                                child: Row(
-                                  children: [
-                                    IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: () => goBack()),
-                                    Text(
-                                      'Страна',
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: ListView.separated(
-                                    itemCount: data.length,
-                                    separatorBuilder: (context, _) => const Divider(),
-                                    itemBuilder: (context, index) {
-                                      final item = data[index];
-                                      return StatefulBuilder(
-                                          builder: (context, setSBState) {
-                                            return CheckboxListTile(
-                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              contentPadding: const EdgeInsets.all(0.0),
-                                              value: filterData.contains(item.name),
-                                              title: Text(item.name),
-                                              onChanged: (value) {
-                                                if (filterData.contains(item.name)) {
-                                                  filterData.remove(item.name);
-                                                  setSBState(() {
-                                                    dropdownValue = null;
-                                                    // query['countries__name'] = null;
-                                                  });
-                                                } else {
-                                                  filterData.add(item.name);
-                                                  setSBState(() {
-                                                    dropdownValue = item.name;
-                                                    // query['countries__name'] = item.name;
-                                                  });
-                                                }
-                                              },
-                                            );
-                                          }
-                                      );
-                                    }
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 52.0,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: theme.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        onTap(dropdownValue);
-                                        // dropdownValue = query['countries__name'];
-                                        goBack();
-                                      });
-                                    },
-                                    child: Text(
-                                      'Применить',
-                                      style: TextStyle(
-                                        color: theme.isLight ? theme.onPrimary : theme.neutral0,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );*/
                       }
                   );
                 },
@@ -193,8 +103,8 @@ class _CountryFilterState extends State<CountryFilter> {
 class FilterBottomSheet extends StatelessWidget {
   final List<Country> data;
   final Function(String? value) onTap;
-  final String? value;///from state
-  final List<String> filterData = [];
+  final String? value;
+  final List<String> selectedItemList = [];
 
   FilterBottomSheet({
     Key? key,
@@ -208,7 +118,7 @@ class FilterBottomSheet extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
     if (value != null) {
-      filterData.add(value!);
+      selectedItemList.add(value!);
     }
     String? dropdownValue;
 
@@ -245,7 +155,7 @@ class FilterBottomSheet extends StatelessWidget {
                 onChanged: (value) {
                   dropdownValue = value;
                 },
-                filterData: filterData,
+              selectedItemList: selectedItemList,
             )
           ),
           Padding(
@@ -284,13 +194,13 @@ class FilterBottomSheet extends StatelessWidget {
 class FilterValueList extends StatelessWidget {
   final List<Country> data;
   final Function(String? value) onChanged;
-  final List<String> filterData;
+  final List<String> selectedItemList;
 
   const FilterValueList({
     Key? key,
     required this.data,
     required this.onChanged,
-    required this.filterData,
+    required this.selectedItemList,
   }) : super(key: key);
 
   @override
@@ -305,19 +215,24 @@ class FilterValueList extends StatelessWidget {
                 return CheckboxListTile(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   contentPadding: const EdgeInsets.all(0.0),
-                  value: filterData.contains(item.name),
+                  value: selectedItemList.contains(item.name),
                   title: Text(item.name),
                   onChanged: (value) {
-                    if (filterData.contains(item.name)) {
-                      filterData.remove(item.name);
-                      setSBState(() {
-                        onChanged(null);
+                    if (value!) {
+                      setSBState((){
+                        if (!selectedItemList.contains(item.name)) {
+                          selectedItemList.clear();
+                          selectedItemList.add(item.name);
+                        }
                       });
+                      onChanged(item.name);
                     } else {
-                      filterData.add(item.name);
-                      setSBState(() {
-                        onChanged(item.name);
+                      setSBState((){
+                        if (selectedItemList.contains(item.name)) {
+                          selectedItemList.clear();
+                        }
                       });
+                      onChanged(null);
                     }
                   },
                 );

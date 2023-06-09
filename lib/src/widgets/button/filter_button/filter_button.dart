@@ -3,10 +3,13 @@ import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
 
-class FilterButton extends StatelessWidget {
-  final void Function()? onPressed;
+import 'mobile_filter/filter_page.dart';
 
-  const FilterButton({Key? key, this.onPressed}) : super(key: key);
+class FilterButton extends StatelessWidget {
+  final void Function() onPressedMobile;
+  final void Function() onPressedWeb;
+
+  const FilterButton({Key? key, required this.onPressedMobile, required this.onPressedWeb}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +18,17 @@ class FilterButton extends StatelessWidget {
 
     if (formFactor == FormFactor.small) {
       return IconButton(
-        onPressed: () {
-          context.goNamed(
-            FilterRoute.name,
-          );
-        },
+          onPressed: () {
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog.fullscreen(
+                child: FilterPage(onTap: () => onPressedMobile()),
+              );
+            }
+        );
+
+            },
         icon: const Icon(Icons.tune_rounded));
     } else {
       return OutlinedButton.icon(
@@ -30,7 +39,9 @@ class FilterButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
         ),
-        onPressed: () => onPressed,
+        onPressed: () {
+          onPressedWeb();
+          },
         icon: const Icon(Icons.filter_list),
         label: const Text('Фильтр'),
       );
