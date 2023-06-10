@@ -117,5 +117,13 @@
     "task_filter_submitted": "Submitted",
     "task_filter_all": "All",
 
-    "task_available": "Available tasks"
+    "task_available": "Available tasks",
+
+    "filter": "Filter",
+    "select": "Select",
+    "apply": "Apply",
+    "apply_filter": "Apply filter",
+    "country": "Country",
+    "category": "Category",
+    "language": "Language"
 }

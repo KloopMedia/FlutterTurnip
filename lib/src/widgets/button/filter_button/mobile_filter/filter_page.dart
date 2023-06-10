@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
@@ -78,9 +79,9 @@ class FilterView extends StatelessWidget {
         child: Column(
           crossAxisAlignment:  CrossAxisAlignment.start,
           children: [
-            const Filter<Country, CountryCubit>(title: 'Страна'),
-            const Filter<Category, CategoryCubit>(title: 'Категории'),
-            const Filter<Language, LanguageCubit>(title: 'Язык'),
+            Filter<Country, CountryCubit>(title: context.loc.country),
+            Filter<Category, CategoryCubit>(title: context.loc.category),
+            Filter<Language, LanguageCubit>(title: context.loc.language),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
@@ -99,7 +100,7 @@ class FilterView extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    'Применить фильтр',
+                    context.loc.apply_filter,
                     style: TextStyle(
                       color: theme.isLight ? theme.onPrimary : theme.neutral0,
                       fontSize: 14.0,

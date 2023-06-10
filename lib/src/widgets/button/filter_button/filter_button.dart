@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import 'mobile_filter/filter_page.dart';
@@ -68,7 +69,7 @@ class _FilterButtonState extends State<FilterButton> {
             )
           )
           : const Icon(Icons.filter_list),
-          label: const Text('Фильтр'),
+          label: Text(context.loc.filter),
       );
     }
   }

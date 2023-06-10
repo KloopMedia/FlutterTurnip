@@ -111,9 +111,9 @@ class _CampaignViewState extends State<CampaignView> {
               ],
               subActions: (showFilters)
                 ? [
-                  const WebFilter<Country, CountryCubit>(title: 'Страна'),
-                  const WebFilter<Category, CategoryCubit>(title: 'Категории'),
-                  const WebFilter<Language, LanguageCubit>(title: 'Язык'),
+                  WebFilter<Country, CountryCubit>(title: context.loc.country),
+                  WebFilter<Category, CategoryCubit>(title: context.loc.category),
+                  WebFilter<Language, LanguageCubit>(title: context.loc.language),
                 ]
                 : null,
               bottom: BaseTabBar(

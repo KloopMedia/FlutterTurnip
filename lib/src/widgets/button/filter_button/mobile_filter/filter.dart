@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../../../../bloc/bloc.dart';
@@ -94,7 +95,7 @@ class _FilterFieldState extends State<FilterField> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            dropdownValue ?? 'Выберите',
+            dropdownValue ?? context.loc.select,
             style: TextStyle(
               color: dropdownValue != null ? dropdownValueColor : hintTextColor,
               fontSize: 16.0,
@@ -208,7 +209,7 @@ class BottomSheet extends StatelessWidget {
                   goBack();
                 },
                 child: Text(
-                  'Применить',
+                  context.loc.apply,
                   style: TextStyle(
                     color: theme.isLight ? theme.onPrimary : theme.neutral0,
                     fontSize: 14.0,

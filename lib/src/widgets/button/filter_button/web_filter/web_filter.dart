@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../../../../bloc/bloc.dart';
@@ -78,7 +79,7 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
-        hintText: 'Выберите',
+        hintText: context.loc.select,
         hintStyle: TextStyle(
           color: hintTextColor,
           fontSize: 16.0,

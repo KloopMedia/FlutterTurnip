@@ -117,5 +117,13 @@
     "task_filter_submitted": "Жөнөтүлгөн",
     "task_filter_all": "Бардыгы",
 
-    "task_available": "Жеткиликтүү тапшырмалар"
+    "task_available": "Жеткиликтүү тапшырмалар",
+
+    "filter": "Фильтр",
+    "select": "Тандаңыз",
+    "apply": "Колдонуу",
+    "apply_filter": "Фильтрди колдонуу",
+    "country": "Өлкө",
+    "category": "Категория",
+    "language": "Тил"
 }

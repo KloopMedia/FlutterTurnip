@@ -117,5 +117,13 @@
      "task_filter_submitted": "Отправленные",
      "task_filter_all": "Все",
 
-     "task_available": "Доступные задания"
+     "task_available": "Доступные задания",
+
+     "filter": "Фильтр",
+     "select": "Выберите",
+     "apply": "Применить",
+     "apply_filter": "Применить фильтр",
+     "country": "Страна",
+     "category": "Категория",
+     "language": "Язык"
 }
