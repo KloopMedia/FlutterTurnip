@@ -104,31 +104,39 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
       selectedItemBuilder: (context) {
         return widget.data.map((item) => Text(item.name)).toList();
       },
+      borderRadius: BorderRadius.circular(15.0),
       items: widget.data
           .map((item) => DropdownMenuItem<String>(
           value: item.name,
-         child: CheckboxFilterField(
-           name: item.name,
-           selectedItemList: selectedItemList,
-           onChanged: (value) {
-             setState(() {
-               dropdownValue = value;
-               selectedItemList.clear();
-               selectedItemList.add(value);
-             });
-           },
+          child: Column(
+           children: [
+             CheckboxField(
+               name: item.name,
+               selectedItemList: selectedItemList,
+               onChanged: (value) {
+                 setState(() {
+                   dropdownValue = value;
+                   selectedItemList.clear();
+                   selectedItemList.add(value);
+                 });
+               },
+             ),
+             (widget.data.indexOf(item) == widget.data.length - 1)
+              ? const SizedBox.shrink()
+              : const Divider(color: Colors.grey),
+           ],
          ),
       )).toList(),
     );
   }
 }
 
-class CheckboxFilterField extends StatelessWidget {
+class CheckboxField extends StatelessWidget {
   final String name;
   final Function(String? value) onChanged;
   final List<String?> selectedItemList;
 
-  const CheckboxFilterField({
+  const CheckboxField({
     Key? key,
     required this.onChanged,
     required this.name,
@@ -146,18 +154,14 @@ class CheckboxFilterField extends StatelessWidget {
           onChanged: (value) {
             if (value!) {
               setSBState((){
-                if (!selectedItemList.contains(name)) {
-                  selectedItemList.clear();
-                  selectedItemList.add(name);
-                }
+                selectedItemList.clear();
+                selectedItemList.add(name);
               });
               onChanged(name);
               Navigator.pop(context);
             } else {
               setSBState((){
-                if (selectedItemList.contains(name)) {
-                  selectedItemList.clear();
-                }
+                selectedItemList.clear();
               });
               onChanged(null);
               Navigator.pop(context);

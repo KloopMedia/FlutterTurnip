@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
-import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import '../../../../features/campaign/bloc/category_bloc/category_cubit.dart';
 import '../../../../features/campaign/bloc/country_bloc/country_cubit.dart';
 import '../../../../features/campaign/bloc/language_bloc/language_cubit.dart';
-import 'country_filter.dart';
+import 'filter.dart';
 
 class FilterPage extends StatelessWidget {
   final Function() onTap;
@@ -17,26 +14,9 @@ class FilterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isGridView = context.isExtraLarge || context.isLarge;
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SelectableCampaignCubit>(
-          create: (context) => CampaignCubit(
-            SelectableCampaignRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-              limit: isGridView ? 9 : 10,
-            ),
-          )..initialize(),
-        ),
-        BlocProvider<UserCampaignCubit>(
-          create: (context) => CampaignCubit(
-            UserCampaignRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-              limit: isGridView ? 9 : 10,
-            ),
-          )..initialize(),
-        ),
         BlocProvider(
           create: (context) => CategoryCubit(
             CategoryRepository(
@@ -59,33 +39,15 @@ class FilterPage extends StatelessWidget {
           )..initialize(),
         ),
       ],
-      child: FilterView(onTap: () => onTap(),),
+      child: FilterView(onTap: () => onTap()),
     );
   }
 }
 
 
-class FilterView extends StatefulWidget {
+class FilterView extends StatelessWidget {
   final Function() onTap;
   const FilterView({Key? key, required this.onTap}) : super(key: key);
-
-  @override
-  State<FilterView> createState() => _FilterViewState();
-}
-
-class _FilterViewState extends State<FilterView> {
-  String? dropdownValue;
-  Map<String, dynamic> query = {};
-  List<String> filterData = [];
-  List<String> items = ['A', 'B', 'C', 'D'];
-
-  void redirect() {
-    if (context.canPop()) {
-      context.pop(true);
-    } else {
-      context.goNamed(CampaignRoute.name);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +78,9 @@ class _FilterViewState extends State<FilterView> {
         child: Column(
           crossAxisAlignment:  CrossAxisAlignment.start,
           children: [
-            const CountryFilter(),
-            // const CategoryFilter(),
-            // const LanguageFilter(),
+            const Filter<Country, CountryCubit>(title: 'Страна'),
+            const Filter<Category, CategoryCubit>(title: 'Категории'),
+            const Filter<Language, LanguageCubit>(title: 'Язык'),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
@@ -133,7 +95,7 @@ class _FilterViewState extends State<FilterView> {
                     ),
                   ),
                   onPressed: () {
-                    widget.onTap();
+                    onTap();
                     Navigator.pop(context);
                   },
                   child: Text(
