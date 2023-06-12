@@ -34,7 +34,7 @@ class LoginPanel extends StatelessWidget {
     );
     final titleTextStyle = TextStyle(
       fontSize: 25,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       color: fontColor,
     );
 
@@ -71,7 +71,8 @@ class LoginPanel extends StatelessWidget {
               DividerWithLabel(
                 label: context.loc.or,
                 padding: const EdgeInsets.symmetric(vertical: 47.0),
-                color: theme.isLight ? theme.neutral90 : theme.neutral40,
+                color: theme.isLight ? theme.neutral50 : theme.neutral60,
+                thickness: 0.2,
               ),
               const LoginProviderButtons(),
             ],

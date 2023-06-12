@@ -33,8 +33,7 @@ class LoginProviderButtons extends StatelessWidget {
           child: Text(
             context.loc.continue_with_google,
             style: textStyle.copyWith(
-              fontFamily: 'Roboto',
-              color: theme.isLight ? Colors.black.withOpacity(0.54) : theme.neutral90,
+              color: theme.isLight ? theme.neutral30 : theme.neutral90,
             ),
           ),
         ),
@@ -45,7 +44,7 @@ class LoginProviderButtons extends StatelessWidget {
         LoginProviderButton(
           color: theme.isLight ? Colors.black : Colors.white,
           onPressed: () =>
-              context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.google)),
+              context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.apple)),
           icon: Image.asset(
             'assets/icon/apple_icon.png',
             height: 24.0,
@@ -56,7 +55,7 @@ class LoginProviderButtons extends StatelessWidget {
             style: const CupertinoTextThemeData().textStyle.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: theme.isLight ? Colors.white : theme.neutral30,
+                  color: theme.isLight ? theme.neutral90 : theme.neutral30,
                 ),
           ),
         ),

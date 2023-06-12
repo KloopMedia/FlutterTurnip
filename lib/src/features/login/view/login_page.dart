@@ -113,47 +113,45 @@ class _LoginViewState extends State<LoginView> {
                       color: theme.primary,
                       borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24.0, top: 30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.grey,
-                                ),
-                                alignment: Alignment.center,
-                                width: 70,
-                                height: 70,
-                                child: const Text('Logo'),
-                              ),
-                              const SizedBox(height: 80),
-                              const Text(
-                                'Присоединяйтесь к сообществу проактивных людей!',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              const Text(
-                                'Здесь люди объединяются и решают общественно значимые проблемы вместе',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(15),
+                          //     color: Colors.grey,
+                          //   ),
+                          //   alignment: Alignment.center,
+                          //   width: 70,
+                          //   height: 70,
+                          //   child: const Text('Logo'),
+                          // ),
+                          const SizedBox(height: 150),
+                          const Text(
+                            'Присоединяйтесь к сообществу проактивных людей!',
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        Image.asset('assets/images/people.png'),
-                        const SizedBox(height: 30)
-                      ],
+                          const SizedBox(height: 30),
+                          Text(
+                            'Здесь люди объединяются и решают общественно значимые проблемы вместе',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white.withOpacity(0.85),
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w300
+                            ),
+                          ),
+                          const Spacer(),
+                          Image.asset('assets/images/people.png'),
+                          const SizedBox(height: 30)
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
