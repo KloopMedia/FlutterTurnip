@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
+import '../../../features/campaign/bloc/filter_bloc/filter_bloc.dart';
 import 'mobile_filter/filter_page.dart';
 
 class FilterButton extends StatefulWidget {
-  final void Function() onPressedMobile;
+  final void Function() onPressed;
   final void Function(bool openClose) openCloseFilter;
 
-  const FilterButton({Key? key, required this.onPressedMobile, required this.openCloseFilter}) : super(key: key);
+  const FilterButton({
+    Key? key,
+    required this.onPressed,
+    required this.openCloseFilter,
+  }) : super(key: key);
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -21,6 +27,7 @@ class _FilterButtonState extends State<FilterButton> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final formFactor = context.formFactor;
+    final itemCount = context.read<FilterBloc>().state.query.length;
 
     if (formFactor == FormFactor.small) {
       return IconButton(
@@ -29,7 +36,7 @@ class _FilterButtonState extends State<FilterButton> {
           context: context,
           builder: (BuildContext context) {
             return Dialog.fullscreen(
-              child: FilterPage(onTap: () => widget.onPressedMobile()),
+              child: FilterPage(onTap: () => widget.onPressed()),
             );
           }
         );
@@ -50,7 +57,7 @@ class _FilterButtonState extends State<FilterButton> {
           });
           widget.openCloseFilter(openClose);
         },
-        icon: (openClose)
+        icon: (openClose && itemCount > 0)
           ? Container(
             width: 24.0,
             height: 24.0,
@@ -61,7 +68,7 @@ class _FilterButtonState extends State<FilterButton> {
             ),
             child: Center(
               child: Text(
-                  '1', ///
+                  itemCount.toString(),
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Theme.of(context).colorScheme.onPrimary)

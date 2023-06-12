@@ -4,6 +4,8 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../../../../bloc/bloc.dart';
+import '../../../../features/campaign/bloc/campaign_cubit.dart';
+import '../../../../features/campaign/bloc/filter_bloc/filter_bloc.dart';
 
 class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget {
   final String title;
@@ -69,13 +71,15 @@ class FilterField extends StatefulWidget {
 
 class _FilterFieldState extends State<FilterField> {
   String? dropdownValue;
-  Map<String, dynamic> query = {};
+  Map<String, dynamic> queryMap = {};
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final dropdownValueColor = theme.isLight ? theme.neutral40 : theme.neutral90;
     final hintTextColor = theme.isLight ? theme.neutral80 : theme.neutral50;
+    final country = context.loc.country;
+    final category = context.loc.category;
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -116,10 +120,22 @@ class _FilterFieldState extends State<FilterField> {
               return BottomSheet(
                 title: widget.title,
                 data: widget.data,
-                onTap: (value) {
+                onTap: (selectedItem) {
                   setState(() {
-                    dropdownValue = value;
+                    dropdownValue = selectedItem;
                   });
+                  if (widget.title == country) {
+                    queryMap['countries__name'] = selectedItem;
+                  } else if (widget.title == category) {
+                    queryMap['categories'] = selectedItem;
+                  } else {
+                    queryMap['language__code'] = selectedItem;
+                  }
+                  context.read<FilterBloc>().add(SelectFilterItem(queryMap));
+                  context.read<SelectableCampaignCubit>().refetchWithFilter(
+                      {'countries__name': 'Кыргызстан'});
+                  context.read<UserCampaignCubit>().refetchWithFilter(
+                      {'countries__name': 'Кыргызстан'});
                 },
                 value: dropdownValue,
               );

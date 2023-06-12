@@ -4,11 +4,13 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../../../../bloc/bloc.dart';
+import '../../../../features/campaign/bloc/campaign_cubit.dart';
+import '../../../../features/campaign/bloc/filter_bloc/filter_bloc.dart';
 
 class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget {
   final String title;
 
-  const WebFilter({
+  WebFilter({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -22,6 +24,8 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
       fontSize: 16.0,
       fontWeight: FontWeight.w500,
     );
+    final country = context.loc.country;
+    final category = context.loc.category;
 
     return BlocBuilder<Cubit, RemoteDataState<Data>>(
       builder: (context, state) {
@@ -41,6 +45,19 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
                 ),
                 DropdownFilterField(
                   data: data,
+                  onTap: (selectedItem) {
+                    if (title == country) {
+                      context.read<FilterBloc>().add(SelectFilterItem({'countries__name': selectedItem.name}));
+                    } else if (title == category) {
+                      context.read<FilterBloc>().add(SelectFilterItem({'categories': selectedItem.name}));
+                    } else {
+                      context.read<FilterBloc>().add(SelectFilterItem({'language__code': selectedItem.code}));
+                    }
+                    final queryMap = context.read<FilterBloc>().state.query;
+                    print('>>> queryMap = $queryMap');
+                    context.read<SelectableCampaignCubit>().refetchWithFilter(queryMap);
+                    context.read<UserCampaignCubit>().refetchWithFilter(queryMap);
+                  },
                 ),
               ],
             ),
@@ -54,8 +71,13 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
 
 class DropdownFilterField extends StatefulWidget {
   final List<dynamic> data;
+  final Function(dynamic item) onTap;
 
-  const DropdownFilterField({Key? key, required this.data}) : super(key: key);
+  const DropdownFilterField({
+    Key? key,
+    required this.data,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   State<DropdownFilterField> createState() => _DropdownFilterFieldState();
@@ -119,6 +141,7 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
                    dropdownValue = value;
                    selectedItemList.clear();
                    selectedItemList.add(value);
+                   widget.onTap(item);
                  });
                },
              ),

@@ -12,6 +12,7 @@ import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
+import '../bloc/filter_bloc/filter_bloc.dart';
 import '../bloc/language_bloc/language_cubit.dart';
 import 'available_campaign_view.dart';
 import 'user_campaign_view.dart';
@@ -67,6 +68,9 @@ class _CampaignPageState extends State<CampaignPage> {
             ),
           )..initialize(),
         ),
+        BlocProvider(
+          create: (_) => FilterBloc(),
+        )
       ],
       child: const CampaignView(),
     );
@@ -88,6 +92,7 @@ class _CampaignViewState extends State<CampaignView> {
       builder: (context, state) {
         final theme = Theme.of(context).colorScheme;
         final hasAvailableCampaigns = state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty;
+        final query = context.read<FilterBloc>().state.query;
 
         return DefaultTabController(
           length: 2,
@@ -97,11 +102,9 @@ class _CampaignViewState extends State<CampaignView> {
               actions: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
                 FilterButton(
-                  onPressedMobile: () {
-                    context.read<SelectableCampaignCubit>().refetchWithFilter(
-                        {'countries__name': 'Кыргызстан'});
-                    context.read<UserCampaignCubit>().refetchWithFilter(
-                        {'countries__name': 'Кыргызстан'});
+                  onPressed: () {
+                    context.read<SelectableCampaignCubit>().refetchWithFilter(query);
+                    context.read<UserCampaignCubit>().refetchWithFilter(query);
                   },
                   openCloseFilter: (openClose) {
                     setState((){
@@ -111,9 +114,15 @@ class _CampaignViewState extends State<CampaignView> {
               ],
               subActions: (showFilters)
                 ? [
-                  WebFilter<Country, CountryCubit>(title: context.loc.country),
-                  WebFilter<Category, CategoryCubit>(title: context.loc.category),
-                  WebFilter<Language, LanguageCubit>(title: context.loc.language),
+                  WebFilter<Country, CountryCubit>(
+                    title: context.loc.country,
+                  ),
+                  WebFilter<Category, CategoryCubit>(
+                    title: context.loc.category,
+                  ),
+                  WebFilter<Language, LanguageCubit>(
+                    title: context.loc.language,
+                  ),
                 ]
                 : null,
               bottom: BaseTabBar(
