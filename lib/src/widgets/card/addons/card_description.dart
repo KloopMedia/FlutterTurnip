@@ -19,7 +19,7 @@ class CardDescription extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
       overflow: TextOverflow.ellipsis,
-      maxLines: 5,
+      maxLines: 3,
     );
   }
 }
