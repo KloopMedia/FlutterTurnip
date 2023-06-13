@@ -88,15 +88,15 @@ class _LoginViewState extends State<LoginView> {
             }
           },
           builder: (context, state) {
-            if (state is OTPCodeSend) {
-              return VerificationPage(
-                onResend: () => loginWithPhone(_resendToken),
-                onConfirm: (smsCode) {
-                  context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                },
-              );
-            }
             if (context.isSmall) {
+              if (state is OTPCodeSend) {
+                return VerificationPage(
+                  onResend: () => loginWithPhone(_resendToken),
+                  onConfirm: (smsCode) {
+                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+                  },
+                );
+              }
               return LoginPanel(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                 onChange: _onChange,
@@ -161,7 +161,15 @@ class _LoginViewState extends State<LoginView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Flexible(
+                        (state is OTPCodeSend)
+                        ? VerificationPage(
+                          constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
+                          onResend: () => loginWithPhone(_resendToken),
+                          onConfirm: (smsCode) {
+                            context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+                          },
+                        )
+                        : Flexible(
                           child: LoginPanel(
                             padding: const EdgeInsets.all(20),
                             constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),

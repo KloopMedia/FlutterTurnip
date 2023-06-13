@@ -10,11 +10,13 @@ import 'package:pinput/pinput.dart';
 class VerificationPage extends StatefulWidget {
   final void Function(String code) onConfirm;
   final void Function() onResend;
+  final BoxConstraints? constraints;
 
   const VerificationPage({
     super.key,
     required this.onConfirm,
     required this.onResend,
+    this.constraints,
   });
 
   @override
@@ -27,6 +29,7 @@ class _VerificationPageState extends State<VerificationPage> {
 
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  final TextEditingController otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +38,19 @@ class _VerificationPageState extends State<VerificationPage> {
 
     final titleTextStyle = TextStyle(
       fontSize: 25,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       color: fontColor,
     );
     final textStyle = TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       color: fontColor,
+    );
+    final errorTextStyle = TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: theme.error,
     );
 
     final defaultPinTheme = PinTheme(
@@ -55,9 +64,22 @@ class _VerificationPageState extends State<VerificationPage> {
         color: theme.isLight ? theme.neutral95 : theme.onSecondary,
       ),
     );
+    final errorPinTheme = PinTheme(
+      height: 54,
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: theme.primary,
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: theme.isLight ? theme.neutral95 : theme.onSecondary,
+          border: Border.all(color: theme.error)
+      ),
+    );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
+      constraints: widget.constraints,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,10 +97,21 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               const SizedBox(height: 15.0),
               Pinput(
+                controller: otpController,
                 autofocus: true,
                 length: _length,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 defaultPinTheme: defaultPinTheme,
+                errorPinTheme: errorPinTheme,
+                errorTextStyle: errorTextStyle,
+                validator: (value) {
+                  ///TODO: compare sent code and input value
+                  // if (value == requiredOtp) {
+                  //   return null;
+                  // }
+                  return 'Код введён неверно';
+                },
+                onTap: () => otpController.clear(),
                 pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                 onChanged: (value) {
                   setState(() {
