@@ -116,13 +116,16 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             onTap: (item) => redirectToAvailableTasks(context, item),
           ),
           SliverToBoxAdapter(
-            child: FilterBar(
-              onChanged: (query) {
-                context.read<RelevantTaskCubit>().refetchWithFilter(query);
-              },
-              value: taskFilterMap.keys.first,
-              filters: taskFilterMap,
-              names: filterNames,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: FilterBar(
+                onChanged: (query) {
+                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
+                },
+                value: taskFilterMap.keys.first,
+                filters: taskFilterMap,
+                names: filterNames,
+              ),
             ),
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(
