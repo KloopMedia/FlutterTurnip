@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CustomWebView extends StatefulWidget {
@@ -26,8 +27,15 @@ class _CustomWebViewState extends State<CustomWebView> {
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            return NavigationDecision.navigate;
+          onNavigationRequest: (NavigationRequest request) async {
+            final domain = Uri.parse(request.url).authority;
+            if (domain == "kloopmedia.github.io") {
+              final url = request.url.split('#').last;
+              context.push(url);
+              return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
+            }
           },
         ),
       )

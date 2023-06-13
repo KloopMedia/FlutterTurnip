@@ -76,8 +76,8 @@
     "test_returned": "Returned. Please answer the questions again",
 
     "delete_account_button": "Delete account",
-    "delete_account_dialog_title": "Are you sure you want to delete account?",
-    "delete_account_dialog_body": "This operation is irreversible. Write your email or phone number for confirmation.",
+    "delete_account_dialog_title": "Delete account",
+    "delete_account_dialog_body": "Are you sure you want to delete your account without further possibility to recover it?",
     "delete_account_confirmation": "Delete",
 
     "settings": "Settings",
