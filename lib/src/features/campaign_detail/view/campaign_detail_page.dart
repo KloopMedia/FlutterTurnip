@@ -122,16 +122,16 @@ class _AlertDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text(
-        'Вы присоединились!',
+        context.loc.joined,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF191C1B),
+          color: Color(0xFF191C1B),
         ),
       ),
       content: Text(
-        'Кампании к которым вы присоединились можете найти во вкладке “Мои кампании”',
+        context.loc.joined_campaigns,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: "Inter",
@@ -152,7 +152,7 @@ class _AlertDialog extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Понятно'),
+            child: Text(context.loc.got_it),
           ),
         )
       ],
@@ -256,7 +256,7 @@ class _Content extends StatelessWidget {
                   },
                   child: Text(
                     context.loc.join_campaign,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ),
