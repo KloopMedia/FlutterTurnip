@@ -6,6 +6,7 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/campaign_route.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/dialogs/delete_account_dialog.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -115,6 +116,23 @@ class AppDrawer extends StatelessWidget {
                 title: Text(context.loc.drawer_exit, style: titleTextStyle),
                 onTap: () {
                   context.read<AuthBloc>().add(AuthLogoutRequested());
+                },
+              ),
+              CustomListTile(
+                contentPadding: contentPadding,
+                leadingPadding: iconPadding,
+                leading: Icon(Icons.remove_circle_outline, color: theme.error),
+                title: Text(
+                  context.loc.delete_account_button,
+                  style: titleTextStyle.copyWith(color: theme.error),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const DeleteAccountDialog();
+                    },
+                  );
                 },
               ),
             ],

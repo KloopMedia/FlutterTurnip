@@ -75,9 +75,9 @@
     "task_returned": "Кайтарылды",
     "test_returned": "Кайтарылды. Суроолорго кайра жооп бериңиз",
 
-    "delete_account_button": "Баракчаңы өчүрүү",
-    "delete_account_dialog_title": "Баракчаңыз өчүрүлсүнбү?",
-    "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс . Ырастоо үчүн «өчүрүү» деген сөздү жазыңыз.",
+    "delete_account_button": "Аккаунтту өчүрүү",
+    "delete_account_dialog_title": "Аккаунтту өчүрүү",
+    "delete_account_dialog_body": "Аккаунтуңузду калыбына келтирүү мүмкүнчүлүгү жок биротоло өчүргүңүз келеби?",
     "delete_account_confirmation": "Өчүрүү",
 
     "settings": "Жөндөөлөр",

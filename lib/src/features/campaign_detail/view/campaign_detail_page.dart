@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../theme/index.dart';
 import '../../../widgets/app_bar/default_app_bar.dart';
+import '../../../widgets/widgets.dart';
 import '../bloc/campaign_detail_bloc.dart';
 
 class CampaignDetailPage extends StatelessWidget {
@@ -71,7 +72,7 @@ class CampaignDetailView extends StatelessWidget {
         child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
           listener: (context, state) {
             if (state is CampaignJoinSuccess) {
-              showDialog(context: context, builder: (context) => const _AlertDialog())
+              showDialog(context: context, builder: (context) => const JoinCampaignDialog())
                   .then((value) => redirectToTaskMenu(context, state.data.id));
             }
           },
@@ -105,57 +106,6 @@ class CampaignDetailView extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class _AlertDialog extends StatelessWidget {
-  const _AlertDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-
-    return AlertDialog(
-      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      title: Text(
-        'Вы присоединились!',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-          color: const Color(0xFF191C1B),
-        ),
-      ),
-      content: Text(
-        'Кампании к которым вы присоединились можете найти во вкладке “Мои кампании”',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: "Inter",
-          fontSize: 16,
-          color: theme.neutral40,
-        ),
-      ),
-      actions: [
-        SizedBox(
-          height: 52,
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Понятно'),
-          ),
-        )
-      ],
     );
   }
 }
