@@ -130,13 +130,16 @@ class _AlertDialog extends StatelessWidget {
           color: Color(0xFF191C1B),
         ),
       ),
-      content: Text(
-        context.loc.joined_campaigns,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: "Inter",
-          fontSize: 16,
-          color: theme.neutral40,
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Text(
+          context.loc.joined_campaigns,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            color: theme.neutral40,
+          ),
         ),
       ),
       actions: [
@@ -242,7 +245,7 @@ class _Content extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
               child: SizedBox(
-                width: double.infinity,
+                width: (context.isSmall) ? double.infinity : 380,
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
