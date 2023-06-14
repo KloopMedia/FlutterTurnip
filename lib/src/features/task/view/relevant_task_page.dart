@@ -128,7 +128,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(
             showLoader: false,
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
             itemBuilder: (context, index, item) {
               return CardWithTitle(
                 chips: const [CardChip('Placeholder')],
@@ -140,7 +140,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             },
           ),
           AdaptiveListView<Task, RelevantTaskCubit>(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
             itemBuilder: (context, index, item) {
               final cardBody = CardDate(date: item.createdAt);
 

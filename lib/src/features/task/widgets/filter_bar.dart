@@ -32,7 +32,7 @@ class _FilterBarState extends State<FilterBar> {
     final values = widget.filters.values.toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      padding: const EdgeInsets.only(left: 24, right: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,7 +45,7 @@ class _FilterBarState extends State<FilterBar> {
                   color: theme.isLight ? theme.neutral30 : theme.neutral90
               ),
             ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           FixedChipBar(
             children: [
               for (var i = 0; i < widget.filters.length; i++)
