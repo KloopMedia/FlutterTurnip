@@ -6,6 +6,8 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import 'empty_campaign_page.dart';
+
 class AvailableCampaignView extends StatelessWidget {
   const AvailableCampaignView({Key? key}) : super(key: key);
 
@@ -25,6 +27,10 @@ class AvailableCampaignView extends StatelessWidget {
       slivers: [
         AdaptiveListView<Campaign, SelectableCampaignCubit>(
           padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+          emptyPlaceholder: const EmptyCampaignPage(
+            title: 'Пока что здесь пусто',
+            body: '',
+          ),
           itemBuilder: (context, index, item) {
             final cardBody = CardDescription(item.description);
 

@@ -15,6 +15,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
   final Widget? Function(BuildContext context, int index, Data item) itemBuilder;
   final bool fillRow;
   final bool showLoader;
+  final Widget? emptyPlaceholder;
 
   const SliverGridViewWithPagination({
     Key? key,
@@ -26,6 +27,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     required this.crossAxisCount,
     this.fillRow = false,
     this.showLoader = true,
+    this.emptyPlaceholder,
   }) : super(key: key);
 
   @override
@@ -38,60 +40,64 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
         if (state is RemoteDataFailed<Data>) {
           return SliverToBoxAdapter(child: Center(child: Text(state.error)));
         }
-        if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
-          final data = state.data.splitBeforeIndexed((i, v) => i % crossAxisCount == 0).toList();
-          return MultiSliver(children: [
-            SliverToBoxAdapter(child: header),
-            SliverPadding(
-              padding: padding,
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, rowIndex) {
-                    final rowCount = fillRow ? data[rowIndex].length : crossAxisCount;
-                    return Row(
-                      children: List.generate(
-                        rowCount,
-                        (columnIndex) {
-                          final verticalPadding = mainAxisSpacing / 2;
-                          final horizontalPadding = crossAxisSpacing / 2;
-                          var item;
-                          try {
-                            item = itemBuilder(context, rowIndex, data[rowIndex][columnIndex])!;
-                          } catch (e) {
-                            item = const SizedBox();
-                          }
+        if (state is RemoteDataLoaded<Data>) {
+          if (state.data.isNotEmpty) {
+            final data = state.data.splitBeforeIndexed((i, v) => i % crossAxisCount == 0).toList();
+            return MultiSliver(children: [
+              SliverToBoxAdapter(child: header),
+              SliverPadding(
+                padding: padding,
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, rowIndex) {
+                      final rowCount = fillRow ? data[rowIndex].length : crossAxisCount;
+                      return Row(
+                        children: List.generate(
+                          rowCount,
+                          (columnIndex) {
+                            final verticalPadding = mainAxisSpacing / 2;
+                            final horizontalPadding = crossAxisSpacing / 2;
+                            var item;
+                            try {
+                              item = itemBuilder(context, rowIndex, data[rowIndex][columnIndex])!;
+                            } catch (e) {
+                              item = const SizedBox();
+                            }
 
-                          return Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: rowIndex == 0 ? 0 : verticalPadding,
-                                bottom: rowIndex == data.length - 1 ? 0 : verticalPadding,
-                                left: columnIndex == 0 ? 0 : horizontalPadding,
-                                right: columnIndex == rowCount - 1 ? 0 : horizontalPadding,
+                            return Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top: rowIndex == 0 ? 0 : verticalPadding,
+                                  bottom: rowIndex == data.length - 1 ? 0 : verticalPadding,
+                                  left: columnIndex == 0 ? 0 : horizontalPadding,
+                                  right: columnIndex == rowCount - 1 ? 0 : horizontalPadding,
+                                ),
+                                child: item,
                               ),
-                              child: item,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  childCount: data.length,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    childCount: data.length,
+                  ),
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: state.total == 0 ? EdgeInsets.zero : padding,
-              sliver: SliverToBoxAdapter(
-                child: Pagination(
-                  currentPage: state.currentPage,
-                  total: state.total,
-                  onChanged: (page) => context.read<Cubit>().fetchData(page),
-                  enabled: state is! RemoteDataLoading,
+              SliverPadding(
+                padding: state.total == 0 ? EdgeInsets.zero : padding,
+                sliver: SliverToBoxAdapter(
+                  child: Pagination(
+                    currentPage: state.currentPage,
+                    total: state.total,
+                    onChanged: (page) => context.read<Cubit>().fetchData(page),
+                    enabled: state is! RemoteDataLoading,
+                  ),
                 ),
               ),
-            ),
-          ]);
+            ]);
+          } else {
+            return SliverFillRemaining(child: emptyPlaceholder);
+          }
         }
         return const SliverToBoxAdapter(child: SizedBox.shrink());
       },

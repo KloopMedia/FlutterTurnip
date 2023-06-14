@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
+import 'package:gigaturnip/src/features/campaign/view/empty_campaign_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -24,6 +25,11 @@ class UserCampaignView extends StatelessWidget {
       slivers: [
         AdaptiveListView<Campaign, UserCampaignCubit>(
           padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+          emptyPlaceholder: const EmptyCampaignPage(
+            title: 'Пока что здесь пусто',
+            body:
+                'Здесь Вы найдете кампании к которым Вы присоединились. Присоединиться к кампании Вы можете  в разделе "Все кампании"',
+          ),
           itemBuilder: (context, index, item) {
             final cardBody = item.unreadNotifications > 0
                 ? CardMessage('У вас ${item.unreadNotifications} непрочитанное сообщение')
