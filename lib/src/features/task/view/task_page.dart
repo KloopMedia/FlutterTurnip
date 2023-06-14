@@ -30,7 +30,7 @@ class TaskPage extends StatefulWidget {
 class _TaskPageState extends State<TaskPage> {
   void _redirectToNotificationPage(BuildContext context) {
     final params = GoRouterState.of(context).params;
-    context.goNamed(NotificationRoute.name, params: params);
+    context.pushNamed(NotificationRoute.name, params: params);
   }
 
   void _redirectToCampaignDetail(BuildContext context) {
