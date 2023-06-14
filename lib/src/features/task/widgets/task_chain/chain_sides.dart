@@ -33,7 +33,7 @@ class ChainSide extends StatelessWidget {
           right: offset,
           child: CustomPaint(
             size: const Size(double.infinity, 0.0),
-            painter: StraightLine(style: style),
+            painter: StraightLine(style: style, isEven: isEven),
           ),
         ),
         Align(
@@ -50,7 +50,7 @@ class ChainSide extends StatelessWidget {
             right: offset,
             child: CustomPaint(
               size: const Size(double.infinity, 0.0),
-              painter: StraightLine(style: endStyle),
+              painter: StraightLine(style: endStyle, isEven: isEven),
             ),
           ),
       ],

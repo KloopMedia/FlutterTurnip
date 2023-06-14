@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
@@ -5,8 +6,9 @@ import 'types.dart';
 
 class StraightLine extends CustomPainter {
   final PaintStyle style;
+  final bool isEven;
 
-  const StraightLine({required this.style});
+  const StraightLine({required this.style, required this.isEven});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -15,7 +17,15 @@ class StraightLine extends CustomPainter {
     final paint = Paint()
       ..color = style.color
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = style.strokeWidth;
+      ..strokeWidth = style.strokeWidth
+      ..shader = ui.Gradient.linear(
+          (isEven) ? Offset(startX, startX) : Offset(size.width, size.height),
+          (isEven) ? Offset(size.width, size.height) : Offset(startX, startX),
+        [
+          const Color(0xFF96ADFF),
+          const Color(0xFF2754F3)
+        ],
+      );
 
     while (startX < size.width) {
       canvas.drawLine(Offset(startX, 0.0), Offset(startX + style.dashWidth, 0.0), paint);
@@ -46,7 +56,15 @@ abstract class CurveLine extends CustomPainter {
       ..color = style.color
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = style.strokeWidth;
+      ..strokeWidth = style.strokeWidth
+      ..shader = ui.Gradient.linear(
+        Offset(size.width, size.height),
+        const Offset(0.0, 0.0),
+        [
+          const Color(0xFF96ADFF),
+          const Color(0xFF2754F3)
+        ],
+      );
 
     final (startPoint, controlPoint1, controlPoint2, endPoint) = _calculatePath(size);
 
