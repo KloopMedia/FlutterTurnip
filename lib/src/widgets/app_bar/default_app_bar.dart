@@ -141,9 +141,9 @@ class _DefaultAppBar extends StatelessWidget {
       boxShadow: boxShadow,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       titleSpacing: titleSpacing,
-      // border: context.isExtraLarge || context.isLarge
-      //     ? const Border(bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1))
-      //     : null,
+      border: context.isExtraLarge || context.isLarge
+          ? const Border(bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1))
+          : null,
       leading: [if (defaultLeadingButton != null) defaultLeadingButton, ...?leading],
       title: DefaultTextStyle(
         style: TextStyle(

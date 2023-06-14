@@ -116,16 +116,14 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             onTap: (item) => redirectToAvailableTasks(context, item),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: FilterBar(
-                onChanged: (query) {
-                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
-                },
-                value: taskFilterMap.keys.first,
-                filters: taskFilterMap,
-                names: filterNames,
-              ),
+            child: FilterBar(
+              title: context.loc.mytasks,
+              onChanged: (query) {
+                context.read<RelevantTaskCubit>().refetchWithFilter(query);
+              },
+              value: taskFilterMap.keys.first,
+              filters: taskFilterMap,
+              names: filterNames,
             ),
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(
@@ -142,7 +140,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             },
           ),
           AdaptiveListView<Task, RelevantTaskCubit>(
-            padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             itemBuilder: (context, index, item) {
               final cardBody = CardDate(date: item.createdAt);
 
