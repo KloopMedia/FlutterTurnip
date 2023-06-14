@@ -62,10 +62,11 @@ class CampaignView extends StatelessWidget {
           child: SafeArea(
             child: DefaultAppBar(
               title: Text(context.loc.campaigns),
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                FilterButton(onPressed: () {}),
-              ],
+              // TODO: Implement action buttons
+              // actions: [
+              //   IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              //   FilterButton(onPressed: () {}),
+              // ],
               bottom: BaseTabBar(
                 width: calculateTabWidth(context),
                 border: context.formFactor == FormFactor.small
