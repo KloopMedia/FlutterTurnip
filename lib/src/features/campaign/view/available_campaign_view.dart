@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -27,8 +28,8 @@ class AvailableCampaignView extends StatelessWidget {
       slivers: [
         AdaptiveListView<Campaign, SelectableCampaignCubit>(
           padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
-          emptyPlaceholder: const EmptyCampaignPage(
-            title: 'Пока что здесь пусто',
+          emptyPlaceholder: EmptyCampaignPage(
+            title: context.loc.campaign_empty_title,
             body: '',
           ),
           itemBuilder: (context, index, item) {

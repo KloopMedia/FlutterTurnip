@@ -101,6 +101,8 @@
     "complete" : "Complete",
     "open_notification" : "Open notifications",
     "closed_notification" : "Closed notifications",
+    "campaign_empty_title": "This page is empty",
+    "campaign_empty_body": "Here you can find campaigns that you joined. You can join a new campaign in “All campaigns” section",
 
     "drawer_campaigns": "Campaigns",
     "drawer_notifications": "Notifications",
