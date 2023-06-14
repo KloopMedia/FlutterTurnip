@@ -51,7 +51,7 @@ class NotificationPage extends StatelessWidget {
               ),
             )
           ],
-          title: const Text('Уведомления'),
+          title: Text(context.loc.notifications),
           bottom: BaseTabBar(
             tabs: [
               Tab(text: context.loc.open_notification),
