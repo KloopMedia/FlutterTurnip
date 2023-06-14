@@ -19,8 +19,9 @@ class StraightLine extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = style.strokeWidth
       ..shader = ui.Gradient.linear(
-          (isEven) ? Offset(startX, startX) : Offset(size.width, size.height),
-          (isEven) ? Offset(size.width, size.height) : Offset(startX, startX),
+          Offset(startX, startX), Offset(size.width, size.height),
+          // (isEven) ? Offset(startX, startX) : Offset(size.width, size.height),
+          // (isEven) ? Offset(size.width, size.height) : Offset(startX, startX),
         [
           const Color(0xFF96ADFF),
           const Color(0xFF2754F3)
@@ -58,8 +59,9 @@ abstract class CurveLine extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = style.strokeWidth
       ..shader = ui.Gradient.linear(
-        Offset(size.width, size.height),
         const Offset(0.0, 0.0),
+        Offset(size.width, size.height),
+        // const Offset(0.0, 0.0),
         [
           const Color(0xFF96ADFF),
           const Color(0xFF2754F3)

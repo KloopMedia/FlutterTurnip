@@ -73,7 +73,7 @@ class ChainRow extends StatelessWidget {
           alignment: isEven ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 120.0),
+            padding: (isEven) ? const EdgeInsets.only(left: 80.0, right: 100.0) : const EdgeInsets.only(right: 80.0, left: 100.0),
             child: GestureDetector(
               onTap: _onTap(),
               child: Text(

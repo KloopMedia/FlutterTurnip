@@ -30,7 +30,7 @@ class ChainRowIcon extends StatelessWidget {
       right: iconPosition?.right,
       child: switch (position) {
         ChainPosition.start => Image.asset('assets/images/flag.png', height: 70.0),
-        ChainPosition.end => Image.asset('assets/images/star.png', color: color, height: 40.0),
+        ChainPosition.end => Image.asset('assets/images/star.png', color: color, height: 45.0),
         ChainPosition.middle => const SizedBox.shrink(),
       },
     );
