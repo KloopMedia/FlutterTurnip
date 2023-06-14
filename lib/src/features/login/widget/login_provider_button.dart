@@ -38,7 +38,10 @@ class LoginProviderButton extends StatelessWidget {
             children: [
               icon,
               const SizedBox(width: 15.0),
-              child,
+              Padding(
+                padding:const EdgeInsets.only(top: 4.0),
+                child: child,
+              ),
             ],
           ),
         ),

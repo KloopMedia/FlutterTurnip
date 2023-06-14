@@ -47,7 +47,7 @@ class LoginProviderButtons extends StatelessWidget {
               context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.apple)),
           icon: Image.asset(
             'assets/icon/apple_icon.png',
-            height: 24.0,
+            height: 22.0,
             color: theme.isLight ? Colors.white : Colors.black,
           ),
           child: Text(

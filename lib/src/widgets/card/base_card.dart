@@ -47,7 +47,7 @@ class _BaseCardState extends State<BaseCard> {
           width: widget.size?.width,
           height: widget.size?.height,
           decoration: BoxDecoration(
-            boxShadow: isHover ? Shadows.elevation5 : Shadows.elevation3,
+            boxShadow: isHover ? Shadows.elevation4 : Shadows.elevation2,
             borderRadius: borderRadius,
             color: backgroundColor,
           ),

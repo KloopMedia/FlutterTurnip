@@ -33,7 +33,7 @@ class UserCampaignView extends StatelessWidget {
               return CardWithTitle(
                 chips: const [CardChip('Placeholder')],
                 title: item.name,
-                size: const Size.fromHeight(165),
+                size: const Size.fromHeight(125),//165
                 imageUrl: item.logo,
                 flex: 1,
                 onTap: () => redirectToTaskMenu(context, item),

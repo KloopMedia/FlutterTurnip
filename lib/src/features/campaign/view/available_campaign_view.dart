@@ -32,7 +32,7 @@ class AvailableCampaignView extends StatelessWidget {
               return CardWithTitle(
                 chips: const [CardChip('Placeholder')],
                 title: item.name,
-                size: const Size.fromHeight(250),
+                size: const Size.fromHeight(160), //250
                 imageUrl: item.logo,
                 flex: 1,
                 onTap: () => redirectToCampaignDetail(context, item),
