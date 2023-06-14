@@ -31,7 +31,6 @@ class UserCampaignView extends StatelessWidget {
 
             if (context.isExtraLarge || context.isLarge) {
               return CardWithTitle(
-                chips: const [CardChip('Placeholder')],
                 title: item.name,
                 size: const Size.fromHeight(165),
                 imageUrl: item.logo,
@@ -41,7 +40,6 @@ class UserCampaignView extends StatelessWidget {
               );
             } else {
               return CardWithTitle(
-                chips: const [CardChip('Placeholder')],
                 title: item.name,
                 imageUrl: item.logo,
                 onTap: () => redirectToTaskMenu(context, item),
