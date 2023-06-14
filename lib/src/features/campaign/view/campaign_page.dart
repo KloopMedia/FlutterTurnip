@@ -56,7 +56,6 @@ class CampaignView extends StatelessWidget {
     return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
       builder: (context, state) {
         final theme = Theme.of(context).colorScheme;
-        final hasAvailableCampaigns = state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty;
 
         return DefaultTabController(
           length: 2,
@@ -68,7 +67,6 @@ class CampaignView extends StatelessWidget {
                 FilterButton(onPressed: () {}),
               ],
               bottom: BaseTabBar(
-                hidden: !hasAvailableCampaigns,
                 width: calculateTabWidth(context),
                 border: context.formFactor == FormFactor.small
                     ? Border(
@@ -80,21 +78,19 @@ class CampaignView extends StatelessWidget {
                     : null,
                 tabs: [
                   Tab(
-                    child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
+                    child: Text(context.loc.open_campaigns, overflow: TextOverflow.ellipsis),
                   ),
                   Tab(
-                    child: Text(context.loc.campaigns, overflow: TextOverflow.ellipsis),
+                    child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
                   ),
                 ],
               ),
-              child: hasAvailableCampaigns
-                  ? const TabBarView(
-                      children: [
-                        AvailableCampaignView(),
-                        UserCampaignView(),
-                      ],
-                    )
-                  : const UserCampaignView(),
+              child: const TabBarView(
+                children: [
+                  UserCampaignView(),
+                  AvailableCampaignView(),
+                ],
+              ),
             ),
           ),
         );
