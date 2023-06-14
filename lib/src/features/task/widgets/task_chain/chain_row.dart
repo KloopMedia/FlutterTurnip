@@ -38,8 +38,8 @@ class ChainRow extends StatelessWidget {
         ? notStartedLineColor
         : completeLineColor;
 
-    final dashWidth = context.isSmall ? 10.0 : 16.0;
-    final dashSpace = context.isSmall ? 10.0 : 12.0;
+    final dashWidth = context.isSmall ? 10.0 : 14.0;
+    final dashSpace = context.isSmall ? 10.0 : 13.0;
     final strokeWidth = context.isSmall ? 5.0 : 7.0;
 
     final style = PaintStyle(
@@ -71,7 +71,8 @@ class ChainRow extends StatelessWidget {
       children: [
         Align(
           alignment: isEven ? Alignment.centerRight : Alignment.centerLeft,
-          child: Padding(
+          child: Container(
+            width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 120.0),
             child: GestureDetector(
               onTap: _onTap(),

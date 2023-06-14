@@ -20,23 +20,25 @@ class LessonIcon extends StatelessWidget {
     final lessonNumTextStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 20.0,
-      color: status == ChainInfoStatus.notStarted ? theme.neutralVariant40 : Colors.white,
+      color: theme.isLight
+        ? Colors.white
+        : status == ChainInfoStatus.notStarted ? theme.neutralVariant40 : Colors.white,
     );
 
     final circleColorSchema = {
       ChainInfoStatus.complete: [
-        const Color(0xFFC0CEFF),
         const Color(0xFF94A9F0),
+        const Color(0xFFC0CEFF),
       ],
       ChainInfoStatus.returned: [
+        const Color(0xFFBFAE0E),
         const Color(0xFFDFC902),
         const Color(0xFFDFC902),
-        const Color(0xFFBFAE0E)
       ],
       ChainInfoStatus.active: [
+        const Color(0xFFBFAE0E),
         const Color(0xFFDFC902),
         const Color(0xFFDFC902),
-        const Color(0xFFBFAE0E)
       ],
       ChainInfoStatus.notStarted: theme.isLight
           ? [const Color(0xFFE1E3E3), const Color(0xFFE1E3E3)]
@@ -52,8 +54,8 @@ class LessonIcon extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15.0),
-      width: 60.0,
-      height: 60.0,
+      width: 57.0,
+      height: 57.0,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(
@@ -65,8 +67,8 @@ class LessonIcon extends StatelessWidget {
         Transform.rotate(
           angle: 0.8,
           child: Container(
-            height: 37.0,
-            width: 37.0,
+            height: 35.0,
+            width: 35.0,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(5.0)),
               color: rhombusColorSchema[status],

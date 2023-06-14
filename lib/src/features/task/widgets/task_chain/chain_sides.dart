@@ -22,8 +22,8 @@ class ChainSide extends StatelessWidget {
     final alignment = isEven ? Alignment.centerRight : Alignment.centerLeft;
     final curveLine = isEven ? CurveLine.right(style: style) : CurveLine.left(style: style);
 
-    const curveWidth = 50.0;
-    const offset = curveWidth + 5;
+    const curveWidth = 55.0;
+    const offset = curveWidth + 6;
 
     return Stack(
       alignment: Alignment.topCenter,
