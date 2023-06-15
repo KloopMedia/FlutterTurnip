@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -59,7 +60,7 @@ class IndividualChainBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
@@ -83,12 +84,19 @@ class IndividualChainBuilder extends StatelessWidget {
                 ? ChainInfoStatus.active
                 : status;
 
-            return ChainRow(
-              position: position,
-              title: item.name,
-              index: index,
-              status: itemStatus,
-              onTap: () => onTap(item, status),
+            return Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: (context.isSmall || context.isMedium)
+                    ? 0.0
+                    : MediaQuery.of(context).size.width / 6
+              ),
+              child: ChainRow(
+                position: position,
+                title: item.name,
+                index: index,
+                status: itemStatus,
+                onTap: () => onTap(item, status),
+              ),
             );
           },
           childCount: data.length,
