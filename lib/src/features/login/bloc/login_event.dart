@@ -4,6 +4,11 @@ abstract class LoginEvent extends Equatable {
   const LoginEvent();
 }
 
+class CloseOnBoarding extends LoginEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class LoginWithAuthProvider extends LoginEvent {
   final AuthProvider provider;
 
