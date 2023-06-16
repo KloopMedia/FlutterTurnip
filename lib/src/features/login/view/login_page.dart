@@ -122,11 +122,11 @@ class _LoginViewState extends State<LoginView> {
                       color: theme.primary,
                       borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24.0, top: 30),
-                          child: Column(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 45),
+                      child: Column(
+                        children: [
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
@@ -158,11 +158,10 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ],
                           ),
-                        ),
-                        const Spacer(),
-                        Image.asset('assets/images/people.png'),
-                        const SizedBox(height: 30)
-                      ],
+                          const Spacer(),
+                          Image.asset('assets/images/people.png'),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(

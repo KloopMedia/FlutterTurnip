@@ -13,13 +13,25 @@ class OnBoarding extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(24.0),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [0, 0.31],
+          colors: [Color(0xFFDFE6FF), Colors.white],
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Row(children: [LanguagePicker()]),
-          Image.asset('assets/images/people.png'),
+          Image.asset(
+            'assets/images/people.png',
+            width: 380,
+            height: 281,
+          ),
           Column(
             children: [
               Text(
@@ -27,7 +39,7 @@ class OnBoarding extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 24,
-                  color: theme.isLight ? theme.neutral30 : theme.neutral90,
+                  color: theme.neutral30,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -37,7 +49,7 @@ class OnBoarding extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: theme.isLight ? theme.neutral30 : theme.neutral90,
+                  color: theme.neutral30,
                 ),
                 textAlign: TextAlign.center,
               ),
