@@ -39,6 +39,9 @@ Future<void> main() async {
         RepositoryProvider<GigaTurnipApiClient>(
           create: (context) => gigaTurnipApiClient,
         ),
+        RepositoryProvider<SharedPreferences>(
+          create: (context) => sharedPreferences,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

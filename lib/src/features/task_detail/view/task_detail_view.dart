@@ -103,73 +103,96 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TaskBloc, TaskState>(listener: (context, state) {
-      if (state is TaskSubmitted) {
-        redirect(context, state.nextTaskId);
-      }
-      if (state is TaskClosed) {
-        redirect(context, null);
-      }
-      if (state is TaskInfoOpened) {
-        openWebView(context);
-      }
-    }, builder: (context, state) {
-      if (state is TaskFetching) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (state is TaskFetchingError) {
-        return Center(child: Text(state.error));
-      }
-      if (state is TaskInitialized) {
-        return DefaultAppBar(
-          title: Text(
-            state.data.name,
-            overflow: TextOverflow.ellipsis,
+    final colorScheme = Theme.of(context).colorScheme;
+    final inputDecoration = InputDecorationTheme(
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          width: 1.0,
+          color: colorScheme.isLight ? Colors.black : colorScheme.neutral60,
+        ),
+      ),
+    );
+    final lightTheme = Theme.of(context).copyWith(inputDecorationTheme: inputDecoration);
+    final darkTheme = Theme.of(context).copyWith(
+      textTheme: Theme.of(context).textTheme.apply(
+            displayColor: Colors.white,
+            bodyColor: Colors.white,
           ),
-          automaticallyImplyLeading: false,
-          leading: [
-            BackButton(
-              onPressed: () => redirect(context, null),
-            )
-          ],
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.read<TaskBloc>().add(OpenTaskInfo());
-              },
-              icon: const Icon(Icons.text_snippet),
-            )
-          ],
-          child: SingleChildScrollView(
-            key: _pageStorageKey,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: Shadows.elevation3,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              margin: EdgeInsets.symmetric(
-                vertical: context.isSmall || context.isMedium ? 0 : 40,
-                horizontal: context.isSmall || context.isMedium
-                    ? 0
-                    : MediaQuery.of(context).size.width / 5,
-              ),
-              child: Column(
-                children: [
-                  for (final task in state.previousTasks)
-                    _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                  if (state.previousTasks.isNotEmpty)
-                    TaskDivider(label: context.loc.form_divider),
-                  _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
-                ],
+      inputDecorationTheme: inputDecoration,
+    );
+
+    return Theme(
+      data: colorScheme.isLight ? lightTheme : darkTheme,
+      child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) {
+        if (state is TaskSubmitted) {
+          redirect(context, state.nextTaskId);
+        }
+        if (state is TaskClosed) {
+          redirect(context, null);
+        }
+        if (state is TaskInfoOpened) {
+          openWebView(context);
+        }
+      }, builder: (context, state) {
+        if (state is TaskFetching) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is TaskFetchingError) {
+          return Center(child: Text(state.error));
+        }
+        if (state is TaskInitialized) {
+          return DefaultAppBar(
+            title: Text(
+              state.data.name,
+              overflow: TextOverflow.ellipsis,
+            ),
+            automaticallyImplyLeading: false,
+            leading: [
+              BackButton(
+                onPressed: () => redirect(context, null),
+              )
+            ],
+            actions: [
+              IconButton(
+                onPressed: () {
+                  context.read<TaskBloc>().add(OpenTaskInfo());
+                },
+                icon: const Icon(Icons.text_snippet),
+              )
+            ],
+            child: SingleChildScrollView(
+              key: _pageStorageKey,
+              child: Container(
+                decoration: context.isSmall || context.isMedium
+                    ? null
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: Shadows.elevation3,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                margin: EdgeInsets.symmetric(
+                  vertical: context.isSmall || context.isMedium ? 0 : 40,
+                  horizontal: context.isSmall || context.isMedium
+                      ? 0
+                      : MediaQuery.of(context).size.width / 5,
+                ),
+                child: Column(
+                  children: [
+                    for (final task in state.previousTasks)
+                      _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
+                    if (state.previousTasks.isNotEmpty)
+                      TaskDivider(label: context.loc.form_divider),
+                    _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }
-      return const SizedBox.shrink();
-    });
+          );
+        }
+        return const SizedBox.shrink();
+      }),
+    );
   }
 }
 

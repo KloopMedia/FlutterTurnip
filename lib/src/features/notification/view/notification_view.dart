@@ -12,7 +12,7 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
   const NotificationView({Key? key, required this.campaignId}) : super(key: key);
 
   void redirectToNotification(BuildContext context, Notification notification) {
-    context.goNamed(
+    context.pushNamed(
       NotificationDetailRoute.name,
       params: {
         'cid': '$campaignId',

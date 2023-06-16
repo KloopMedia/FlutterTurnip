@@ -88,13 +88,13 @@ class AppDrawer extends StatelessWidget {
                 title: Text(context.loc.drawer_campaigns, style: titleTextStyle),
                 onTap: () => context.goNamed(CampaignRoute.name),
               ),
-              CustomListTile(
-                contentPadding: contentPadding,
-                leadingPadding: iconPadding,
-                leading: Icon(Icons.notifications_outlined, color: theme.primary),
-                title: Text(context.loc.drawer_notifications, style: titleTextStyle),
-                onTap: () {},
-              ),
+              // CustomListTile(
+              //   contentPadding: contentPadding,
+              //   leadingPadding: iconPadding,
+              //   leading: Icon(Icons.notifications_outlined, color: theme.primary),
+              //   title: Text(context.loc.drawer_notifications, style: titleTextStyle),
+              //   onTap: () {},
+              // ),
               ThemeSwitch(
                 contentPadding: contentPadding,
                 iconPadding: iconPadding,
@@ -102,13 +102,13 @@ class AppDrawer extends StatelessWidget {
                 title: Text(context.loc.drawer_theme, style: titleTextStyle),
               ),
               const Spacer(),
-              CustomListTile(
-                contentPadding: contentPadding,
-                leadingPadding: iconPadding,
-                leading: Icon(Icons.help_outline, color: theme.primary),
-                title: Text(context.loc.drawer_help, style: titleTextStyle),
-                onTap: () {},
-              ),
+              // CustomListTile(
+              //   contentPadding: contentPadding,
+              //   leadingPadding: iconPadding,
+              //   leading: Icon(Icons.help_outline, color: theme.primary),
+              //   title: Text(context.loc.drawer_help, style: titleTextStyle),
+              //   onTap: () {},
+              // ),
               CustomListTile(
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,

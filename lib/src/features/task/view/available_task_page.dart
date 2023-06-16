@@ -76,7 +76,6 @@ class AvailableTaskPage extends StatelessWidget {
                 itemBuilder: (context, index, item) {
                   return CardWithTitle(
                     chips: [
-                      const CardChip('Placeholder'),
                       const Spacer(),
                       ElevatedButton(
                         onPressed: () {

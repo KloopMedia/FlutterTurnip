@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login_event.dart';
 
@@ -12,14 +14,22 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationRepository _authenticationRepository;
+  final SharedPreferences _sharedPreferences;
 
-  LoginBloc({required AuthenticationRepository authenticationRepository})
-      : _authenticationRepository = authenticationRepository,
-        super(LoginInitial()) {
+  LoginBloc({
+    required AuthenticationRepository authenticationRepository,
+    required SharedPreferences sharedPreferences,
+  })  : _authenticationRepository = authenticationRepository,
+        _sharedPreferences = sharedPreferences,
+        super(
+          LoginInitial(
+              firstTime: sharedPreferences.getBool(Constants.sharedPrefFirstTimeKey) ?? true),
+        ) {
     on<LoginWithAuthProvider>(_onLoginWithAuthProvider);
     on<SendOTP>(_onSendOTP);
     on<ConfirmOTP>(_onConfirmOTP);
     on<CompleteVerification>(_onCompleteVerification);
+    on<CloseOnBoarding>(_onCloseOnBoarding);
   }
 
   Future<void> _login(AuthProvider provider) async {
@@ -76,5 +86,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
       emit(LoginFailed(e.toString()));
     }
+  }
+
+  void _onCloseOnBoarding(CloseOnBoarding event, Emitter<LoginState> emit) {
+    _sharedPreferences.setBool(Constants.sharedPrefFirstTimeKey, false);
+    emit(const LoginInitial(firstTime: false));
   }
 }

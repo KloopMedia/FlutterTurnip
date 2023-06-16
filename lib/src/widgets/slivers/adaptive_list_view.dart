@@ -12,6 +12,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
   final bool fillRow;
   final Widget Function(BuildContext context, int index, Data item) itemBuilder;
   final bool showLoader;
+  final Widget? emptyPlaceholder;
 
   const AdaptiveListView({
     Key? key,
@@ -23,6 +24,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
     this.contentPadding = 10,
     this.fillRow = false,
     this.showLoader = true,
+    this.emptyPlaceholder,
   }) : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
         itemBuilder: itemBuilder,
         fillRow: fillRow,
         showLoader: showLoader,
+        emptyPlaceholder: emptyPlaceholder,
       );
     } else {
       return SliverListViewWithPagination<Data, Cubit>(
@@ -43,6 +46,7 @@ class AdaptiveListView<Data, Cubit extends RemoteDataCubit<Data>> extends Statel
         contentPadding: EdgeInsets.symmetric(vertical: contentPadding),
         itemBuilder: itemBuilder,
         showLoader: showLoader,
+        emptyPlaceholder: emptyPlaceholder,
       );
     }
   }
