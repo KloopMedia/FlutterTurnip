@@ -17,7 +17,11 @@ class LanguagePicker extends StatelessWidget {
 
     return Container(
       width: 125,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: borderRadius),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: borderRadius,
+        boxShadow: Shadows.elevation3,
+      ),
       child: DropdownButtonFormField<String>(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: theme.neutral30),

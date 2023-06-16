@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 class SignUpButton extends StatelessWidget {
@@ -29,6 +28,7 @@ class SignUpButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
+            color: Colors.white,
           ),
         ),
       ),
