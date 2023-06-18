@@ -6,8 +6,9 @@ import 'types.dart';
 class ChainRowIcon extends StatelessWidget {
   final ChainPosition position;
   final bool isEven;
+  final bool isCollapsed;
 
-  const ChainRowIcon({Key? key, required this.position, required this.isEven}) : super(key: key);
+  const ChainRowIcon({Key? key, required this.position, required this.isEven, required this.isCollapsed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class ChainRowIcon extends StatelessWidget {
       right: iconPosition?.right,
       child: switch (position) {
         ChainPosition.start => Image.asset('assets/images/flag.png', height: 70.0),
-        ChainPosition.end => Image.asset('assets/images/star.png', color: color, height: 45.0),
+        ChainPosition.end => (isCollapsed) ? const SizedBox.shrink() : Image.asset('assets/images/star.png', color: color, height: 45.0),
         ChainPosition.middle => const SizedBox.shrink(),
       },
     );

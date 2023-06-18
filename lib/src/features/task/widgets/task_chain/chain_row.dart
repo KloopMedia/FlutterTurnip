@@ -9,6 +9,7 @@ import 'types.dart';
 class ChainRow extends StatelessWidget {
   final int index;
   final String title;
+  final bool isCollapsed;
   final ChainInfoStatus status;
   final ChainPosition position;
   final void Function()? onTap;
@@ -17,6 +18,7 @@ class ChainRow extends StatelessWidget {
     Key? key,
     required this.title,
     required this.status,
+    required this.isCollapsed,
     required this.index,
     required this.position,
     required this.onTap,
@@ -28,7 +30,7 @@ class ChainRow extends StatelessWidget {
 
     final isEven = index % 2 == 0;
 
-    final completeLineColor = theme.isLight ? const Color(0xFF2754F3) : const Color(0xFF7694FF);
+    final completeLineColor = theme.primary;
     final notStartedLineColor = theme.isLight ? const Color(0xFFE1E3E3) : theme.neutral20;
 
     final lineColor =
@@ -91,7 +93,7 @@ class ChainRow extends StatelessWidget {
             child: GestureDetector(
               onTap: _onTap(),
               child: LessonIcon(
-                lessonNum: index,
+                lessonNum: index + 1,
                 status: status,
               ),
             ),
@@ -101,9 +103,10 @@ class ChainRow extends StatelessWidget {
           style: style,
           endStyle: style.copyWith(color: endLineColor),
           isEven: isEven,
+          isCollapsed: isCollapsed,
           position: position,
         ),
-        ChainRowIcon(position: position, isEven: isEven),
+        ChainRowIcon(position: position, isEven: isEven, isCollapsed: isCollapsed),
       ],
     );
   }
