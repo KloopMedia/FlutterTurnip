@@ -110,24 +110,28 @@ class _CampaignViewState extends State<CampaignView> {
                 FilterButton(
                   queries: queries,
                   onPressed: (selectedItems) {
-                    if (selectedItems.isNotEmpty) {
+                    if (selectedItems.isNotEmpty && !selectedItems.contains(null)) {
                       for (var selectedItem in selectedItems) {
                         if (selectedItem is Country) {
+                          queries.removeWhere((item) => item is Country);
+                          queries.add(selectedItem);
                           queryMap.addAll({'countries__name': selectedItem.name});
-                          onFilterTapByQuery(queryMap);
                         } else if (selectedItem is Category) {
+                          queries.removeWhere((item) => item is Category);
+                          queries.add(selectedItem);
                           queryMap.addAll({'categories': selectedItem.id});
-                          onFilterTapByQuery(queryMap);
                         } else if (selectedItem is Language){
+                          queries.removeWhere((item) => item is Language);
+                          queries.add(selectedItem);
                           queryMap.addAll({'language__code': selectedItem.code});
-                          onFilterTapByQuery(queryMap);
                         }
                       }
+                      onFilterTapByQuery(queryMap);
                     } else {
                       queryMap.clear();
+                      queries.clear();
                       onFilterTapByQuery(queryMap);
                     }
-                    queries = selectedItems;
                   },
                   openCloseFilter: (openClose) {
                     setState((){

@@ -85,10 +85,8 @@ class FilterView extends StatelessWidget {
           children: [
             Filter<Country, CountryCubit>(
               queries: queries,
-              // queryMap: queryMap,
               title: context.loc.country,
               onTap: (selectedItem){
-                print('>>> Country = $selectedItem');
                 selectedItems.removeWhere((element) => element is Country);
                 selectedItems.add(selectedItem);
               },
@@ -97,7 +95,6 @@ class FilterView extends StatelessWidget {
               queries: queries,
               title: context.loc.category,
               onTap: (selectedItem){
-                print('>>> Category = $selectedItem');
                 selectedItems.removeWhere((element) => element is Category);
                 selectedItems.add(selectedItem);
               },
@@ -106,7 +103,6 @@ class FilterView extends StatelessWidget {
               queries: queries,
               title: context.loc.language,
               onTap: (selectedItem){
-                print('>>> Language = $selectedItem');
                 selectedItems.removeWhere((element) => element is Language);
                 selectedItems.add(selectedItem);
               },
@@ -159,8 +155,22 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
     required this.onTap,
   }) : super(key: key);
 
+  String? setFieldQuery(List<dynamic> data, String? fieldQuery) {
+    if (queries.isNotEmpty) {
+      for (var query in queries) {
+        for (var item in data) {
+          if (item == query) {
+            fieldQuery = query.name;
+          }
+        }
+      }
+    }
+    return fieldQuery;
+  }
+
   @override
   Widget build(BuildContext context) {
+    String? fieldQuery;
     final theme = Theme.of(context).colorScheme;
     final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
 
@@ -168,6 +178,7 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
         builder: (context, state) {
           if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
             final data = state.data;
+            fieldQuery = setFieldQuery(data, fieldQuery);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -176,6 +187,7 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
                   child: Text(
                     title,
                     style: TextStyle(
+                      fontFamily: 'Roboto',
                       color: textColor,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
@@ -183,6 +195,7 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
                   ),
                 ),
                 FilterField(
+                  fieldQuery: fieldQuery,
                   queries: queries,
                   data: data,
                   title: title,
@@ -204,11 +217,13 @@ class FilterField extends StatefulWidget {
   final List<dynamic> data;
   final List<dynamic> queries;
   final String title;
+  final String? fieldQuery;
   final Function(dynamic item) onTap;
 
   const FilterField({
     Key? key,
     required this.data,
+    required this.fieldQuery,
     required this.queries,
     required this.title,
     required this.onTap,
@@ -223,17 +238,8 @@ class _FilterFieldState extends State<FilterField> {
   String? dropdownValue;
 
   @override
-  void initState() {///******
-    final queries = widget.queries;
-    for (var query in queries) {
-      if (query is Country) {
-        dropdownValue = query.name;
-      } else if (query is Category) {
-        dropdownValue = query.name;
-      } else if (query is Language) {
-        dropdownValue = query.name;
-      }
-    }
+  void initState() {
+    dropdownValue = widget.fieldQuery;
     super.initState();
   }
 
@@ -251,7 +257,6 @@ class _FilterFieldState extends State<FilterField> {
         elevation: 0.0,
         minimumSize: const Size.fromHeight(54.0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        side: BorderSide(color: dropdownValue != null ? theme.primary : theme.neutral95),
         backgroundColor: theme.isLight ? theme.neutral95 : theme.onSecondary,
         textStyle: TextStyle(
           color: dropdownValue != null ? dropdownValueColor : hintTextColor,
@@ -277,6 +282,7 @@ class _FilterFieldState extends State<FilterField> {
       ),
       onPressed: () {
         showModalBottomSheet(
+            backgroundColor: theme.background,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
             ),
@@ -288,11 +294,11 @@ class _FilterFieldState extends State<FilterField> {
                 onTap: (selectedItem) {
                   if (selectedItem != null) {
                     setState(() {
-                      item = selectedItem;
+                      dropdownValue = selectedItem.name;
                     });
                   } else {
                     setState(() {
-                      item = null;
+                      dropdownValue = null;
                     });
                   }
                   widget.onTap(selectedItem);

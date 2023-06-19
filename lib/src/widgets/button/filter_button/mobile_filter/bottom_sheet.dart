@@ -43,6 +43,7 @@ class BottomSheetView extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
+                    fontFamily: 'Roboto',
                     color: textColor,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
@@ -133,9 +134,10 @@ class _CheckboxFieldsState extends State<CheckboxFields> {
   }
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return ListView.separated(
         itemCount: widget.data.length,
-        separatorBuilder: (context, _) => const Divider(color: Colors.grey),
+        separatorBuilder: (context, _) => const Divider(color: Colors.grey, height: 1),
         itemBuilder: (context, index) {
           final item = widget.data[index];
           return StatefulBuilder(
@@ -143,7 +145,14 @@ class _CheckboxFieldsState extends State<CheckboxFields> {
                 return CheckboxListTile(
                   contentPadding: const EdgeInsets.all(0.0),
                   value: selectedItemList.contains(item.name),
-                  title: Text(item.name),
+                  title: Text(
+                    item.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: theme.isLight ? theme.neutral30 : theme.neutral90
+                    )
+                  ),
                   onChanged: (value) {
                     setSBState((){
                       if (value!) {
