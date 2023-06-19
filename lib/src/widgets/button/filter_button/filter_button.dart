@@ -7,11 +7,13 @@ import '../../../features/campaign/bloc/filter_bloc/filter_bloc.dart';
 import 'mobile_filter/filter_page.dart';
 
 class FilterButton extends StatefulWidget {
-  final void Function() onPressed;
+  final List<dynamic> queries;
+  final void Function(dynamic items) onPressed;
   final void Function(bool openClose) openCloseFilter;
 
   const FilterButton({
     Key? key,
+    required this.queries,
     required this.onPressed,
     required this.openCloseFilter,
   }) : super(key: key);
@@ -36,7 +38,7 @@ class _FilterButtonState extends State<FilterButton> {
           context: context,
           builder: (BuildContext context) {
             return Dialog.fullscreen(
-              child: FilterPage(onTap: () => widget.onPressed()),
+              child: FilterPage(queries: widget.queries, onTap: (selectedItems) => widget.onPressed(selectedItems)),
             );
           }
         );
@@ -57,7 +59,8 @@ class _FilterButtonState extends State<FilterButton> {
           });
           widget.openCloseFilter(openClose);
         },
-        icon: (openClose && itemCount > 0)
+        icon: (openClose && widget.queries.isNotEmpty)
+        // icon: (openClose && itemCount > 0)
           ? Container(
             width: 24.0,
             height: 24.0,
@@ -68,7 +71,8 @@ class _FilterButtonState extends State<FilterButton> {
             ),
             child: Center(
               child: Text(
-                  itemCount.toString(),
+                  widget.queries.length.toString(),
+                  // itemCount.toString(),
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Theme.of(context).colorScheme.onPrimary)

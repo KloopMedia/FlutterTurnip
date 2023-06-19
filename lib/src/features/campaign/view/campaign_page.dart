@@ -85,6 +85,7 @@ class CampaignView extends StatefulWidget {
 
 class _CampaignViewState extends State<CampaignView> {
   bool showFilters = false;
+  List<dynamic> queries = [];
   final Map<String, dynamic> queryMap = {};
 
   void onFilterTapByQuery(Map<String, dynamic> queryMap) {
@@ -98,7 +99,6 @@ class _CampaignViewState extends State<CampaignView> {
       builder: (context, state) {
         final theme = Theme.of(context).colorScheme;
         final hasAvailableCampaigns = state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty;
-        final query = context.read<FilterBloc>().state.query;
 
         return DefaultTabController(
           length: 2,
@@ -108,9 +108,26 @@ class _CampaignViewState extends State<CampaignView> {
               actions: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
                 FilterButton(
-                  onPressed: () {
-                    context.read<SelectableCampaignCubit>().refetchWithFilter(query);
-                    context.read<UserCampaignCubit>().refetchWithFilter(query);
+                  queries: queries,
+                  onPressed: (selectedItems) {
+                    if (selectedItems.isNotEmpty) {
+                      for (var selectedItem in selectedItems) {
+                        if (selectedItem is Country) {
+                          queryMap.addAll({'countries__name': selectedItem.name});
+                          onFilterTapByQuery(queryMap);
+                        } else if (selectedItem is Category) {
+                          queryMap.addAll({'categories': selectedItem.id});
+                          onFilterTapByQuery(queryMap);
+                        } else if (selectedItem is Language){
+                          queryMap.addAll({'language__code': selectedItem.code});
+                          onFilterTapByQuery(queryMap);
+                        }
+                      }
+                    } else {
+                      queryMap.clear();
+                      onFilterTapByQuery(queryMap);
+                    }
+                    queries = selectedItems;
                   },
                   openCloseFilter: (openClose) {
                     setState((){

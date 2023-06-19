@@ -129,7 +129,7 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
                    dropdownValue = value;
                    selectedItemList.clear();
                    selectedItemList.add(value);
-                   (value == item.name) ? widget.onTap(item) : widget.onTap(null);
+                   (value != null) ? widget.onTap(item) : widget.onTap(null);
                  });
                },
              ),
