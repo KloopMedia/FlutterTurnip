@@ -248,21 +248,25 @@ class _FilterFieldState extends State<FilterField> {
     final theme = Theme.of(context).colorScheme;
     final dropdownValueColor = theme.isLight ? theme.neutral40 : theme.neutral90;
     final hintTextColor = theme.isLight ? theme.neutral80 : theme.neutral50;
+    final backgroundColor = theme.isLight ? theme.neutral95 : theme.onSecondary;
+    final textStyle = TextStyle(
+      color: dropdownValue != null ? dropdownValueColor : hintTextColor,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+    );
     if (item != null) {
       dropdownValue = item.name;
     }
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.transparent,
         elevation: 0.0,
         minimumSize: const Size.fromHeight(54.0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        backgroundColor: theme.isLight ? theme.neutral95 : theme.onSecondary,
-        textStyle: TextStyle(
-          color: dropdownValue != null ? dropdownValueColor : hintTextColor,
-          fontSize: 16.0,
-          fontWeight: FontWeight.w400,
-        ),
+        side: BorderSide(color: dropdownValue != null ? theme.primary : backgroundColor),
+        backgroundColor: backgroundColor,
+        textStyle: textStyle,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -270,11 +274,7 @@ class _FilterFieldState extends State<FilterField> {
         children: [
           Text(
             dropdownValue ?? context.loc.select,
-            style: TextStyle(
-              color: dropdownValue != null ? dropdownValueColor : hintTextColor,
-              fontSize: 16.0,
-              fontWeight: FontWeight.w400,
-            ),
+            style: textStyle,
           ),
           const Spacer(),
           Icon(Icons.keyboard_arrow_down, color: theme.primary),
@@ -282,6 +282,7 @@ class _FilterFieldState extends State<FilterField> {
       ),
       onPressed: () {
         showModalBottomSheet(
+          isScrollControlled: true,
             backgroundColor: theme.background,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),

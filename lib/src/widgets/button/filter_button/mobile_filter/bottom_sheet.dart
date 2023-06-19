@@ -143,6 +143,8 @@ class _CheckboxFieldsState extends State<CheckboxFields> {
           return StatefulBuilder(
               builder: (context, setSBState) {
                 return CheckboxListTile(
+                  side: MaterialStateBorderSide.resolveWith(
+                        (states) => BorderSide(width: 1.0, color: theme.neutralVariant70)),
                   contentPadding: const EdgeInsets.all(0.0),
                   value: selectedItemList.contains(item.name),
                   title: Text(
