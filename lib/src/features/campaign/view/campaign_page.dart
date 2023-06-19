@@ -85,6 +85,12 @@ class CampaignView extends StatefulWidget {
 
 class _CampaignViewState extends State<CampaignView> {
   bool showFilters = false;
+  final Map<String, dynamic> queryMap = {};
+
+  void onFilterTapByQuery(Map<String, dynamic> queryMap) {
+    context.read<SelectableCampaignCubit>().refetchWithFilter(queryMap);
+    context.read<UserCampaignCubit>().refetchWithFilter(queryMap);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +122,39 @@ class _CampaignViewState extends State<CampaignView> {
                 ? [
                   WebFilter<Country, CountryCubit>(
                     title: context.loc.country,
+                    onTap: (selectedItem) {
+                      if (selectedItem != null) {
+                        queryMap.addAll({'countries__name': selectedItem.name});
+                        onFilterTapByQuery(queryMap);
+                      } else {
+                        queryMap.removeWhere((key, value) => key =='countries__name');
+                        onFilterTapByQuery(queryMap);
+                      }
+                    },
                   ),
                   WebFilter<Category, CategoryCubit>(
                     title: context.loc.category,
+                    onTap: (selectedItem) {
+                      if (selectedItem != null) {
+                        queryMap.addAll({'categories': selectedItem.id});
+                        onFilterTapByQuery(queryMap);
+                      } else {
+                        queryMap.removeWhere((key, value) => key == 'categories');
+                        onFilterTapByQuery(queryMap);
+                      }
+                    },
                   ),
                   WebFilter<Language, LanguageCubit>(
                     title: context.loc.language,
+                    onTap: (selectedItem) {
+                      if (selectedItem != null) {
+                        queryMap.addAll({'language__code': selectedItem.code});
+                        onFilterTapByQuery(queryMap);
+                      } else {
+                        queryMap.removeWhere((key, value) => key == 'language__code');
+                        onFilterTapByQuery(queryMap);
+                      }
+                    },
                   ),
                 ]
                 : null,
