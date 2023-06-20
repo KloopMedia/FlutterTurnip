@@ -87,24 +87,21 @@ class FilterView extends StatelessWidget {
               queries: queries,
               title: context.loc.country,
               onTap: (selectedItem){
-                selectedItems.removeWhere((element) => element is Country);
-                selectedItems.add(selectedItem);
+                selectedItems.addAll(selectedItem);
               },
             ),
             Filter<Category, CategoryCubit>(
               queries: queries,
               title: context.loc.category,
               onTap: (selectedItem){
-                selectedItems.removeWhere((element) => element is Category);
-                selectedItems.add(selectedItem);
+                selectedItems.addAll(selectedItem);
               },
             ),
             Filter<Language, LanguageCubit>(
               queries: queries,
               title: context.loc.language,
               onTap: (selectedItem){
-                selectedItems.removeWhere((element) => element is Language);
-                selectedItems.add(selectedItem);
+                selectedItems.addAll(selectedItem);
               },
             ),
             const Spacer(),
@@ -121,7 +118,6 @@ class FilterView extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    print('>>>queries = $selectedItems');
                     onTap(selectedItems);
                     Navigator.pop(context);
                   },
@@ -147,30 +143,28 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
   final String title;
   final List<dynamic> queries;
   final Function(dynamic item) onTap;
+  String? fieldQuery;
 
-  const Filter({
+  Filter({
     Key? key,
     required this.title,
     required this.queries,
     required this.onTap,
   }) : super(key: key);
 
-  String? setFieldQuery(List<dynamic> data, String? fieldQuery) {
-    if (queries.isNotEmpty) {
+  void setFieldQuery(List<dynamic> data) {
       for (var query in queries) {
-        for (var item in data) {
-          if (item == query) {
-            fieldQuery = query.name;
-          }
-        }
+        if (data.contains(query)) {
+          fieldQuery = query.name;
+          break;
+        } else {
+          continue;
       }
     }
-    return fieldQuery;
   }
 
   @override
   Widget build(BuildContext context) {
-    String? fieldQuery;
     final theme = Theme.of(context).colorScheme;
     final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
 
@@ -178,7 +172,7 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
         builder: (context, state) {
           if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
             final data = state.data;
-            fieldQuery = setFieldQuery(data, fieldQuery);
+            setFieldQuery(data);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -200,7 +194,11 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
                   data: data,
                   title: title,
                   onTap: (selectedItem) {
-                    onTap(selectedItem);
+                    final List<dynamic> list;
+                    list = List.from(queries);
+                    list.removeWhere((element) => element is Data);
+                    if (selectedItem != null) list.add(selectedItem);
+                    onTap(list);
                   },
                 )
               ],

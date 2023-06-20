@@ -106,26 +106,21 @@ class _CampaignViewState extends State<CampaignView> {
                 FilterButton(
                   queries: queries,
                   onPressed: (selectedItems) {
-                    if (selectedItems.isNotEmpty && !selectedItems.contains(null)) {
+                    queries.clear();
+                    if (selectedItems.isNotEmpty) {
                       for (var selectedItem in selectedItems) {
                         if (selectedItem is Country) {
-                          queries.removeWhere((item) => item is Country);
-                          queries.add(selectedItem);
                           queryMap.addAll({'countries__name': selectedItem.name});
                         } else if (selectedItem is Category) {
-                          queries.removeWhere((item) => item is Category);
-                          queries.add(selectedItem);
                           queryMap.addAll({'categories': selectedItem.id});
                         } else if (selectedItem is Language){
-                          queries.removeWhere((item) => item is Language);
-                          queries.add(selectedItem);
                           queryMap.addAll({'language__code': selectedItem.code});
                         }
                       }
+                      queries.addAll(selectedItems);
                       onFilterTapByQuery(queryMap);
                     } else {
                       queryMap.clear();
-                      queries.clear();
                       onFilterTapByQuery(queryMap);
                     }
                   },
@@ -135,7 +130,9 @@ class _CampaignViewState extends State<CampaignView> {
                     });
                 }),
               ],
-              middle: const FilterBarWidget(),
+              // middle: FilterBarWidget(
+              //   queryValue: getQueriedItem(),
+              // ),
               subActions: (showFilters)
                 ? [
                   WebFilter<Country, CountryCubit>(

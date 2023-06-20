@@ -8,7 +8,9 @@ import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 
 class FilterBarWidget extends StatelessWidget {
-  const FilterBarWidget({super.key});
+  final dynamic queryValue;
+  // final void Function(Map<String, dynamic>? value) onChanged;
+  const FilterBarWidget({super.key, required this.queryValue, /*required this.onChanged,*/});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,9 @@ class FilterBarWidget extends StatelessWidget {
               onChanged: (query) {
                 context.read<SelectableCampaignCubit>().refetchWithFilter(query);
                 context.read<UserCampaignCubit>().refetchWithFilter(query);
+                // onChanged(query);
               },
-              value: taskFilterMap.keys.first,
+              value: /*queryValue ?? */taskFilterMap.keys.first,
               filters: taskFilterMap,
               names: filterNames,
             );
