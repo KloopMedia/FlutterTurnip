@@ -35,7 +35,7 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
               crossAxisAlignment:  CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 25.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                     title,
                     style: textStyle,
@@ -96,7 +96,7 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
           fontWeight: FontWeight.w400,
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: theme.neutral95),
+          borderSide: BorderSide(color: theme.isLight ? theme.neutral95 : theme.onSecondary),
           borderRadius: BorderRadius.circular(15.0),
         ),
         focusedBorder: OutlineInputBorder(
@@ -157,9 +157,12 @@ class CheckboxField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return StatefulBuilder(
       builder: (context, setSBState) {
         return CheckboxListTile(
+          side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(width: 1.0, color: theme.neutralVariant70)),
           contentPadding: const EdgeInsets.all(0.0),
           value: selectedItemList.contains(name),
           title: Text(name),

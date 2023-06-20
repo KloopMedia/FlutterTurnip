@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
-import '../../../features/campaign/bloc/filter_bloc/filter_bloc.dart';
 import 'mobile_filter/filter_page.dart';
 
 class FilterButton extends StatefulWidget {
@@ -29,7 +27,6 @@ class _FilterButtonState extends State<FilterButton> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final formFactor = context.formFactor;
-    final itemCount = context.read<FilterBloc>().state.query.length;
 
     if (formFactor == FormFactor.small) {
       return IconButton(
@@ -38,7 +35,10 @@ class _FilterButtonState extends State<FilterButton> {
           context: context,
           builder: (BuildContext context) {
             return Dialog.fullscreen(
-              child: FilterPage(queries: widget.queries, onTap: (selectedItems) => widget.onPressed(selectedItems)),
+              child: FilterPage(
+                queries: widget.queries,
+                onTap: (selectedItems) => widget.onPressed(selectedItems)
+              ),
             );
           }
         );
@@ -60,7 +60,6 @@ class _FilterButtonState extends State<FilterButton> {
           widget.openCloseFilter(openClose);
         },
         icon: (openClose && widget.queries.isNotEmpty)
-        // icon: (openClose && itemCount > 0)
           ? Container(
             width: 24.0,
             height: 24.0,
@@ -72,7 +71,6 @@ class _FilterButtonState extends State<FilterButton> {
             child: Center(
               child: Text(
                   widget.queries.length.toString(),
-                  // itemCount.toString(),
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Theme.of(context).colorScheme.onPrimary)

@@ -12,7 +12,6 @@ import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
-import '../bloc/filter_bloc/filter_bloc.dart';
 import '../bloc/language_bloc/language_cubit.dart';
 import 'available_campaign_view.dart';
 import 'user_campaign_view.dart';
@@ -68,9 +67,6 @@ class _CampaignPageState extends State<CampaignPage> {
             ),
           )..initialize(),
         ),
-        BlocProvider(
-          create: (_) => FilterBloc(),
-        )
       ],
       child: const CampaignView(),
     );
@@ -145,9 +141,12 @@ class _CampaignViewState extends State<CampaignView> {
                     title: context.loc.country,
                     onTap: (selectedItem) {
                       if (selectedItem != null) {
+                        queries.removeWhere((item) => item is Country);
+                        queries.add(selectedItem);
                         queryMap.addAll({'countries__name': selectedItem.name});
                         onFilterTapByQuery(queryMap);
                       } else {
+                        queries.removeWhere((item) => item is Country);
                         queryMap.removeWhere((key, value) => key =='countries__name');
                         onFilterTapByQuery(queryMap);
                       }
@@ -157,9 +156,12 @@ class _CampaignViewState extends State<CampaignView> {
                     title: context.loc.category,
                     onTap: (selectedItem) {
                       if (selectedItem != null) {
+                        queries.removeWhere((item) => item is Category);
+                        queries.add(selectedItem);
                         queryMap.addAll({'categories': selectedItem.id});
                         onFilterTapByQuery(queryMap);
                       } else {
+                        queries.removeWhere((item) => item is Category);
                         queryMap.removeWhere((key, value) => key == 'categories');
                         onFilterTapByQuery(queryMap);
                       }
@@ -169,9 +171,12 @@ class _CampaignViewState extends State<CampaignView> {
                     title: context.loc.language,
                     onTap: (selectedItem) {
                       if (selectedItem != null) {
+                        queries.removeWhere((item) => item is Language);
+                        queries.add(selectedItem);
                         queryMap.addAll({'language__code': selectedItem.code});
                         onFilterTapByQuery(queryMap);
                       } else {
+                        queries.removeWhere((item) => item is Language);
                         queryMap.removeWhere((key, value) => key == 'language__code');
                         onFilterTapByQuery(queryMap);
                       }
