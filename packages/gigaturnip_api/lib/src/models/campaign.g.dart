@@ -29,8 +29,6 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           descriptor: $checkedConvert('descriptor', (v) => v as String?),
           notificationsCount:
               $checkedConvert('notifications_count', (v) => v as int),
-          categories: $checkedConvert('categories',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
         );
         return val;
       },

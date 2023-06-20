@@ -4,8 +4,8 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../bloc/bloc.dart';
 import '../../task/widgets/filter_bar.dart';
-import '../bloc/campaign_category_bloc/category_cubit.dart';
 import '../bloc/campaign_cubit.dart';
+import '../bloc/category_bloc/category_cubit.dart';
 
 class FilterBarWidget extends StatelessWidget {
   const FilterBarWidget({super.key});

@@ -16,7 +16,6 @@ class Campaign {
   final String? descriptor;
   final String logo;
   final int notificationsCount;
-  final List<int> categories;
 
   Campaign({
     required this.id,
@@ -31,7 +30,6 @@ class Campaign {
     required this.logo,
     required this.descriptor,
     required this.notificationsCount,
-    required this.categories,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

@@ -14,8 +14,6 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       logo: json['logo'] as String,
       smsLoginAllow: json['smsLoginAllow'] as bool,
       unreadNotifications: json['unreadNotifications'] as int,
-      categories:
-          (json['categories'] as List<dynamic>).map((e) => e as int).toList(),
       canJoin: json['canJoin'] as bool? ?? false,
     );
 
@@ -28,5 +26,4 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'descriptor': instance.descriptor,
       'logo': instance.logo,
       'unreadNotifications': instance.unreadNotifications,
-      'categories': instance.categories,
     };

@@ -8,14 +8,12 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../task/widgets/filter_bar.dart';
-import '../bloc/campaign_category_bloc/category_cubit.dart';
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../bloc/campaign_cubit.dart';
-import '../widgets/filter_bar_widget.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
 import '../bloc/language_bloc/language_cubit.dart';
+import '../widgets/filter_bar_widget.dart';
 import 'available_campaign_view.dart';
 import 'user_campaign_view.dart';
 
