@@ -26,9 +26,9 @@ class Category extends Equatable {
 
   factory Category.fromApiModel(api.Category model) {
     return Category(
-        id: model.id,
-        name: model.name,
-        outCategories: model.outCategories
+      id: model.id,
+      name: model.name,
+      outCategories: model.outCategories
     );
   }
 

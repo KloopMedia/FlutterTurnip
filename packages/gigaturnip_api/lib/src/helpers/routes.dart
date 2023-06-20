@@ -15,6 +15,9 @@ const languagesRoute = 'languages/';
 const chainsRoute = 'chains/';
 const individualChainsRoute = '${chainsRoute}individuals/';
 
+// Campaigns filter routes
+const categoriesRoute = 'categories/';
+
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';
 const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';

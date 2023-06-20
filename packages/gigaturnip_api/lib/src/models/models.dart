@@ -1,4 +1,5 @@
 export 'campaign.dart';
+export 'category.dart';
 export 'chain.dart';
 export 'task.dart';
 export 'pagination_wrapper.dart';
