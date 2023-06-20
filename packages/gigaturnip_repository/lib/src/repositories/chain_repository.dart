@@ -1,7 +1,7 @@
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 
-class IndividualChainRepository extends GigaTurnipRepository<api.IndividualChain, IndividualChain> {
+class IndividualChainRepository extends GigaTurnipRepository<IndividualChain> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
 
@@ -11,15 +11,17 @@ class IndividualChainRepository extends GigaTurnipRepository<api.IndividualChain
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
-  Future<api.PaginationWrapper<api.IndividualChain>> fetchData({Map<String, dynamic>? query}) {
-    return _gigaTurnipApiClient.getIndividualChains(query: {
+  Future<api.PaginationWrapper<IndividualChain>> fetchAndParseData(
+      {Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getIndividualChains(query: {
       'campaign': campaignId,
       'is_individual': true,
       ...?query,
     });
+
+    return data.copyWith<IndividualChain>(results: parseData(data.results));
   }
 
-  @override
   List<IndividualChain> parseData(List<api.IndividualChain> data) {
     return data.map(IndividualChain.fromApiModel).toList();
   }

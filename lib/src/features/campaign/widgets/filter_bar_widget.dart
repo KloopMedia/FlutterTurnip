@@ -4,7 +4,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../bloc/bloc.dart';
 import '../../task/widgets/filter_bar.dart';
-import '../bloc/campaign_category_bloc/campaign_category_cubit.dart';
+import '../bloc/campaign_category_bloc/category_cubit.dart';
 import '../bloc/campaign_cubit.dart';
 
 class FilterBarWidget extends StatelessWidget {
@@ -12,7 +12,7 @@ class FilterBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CampaignCategoryCubit, RemoteDataState<Category>>(
+    return BlocBuilder<CategoryCubit, RemoteDataState<Category>>(
         builder: (context, state) {
           final Map<String, Map<String, dynamic>?> taskFilterMap = {'Все': {}};
           final filterNames = ['Все'];

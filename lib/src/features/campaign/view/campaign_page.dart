@@ -9,7 +9,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../task/widgets/filter_bar.dart';
-import '../bloc/campaign_category_bloc/campaign_category_cubit.dart';
+import '../bloc/campaign_category_bloc/category_cubit.dart';
 import '../bloc/campaign_cubit.dart';
 import '../widgets/filter_bar_widget.dart';
 import 'available_campaign_view.dart';
@@ -46,8 +46,8 @@ class _CampaignPageState extends State<CampaignPage> {
           )..initialize(),
         ),
         BlocProvider(
-          create: (context) => CampaignCategoryCubit(
-            CampaignCategoryRepository(
+          create: (context) => CategoryCubit(
+            CategoryRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>()
             ),
           )..initialize(),

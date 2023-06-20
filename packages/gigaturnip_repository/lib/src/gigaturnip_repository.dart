@@ -1,7 +1,7 @@
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/src/models/page_data.dart';
 
-abstract class GigaTurnipRepository<Raw, Data> {
+abstract class GigaTurnipRepository<Data> {
   final int limit;
 
   GigaTurnipRepository({this.limit = 10});
@@ -21,16 +21,14 @@ abstract class GigaTurnipRepository<Raw, Data> {
       'offset': _calculateOffset(page),
       ...?query,
     };
-    final data = await fetchData(query: paginationQuery);
+    final data = await fetchAndParseData(query: paginationQuery);
 
     return PageData(
-      data: parseData(data.results),
+      data: data.results,
       currentPage: page,
       total: _calculateTotalPage(data.count),
     );
   }
 
-  Future<api.PaginationWrapper<Raw>> fetchData({Map<String, dynamic>? query});
-
-  List<Data> parseData(List<Raw> data);
+  Future<api.PaginationWrapper<Data>> fetchAndParseData({Map<String, dynamic>? query});
 }

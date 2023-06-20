@@ -43,7 +43,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Campaign>.fromJson(
       _result.data!,
       (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -72,7 +76,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Campaign>.fromJson(
       _result.data!,
       (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -101,7 +109,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Campaign>.fromJson(
       _result.data!,
       (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -127,7 +139,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Campaign.fromJson(_result.data!);
     return value;
   }
@@ -149,7 +165,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -173,7 +193,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Chain>.fromJson(
       _result.data!,
       (json) => Chain.fromJson(json as Map<String, dynamic>),
@@ -202,7 +226,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<IndividualChain>.fromJson(
       _result.data!,
       (json) => IndividualChain.fromJson(json as Map<String, dynamic>),
@@ -211,7 +239,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Category>> getCampaignCategories(
+  Future<PaginationWrapper<Category>> getCategories(
       {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -231,7 +259,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Category>.fromJson(
       _result.data!,
       (json) => Category.fromJson(json as Map<String, dynamic>),
@@ -260,7 +292,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
@@ -289,7 +325,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
@@ -318,7 +358,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
@@ -344,7 +388,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TaskDetail.fromJson(_result.data!);
     return value;
   }
@@ -371,7 +419,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TaskResponse.fromJson(_result.data!);
     return value;
   }
@@ -399,7 +451,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => Task.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -429,7 +485,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<TaskDetail>.fromJson(
       _result.data!,
       (json) => TaskDetail.fromJson(json as Map<String, dynamic>),
@@ -455,7 +515,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Task.fromJson(_result.data!);
     return value;
   }
@@ -477,7 +541,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -497,7 +565,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -518,7 +590,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = WebhookResponse.fromJson(_result.data!);
     return value;
   }
@@ -540,7 +616,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -565,7 +645,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DynamicSchema.fromJson(_result.data!);
     return value;
   }
@@ -591,7 +675,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<TaskStage>.fromJson(
       _result.data!,
       (json) => TaskStage.fromJson(json as Map<String, dynamic>),
@@ -620,7 +708,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<TaskStage>.fromJson(
       _result.data!,
       (json) => TaskStage.fromJson(json as Map<String, dynamic>),
@@ -646,7 +738,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = CreateTaskResponse.fromJson(_result.data!);
     return value;
   }
@@ -672,7 +768,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Notification>.fromJson(
       _result.data!,
       (json) => Notification.fromJson(json as Map<String, dynamic>),
@@ -701,7 +801,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Notification>.fromJson(
       _result.data!,
       (json) => Notification.fromJson(json as Map<String, dynamic>),
@@ -727,7 +831,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Notification.fromJson(_result.data!);
     return value;
   }
@@ -749,7 +857,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
@@ -763,5 +875,22 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

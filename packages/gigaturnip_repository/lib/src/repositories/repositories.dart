@@ -1,6 +1,6 @@
 export 'campaign_repository.dart';
 export 'campaign_detail_repository.dart';
-export 'campaign_category_repository.dart';
+export 'category_repository.dart';
 export 'chain_repository.dart';
 export 'task_repository.dart';
 export 'task_detail_repository.dart';

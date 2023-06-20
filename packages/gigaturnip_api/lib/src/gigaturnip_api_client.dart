@@ -37,8 +37,8 @@ abstract class GigaTurnipApiClient {
   @GET(individualChainsRoute)
   Future<PaginationWrapper<IndividualChain>> getIndividualChains({@Queries() Map<String, dynamic>? query});
 
-  @GET(campaignCategories)
-  Future<PaginationWrapper<Category>> getCampaignCategories({@Queries() Map<String, dynamic>? query});
+  @GET(categoriesRoute)
+  Future<PaginationWrapper<Category>> getCategories({@Queries() Map<String, dynamic>? query});
 
   // Task methods
 

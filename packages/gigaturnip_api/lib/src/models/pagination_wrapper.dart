@@ -20,6 +20,20 @@ class PaginationWrapper<T> {
     return _$PaginationWrapperFromJson(json, fromJsonT);
   }
 
+  PaginationWrapper<K> copyWith<K>({
+    int? count,
+    String? next,
+    String? previous,
+    required List<K> results,
+  }) =>
+      PaginationWrapper<K>(
+        count: count ?? this.count,
+        next: next ?? this.next,
+        previous: previous ?? this.previous,
+        results: results,
+      );
+
   bool get hasNext => next != null ? true : false;
+
   bool get hasPrevious => previous != null ? true : false;
 }
