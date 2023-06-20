@@ -76,8 +76,8 @@
      "test_returned": "Возвращено. Пожалуйста снова ответьте на вопросы",
 
      "delete_account_button": "Удалить аккаунт",
-     "delete_account_dialog_title": "Вы уверены, что хотите удалить свой аккаунт?",
-     "delete_account_dialog_body": "Бул аракетиңиз кайтарылгыс. Ырастоо үчүн почтаңызды же телефон номериңизди жазыңыз.",
+     "delete_account_dialog_title": "Удаление аккаунта",
+     "delete_account_dialog_body": "Вы уверены, что хотите удалить свой аккаунт навсегда, без возможности восстановления?",
      "delete_account_confirmation": "Удалить",
 
      "settings": "Настройки",
@@ -95,12 +95,14 @@
      "closed_tasks" : "Закрытые задания",
      "relevant_tasks" : "Соответствующие задания",
      "unknown_page" : "Неизвестная страница",
-     "open_campaigns" : "Открытые кампании",
+     "open_campaigns" : "Мои кампании",
      "available_campaigns" : "Доступные кампании",
      "join" : "Присоединиться",
      "complete" : "Законченный",
      "open_notification" : "Открытые уведомления",
      "closed_notification" : "Закрытые уведомления",
+     "campaign_empty_title": "Пока что здесь пусто",
+     "campaign_empty_body": "Здесь Вы найдете кампании к которым Вы присоединились. Присоединиться к кампании Вы можете  в разделе \"Доступные кампании\"",
 
      "drawer_campaigns": "Кампании",
      "drawer_notifications": "Уведомления",

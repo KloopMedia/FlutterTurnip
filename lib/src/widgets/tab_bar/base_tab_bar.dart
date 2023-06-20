@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 double calculateTabWidth(BuildContext context) {
-  final formFactor = context.formFactor;
   final deviceWidth = MediaQuery.of(context).size.width;
-  if (formFactor == FormFactor.extraLarge) {
+  if (context.isExtraLarge) {
     return deviceWidth / 3;
-  } else if (formFactor == FormFactor.medium) {
+  } else if (context.isLarge) {
     return deviceWidth / 2;
   } else {
     return double.infinity;
@@ -50,7 +49,7 @@ class BaseTabBar extends StatelessWidget {
             TabBar(
               indicator: indicator,
               labelColor: theme.primary,
-              labelStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              labelStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               unselectedLabelColor: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
               indicatorColor: theme.primary,
               tabs: tabs,

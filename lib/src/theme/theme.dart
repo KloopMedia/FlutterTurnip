@@ -16,7 +16,7 @@ const lightColorScheme = ColorScheme(
   onTertiary: Color(0xFFFFFFFF),
   tertiaryContainer: Color(0xFFA0F879),
   onTertiaryContainer: Color(0xFF062100),
-  error: Color(0xFFBA1A1A),
+  error: Color(0xFFFF897D),
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
   onErrorContainer: Color(0xFF410002),

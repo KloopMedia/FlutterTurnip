@@ -39,11 +39,17 @@ Future<void> main() async {
         RepositoryProvider<GigaTurnipApiClient>(
           create: (context) => gigaTurnipApiClient,
         ),
+        RepositoryProvider<SharedPreferences>(
+          create: (context) => sharedPreferences,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => AuthBloc(authenticationRepository: authenticationRepository),
+            create: (_) => AuthBloc(
+              authenticationRepository: authenticationRepository,
+              gigaTurnipApiClient: gigaTurnipApiClient,
+            ),
           ),
           BlocProvider(
             create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences),

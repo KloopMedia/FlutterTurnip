@@ -1,13 +1,12 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'localization_event.dart';
-
 part 'localization_state.dart';
 
 class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
@@ -22,9 +21,15 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
   static Locale _fetchSavedLocale(SharedPreferences sharedPreferences) {
     String defaultCode;
     try {
-      defaultCode = Platform.localeName;
+      const supportedLocales = AppLocalizations.supportedLocales;
+      final systemLocale = PlatformDispatcher.instance.locale.languageCode;
+      if (supportedLocales.contains(Locale(systemLocale))) {
+        defaultCode = systemLocale;
+      } else {
+        defaultCode = 'en';
+      }
     } on UnsupportedError {
-      defaultCode = 'ky';
+      defaultCode = 'en';
     }
     return Locale(sharedPreferences.getString(Constants.sharedPrefLocaleKey) ?? defaultCode);
   }

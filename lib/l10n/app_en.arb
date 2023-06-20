@@ -76,8 +76,8 @@
     "test_returned": "Returned. Please answer the questions again",
 
     "delete_account_button": "Delete account",
-    "delete_account_dialog_title": "Are you sure you want to delete account?",
-    "delete_account_dialog_body": "This operation is irreversible. Write your email or phone number for confirmation.",
+    "delete_account_dialog_title": "Delete account",
+    "delete_account_dialog_body": "Are you sure you want to delete your account without further possibility to recover it?",
     "delete_account_confirmation": "Delete",
 
     "settings": "Settings",
@@ -95,12 +95,14 @@
     "closed_tasks" : "Closed tasks",
     "relevant_tasks" : "Relevant Tasks",
     "unknown_page" : "Unknown Page",
-    "open_campaigns" : "Open campaigns",
+    "open_campaigns" : "My campaigns",
     "available_campaigns" : "Available campaigns",
     "join" : "Join",
     "complete" : "Complete",
-    "open_notification" : "Open notification",
-    "closed_notification" : "Closed notification",
+    "open_notification" : "Open notifications",
+    "closed_notification" : "Closed notifications",
+    "campaign_empty_title": "This page is empty",
+    "campaign_empty_body": "Here you can find campaigns that you joined. You can join a new campaign in “Available campaigns” section",
 
     "drawer_campaigns": "Campaigns",
     "drawer_notifications": "Notifications",

@@ -8,6 +8,13 @@ part 'gigaturnip_api_client.g.dart';
 abstract class GigaTurnipApiClient {
   factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _GigaTurnipApiClient;
 
+  // User methods
+  @GET(deleteInitRoute)
+  Future<HttpResponse> deleteUserInit();
+
+  @POST("$usersRoute/{id}/$deleteUserAction")
+  Future<HttpResponse> deleteUser(@Path("id") int id, @Body() Map<String, dynamic> data);
+
   // Campaign methods
 
   @GET(campaignsRoute)
@@ -46,7 +53,8 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Chain>> getChains({@Queries() Map<String, dynamic>? query});
 
   @GET(individualChainsRoute)
-  Future<PaginationWrapper<IndividualChain>> getIndividualChains({@Queries() Map<String, dynamic>? query});
+  Future<PaginationWrapper<IndividualChain>> getIndividualChains(
+      {@Queries() Map<String, dynamic>? query});
 
   // Task methods
 

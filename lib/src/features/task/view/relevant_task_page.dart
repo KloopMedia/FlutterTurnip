@@ -130,7 +130,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             itemBuilder: (context, index, item) {
               return CardWithTitle(
-                chips: const [CardChip('Placeholder')],
                 title: item.name,
                 size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                 flex: context.isSmall || context.isMedium ? 0 : 1,
@@ -144,7 +143,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               final cardBody = CardDate(date: item.createdAt);
 
               return CardWithTitle(
-                chips: [const CardChip('Placeholder'), const Spacer(), StatusCardChip(item)],
+                chips: [const Spacer(), StatusCardChip(item)],
                 title: item.name,
                 size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                 flex: context.isSmall || context.isMedium ? 0 : 1,

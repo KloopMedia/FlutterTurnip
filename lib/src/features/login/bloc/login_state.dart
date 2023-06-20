@@ -10,6 +10,10 @@ abstract class LoginState extends Equatable {
 }
 
 class LoginInitial extends LoginState {
+  final bool firstTime;
+
+  const LoginInitial({required this.firstTime});
+
   @override
   List<Object> get props => [];
 }

@@ -45,3 +45,8 @@ const userNotificationsRoute = '${notificationsRoute}list_user_notifications/';
 
 // Notifications actions
 const openNotificationActionRoute = 'open_notification/';
+
+// Users routes
+const usersRoute = 'users/';
+const deleteInitRoute = '$usersRoute/delete_init/';
+const deleteUserAction = '/delete_user/';

@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bloc/login_bloc.dart';
+import 'onboarding.dart';
 import 'otp_verification.dart';
 
 class LoginPage extends StatelessWidget {
@@ -17,6 +18,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => LoginBloc(
+        sharedPreferences: context.read<SharedPreferences>(),
         authenticationRepository: context.read<AuthenticationRepository>(),
       ),
       child: const LoginView(),
@@ -97,6 +99,13 @@ class _LoginViewState extends State<LoginView> {
               );
             }
             if (context.isSmall) {
+              if (state is LoginInitial && state.firstTime) {
+                return OnBoarding(
+                  onContinue: () {
+                    context.read<LoginBloc>().add(CloseOnBoarding());
+                  },
+                );
+              }
               return LoginPanel(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                 onChange: _onChange,
@@ -113,11 +122,11 @@ class _LoginViewState extends State<LoginView> {
                       color: theme.primary,
                       borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24.0, top: 30),
-                          child: Column(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 45),
+                      child: Column(
+                        children: [
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
@@ -149,11 +158,10 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ],
                           ),
-                        ),
-                        const Spacer(),
-                        Image.asset('assets/images/people.png'),
-                        const SizedBox(height: 30)
-                      ],
+                          const Spacer(),
+                          Image.asset('assets/images/people.png'),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
