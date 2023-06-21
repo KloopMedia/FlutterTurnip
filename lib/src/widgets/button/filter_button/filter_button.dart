@@ -43,7 +43,17 @@ class _FilterButtonState extends State<FilterButton> {
           }
         );
       },
-        icon: const Icon(Icons.tune_rounded));
+        icon: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.tune_rounded),
+            ),
+            if (widget.queries.isNotEmpty)
+              Image.asset('assets/images/filter_badge.png'),
+          ],
+        ));
     } else {
       return OutlinedButton.icon(
         style: OutlinedButton.styleFrom(

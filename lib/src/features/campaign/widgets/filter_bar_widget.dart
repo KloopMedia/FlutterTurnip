@@ -31,7 +31,7 @@ class FilterBarWidget extends StatelessWidget {
                 context.read<UserCampaignCubit>().refetchWithFilter(query);
                 // onChanged(query);
               },
-              value: /*queryValue ?? */taskFilterMap.keys.first,
+              value: queryValue ?? taskFilterMap.keys.first,
               filters: taskFilterMap,
               names: filterNames,
             );

@@ -90,6 +90,30 @@ class _CampaignViewState extends State<CampaignView> {
     context.read<UserCampaignCubit>().refetchWithFilter(queryMap);
   }
 
+  dynamic getQueriedCategoryItem() {
+    dynamic item;
+    if (queries.isNotEmpty) {
+      for (var query in queries) {
+        if (query is Category) {
+          final index = queries.indexOf(query);
+          if (index >= 0) {
+            var element = queries.elementAtOrNull(index);
+            item = element.name;
+            break;
+          } else {
+            item = null;
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+    } else {
+      item = null;
+    }
+    return item;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
@@ -130,9 +154,9 @@ class _CampaignViewState extends State<CampaignView> {
                     });
                 }),
               ],
-              // middle: FilterBarWidget(
-              //   queryValue: getQueriedItem(),
-              // ),
+              middle: FilterBarWidget(
+                queryValue: getQueriedCategoryItem(),
+              ),
               subActions: (showFilters)
                 ? [
                   WebFilter<Country, CountryCubit>(
