@@ -8,12 +8,22 @@ import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 
 class FilterBarWidget extends StatelessWidget {
-  final dynamic queryValue;
-  // final void Function(Map<String, dynamic>? value) onChanged;
-  const FilterBarWidget({super.key, required this.queryValue, /*required this.onChanged,*/});
+  final List<dynamic> queries;
+  final void Function(Map<String, dynamic>? query) onChanged;
+  const FilterBarWidget({super.key, required this.queries, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
+    String? queryValue;
+    for (var query in queries) {
+      if (query is Category) {
+        queryValue = query.name;
+        break;
+      } else {
+        continue;
+      }
+    }
+
     return BlocBuilder<CategoryCubit, RemoteDataState<Category>>(
         builder: (context, state) {
           final Map<String, Map<String, dynamic>?> taskFilterMap = {'Все': {}};
@@ -27,9 +37,9 @@ class FilterBarWidget extends StatelessWidget {
             }
             return FilterBar(
               onChanged: (query) {
-                context.read<SelectableCampaignCubit>().refetchWithFilter(query);
-                context.read<UserCampaignCubit>().refetchWithFilter(query);
-                // onChanged(query);
+                context.read<SelectableCampaignCubit>().refetchWithFilter(query!.values.first);
+                context.read<UserCampaignCubit>().refetchWithFilter(query.values.first);
+                onChanged(query);
               },
               value: queryValue ?? taskFilterMap.keys.first,
               filters: taskFilterMap,

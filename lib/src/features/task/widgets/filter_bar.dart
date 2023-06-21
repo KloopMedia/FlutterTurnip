@@ -20,27 +20,13 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  late String _activeFilter;
+  // late String _activeFilter = widget.value;
 
-  @override
-  void initState() {
-    super.initState();
-    _activeFilter = widget.value;
-  }
-
-  @override
-  void didUpdateWidget(covariant FilterBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.value != _activeFilter) {
-      setState(() {
-        _activeFilter = widget.value;
-      });
-    }
-  }
   @override
   Widget build(BuildContext context) {
     final keys = widget.filters.keys.toList();
     final values = widget.filters.values.toList();
+    // _activeFilter = widget.value;
 
     return FixedChipBar(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -48,12 +34,12 @@ class _FilterBarState extends State<FilterBar> {
         for (var i = 0; i < widget.filters.length; i++)
           DefaultChip(
             label: widget.names[i],
-            active: keys[i] == _activeFilter,
+            active: keys[i] == widget.value,//_activeFilter,
             onPressed: () {
-              setState(() {
-                _activeFilter = keys[i];
-              });
-              widget.onChanged(values[i]);
+              // setState(() {
+              //   _activeFilter = keys[i];
+              // });
+              widget.onChanged({keys[i]: values[i]});
             },
           ),
       ],

@@ -90,36 +90,31 @@ class _CampaignViewState extends State<CampaignView> {
     context.read<UserCampaignCubit>().refetchWithFilter(queryMap);
   }
 
-  dynamic getQueriedCategoryItem() {
-    dynamic item;
-    if (queries.isNotEmpty) {
-      for (var query in queries) {
-        if (query is Category) {
-          final index = queries.indexOf(query);
-          if (index >= 0) {
-            var element = queries.elementAtOrNull(index);
-            item = element.name;
-            break;
-          } else {
-            item = null;
-            break;
-          }
-        } else {
-          continue;
-        }
-      }
-    } else {
-      item = null;
-    }
-    return item;
-  }
+  // void addSelectedCategoryToQueries(Map<String, dynamic>? selectedCategory) {
+  //   print('>>> default = $queries');
+  //   // if (queries.isNotEmpty) {
+  //   //   queries.removeWhere((element) => element is Category);
+  //   //   print('>>> remove = $queries');
+  //   // }
+  //   if (selectedCategory != null && selectedCategory.keys.first != 'Все') {
+  //     var category = Category(
+  //       id: selectedCategory.values.first['categories'],
+  //       name: selectedCategory.keys.first,
+  //       outCategories: const []
+  //     );
+  //     queries.removeWhere((element) => element is Category);
+  //     print('>>> remove = $queries');
+  //     queries.add(category);
+  //     print('>>> add = $queries');
+  //   }
+  //   // return item;
+  // }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
       builder: (context, state) {
         final theme = Theme.of(context).colorScheme;
-
         return DefaultTabController(
           length: 2,
           child: SafeArea(
@@ -142,6 +137,8 @@ class _CampaignViewState extends State<CampaignView> {
                         }
                       }
                       queries.addAll(selectedItems);
+                      print('>>> default = $queries');
+
                       onFilterTapByQuery(queryMap);
                     } else {
                       queryMap.clear();
@@ -155,7 +152,10 @@ class _CampaignViewState extends State<CampaignView> {
                 }),
               ],
               middle: FilterBarWidget(
-                queryValue: getQueriedCategoryItem(),
+                queries: queries,
+                onChanged: (query) {
+                  // addSelectedCategoryToQueries(query!);
+                },
               ),
               subActions: (showFilters)
                 ? [
