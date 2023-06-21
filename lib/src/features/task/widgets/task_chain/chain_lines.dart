@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
@@ -5,8 +6,9 @@ import 'types.dart';
 
 class StraightLine extends CustomPainter {
   final PaintStyle style;
+  final bool isCollapsed;
 
-  const StraightLine({required this.style});
+  const StraightLine({required this.style, required this.isCollapsed});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -16,6 +18,17 @@ class StraightLine extends CustomPainter {
       ..color = style.color
       ..strokeCap = StrokeCap.round
       ..strokeWidth = style.strokeWidth;
+
+    if (isCollapsed) {
+      paint.shader = ui.Gradient.linear(
+        Offset(size.width, startX),
+        Offset(startX, startX),
+        [
+          style.color,
+          Colors.transparent,
+        ],
+      );
+    }
 
     while (startX < size.width) {
       canvas.drawLine(Offset(startX, 0.0), Offset(startX + style.dashWidth, 0.0), paint);

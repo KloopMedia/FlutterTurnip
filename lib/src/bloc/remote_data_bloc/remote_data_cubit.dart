@@ -19,6 +19,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
           data: pageData.data,
           currentPage: pageData.currentPage,
           total: pageData.total,
+          count: pageData.count,
           query: query,
         ),
       );
@@ -45,6 +46,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
           data: pageData.data,
           currentPage: pageData.currentPage,
           total: pageData.total,
+          count: pageData.count,
           query: query,
         ),
       );
@@ -66,6 +68,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
           data: _state.data,
           currentPage: _state.currentPage,
           total: _state.total,
+          count: _state.count,
           query: query,
         ),
       );
