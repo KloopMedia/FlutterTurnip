@@ -33,7 +33,7 @@ class CardWithTitle extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final titleStyle = TextStyle(
       fontSize: 18,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       color: theme.isLight ? theme.neutral40 : theme.neutral90,
       overflow: TextOverflow.ellipsis,
     );

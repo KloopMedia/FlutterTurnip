@@ -107,7 +107,7 @@ class _TaskPageState extends State<TaskPage> {
         ),
       ],
       child: DefaultAppBar(
-        boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
+        // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
         title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
           builder: (context, state) {
             if (state is CampaignInitialized) {
