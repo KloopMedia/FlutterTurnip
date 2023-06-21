@@ -90,25 +90,19 @@ class _CampaignViewState extends State<CampaignView> {
     context.read<UserCampaignCubit>().refetchWithFilter(queryMap);
   }
 
-  // void addSelectedCategoryToQueries(Map<String, dynamic>? selectedCategory) {
-  //   print('>>> default = $queries');
-  //   // if (queries.isNotEmpty) {
-  //   //   queries.removeWhere((element) => element is Category);
-  //   //   print('>>> remove = $queries');
-  //   // }
-  //   if (selectedCategory != null && selectedCategory.keys.first != 'Все') {
-  //     var category = Category(
-  //       id: selectedCategory.values.first['categories'],
-  //       name: selectedCategory.keys.first,
-  //       outCategories: const []
-  //     );
-  //     queries.removeWhere((element) => element is Category);
-  //     print('>>> remove = $queries');
-  //     queries.add(category);
-  //     print('>>> add = $queries');
-  //   }
-  //   // return item;
-  // }
+  void addSelectedCategoryToQueries(Map<String, dynamic>? selectedCategory) {
+    if (selectedCategory != null && selectedCategory.keys.first == 'Все') {
+      queries.removeWhere((element) => element is Category);
+    } else if (selectedCategory != null && selectedCategory.keys.first != 'Все') {
+      var category = Category(
+          id: selectedCategory.values.first['categories'],
+          name: selectedCategory.keys.first,
+          outCategories: const []
+      );
+      queries.removeWhere((element) => element is Category);
+      queries.add(category);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +120,7 @@ class _CampaignViewState extends State<CampaignView> {
                   queries: queries,
                   onPressed: (selectedItems) {
                     queries.clear();
+                    queryMap.clear();
                     if (selectedItems.isNotEmpty) {
                       for (var selectedItem in selectedItems) {
                         if (selectedItem is Country) {
@@ -137,11 +132,8 @@ class _CampaignViewState extends State<CampaignView> {
                         }
                       }
                       queries.addAll(selectedItems);
-                      print('>>> default = $queries');
-
                       onFilterTapByQuery(queryMap);
                     } else {
-                      queryMap.clear();
                       onFilterTapByQuery(queryMap);
                     }
                   },
@@ -154,7 +146,7 @@ class _CampaignViewState extends State<CampaignView> {
               middle: FilterBarWidget(
                 queries: queries,
                 onChanged: (query) {
-                  // addSelectedCategoryToQueries(query!);
+                  addSelectedCategoryToQueries(query!);
                 },
               ),
               subActions: (showFilters)
