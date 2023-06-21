@@ -90,14 +90,14 @@ class _LoginViewState extends State<LoginView> {
             }
           },
           builder: (context, state) {
-            if (state is OTPCodeSend) {
-              return VerificationPage(
-                onResend: () => loginWithPhone(_resendToken),
-                onConfirm: (smsCode) {
-                  context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                },
-              );
-            }
+            // if (state is OTPCodeSend) {
+            //   return VerificationPage(
+            //     onResend: () => loginWithPhone(_resendToken),
+            //     onConfirm: (smsCode) {
+            //       context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+            //     },
+            //   );
+            // }
             if (context.isSmall) {
               if (state is LoginInitial && state.firstTime) {
                 return OnBoarding(
@@ -105,9 +105,7 @@ class _LoginViewState extends State<LoginView> {
                     context.read<LoginBloc>().add(CloseOnBoarding());
                   },
                 );
-              }
-            if (context.isSmall) {
-              if (state is OTPCodeSend) {
+              } else if (state is OTPCodeSend) {
                 return VerificationPage(
                   onResend: () => loginWithPhone(_resendToken),
                   onConfirm: (smsCode) {
@@ -132,42 +130,45 @@ class _LoginViewState extends State<LoginView> {
                       borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 30.0),
+                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24/*45*/),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(15),
-                          //     color: Colors.grey,
-                          //   ),
-                          //   alignment: Alignment.center,
-                          //   width: 70,
-                          //   height: 70,
-                          //   child: const Text('Logo'),
-                          // ),
-                          const SizedBox(height: 150),
-                          const Text(
-                            'Присоединяйтесь к сообществу проактивных людей!',
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          Text(
-                            'Здесь люди объединяются и решают общественно значимые проблемы вместе',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white.withOpacity(0.85),
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w300
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Container(
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(15),
+                              //     color: Colors.grey,
+                              //   ),
+                              //   alignment: Alignment.center,
+                              //   width: 70,
+                              //   height: 70,
+                              //   child: const Text('Logo'),
+                              // ),
+                              const SizedBox(height: 90),
+                              const Text(
+                                'Присоединяйтесь к сообществу проактивных людей!',
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              Text(
+                                'Здесь люди объединяются и решают общественно значимые проблемы вместе',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white.withOpacity(0.85),
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w300
+                                ),
+                              ),
+                            ],
                           ),
                           const Spacer(),
-                          Image.asset('assets/images/people.png'),
-                          const SizedBox(height: 30)
+                          (context.isSmall) ? Image.asset('assets/images/people.png') : Image.asset('assets/images/people_web.png'),
                         ],
                       ),
                     ),
@@ -178,21 +179,29 @@ class _LoginViewState extends State<LoginView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         (state is OTPCodeSend)
-                        ? VerificationPage(
-                          constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
-                          onResend: () => loginWithPhone(_resendToken),
-                          onConfirm: (smsCode) {
+                           ? VerificationPage(
+                            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
+                            onResend: () => loginWithPhone(_resendToken),
+                            onConfirm: (smsCode) {
                             context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                          },
-                        )
-                        : Flexible(
-                          child: LoginPanel(
+                            },
+                          )
+                           : Flexible(
+                            child: LoginPanel(
                             padding: const EdgeInsets.all(20),
                             constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
                             onChange: _onChange,
                             onSubmit: loginWithPhone,
+                            ),
                           ),
-                        ),
+                        // Flexible(
+                        //   child: LoginPanel(
+                        //     padding: const EdgeInsets.all(20),
+                        //     constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
+                        //     onChange: _onChange,
+                        //     onSubmit: loginWithPhone,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
