@@ -20,8 +20,23 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  late String _activeFilter = widget.value;
+  late String _activeFilter;
 
+  @override
+  void initState() {
+    super.initState();
+    _activeFilter = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(covariant FilterBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != _activeFilter) {
+      setState(() {
+        _activeFilter = widget.value;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final keys = widget.filters.keys.toList();
