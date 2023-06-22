@@ -71,11 +71,7 @@ class CampaignDetailView extends StatelessWidget {
         ],
         child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
           listener: (context, state) async {
-            final repo = UserCampaignRepository(
-                gigaTurnipApiClient: context.read<GigaTurnipApiClient>()
-            );
-            final data = await repo.fetchAndParseData(query: {});
-            if (state is CampaignJoinSuccess && data.count == 0) {
+            if (state is CampaignJoinSuccess) {
               showDialog(context: context, builder: (context) => const JoinCampaignDialog())
                   .then((value) => redirectToTaskMenu(context, state.data.id));
             }

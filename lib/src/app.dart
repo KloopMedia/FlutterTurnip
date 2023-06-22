@@ -37,7 +37,11 @@ class App extends StatelessWidget {
         final MediaQueryData data = MediaQuery.of(context);
         return MediaQuery(
           data: data.copyWith(textScaleFactor: 0.9),
-          child: child!,
+          child: WillPopScope(
+            onWillPop: () async {
+                return false;
+              },
+            child: child!),
         );
       },
     );
