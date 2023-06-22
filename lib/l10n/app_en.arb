@@ -1,5 +1,7 @@
 {
     "welcome": "Welcome!",
+    "welcome_title": "Join the community of proactive people",
+    "welcome_subtitle": "Here people unite and solve socially significant problems together. You can join campaigns that interest you or even create your own!",
     "sign_in_or_sign_up": "Sign in or sign up to continue",
     "sign_in": "Sign in",
     "continue_with_google": "Continue with Google",

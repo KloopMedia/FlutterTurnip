@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 import '../../../widgets/widgets.dart';
@@ -35,7 +36,7 @@ class OnBoarding extends StatelessWidget {
           Column(
             children: [
               Text(
-                'Присоединяйтесь к социальным кампаниям',
+                context.loc.welcome_title,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 24,
@@ -45,7 +46,7 @@ class OnBoarding extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Здесь люди объединяются и решают общественно значимые проблемы вместе. Вы можете присоединиться к интересующим вас кампаниям или даже создать свою!',
+                context.loc.welcome_subtitle,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
