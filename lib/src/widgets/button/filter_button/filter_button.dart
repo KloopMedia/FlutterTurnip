@@ -69,7 +69,7 @@ class _FilterButtonState extends State<FilterButton> {
           });
           widget.openCloseFilter(openClose);
         },
-        icon: (openClose && widget.queries.isNotEmpty)
+        icon: (widget.queries.isNotEmpty)
           ? Container(
             width: 24.0,
             height: 24.0,

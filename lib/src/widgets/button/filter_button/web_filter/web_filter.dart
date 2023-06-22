@@ -7,11 +7,13 @@ import '../../../../bloc/bloc.dart';
 
 class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget {
   final String title;
+  final List<dynamic> queries;
   final Function(dynamic item) onTap;
 
   const WebFilter({
     Key? key,
     required this.title,
+    required this.queries,
     required this.onTap,
   }) : super(key: key);
 
@@ -29,7 +31,13 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
       builder: (context, state) {
         if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
           final data = state.data;
-          return SizedBox(
+          var fieldQueries = [];
+          if (queries.isNotEmpty) {
+            fieldQueries = queries.where(
+                  (query) => data.any((item) => query == item),
+            ).toList();
+          }
+        return SizedBox(
             width: MediaQuery.of(context).size.width / 4,
             child: Column(
               crossAxisAlignment:  CrossAxisAlignment.start,
@@ -42,6 +50,7 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
                   ),
                 ),
                 DropdownFilterField(
+                  fieldQueries: fieldQueries,
                   data: data,
                   onTap: (selectedItem) {
                     onTap(selectedItem);
@@ -59,11 +68,13 @@ class WebFilter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidg
 
 class DropdownFilterField extends StatefulWidget {
   final List<dynamic> data;
+  final List<dynamic> fieldQueries;
   final Function(dynamic item) onTap;
 
   const DropdownFilterField({
     Key? key,
     required this.data,
+    required this.fieldQueries,
     required this.onTap,
   }) : super(key: key);
 
@@ -80,7 +91,18 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
     final theme = Theme.of(context).colorScheme;
     final dropdownValueColor = theme.isLight ? theme.neutral40 : theme.neutral90;
     final hintTextColor = theme.isLight ? theme.neutral80 : theme.neutral50;
-    if (dropdownValue != null) selectedItemList.add(dropdownValue);
+
+    if (widget.fieldQueries.isNotEmpty) {
+      dropdownValue = widget.fieldQueries.first.name;
+    } else {
+      dropdownValue = null;
+    }
+    if (dropdownValue != null) {
+      selectedItemList.clear();
+      selectedItemList.add(dropdownValue);
+    } else {
+      selectedItemList.clear();
+    }
 
     return DropdownButtonFormField<String>(
       style: TextStyle(
@@ -111,7 +133,7 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
       isDense: true,
       icon: Icon(Icons.keyboard_arrow_down, color: theme.primary),
       value: dropdownValue,
-      onChanged: (value) {},
+      onChanged: (val) {},
       selectedItemBuilder: (context) {
         return widget.data.map((item) => Text(item.name)).toList();
       },
@@ -135,7 +157,7 @@ class _DropdownFilterFieldState extends State<DropdownFilterField> {
              ),
              (widget.data.indexOf(item) == widget.data.length - 1)
               ? const SizedBox.shrink()
-              : const Divider(color: Colors.grey),
+              : const Divider(color: Colors.grey, height: 1),
            ],
          ),
       )).toList(),

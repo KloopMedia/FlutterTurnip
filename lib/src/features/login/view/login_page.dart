@@ -159,7 +159,7 @@ class _LoginViewState extends State<LoginView> {
                             ],
                           ),
                           const Spacer(),
-                          Image.asset('assets/images/people.png'),
+                          (context.isSmall) ? Image.asset('assets/images/people.png') : Image.asset('assets/images/people_web.png'),
                         ],
                       ),
                     ),

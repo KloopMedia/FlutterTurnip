@@ -85,14 +85,16 @@ class _CampaignViewState extends State<CampaignView> {
   List<dynamic> queries = [];
   final Map<String, dynamic> queryMap = {};
 
-  void onFilterTapByQuery(Map<String, dynamic> queryMap) {
-    context.read<SelectableCampaignCubit>().refetchWithFilter(queryMap);
-    context.read<UserCampaignCubit>().refetchWithFilter(queryMap);
+  void onFilterTapByQuery(Map<String, dynamic> map) {
+    context.read<UserCampaignCubit>().refetchWithFilter(map);
+    context.read<SelectableCampaignCubit>().refetchWithFilter(map);
   }
 
   void addSelectedCategoryToQueries(Map<String, dynamic>? selectedCategory) {
     if (selectedCategory != null && selectedCategory.keys.first == 'Все') {
       queries.removeWhere((element) => element is Category);
+      queryMap.removeWhere((key, value) => key == 'categories');
+      onFilterTapByQuery(queryMap);
     } else if (selectedCategory != null && selectedCategory.keys.first != 'Все') {
       var category = Category(
           id: selectedCategory.values.first['categories'],
@@ -101,6 +103,9 @@ class _CampaignViewState extends State<CampaignView> {
       );
       queries.removeWhere((element) => element is Category);
       queries.add(category);
+      queryMap.removeWhere((key, value) => key == 'categories');
+      queryMap.addAll({'categories': category.id});
+      onFilterTapByQuery(queryMap);
     }
   }
 
@@ -152,6 +157,7 @@ class _CampaignViewState extends State<CampaignView> {
               subActions: (showFilters)
                 ? [
                   WebFilter<Country, CountryCubit>(
+                    queries: queries,
                     title: context.loc.country,
                     onTap: (selectedItem) {
                       if (selectedItem != null) {
@@ -167,6 +173,7 @@ class _CampaignViewState extends State<CampaignView> {
                     },
                   ),
                   WebFilter<Category, CategoryCubit>(
+                    queries: queries,
                     title: context.loc.category,
                     onTap: (selectedItem) {
                       if (selectedItem != null) {
@@ -182,6 +189,7 @@ class _CampaignViewState extends State<CampaignView> {
                     },
                   ),
                   WebFilter<Language, LanguageCubit>(
+                    queries: queries,
                     title: context.loc.language,
                     onTap: (selectedItem) {
                       if (selectedItem != null) {
