@@ -70,8 +70,12 @@ class CampaignDetailView extends StatelessWidget {
           ),
         ],
         child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
-          listener: (context, state) {
-            if (state is CampaignJoinSuccess) {
+          listener: (context, state) async {
+            final repo = UserCampaignRepository(
+                gigaTurnipApiClient: context.read<GigaTurnipApiClient>()
+            );
+            final data = await repo.fetchAndParseData(query: {});
+            if (state is CampaignJoinSuccess && data.count == 0) {
               showDialog(context: context, builder: (context) => const JoinCampaignDialog())
                   .then((value) => redirectToTaskMenu(context, state.data.id));
             }
@@ -192,7 +196,7 @@ class _Content extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
               child: SizedBox(
-                width: double.infinity,
+                width: (context.isSmall) ? double.infinity : 380,
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -206,7 +210,7 @@ class _Content extends StatelessWidget {
                   },
                   child: Text(
                     context.loc.join_campaign,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ),

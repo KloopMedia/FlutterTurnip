@@ -27,6 +27,7 @@ abstract class GigaTurnipRepository<Data> {
       data: data.results,
       currentPage: page,
       total: _calculateTotalPage(data.count),
+      count: data.count,
     );
   }
 

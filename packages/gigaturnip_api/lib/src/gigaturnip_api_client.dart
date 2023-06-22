@@ -4,7 +4,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
 
-@RestApi(baseUrl: "https://journal-bb5e3.uc.r.appspot.com/api/v1/")
+@RestApi(baseUrl: "https://front-test-dot-journal-bb5e3.uc.r.appspot.com/api/v1/")
 abstract class GigaTurnipApiClient {
   factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _GigaTurnipApiClient;
 

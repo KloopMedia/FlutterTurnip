@@ -107,7 +107,7 @@ class _TaskPageState extends State<TaskPage> {
         ),
       ],
       child: DefaultAppBar(
-        boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
+        // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
         title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
           builder: (context, state) {
             if (state is CampaignInitialized) {
@@ -136,7 +136,45 @@ class _TaskPageState extends State<TaskPage> {
         actions: [
           IconButton(
             onPressed: () => _redirectToNotificationPage(context),
-            icon: const Icon(Icons.notifications_outlined),
+            icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+              builder: (context, state) {
+                if (state is CampaignInitialized && state.data.unreadNotifications > 0) {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.topLeft,
+                    children: [
+                      const Positioned(
+                        right: 5,
+                        top: 5,
+                        child: Icon(Icons.notifications_outlined),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                            width: 18.0,
+                            height: 18.0,
+                            margin: EdgeInsets.zero,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).colorScheme.tertiary
+                            ),
+                            child: Center(
+                              child: Text(
+                                  state.data.unreadNotifications.toString(),
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Theme.of(context).colorScheme.onPrimary)
+                              ),
+                            )
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Icon(Icons.notifications_outlined);
+                }
+              },
+            ),
           )
         ],
         floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),

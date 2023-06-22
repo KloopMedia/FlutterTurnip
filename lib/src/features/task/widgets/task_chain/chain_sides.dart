@@ -7,6 +7,7 @@ class ChainSide extends StatelessWidget {
   final PaintStyle style;
   final PaintStyle endStyle;
   final bool isEven;
+  final bool isCollapsed;
   final ChainPosition position;
 
   const ChainSide({
@@ -14,6 +15,7 @@ class ChainSide extends StatelessWidget {
     required this.style,
     required this.endStyle,
     required this.isEven,
+    required this.isCollapsed,
     required this.position,
   }) : super(key: key);
 
@@ -22,8 +24,8 @@ class ChainSide extends StatelessWidget {
     final alignment = isEven ? Alignment.centerRight : Alignment.centerLeft;
     final curveLine = isEven ? CurveLine.right(style: style) : CurveLine.left(style: style);
 
-    const curveWidth = 50.0;
-    const offset = curveWidth + 5;
+    const curveWidth = 55.0;
+    const offset = curveWidth + 6;
 
     return Stack(
       alignment: Alignment.topCenter,
@@ -33,7 +35,7 @@ class ChainSide extends StatelessWidget {
           right: offset,
           child: CustomPaint(
             size: const Size(double.infinity, 0.0),
-            painter: StraightLine(style: style),
+            painter: StraightLine(style: style, isCollapsed: false),
           ),
         ),
         Align(
@@ -50,7 +52,7 @@ class ChainSide extends StatelessWidget {
             right: offset,
             child: CustomPaint(
               size: const Size(double.infinity, 0.0),
-              painter: StraightLine(style: endStyle),
+              painter: StraightLine(style: endStyle, isCollapsed: isCollapsed),
             ),
           ),
       ],

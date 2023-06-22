@@ -19,7 +19,7 @@ class IndividualChainRepository extends GigaTurnipRepository<IndividualChain> {
       ...?query,
     });
 
-    return data.copyWith<IndividualChain>(results: parseData(data.results));
+    return data.copyWith<IndividualChain>(count: data.count, results: parseData(data.results));
   }
 
   List<IndividualChain> parseData(List<api.IndividualChain> data) {

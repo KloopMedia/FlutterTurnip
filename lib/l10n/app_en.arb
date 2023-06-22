@@ -17,7 +17,7 @@
         }
     },
     "further": "Continue",
-    "or": "or",
+    "or": "OR",
 
     "login" : "Login",
     "logout_from_email" : "LOG OUT FROM EMAIL",
@@ -83,7 +83,10 @@
     "settings": "Settings",
     "form_submit_button": "Submit",
     "form_divider": "Your form starts here",
-    "join_campaign": "Join campaign?",
+    "join_campaign": "Join campaign",
+    "joined_campaigns": "Campaigns you have joined can be found in the “My Campaigns” tab",
+    "joined": "You have joined!",
+    "got_it": "Got it",
     "yes": "Yes",
     "no": "No",
 
@@ -97,6 +100,7 @@
     "unknown_page" : "Unknown Page",
     "open_campaigns" : "My campaigns",
     "available_campaigns" : "Available campaigns",
+    "my_campaigns" : "My campaigns",
     "join" : "Join",
     "complete" : "Complete",
     "open_notification" : "Open notifications",
