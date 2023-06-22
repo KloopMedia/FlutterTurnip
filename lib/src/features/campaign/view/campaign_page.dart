@@ -13,7 +13,7 @@ import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
 import '../bloc/language_bloc/language_cubit.dart';
-import '../widgets/filter_bar_widget.dart';
+import '../widgets/category_filter_bar_widget.dart';
 import 'available_campaign_view.dart';
 import 'user_campaign_view.dart';
 
@@ -148,7 +148,7 @@ class _CampaignViewState extends State<CampaignView> {
                     });
                 }),
               ],
-              middle: FilterBarWidget(
+              middle: CategoryFilterBarWidget(
                 queries: queries,
                 onChanged: (query) {
                   addSelectedCategoryToQueries(query!);
