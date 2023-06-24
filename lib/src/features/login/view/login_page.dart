@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,11 +17,21 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginBloc(
-        sharedPreferences: context.read<SharedPreferences>(),
-        authenticationRepository: context.read<AuthenticationRepository>(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => LoginBloc(
+            sharedPreferences: context.read<SharedPreferences>(),
+            authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => LocalizationBloc(
+            sharedPreferences: context.read<SharedPreferences>(),
+            // showSavedLocale: false
+          ),
+        ),
+      ],
       child: const LoginView(),
     );
   }

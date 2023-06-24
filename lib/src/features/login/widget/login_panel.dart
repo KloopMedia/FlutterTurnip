@@ -67,7 +67,7 @@ class LoginPanel extends StatelessWidget {
             children: [
               PhoneNumberField(onChanged: onChange),
               const SizedBox(height: 20),
-              SignUpButton(onPressed: onSubmit),
+              SignUpButton(onPressed: (_) => onSubmit),
               DividerWithLabel(
                 label: context.loc.or,
                 padding: const EdgeInsets.symmetric(vertical: 47.0),

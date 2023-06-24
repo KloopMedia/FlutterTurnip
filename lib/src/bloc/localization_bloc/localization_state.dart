@@ -1,10 +1,14 @@
 part of 'localization_bloc.dart';
 
-class LocalizationState extends Equatable {
+class LocalizationState  extends Equatable {
   final Locale locale;
+  final bool firstLogin;
 
-  const LocalizationState(this.locale);
+  const LocalizationState ({
+    required this.locale,
+    required this.firstLogin,
+  });
 
   @override
-  List<Object?> get props => [locale];
+  List<Object?> get props => [locale, firstLogin];
 }

@@ -14,7 +14,10 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
 
   LocalizationBloc({required SharedPreferences sharedPreferences})
       : _sharedPreferences = sharedPreferences,
-        super(LocalizationState(_fetchSavedLocale(sharedPreferences))) {
+        super(LocalizationState(
+          locale: _fetchSavedLocale(sharedPreferences),
+          firstLogin: true)
+        ) {
     on<ChangeLocale>(_onChangeLocale);
   }
 
@@ -26,10 +29,10 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
       if (supportedLocales.contains(Locale(systemLocale))) {
         defaultCode = systemLocale;
       } else {
-        defaultCode = 'en';
+        defaultCode = 'ky';
       }
     } on UnsupportedError {
-      defaultCode = 'en';
+      defaultCode = 'ky';
     }
     return Locale(sharedPreferences.getString(Constants.sharedPrefLocaleKey) ?? defaultCode);
   }
@@ -37,6 +40,6 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
   void _onChangeLocale(ChangeLocale event, Emitter<LocalizationState> emit) {
     final locale = event.locale;
     _sharedPreferences.setString(Constants.sharedPrefLocaleKey, locale.languageCode);
-    emit(LocalizationState(locale));
+    emit(LocalizationState(locale: locale, firstLogin: false));
   }
 }
