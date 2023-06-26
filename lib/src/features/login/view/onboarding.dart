@@ -9,8 +9,9 @@ import 'language_picker.dart';
 
 class OnBoarding extends StatefulWidget {
   final void Function() onContinue;
+  final String? campaignId;
 
-  const OnBoarding({super.key, required this.onContinue});
+  const OnBoarding({super.key, required this.onContinue, this.campaignId});
    @override
   State<OnBoarding> createState() => _OnBoardingState();
 }
@@ -23,6 +24,7 @@ class _OnBoardingState extends State<OnBoarding> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final state = context.watch<LocalizationBloc>().state;
+
     if (state.firstLogin == false) {
       setState(() {
         isLocaleSelected = !state.firstLogin;
@@ -45,7 +47,8 @@ class _OnBoardingState extends State<OnBoarding> {
               child: LanguagePicker(errorMessage:
               (errorMessage != null && isLocaleSelected == false)
                   ? errorMessage
-                  : null)
+                  : null,
+              isLocaleSelected: isLocaleSelected)
           ),
           Container(
             height: 200,

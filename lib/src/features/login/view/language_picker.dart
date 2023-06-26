@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -11,8 +12,9 @@ class SupportedLocale {
 
 class LanguagePicker extends StatelessWidget {
   final String? errorMessage;
+  final bool isLocaleSelected;
 
-  const LanguagePicker({super.key, this.errorMessage});
+  const LanguagePicker({super.key, this.errorMessage, required this.isLocaleSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class LanguagePicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            width: 200,
+            width: 206,
             // height: 40,
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -44,41 +46,45 @@ class LanguagePicker extends StatelessWidget {
               border: (errorMessage != null) ? Border.all(color: theme.error) : null,
             ),
             child: DropdownButtonFormField<String>(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.only(left: 6, right: 16),
               style: textStyle,
               borderRadius: borderRadius,
               dropdownColor: Colors.white,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.language),
+                prefixIconColor: theme.primary,
+                hintText: context.loc.choose_language,
+                hintStyle: textStyle,
                 focusedBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,
               ),
               isDense: true,
               icon: Icon(Icons.keyboard_arrow_down, color: theme.neutral30),
-              value: context.read<LocalizationBloc>().state.locale.languageCode.split('_').first,
+              value: (isLocaleSelected == false) ? null : context.read<LocalizationBloc>().state.locale.languageCode.split('_').first,
               onChanged: (locale) {
                 if (locale != null) {
                   context.read<LocalizationBloc>().add(ChangeLocale(Locale(locale)));
                 }
               },
-              selectedItemBuilder:  (BuildContext context) {
-                return locales.map((SupportedLocale locale) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset('assets/images/world.png', height: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        locale.name,
-                        style: textStyle,
-                      ),
-                    ],
-                  );
-                }).toList();
-              },
+              // selectedItemBuilder:  (BuildContext context) {
+              //   return locales.map((SupportedLocale locale) {
+              //     return Row(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         Image.asset('assets/images/world.png', height: 20),
+              //         const SizedBox(width: 8),
+              //         Text(
+              //           locale.name,
+              //           style: textStyle,
+              //         ),
+              //       ],
+              //     );
+              //   }).toList();
+              // },
               items: locales.map((SupportedLocale locale) => DropdownMenuItem<String>(
                 value: locale.code,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
+                  padding: const EdgeInsets.only(left: 5.0),
                   child: Text(locale.name),
                 ),
               )).toList(),

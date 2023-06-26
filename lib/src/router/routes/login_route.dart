@@ -17,7 +17,9 @@ class LoginRoute {
       name: name,
       path: path,
       builder: (BuildContext context, GoRouterState state) {
-        return const LoginPage();
+        final query = {...state.queryParams};
+        final id = query['campaigns'];
+        return LoginPage(campaignId: id);
       },
     );
   }

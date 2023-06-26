@@ -37,7 +37,7 @@ class SignUpButton extends StatelessWidget {
           if (active) {
             onPressed(null);
           } else {
-            onPressed('Choose language');
+            onPressed(context.loc.choose_language);
           }
         },
         child: Text(

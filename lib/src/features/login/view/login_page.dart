@@ -3,17 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
 import 'onboarding.dart';
 import 'otp_verification.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final String? campaignId;
+
+  const LoginPage({Key? key, this.campaignId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +29,22 @@ class LoginPage extends StatelessWidget {
             authenticationRepository: context.read<AuthenticationRepository>(),
           ),
         ),
-        BlocProvider(
-          create: (_) => LocalizationBloc(
-            sharedPreferences: context.read<SharedPreferences>(),
-            // showSavedLocale: false
-          ),
-        ),
+        // BlocProvider(
+        //   create: (_) => LocalizationBloc(
+        //     sharedPreferences: context.read<SharedPreferences>(),
+        //     // showSavedLocale: false
+        //   ),
+        // ),
       ],
-      child: const LoginView(),
+      child: LoginView(campaignId: campaignId),
     );
   }
 }
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  final String? campaignId;
+
+  const LoginView({Key? key, this.campaignId}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
