@@ -22,80 +22,77 @@ class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final state = context.watch<LocalizationBloc>().state;
+    if (state.firstLogin == false) {
+      setState(() {
+        isLocaleSelected = !state.firstLogin;
+      });
+    }
 
-    return BlocConsumer<LocalizationBloc, LocalizationState>(
-      listener: (context, state) {
-        if (state.firstLogin == false) {
-          isLocaleSelected = !state.firstLogin;
-          errorMessage = null;
-          print('>>> listener = ${state.firstLogin} / $errorMessage');
-        }
-      },
-      builder: (context, state) {
-        return Container(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(
-                'assets/images/people.png',
-                width: 380,
-                height: 281,
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: LanguagePicker(errorMessage: errorMessage)
-              ),
-              Container(
-                height: 200,
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(
+            'assets/images/people.png',
+            width: 380,
+            height: 281,
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: LanguagePicker(errorMessage:
+              (errorMessage != null && isLocaleSelected == false)
+                  ? errorMessage
+                  : null)
+          ),
+          Container(
+            height: 200,
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          /*(byLink) ? campaign.name :*/ context.loc.welcome_title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 24,
-                            color: theme.neutral30,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          /*(byLink) ? campaign.description :*/ context.loc.welcome_subtitle,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: theme.neutral30,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                    Text(
+                      /*(byLink) ? campaign.name :*/ context.loc.welcome_title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                        color: theme.neutral30,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      /*(byLink) ? campaign.description :*/ context.loc.welcome_subtitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: theme.neutral30,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-              ),
-              SignUpButton(
-                onPressed: (message) {
-                  if (message != null) {
-                    setState(() {
-                      errorMessage = message;
-                    });
-                  } else {
-                    print('>>> continue 2');
-                    widget.onContinue();
-                  }
-                },
-                isActive: isLocaleSelected,
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      }
+          SignUpButton(
+            onPressed: (message) {
+              if (message != null) {
+                setState(() {
+                  errorMessage = message;
+                });
+              } else {
+                widget.onContinue();
+              }
+            },
+            isActive: isLocaleSelected,
+          ),
+        ],
+      ),
     );
   }
 }

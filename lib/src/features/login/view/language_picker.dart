@@ -26,7 +26,7 @@ class LanguagePicker extends StatelessWidget {
 
     final locales = [
       const SupportedLocale('Кыргыз тили', 'ky'),
-      const SupportedLocale('РусскийEnglishEnglish', 'en'),
+      const SupportedLocale('English', 'en'),
       const SupportedLocale('Русский', 'ru'),
     ];
 
