@@ -87,21 +87,33 @@ class FilterView extends StatelessWidget {
               queries: queries,
               title: context.loc.country,
               onTap: (selectedItem){
-                selectedItems.addAll(selectedItem);
+                if (selectedItem.isEmpty) {
+                  selectedItems.removeWhere((element) => element is Country);
+                } else {
+                  selectedItems.addAll(selectedItem);
+                }
               },
             ),
             Filter<Category, CategoryCubit>(
               queries: queries,
               title: context.loc.category,
               onTap: (selectedItem){
-                selectedItems.addAll(selectedItem);
+                if (selectedItem.isEmpty) {
+                  selectedItems.removeWhere((element) => element is Category);
+                } else {
+                  selectedItems.addAll(selectedItem);
+                }
               },
             ),
             Filter<Language, LanguageCubit>(
               queries: queries,
               title: context.loc.language,
               onTap: (selectedItem){
-                selectedItems.addAll(selectedItem);
+                if (selectedItem.isEmpty) {
+                  selectedItems.removeWhere((element) => element is Language);
+                } else {
+                  selectedItems.addAll(selectedItem);
+                }
               },
             ),
             const Spacer(),
