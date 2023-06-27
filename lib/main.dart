@@ -52,7 +52,7 @@ Future<void> main() async {
             ),
           ),
           BlocProvider(
-            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences),
+            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences, /*showSavedLocale: true*/),
           ),
           BlocProvider(
             create: (_) => ThemeCubit(sharedPreferences: sharedPreferences),

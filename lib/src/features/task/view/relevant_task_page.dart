@@ -117,6 +117,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           ),
           SliverToBoxAdapter(
             child: FilterBar(
+              title: context.loc.mytasks,
               onChanged: (query) {
                 context.read<RelevantTaskCubit>().refetchWithFilter(query);
               },
@@ -127,7 +128,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           ),
           AdaptiveListView<TaskStage, ReactiveTasks>(
             showLoader: false,
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
             itemBuilder: (context, index, item) {
               return CardWithTitle(
                 title: item.name,
@@ -138,7 +139,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             },
           ),
           AdaptiveListView<Task, RelevantTaskCubit>(
-            padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+            padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
             itemBuilder: (context, index, item) {
               final cardBody = CardDate(date: item.createdAt);
 

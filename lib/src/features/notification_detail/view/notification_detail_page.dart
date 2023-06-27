@@ -74,7 +74,7 @@ class NotificationDetailView extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(state.data.text, textAlign: TextAlign.center),

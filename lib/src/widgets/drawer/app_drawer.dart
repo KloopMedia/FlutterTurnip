@@ -10,12 +10,13 @@ import 'package:gigaturnip/src/widgets/dialogs/delete_account_dialog.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/campaign/view/campaign_page.dart';
 import 'language_select.dart';
 import 'theme_switch.dart';
 import 'user_avatar.dart';
 
 const drawerDecoration = BoxDecoration(
-  boxShadow: Shadows.elevation3,
+  boxShadow: Shadows.elevation2,
   borderRadius: BorderRadius.only(
     topRight: Radius.circular(16),
     bottomRight: Radius.circular(16),
@@ -86,7 +87,7 @@ class AppDrawer extends StatelessWidget {
                 leadingPadding: iconPadding,
                 leading: Icon(Icons.grid_view, color: theme.primary),
                 title: Text(context.loc.drawer_campaigns, style: titleTextStyle),
-                onTap: () => context.goNamed(CampaignRoute.name),
+                onTap: () => context.pushNamed(CampaignRoute.name),
               ),
               // CustomListTile(
               //   contentPadding: contentPadding,

@@ -70,7 +70,7 @@ class CampaignDetailView extends StatelessWidget {
           ),
         ],
         child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is CampaignJoinSuccess) {
               showDialog(context: context, builder: (context) => const JoinCampaignDialog())
                   .then((value) => redirectToTaskMenu(context, state.data.id));
@@ -192,7 +192,7 @@ class _Content extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
               child: SizedBox(
-                width: double.infinity,
+                width: (context.isSmall) ? double.infinity : 380,
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -206,7 +206,7 @@ class _Content extends StatelessWidget {
                   },
                   child: Text(
                     context.loc.join_campaign,
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ),

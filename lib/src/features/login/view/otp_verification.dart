@@ -10,11 +10,13 @@ import 'package:pinput/pinput.dart';
 class VerificationPage extends StatefulWidget {
   final void Function(String code) onConfirm;
   final void Function() onResend;
+  final BoxConstraints? constraints;
 
   const VerificationPage({
     super.key,
     required this.onConfirm,
     required this.onResend,
+    this.constraints,
   });
 
   @override
@@ -35,7 +37,7 @@ class _VerificationPageState extends State<VerificationPage> {
 
     final titleTextStyle = TextStyle(
       fontSize: 25,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       color: fontColor,
     );
     final textStyle = TextStyle(
@@ -58,6 +60,7 @@ class _VerificationPageState extends State<VerificationPage> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
+      constraints: widget.constraints,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +107,7 @@ class _VerificationPageState extends State<VerificationPage> {
           ),
           SignUpButton(
             focusNode: focusNode,
-            onPressed: pinCode.length != _length ? null : () => widget.onConfirm(pinCode),
+            onPressed: (_) => pinCode.length != _length ? null : () => widget.onConfirm(pinCode),
           ),
         ],
       ),

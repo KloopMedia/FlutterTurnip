@@ -38,7 +38,7 @@ class UserCampaignView extends StatelessWidget {
             if (context.isExtraLarge || context.isLarge) {
               return CardWithTitle(
                 title: item.name,
-                size: const Size.fromHeight(165),
+                size: const Size.fromHeight(125),//165
                 imageUrl: item.logo,
                 flex: 1,
                 onTap: () => redirectToTaskMenu(context, item),

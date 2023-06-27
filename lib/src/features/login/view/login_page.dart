@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,22 +13,30 @@ import 'onboarding.dart';
 import 'otp_verification.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final String? campaignId;
+
+  const LoginPage({Key? key, this.campaignId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginBloc(
-        sharedPreferences: context.read<SharedPreferences>(),
-        authenticationRepository: context.read<AuthenticationRepository>(),
-      ),
-      child: const LoginView(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => LoginBloc(
+            sharedPreferences: context.read<SharedPreferences>(),
+            authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+        ),
+      ],
+      child: LoginView(campaignId: campaignId),
     );
   }
 }
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  final String? campaignId;
+
+  const LoginView({Key? key, this.campaignId}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -90,19 +99,26 @@ class _LoginViewState extends State<LoginView> {
             }
           },
           builder: (context, state) {
-            if (state is OTPCodeSend) {
-              return VerificationPage(
-                onResend: () => loginWithPhone(_resendToken),
-                onConfirm: (smsCode) {
-                  context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                },
-              );
-            }
+            // if (state is OTPCodeSend) {
+            //   return VerificationPage(
+            //     onResend: () => loginWithPhone(_resendToken),
+            //     onConfirm: (smsCode) {
+            //       context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+            //     },
+            //   );
+            // }
             if (context.isSmall) {
               if (state is LoginInitial && state.firstTime) {
                 return OnBoarding(
                   onContinue: () {
                     context.read<LoginBloc>().add(CloseOnBoarding());
+                  },
+                );
+              } else if (state is OTPCodeSend) {
+                return VerificationPage(
+                  onResend: () => loginWithPhone(_resendToken),
+                  onConfirm: (smsCode) {
+                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
                   },
                 );
               }
@@ -123,43 +139,45 @@ class _LoginViewState extends State<LoginView> {
                       borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 45),
+                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24/*45*/),
                       child: Column(
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.grey,
-                                ),
-                                alignment: Alignment.center,
-                                width: 70,
-                                height: 70,
-                                child: const Text('Logo'),
-                              ),
-                              const SizedBox(height: 80),
-                              const Text(
-                                'Присоединяйтесь к сообществу проактивных людей!',
-                                style: TextStyle(
-                                  fontSize: 30,
+                              // Container(
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(15),
+                              //     color: Colors.grey,
+                              //   ),
+                              //   alignment: Alignment.center,
+                              //   width: 70,
+                              //   height: 70,
+                              //   child: const Text('Logo'),
+                              // ),
+                              const SizedBox(height: 90),
+                              Text(
+                                context.loc.welcome_title,
+                                style: const TextStyle(
+                                  fontSize: 40,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              const Text(
-                                'Здесь люди объединяются и решают общественно значимые проблемы вместе',
+                              Text(
+                                context.loc.welcome_subtitle,
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
+                                    fontSize: 18,
+                                    color: Colors.white.withOpacity(0.85),
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w300
                                 ),
                               ),
                             ],
                           ),
                           const Spacer(),
-                          Image.asset('assets/images/people.png'),
+                          (context.isSmall) ? Image.asset('assets/images/people.png') : Image.asset('assets/images/people_web.png'),
                         ],
                       ),
                     ),
@@ -169,14 +187,30 @@ class _LoginViewState extends State<LoginView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Flexible(
-                          child: LoginPanel(
+                        (state is OTPCodeSend)
+                           ? VerificationPage(
+                            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
+                            onResend: () => loginWithPhone(_resendToken),
+                            onConfirm: (smsCode) {
+                            context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+                            },
+                          )
+                           : Flexible(
+                            child: LoginPanel(
                             padding: const EdgeInsets.all(20),
                             constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
                             onChange: _onChange,
                             onSubmit: loginWithPhone,
+                            ),
                           ),
-                        ),
+                        // Flexible(
+                        //   child: LoginPanel(
+                        //     padding: const EdgeInsets.all(20),
+                        //     constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
+                        //     onChange: _onChange,
+                        //     onSubmit: loginWithPhone,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

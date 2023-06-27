@@ -1,5 +1,8 @@
 {
     "welcome": "Welcome!",
+    "welcome_title": "Join the community of proactive people",
+    "welcome_subtitle": "Here people unite and solve socially significant problems together. You can join campaigns that interest you or even create your own!",
+    "choose_language": "Choose language",
     "sign_in_or_sign_up": "Sign in or sign up to continue",
     "sign_in": "Sign in",
     "continue_with_google": "Continue with Google",
@@ -17,7 +20,7 @@
         }
     },
     "further": "Continue",
-    "or": "or",
+    "or": "OR",
 
     "login" : "Login",
     "logout_from_email" : "LOG OUT FROM EMAIL",
@@ -83,7 +86,10 @@
     "settings": "Settings",
     "form_submit_button": "Submit",
     "form_divider": "Your form starts here",
-    "join_campaign": "Join campaign?",
+    "join_campaign": "Join campaign",
+    "joined_campaigns": "Campaigns you have joined can be found in the “My Campaigns” tab",
+    "joined": "You have joined!",
+    "got_it": "Got it",
     "yes": "Yes",
     "no": "No",
 
@@ -97,6 +103,7 @@
     "unknown_page" : "Unknown Page",
     "open_campaigns" : "My campaigns",
     "available_campaigns" : "Available campaigns",
+    "my_campaigns" : "My campaigns",
     "join" : "Join",
     "complete" : "Complete",
     "open_notification" : "Open notifications",
