@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
 import 'onboarding.dart';
 import 'otp_verification.dart';
@@ -29,12 +27,6 @@ class LoginPage extends StatelessWidget {
             authenticationRepository: context.read<AuthenticationRepository>(),
           ),
         ),
-        // BlocProvider(
-        //   create: (_) => LocalizationBloc(
-        //     sharedPreferences: context.read<SharedPreferences>(),
-        //     // showSavedLocale: false
-        //   ),
-        // ),
       ],
       child: LoginView(campaignId: campaignId),
     );
@@ -164,9 +156,9 @@ class _LoginViewState extends State<LoginView> {
                               //   child: const Text('Logo'),
                               // ),
                               const SizedBox(height: 90),
-                              const Text(
-                                'Присоединяйтесь к сообществу проактивных людей!',
-                                style: TextStyle(
+                              Text(
+                                context.loc.welcome_title,
+                                style: const TextStyle(
                                   fontSize: 40,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
@@ -174,7 +166,7 @@ class _LoginViewState extends State<LoginView> {
                               ),
                               const SizedBox(height: 30),
                               Text(
-                                'Здесь люди объединяются и решают общественно значимые проблемы вместе',
+                                context.loc.welcome_subtitle,
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.white.withOpacity(0.85),
