@@ -157,7 +157,7 @@ class IndividualChainBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
+      padding: const EdgeInsets.fromLTRB(10, 60, 10, 30),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {

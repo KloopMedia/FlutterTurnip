@@ -40,7 +40,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
@@ -48,8 +52,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<HttpResponse<dynamic>> deleteUser(
-    id,
-    data,
+    int id,
+    Map<String, dynamic> data,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -68,14 +72,19 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<PaginationWrapper<Campaign>> getCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getCampaigns(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -94,7 +103,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Campaign>.fromJson(
       _result.data!,
       (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -103,7 +116,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Campaign>> getUserCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getUserCampaigns(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -122,7 +136,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Campaign>.fromJson(
       _result.data!,
       (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -131,7 +149,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Campaign>> getSelectableCampaigns({query}) async {
+  Future<PaginationWrapper<Campaign>> getSelectableCampaigns(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -150,7 +169,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Campaign>.fromJson(
       _result.data!,
       (json) => Campaign.fromJson(json as Map<String, dynamic>),
@@ -159,7 +182,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Campaign> getCampaignById(id) async {
+  Future<Campaign> getCampaignById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -176,13 +199,17 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Campaign.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<void> joinCampaign(id) async {
+  Future<void> joinCampaign(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -198,11 +225,115 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
-  Future<PaginationWrapper<Chain>> getChains({query}) async {
+  Future<PaginationWrapper<Category>> getCategories(
+      {Map<String, dynamic>? query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Category>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'categories/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = PaginationWrapper<Category>.fromJson(
+      _result.data!,
+      (json) => Category.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<PaginationWrapper<Country>> getCountries(
+      {Map<String, dynamic>? query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Country>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'countries/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = PaginationWrapper<Country>.fromJson(
+      _result.data!,
+      (json) => Country.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<PaginationWrapper<Language>> getLanguages(
+      {Map<String, dynamic>? query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Language>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'languages/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = PaginationWrapper<Language>.fromJson(
+      _result.data!,
+      (json) => Language.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<PaginationWrapper<Chain>> getChains(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -221,7 +352,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Chain>.fromJson(
       _result.data!,
       (json) => Chain.fromJson(json as Map<String, dynamic>),
@@ -231,7 +366,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<PaginationWrapper<IndividualChain>> getIndividualChains(
-      {query}) async {
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -250,7 +385,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<IndividualChain>.fromJson(
       _result.data!,
       (json) => IndividualChain.fromJson(json as Map<String, dynamic>),
@@ -259,7 +398,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getTasks({query}) async {
+  Future<PaginationWrapper<Task>> getTasks(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -278,7 +418,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
@@ -287,7 +431,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getUserSelectableTasks({query}) async {
+  Future<PaginationWrapper<Task>> getUserSelectableTasks(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -306,7 +451,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
@@ -315,7 +464,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Task>> getUserRelevantTasks({query}) async {
+  Future<PaginationWrapper<Task>> getUserRelevantTasks(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -334,7 +484,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
@@ -343,7 +497,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<TaskDetail> getTaskById(id) async {
+  Future<TaskDetail> getTaskById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -360,15 +514,19 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TaskDetail.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<TaskResponse> saveTaskById(
-    id,
-    data,
+    int id,
+    Map<String, dynamic> data,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -387,15 +545,19 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TaskResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<List<Task>> getIntegratedTasks(
-    id, {
-    query,
+    int id, {
+    Map<String, dynamic>? query,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -415,7 +577,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => Task.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -424,8 +590,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
 
   @override
   Future<PaginationWrapper<TaskDetail>> getDisplayedPreviousTasks(
-    id, {
-    query,
+    int id, {
+    Map<String, dynamic>? query,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -445,7 +611,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<TaskDetail>.fromJson(
       _result.data!,
       (json) => TaskDetail.fromJson(json as Map<String, dynamic>),
@@ -454,7 +624,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Task> openPreviousTask(id) async {
+  Future<Task> openPreviousTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -471,13 +641,17 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Task.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<void> releaseTask(id) async {
+  Future<void> releaseTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -493,11 +667,15 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
-  Future<void> requestTask(id) async {
+  Future<void> requestTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -513,11 +691,15 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
-  Future<WebhookResponse> triggerTaskWebhook(id) async {
+  Future<WebhookResponse> triggerTaskWebhook(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -534,13 +716,17 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = WebhookResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<void> reopenTask(id) async {
+  Future<void> reopenTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -556,13 +742,17 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
   Future<DynamicSchema> getDynamicSchema(
-    id, {
-    required query,
+    int id, {
+    required Map<String, dynamic> query,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -581,14 +771,18 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DynamicSchema.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<PaginationWrapper<TaskStage>> getUserRelevantTaskStages(
-      {query}) async {
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -607,7 +801,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<TaskStage>.fromJson(
       _result.data!,
       (json) => TaskStage.fromJson(json as Map<String, dynamic>),
@@ -616,7 +814,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<TaskStage>> getSelectableTaskStages({query}) async {
+  Future<PaginationWrapper<TaskStage>> getSelectableTaskStages(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -635,7 +834,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<TaskStage>.fromJson(
       _result.data!,
       (json) => TaskStage.fromJson(json as Map<String, dynamic>),
@@ -644,7 +847,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<CreateTaskResponse> createTaskFromStageId(id) async {
+  Future<CreateTaskResponse> createTaskFromStageId(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -661,13 +864,18 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = CreateTaskResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<PaginationWrapper<Notification>> getNotifications({query}) async {
+  Future<PaginationWrapper<Notification>> getNotifications(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -686,7 +894,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Notification>.fromJson(
       _result.data!,
       (json) => Notification.fromJson(json as Map<String, dynamic>),
@@ -695,7 +907,8 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<PaginationWrapper<Notification>> getUserNotifications({query}) async {
+  Future<PaginationWrapper<Notification>> getUserNotifications(
+      {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(query ?? <String, dynamic>{});
@@ -714,7 +927,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PaginationWrapper<Notification>.fromJson(
       _result.data!,
       (json) => Notification.fromJson(json as Map<String, dynamic>),
@@ -723,7 +940,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Notification> getNotificationById(id) async {
+  Future<Notification> getNotificationById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -740,13 +957,17 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Notification.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<void> openNotification(id) async {
+  Future<void> openNotification(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -762,7 +983,11 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
@@ -776,5 +1001,22 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

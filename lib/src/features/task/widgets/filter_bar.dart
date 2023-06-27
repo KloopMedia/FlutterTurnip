@@ -3,7 +3,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/chip_bar/index.dart';
 
 class FilterBar extends StatefulWidget {
-  final String? title;
+  final String title;
   final String value;
   final Map<String, Map<String, dynamic>?> filters;
   final List<String> names;

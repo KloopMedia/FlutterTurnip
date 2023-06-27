@@ -62,6 +62,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
 
   Future<void> setFilter(Map<String, dynamic>? query) async {
     final _state = state;
+    print(_state.runtimeType);
     if (_state is RemoteDataLoaded<Data>) {
       emit(
         RemoteDataLoaded(

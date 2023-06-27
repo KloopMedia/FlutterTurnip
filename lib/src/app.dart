@@ -22,10 +22,16 @@ class App extends StatelessWidget {
       routerDelegate: router.routerDelegate,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateProperty.all(const Color(0xFF5E81FB)),
+        ),
         colorScheme: lightColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData(
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateProperty.all(const Color(0xFF9BB1FF)),
+        ),
         colorScheme: darkColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
       ),

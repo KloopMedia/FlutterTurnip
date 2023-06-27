@@ -4,6 +4,7 @@ class BaseAppBar extends StatelessWidget {
   final Widget? title;
   final List<Widget>? leading;
   final List<Widget>? actions;
+  final List<Widget>? subActions;
   final Widget? middle;
   final Widget? bottom;
   final IconThemeData? iconTheme;
@@ -19,6 +20,7 @@ class BaseAppBar extends StatelessWidget {
     this.title,
     this.leading,
     this.actions,
+    this.subActions,
     this.middle,
     this.bottom,
     this.backgroundColor,
@@ -35,6 +37,7 @@ class BaseAppBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: backgroundColor, border: border, boxShadow: boxShadow),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: padding ?? EdgeInsets.zero,
@@ -54,6 +57,15 @@ class BaseAppBar extends StatelessWidget {
                   if (actions != null) ...actions!,
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: padding ?? EdgeInsets.zero,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (subActions != null) ...subActions!,
+              ],
             ),
           ),
           if (middle != null) middle!,
