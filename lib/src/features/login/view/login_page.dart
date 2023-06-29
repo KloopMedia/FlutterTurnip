@@ -6,14 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/login/widget/login_panel.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../campaign/bloc/language_bloc/language_cubit.dart';
+import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
 import 'onboarding.dart';
 import 'otp_verification.dart';
 
 class LoginPage extends StatelessWidget {
-  final String? campaignId;
+  final int? campaignId;
 
   const LoginPage({Key? key, this.campaignId}) : super(key: key);
 
@@ -27,6 +31,21 @@ class LoginPage extends StatelessWidget {
             authenticationRepository: context.read<AuthenticationRepository>(),
           ),
         ),
+        if (campaignId != null) BlocProvider(
+          create: (context) => CampaignDetailBloc(
+            repository: CampaignDetailRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+            ),
+            campaignId: campaignId!,
+          )..add(InitializeCampaign()),
+        ),
+        if (campaignId != null) BlocProvider(
+          create: (context) => LanguageCubit(
+            LanguageRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+            ),
+          )..initialize(),
+        ),
       ],
       child: LoginView(campaignId: campaignId),
     );
@@ -34,7 +53,7 @@ class LoginPage extends StatelessWidget {
 }
 
 class LoginView extends StatefulWidget {
-  final String? campaignId;
+  final int? campaignId;
 
   const LoginView({Key? key, this.campaignId}) : super(key: key);
 
@@ -109,6 +128,33 @@ class _LoginViewState extends State<LoginView> {
             // }
             if (context.isSmall) {
               if (state is LoginInitial && state.firstTime) {
+                if (widget.campaignId != null) {
+                  return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+                      builder: (context, state) {
+                        if (state is CampaignFetching) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        if (state is CampaignFetchingError) {
+                          return Center(child: Text(state.error));
+                        }
+                        if (state is CampaignJoinError) {
+                          return Center(child: Text(state.error));
+                        }
+                        if (state is CampaignLoaded) {
+                          final data = state.data;
+                          return OnBoarding(
+                            onContinue: () {
+                              context.read<LoginBloc>().add(CloseOnBoarding());
+                            },
+                            campaignName: data.name,
+                            campaignDescription: data.description,
+                            campaignLanguages: data.languages,
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }
+                  );
+                }
                 return OnBoarding(
                   onContinue: () {
                     context.read<LoginBloc>().add(CloseOnBoarding());

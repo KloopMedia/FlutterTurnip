@@ -65,7 +65,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   void redirect(BuildContext context, int? nextTaskId) {
     if (nextTaskId != null) {
-      context.pushNamed(
+      context.goNamed(
         TaskDetailRoute.name,
         params: {
           'tid': '$nextTaskId',

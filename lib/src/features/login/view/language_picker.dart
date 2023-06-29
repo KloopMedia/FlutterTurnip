@@ -13,8 +13,14 @@ class SupportedLocale {
 class LanguagePicker extends StatelessWidget {
   final String? errorMessage;
   final bool isLocaleSelected;
+  final List<SupportedLocale> campaignLocales;
 
-  const LanguagePicker({super.key, this.errorMessage, required this.isLocaleSelected});
+  const LanguagePicker({
+    super.key,
+    this.errorMessage,
+    required this.isLocaleSelected,
+    required this.campaignLocales
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +31,13 @@ class LanguagePicker extends StatelessWidget {
         fontSize: 16,
         color: theme.neutral30
     );
-
-    final locales = [
+    List<SupportedLocale> locales = [];
+    final supportedLocales = [
       const SupportedLocale('Кыргыз тили', 'ky'),
       const SupportedLocale('English', 'en'),
       const SupportedLocale('Русский', 'ru'),
     ];
+    (campaignLocales.isNotEmpty) ? locales.addAll(campaignLocales) : locales.addAll(supportedLocales);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

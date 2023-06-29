@@ -15,7 +15,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://journal-bb5e3.uc.r.appspot.com/api/v1/';
+    baseUrl ??= 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com/api/v1/';
   }
 
   final Dio _dio;
