@@ -31,6 +31,7 @@ class AuthenticationRepository {
       googleProvider.setCustomParameters({'prompt': 'select_account'});
       await _firebaseAuth.signInWithPopup(googleProvider);
     } else {
+      await _googleSignIn.signOut();
       final googleUser = await _googleSignIn.signIn();
       final googleAuth = await googleUser!.authentication;
       credential = firebase_auth.GoogleAuthProvider.credential(
