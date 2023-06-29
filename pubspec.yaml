@@ -76,6 +76,7 @@ dependencies:
   material_color_utilities: ^0.2.0
   google_fonts: ^4.0.4
   path_drawing: ^1.0.1
+  back_button_interceptor: ^6.0.2
 
 dependency_overrides:
   intl: ^0.18.1
