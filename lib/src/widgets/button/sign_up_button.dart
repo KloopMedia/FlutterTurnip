@@ -19,8 +19,6 @@ class SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    bool active = false;
-    if (isActive != null) active = isActive!;
 
     return SizedBox(
       height: 52,
@@ -31,13 +29,13 @@ class SignUpButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          backgroundColor: (active) ? theme.primary : theme.neutral95,
+          backgroundColor: (isActive != null && !isActive!) ? theme.neutral95  : theme.primary,
         ),
         onPressed: () {
-          if (active) {
-            onPressed(null);
-          } else {
+          if (isActive != null && !isActive!) {
             onPressed(context.loc.choose_language);
+          } else {
+            onPressed(null);
           }
         },
         child: Text(
@@ -45,7 +43,7 @@ class SignUpButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: (active) ?   Colors.white : theme.neutralVariant80,
+            color: (isActive != null && !isActive!) ? theme.neutralVariant80 : Colors.white,
           ),
         ),
       ),
