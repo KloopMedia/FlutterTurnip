@@ -19,6 +19,7 @@ const individualChainsRoute = '${chainsRoute}individuals/';
 const taskStagesRoute = 'taskstages/';
 const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
 const selectableTaskStageRoute = '${taskStagesRoute}selectable/';
+const availableTaskStageRoute = '${taskStagesRoute}available_stages/';
 
 
 // TaskStages actions

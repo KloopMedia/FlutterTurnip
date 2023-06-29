@@ -15,7 +15,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://journal-bb5e3.uc.r.appspot.com/api/v1/';
+    baseUrl ??= 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com/api/v1/';
   }
 
   final Dio _dio;
@@ -870,6 +870,39 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               baseUrl,
             ))));
     final value = CreateTaskResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<PaginationWrapper<TaskStageDetail>> getAvailableTaskStages(
+      {Map<String, dynamic>? query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<TaskStageDetail>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'taskstages/available_stages/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = PaginationWrapper<TaskStageDetail>.fromJson(
+      _result.data!,
+      (json) => TaskStageDetail.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 

@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:local_database/src/models/task_stage.dart';
+import 'package:local_database/local_database.dart';
 
 class Task extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -11,6 +11,8 @@ class Task extends Table {
   BoolColumn get reopened => boolean()();
 
   IntColumn get stage => integer().references(TaskStage, #id)();
+
+  IntColumn get campaign => integer().references(Campaign, #id)();
 
   TextColumn get responses => text().nullable()();
 
