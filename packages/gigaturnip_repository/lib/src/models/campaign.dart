@@ -39,12 +39,12 @@ class Campaign extends Equatable {
   }
 
   db.CampaignCompanion toDB() {
-    return db.CampaignCompanion.insert(
+    return db.CampaignCompanion(
       id: Value(id),
-      name: name,
-      description: description,
+      name: Value(name),
+      description: Value(description),
       descriptor: Value(descriptor),
-      logo: logo,
+      logo: Value(logo),
     );
   }
 

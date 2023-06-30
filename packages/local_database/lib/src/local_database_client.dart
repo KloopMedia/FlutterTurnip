@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart' as repo;
 
 import 'database.dart';
 
@@ -41,7 +38,7 @@ class LocalDatabase {
       ..write(data);
   }
 
-  static Future<List<repo.Task>> getTasks(int campaign) async {
+  static Future<List<Map<String, dynamic>>> getTasks(int campaign) async {
     final query = database.select(database.task).join([
       leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
     ]);
@@ -50,35 +47,20 @@ class LocalDatabase {
 
     final rows = await query.get();
 
-    final List<repo.Task> parsed = [];
+    final List<Map<String, dynamic>> parsed = [];
     for (var row in rows) {
       final task = row.readTable(database.task);
       final stage = row.readTableOrNull(database.taskStage);
 
       if (stage != null) {
-        final taskStage = repo.TaskStage(
-          id: stage.id,
-          name: stage.name,
-          description: stage.description,
-          chain: stage.chain,
-          campaign: stage.campaign,
-          cardJsonSchema: jsonDecode(stage.cardJsonSchema ?? "{}"),
-          cardUiSchema: jsonDecode(stage.cardUiSchema ?? "{}"),
-        );
+        final jsonTask = task.toJson(
+            serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
+        final jsonStage = stage.toJson(
+            serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
 
-        final parsedTask = repo.Task(
-          id: task.id,
-          name: task.name,
-          responses: jsonDecode(task.responses ?? "{}"),
-          complete: task.complete,
-          reopened: task.reopened,
-          createdAt: task.createdAt,
-          cardJsonSchema: jsonDecode(stage.cardJsonSchema ?? "{}"),
-          cardUiSchema: jsonDecode(stage.cardUiSchema ?? "{}"),
-          stage: taskStage,
-        );
+        jsonTask['stage'] = jsonStage;
 
-        parsed.add(parsedTask);
+        parsed.add(jsonTask);
       }
     }
 

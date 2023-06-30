@@ -41,8 +41,10 @@ class AllTaskRepository extends TaskRepository {
 
       return data.copyWith<Task>(results: parsed);
     } catch (e) {
+      print(e);
       final data = await db.LocalDatabase.getTasks(campaignId);
-      return api.PaginationWrapper(count: data.length, results: data);
+      final parsed = data.map(Task.fromJson).toList();
+      return api.PaginationWrapper(count: data.length, results: parsed);
     }
   }
 
