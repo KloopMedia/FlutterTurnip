@@ -22,18 +22,18 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
   }
 
   static Locale _fetchSavedLocale(SharedPreferences sharedPreferences) {
-    String defaultCode;
-    try {
-      const supportedLocales = AppLocalizations.supportedLocales;
-      final systemLocale = PlatformDispatcher.instance.locale.languageCode;
-      if (supportedLocales.contains(Locale(systemLocale))) {
-        defaultCode = systemLocale;
-      } else {
-        defaultCode = 'ky';
-      }
-    } on UnsupportedError {
-      defaultCode = 'ky';
-    }
+    String defaultCode = 'ky';
+    // try {
+    //   const supportedLocales = AppLocalizations.supportedLocales;
+    //   final systemLocale = PlatformDispatcher.instance.locale.languageCode;
+    //   if (supportedLocales.contains(Locale(systemLocale))) {
+    //     defaultCode = systemLocale;
+    //   } else {
+    //     defaultCode = 'ky';
+    //   }
+    // } on UnsupportedError {
+    //   defaultCode = 'ky';
+    // }
     return Locale(sharedPreferences.getString(Constants.sharedPrefLocaleKey) ?? defaultCode);
   }
 
