@@ -29,13 +29,13 @@ class SignUpButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          backgroundColor: (isActive != null && isActive!) ? theme.primary : theme.neutral95,
+          backgroundColor: (isActive != null && !isActive!) ? theme.neutral95  : theme.primary,
         ),
         onPressed: () {
-          if (isActive != null && isActive!) {
-            onPressed(null);
-          } else {
+          if (isActive != null && !isActive!) {
             onPressed(context.loc.choose_language);
+          } else {
+            onPressed(null);
           }
         },
         child: Text(
@@ -43,7 +43,7 @@ class SignUpButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: (isActive != null && isActive!) ?   Colors.white : theme.neutralVariant80,
+            color: (isActive != null && !isActive!) ? theme.neutralVariant80 : Colors.white,
           ),
         ),
       ),

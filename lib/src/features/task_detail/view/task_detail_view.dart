@@ -1,6 +1,6 @@
 import 'dart:isolate';
 import 'dart:ui';
-
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +43,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         // int progress = data[2];
         setState(() {});
       });
-
+      BackButtonInterceptor.add(myInterceptor);
       FlutterDownloader.registerCallback(downloadCallback);
     }
     super.initState();
@@ -54,7 +54,18 @@ class _TaskDetailViewState extends State<TaskDetailView> {
     if (!kIsWeb) {
       IsolateNameServer.removePortNameMapping('downloader_send_port');
     }
+    BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    context.goNamed(
+      TaskRoute.name,
+      params: {
+        'cid': '${widget.campaignId}',
+      },
+    );
+    return true;
   }
 
   @pragma('vm:entry-point')

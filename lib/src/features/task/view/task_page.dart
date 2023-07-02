@@ -6,9 +6,11 @@ import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
-import 'package:gigaturnip_repository/gigaturnip_repository.dart' hide Notification;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';// hide Notification;
 import 'package:go_router/go_router.dart';
 
+import '../../../bloc/bloc.dart';
+import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_page_floating_action_button.dart';
 import 'relevant_task_page.dart';
@@ -105,6 +107,14 @@ class _TaskPageState extends State<TaskPage> {
             ),
           )..initialize(),
         ),
+        BlocProvider<OpenNotificationCubit>(
+          create: (context) => NotificationCubit(
+            OpenNotificationRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              campaignId: widget.campaignId,
+            ),
+          )..initialize(),
+        ),
       ],
       child: DefaultAppBar(
         // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
@@ -136,9 +146,10 @@ class _TaskPageState extends State<TaskPage> {
         actions: [
           IconButton(
             onPressed: () => _redirectToNotificationPage(context),
-            icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+            icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
               builder: (context, state) {
-                if (state is CampaignInitialized && state.data.unreadNotifications > 0) {
+                if (state is RemoteDataInitialized<Notification>) {
+                  final notifications = state.data;
                   return Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.topLeft,
@@ -148,7 +159,7 @@ class _TaskPageState extends State<TaskPage> {
                         top: 5,
                         child: Icon(Icons.notifications_outlined),
                       ),
-                      Align(
+                      if (notifications.isNotEmpty) Align(
                         alignment: Alignment.topRight,
                         child: Container(
                             width: 18.0,
@@ -160,7 +171,7 @@ class _TaskPageState extends State<TaskPage> {
                             ),
                             child: Center(
                               child: Text(
-                                  state.data.unreadNotifications.toString(),
+                                  notifications.length.toString(),
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       color: Theme.of(context).colorScheme.onPrimary)
@@ -171,7 +182,7 @@ class _TaskPageState extends State<TaskPage> {
                     ],
                   );
                 } else {
-                  return const Icon(Icons.notifications_outlined);
+                  return const SizedBox.shrink();
                 }
               },
             ),
