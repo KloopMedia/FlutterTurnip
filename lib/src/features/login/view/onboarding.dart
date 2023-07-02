@@ -40,95 +40,7 @@ class _OnBoardingState extends State<OnBoarding> {
         isLocaleSelected = !state.firstLogin;
       });
     }
-    // if (widget.campaignId != null) {
-    //   print('>>> onb = ${widget.campaignId}');
-    //   return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-    //     builder: (context, state) {
-    //       if (state is CampaignFetching) {
-    //         return const Center(child: CircularProgressIndicator());
-    //       }
-    //       if (state is CampaignFetchingError) {
-    //         return Center(child: Text(state.error));
-    //       }
-    //       if (state is CampaignJoinError) {
-    //         return Center(child: Text(state.error));
-    //       }
-    //       if (state is CampaignLoaded) {
-    //         print('>>> ${state.data}');
-    //         final languages = state.data.languages;
-    //         print('>>> languages=$languages');
-    //         return Container(
-    //           padding: const EdgeInsets.all(24.0),
-    //           child: Column(
-    //             mainAxisAlignment: MainAxisAlignment.end,
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Image.asset(
-    //                 'assets/images/people.png',
-    //                 width: 380,
-    //                 height: 281,
-    //               ),
-    //               Padding(
-    //                   padding: const EdgeInsets.symmetric(vertical: 20),
-    //                   child: LanguagePicker(
-    //                     errorMessage: (errorMessage != null && isLocaleSelected == false)
-    //                       ? errorMessage
-    //                       : null,
-    //                       isLocaleSelected: isLocaleSelected,
-    //                     languages: languages)
-    //               ),
-    //               Container(
-    //                 height: 200,
-    //                 padding: const EdgeInsets.only(bottom: 20),
-    //                 child: Column(
-    //                   mainAxisAlignment: MainAxisAlignment.center,
-    //                   children: [
-    //                     Column(
-    //                       children: [
-    //                         Text(
-    //                           /*(byLink) ? campaign.name :*/ context.loc.welcome_title,
-    //                           style: TextStyle(
-    //                             fontWeight: FontWeight.w500,
-    //                             fontSize: 24,
-    //                             color: theme.neutral30,
-    //                           ),
-    //                           textAlign: TextAlign.center,
-    //                         ),
-    //                         const SizedBox(height: 20),
-    //                         Text(
-    //                           /*(byLink) ? campaign.description :*/ context.loc.welcome_subtitle,
-    //                           style: TextStyle(
-    //                             fontWeight: FontWeight.w400,
-    //                             fontSize: 16,
-    //                             color: theme.neutral30,
-    //                           ),
-    //                           textAlign: TextAlign.center,
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //               SignUpButton(
-    //                 onPressed: (message) {
-    //                   if (message != null) {
-    //                     setState(() {
-    //                       errorMessage = message;
-    //                     });
-    //                   } else {
-    //                     widget.onContinue();
-    //                   }
-    //                 },
-    //                 isActive: isLocaleSelected,
-    //               ),
-    //             ],
-    //           ),
-    //         );
-    //       }
-    //       return const SizedBox.shrink();
-    //     },
-    //   );
-    // }
+
     return Container(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -140,8 +52,8 @@ class _OnBoardingState extends State<OnBoarding> {
             width: 380,
             height: 281,
           ),
-          if (widget.campaignLanguages !=  null && widget.campaignLanguages!.isNotEmpty)
-            BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
+          (widget.campaignLanguages !=  null && widget.campaignLanguages!.isNotEmpty)
+            ? BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
               builder: (context, state) {
                 if (state is RemoteDataLoaded<Language> && state.data.isNotEmpty) {
                   final data = state.data;
@@ -162,22 +74,23 @@ class _OnBoardingState extends State<OnBoarding> {
                 }
                 return const SizedBox.shrink();
               },
+            )
+            : Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: LanguagePicker(
+                  errorMessage: (errorMessage != null && isLocaleSelected == false)
+                    ? errorMessage
+                    : null,
+                  isLocaleSelected: isLocaleSelected,
+                  campaignLocales: const [],
+                ),
             ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: LanguagePicker(
-              errorMessage: (errorMessage != null && isLocaleSelected == false)
-                ? errorMessage
-                : null,
-              isLocaleSelected: isLocaleSelected,
-              campaignLocales: const [],
-            ),
-          ),
           Container(
             height: 200,
             padding: const EdgeInsets.only(bottom: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   children: [

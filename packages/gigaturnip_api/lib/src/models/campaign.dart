@@ -11,7 +11,7 @@ class Campaign {
   final DateTime updatedAt;
   final bool open;
   final int? defaultTrack;
-  final List<int> managers;
+  final List<int>? managers;
   final bool smsLoginAllow;
   final String? descriptor;
   final String logo;
