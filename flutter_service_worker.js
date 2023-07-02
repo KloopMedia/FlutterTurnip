@@ -379,13 +379,13 @@ const RESOURCES = {".well-known/assetlinks.json": "0626d16954639a780da7f9b39953b
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "e9a8a57c1be070d889433ed89035857f",
-"/": "e9a8a57c1be070d889433ed89035857f",
-"main.dart.js": "6d5d94ef7a96d4f165fe41e9df9e894e",
+"index.html": "9b38c91865a04894d8aa824cd9cfb9ca",
+"/": "9b38c91865a04894d8aa824cd9cfb9ca",
+"main.dart.js": "3da02c4399c2fc5ae0fcf538483d894c",
 "manifest.json": "86f21a9332594c75d3c7f5f8916d818f",
 "sql-wasm.js": "c05e88801dc795cd004c2fd7ced5c4fb",
 "sql-wasm.wasm": "51739179fd57f102da5297192df613e7",
-"version.json": "a72cabed4b82e8dcfc75cfbe34a1e64e"};
+"version.json": "c3ca84899de114cac228b9f986a7be7b"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
