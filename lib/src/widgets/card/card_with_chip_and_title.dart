@@ -60,6 +60,11 @@ class CardWithTitle extends StatelessWidget {
                     Row(children: chips),
                     const SizedBox(height: 10),
                     Text(title, maxLines: 2, style: titleStyle),
+                    const SizedBox(height: 5),
+                    Text(
+                      (id != null) ? 'ID:${id!}' : '',
+                      style: footerStyle,
+                    )
                   ],
                 ),
               ),
@@ -75,16 +80,7 @@ class CardWithTitle extends StatelessWidget {
           if (flex != 0) const Spacer(),
         ],
       ),
-      bottom: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          if (bottom != null) bottom!,
-          Text(
-            (id != null) ? 'ID:${id!}' : '',
-            style: footerStyle,
-          )
-        ],
-      ),
+      bottom: bottom,
     );
   }
 }
