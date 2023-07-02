@@ -85,9 +85,10 @@ class AvailableTaskPage extends StatelessWidget {
                       ),
                     ],
                     title: item.name,
+                    id: item.id,
                     bottom: ExpansionTile(
                       tilePadding: EdgeInsets.zero,
-                      title: CardDate(date: item.createdAt),
+                      title: CardDate(date: item.createdAt?.toLocal()),
                       children: [
                         FlutterJsonSchemaForm(
                           schema: item.cardJsonSchema ?? {},

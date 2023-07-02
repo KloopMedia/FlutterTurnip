@@ -23,12 +23,14 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           open: $checkedConvert('open', (v) => v as bool),
           defaultTrack: $checkedConvert('default_track', (v) => v as int?),
           managers: $checkedConvert('managers',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
           smsLoginAllow: $checkedConvert('sms_login_allow', (v) => v as bool),
           logo: $checkedConvert('logo', (v) => v as String),
           descriptor: $checkedConvert('descriptor', (v) => v as String?),
           notificationsCount:
               $checkedConvert('notifications_count', (v) => v as int),
+          languages: $checkedConvert('languages',
+              (v) => (v as List<dynamic>).map((e) => e as int?).toList()),
         );
         return val;
       },

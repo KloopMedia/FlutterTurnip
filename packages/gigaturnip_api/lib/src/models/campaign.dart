@@ -11,11 +11,12 @@ class Campaign {
   final DateTime updatedAt;
   final bool open;
   final int? defaultTrack;
-  final List<int> managers;
+  final List<int>? managers;
   final bool smsLoginAllow;
   final String? descriptor;
   final String logo;
   final int notificationsCount;
+  final List<int?> languages;
 
   Campaign({
     required this.id,
@@ -30,6 +31,7 @@ class Campaign {
     required this.logo,
     required this.descriptor,
     required this.notificationsCount,
+    required this.languages,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

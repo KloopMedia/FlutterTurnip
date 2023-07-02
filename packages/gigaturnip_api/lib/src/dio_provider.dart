@@ -20,7 +20,7 @@ class ApiInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     var accessToken = await _authenticationRepository.token;
 
-    options.headers['Authorization'] = 'JWT $accessToken';
+    if (accessToken != null) options.headers['Authorization'] = 'JWT $accessToken';
 
     options.contentType ??= Headers.jsonContentType;
 
