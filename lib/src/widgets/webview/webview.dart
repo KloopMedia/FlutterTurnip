@@ -21,13 +21,20 @@ class _WebViewState extends State<WebView> {
   void initState() {
     fullHtml = '''
     <html>
+      <style>  
+      div {  
+        padding: 10px 20px;  
+      }  
+      </style>  
       <head>  
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
       </head>
       <body>
-        ${widget.htmlText}
+        <div>
+          ${widget.htmlText}
+        </div>
       </body>
     </html>
     ''';

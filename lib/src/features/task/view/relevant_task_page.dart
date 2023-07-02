@@ -132,6 +132,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             itemBuilder: (context, index, item) {
               return CardWithTitle(
                 title: item.name,
+                id: item.id,
                 size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                 flex: context.isSmall || context.isMedium ? 0 : 1,
                 onTap: () => context.read<ReactiveTasks>().createTask(item),
@@ -141,11 +142,12 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           AdaptiveListView<Task, RelevantTaskCubit>(
             padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
             itemBuilder: (context, index, item) {
-              final cardBody = CardDate(date: item.createdAt);
+              final cardBody = CardDate(date: item.createdAt?.toLocal());
 
               return CardWithTitle(
                 chips: [const Spacer(), StatusCardChip(item)],
                 title: item.name,
+                id: item.id,
                 size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                 flex: context.isSmall || context.isMedium ? 0 : 1,
                 onTap: () => redirectToTask(context, item),
