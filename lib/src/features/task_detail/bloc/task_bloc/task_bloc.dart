@@ -75,7 +75,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
     } catch (e) {
       print(e);
-      emit(TaskSubmitError.clone(state as TaskLoaded, e.toString()));
+      emit(TaskSubmitError.clone(state as TaskInitialized, e.toString()));
+      emit(TaskLoaded.clone(state as TaskInitialized));
     }
   }
 

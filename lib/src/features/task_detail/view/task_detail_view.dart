@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -18,6 +19,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
+import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../widgets/task_divider.dart';
 
 class TaskDetailView extends StatefulWidget {
@@ -143,6 +145,17 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         }
         if (state is TaskInfoOpened) {
           openWebView(context);
+        }
+        if (state is TaskSubmitError) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return OfflinePhoneMessageDialog(
+                phoneNumber: '+ 996 45-45-45',
+                message: jsonEncode({'id': state.data.id, 'responses': state.data.responses}),
+              );
+            },
+          );
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {
