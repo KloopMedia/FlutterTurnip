@@ -42,9 +42,10 @@ class AllTaskRepository extends TaskRepository {
       return data.copyWith<Task>(results: parsed);
     } catch (e) {
       print(e);
-      final data = await db.LocalDatabase.getTasks(campaignId);
-      final parsed = data.map(Task.fromJson).toList();
-      return api.PaginationWrapper(count: data.length, results: parsed);
+      final wrapper = await db.LocalDatabase.getTasks(campaignId, limit: limit, offset: query?['offset']);
+      final results = wrapper['results'] as List<Map<String, dynamic>>;
+      final parsed = results.map(Task.fromJson).toList();
+      return api.PaginationWrapper(count: wrapper['count'], results: parsed);
     }
   }
 

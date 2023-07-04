@@ -38,12 +38,14 @@ class LocalDatabase {
       ..write(data);
   }
 
-  static Future<List<Map<String, dynamic>>> getTasks(int campaign) async {
+  static Future<Map<String, dynamic>> getTasks(int campaign, {int limit = 10, int? offset}) async {
     final query = database.select(database.task).join([
       leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
     ]);
 
     query.where(database.task.campaign.equals(campaign));
+
+    query.limit(limit, offset: offset);
 
     final rows = await query.get();
 
@@ -64,7 +66,12 @@ class LocalDatabase {
       }
     }
 
-    return parsed;
+    Expression<int> countTasks = database.task.id.count();
+    final countQuery = database.selectOnly(database.task)..addColumns([countTasks]);
+    final row = await countQuery.getSingle();
+    final count = row.read(countTasks);
+
+    return {'count': count, 'results': parsed};
   }
 
   static Future<int> insertTask(TaskCompanion entity) {
