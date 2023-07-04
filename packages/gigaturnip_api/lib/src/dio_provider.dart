@@ -18,16 +18,18 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    var accessToken = await _authenticationRepository.token;
+    try {
+      var accessToken = await _authenticationRepository.token;
+      if (accessToken != null) options.headers['Authorization'] = 'JWT $accessToken';
 
-    if (accessToken != null) options.headers['Authorization'] = 'JWT $accessToken';
+      options.contentType ??= Headers.jsonContentType;
 
-    options.contentType ??= Headers.jsonContentType;
-
-    if (!options.path.endsWith('/')) {
-      options.path = '${options.path}/';
+      if (!options.path.endsWith('/')) {
+        options.path = '${options.path}/';
+      }
+      return handler.next(options);
+    } catch (e) {
+      return handler.reject(DioError(requestOptions: options));
     }
-
-    return handler.next(options);
   }
 }
