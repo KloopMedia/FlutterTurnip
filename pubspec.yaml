@@ -77,6 +77,7 @@ dependencies:
   google_fonts: ^4.0.4
   path_drawing: ^1.0.1
   drift: ^2.9.0
+  url_launcher: ^6.1.11
   back_button_interceptor: ^6.0.2
 
 dependency_overrides:

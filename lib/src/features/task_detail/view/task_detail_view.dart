@@ -17,9 +17,10 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../bloc/bloc.dart';
 import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
+import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
 
 class TaskDetailView extends StatefulWidget {
@@ -71,7 +72,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   }
 
   @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(String id, int status, int progress) {
     final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
     send?.send([id, status, progress]);
   }
@@ -114,6 +115,18 @@ class _TaskDetailViewState extends State<TaskDetailView> {
     );
   }
 
+  void openOfflineDialog(BuildContext context, String phoneNumber, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return OfflinePhoneMessageDialog(
+          phoneNumber: phoneNumber,
+          message: message,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -136,7 +149,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
     return Theme(
       data: colorScheme.isLight ? lightTheme : darkTheme,
-      child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) {
+      child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) async {
         if (state is TaskSubmitted) {
           redirect(context, state.nextTaskId);
         }
@@ -147,15 +160,14 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           openWebView(context);
         }
         if (state is TaskSubmitError) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return OfflinePhoneMessageDialog(
-                phoneNumber: '+ 996 45-45-45',
-                message: jsonEncode({'id': state.data.id, 'responses': state.data.responses}),
-              );
-            },
-          );
+          const phoneNumber = '+ 996 45-45-45';
+          final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
+          try {
+            final uri = Uri.parse('sms:$phoneNumber?body=$message');
+            await launchUrl(uri);
+          } catch (e) {
+            openOfflineDialog(context, phoneNumber, message);
+          }
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {
