@@ -5,12 +5,12 @@ import 'database.dart';
 class LocalDatabase {
   static final database = AppDatabase();
 
-  static Future<List<CampaignData>> getCampaigns() async {
-    return database.select(database.campaign).get();
+  static Future<List<CampaignData>> getCampaigns(bool joined) async {
+    return (database.select(database.campaign)..where((tbl) => tbl.joined.equals(joined))).get();
   }
 
   static Future<int> insertCampaign(CampaignCompanion entity) async {
-    return database.into(database.campaign).insert(entity, mode: InsertMode.insertOrIgnore);
+    return database.into(database.campaign).insert(entity, mode: InsertMode.insertOrReplace);
   }
 
   static Future<List<TaskStageData>> getTaskStages() async {

@@ -10,4 +10,6 @@ class Campaign extends Table {
   TextColumn get descriptor => text().nullable()();
 
   TextColumn get logo => text()();
+
+  BoolColumn get joined => boolean()();
 }

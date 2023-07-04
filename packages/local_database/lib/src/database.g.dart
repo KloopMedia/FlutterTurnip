@@ -40,9 +40,20 @@ class $CampaignTable extends Campaign
   late final GeneratedColumn<String> logo = GeneratedColumn<String>(
       'logo', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _joinedMeta = const VerificationMeta('joined');
+  @override
+  late final GeneratedColumn<bool> joined =
+      GeneratedColumn<bool>('joined', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("joined" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, description, descriptor, logo];
+      [id, name, description, descriptor, logo, joined];
   @override
   String get aliasedName => _alias ?? 'campaign';
   @override
@@ -81,6 +92,12 @@ class $CampaignTable extends Campaign
     } else if (isInserting) {
       context.missing(_logoMeta);
     }
+    if (data.containsKey('joined')) {
+      context.handle(_joinedMeta,
+          joined.isAcceptableOrUnknown(data['joined']!, _joinedMeta));
+    } else if (isInserting) {
+      context.missing(_joinedMeta);
+    }
     return context;
   }
 
@@ -100,6 +117,8 @@ class $CampaignTable extends Campaign
           .read(DriftSqlType.string, data['${effectivePrefix}descriptor']),
       logo: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}logo'])!,
+      joined: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}joined'])!,
     );
   }
 
@@ -115,12 +134,14 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
   final String description;
   final String? descriptor;
   final String logo;
+  final bool joined;
   const CampaignData(
       {required this.id,
       required this.name,
       required this.description,
       this.descriptor,
-      required this.logo});
+      required this.logo,
+      required this.joined});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -131,6 +152,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       map['descriptor'] = Variable<String>(descriptor);
     }
     map['logo'] = Variable<String>(logo);
+    map['joined'] = Variable<bool>(joined);
     return map;
   }
 
@@ -143,6 +165,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           ? const Value.absent()
           : Value(descriptor),
       logo: Value(logo),
+      joined: Value(joined),
     );
   }
 
@@ -155,6 +178,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       description: serializer.fromJson<String>(json['description']),
       descriptor: serializer.fromJson<String?>(json['descriptor']),
       logo: serializer.fromJson<String>(json['logo']),
+      joined: serializer.fromJson<bool>(json['joined']),
     );
   }
   @override
@@ -166,6 +190,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       'description': serializer.toJson<String>(description),
       'descriptor': serializer.toJson<String?>(descriptor),
       'logo': serializer.toJson<String>(logo),
+      'joined': serializer.toJson<bool>(joined),
     };
   }
 
@@ -174,13 +199,15 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           String? name,
           String? description,
           Value<String?> descriptor = const Value.absent(),
-          String? logo}) =>
+          String? logo,
+          bool? joined}) =>
       CampaignData(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,
         descriptor: descriptor.present ? descriptor.value : this.descriptor,
         logo: logo ?? this.logo,
+        joined: joined ?? this.joined,
       );
   @override
   String toString() {
@@ -189,13 +216,15 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('descriptor: $descriptor, ')
-          ..write('logo: $logo')
+          ..write('logo: $logo, ')
+          ..write('joined: $joined')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, descriptor, logo);
+  int get hashCode =>
+      Object.hash(id, name, description, descriptor, logo, joined);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -204,7 +233,8 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           other.name == this.name &&
           other.description == this.description &&
           other.descriptor == this.descriptor &&
-          other.logo == this.logo);
+          other.logo == this.logo &&
+          other.joined == this.joined);
 }
 
 class CampaignCompanion extends UpdateCompanion<CampaignData> {
@@ -213,12 +243,14 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
   final Value<String> description;
   final Value<String?> descriptor;
   final Value<String> logo;
+  final Value<bool> joined;
   const CampaignCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.description = const Value.absent(),
     this.descriptor = const Value.absent(),
     this.logo = const Value.absent(),
+    this.joined = const Value.absent(),
   });
   CampaignCompanion.insert({
     this.id = const Value.absent(),
@@ -226,15 +258,18 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     required String description,
     this.descriptor = const Value.absent(),
     required String logo,
+    required bool joined,
   })  : name = Value(name),
         description = Value(description),
-        logo = Value(logo);
+        logo = Value(logo),
+        joined = Value(joined);
   static Insertable<CampaignData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? description,
     Expression<String>? descriptor,
     Expression<String>? logo,
+    Expression<bool>? joined,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -242,6 +277,7 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       if (description != null) 'description': description,
       if (descriptor != null) 'descriptor': descriptor,
       if (logo != null) 'logo': logo,
+      if (joined != null) 'joined': joined,
     });
   }
 
@@ -250,13 +286,15 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       Value<String>? name,
       Value<String>? description,
       Value<String?>? descriptor,
-      Value<String>? logo}) {
+      Value<String>? logo,
+      Value<bool>? joined}) {
     return CampaignCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       descriptor: descriptor ?? this.descriptor,
       logo: logo ?? this.logo,
+      joined: joined ?? this.joined,
     );
   }
 
@@ -278,6 +316,9 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     if (logo.present) {
       map['logo'] = Variable<String>(logo.value);
     }
+    if (joined.present) {
+      map['joined'] = Variable<bool>(joined.value);
+    }
     return map;
   }
 
@@ -288,7 +329,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('descriptor: $descriptor, ')
-          ..write('logo: $logo')
+          ..write('logo: $logo, ')
+          ..write('joined: $joined')
           ..write(')'))
         .toString();
   }

@@ -38,13 +38,14 @@ class Campaign extends Equatable {
     return _$CampaignToJson(this);
   }
 
-  db.CampaignCompanion toDB() {
+  db.CampaignCompanion toDB(bool joined) {
     return db.CampaignCompanion(
       id: Value(id),
       name: Value(name),
       description: Value(description),
       descriptor: Value(descriptor),
       logo: Value(logo),
+      joined: Value(joined),
     );
   }
 
