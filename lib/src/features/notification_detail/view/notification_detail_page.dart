@@ -45,7 +45,7 @@ class NotificationDetailView extends StatelessWidget {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            context.goNamed(TaskRoute.name, params: {'cid': '$campaignId'});
+            context.goNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
           },
         ),
       ),

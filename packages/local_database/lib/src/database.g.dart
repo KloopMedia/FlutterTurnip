@@ -40,9 +40,20 @@ class $CampaignTable extends Campaign
   late final GeneratedColumn<String> logo = GeneratedColumn<String>(
       'logo', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _joinedMeta = const VerificationMeta('joined');
+  @override
+  late final GeneratedColumn<bool> joined =
+      GeneratedColumn<bool>('joined', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("joined" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, description, descriptor, logo];
+      [id, name, description, descriptor, logo, joined];
   @override
   String get aliasedName => _alias ?? 'campaign';
   @override
@@ -81,6 +92,12 @@ class $CampaignTable extends Campaign
     } else if (isInserting) {
       context.missing(_logoMeta);
     }
+    if (data.containsKey('joined')) {
+      context.handle(_joinedMeta,
+          joined.isAcceptableOrUnknown(data['joined']!, _joinedMeta));
+    } else if (isInserting) {
+      context.missing(_joinedMeta);
+    }
     return context;
   }
 
@@ -100,6 +117,8 @@ class $CampaignTable extends Campaign
           .read(DriftSqlType.string, data['${effectivePrefix}descriptor']),
       logo: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}logo'])!,
+      joined: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}joined'])!,
     );
   }
 
@@ -115,12 +134,14 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
   final String description;
   final String? descriptor;
   final String logo;
+  final bool joined;
   const CampaignData(
       {required this.id,
       required this.name,
       required this.description,
       this.descriptor,
-      required this.logo});
+      required this.logo,
+      required this.joined});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -131,6 +152,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       map['descriptor'] = Variable<String>(descriptor);
     }
     map['logo'] = Variable<String>(logo);
+    map['joined'] = Variable<bool>(joined);
     return map;
   }
 
@@ -143,6 +165,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           ? const Value.absent()
           : Value(descriptor),
       logo: Value(logo),
+      joined: Value(joined),
     );
   }
 
@@ -155,6 +178,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       description: serializer.fromJson<String>(json['description']),
       descriptor: serializer.fromJson<String?>(json['descriptor']),
       logo: serializer.fromJson<String>(json['logo']),
+      joined: serializer.fromJson<bool>(json['joined']),
     );
   }
   @override
@@ -166,6 +190,7 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       'description': serializer.toJson<String>(description),
       'descriptor': serializer.toJson<String?>(descriptor),
       'logo': serializer.toJson<String>(logo),
+      'joined': serializer.toJson<bool>(joined),
     };
   }
 
@@ -174,13 +199,15 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           String? name,
           String? description,
           Value<String?> descriptor = const Value.absent(),
-          String? logo}) =>
+          String? logo,
+          bool? joined}) =>
       CampaignData(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,
         descriptor: descriptor.present ? descriptor.value : this.descriptor,
         logo: logo ?? this.logo,
+        joined: joined ?? this.joined,
       );
   @override
   String toString() {
@@ -189,13 +216,15 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('descriptor: $descriptor, ')
-          ..write('logo: $logo')
+          ..write('logo: $logo, ')
+          ..write('joined: $joined')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, descriptor, logo);
+  int get hashCode =>
+      Object.hash(id, name, description, descriptor, logo, joined);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -204,7 +233,8 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           other.name == this.name &&
           other.description == this.description &&
           other.descriptor == this.descriptor &&
-          other.logo == this.logo);
+          other.logo == this.logo &&
+          other.joined == this.joined);
 }
 
 class CampaignCompanion extends UpdateCompanion<CampaignData> {
@@ -213,12 +243,14 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
   final Value<String> description;
   final Value<String?> descriptor;
   final Value<String> logo;
+  final Value<bool> joined;
   const CampaignCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.description = const Value.absent(),
     this.descriptor = const Value.absent(),
     this.logo = const Value.absent(),
+    this.joined = const Value.absent(),
   });
   CampaignCompanion.insert({
     this.id = const Value.absent(),
@@ -226,15 +258,18 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     required String description,
     this.descriptor = const Value.absent(),
     required String logo,
+    required bool joined,
   })  : name = Value(name),
         description = Value(description),
-        logo = Value(logo);
+        logo = Value(logo),
+        joined = Value(joined);
   static Insertable<CampaignData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? description,
     Expression<String>? descriptor,
     Expression<String>? logo,
+    Expression<bool>? joined,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -242,6 +277,7 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       if (description != null) 'description': description,
       if (descriptor != null) 'descriptor': descriptor,
       if (logo != null) 'logo': logo,
+      if (joined != null) 'joined': joined,
     });
   }
 
@@ -250,13 +286,15 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       Value<String>? name,
       Value<String>? description,
       Value<String?>? descriptor,
-      Value<String>? logo}) {
+      Value<String>? logo,
+      Value<bool>? joined}) {
     return CampaignCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       descriptor: descriptor ?? this.descriptor,
       logo: logo ?? this.logo,
+      joined: joined ?? this.joined,
     );
   }
 
@@ -278,6 +316,9 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     if (logo.present) {
       map['logo'] = Variable<String>(logo.value);
     }
+    if (joined.present) {
+      map['joined'] = Variable<bool>(joined.value);
+    }
     return map;
   }
 
@@ -288,7 +329,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('descriptor: $descriptor, ')
-          ..write('logo: $logo')
+          ..write('logo: $logo, ')
+          ..write('joined: $joined')
           ..write(')'))
         .toString();
   }
@@ -838,6 +880,15 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES task_stage (id)'));
+  static const VerificationMeta _campaignMeta =
+      const VerificationMeta('campaign');
+  @override
+  late final GeneratedColumn<int> campaign = GeneratedColumn<int>(
+      'campaign', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES campaign (id)'));
   static const VerificationMeta _responsesMeta =
       const VerificationMeta('responses');
   @override
@@ -869,6 +920,7 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
         complete,
         reopened,
         stage,
+        campaign,
         responses,
         jsonSchema,
         uiSchema,
@@ -910,6 +962,12 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
     } else if (isInserting) {
       context.missing(_stageMeta);
     }
+    if (data.containsKey('campaign')) {
+      context.handle(_campaignMeta,
+          campaign.isAcceptableOrUnknown(data['campaign']!, _campaignMeta));
+    } else if (isInserting) {
+      context.missing(_campaignMeta);
+    }
     if (data.containsKey('responses')) {
       context.handle(_responsesMeta,
           responses.isAcceptableOrUnknown(data['responses']!, _responsesMeta));
@@ -947,6 +1005,8 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
           .read(DriftSqlType.bool, data['${effectivePrefix}reopened'])!,
       stage: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}stage'])!,
+      campaign: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}campaign'])!,
       responses: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}responses']),
       jsonSchema: attachedDatabase.typeMapping
@@ -970,6 +1030,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
   final bool complete;
   final bool reopened;
   final int stage;
+  final int campaign;
   final String? responses;
   final String? jsonSchema;
   final String? uiSchema;
@@ -980,6 +1041,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       required this.complete,
       required this.reopened,
       required this.stage,
+      required this.campaign,
       this.responses,
       this.jsonSchema,
       this.uiSchema,
@@ -992,6 +1054,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
     map['complete'] = Variable<bool>(complete);
     map['reopened'] = Variable<bool>(reopened);
     map['stage'] = Variable<int>(stage);
+    map['campaign'] = Variable<int>(campaign);
     if (!nullToAbsent || responses != null) {
       map['responses'] = Variable<String>(responses);
     }
@@ -1014,6 +1077,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       complete: Value(complete),
       reopened: Value(reopened),
       stage: Value(stage),
+      campaign: Value(campaign),
       responses: responses == null && nullToAbsent
           ? const Value.absent()
           : Value(responses),
@@ -1038,6 +1102,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       complete: serializer.fromJson<bool>(json['complete']),
       reopened: serializer.fromJson<bool>(json['reopened']),
       stage: serializer.fromJson<int>(json['stage']),
+      campaign: serializer.fromJson<int>(json['campaign']),
       responses: serializer.fromJson<String?>(json['responses']),
       jsonSchema: serializer.fromJson<String?>(json['jsonSchema']),
       uiSchema: serializer.fromJson<String?>(json['uiSchema']),
@@ -1053,6 +1118,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       'complete': serializer.toJson<bool>(complete),
       'reopened': serializer.toJson<bool>(reopened),
       'stage': serializer.toJson<int>(stage),
+      'campaign': serializer.toJson<int>(campaign),
       'responses': serializer.toJson<String?>(responses),
       'jsonSchema': serializer.toJson<String?>(jsonSchema),
       'uiSchema': serializer.toJson<String?>(uiSchema),
@@ -1066,6 +1132,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           bool? complete,
           bool? reopened,
           int? stage,
+          int? campaign,
           Value<String?> responses = const Value.absent(),
           Value<String?> jsonSchema = const Value.absent(),
           Value<String?> uiSchema = const Value.absent(),
@@ -1076,6 +1143,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
         complete: complete ?? this.complete,
         reopened: reopened ?? this.reopened,
         stage: stage ?? this.stage,
+        campaign: campaign ?? this.campaign,
         responses: responses.present ? responses.value : this.responses,
         jsonSchema: jsonSchema.present ? jsonSchema.value : this.jsonSchema,
         uiSchema: uiSchema.present ? uiSchema.value : this.uiSchema,
@@ -1089,6 +1157,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           ..write('complete: $complete, ')
           ..write('reopened: $reopened, ')
           ..write('stage: $stage, ')
+          ..write('campaign: $campaign, ')
           ..write('responses: $responses, ')
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
@@ -1098,7 +1167,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, complete, reopened, stage,
+  int get hashCode => Object.hash(id, name, complete, reopened, stage, campaign,
       responses, jsonSchema, uiSchema, createdAt);
   @override
   bool operator ==(Object other) =>
@@ -1109,6 +1178,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           other.complete == this.complete &&
           other.reopened == this.reopened &&
           other.stage == this.stage &&
+          other.campaign == this.campaign &&
           other.responses == this.responses &&
           other.jsonSchema == this.jsonSchema &&
           other.uiSchema == this.uiSchema &&
@@ -1121,6 +1191,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
   final Value<bool> complete;
   final Value<bool> reopened;
   final Value<int> stage;
+  final Value<int> campaign;
   final Value<String?> responses;
   final Value<String?> jsonSchema;
   final Value<String?> uiSchema;
@@ -1131,6 +1202,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     this.complete = const Value.absent(),
     this.reopened = const Value.absent(),
     this.stage = const Value.absent(),
+    this.campaign = const Value.absent(),
     this.responses = const Value.absent(),
     this.jsonSchema = const Value.absent(),
     this.uiSchema = const Value.absent(),
@@ -1142,6 +1214,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     required bool complete,
     required bool reopened,
     required int stage,
+    required int campaign,
     this.responses = const Value.absent(),
     this.jsonSchema = const Value.absent(),
     this.uiSchema = const Value.absent(),
@@ -1149,13 +1222,15 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
   })  : name = Value(name),
         complete = Value(complete),
         reopened = Value(reopened),
-        stage = Value(stage);
+        stage = Value(stage),
+        campaign = Value(campaign);
   static Insertable<TaskData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<bool>? complete,
     Expression<bool>? reopened,
     Expression<int>? stage,
+    Expression<int>? campaign,
     Expression<String>? responses,
     Expression<String>? jsonSchema,
     Expression<String>? uiSchema,
@@ -1167,6 +1242,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       if (complete != null) 'complete': complete,
       if (reopened != null) 'reopened': reopened,
       if (stage != null) 'stage': stage,
+      if (campaign != null) 'campaign': campaign,
       if (responses != null) 'responses': responses,
       if (jsonSchema != null) 'json_schema': jsonSchema,
       if (uiSchema != null) 'ui_schema': uiSchema,
@@ -1180,6 +1256,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       Value<bool>? complete,
       Value<bool>? reopened,
       Value<int>? stage,
+      Value<int>? campaign,
       Value<String?>? responses,
       Value<String?>? jsonSchema,
       Value<String?>? uiSchema,
@@ -1190,6 +1267,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       complete: complete ?? this.complete,
       reopened: reopened ?? this.reopened,
       stage: stage ?? this.stage,
+      campaign: campaign ?? this.campaign,
       responses: responses ?? this.responses,
       jsonSchema: jsonSchema ?? this.jsonSchema,
       uiSchema: uiSchema ?? this.uiSchema,
@@ -1215,6 +1293,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     if (stage.present) {
       map['stage'] = Variable<int>(stage.value);
     }
+    if (campaign.present) {
+      map['campaign'] = Variable<int>(campaign.value);
+    }
     if (responses.present) {
       map['responses'] = Variable<String>(responses.value);
     }
@@ -1238,6 +1319,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
           ..write('complete: $complete, ')
           ..write('reopened: $reopened, ')
           ..write('stage: $stage, ')
+          ..write('campaign: $campaign, ')
           ..write('responses: $responses, ')
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
@@ -1247,8 +1329,8 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
   }
 }
 
-abstract class _$MyDatabase extends GeneratedDatabase {
-  _$MyDatabase(QueryExecutor e) : super(e);
+abstract class _$AppDatabase extends GeneratedDatabase {
+  _$AppDatabase(QueryExecutor e) : super(e);
   late final $CampaignTable campaign = $CampaignTable(this);
   late final $TaskStageTable taskStage = $TaskStageTable(this);
   late final $TaskTable task = $TaskTable(this);

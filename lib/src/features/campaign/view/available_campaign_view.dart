@@ -15,7 +15,7 @@ class AvailableCampaignView extends StatelessWidget {
   void redirectToCampaignDetail(BuildContext context, Campaign campaign) {
     context.pushNamed(
       CampaignDetailRoute.name,
-      params: {'cid': '${campaign.id}'},
+      pathParameters: {'cid': '${campaign.id}'},
       extra: campaign,
     );
   }

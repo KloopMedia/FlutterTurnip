@@ -14,7 +14,7 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
   void redirectToNotification(BuildContext context, Notification notification) {
     context.pushNamed(
       NotificationDetailRoute.name,
-      params: {
+      pathParameters: {
         'cid': '$campaignId',
         'nid': '${notification.id}',
       },

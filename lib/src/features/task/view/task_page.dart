@@ -31,14 +31,14 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
   void _redirectToNotificationPage(BuildContext context) {
-    final params = GoRouterState.of(context).params;
-    context.pushNamed(NotificationRoute.name, params: params);
+    final params = GoRouterState.of(context).pathParameters;
+    context.pushNamed(NotificationRoute.name, pathParameters: params);
   }
 
   void _redirectToCampaignDetail(BuildContext context) {
     context.pushNamed(
       CampaignDetailRoute.name,
-      params: {'cid': '${widget.campaignId}'},
+      pathParameters: {'cid': '${widget.campaignId}'},
       extra: widget.campaign,
     );
   }

@@ -22,8 +22,8 @@ class TaskRoute {
   TaskRoute({required this.parentKey});
 
   Future<String?> createTask(BuildContext context, GoRouterState state) async {
-    final params = {...state.params};
-    final query = {...state.queryParams};
+    final params = {...state.pathParameters};
+    final query = {...state.queryParameters};
     final queryString = toQueryString(query, 'create_task');
 
     try {
@@ -31,13 +31,13 @@ class TaskRoute {
       final task = await context.read<GigaTurnipApiClient>().createTaskFromStageId(stageId);
       return '${TaskDetailRoute.path.replaceFirst(':cid', '${params['cid']}').replaceFirst(':tid', '${task.id}')}/?$queryString';
     } on FormatException {
-      return '${state.subloc}?$queryString';
+      return '${state.matchedLocation}?$queryString';
     }
   }
 
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
-    final params = {...state.params};
-    final query = {...state.queryParams};
+    final params = {...state.pathParameters};
+    final query = {...state.queryParameters};
     final queryString = toQueryString(query, 'join');
 
     try {
@@ -49,11 +49,11 @@ class TaskRoute {
         print(c);
       }
     }
-    return '${state.subloc}/?$queryString';
+    return '${state.matchedLocation}/?$queryString';
   }
 
   FutureOr<String?> redirect(BuildContext context, GoRouterState state) async {
-    final query = {...state.queryParams};
+    final query = {...state.queryParameters};
 
     final joinCampaignQueryValue = query['join']?.toLowerCase() == 'true';
     // final createTaskIdQueryValue = query['create_task'];
@@ -76,9 +76,9 @@ class TaskRoute {
       path: path,
       redirect: redirect,
       builder: (BuildContext context, GoRouterState state) {
-        final id = state.params['cid'] ?? '';
+        final id = state.pathParameters['cid'] ?? '';
         final campaign = state.extra;
-        final createTaskIdQueryValue = state.queryParams['create_task'] ?? '';
+        final createTaskIdQueryValue = state.queryParameters['create_task'] ?? '';
 
         final campaignId = int.tryParse(id);
         if (campaignId == null) {

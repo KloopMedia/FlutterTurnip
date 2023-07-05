@@ -6,11 +6,11 @@ abstract class GigaTurnipRepository<Data> {
 
   GigaTurnipRepository({this.limit = 10});
 
-  int _calculateOffset(int page) {
+  int calculateOffset(int page) {
     return page * limit;
   }
 
-  int _calculateTotalPage(int total) {
+  int calculateTotalPage(int total) {
     final totalWithOffset = (total - 1).isNegative ? 0 : total - 1;
     return (totalWithOffset / limit).floor();
   }
@@ -18,7 +18,7 @@ abstract class GigaTurnipRepository<Data> {
   Future<PageData<Data>> fetchDataOnPage(int page, [Map<String, dynamic>? query]) async {
     final paginationQuery = {
       'limit': limit,
-      'offset': _calculateOffset(page),
+      'offset': calculateOffset(page),
       ...?query,
     };
     final data = await fetchAndParseData(query: paginationQuery);
@@ -26,7 +26,7 @@ abstract class GigaTurnipRepository<Data> {
     return PageData(
       data: data.results,
       currentPage: page,
-      total: _calculateTotalPage(data.count),
+      total: calculateTotalPage(data.count),
       count: data.count,
     );
   }

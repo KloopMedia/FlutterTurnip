@@ -44,6 +44,7 @@ class Task extends Equatable {
       complete: complete,
       reopened: reopened,
       stage: stage.id,
+      campaign: stage.campaign,
       createdAt: Value(createdAt),
     );
   }

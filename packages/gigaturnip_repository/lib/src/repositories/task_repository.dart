@@ -27,6 +27,7 @@ class AllTaskRepository extends TaskRepository {
   @override
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
     try {
+      fetchAllTaskStages();
       final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
         'stage__chain__campaign': campaignId,
         ...?query,
@@ -35,19 +36,34 @@ class AllTaskRepository extends TaskRepository {
 
       for (final item in parsed) {
         final entity = item.toDB();
-        await db.LocalDatabase.insertTaskStage(item.stage.toDB());
         await db.LocalDatabase.insertTask(entity);
       }
 
       return data.copyWith<Task>(results: parsed);
     } catch (e) {
-      final data = await db.LocalDatabase.getTasks();
-      final parsed = await Future.wait(data.map((model) async {
-        final stage = await db.LocalDatabase.getSingleTaskStage(model.stage);
-        return Task.fromDB(model, stage);
-      }));
-      return api.PaginationWrapper(count: parsed.length, results: parsed);
+      print(e);
+      final wrapper = await db.LocalDatabase.getTasks(campaignId, limit: limit, offset: query?['offset']);
+      final results = wrapper['results'] as List<Map<String, dynamic>>;
+      final parsed = results.map(Task.fromJson).toList();
+      return api.PaginationWrapper(count: wrapper['count'], results: parsed);
     }
+  }
+
+  void fetchAllTaskStages() async {
+    try {
+      final data = await _gigaTurnipApiClient.getAvailableTaskStages(
+        query: {'chain__campaign': campaignId, 'limit': 1000},
+      );
+
+      final parsed = data.results.map(TaskStageDetail.fromApiModel).toList();
+      for (final item in parsed) {
+        final entity = item.toDB();
+        await db.LocalDatabase.insertTaskStage(entity);
+      }
+    } catch (e) {
+      print('FETCHING ALL TASK STAGES ERROR $e');
+    }
+
   }
 }
 

@@ -66,16 +66,19 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final _state = state as TaskInitialized;
     final formData = event.formData;
 
+    final data = {'responses': formData, 'complete': true};
+
     try {
-      final data = {'responses': formData, 'complete': true};
+      final updatedTask = _state.data.copyWith(responses: formData, complete: true);
       final response = await _repository.saveData(taskId, data);
       final nextTaskId = response.nextDirectId;
 
-      final updatedTask = _state.data.copyWith(responses: formData, complete: true);
       emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
     } catch (e) {
       print(e);
-      emit(TaskSubmitError.clone(state as TaskLoaded, e.toString()));
+      final updatedTask = _state.data.copyWith(responses: formData);
+      emit(TaskSubmitError(updatedTask, _state.previousTasks, e.toString()));
+      emit(TaskLoaded(updatedTask, _state.previousTasks));
     }
   }
 

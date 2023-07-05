@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -16,7 +17,9 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
 
@@ -61,7 +64,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     context.goNamed(
       TaskRoute.name,
-      params: {
+      pathParameters: {
         'cid': '${widget.campaignId}',
       },
     );
@@ -69,7 +72,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   }
 
   @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(String id, int status, int progress) {
     final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
     send?.send([id, status, progress]);
   }
@@ -78,7 +81,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
     if (nextTaskId != null) {
       context.goNamed(
         TaskDetailRoute.name,
-        params: {
+        pathParameters: {
           'tid': '$nextTaskId',
           'cid': '${widget.campaignId}',
         },
@@ -89,7 +92,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       } else {
         context.goNamed(
           TaskRoute.name,
-          params: {
+          pathParameters: {
             'cid': '${widget.campaignId}',
           },
         );
@@ -109,6 +112,18 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           },
         ),
       ),
+    );
+  }
+
+  void openOfflineDialog(BuildContext context, String phoneNumber, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return OfflinePhoneMessageDialog(
+          phoneNumber: phoneNumber,
+          message: message,
+        );
+      },
     );
   }
 
@@ -134,7 +149,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
     return Theme(
       data: colorScheme.isLight ? lightTheme : darkTheme,
-      child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) {
+      child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) async {
         if (state is TaskSubmitted) {
           redirect(context, state.nextTaskId);
         }
@@ -143,6 +158,16 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         }
         if (state is TaskInfoOpened) {
           openWebView(context);
+        }
+        if (state is TaskSubmitError) {
+          const phoneNumber = '+ 996 45-45-45';
+          final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
+          try {
+            final uri = Uri.parse('sms:$phoneNumber?body=$message');
+            await launchUrl(uri);
+          } catch (e) {
+            openOfflineDialog(context, phoneNumber, message);
+          }
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {

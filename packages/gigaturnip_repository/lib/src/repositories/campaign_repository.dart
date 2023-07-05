@@ -27,14 +27,14 @@ class UserCampaignRepository extends CampaignRepository {
       final List<Campaign> parsed = parseData(data.results);
 
       for (final campaign in parsed) {
-        final entity = campaign.toDB();
+        final entity = campaign.toDB(true);
         await db.LocalDatabase.insertCampaign(entity);
       }
 
       return data.copyWith<Campaign>(results: parsed);
     } catch (e) {
       print(e);
-      final data = await db.LocalDatabase.getCampaigns();
+      final data = await db.LocalDatabase.getCampaigns(true);
       final parsed = data.map(Campaign.fromDB).toList();
       return api.PaginationWrapper(count: parsed.length, results: parsed);
     }
@@ -51,13 +51,13 @@ class SelectableCampaignRepository extends CampaignRepository {
       final List<Campaign> parsed = parseData(data.results);
 
       for (final campaign in parsed) {
-        final entity = campaign.toDB();
+        final entity = campaign.toDB(false);
         await db.LocalDatabase.insertCampaign(entity);
       }
 
       return data.copyWith<Campaign>(results: parsed);
     } catch (e) {
-      final data = await db.LocalDatabase.getCampaigns();
+      final data = await db.LocalDatabase.getCampaigns(false);
       final parsed = data.map(Campaign.fromDB).toList();
       return api.PaginationWrapper(count: parsed.length, results: parsed);
     }

@@ -121,6 +121,11 @@ abstract class GigaTurnipApiClient {
   @POST("$taskStagesRoute/{id}/$createTaskActionRoute")
   Future<CreateTaskResponse> createTaskFromStageId(@Path("id") int id);
 
+  @GET(availableTaskStageRoute)
+  Future<PaginationWrapper<TaskStageDetail>> getAvailableTaskStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
   // Notification methods
 
   @GET(notificationsRoute)

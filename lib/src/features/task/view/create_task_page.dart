@@ -16,7 +16,7 @@ class CreateTaskPage extends StatefulWidget {
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
   Future<void> createTask() async {
-    final campaignId = GoRouterState.of(context).params['cid'];
+    final campaignId = GoRouterState.of(context).pathParameters['cid'];
     if (campaignId != null) {
       try {
         final api = context.read<GigaTurnipApiClient>();
@@ -27,10 +27,10 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         );
         final newTaskId = await repository.createTask(widget.taskId);
         if (!mounted) return;
-        context.goNamed(TaskDetailRoute.name, params: {'cid': campaignId, 'tid': '$newTaskId'});
+        context.goNamed(TaskDetailRoute.name, pathParameters: {'cid': campaignId, 'tid': '$newTaskId'});
       } catch (e) {
         print(e);
-        context.goNamed(TaskRoute.name, params: {'cid': campaignId});
+        context.goNamed(TaskRoute.name, pathParameters: {'cid': campaignId});
       }
     }
   }

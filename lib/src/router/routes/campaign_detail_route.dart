@@ -19,7 +19,7 @@ class CampaignDetailRoute {
       path: path,
       builder: (BuildContext context, GoRouterState state) {
         final campaign = state.extra;
-        final cid = state.params['cid'] ?? '';
+        final cid = state.pathParameters['cid'] ?? '';
 
         final campaignId = int.parse(cid);
 

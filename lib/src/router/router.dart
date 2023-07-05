@@ -19,22 +19,22 @@ class AppRouter {
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
   String redirectToLoginPage(BuildContext context, GoRouterState state) {
-    final query = {...state.queryParams};
+    final query = {...state.queryParameters};
 
     final queryString = toQueryString(query);
-    final fromPage = state.subloc == _initialLocation ? '' : '?from=${state.subloc}&$queryString';
+    final fromPage = state.matchedLocation == _initialLocation ? '' : '?from=${state.matchedLocation}&$queryString';
     return LoginRoute.path + fromPage;
   }
 
   String redirectToInitialPage(BuildContext context, GoRouterState state) {
-    final query = {...state.queryParams};
+    final query = {...state.queryParameters};
 
     final queryString = toQueryString(query, 'from');
-    return '${state.queryParams['from'] ?? _initialLocation}?$queryString';
+    return '${state.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
-    final query = {...state.queryParams};
+    final query = {...state.queryParameters};
     final queryString = toQueryString(query, 'join_campaign');
 
     try {
@@ -42,7 +42,7 @@ class AppRouter {
       await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
       return '${TaskRoute.path.replaceFirst(':cid', '$campaignId')}/?$queryString';
     } on FormatException {
-      return '${state.subloc}?$queryString';
+      return '${state.matchedLocation}?$queryString';
     }
   }
 
@@ -53,9 +53,9 @@ class AppRouter {
       redirect: (BuildContext context, GoRouterState state) async {
         final authenticationService = context.read<AuthenticationRepository>();
 
-        final query = {...state.queryParams};
+        final query = {...state.queryParameters};
         final bool loggedIn = authenticationService.user.isNotEmpty;
-        final bool loggingIn = state.subloc == LoginRoute.path;
+        final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final campaignIdQueryValue = query['join_campaign'];
 
         // bundle the location the user is coming from into a query parameter

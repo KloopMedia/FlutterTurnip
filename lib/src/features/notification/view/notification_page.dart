@@ -47,7 +47,7 @@ class NotificationPage extends StatelessWidget {
             BackButton(
               onPressed: () => context.goNamed(
                 TaskRoute.name,
-                params: GoRouterState.of(context).params,
+                pathParameters: GoRouterState.of(context).pathParameters,
               ),
             )
           ],
