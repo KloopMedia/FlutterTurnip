@@ -96,8 +96,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
               ),
             ]);
           } else {
-            // return SliverFillRemaining(child: emptyPlaceholder);
-            return const SliverToBoxAdapter(child: SizedBox.shrink());
+            return SliverFillRemaining(child: emptyPlaceholder);
           }
         }
         return const SliverToBoxAdapter(child: SizedBox.shrink());
