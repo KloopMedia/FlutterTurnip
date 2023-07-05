@@ -64,7 +64,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     context.goNamed(
       TaskRoute.name,
-      params: {
+      pathParameters: {
         'cid': '${widget.campaignId}',
       },
     );
