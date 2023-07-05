@@ -33,6 +33,7 @@ class UserCampaignRepository extends CampaignRepository {
 
       return data.copyWith<Campaign>(results: parsed);
     } catch (e) {
+      print(e);
       final data = await db.LocalDatabase.getCampaigns();
       final parsed = data.map(Campaign.fromDB).toList();
       return api.PaginationWrapper(count: parsed.length, results: parsed);

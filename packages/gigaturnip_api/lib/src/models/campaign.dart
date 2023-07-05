@@ -16,7 +16,7 @@ class Campaign {
   final String? descriptor;
   final String logo;
   final int notificationsCount;
-  final List<int?> languages;
+  final List<int>? languages;
 
   Campaign({
     required this.id,

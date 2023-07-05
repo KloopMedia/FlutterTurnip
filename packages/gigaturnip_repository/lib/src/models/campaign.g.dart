@@ -15,7 +15,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       smsLoginAllow: json['smsLoginAllow'] as bool,
       unreadNotifications: json['unreadNotifications'] as int,
       languages:
-          (json['languages'] as List<dynamic>).map((e) => e as int?).toList(),
+          (json['languages'] as List<dynamic>?)?.map((e) => e as int).toList(),
       canJoin: json['canJoin'] as bool? ?? false,
     );
 

@@ -16,7 +16,7 @@ class Campaign extends Equatable {
   final String? descriptor;
   final String logo;
   final int unreadNotifications;
-  final List<int?> languages;
+  final List<int>? languages;
 
   const Campaign({
     required this.id,

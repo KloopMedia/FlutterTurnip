@@ -30,7 +30,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           notificationsCount:
               $checkedConvert('notifications_count', (v) => v as int),
           languages: $checkedConvert('languages',
-              (v) => (v as List<dynamic>).map((e) => e as int?).toList()),
+              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
         );
         return val;
       },
