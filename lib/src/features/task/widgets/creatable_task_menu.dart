@@ -18,7 +18,7 @@ class CreatableTaskMenu extends StatelessWidget {
     void redirectToTask(BuildContext context, int id) {
       context.goNamed(
         TaskDetailRoute.name,
-        params: {
+        pathParameters: {
           "cid": "$campaignId",
           "tid": "$id",
         },

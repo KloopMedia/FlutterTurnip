@@ -20,8 +20,8 @@ class TaskDetailRoute {
       path: path,
       builder: (BuildContext context, GoRouterState state) {
         final task = state.extra;
-        final tid = state.params['tid'];
-        final cid = state.params['cid'];
+        final tid = state.pathParameters['tid'];
+        final cid = state.pathParameters['cid'];
 
         if (tid == null || cid == null) {
           return Text(context.loc.unknown_page);

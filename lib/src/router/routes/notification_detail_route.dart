@@ -24,8 +24,8 @@ class NotificationDetailRoute {
       path: path,
       builder: (BuildContext context, GoRouterState state) {
         final notification = state.extra;
-        final nid = state.params['nid'];
-        final cid = state.params['cid'];
+        final nid = state.pathParameters['nid'];
+        final cid = state.pathParameters['cid'];
 
         if (nid == null || cid == null) {
           return Text(context.loc.unknown_page);

@@ -18,8 +18,8 @@ class AvailableTaskRoute {
       name: name,
       path: path,
       builder: (BuildContext context, GoRouterState state) {
-        final cid = state.params['cid'] ?? '';
-        final tid = state.params['tid'] ?? '';
+        final cid = state.pathParameters['cid'] ?? '';
+        final tid = state.pathParameters['tid'] ?? '';
 
         final campaignId = int.tryParse(cid);
         final stageId = int.tryParse(tid);

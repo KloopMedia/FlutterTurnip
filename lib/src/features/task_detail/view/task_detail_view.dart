@@ -81,7 +81,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
     if (nextTaskId != null) {
       context.goNamed(
         TaskDetailRoute.name,
-        params: {
+        pathParameters: {
           'tid': '$nextTaskId',
           'cid': '${widget.campaignId}',
         },
@@ -92,7 +92,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       } else {
         context.goNamed(
           TaskRoute.name,
-          params: {
+          pathParameters: {
             'cid': '${widget.campaignId}',
           },
         );

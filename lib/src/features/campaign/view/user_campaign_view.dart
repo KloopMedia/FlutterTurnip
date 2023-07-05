@@ -14,7 +14,7 @@ class UserCampaignView extends StatelessWidget {
   void redirectToTaskMenu(BuildContext context, Campaign item) {
     context.pushNamed(
       TaskRoute.name,
-      params: {'cid': '${item.id}'},
+      pathParameters: {'cid': '${item.id}'},
     );
   }
 
