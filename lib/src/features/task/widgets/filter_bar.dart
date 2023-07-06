@@ -36,15 +36,14 @@ class _FilterBarState extends State<FilterBar> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.title != null)
-            Text(
-              widget.title!,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: theme.isLight ? theme.neutral30 : theme.neutral90
-              ),
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: theme.isLight ? theme.neutral30 : theme.neutral90,
             ),
+          ),
           const SizedBox(height: 15),
           FixedChipBar(
             children: [
