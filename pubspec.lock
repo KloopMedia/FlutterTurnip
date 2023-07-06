@@ -80,6 +80,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  background_downloader:
+    dependency: "direct main"
+    description:
+      name: background_downloader
+      sha256: "3cf9a9defa91c04a7b770976283191b6ae7c83ae77a35ad58ce9411481cb4884"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.4.1"
   bloc:
     dependency: "direct main"
     description:
@@ -485,14 +493,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
-  flutter_downloader:
-    dependency: "direct main"
-    description:
-      name: flutter_downloader
-      sha256: "79e05335471e23593f2e22483d2c909a03f19000293cbc7f39c8c2fd4d5d9c3d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.10.4"
   flutter_form_builder:
     dependency: transitive
     description:
@@ -538,7 +538,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "86273c15dae12be6784020af8edbca5af7d96762"
+      resolved-ref: ddf0c9ff92cb309a7be4e519362e2935bfcb73a8
       url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
     source: git
     version: "0.0.1"
