@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
+
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +17,6 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
@@ -159,16 +158,16 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskInfoOpened) {
           openWebView(context);
         }
-        if (state is TaskSubmitError) {
-          const phoneNumber = '+ 996 45-45-45';
-          final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
-          try {
-            final uri = Uri.parse('sms:$phoneNumber?body=$message');
-            await launchUrl(uri);
-          } catch (e) {
-            openOfflineDialog(context, phoneNumber, message);
-          }
-        }
+        // if (state is TaskSubmitError) {
+        //   const phoneNumber = '+ 996 45-45-45';
+        //   final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
+        //   try {
+        //     final uri = Uri.parse('sms:$phoneNumber?body=$message');
+        //     await launchUrl(uri);
+        //   } catch (e) {
+        //     openOfflineDialog(context, phoneNumber, message);
+        //   }
+        // }
       }, builder: (context, state) {
         if (state is TaskFetching) {
           return const Center(child: CircularProgressIndicator());
