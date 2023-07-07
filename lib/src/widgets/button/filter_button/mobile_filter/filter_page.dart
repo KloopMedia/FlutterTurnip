@@ -13,11 +13,11 @@ import '../../../../bloc/bloc.dart';
 class FilterPage extends StatelessWidget {
   final Function(dynamic item) onTap;
   final List<dynamic> queries;
+
   const FilterPage({Key? key, required this.onTap, required this.queries}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -47,11 +47,13 @@ class FilterPage extends StatelessWidget {
   }
 }
 
-
 class FilterView extends StatelessWidget {
   final Function(dynamic item) onTap;
   final List<dynamic> queries;
-  const FilterView({Key? key, required this.onTap, required this.queries/*queryMap*/}) : super(key: key);
+
+  const FilterView({Key? key, required this.onTap, required this.queries /*queryMap*/
+      })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,10 @@ class FilterView extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: textColor,),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: textColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -81,12 +86,12 @@ class FilterView extends StatelessWidget {
         color: backgroundColor,
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
-          crossAxisAlignment:  CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Filter<Country, CountryCubit>(
               queries: queries,
               title: context.loc.country,
-              onTap: (selectedItem){
+              onTap: (selectedItem) {
                 if (selectedItem.isEmpty) {
                   selectedItems.removeWhere((element) => element is Country);
                 } else {
@@ -97,7 +102,7 @@ class FilterView extends StatelessWidget {
             Filter<Category, CategoryCubit>(
               queries: queries,
               title: context.loc.category,
-              onTap: (selectedItem){
+              onTap: (selectedItem) {
                 if (selectedItem.isEmpty) {
                   selectedItems.removeWhere((element) => element is Category);
                 } else {
@@ -108,7 +113,7 @@ class FilterView extends StatelessWidget {
             Filter<Language, LanguageCubit>(
               queries: queries,
               title: context.loc.language,
-              onTap: (selectedItem){
+              onTap: (selectedItem) {
                 if (selectedItem.isEmpty) {
                   selectedItems.removeWhere((element) => element is Language);
                 } else {
@@ -155,24 +160,21 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
   final String title;
   final List<dynamic> queries;
   final Function(dynamic item) onTap;
-  String? fieldQuery;
 
-  Filter({
+  const Filter({
     Key? key,
     required this.title,
     required this.queries,
     required this.onTap,
   }) : super(key: key);
 
-  void setFieldQuery(List<dynamic> data) {
-      for (var query in queries) {
-        if (data.contains(query)) {
-          fieldQuery = query.name;
-          break;
-        } else {
-          continue;
+  String? setFieldQuery(List<dynamic> data) {
+    for (var query in queries) {
+      if (data.contains(query)) {
+        return query.name;
       }
     }
+    return null;
   }
 
   @override
@@ -180,48 +182,45 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
     final theme = Theme.of(context).colorScheme;
     final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
 
-    return BlocBuilder<Cubit, RemoteDataState<Data>>(
-        builder: (context, state) {
-          if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
-            final data = state.data;
-            setFieldQuery(data);
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      color: textColor,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+    return BlocBuilder<Cubit, RemoteDataState<Data>>(builder: (context, state) {
+      if (state is RemoteDataLoaded<Data> && state.data.isNotEmpty) {
+        final data = state.data;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: textColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
                 ),
-                FilterField(
-                  fieldQuery: fieldQuery,
-                  queries: queries,
-                  data: data,
-                  title: title,
-                  onTap: (selectedItem) {
-                    final List<dynamic> list;
-                    list = List.from(queries);
-                    list.removeWhere((element) => element is Data);
-                    if (selectedItem != null) list.add(selectedItem);
-                    onTap(list);
-                  },
-                )
-              ],
-            );
-          }
-          return const SizedBox.shrink();
-        }
-    );
+              ),
+            ),
+            FilterField(
+              fieldQuery: setFieldQuery(data),
+              queries: queries,
+              data: data,
+              title: title,
+              onTap: (selectedItem) {
+                final List<dynamic> list;
+                list = List.from(queries);
+                list.removeWhere((element) => element is Data);
+                if (selectedItem != null) list.add(selectedItem);
+                onTap(list);
+              },
+            )
+          ],
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }
-
 
 class FilterField extends StatefulWidget {
   final List<dynamic> data;
@@ -292,7 +291,7 @@ class _FilterFieldState extends State<FilterField> {
       ),
       onPressed: () {
         showModalBottomSheet(
-          isScrollControlled: true,
+            isScrollControlled: true,
             backgroundColor: theme.background,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
@@ -317,8 +316,7 @@ class _FilterFieldState extends State<FilterField> {
                 value: dropdownValue,
                 queries: widget.queries,
               );
-            }
-        );
+            });
       },
     );
   }

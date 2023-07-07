@@ -1,7 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/campaign_route.dart';
@@ -10,7 +9,6 @@ import 'package:gigaturnip/src/widgets/dialogs/delete_account_dialog.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/campaign/view/campaign_page.dart';
 import 'language_select.dart';
 import 'theme_switch.dart';
 import 'user_avatar.dart';

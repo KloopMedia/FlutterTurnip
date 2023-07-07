@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
+
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
@@ -17,7 +16,6 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
@@ -34,20 +32,11 @@ class TaskDetailView extends StatefulWidget {
 
 class _TaskDetailViewState extends State<TaskDetailView> {
   final _pageStorageKey = const PageStorageKey('pageKey');
-  ReceivePort _port = ReceivePort();
 
   @override
   void initState() {
     if (!kIsWeb) {
-      IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-      _port.listen((dynamic data) {
-        // String id = data[0];
-        // DownloadTaskStatus status = data[1];
-        // int progress = data[2];
-        setState(() {});
-      });
       BackButtonInterceptor.add(myInterceptor);
-      FlutterDownloader.registerCallback(downloadCallback);
     }
     super.initState();
   }
@@ -159,16 +148,16 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskInfoOpened) {
           openWebView(context);
         }
-        if (state is TaskSubmitError) {
-          const phoneNumber = '+ 996 45-45-45';
-          final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
-          try {
-            final uri = Uri.parse('sms:$phoneNumber?body=$message');
-            await launchUrl(uri);
-          } catch (e) {
-            openOfflineDialog(context, phoneNumber, message);
-          }
-        }
+        // if (state is TaskSubmitError) {
+        //   const phoneNumber = '+ 996 45-45-45';
+        //   final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
+        //   try {
+        //     final uri = Uri.parse('sms:$phoneNumber?body=$message');
+        //     await launchUrl(uri);
+        //   } catch (e) {
+        //     openOfflineDialog(context, phoneNumber, message);
+        //   }
+        // }
       }, builder: (context, state) {
         if (state is TaskFetching) {
           return const Center(child: CircularProgressIndicator());
@@ -256,7 +245,7 @@ class _CurrentTask extends StatelessWidget {
         onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
         onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
         onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-        onDownloadFile: (url) => DownloadService().download(url: url),
+        onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
         submitButtonText: Text(context.loc.form_submit_button),
       ),
     );
@@ -287,7 +276,7 @@ class _PreviousTask extends StatelessWidget {
             disabled: true,
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-            onDownloadFile: (url) => DownloadService().download(url: url),
+            onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
           ),
         ),
       ],

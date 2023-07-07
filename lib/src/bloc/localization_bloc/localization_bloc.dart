@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
