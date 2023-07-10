@@ -17,6 +17,8 @@ class Campaign {
   final String logo;
   final int notificationsCount;
   final List<int>? languages;
+  final String? smsPhone;
+  final bool smsCompleteTaskAllow;
 
   Campaign({
     required this.id,
@@ -32,6 +34,8 @@ class Campaign {
     required this.descriptor,
     required this.notificationsCount,
     required this.languages,
+    required this.smsPhone,
+    this.smsCompleteTaskAllow = false,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

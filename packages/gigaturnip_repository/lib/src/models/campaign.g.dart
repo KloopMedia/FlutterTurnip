@@ -17,6 +17,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       languages:
           (json['languages'] as List<dynamic>?)?.map((e) => e as int).toList(),
       canJoin: json['canJoin'] as bool? ?? false,
+      smsPhone: json['smsPhone'] as String?,
+      smsCompleteTaskAllow: json['smsCompleteTaskAllow'] as bool,
     );
 
 Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
@@ -29,4 +31,6 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'logo': instance.logo,
       'unreadNotifications': instance.unreadNotifications,
       'languages': instance.languages,
+      'smsPhone': instance.smsPhone,
+      'smsCompleteTaskAllow': instance.smsCompleteTaskAllow,
     };
