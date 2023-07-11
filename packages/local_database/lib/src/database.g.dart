@@ -51,9 +51,36 @@ class $CampaignTable extends Campaign
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
           }));
+  static const VerificationMeta _smsCompleteTaskAllowMeta =
+      const VerificationMeta('smsCompleteTaskAllow');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, description, descriptor, logo, joined];
+  late final GeneratedColumn<bool> smsCompleteTaskAllow =
+      GeneratedColumn<bool>('sms_complete_task_allow', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("sms_complete_task_allow" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(false));
+  static const VerificationMeta _smsPhoneMeta =
+      const VerificationMeta('smsPhone');
+  @override
+  late final GeneratedColumn<String> smsPhone = GeneratedColumn<String>(
+      'sms_phone', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        description,
+        descriptor,
+        logo,
+        joined,
+        smsCompleteTaskAllow,
+        smsPhone
+      ];
   @override
   String get aliasedName => _alias ?? 'campaign';
   @override
@@ -98,6 +125,16 @@ class $CampaignTable extends Campaign
     } else if (isInserting) {
       context.missing(_joinedMeta);
     }
+    if (data.containsKey('sms_complete_task_allow')) {
+      context.handle(
+          _smsCompleteTaskAllowMeta,
+          smsCompleteTaskAllow.isAcceptableOrUnknown(
+              data['sms_complete_task_allow']!, _smsCompleteTaskAllowMeta));
+    }
+    if (data.containsKey('sms_phone')) {
+      context.handle(_smsPhoneMeta,
+          smsPhone.isAcceptableOrUnknown(data['sms_phone']!, _smsPhoneMeta));
+    }
     return context;
   }
 
@@ -119,6 +156,10 @@ class $CampaignTable extends Campaign
           .read(DriftSqlType.string, data['${effectivePrefix}logo'])!,
       joined: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}joined'])!,
+      smsCompleteTaskAllow: attachedDatabase.typeMapping.read(DriftSqlType.bool,
+          data['${effectivePrefix}sms_complete_task_allow'])!,
+      smsPhone: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sms_phone']),
     );
   }
 
@@ -135,13 +176,17 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
   final String? descriptor;
   final String logo;
   final bool joined;
+  final bool smsCompleteTaskAllow;
+  final String? smsPhone;
   const CampaignData(
       {required this.id,
       required this.name,
       required this.description,
       this.descriptor,
       required this.logo,
-      required this.joined});
+      required this.joined,
+      required this.smsCompleteTaskAllow,
+      this.smsPhone});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -153,6 +198,10 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
     }
     map['logo'] = Variable<String>(logo);
     map['joined'] = Variable<bool>(joined);
+    map['sms_complete_task_allow'] = Variable<bool>(smsCompleteTaskAllow);
+    if (!nullToAbsent || smsPhone != null) {
+      map['sms_phone'] = Variable<String>(smsPhone);
+    }
     return map;
   }
 
@@ -166,6 +215,10 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           : Value(descriptor),
       logo: Value(logo),
       joined: Value(joined),
+      smsCompleteTaskAllow: Value(smsCompleteTaskAllow),
+      smsPhone: smsPhone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsPhone),
     );
   }
 
@@ -179,6 +232,9 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       descriptor: serializer.fromJson<String?>(json['descriptor']),
       logo: serializer.fromJson<String>(json['logo']),
       joined: serializer.fromJson<bool>(json['joined']),
+      smsCompleteTaskAllow:
+          serializer.fromJson<bool>(json['smsCompleteTaskAllow']),
+      smsPhone: serializer.fromJson<String?>(json['smsPhone']),
     );
   }
   @override
@@ -191,6 +247,8 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
       'descriptor': serializer.toJson<String?>(descriptor),
       'logo': serializer.toJson<String>(logo),
       'joined': serializer.toJson<bool>(joined),
+      'smsCompleteTaskAllow': serializer.toJson<bool>(smsCompleteTaskAllow),
+      'smsPhone': serializer.toJson<String?>(smsPhone),
     };
   }
 
@@ -200,7 +258,9 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           String? description,
           Value<String?> descriptor = const Value.absent(),
           String? logo,
-          bool? joined}) =>
+          bool? joined,
+          bool? smsCompleteTaskAllow,
+          Value<String?> smsPhone = const Value.absent()}) =>
       CampaignData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -208,6 +268,8 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
         descriptor: descriptor.present ? descriptor.value : this.descriptor,
         logo: logo ?? this.logo,
         joined: joined ?? this.joined,
+        smsCompleteTaskAllow: smsCompleteTaskAllow ?? this.smsCompleteTaskAllow,
+        smsPhone: smsPhone.present ? smsPhone.value : this.smsPhone,
       );
   @override
   String toString() {
@@ -217,14 +279,16 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           ..write('description: $description, ')
           ..write('descriptor: $descriptor, ')
           ..write('logo: $logo, ')
-          ..write('joined: $joined')
+          ..write('joined: $joined, ')
+          ..write('smsCompleteTaskAllow: $smsCompleteTaskAllow, ')
+          ..write('smsPhone: $smsPhone')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, description, descriptor, logo, joined);
+  int get hashCode => Object.hash(id, name, description, descriptor, logo,
+      joined, smsCompleteTaskAllow, smsPhone);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -234,7 +298,9 @@ class CampaignData extends DataClass implements Insertable<CampaignData> {
           other.description == this.description &&
           other.descriptor == this.descriptor &&
           other.logo == this.logo &&
-          other.joined == this.joined);
+          other.joined == this.joined &&
+          other.smsCompleteTaskAllow == this.smsCompleteTaskAllow &&
+          other.smsPhone == this.smsPhone);
 }
 
 class CampaignCompanion extends UpdateCompanion<CampaignData> {
@@ -244,6 +310,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
   final Value<String?> descriptor;
   final Value<String> logo;
   final Value<bool> joined;
+  final Value<bool> smsCompleteTaskAllow;
+  final Value<String?> smsPhone;
   const CampaignCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -251,6 +319,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     this.descriptor = const Value.absent(),
     this.logo = const Value.absent(),
     this.joined = const Value.absent(),
+    this.smsCompleteTaskAllow = const Value.absent(),
+    this.smsPhone = const Value.absent(),
   });
   CampaignCompanion.insert({
     this.id = const Value.absent(),
@@ -259,6 +329,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     this.descriptor = const Value.absent(),
     required String logo,
     required bool joined,
+    this.smsCompleteTaskAllow = const Value.absent(),
+    this.smsPhone = const Value.absent(),
   })  : name = Value(name),
         description = Value(description),
         logo = Value(logo),
@@ -270,6 +342,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     Expression<String>? descriptor,
     Expression<String>? logo,
     Expression<bool>? joined,
+    Expression<bool>? smsCompleteTaskAllow,
+    Expression<String>? smsPhone,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -278,6 +352,9 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       if (descriptor != null) 'descriptor': descriptor,
       if (logo != null) 'logo': logo,
       if (joined != null) 'joined': joined,
+      if (smsCompleteTaskAllow != null)
+        'sms_complete_task_allow': smsCompleteTaskAllow,
+      if (smsPhone != null) 'sms_phone': smsPhone,
     });
   }
 
@@ -287,7 +364,9 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       Value<String>? description,
       Value<String?>? descriptor,
       Value<String>? logo,
-      Value<bool>? joined}) {
+      Value<bool>? joined,
+      Value<bool>? smsCompleteTaskAllow,
+      Value<String?>? smsPhone}) {
     return CampaignCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -295,6 +374,8 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
       descriptor: descriptor ?? this.descriptor,
       logo: logo ?? this.logo,
       joined: joined ?? this.joined,
+      smsCompleteTaskAllow: smsCompleteTaskAllow ?? this.smsCompleteTaskAllow,
+      smsPhone: smsPhone ?? this.smsPhone,
     );
   }
 
@@ -319,6 +400,13 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     if (joined.present) {
       map['joined'] = Variable<bool>(joined.value);
     }
+    if (smsCompleteTaskAllow.present) {
+      map['sms_complete_task_allow'] =
+          Variable<bool>(smsCompleteTaskAllow.value);
+    }
+    if (smsPhone.present) {
+      map['sms_phone'] = Variable<String>(smsPhone.value);
+    }
     return map;
   }
 
@@ -330,7 +418,9 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
           ..write('description: $description, ')
           ..write('descriptor: $descriptor, ')
           ..write('logo: $logo, ')
-          ..write('joined: $joined')
+          ..write('joined: $joined, ')
+          ..write('smsCompleteTaskAllow: $smsCompleteTaskAllow, ')
+          ..write('smsPhone: $smsPhone')
           ..write(')'))
         .toString();
   }

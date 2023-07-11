@@ -9,6 +9,10 @@ class LocalDatabase {
     return (database.select(database.campaign)..where((tbl) => tbl.joined.equals(joined))).get();
   }
 
+  static Future<CampaignData> getSingleCampaign(int id) async {
+    return (database.select(database.campaign)..where((tbl) => tbl.id.equals(id))).getSingle();
+  }
+
   static Future<int> insertCampaign(CampaignCompanion entity) async {
     return database.into(database.campaign).insert(entity, mode: InsertMode.insertOrReplace);
   }

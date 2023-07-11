@@ -60,6 +60,7 @@
     "english" : "English",
     "russian" : "Русский",
     "kyrgyz" : "Кыргыз тили",
+    "ukrainian" : "Українська",
     "language" : "Тилди тандоо",
 
     "are_you_sure_logout" : "Чыгууну тастыктаңыз",
@@ -135,5 +136,5 @@
     "apply_filter": "Фильтрди колдонуу",
     "country": "Өлкө",
     "category": "Категория",
-    "language": "Тил"
+    "language_label": "Тил"
 }

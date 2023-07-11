@@ -17,6 +17,8 @@ class Campaign extends Equatable {
   final String logo;
   final int unreadNotifications;
   final List<int>? languages;
+  final String? smsPhone;
+  final bool smsCompleteTaskAllow;
 
   const Campaign({
     required this.id,
@@ -28,6 +30,8 @@ class Campaign extends Equatable {
     required this.unreadNotifications,
     required this.languages,
     this.canJoin = false,
+    required this.smsPhone,
+    required this.smsCompleteTaskAllow,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
@@ -46,6 +50,8 @@ class Campaign extends Equatable {
       descriptor: Value(descriptor),
       logo: Value(logo),
       joined: Value(joined),
+      smsPhone: Value(smsPhone),
+      smsCompleteTaskAllow: Value(smsCompleteTaskAllow),
     );
   }
 
@@ -60,6 +66,8 @@ class Campaign extends Equatable {
       smsLoginAllow: model.smsLoginAllow,
       unreadNotifications: model.notificationsCount,
       languages: model.languages,
+      smsPhone: model.smsPhone,
+      smsCompleteTaskAllow: model.smsCompleteTaskAllow,
     );
   }
 
@@ -73,6 +81,8 @@ class Campaign extends Equatable {
       smsLoginAllow: false,
       unreadNotifications: 0,
       languages: const [],
+      smsPhone: model.smsPhone,
+      smsCompleteTaskAllow: model.smsCompleteTaskAllow,
     );
   }
 

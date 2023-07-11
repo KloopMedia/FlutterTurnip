@@ -52,6 +52,13 @@ class TaskSubmitError extends TaskInitialized {
   TaskSubmitError.clone(TaskInitialized state, this.error) : super.clone(state);
 }
 
+class RedirectToSms extends TaskInitialized {
+  final String? phoneNumber;
+  const RedirectToSms(super.data, super.previousTasks, this.phoneNumber);
+
+  RedirectToSms.clone(TaskInitialized state, this.phoneNumber) : super.clone(state);
+}
+
 class TaskWebhookTriggered extends TaskInitialized {
   const TaskWebhookTriggered(super.data, super.previousTasks);
 }

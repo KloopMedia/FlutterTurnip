@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip/src/utilities/functions.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -12,12 +13,15 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final int taskId;
   final TaskDetailRepository _repository;
+  final CampaignDetailRepository _campaignRepository;
 
   TaskBloc({
     required TaskDetailRepository repository,
+    required CampaignDetailRepository campaignRepository,
     required this.taskId,
     Task? task,
   })  : _repository = repository,
+        _campaignRepository = campaignRepository,
         super(TaskUninitialized()) {
     on<InitializeTask>(_onInitializeTask);
     on<UpdateTask>(_onUpdateTask, transformer: debounce(const Duration(seconds: 2)));
@@ -75,6 +79,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final nextTaskId = response.nextDirectId;
 
       emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
+    } on DioException catch (e) {
+      print(e);
+      final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
+      if (campaign.smsCompleteTaskAllow && e.type == DioExceptionType.connectionError) {
+        final updatedTask = _state.data.copyWith(responses: formData);
+        emit(RedirectToSms.clone(_state, campaign.smsPhone));
+        emit(TaskLoaded(updatedTask, _state.previousTasks));
+      }
     } catch (e) {
       print(e);
       final updatedTask = _state.data.copyWith(responses: formData);
