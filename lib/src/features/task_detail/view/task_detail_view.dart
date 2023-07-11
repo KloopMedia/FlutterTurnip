@@ -240,21 +240,23 @@ class _CurrentTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: FlutterJsonSchemaForm(
-        schema: task.schema ?? {},
-        uiSchema: task.uiSchema,
-        formData: task.responses,
-        disabled: task.complete,
-        pageStorageKey: pageStorageKey,
-        storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-        onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
-        onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
-        onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-        onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
-        submitButtonText: Text(context.loc.form_submit_button),
-        onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FlutterJsonSchemaForm(
+          schema: task.schema ?? {},
+          uiSchema: task.uiSchema,
+          formData: task.responses,
+          disabled: task.complete,
+          pageStorageKey: pageStorageKey,
+          storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
+          onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
+          onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
+          onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
+          onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
+          submitButtonText: Text(context.loc.form_submit_button),
+          onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+        ),
       ),
     );
   }
