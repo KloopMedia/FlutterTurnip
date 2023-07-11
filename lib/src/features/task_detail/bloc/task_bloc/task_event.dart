@@ -26,3 +26,9 @@ class TriggerWebhook extends TaskEvent {}
 class OpenTaskInfo extends TaskEvent {}
 
 class CloseTaskInfo extends TaskEvent {}
+
+class ValidationFailed extends TaskEvent {
+  final String error;
+
+  const ValidationFailed(this.error);
+}

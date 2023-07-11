@@ -17,6 +17,7 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../widgets/dialogs/form_error_dialog.dart';
 import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
@@ -148,6 +149,9 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskInfoOpened) {
           openWebView(context);
         }
+        if (state is TaskSubmitError) {
+          showDialog(context: context, builder: (context) => FormErrorDialog(content: state.error));
+        }
         // if (state is TaskSubmitError) {
         //   const phoneNumber = '+ 996 45-45-45';
         //   final message = jsonEncode({'id': state.data.id, 'responses': state.data.responses});
@@ -247,6 +251,7 @@ class _CurrentTask extends StatelessWidget {
         onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
         onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
         submitButtonText: Text(context.loc.form_submit_button),
+        onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
       ),
     );
   }

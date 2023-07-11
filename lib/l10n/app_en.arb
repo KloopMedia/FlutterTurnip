@@ -75,6 +75,7 @@
 
     "empty_richtext": "No explanation for the task",
     "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
+    "form_error": "Form error",
     "task_returned": "Returned",
     "test_returned": "Returned. Please answer the questions again",
 
