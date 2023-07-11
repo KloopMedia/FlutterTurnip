@@ -57,12 +57,13 @@ class $CampaignTable extends Campaign
   late final GeneratedColumn<bool> smsCompleteTaskAllow =
       GeneratedColumn<bool>('sms_complete_task_allow', aliasedName, false,
           type: DriftSqlType.bool,
-          requiredDuringInsert: true,
+          requiredDuringInsert: false,
           defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
             SqlDialect.sqlite: 'CHECK ("sms_complete_task_allow" IN (0, 1))',
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
-          }));
+          }),
+          defaultValue: const Constant(false));
   static const VerificationMeta _smsPhoneMeta =
       const VerificationMeta('smsPhone');
   @override
@@ -129,8 +130,6 @@ class $CampaignTable extends Campaign
           _smsCompleteTaskAllowMeta,
           smsCompleteTaskAllow.isAcceptableOrUnknown(
               data['sms_complete_task_allow']!, _smsCompleteTaskAllowMeta));
-    } else if (isInserting) {
-      context.missing(_smsCompleteTaskAllowMeta);
     }
     if (data.containsKey('sms_phone')) {
       context.handle(_smsPhoneMeta,
@@ -330,13 +329,12 @@ class CampaignCompanion extends UpdateCompanion<CampaignData> {
     this.descriptor = const Value.absent(),
     required String logo,
     required bool joined,
-    required bool smsCompleteTaskAllow,
+    this.smsCompleteTaskAllow = const Value.absent(),
     this.smsPhone = const Value.absent(),
   })  : name = Value(name),
         description = Value(description),
         logo = Value(logo),
-        joined = Value(joined),
-        smsCompleteTaskAllow = Value(smsCompleteTaskAllow);
+        joined = Value(joined);
   static Insertable<CampaignData> custom({
     Expression<int>? id,
     Expression<String>? name,

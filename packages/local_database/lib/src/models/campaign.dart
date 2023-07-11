@@ -13,7 +13,7 @@ class Campaign extends Table {
 
   BoolColumn get joined => boolean()();
 
-  BoolColumn get smsCompleteTaskAllow => boolean()();
+  BoolColumn get smsCompleteTaskAllow => boolean().withDefault(const Constant(false))();
 
   TextColumn get smsPhone => text().nullable()();
 }
