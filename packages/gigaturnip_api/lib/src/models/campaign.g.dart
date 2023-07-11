@@ -31,6 +31,9 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
               $checkedConvert('notifications_count', (v) => v as int),
           languages: $checkedConvert('languages',
               (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
+          smsPhone: $checkedConvert('sms_phone', (v) => v as String?),
+          smsCompleteTaskAllow: $checkedConvert(
+              'sms_complete_task_allow', (v) => v as bool? ?? false),
         );
         return val;
       },
@@ -39,6 +42,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
         'updatedAt': 'updated_at',
         'defaultTrack': 'default_track',
         'smsLoginAllow': 'sms_login_allow',
-        'notificationsCount': 'notifications_count'
+        'notificationsCount': 'notifications_count',
+        'smsPhone': 'sms_phone',
+        'smsCompleteTaskAllow': 'sms_complete_task_allow'
       },
     );

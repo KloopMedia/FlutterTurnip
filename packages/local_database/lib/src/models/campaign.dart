@@ -12,4 +12,8 @@ class Campaign extends Table {
   TextColumn get logo => text()();
 
   BoolColumn get joined => boolean()();
+
+  BoolColumn get smsCompleteTaskAllow => boolean()();
+
+  TextColumn get smsPhone => text().nullable()();
 }

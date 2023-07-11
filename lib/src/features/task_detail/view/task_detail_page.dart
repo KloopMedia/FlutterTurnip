@@ -19,11 +19,11 @@ class TaskDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiClient = context.read<api.GigaTurnipApiClient>();
     return BlocProvider(
       create: (context) => TaskBloc(
-        repository: TaskDetailRepository(
-          gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-        ),
+        repository: TaskDetailRepository(gigaTurnipApiClient: apiClient),
+        campaignRepository: CampaignDetailRepository(gigaTurnipApiClient: apiClient),
         taskId: taskId,
         task: task,
       )..add(InitializeTask()),
