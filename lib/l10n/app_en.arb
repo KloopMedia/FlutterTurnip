@@ -60,6 +60,7 @@
     "english" : "English",
     "russian" : "Русский",
     "kyrgyz" : "Кыргыз тили",
+    "ukrainian" : "Українська",
     "language" : "Language",
 
     "are_you_sure_logout" : "Are you sure you want to log out?",
@@ -134,5 +135,5 @@
     "apply_filter": "Apply filter",
     "country": "Country",
     "category": "Category",
-    "language": "Language"
+    "language_label": "Language"
 }

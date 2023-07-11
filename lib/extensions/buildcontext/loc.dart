@@ -12,14 +12,16 @@ extension Localization on BuildContext {
         return loc.russian;
       case 'ky':
         return loc.kyrgyz;
+      case 'uk':
+        return loc.ukrainian;
       default:
         return locale.languageCode;
     }
   }
 
-  Iterable<MapEntry> get supportedLocales {
+  Iterable<MapEntry<String, Locale>> get supportedLocales {
     return AppLocalizations.supportedLocales.map((locale) {
-      return MapEntry(_labelFromLocale(locale), locale);
+      return MapEntry<String, Locale>(_labelFromLocale(locale), locale);
     });
   }
 }
