@@ -148,7 +148,7 @@ class _TaskPageState extends State<TaskPage> {
             onPressed: () => _redirectToNotificationPage(context),
             icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
               builder: (context, state) {
-                if (state is RemoteDataInitialized<Notification>) {
+                if (state is RemoteDataLoaded<Notification>) {
                   final notifications = state.data;
                   return Stack(
                     clipBehavior: Clip.none,
@@ -159,7 +159,7 @@ class _TaskPageState extends State<TaskPage> {
                         top: 5,
                         child: Icon(Icons.notifications_outlined),
                       ),
-                      if (notifications.isNotEmpty) Align(
+                      Align(
                         alignment: Alignment.topRight,
                         child: Container(
                             width: 18.0,

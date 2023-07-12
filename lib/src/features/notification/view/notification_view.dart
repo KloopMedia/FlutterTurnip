@@ -28,6 +28,7 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
       slivers: [
         SliverListViewWithPagination<Notification, NotificationCubit>(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          contentPadding: const EdgeInsets.symmetric(vertical: 5),
           itemBuilder: (context, index, item) {
             return CardWithTitle(
               title: item.title,
