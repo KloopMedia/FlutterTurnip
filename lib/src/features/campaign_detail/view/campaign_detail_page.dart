@@ -72,8 +72,12 @@ class CampaignDetailView extends StatelessWidget {
         child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
           listener: (context, state) async {
             if (state is CampaignJoinSuccess) {
-              showDialog(context: context, builder: (context) => const JoinCampaignDialog())
-                  .then((value) => redirectToTaskMenu(context, state.data.id));
+              showDialog(context: context, builder: (context) => JoinCampaignDialog(
+                title: context.loc.joined,
+                content: context.loc.joined_campaigns,
+                buttonText: context.loc.got_it,
+              ))
+              .then((value) => redirectToTaskMenu(context, state.data.id));
             }
           },
           builder: (context, state) {

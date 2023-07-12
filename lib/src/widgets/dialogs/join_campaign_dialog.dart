@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/widgets/dialogs/base_dialog.dart';
 
 class JoinCampaignDialog extends StatelessWidget {
-  const JoinCampaignDialog({Key? key}) : super(key: key);
+  final String title;
+  final String content;
+  final String buttonText;
+
+  const JoinCampaignDialog({
+    Key? key,
+    required this.title,
+    required this.content,
+    required this.buttonText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: 'Вы присоединились!',
-      content: 'Кампании к которым вы присоединились можете найти во вкладке “Мои кампании”',
+      title: title,
+      content: content,
       actions: [
         SizedBox(
           height: 52,
@@ -20,7 +29,7 @@ class JoinCampaignDialog extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Понятно'),
+            child: Text(buttonText),
           ),
         )
       ],

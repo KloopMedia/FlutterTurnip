@@ -163,7 +163,11 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           }
         }
         if (state is TaskSubmitError) {
-          showDialog(context: context, builder: (context) => FormErrorDialog(content: state.error));
+          showDialog(context: context, builder: (context) => FormErrorDialog(
+            title: context.loc.form_error,
+            content: state.error,
+            buttonText: context.loc.ok,
+          ));
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {

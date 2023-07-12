@@ -48,7 +48,7 @@
     "sent" : "Sent",
     "notsent" : "Not sent",
     "opentosee" : "View/Open",
-    "close": "Close",
+    "close": "Next",
 
     "sign_in_with_google" : "Sign in with Google account",
     "sign_in_with_apple" : "Sign in with Apple ID account",
@@ -86,7 +86,7 @@
     "delete_account_confirmation": "Delete",
 
     "settings": "Settings",
-    "form_submit_button": "Submit",
+    "form_submit_button": "Enter",
     "form_divider": "Your form starts here",
     "join_campaign": "Join campaign",
     "joined_campaigns": "Campaigns you have joined can be found in the “My Campaigns” tab",

@@ -4,17 +4,21 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import '../widgets.dart';
 
 class FormErrorDialog extends StatelessWidget {
+  final String title;
   final String content;
+  final String buttonText;
 
   const FormErrorDialog({
     super.key,
+    required this.title,
     required this.content,
+    required this.buttonText,
   });
 
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: context.loc.form_error,
+      title: title,
       content: content,
       actions: [
         SizedBox(
@@ -27,7 +31,7 @@ class FormErrorDialog extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text(context.loc.got_it),
+            child: Text(buttonText),
           ),
         )
       ],
