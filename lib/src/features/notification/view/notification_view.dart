@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Notification;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -24,19 +25,22 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverListViewWithPagination<Notification, NotificationCubit>(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-          itemBuilder: (context, index, item) {
-            return CardWithTitle(
-              title: item.title,
-              onTap: () => redirectToNotification(context, item),
-            );
-          },
-        )
-      ],
+    return RefreshIndicator(
+      onRefresh: () async => context.read<NotificationCubit>().refetch(),
+      child: CustomScrollView(
+        slivers: [
+          SliverListViewWithPagination<Notification, NotificationCubit>(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+            itemBuilder: (context, index, item) {
+              return CardWithTitle(
+                title: item.title,
+                onTap: () => redirectToNotification(context, item),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }

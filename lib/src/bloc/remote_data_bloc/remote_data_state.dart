@@ -60,6 +60,8 @@ class RemoteDataLoaded<Data> extends RemoteDataInitialized<Data> {
     required super.count,
     super.query,
   });
+
+  RemoteDataLoaded.clone(RemoteDataInitialized<Data> state) : super.clone(state);
 }
 
 class RemoteDataRefetching<Data> extends RemoteDataInitialized<Data> with RemoteDataLoading<Data> {

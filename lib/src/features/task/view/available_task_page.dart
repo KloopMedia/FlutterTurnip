@@ -68,44 +68,47 @@ class AvailableTaskPage extends StatelessWidget {
               redirectToTask(context, state.task);
             }
           },
-          child: CustomScrollView(
-            slivers: [
-              SliverListViewWithPagination<Task, AvailableTaskCubit>(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                itemBuilder: (context, index, item) {
-                  return CardWithTitle(
-                    chips: [
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<AvailableTaskCubit>().requestTaskAssignment(item);
-                        },
-                        child: Text(context.loc.opentosee),
-                      ),
-                    ],
-                    title: item.name,
-                    id: item.id,
-                    bottom: ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: CardDate(date: item.createdAt?.toLocal()),
-                      children: [
-                        FlutterJsonSchemaForm(
-                          schema: item.cardJsonSchema ?? {},
-                          uiSchema: item.cardUiSchema,
-                          formData: item.responses,
-                          disabled: true,
-                          storage: generateStorageReference(
-                              item, context.read<AuthenticationRepository>().user),
-                          onDownloadFile: (url, filename) =>
-                              DownloadService().download(url: url, filename: filename),
-                        )
+          child: RefreshIndicator(
+            onRefresh: () async => context.read<AvailableTaskCubit>().refetch(),
+            child: CustomScrollView(
+              slivers: [
+                SliverListViewWithPagination<Task, AvailableTaskCubit>(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  itemBuilder: (context, index, item) {
+                    return CardWithTitle(
+                      chips: [
+                        const Spacer(),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<AvailableTaskCubit>().requestTaskAssignment(item);
+                          },
+                          child: Text(context.loc.opentosee),
+                        ),
                       ],
-                    ),
-                  );
-                },
-              )
-            ],
+                      title: item.name,
+                      id: item.id,
+                      bottom: ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        title: CardDate(date: item.createdAt?.toLocal()),
+                        children: [
+                          FlutterJsonSchemaForm(
+                            schema: item.cardJsonSchema ?? {},
+                            uiSchema: item.cardUiSchema,
+                            formData: item.responses,
+                            disabled: true,
+                            storage: generateStorageReference(
+                                item, context.read<AuthenticationRepository>().user),
+                            onDownloadFile: (url, filename) =>
+                                DownloadService().download(url: url, filename: filename),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
