@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
@@ -24,37 +25,40 @@ class AvailableCampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double verticalPadding = (context.isExtraLarge || context.isLarge) ? 30 : 20;
 
-    return CustomScrollView(
-      slivers: [
-        AdaptiveListView<Campaign, SelectableCampaignCubit>(
-          padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
-          emptyPlaceholder: EmptyCampaignPage(
-            title: context.loc.campaign_empty_title,
-            body: '',
-          ),
-          itemBuilder: (context, index, item) {
-            final cardBody = CardDescription(item.description);
+    return RefreshIndicator(
+      onRefresh: () async => context.read<SelectableCampaignCubit>().refetch(),
+      child: CustomScrollView(
+        slivers: [
+          AdaptiveListView<Campaign, SelectableCampaignCubit>(
+            padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 24),
+            emptyPlaceholder: EmptyCampaignPage(
+              title: context.loc.campaign_empty_title,
+              body: '',
+            ),
+            itemBuilder: (context, index, item) {
+              final cardBody = CardDescription(item.description);
 
-            if (context.isExtraLarge || context.isLarge) {
-              return CardWithTitle(
-                title: item.name,
-                size: const Size.fromHeight(160), //250
-                imageUrl: item.logo,
-                flex: 1,
-                onTap: () => redirectToCampaignDetail(context, item),
-                body: cardBody,
-              );
-            } else {
-              return CardWithTitle(
-                title: item.name,
-                imageUrl: item.logo,
-                onTap: () => redirectToCampaignDetail(context, item),
-                body: cardBody,
-              );
-            }
-          },
-        )
-      ],
+              if (context.isExtraLarge || context.isLarge) {
+                return CardWithTitle(
+                  title: item.name,
+                  size: const Size.fromHeight(160), //250
+                  imageUrl: item.logo,
+                  flex: 1,
+                  onTap: () => redirectToCampaignDetail(context, item),
+                  body: cardBody,
+                );
+              } else {
+                return CardWithTitle(
+                  title: item.name,
+                  imageUrl: item.logo,
+                  onTap: () => redirectToCampaignDetail(context, item),
+                  body: cardBody,
+                );
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 }

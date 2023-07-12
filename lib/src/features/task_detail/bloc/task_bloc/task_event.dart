@@ -26,3 +26,5 @@ class TriggerWebhook extends TaskEvent {}
 class OpenTaskInfo extends TaskEvent {}
 
 class CloseTaskInfo extends TaskEvent {}
+
+class RefetchTask extends TaskEvent {}
