@@ -41,7 +41,7 @@ class NotificationDetailView extends StatelessWidget {
   const NotificationDetailView({Key? key, required this.campaignId}) : super(key: key);
 
   void refreshNotifications(BuildContext context, bool? refresh) {
-    if (refresh ?? false) context.read<OpenNotificationCubit>().refetch();
+    context.read<OpenNotificationCubit>().refetch();
   }
 
   @override
@@ -53,7 +53,7 @@ class NotificationDetailView extends StatelessWidget {
             final result = await context.pushNamed<bool>(
                 TaskRoute.name,
                 pathParameters: {'cid': '$campaignId'});
-            if (context.mounted) {
+            if (context.mounted && result != null && result) {
               refreshNotifications(context, result);
             }
           },
