@@ -26,14 +26,12 @@ class RelevantTaskPage extends StatefulWidget {
 }
 
 class _RelevantTaskPageState extends State<RelevantTaskPage> {
-  void refreshAllTasks(BuildContext context, bool? refresh) {
-    if (refresh ?? false) {
-      context.read<RelevantTaskCubit>().refetch();
-      context.read<SelectableTaskStageCubit>().refetch();
-      context.read<ReactiveTasks>().refetch();
-      context.read<ProactiveTasks>().refetch();
-      context.read<OpenNotificationCubit>().refetch();
-    }
+  void refreshAllTasks(BuildContext context) {
+    context.read<RelevantTaskCubit>().refetch();
+    context.read<SelectableTaskStageCubit>().refetch();
+    context.read<ReactiveTasks>().refetch();
+    context.read<ProactiveTasks>().refetch();
+    context.read<OpenNotificationCubit>().refetch();
   }
 
   void redirectToTask(BuildContext context, Task task) async {
@@ -45,8 +43,8 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       },
       extra: task,
     );
-    if (context.mounted) {
-      refreshAllTasks(context, result);
+    if (context.mounted && result != null && result) {
+      refreshAllTasks(context);
     }
   }
 
@@ -58,8 +56,8 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
         'tid': '$id',
       },
     );
-    if (context.mounted) {
-      refreshAllTasks(context, result);
+    if (context.mounted && result != null && result) {
+      refreshAllTasks(context);
     }
   }
 
@@ -107,56 +105,59 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           redirectToTaskWithId(context, state.createdTaskId);
         }
       },
-      child: CustomScrollView(
-        slivers: [
-          // const SliverToBoxAdapter(
-          //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
-          // ),
-          AvailableTaskStages(
-            onTap: (item) => redirectToAvailableTasks(context, item),
-          ),
-          SliverToBoxAdapter(
-            child: FilterBar(
-              title: context.loc.mytasks,
-              onChanged: (query) {
-                context.read<RelevantTaskCubit>().refetchWithFilter(query);
-              },
-              value: taskFilterMap.keys.first,
-              filters: taskFilterMap,
-              names: filterNames,
+      child: RefreshIndicator(
+        onRefresh: () async => refreshAllTasks(context),
+        child: CustomScrollView(
+          slivers: [
+            // const SliverToBoxAdapter(
+            //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
+            // ),
+            AvailableTaskStages(
+              onTap: (item) => redirectToAvailableTasks(context, item),
             ),
-          ),
-          AdaptiveListView<TaskStage, ReactiveTasks>(
-            showLoader: false,
-            padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-            itemBuilder: (context, index, item) {
-              return CardWithTitle(
-                title: item.name,
-                id: item.id,
-                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
-                flex: context.isSmall || context.isMedium ? 0 : 1,
-                onTap: () => context.read<ReactiveTasks>().createTask(item),
-              );
-            },
-          ),
-          AdaptiveListView<Task, RelevantTaskCubit>(
-            padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-            itemBuilder: (context, index, item) {
-              final cardBody = CardDate(date: item.createdAt?.toLocal());
+            SliverToBoxAdapter(
+              child: FilterBar(
+                title: context.loc.mytasks,
+                onChanged: (query) {
+                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
+                },
+                value: taskFilterMap.keys.first,
+                filters: taskFilterMap,
+                names: filterNames,
+              ),
+            ),
+            AdaptiveListView<TaskStage, ReactiveTasks>(
+              showLoader: false,
+              padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+              itemBuilder: (context, index, item) {
+                return CardWithTitle(
+                  title: item.name,
+                  id: item.id,
+                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                  flex: context.isSmall || context.isMedium ? 0 : 1,
+                  onTap: () => context.read<ReactiveTasks>().createTask(item),
+                );
+              },
+            ),
+            AdaptiveListView<Task, RelevantTaskCubit>(
+              padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+              itemBuilder: (context, index, item) {
+                final cardBody = CardDate(date: item.createdAt?.toLocal());
 
-              return CardWithTitle(
-                chips: [const Spacer(), StatusCardChip(item)],
-                title: item.name,
-                id: item.id,
-                size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
-                flex: context.isSmall || context.isMedium ? 0 : 1,
-                onTap: () => redirectToTask(context, item),
-                bottom: cardBody,
-              );
-            },
-          ),
-          TaskStageChainView(onTap: onChainTap),
-        ],
+                return CardWithTitle(
+                  chips: [const Spacer(), StatusCardChip(item)],
+                  title: item.name,
+                  id: item.id,
+                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                  flex: context.isSmall || context.isMedium ? 0 : 1,
+                  onTap: () => redirectToTask(context, item),
+                  bottom: cardBody,
+                );
+              },
+            ),
+            TaskStageChainView(onTap: onChainTap),
+          ],
+        ),
       ),
     );
   }

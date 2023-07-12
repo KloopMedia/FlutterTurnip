@@ -29,6 +29,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TriggerWebhook>(_onTriggerWebhook);
     on<OpenTaskInfo>(_onOpenTaskInfo);
     on<CloseTaskInfo>(_onCloseTaskInfo);
+    on<RefetchTask>(_onRefetchTask);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -128,6 +129,17 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       if (isSchemaEmpty) {
         emit(TaskClosed());
       }
+    }
+  }
+
+  Future<void> _onRefetchTask(RefetchTask event, Emitter<TaskState> emit) async {
+    try {
+      emit(TaskFetching());
+      final data = await _repository.fetchData(taskId);
+      final previousTasks = await _repository.fetchPreviousTaskData(taskId);
+      emit(TaskLoaded(data, previousTasks));
+    } catch (e) {
+      emit(TaskFetchingError(e.toString()));
     }
   }
 }

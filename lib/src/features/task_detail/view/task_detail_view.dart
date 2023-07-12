@@ -188,31 +188,34 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                 icon: const Icon(Icons.text_snippet),
               )
             ],
-            child: SingleChildScrollView(
-              key: _pageStorageKey,
-              child: Container(
-                decoration: context.isSmall || context.isMedium
-                    ? null
-                    : BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: Shadows.elevation3,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                margin: EdgeInsets.symmetric(
-                  vertical: context.isSmall || context.isMedium ? 0 : 40,
-                  horizontal: context.isSmall || context.isMedium
-                      ? 0
-                      : MediaQuery.of(context).size.width / 5,
-                ),
-                child: Column(
-                  children: [
-                    for (final task in state.previousTasks)
-                      _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                    if (state.previousTasks.isNotEmpty)
-                      TaskDivider(label: context.loc.form_divider),
-                    _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
-                  ],
+            child: RefreshIndicator(
+              onRefresh: () async => context.read<TaskBloc>().add(RefetchTask()),
+              child: SingleChildScrollView(
+                key: _pageStorageKey,
+                child: Container(
+                  decoration: context.isSmall || context.isMedium
+                      ? null
+                      : BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: Shadows.elevation3,
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: EdgeInsets.symmetric(
+                    vertical: context.isSmall || context.isMedium ? 0 : 40,
+                    horizontal: context.isSmall || context.isMedium
+                        ? 0
+                        : MediaQuery.of(context).size.width / 5,
+                  ),
+                  child: Column(
+                    children: [
+                      for (final task in state.previousTasks)
+                        _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
+                      if (state.previousTasks.isNotEmpty)
+                        TaskDivider(label: context.loc.form_divider),
+                      _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
+                    ],
+                  ),
                 ),
               ),
             ),
