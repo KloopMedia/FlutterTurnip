@@ -41,97 +41,99 @@ class _OnBoardingState extends State<OnBoarding> {
       });
     }
 
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              'assets/images/people.png',
-              width: 380,
-              height: 281,
-            ),
-            (widget.campaignLanguages !=  null && widget.campaignLanguages!.isNotEmpty)
-              ? BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
-                builder: (context, state) {
-                  if (state is RemoteDataLoaded<Language> && state.data.isNotEmpty) {
-                    final data = state.data;
-                    final List<SupportedLocale> campaignLocales = [];
-                    for (var id in widget.campaignLanguages!) {
-                      final matchedLanguage = data.where((e) => e.id == id).toList();
-                      final locale = SupportedLocale(matchedLanguage.first.name, matchedLanguage.first.code);
-                      campaignLocales.add(locale);
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                'assets/images/people.png',
+                width: 380,
+                height: 281,
+              ),
+              (widget.campaignLanguages !=  null && widget.campaignLanguages!.isNotEmpty)
+                ? BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
+                  builder: (context, state) {
+                    if (state is RemoteDataLoaded<Language> && state.data.isNotEmpty) {
+                      final data = state.data;
+                      final List<SupportedLocale> campaignLocales = [];
+                      for (var id in widget.campaignLanguages!) {
+                        final matchedLanguage = data.where((e) => e.id == id).toList();
+                        final locale = SupportedLocale(matchedLanguage.first.name, matchedLanguage.first.code);
+                        campaignLocales.add(locale);
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: LanguagePicker(
+                          errorMessage: (errorMessage != null && isLocaleSelected == false)
+                            ? errorMessage : null,
+                          isLocaleSelected: isLocaleSelected,
+                          campaignLocales: campaignLocales),
+                      );
                     }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: LanguagePicker(
-                        errorMessage: (errorMessage != null && isLocaleSelected == false)
-                          ? errorMessage : null,
-                        isLocaleSelected: isLocaleSelected,
-                        campaignLocales: campaignLocales),
-                    );
+                    return const SizedBox.shrink();
+                  },
+                )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: LanguagePicker(
+                      errorMessage: (errorMessage != null && isLocaleSelected == false)
+                        ? errorMessage
+                        : null,
+                      isLocaleSelected: isLocaleSelected,
+                      campaignLocales: const [],
+                    ),
+                ),
+              Container(
+                height: 200,
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          (widget.campaignName != null) ? widget.campaignName! : context.loc.welcome_title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 24,
+                            color: theme.neutral30,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          (widget.campaignDescription != null) ? widget.campaignDescription! : context.loc.welcome_subtitle,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                            color: theme.neutral30,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SignUpButton(
+                onPressed: (message) {
+                  if (message != null) {
+                    setState(() {
+                      errorMessage = message;
+                    });
+                  } else {
+                    widget.onContinue();
                   }
-                  return const SizedBox.shrink();
                 },
-              )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: LanguagePicker(
-                    errorMessage: (errorMessage != null && isLocaleSelected == false)
-                      ? errorMessage
-                      : null,
-                    isLocaleSelected: isLocaleSelected,
-                    campaignLocales: const [],
-                  ),
+                isActive: isLocaleSelected,
               ),
-            Container(
-              height: 200,
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        (widget.campaignName != null) ? widget.campaignName! : context.loc.welcome_title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 24,
-                          color: theme.neutral30,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        (widget.campaignDescription != null) ? widget.campaignDescription! : context.loc.welcome_subtitle,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: theme.neutral30,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SignUpButton(
-              onPressed: (message) {
-                if (message != null) {
-                  setState(() {
-                    errorMessage = message;
-                  });
-                } else {
-                  widget.onContinue();
-                }
-              },
-              isActive: isLocaleSelected,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

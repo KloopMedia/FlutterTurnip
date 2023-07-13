@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/widgets/dialogs/base_dialog.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
-class JoinCampaignDialog extends StatelessWidget {
+import '../widgets.dart';
+
+class FormErrorDialog extends StatelessWidget {
   final String title;
   final String content;
   final String buttonText;
 
-  const JoinCampaignDialog({
-    Key? key,
+  const FormErrorDialog({
+    super.key,
     required this.title,
     required this.content,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

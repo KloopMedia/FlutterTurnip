@@ -28,3 +28,9 @@ class OpenTaskInfo extends TaskEvent {}
 class CloseTaskInfo extends TaskEvent {}
 
 class RefetchTask extends TaskEvent {}
+
+class ValidationFailed extends TaskEvent {
+  final String error;
+
+  const ValidationFailed(this.error);
+}

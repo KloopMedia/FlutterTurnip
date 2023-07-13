@@ -6,6 +6,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
+import '../../notification/bloc/notification_cubit.dart';
 
 class NotificationDetailPage extends StatelessWidget {
   final int notificationId;
@@ -39,13 +40,22 @@ class NotificationDetailView extends StatelessWidget {
 
   const NotificationDetailView({Key? key, required this.campaignId}) : super(key: key);
 
+  void refreshNotifications(BuildContext context, bool? refresh) {
+    context.read<OpenNotificationCubit>().refetch();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () {
-            context.goNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
+          onPressed: () async {
+            final result = await context.pushNamed<bool>(
+                TaskRoute.name,
+                pathParameters: {'cid': '$campaignId'});
+            if (context.mounted && result != null && result) {
+              refreshNotifications(context, result);
+            }
           },
         ),
       ),
