@@ -23,7 +23,7 @@ class _WebViewState extends State<WebView> {
     <html>
       <style>  
       div {  
-        padding: 10px 20px;  
+        padding: 15px 20px;  
       }  
       </style>  
       <head>  

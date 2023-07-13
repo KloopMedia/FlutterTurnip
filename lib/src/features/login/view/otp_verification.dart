@@ -58,58 +58,60 @@ class _VerificationPageState extends State<VerificationPage> {
       ),
     );
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
-      constraints: widget.constraints,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.loc.phone_number_verification,
-            style: titleTextStyle,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.loc.enter_code,
-                style: textStyle,
-              ),
-              const SizedBox(height: 15.0),
-              Pinput(
-                autofocus: true,
-                length: _length,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                defaultPinTheme: defaultPinTheme,
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                onChanged: (value) {
-                  setState(() {
-                    pinCode = value;
-                  });
-                },
-                onCompleted: (value) {
-                  focusNode.requestFocus();
-                },
-                cursor: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 9),
-                    width: 22,
-                    height: 1,
-                    color: theme.primary,
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
+        constraints: widget.constraints,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              context.loc.phone_number_verification,
+              style: titleTextStyle,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.loc.enter_code,
+                  style: textStyle,
+                ),
+                const SizedBox(height: 15.0),
+                Pinput(
+                  autofocus: true,
+                  length: _length,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  defaultPinTheme: defaultPinTheme,
+                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                  onChanged: (value) {
+                    setState(() {
+                      pinCode = value;
+                    });
+                  },
+                  onCompleted: (value) {
+                    focusNode.requestFocus();
+                  },
+                  cursor: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 9),
+                      width: 22,
+                      height: 1,
+                      color: theme.primary,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10.0),
-              ResendCodeButton(onResend: widget.onResend),
-            ],
-          ),
-          SignUpButton(
-            focusNode: focusNode,
-            onPressed: (_) => pinCode.length != _length ? null : () => widget.onConfirm(pinCode),
-          ),
-        ],
+                const SizedBox(height: 10.0),
+                ResendCodeButton(onResend: widget.onResend),
+              ],
+            ),
+            SignUpButton(
+              focusNode: focusNode,
+              onPressed: (_) => pinCode.length != _length ? null : () => widget.onConfirm(pinCode),
+            ),
+          ],
+        ),
       ),
     );
   }

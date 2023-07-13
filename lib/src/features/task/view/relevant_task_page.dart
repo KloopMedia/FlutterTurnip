@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
-import 'package:gigaturnip/src/features/notification/bloc/notification_cubit.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
 import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
@@ -31,7 +30,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     context.read<SelectableTaskStageCubit>().refetch();
     context.read<ReactiveTasks>().refetch();
     context.read<ProactiveTasks>().refetch();
-    context.read<OpenNotificationCubit>().refetch();
   }
 
   void redirectToTask(BuildContext context, Task task) async {

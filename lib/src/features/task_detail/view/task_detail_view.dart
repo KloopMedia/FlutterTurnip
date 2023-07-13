@@ -19,6 +19,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../widgets/dialogs/form_error_dialog.dart';
 import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
@@ -161,6 +162,13 @@ class _TaskDetailViewState extends State<TaskDetailView> {
             openOfflineDialog(context, phoneNumber ?? '', message);
           }
         }
+        if (state is TaskSubmitError) {
+          showDialog(context: context, builder: (context) => FormErrorDialog(
+            title: context.loc.form_error,
+            content: state.error,
+            buttonText: context.loc.ok,
+          ));
+        }
       }, builder: (context, state) {
         if (state is TaskFetching) {
           return const Center(child: CircularProgressIndicator());
@@ -239,20 +247,23 @@ class _CurrentTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: FlutterJsonSchemaForm(
-        schema: task.schema ?? {},
-        uiSchema: task.uiSchema,
-        formData: task.responses,
-        disabled: task.complete,
-        pageStorageKey: pageStorageKey,
-        storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-        onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
-        onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
-        onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-        onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
-        submitButtonText: Text(context.loc.form_submit_button),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FlutterJsonSchemaForm(
+          schema: task.schema ?? {},
+          uiSchema: task.uiSchema,
+          formData: task.responses,
+          disabled: task.complete,
+          pageStorageKey: pageStorageKey,
+          storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
+          onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
+          onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
+          onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
+          onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
+          submitButtonText: Text(context.loc.form_submit_button),
+          onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+        ),
       ),
     );
   }

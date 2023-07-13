@@ -30,6 +30,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<OpenTaskInfo>(_onOpenTaskInfo);
     on<CloseTaskInfo>(_onCloseTaskInfo);
     on<RefetchTask>(_onRefetchTask);
+    on<ValidationFailed>(_onValidationFailed);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -141,5 +142,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     } catch (e) {
       emit(TaskFetchingError(e.toString()));
     }
+  }
+
+  Future<void> _onValidationFailed(ValidationFailed event, Emitter<TaskState> emit) async {
+    final _state = state as TaskInitialized;
+    final error = event.error;
+    emit(TaskSubmitError.clone(_state, error));
+    emit(TaskLoaded(_state.data, _state.previousTasks));
   }
 }
