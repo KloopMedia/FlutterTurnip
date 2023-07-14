@@ -34,3 +34,5 @@ class ValidationFailed extends TaskEvent {
 
   const ValidationFailed(this.error);
 }
+
+class ReleaseTask extends TaskEvent {}

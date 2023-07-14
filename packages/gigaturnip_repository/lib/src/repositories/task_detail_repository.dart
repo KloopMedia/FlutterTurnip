@@ -72,4 +72,8 @@ class TaskDetailRepository {
       return {};
     }
   }
+
+  Future<void> releaseTask(int id) async {
+    await _gigaTurnipApiClient.releaseTask(id);
+  }
 }

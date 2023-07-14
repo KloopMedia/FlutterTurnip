@@ -136,5 +136,9 @@
      "apply_filter": "Применить фильтр",
      "country": "Страна",
      "category": "Категория",
-     "language_label": "Язык"
+     "language_label": "Язык",
+
+     "release_task_button": "Отказаться",
+     "release_task_dialog_title": "Отказаться от задания",
+     "release_task_dialog_body": "Вы уверены, что хотите отказаться от задания?"
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:authentication_repository/authentication_repository.dart';
@@ -19,8 +18,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../widgets/dialogs/form_error_dialog.dart';
-import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
 
@@ -61,12 +58,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       },
     );
     return true;
-  }
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(String id, int status, int progress) {
-    final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send?.send([id, status, progress]);
   }
 
   void redirect(BuildContext context, int? nextTaskId) {
@@ -151,6 +142,18 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskInfoOpened) {
           openWebView(context);
         }
+        if (state is TaskReleased) {
+          redirect(context, null);
+        }
+        if (state is TaskSubmitError) {
+          showDialog(
+              context: context,
+              builder: (context) => FormErrorDialog(
+                    title: context.loc.form_error,
+                    content: state.error,
+                    buttonText: context.loc.ok,
+                  ));
+        }
         if (state is RedirectToSms) {
           final phoneNumber = state.phoneNumber;
           final payload = {'stage': state.data.stage, 'responses': state.data.responses};
@@ -161,13 +164,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           } catch (e) {
             openOfflineDialog(context, phoneNumber ?? '', message);
           }
-        }
-        if (state is TaskSubmitError) {
-          showDialog(context: context, builder: (context) => FormErrorDialog(
-            title: context.loc.form_error,
-            content: state.error,
-            buttonText: context.loc.ok,
-          ));
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {
@@ -189,6 +185,22 @@ class _TaskDetailViewState extends State<TaskDetailView> {
               )
             ],
             actions: [
+              if(state.data.stage.allowRelease)
+                TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return ReleaseTaskDialog(
+                        onConfirm: () {
+                          context.read<TaskBloc>().add(ReleaseTask());
+                        },
+                      );
+                    },
+                  );
+                },
+                child: Text(context.loc.release_task_button),
+              ),
               IconButton(
                 onPressed: () {
                   context.read<TaskBloc>().add(OpenTaskInfo());
@@ -260,9 +272,11 @@ class _CurrentTask extends StatelessWidget {
           onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
           onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-          onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
+          onDownloadFile: (url, filename) =>
+              DownloadService().download(url: url, filename: filename),
           submitButtonText: Text(context.loc.form_submit_button),
-          onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          onValidationFailed: (errorMessage) =>
+              context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
         ),
       ),
     );
