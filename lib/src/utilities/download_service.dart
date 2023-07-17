@@ -26,7 +26,7 @@ class WebDownloadService implements DownloadService {
 
     await Future.delayed(const Duration(seconds: 1));
     html.Url.revokeObjectUrl(url);
-    return 'success';
+    return 'Download successful';
   }
 }
 

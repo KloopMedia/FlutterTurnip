@@ -184,7 +184,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           }
         }
         if (state is FileDownloaded) {
-          showFileStatus(context, state.message);
+          if (!kIsWeb) showFileStatus(context, state.message);
         }
         if (state is TaskSubmitError) {
           showFormError(context, state.error);
