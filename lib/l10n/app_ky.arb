@@ -136,5 +136,9 @@
     "apply_filter": "Фильтрди колдонуу",
     "country": "Өлкө",
     "category": "Категория",
-    "language_label": "Тил"
+    "language_label": "Тил",
+
+    "release_task_button": "Баш тартуу",
+    "release_task_dialog_title": "Тапшырмадан баш тартуу",
+    "release_task_dialog_body": "Тапшырмадан чын эле баш тартууну каалайсызбы?"
 }

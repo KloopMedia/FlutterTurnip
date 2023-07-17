@@ -136,5 +136,9 @@
     "apply_filter": "Apply filter",
     "country": "Country",
     "category": "Category",
-    "language_label": "Language"
+    "language_label": "Language",
+
+    "release_task_button": "Abandon",
+    "release_task_dialog_title": "Abandon task",
+    "release_task_dialog_body": "Are you sure you want to abandon the task?"
 }

@@ -54,6 +54,7 @@ class TaskSubmitError extends TaskInitialized {
 
 class RedirectToSms extends TaskInitialized {
   final String? phoneNumber;
+
   const RedirectToSms(super.data, super.previousTasks, this.phoneNumber);
 
   RedirectToSms.clone(TaskInitialized state, this.phoneNumber) : super.clone(state);
@@ -78,3 +79,9 @@ class TaskInfoOpened extends TaskInitialized {
 }
 
 class TaskClosed extends TaskState {}
+
+class TaskReleased extends TaskInitialized {
+  const TaskReleased(super.data, super.previousTasks);
+
+  TaskReleased.clone(TaskInitialized state) : super.clone(state);
+}

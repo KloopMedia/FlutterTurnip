@@ -24,6 +24,8 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
       dynamicJsonsTarget: (json['dynamicJsonsTarget'] as List<dynamic>?)
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
+      allowRelease: json['allowRelease'] as bool,
+      allowGoBack: json['allowGoBack'] as bool,
     );
 
 Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
@@ -40,4 +42,6 @@ Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
       'uiSchema': instance.uiSchema,
       'dynamicJsonsSource': instance.dynamicJsonsSource,
       'dynamicJsonsTarget': instance.dynamicJsonsTarget,
+      'allowRelease': instance.allowRelease,
+      'allowGoBack': instance.allowGoBack,
     };

@@ -31,6 +31,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<CloseTaskInfo>(_onCloseTaskInfo);
     on<RefetchTask>(_onRefetchTask);
     on<ValidationFailed>(_onValidationFailed);
+    on<ReleaseTask>(_onReleaseTask);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -149,5 +150,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final error = event.error;
     emit(TaskSubmitError.clone(_state, error));
     emit(TaskLoaded(_state.data, _state.previousTasks));
+  }
+
+  Future<void> _onReleaseTask(ReleaseTask event, Emitter<TaskState> emit) async {
+    await _repository.releaseTask(taskId);
+    emit(TaskReleased.clone(state as TaskInitialized));
   }
 }

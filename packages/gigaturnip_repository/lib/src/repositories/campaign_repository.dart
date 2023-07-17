@@ -28,7 +28,7 @@ class UserCampaignRepository extends CampaignRepository {
 
       for (final campaign in parsed) {
         final entity = campaign.toDB(true);
-        await db.LocalDatabase.insertCampaign(entity);
+        db.LocalDatabase.insertCampaign(entity);
       }
 
       return data.copyWith<Campaign>(results: parsed);
