@@ -19,7 +19,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../widgets/dialogs/form_error_dialog.dart';
+import '../../../widgets/dialogs/form_dialog.dart';
 import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
@@ -119,6 +119,27 @@ class _TaskDetailViewState extends State<TaskDetailView> {
     );
   }
 
+  void showFileStatus(BuildContext context, String status) {
+    showDialog(
+      context: context,
+      builder: (context) => FormDialog(
+        content: status,
+        buttonText: context.loc.ok,
+      )
+    );
+  }
+
+  void showFormError(BuildContext context, String error) {
+    showDialog(
+      context: context,
+      builder: (context) => FormDialog(
+        title: context.loc.form_error,
+        content: error,
+        buttonText: context.loc.ok,
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -162,12 +183,11 @@ class _TaskDetailViewState extends State<TaskDetailView> {
             openOfflineDialog(context, phoneNumber ?? '', message);
           }
         }
+        if (state is FileDownloaded) {
+          showFileStatus(context, state.message);
+        }
         if (state is TaskSubmitError) {
-          showDialog(context: context, builder: (context) => FormErrorDialog(
-            title: context.loc.form_error,
-            content: state.error,
-            buttonText: context.loc.ok,
-          ));
+          showFormError(context, state.error);
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {
@@ -247,6 +267,8 @@ class _CurrentTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final taskBloc = context.read<TaskBloc>();
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -260,7 +282,11 @@ class _CurrentTask extends StatelessWidget {
           onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
           onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-          onDownloadFile: (url, filename) => DownloadService().download(url: url, filename: filename),
+          onDownloadFile: (url, filename, bytes) async {
+            var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
+            taskBloc.add(DownloadFile(status!));
+            return status;
+          },
           submitButtonText: Text(context.loc.form_submit_button),
           onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
         ),
@@ -281,6 +307,8 @@ class _PreviousTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final taskBloc = context.read<TaskBloc>();
+
     return Column(
       children: [
         TaskDivider(label: task.name),
@@ -293,8 +321,11 @@ class _PreviousTask extends StatelessWidget {
             disabled: true,
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-            onDownloadFile: (url, filename) =>
-                DownloadService().download(url: url, filename: filename),
+            onDownloadFile: (url, filename, bytes) async {
+              var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
+              taskBloc.add(DownloadFile(status!));
+              return status;
+            },
           ),
         ),
       ],

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:universal_html/html.dart' as html;
 
 abstract class DownloadService {
-  Future<String?> download({required String url, required String? filename});
+  Future<String?> download({required String url, required String? filename, required int? bytes});
 
   factory DownloadService() {
     if (kIsWeb) {
@@ -16,15 +16,23 @@ abstract class DownloadService {
 
 class WebDownloadService implements DownloadService {
   @override
-  Future<String?> download({required String url, String? filename}) async {
-    html.window.open(url, "_blank");
+  Future<String?> download({required String url, String? filename, int? bytes}) async {
+    html.Blob fileBlob = html.Blob([bytes], 'application/octet-stream');
+    final url = html.Url.createObjectUrlFromBlob(fileBlob);
+
+    final anchorElement = html.AnchorElement(href: url);
+    anchorElement.download = filename;
+    anchorElement.click();
+
+    await Future.delayed(const Duration(seconds: 1));
+    html.Url.revokeObjectUrl(url);
     return 'success';
   }
 }
 
 class MobileDownloadService implements DownloadService {
   @override
-  Future<String?> download({required String url, String? filename}) async {
+  Future<String?> download({required String url, String? filename, int? bytes}) async {
     final task = await DownloadTask(
       url: url,
       updates: Updates.statusAndProgress,
@@ -46,6 +54,18 @@ class MobileDownloadService implements DownloadService {
     if (result.status == TaskStatus.complete) {
       await FileDownloader().moveToSharedStorage(task, SharedStorage.downloads);
     }
-    return 'success';
+    switch (result.status) {
+      case TaskStatus.complete:
+        return 'Download successful';
+
+      case TaskStatus.canceled:
+        return 'Download was canceled';
+
+      case TaskStatus.paused:
+        return 'Download was paused';
+
+      default:
+        return 'Download not successful';
+    }
   }
 }

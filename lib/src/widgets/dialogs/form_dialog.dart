@@ -3,14 +3,14 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 import '../widgets.dart';
 
-class FormErrorDialog extends StatelessWidget {
-  final String title;
+class FormDialog extends StatelessWidget {
+  final String? title;
   final String content;
   final String buttonText;
 
-  const FormErrorDialog({
+  const FormDialog({
     super.key,
-    required this.title,
+    this.title,
     required this.content,
     required this.buttonText,
   });
@@ -18,7 +18,7 @@ class FormErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: title,
+      title: title ?? '',
       content: content,
       actions: [
         SizedBox(

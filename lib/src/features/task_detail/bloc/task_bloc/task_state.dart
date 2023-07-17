@@ -78,3 +78,11 @@ class TaskInfoOpened extends TaskInitialized {
 }
 
 class TaskClosed extends TaskState {}
+
+class FileDownloaded extends TaskInitialized {
+  final String message;
+
+  const FileDownloaded(super.data, super.previousTasks, this.message);
+
+  FileDownloaded.clone(TaskInitialized state, this.message) : super.clone(state);
+}
