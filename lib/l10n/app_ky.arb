@@ -49,6 +49,8 @@
     "notsent" : "Жибериле элек",
     "opentosee" : "Тапшырманы көрүү/ачуу",
     "close": "Жабуу",
+    "select_file": "Файлды тандаңыз",
+    "to_upload": " жүктөө үчүн",
 
     "sign_in_with_google" : "Google аккаунту аркылуу кирүү",
     "sign_in_with_apple" : "Apple ID аккаунту аркылуу кирүү",

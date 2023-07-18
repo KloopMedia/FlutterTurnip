@@ -289,6 +289,7 @@ class _CurrentTask extends StatelessWidget {
           },
           submitButtonText: Text(context.loc.form_submit_button),
           onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          addFileText: [context.loc.select_file, context.loc.to_upload],
         ),
       ),
     );
