@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -43,9 +42,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   void dispose() {
-    if (!kIsWeb) {
-      IsolateNameServer.removePortNameMapping('downloader_send_port');
-    }
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
