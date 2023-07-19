@@ -624,13 +624,13 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Task> openPreviousTask(int id) async {
+  Future<HttpResponse<dynamic>> openPreviousTask(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Task>(Options(
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -646,8 +646,9 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = Task.fromJson(_result.data!);
-    return value;
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   @override

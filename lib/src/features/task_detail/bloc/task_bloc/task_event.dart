@@ -36,3 +36,5 @@ class ValidationFailed extends TaskEvent {
 }
 
 class ReleaseTask extends TaskEvent {}
+
+class GoBackToPreviousTask extends TaskEvent {}

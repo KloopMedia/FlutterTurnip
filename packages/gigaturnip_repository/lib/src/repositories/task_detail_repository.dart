@@ -76,4 +76,9 @@ class TaskDetailRepository {
   Future<void> releaseTask(int id) async {
     await _gigaTurnipApiClient.releaseTask(id);
   }
+
+  Future<int> openPreviousTask(int id) async {
+    final response = await _gigaTurnipApiClient.openPreviousTask(id);
+    return response.data['id'] as int;
+  }
 }

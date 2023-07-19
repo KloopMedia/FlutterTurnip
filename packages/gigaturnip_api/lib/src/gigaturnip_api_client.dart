@@ -86,7 +86,7 @@ abstract class GigaTurnipApiClient {
   });
 
   @GET("$tasksRoute/{id}/$openPreviousTaskActionRoute")
-  Future<Task> openPreviousTask(@Path("id") int id);
+  Future<HttpResponse> openPreviousTask(@Path("id") int id);
 
   @GET("$tasksRoute/{id}/$releaseTaskActionRoute")
   Future<void> releaseTask(@Path("id") int id);
