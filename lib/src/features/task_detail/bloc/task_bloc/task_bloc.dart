@@ -77,6 +77,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final data = {'responses': formData, 'complete': true};
 
     try {
+      emit(TaskFetching());
       final updatedTask = _state.data.copyWith(responses: formData);
       final response = await _repository.saveData(taskId, data);
       final nextTaskId = response.nextDirectId;
