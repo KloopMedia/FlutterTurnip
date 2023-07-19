@@ -121,11 +121,11 @@
 
     "task_status_returned": "Returned",
     "task_status_not_submitted": "Active",
-    "task_status_submitted": "Submitted",
+    "task_status_submitted": "Completed",
 
     "task_filter_active": "Active",
     "task_filter_returned": "Returned",
-    "task_filter_submitted": "Submitted",
+    "task_filter_submitted": "Completed",
     "task_filter_all": "All",
 
     "task_available": "Available tasks",
