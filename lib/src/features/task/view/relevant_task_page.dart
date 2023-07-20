@@ -129,8 +129,8 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
               itemBuilder: (context, index, item) {
                 return CardWithTitle(
+                  chips: [CardChip(item.id.toString()), const Spacer()],
                   title: item.name,
-                  id: item.id,
                   size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   onTap: () => context.read<ReactiveTasks>().createTask(item),
@@ -143,9 +143,8 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 final cardBody = CardDate(date: item.createdAt?.toLocal());
 
                 return CardWithTitle(
-                  chips: [const Spacer(), StatusCardChip(item)],
+                  chips: [CardChip(item.id.toString()), StatusCardChip(item)],
                   title: item.name,
-                  id: item.id,
                   size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   onTap: () => redirectToTask(context, item),
