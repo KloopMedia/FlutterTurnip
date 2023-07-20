@@ -32,6 +32,7 @@ class TaskDetailView extends StatefulWidget {
 
 class _TaskDetailViewState extends State<TaskDetailView> {
   final _pageStorageKey = const PageStorageKey('pageKey');
+  final ScrollController scrollController = ScrollController(initialScrollOffset: 0);
 
   @override
   void initState() {
@@ -211,6 +212,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
             child: RefreshIndicator(
               onRefresh: () async => context.read<TaskBloc>().add(RefetchTask()),
               child: SingleChildScrollView(
+                controller: scrollController,
                 key: _pageStorageKey,
                 child: Container(
                   decoration: context.isSmall || context.isMedium
@@ -233,7 +235,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                         _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
                       if (state.previousTasks.isNotEmpty)
                         TaskDivider(label: context.loc.form_divider),
-                      _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
+                      _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey, scrollController: scrollController),
                     ],
                   ),
                 ),
@@ -250,11 +252,13 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 class _CurrentTask extends StatelessWidget {
   final TaskDetail task;
   final PageStorageKey pageStorageKey;
+  final ScrollController scrollController;
 
   const _CurrentTask({
     Key? key,
     required this.task,
     required this.pageStorageKey,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -270,7 +274,10 @@ class _CurrentTask extends StatelessWidget {
           pageStorageKey: pageStorageKey,
           storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
           onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
-          onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
+          onSubmit: (formData) {
+            context.read<TaskBloc>().add(SubmitTask(formData));
+            if (scrollController.hasClients) scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+          },
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
           onDownloadFile: (url, filename) =>
               DownloadService().download(url: url, filename: filename),
