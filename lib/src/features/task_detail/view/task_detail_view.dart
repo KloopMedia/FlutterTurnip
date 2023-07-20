@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -44,9 +43,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   void dispose() {
-    if (!kIsWeb) {
-      IsolateNameServer.removePortNameMapping('downloader_send_port');
-    }
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
@@ -146,7 +142,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskReleased) {
           redirect(context, null);
         }
-        if (state is TaskSubmitError) {
+        if (state is TaskErrorState) {
           showDialog(
               context: context,
               builder: (context) => FormErrorDialog(
@@ -154,6 +150,9 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                     content: state.error,
                     buttonText: context.loc.ok,
                   ));
+        }
+        if (state is GoBackToPreviousTaskState) {
+          redirect(context, state.previousTaskId);
         }
         if (state is RedirectToSms) {
           final phoneNumber = state.phoneNumber;
@@ -186,22 +185,22 @@ class _TaskDetailViewState extends State<TaskDetailView> {
               )
             ],
             actions: [
-              if(state.data.stage.allowRelease)
+              if (state.data.stage.allowRelease)
                 TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return ReleaseTaskDialog(
-                        onConfirm: () {
-                          context.read<TaskBloc>().add(ReleaseTask());
-                        },
-                      );
-                    },
-                  );
-                },
-                child: Text(context.loc.release_task_button),
-              ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return ReleaseTaskDialog(
+                          onConfirm: () {
+                            context.read<TaskBloc>().add(ReleaseTask());
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Text(context.loc.release_task_button),
+                ),
               IconButton(
                 onPressed: () {
                   context.read<TaskBloc>().add(OpenTaskInfo());
@@ -236,6 +235,29 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                       if (state.previousTasks.isNotEmpty)
                         TaskDivider(label: context.loc.form_divider),
                       _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey, scrollController: scrollController),
+                      // if (state.data.stage.allowGoBack)
+                      //   Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: SizedBox(
+                      //       height: 52,
+                      //       width: double.infinity,
+                      //       child: OutlinedButton(
+                      //         style: OutlinedButton.styleFrom(
+                      //           side: BorderSide(
+                      //             width: 1,
+                      //             color: Theme.of(context).colorScheme.primary,
+                      //           ),
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(15),
+                      //           ),
+                      //         ),
+                      //         onPressed: () {
+                      //           context.read<TaskBloc>().add(GoBackToPreviousTask());
+                      //         },
+                      //         child: Text(context.loc.go_back_to_previous_task),
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
@@ -284,6 +306,9 @@ class _CurrentTask extends StatelessWidget {
           submitButtonText: Text(context.loc.form_submit_button),
           onValidationFailed: (errorMessage) =>
               context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          onOpenPreviousTask: () => context.read<TaskBloc>().add(GoBackToPreviousTask()),
+          openPreviousButtonText: Text(context.loc.go_back_to_previous_task),
+          allowOpenPrevious: task.stage.allowGoBack,
         ),
       ),
     );

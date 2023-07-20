@@ -1,12 +1,13 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
-import 'package:gigaturnip/src/features/task/bloc/selectable_task_stage_bloc/selectable_task_stage_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';// hide Notification;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart'; // hide Notification;
 import 'package:go_router/go_router.dart';
 
 import '../../../bloc/bloc.dart';
@@ -41,6 +42,25 @@ class _TaskPageState extends State<TaskPage> {
       pathParameters: {'cid': '${widget.campaignId}'},
       extra: widget.campaign,
     );
+  }
+
+  @override
+  void initState() {
+    if (!kIsWeb) {
+      BackButtonInterceptor.add(myInterceptor);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    context.goNamed(CampaignRoute.name);
+    return true;
   }
 
   @override
@@ -162,21 +182,21 @@ class _TaskPageState extends State<TaskPage> {
                       Align(
                         alignment: Alignment.topRight,
                         child: Container(
-                            width: 22.0,
-                            height: 20.0,
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Theme.of(context).colorScheme.tertiary
-                            ),
-                            child: Center(
-                              child: Text(
-                                  (notifications.length > 10) ? '10+' : notifications.length.toString(),
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Theme.of(context).colorScheme.onPrimary)
-                              ),
-                            )
+                          width: 22.0,
+                          height: 20.0,
+                          margin: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Theme.of(context).colorScheme.tertiary),
+                          child: Center(
+                            child: Text(
+                                (notifications.length > 10)
+                                    ? '10+'
+                                    : notifications.length.toString(),
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Theme.of(context).colorScheme.onPrimary)),
+                          ),
                         ),
                       ),
                     ],
