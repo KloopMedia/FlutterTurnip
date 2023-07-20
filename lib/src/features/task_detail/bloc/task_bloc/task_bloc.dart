@@ -32,6 +32,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<RefetchTask>(_onRefetchTask);
     on<ValidationFailed>(_onValidationFailed);
     on<ReleaseTask>(_onReleaseTask);
+    on<GoBackToPreviousTask>(_onGoBackToPreviousTask);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -76,7 +77,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final data = {'responses': formData, 'complete': true};
 
     try {
-      final updatedTask = _state.data.copyWith(responses: formData, complete: true);
+      emit(TaskFetching());
+      final updatedTask = _state.data.copyWith(responses: formData);
       final response = await _repository.saveData(taskId, data);
       final nextTaskId = response.nextDirectId;
 
@@ -155,5 +157,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   Future<void> _onReleaseTask(ReleaseTask event, Emitter<TaskState> emit) async {
     await _repository.releaseTask(taskId);
     emit(TaskReleased.clone(state as TaskInitialized));
+  }
+
+  Future<void> _onGoBackToPreviousTask(GoBackToPreviousTask event, Emitter<TaskState> emit) async {
+    try {
+      final previousTaskId = await _repository.openPreviousTask(taskId);
+      emit(GoBackToPreviousTaskState.clone(state as TaskInitialized, previousTaskId));
+    } catch (e) {
+      emit(GoBackToPreviousTaskError.clone(state as TaskInitialized, e.toString()));
+    }
   }
 }
