@@ -182,21 +182,20 @@ class _TaskPageState extends State<TaskPage> {
                       Align(
                         alignment: Alignment.topRight,
                         child: Container(
-                            width: 22.0,
-                            height: 20.0,
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Theme.of(context).colorScheme.tertiary
-                            ),
-                            child: Center(
-                              child: Text(
-                                  (notifications.length > 10) ? '10+' : notifications.length.toString(),
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Theme.of(context).colorScheme.onPrimary)
-                              ),
-                            ),
+                          width: 22.0,
+                          height: 20.0,
+                          margin: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Theme.of(context).colorScheme.tertiary),
+                          child: Center(
+                            child: Text(
+                                (notifications.length > 10)
+                                    ? '10+'
+                                    : notifications.length.toString(),
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Theme.of(context).colorScheme.onPrimary)),
                           ),
                         ),
                       ),
