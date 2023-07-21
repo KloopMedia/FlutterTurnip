@@ -17,8 +17,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../widgets/dialogs/form_dialog.dart';
-import '../../../widgets/dialogs/offline_phone_message_dialog.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
 

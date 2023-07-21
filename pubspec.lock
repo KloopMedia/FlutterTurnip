@@ -538,7 +538,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "0c3a77e656109e890982367435759a403944c4d5"
+      resolved-ref: ab6aa77aba1abc04233b40f7e8d16cd214708919
       url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
     source: git
     version: "0.0.1"
