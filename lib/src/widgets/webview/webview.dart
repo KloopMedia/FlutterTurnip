@@ -19,8 +19,10 @@ class _WebViewState extends State<WebView> {
   @override
   Widget build(BuildContext context) {
     final onClose = widget.onCloseCallback;
+    final theme = Theme.of(context).colorScheme;
 
     final width = context.isSmall || context.isMedium ? '100%' : '70%';
+    final backgroundColor = theme.isLight ? 'rgba(255, 255, 255, 1)' : 'rgba(196, 199, 199, 1)';
 
     final fullHtml = '''
     <html>
@@ -31,6 +33,9 @@ class _WebViewState extends State<WebView> {
       #container {
         margin: auto;
         width: $width;
+      }
+      body {
+        background-color: $backgroundColor;
       }
       </style>  
       <head>  
@@ -47,6 +52,7 @@ class _WebViewState extends State<WebView> {
     ''';
 
     return Scaffold(
+      backgroundColor: theme.isLight ? Colors.white : theme.neutral80,
       appBar: AppBar(),
       body: Builder(builder: (context) {
         if (widget.htmlText.isEmpty) {
@@ -59,12 +65,7 @@ class _WebViewState extends State<WebView> {
         return multi_platform.CustomWebView(htmlText: fullHtml);
       }),
       bottomNavigationBar: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: context.isSmall || context.isMedium
-                ? 0
-                : MediaQuery.of(context).size.width / 5,
-          ),
+        child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             onPressed: () {
