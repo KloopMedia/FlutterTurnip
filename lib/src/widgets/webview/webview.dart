@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'mobile_webview.dart' if (dart.library.html) 'web_webview.dart' as multi_platform;
 
 class WebView extends StatefulWidget {
@@ -15,16 +16,22 @@ class WebView extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebView> {
-  late final String fullHtml;
-
   @override
-  void initState() {
-    fullHtml = '''
+  Widget build(BuildContext context) {
+    final onClose = widget.onCloseCallback;
+
+    final width = context.isSmall || context.isMedium ? '100%' : '70%';
+
+    final fullHtml = '''
     <html>
       <style>  
       div {  
         padding: 15px 20px;  
       }  
+      #container {
+        margin: auto;
+        width: $width;
+      }
       </style>  
       <head>  
         <meta charset="utf-8" />
@@ -32,18 +39,12 @@ class _WebViewState extends State<WebView> {
         <meta name="theme-color" content="#000000" />
       </head>
       <body>
-        <div>
+        <div id="container">
           ${widget.htmlText}
         </div>
       </body>
     </html>
     ''';
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final onClose = widget.onCloseCallback;
 
     return Scaffold(
       appBar: AppBar(),
@@ -58,7 +59,12 @@ class _WebViewState extends State<WebView> {
         return multi_platform.CustomWebView(htmlText: fullHtml);
       }),
       bottomNavigationBar: SafeArea(
-        child: Padding(
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: context.isSmall || context.isMedium
+                ? 0
+                : MediaQuery.of(context).size.width / 5,
+          ),
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             onPressed: () {
