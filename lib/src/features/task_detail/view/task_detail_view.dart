@@ -261,7 +261,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                       for (final task in state.previousTasks)
                         _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
                       if (state.previousTasks.isNotEmpty)
-                        TaskDivider(label: context.loc.form_divider),
+                        if (context.loc.localeName != 'en') TaskDivider(label: context.loc.form_divider),
                       _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
                     ],
                   ),
@@ -346,6 +346,7 @@ class _PreviousTask extends StatelessWidget {
             disabled: true,
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
+            addFileText: [context.loc.select_file, context.loc.to_upload],
             onDownloadFile: (url, filename, bytes) async {
               var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
               taskBloc.add(DownloadFile(status!));
