@@ -144,5 +144,8 @@
   "release_task_dialog_title": "Отказаться от задания",
   "release_task_dialog_body": "Вы уверены, что хотите отказаться от задания?",
 
-  "go_back_to_previous_task": "Предыдущее задание"
+  "go_back_to_previous_task": "Предыдущее задание",
+
+  "task_has_error": "Ошибка в форме",
+  "task_failed": "Вы не прошли тест. Попробуйте еще раз."
 }

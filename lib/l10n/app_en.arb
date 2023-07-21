@@ -144,5 +144,8 @@
   "release_task_dialog_title": "Abandon task",
   "release_task_dialog_body": "Are you sure you want to abandon the task?",
 
-  "go_back_to_previous_task": "Previous task"
+  "go_back_to_previous_task": "Previous task",
+
+  "task_has_error": "Form error",
+  "task_failed": "You failed the test. Try again."
 }

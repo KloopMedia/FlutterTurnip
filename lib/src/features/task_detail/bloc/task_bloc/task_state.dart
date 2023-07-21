@@ -112,6 +112,12 @@ class GoBackToPreviousTaskError extends TaskInitialized with TaskErrorState {
   }
 }
 
+class TaskReturned extends TaskInitialized {
+  const TaskReturned(super.data, super.previousTasks);
+
+  TaskReturned.clone(TaskInitialized state) : super.clone(state);
+}
+
 class FileDownloaded extends TaskInitialized {
   final String message;
 

@@ -162,22 +162,25 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskReleased) {
           redirect(context, null);
         }
-        if (state is TaskErrorState) {
-          showDialog(
-              context: context,
-              builder: (context) => FormDialog(
-                    title: context.loc.form_error,
-                    content: state.error,
-                    buttonText: context.loc.ok,
-                  ));
-        }
         if (state is GoBackToPreviousTaskState) {
           redirect(context, state.previousTaskId);
+        }
+        if (state is TaskReturned) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return FormDialog(
+                title: context.loc.task_has_error,
+                content: context.loc.task_failed,
+                buttonText: context.loc.ok,
+              );
+            },
+          );
         }
         if (state is FileDownloaded) {
           if (!kIsWeb) showFileStatus(context, state.message);
         }
-        if (state is TaskSubmitError) {
+        if (state is TaskErrorState) {
           showFormError(context, state.error);
         }
         if (state is RedirectToSms) {

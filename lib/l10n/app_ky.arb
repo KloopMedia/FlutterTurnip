@@ -144,5 +144,8 @@
   "release_task_dialog_title": "Тапшырмадан баш тартуу",
   "release_task_dialog_body": "Тапшырмадан чын эле баш тартууну каалайсызбы?",
 
-  "go_back_to_previous_task": "Мурунку тапшырма"
+  "go_back_to_previous_task": "Мурунку тапшырма",
+
+  "task_has_error": "Формада ката бар",
+  "task_failed": "Тесттен өтпөй калдыңыз. Кайра аракет кылыңыз."
 }
