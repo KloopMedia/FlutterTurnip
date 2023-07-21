@@ -73,6 +73,7 @@
 
   "read_notifications": "Окулган билдирүүлөр",
   "unread_notifications": "Окула элек билдирүүлөр",
+  "important_notification": "Маанилүү билдирүү",
 
   "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
   "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",

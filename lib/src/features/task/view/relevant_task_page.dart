@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
@@ -11,6 +11,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/task_chain/types.dart';
@@ -25,6 +26,8 @@ class RelevantTaskPage extends StatefulWidget {
 }
 
 class _RelevantTaskPageState extends State<RelevantTaskPage> {
+  bool closeNotificationCard = false;
+
   void refreshAllTasks(BuildContext context) {
     context.read<RelevantTaskCubit>().refetch();
     context.read<SelectableTaskStageCubit>().refetch();
@@ -81,8 +84,27 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     }
   }
 
+  void redirectToNotification(BuildContext context, Notification notification) {
+    context.pushNamed(
+      NotificationDetailRoute.name,
+      pathParameters: {
+        'cid': '${widget.campaignId}',
+        'nid': '${notification.id}',
+      },
+      extra: Notification,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    final notificationStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: theme.onSurfaceVariant,
+      overflow: TextOverflow.ellipsis,
+    );
+
     const taskFilterMap = {
       'Активные': {'complete': false},
       'Возвращенные': {'reopened': true, 'complete': false},
@@ -110,6 +132,29 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             // const SliverToBoxAdapter(
             //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
             // ),
+            if (!closeNotificationCard) ImportantAndOpenNotificationListView (
+              padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+              importantNotificationCount: 1,
+              itemBuilder: (context, item) {
+                return CardWithTitle(
+                  chips: [
+                    // CardChip(context.loc.important_notification),
+                    IconButton(
+                      onPressed: () async {
+                        final repo = NotificationDetailRepository(gigaTurnipApiClient: context.read<GigaTurnipApiClient>());
+                        await repo.markNotificationAsViewed(item.id);
+                        setState(() => closeNotificationCard = true);
+                      },
+                      icon: const Icon(Icons.close))
+                  ],
+                  title: item.title,
+                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                  flex: context.isSmall || context.isMedium ? 0 : 1,
+                  onTap: () => redirectToNotification(context, item),
+                  bottom: Text(item.text, style: notificationStyle, maxLines: 3),
+                );
+              },
+            ),
             AvailableTaskStages(
               onTap: (item) => redirectToAvailableTasks(context, item),
             ),
