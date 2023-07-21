@@ -49,6 +49,8 @@
   "notsent" : "Not sent",
   "opentosee" : "View/Open",
   "close": "Next",
+  "select_file": "Select file",
+  "to_upload": " to upload",
 
   "sign_in_with_google" : "Sign in with Google account",
   "sign_in_with_apple" : "Sign in with Apple ID account",

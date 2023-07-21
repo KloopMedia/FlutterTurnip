@@ -48,6 +48,8 @@
   "notsent" : "Неотправлено",
   "opentosee" : "Посмотреть/Открыть",
   "close": "Закрыть",
+  "select_file": "Выберите файл",
+  "to_upload": " для загрузки",
 
 
   "sign_in_with_google" : "Вход с аккаунтом Google",

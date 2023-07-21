@@ -106,6 +106,27 @@ class _TaskDetailViewState extends State<TaskDetailView> {
     );
   }
 
+  void showFileStatus(BuildContext context, String status) {
+    showDialog(
+      context: context,
+      builder: (context) => FormDialog(
+        content: status,
+        buttonText: context.loc.ok,
+      )
+    );
+  }
+
+  void showFormError(BuildContext context, String error) {
+    showDialog(
+      context: context,
+      builder: (context) => FormDialog(
+        title: context.loc.form_error,
+        content: error,
+        buttonText: context.loc.ok,
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -144,7 +165,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskErrorState) {
           showDialog(
               context: context,
-              builder: (context) => FormErrorDialog(
+              builder: (context) => FormDialog(
                     title: context.loc.form_error,
                     content: state.error,
                     buttonText: context.loc.ok,
@@ -152,6 +173,12 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         }
         if (state is GoBackToPreviousTaskState) {
           redirect(context, state.previousTaskId);
+        }
+        if (state is FileDownloaded) {
+          if (!kIsWeb) showFileStatus(context, state.message);
+        }
+        if (state is TaskSubmitError) {
+          showFormError(context, state.error);
         }
         if (state is RedirectToSms) {
           final phoneNumber = state.phoneNumber;
@@ -233,29 +260,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                       if (state.previousTasks.isNotEmpty)
                         TaskDivider(label: context.loc.form_divider),
                       _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey),
-                      // if (state.data.stage.allowGoBack)
-                      //   Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: SizedBox(
-                      //       height: 52,
-                      //       width: double.infinity,
-                      //       child: OutlinedButton(
-                      //         style: OutlinedButton.styleFrom(
-                      //           side: BorderSide(
-                      //             width: 1,
-                      //             color: Theme.of(context).colorScheme.primary,
-                      //           ),
-                      //           shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(15),
-                      //           ),
-                      //         ),
-                      //         onPressed: () {
-                      //           context.read<TaskBloc>().add(GoBackToPreviousTask());
-                      //         },
-                      //         child: Text(context.loc.go_back_to_previous_task),
-                      //       ),
-                      //     ),
-                      //   ),
                     ],
                   ),
                 ),
@@ -281,6 +285,8 @@ class _CurrentTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final taskBloc = context.read<TaskBloc>();
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -294,11 +300,14 @@ class _CurrentTask extends StatelessWidget {
           onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
           onSubmit: (formData) => context.read<TaskBloc>().add(SubmitTask(formData)),
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-          onDownloadFile: (url, filename) =>
-              DownloadService().download(url: url, filename: filename),
+          onDownloadFile: (url, filename, bytes) async {
+            var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
+            taskBloc.add(DownloadFile(status!));
+            return status;
+          },
           submitButtonText: Text(context.loc.form_submit_button),
-          onValidationFailed: (errorMessage) =>
-              context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          addFileText: [context.loc.select_file, context.loc.to_upload],
           onOpenPreviousTask: () => context.read<TaskBloc>().add(GoBackToPreviousTask()),
           openPreviousButtonText: Text(context.loc.go_back_to_previous_task),
           allowOpenPrevious: task.stage.allowGoBack,
@@ -320,6 +329,8 @@ class _PreviousTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final taskBloc = context.read<TaskBloc>();
+
     return Column(
       children: [
         TaskDivider(label: task.name),
@@ -332,8 +343,11 @@ class _PreviousTask extends StatelessWidget {
             disabled: true,
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-            onDownloadFile: (url, filename) =>
-                DownloadService().download(url: url, filename: filename),
+            onDownloadFile: (url, filename, bytes) async {
+              var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
+              taskBloc.add(DownloadFile(status!));
+              return status;
+            },
           ),
         ),
       ],

@@ -48,6 +48,8 @@
   "notsent" : "Не відправлено",
   "opentosee" : "Подивитися/Відкрити",
   "close": "Закрити",
+  "select_file": "Виберіть файл",
+  "to_upload": " для завантаження",
 
 
   "sign_in_with_google" : "Вхід з акаунтом Google",
