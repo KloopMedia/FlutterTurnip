@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
-import 'dart:ui';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -46,9 +44,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   void dispose() {
-    if (!kIsWeb) {
-      IsolateNameServer.removePortNameMapping('downloader_send_port');
-    }
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
@@ -61,12 +56,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       },
     );
     return true;
-  }
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(String id, int status, int progress) {
-    final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send?.send([id, status, progress]);
   }
 
   void redirect(BuildContext context, int? nextTaskId) {
@@ -172,6 +161,27 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         if (state is TaskInfoOpened) {
           openWebView(context);
         }
+        if (state is TaskReleased) {
+          redirect(context, null);
+        }
+        if (state is TaskErrorState) {
+          showDialog(
+              context: context,
+              builder: (context) => FormDialog(
+                    title: context.loc.form_error,
+                    content: state.error,
+                    buttonText: context.loc.ok,
+                  ));
+        }
+        if (state is GoBackToPreviousTaskState) {
+          redirect(context, state.previousTaskId);
+        }
+        if (state is FileDownloaded) {
+          if (!kIsWeb) showFileStatus(context, state.message);
+        }
+        if (state is TaskSubmitError) {
+          showFormError(context, state.error);
+        }
         if (state is RedirectToSms) {
           final phoneNumber = state.phoneNumber;
           final payload = {'stage': state.data.stage, 'responses': state.data.responses};
@@ -182,12 +192,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           } catch (e) {
             openOfflineDialog(context, phoneNumber ?? '', message);
           }
-        }
-        if (state is FileDownloaded) {
-          if (!kIsWeb) showFileStatus(context, state.message);
-        }
-        if (state is TaskSubmitError) {
-          showFormError(context, state.error);
         }
       }, builder: (context, state) {
         if (state is TaskFetching) {
@@ -209,6 +213,22 @@ class _TaskDetailViewState extends State<TaskDetailView> {
               )
             ],
             actions: [
+              if (state.data.stage.allowRelease)
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return ReleaseTaskDialog(
+                          onConfirm: () {
+                            context.read<TaskBloc>().add(ReleaseTask());
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Text(context.loc.release_task_button),
+                ),
               IconButton(
                 onPressed: () {
                   context.read<TaskBloc>().add(OpenTaskInfo());
@@ -290,6 +310,9 @@ class _CurrentTask extends StatelessWidget {
           submitButtonText: Text(context.loc.form_submit_button),
           onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
           addFileText: [context.loc.select_file, context.loc.to_upload],
+          onOpenPreviousTask: () => context.read<TaskBloc>().add(GoBackToPreviousTask()),
+          openPreviousButtonText: Text(context.loc.go_back_to_previous_task),
+          allowOpenPrevious: task.stage.allowGoBack,
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 import '../widgets.dart';
 

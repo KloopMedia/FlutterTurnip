@@ -36,7 +36,7 @@ class AllTaskRepository extends TaskRepository {
 
       for (final item in parsed) {
         final entity = item.toDB();
-        await db.LocalDatabase.insertTask(entity);
+        db.LocalDatabase.insertTask(entity);
       }
 
       return data.copyWith<Task>(results: parsed);
@@ -58,7 +58,7 @@ class AllTaskRepository extends TaskRepository {
       final parsed = data.results.map(TaskStageDetail.fromApiModel).toList();
       for (final item in parsed) {
         final entity = item.toDB();
-        await db.LocalDatabase.insertTaskStage(entity);
+        db.LocalDatabase.insertTaskStage(entity);
       }
     } catch (e) {
       print('FETCHING ALL TASK STAGES ERROR $e');

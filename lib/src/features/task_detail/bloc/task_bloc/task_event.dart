@@ -40,3 +40,7 @@ class DownloadFile extends TaskEvent {
 
   const DownloadFile(this.message);
 }
+
+class ReleaseTask extends TaskEvent {}
+
+class GoBackToPreviousTask extends TaskEvent {}

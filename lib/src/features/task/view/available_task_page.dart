@@ -78,7 +78,7 @@ class AvailableTaskPage extends StatelessWidget {
                   itemBuilder: (context, index, item) {
                     return CardWithTitle(
                       chips: [
-                        const Spacer(),
+                        CardChip(item.id.toString()),
                         ElevatedButton(
                           onPressed: () {
                             context.read<AvailableTaskCubit>().requestTaskAssignment(item);
@@ -87,7 +87,6 @@ class AvailableTaskPage extends StatelessWidget {
                         ),
                       ],
                       title: item.name,
-                      id: item.id,
                       bottom: ExpansionTile(
                         tilePadding: EdgeInsets.zero,
                         title: CardDate(date: item.createdAt?.toLocal()),

@@ -138,5 +138,11 @@
   "apply_filter": "Застосувати фільтр",
   "country": "Країна",
   "category": "Категорія",
-  "language_label": "Мова"
+  "language_label": "Мова",
+
+  "release_task_button": "Відмовитись",
+  "release_task_dialog_title": "Відмовитись від завдання",
+  "release_task_dialog_body": "Ви впевнені, що хочете відмовитись від завдання?",
+
+  "go_back_to_previous_task": "Попереднє завдання"
 }

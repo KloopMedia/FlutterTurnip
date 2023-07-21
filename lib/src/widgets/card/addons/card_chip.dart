@@ -12,8 +12,8 @@ class CardChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final _fontColor = theme.isLight ? theme.neutral40 : theme.neutral60;
-    final _backgroundColor = theme.isLight ? theme.neutral95 : theme.neutral20;
+    final _fontColor = theme.isLight ? theme.neutral40 : theme.neutral80;
+    final _backgroundColor = theme.isLight ? theme.neutralVariant95 : theme.neutralVariant20;
 
     return Container(
       decoration: BoxDecoration(
