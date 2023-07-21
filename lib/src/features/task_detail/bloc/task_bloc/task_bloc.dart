@@ -31,6 +31,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<CloseTaskInfo>(_onCloseTaskInfo);
     on<RefetchTask>(_onRefetchTask);
     on<ValidationFailed>(_onValidationFailed);
+    on<DownloadFile>(_onFileDownloaded);
     on<ReleaseTask>(_onReleaseTask);
     on<GoBackToPreviousTask>(_onGoBackToPreviousTask);
   }
@@ -82,7 +83,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final response = await _repository.saveData(taskId, data);
       final nextTaskId = response.nextDirectId;
 
-      emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
+      if (nextTaskId == taskId) {
+        emit(TaskReturned.clone(_state));
+      } else {
+        emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
+      }
     } on DioException catch (e) {
       print(e);
       final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
@@ -151,6 +156,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final _state = state as TaskInitialized;
     final error = event.error;
     emit(TaskSubmitError.clone(_state, error));
+    emit(TaskLoaded(_state.data, _state.previousTasks));
+  }
+
+  Future<void> _onFileDownloaded(DownloadFile event, Emitter<TaskState> emit) async {
+    final _state = state as TaskInitialized;
+    final error = event.message;
+    emit(FileDownloaded.clone(_state, error));
     emit(TaskLoaded(_state.data, _state.previousTasks));
   }
 

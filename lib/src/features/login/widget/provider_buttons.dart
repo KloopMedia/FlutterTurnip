@@ -20,7 +20,9 @@ class LoginProviderButtons extends StatelessWidget {
       fontWeight: FontWeight.w500,
     );
 
-    return CustomWrap(
+    // return CustomWrapper(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         LoginProviderButton(
           color: theme.isLight ? Colors.white : Colors.black,

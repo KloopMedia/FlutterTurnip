@@ -48,6 +48,8 @@
   "notsent" : "Неотправлено",
   "opentosee" : "Посмотреть/Открыть",
   "close": "Закрыть",
+  "select_file": "Выберите файл",
+  "to_upload": " для загрузки",
 
 
   "sign_in_with_google" : "Вход с аккаунтом Google",
@@ -109,8 +111,8 @@
   "my_campaigns" : "Мои кампании",
   "join" : "Присоединиться",
   "complete" : "Законченный",
-  "open_notification" : "Открытые уведомления",
-  "closed_notification" : "Закрытые уведомления",
+  "open_notification" : "Прочитанные уведомления",
+  "closed_notification" : "Непрочитанные уведомления",
   "campaign_empty_title": "Пока что здесь пусто",
   "campaign_empty_body": "Здесь Вы найдете кампании к которым Вы присоединились. Присоединиться к кампании Вы можете  в разделе \"Доступные кампании\"",
 
@@ -143,5 +145,8 @@
   "release_task_dialog_title": "Отказаться от задания",
   "release_task_dialog_body": "Вы уверены, что хотите отказаться от задания?",
 
-  "go_back_to_previous_task": "Предыдущее задание"
+  "go_back_to_previous_task": "Предыдущее задание",
+
+  "task_has_error": "Ошибка в форме",
+  "task_failed": "Вы не прошли тест. Попробуйте еще раз."
 }
