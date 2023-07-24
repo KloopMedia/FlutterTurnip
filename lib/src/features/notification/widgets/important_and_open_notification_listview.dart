@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/notification/bloc/notification_cubit.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
@@ -36,6 +37,22 @@ class ImportantAndOpenNotificationListView extends StatelessWidget {
               if (containsImportantNotification) data = [state.data.firstWhere((item) => item.importance == 0)];
             }
             if (data.isNotEmpty) {
+              if (!context.isSmall || !context.isMedium && importantNotificationCount != null) {
+                return SliverToBoxAdapter(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 15
+                        ),
+                        child: itemBuilder(context, data[0])!,
+                      ),
+                      const Spacer()
+                    ],
+                  ),
+                );
+              }
               return MultiSliver(children: [
                 SliverPadding(
                   padding: padding,

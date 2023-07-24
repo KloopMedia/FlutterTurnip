@@ -169,7 +169,7 @@ class _TaskPageState extends State<TaskPage> {
             icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
               builder: (context, state) {
                 if (state is RemoteDataLoaded<Notification>) {
-                  final notifications = state.data;
+                  final notifications = state.data.where((item) => item.importance > 0).toList();
                   return Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.topLeft,

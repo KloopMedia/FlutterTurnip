@@ -138,7 +138,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               itemBuilder: (context, item) {
                 return CardWithTitle(
                   chips: [
-                    // CardChip(context.loc.important_notification),
+                    CardChip(context.loc.important_notification),
                     IconButton(
                       onPressed: () async {
                         final repo = NotificationDetailRepository(gigaTurnipApiClient: context.read<GigaTurnipApiClient>());
@@ -148,7 +148,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                       icon: const Icon(Icons.close))
                   ],
                   title: item.title,
-                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                  size: context.isSmall || context.isMedium ? null : const Size(365, 165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   onTap: () => redirectToNotification(context, item),
                   bottom: Text(item.text, style: notificationStyle, maxLines: 3),
