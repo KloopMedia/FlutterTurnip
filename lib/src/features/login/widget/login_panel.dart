@@ -12,7 +12,6 @@ import 'provider_buttons.dart';
 class LoginPanel extends StatelessWidget {
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry padding;
-  final List? campaignLanguages;
   final void Function() onSubmit;
   final void Function(String phoneNumber) onChange;
 
@@ -20,7 +19,6 @@ class LoginPanel extends StatelessWidget {
     Key? key,
     this.padding = EdgeInsets.zero,
     this.constraints,
-    this.campaignLanguages,
     required this.onChange,
     required this.onSubmit,
   }) : super(key: key);
@@ -69,28 +67,7 @@ class LoginPanel extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          (campaignLanguages !=  null && campaignLanguages!.isNotEmpty)
-          ? BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
-            builder: (context, state) {
-              if (state is RemoteDataLoaded<Language> && state.data.isNotEmpty) {
-                final data = state.data;
-                final List<SupportedLocale> campaignLocales = [];
-                for (var id in campaignLanguages!) {
-                  final matchedLanguage = data.where((e) => e.id == id).toList();
-                  final locale = SupportedLocale(matchedLanguage.first.name, matchedLanguage.first.code);
-                  campaignLocales.add(locale);
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: LanguagePicker(
-                      isLocaleSelected: true,
-                      campaignLocales: campaignLocales),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          )
-          : const Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: LanguagePicker(
               isLocaleSelected: true,

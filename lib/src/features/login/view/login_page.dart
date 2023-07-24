@@ -241,32 +241,14 @@ class _LoginViewState extends State<LoginView> {
                             context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
                             },
                           )
-                           : BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                             builder: (context, state) {
-                               if (state is CampaignFetching) {
-                                 return const Center(child: CircularProgressIndicator());
-                               }
-                               if (state is CampaignFetchingError) {
-                                 return Center(child: Text(state.error));
-                               }
-                               if (state is CampaignJoinError) {
-                                 return Center(child: Text(state.error));
-                               }
-                               if (state is CampaignLoaded) {
-                                 final data = state.data;
-                                 return Flexible(
-                                     child: LoginPanel(
-                                       padding: const EdgeInsets.all(20),
-                                       constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
-                                       onChange: _onChange,
-                                       onSubmit: loginWithPhone,
-                                       campaignLanguages: data.languages,
-                                     )
-                                 );
-                               }
-                               return const SizedBox.shrink();
-                               }
-                           ),
+                           : Flexible(
+                            child: LoginPanel(
+                              padding: const EdgeInsets.all(20),
+                              constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
+                              onChange: _onChange,
+                              onSubmit: loginWithPhone,
+                            )
+                          )
                         // Flexible(
                         //   child: LoginPanel(
                         //     padding: const EdgeInsets.all(20),
