@@ -17,15 +17,10 @@ abstract class DownloadService {
 class WebDownloadService implements DownloadService {
   @override
   Future<String?> download({required String url, String? filename, int? bytes}) async {
-    html.Blob fileBlob = html.Blob([bytes], 'application/octet-stream');
-    final url = html.Url.createObjectUrlFromBlob(fileBlob);
-
-    final anchorElement = html.AnchorElement(href: url);
-    anchorElement.download = filename;
+    html.AnchorElement anchorElement =  html.AnchorElement(href: url);
+    anchorElement.target = 'blank';
+    anchorElement.download = url;
     anchorElement.click();
-
-    await Future.delayed(const Duration(seconds: 1));
-    html.Url.revokeObjectUrl(url);
     return 'Download successful';
   }
 }
