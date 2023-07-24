@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
+import '../../../bloc/bloc.dart';
+import '../../campaign/bloc/language_bloc/language_cubit.dart';
+import '../view/language_picker.dart';
 import 'provider_buttons.dart';
 
 class LoginPanel extends StatelessWidget {
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry padding;
+  final List? campaignLanguages;
   final void Function() onSubmit;
   final void Function(String phoneNumber) onChange;
 
@@ -14,6 +20,7 @@ class LoginPanel extends StatelessWidget {
     Key? key,
     this.padding = EdgeInsets.zero,
     this.constraints,
+    this.campaignLanguages,
     required this.onChange,
     required this.onSubmit,
   }) : super(key: key);
@@ -39,7 +46,8 @@ class LoginPanel extends StatelessWidget {
       margin: padding,
       constraints: constraints,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
             children: [
@@ -60,8 +68,38 @@ class LoginPanel extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          (campaignLanguages !=  null && campaignLanguages!.isNotEmpty)
+          ? BlocBuilder<LanguageCubit, RemoteDataState<Language>>(
+            builder: (context, state) {
+              if (state is RemoteDataLoaded<Language> && state.data.isNotEmpty) {
+                final data = state.data;
+                final List<SupportedLocale> campaignLocales = [];
+                for (var id in campaignLanguages!) {
+                  final matchedLanguage = data.where((e) => e.id == id).toList();
+                  final locale = SupportedLocale(matchedLanguage.first.name, matchedLanguage.first.code);
+                  campaignLocales.add(locale);
+                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: LanguagePicker(
+                      isLocaleSelected: true,
+                      campaignLocales: campaignLocales),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          )
+          : const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: LanguagePicker(
+              isLocaleSelected: true,
+              campaignLocales: [],
+            ),
+          ),
+          const SizedBox(height: 60),
           const LoginProviderButtons(),
-          SizedBox.shrink(),
+          const SizedBox.shrink(),
           // Column(
           //   children: [
           //     PhoneNumberField(onChanged: onChange),
