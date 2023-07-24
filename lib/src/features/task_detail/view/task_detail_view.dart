@@ -86,9 +86,9 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       MaterialPageRoute(
         builder: (context) => WebView(
           html: state.data.stage.richText,
-          onCloseCallback: () {
-            bloc.add(CloseTaskInfo());
-          },
+          allowOpenPrevious: state.data.stage.allowGoBack,
+          onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
+          onCloseCallback: () => bloc.add(CloseTaskInfo()),
         ),
       ),
     );

@@ -5,10 +5,17 @@ import 'mobile_webview.dart' if (dart.library.html) 'web_webview.dart' as multi_
 
 class WebView extends StatefulWidget {
   final String htmlText;
+  final bool allowOpenPrevious;
   final void Function()? onCloseCallback;
+  final void Function()? onOpenPreviousTask;
 
-  const WebView({Key? key, String? html = "", this.onCloseCallback})
-      : htmlText = html as String,
+  const WebView({
+    Key? key,
+    String? html = "",
+    this.onCloseCallback,
+    this.onOpenPreviousTask,
+    this.allowOpenPrevious = false,
+  })  : htmlText = html as String,
         super(key: key);
 
   @override
@@ -19,6 +26,7 @@ class _WebViewState extends State<WebView> {
   @override
   Widget build(BuildContext context) {
     final onClose = widget.onCloseCallback;
+    final onPrevious = widget.onOpenPreviousTask;
     final theme = Theme.of(context).colorScheme;
 
     final width = context.isSmall || context.isMedium ? '100%' : '70%';
@@ -53,7 +61,16 @@ class _WebViewState extends State<WebView> {
 
     return Scaffold(
       backgroundColor: theme.isLight ? Colors.white : theme.neutral80,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            if (onClose != null) {
+              onClose();
+            }
+          },
+        ),
+      ),
       body: Builder(builder: (context) {
         if (widget.htmlText.isEmpty) {
           return Center(
@@ -65,19 +82,57 @@ class _WebViewState extends State<WebView> {
         return multi_platform.CustomWebView(htmlText: fullHtml);
       }),
       bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              if (onClose != null) {
-                onClose();
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(context.loc.close),
-            ),
+        child: Container(
+          padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (widget.allowOpenPrevious)
+                Expanded(
+                  child: SizedBox(
+                    height: 52,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          width: 1,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        if (onPrevious != null) {
+                          onPrevious();
+                        }
+                      },
+                      child: Text(context.loc.go_back_to_previous_task),
+                    ),
+                  ),
+                ),
+              if (widget.allowOpenPrevious) const SizedBox(width: 10),
+              Expanded(
+                child: SizedBox(
+                  height: 52,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      if (onClose != null) {
+                        onClose();
+                      }
+                    },
+                    child: Text(context.loc.close),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
