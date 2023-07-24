@@ -262,8 +262,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                     children: [
                       for (final task in state.previousTasks)
                         _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                      if (state.previousTasks.isNotEmpty)
-                        if (context.loc.localeName != 'en') TaskDivider(label: context.loc.form_divider),
+                      if (state.previousTasks.isNotEmpty) const Divider(color: Colors.black, height: 36, thickness: 2),
                       _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey, scrollController: scrollController),
                       // if (state.data.stage.allowGoBack)
                       //   Padding(
