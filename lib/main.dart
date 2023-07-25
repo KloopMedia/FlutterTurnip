@@ -23,7 +23,7 @@ Future<void> main() async {
   final gigaTurnipApiClient = GigaTurnipApiClient(dio, baseUrl: AppConfig.apiUrl);
   final sharedPreferences = await SharedPreferences.getInstance();
   final router = AppRouter(authenticationRepository).router;
-  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) => ErrorScreen(detailsException: flutterErrorDetails.exception);
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) => SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
 
   if (!kIsWeb) {
     // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

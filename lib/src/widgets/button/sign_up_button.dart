@@ -31,7 +31,8 @@ class SignUpButton extends StatelessWidget {
         ),
         onPressed: () {
           if (isActive != null && !isActive!) {
-            onPressed(context.loc.choose_language);
+            final helperText = (context.loc.localeName == 'ky') ? ' / Choose the language' : '';
+            onPressed(context.loc.choose_language + helperText);
           } else {
             onPressed(null);
           }

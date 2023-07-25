@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+
 import 'mobile_webview.dart' if (dart.library.html) 'web_webview.dart' as multi_platform;
 
 class WebView extends StatefulWidget {
   final String htmlText;
   final bool allowOpenPrevious;
+  final void Function()? onSubmitCallback;
   final void Function()? onCloseCallback;
   final void Function()? onOpenPreviousTask;
 
   const WebView({
     Key? key,
     String? html = "",
+    this.onSubmitCallback,
     this.onCloseCallback,
     this.onOpenPreviousTask,
     this.allowOpenPrevious = false,
@@ -23,9 +26,33 @@ class WebView extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebView> {
+  // @override
+  // void initState() {
+  //   if (!kIsWeb) {
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
+  //
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   print('intercepting');
+  //   Navigator.of(context).pop();
+  //   if (widget.onCloseCallback != null) {
+  //     widget.onCloseCallback!();
+  //   }
+  //   return false;
+  // }
+
   @override
   Widget build(BuildContext context) {
     final onClose = widget.onCloseCallback;
+    final onSubmit = widget.onSubmitCallback;
     final onPrevious = widget.onOpenPreviousTask;
     final theme = Theme.of(context).colorScheme;
 
@@ -124,8 +151,8 @@ class _WebViewState extends State<WebView> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      if (onClose != null) {
-                        onClose();
+                      if (onSubmit != null) {
+                        onSubmit();
                       }
                     },
                     child: Text(context.loc.close),

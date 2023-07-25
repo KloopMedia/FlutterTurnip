@@ -1,5 +1,3 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
@@ -43,25 +41,25 @@ class _TaskPageState extends State<TaskPage> {
       extra: widget.campaign,
     );
   }
-
-  @override
-  void initState() {
-    if (!kIsWeb) {
-      BackButtonInterceptor.add(myInterceptor);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    context.goNamed(CampaignRoute.name);
-    return true;
-  }
+  //
+  // @override
+  // void initState() {
+  //   if (!kIsWeb) {
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
+  //
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   context.goNamed(CampaignRoute.name);
+  //   return true;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +167,7 @@ class _TaskPageState extends State<TaskPage> {
             icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
               builder: (context, state) {
                 if (state is RemoteDataLoaded<Notification>) {
-                  final notifications = state.data;
+                  final notifications = state.data.where((item) => item.importance > 0).toList();
                   return Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.topLeft,

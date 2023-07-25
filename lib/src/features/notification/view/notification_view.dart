@@ -6,14 +6,23 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../bloc/notification_cubit.dart';
+
+import '../widgets/important_and_open_notification_listview.dart';
+
 class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
     extends StatelessWidget {
   final int campaignId;
+  final bool isClosed;
 
-  const NotificationView({Key? key, required this.campaignId}) : super(key: key);
+  const NotificationView({Key? key, required this.campaignId, required this.isClosed}) : super(key: key);
 
-  void redirectToNotification(BuildContext context, Notification notification) {
-    context.pushNamed(
+  void refreshNotifications(BuildContext context) {
+    context.read<OpenNotificationCubit>().refetch();
+  }
+
+  void redirectToNotification(BuildContext context, Notification notification) async {
+    final result = await context.pushNamed<bool>(
       NotificationDetailRoute.name,
       pathParameters: {
         'cid': '$campaignId',
@@ -21,6 +30,10 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
       },
       extra: Notification,
     );
+
+    if (context.mounted && result != null && result) {
+      refreshNotifications(context);
+    }
   }
 
   @override
@@ -29,10 +42,21 @@ class NotificationView<NotificationCubit extends RemoteDataCubit<Notification>>
       onRefresh: () async => context.read<NotificationCubit>().refetch(),
       child: CustomScrollView(
         slivers: [
-          SliverListViewWithPagination<Notification, NotificationCubit>(
+          (isClosed)
+          ? SliverListViewWithPagination<Notification, NotificationCubit>(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
             contentPadding: const EdgeInsets.symmetric(vertical: 5),
             itemBuilder: (context, index, item) {
+              return CardWithTitle(
+                title: item.title,
+                onTap: () => redirectToNotification(context, item),
+              );
+            },
+          )
+          : ImportantAndOpenNotificationListView(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+            itemBuilder: (context, item) {
               return CardWithTitle(
                 title: item.title,
                 onTap: () => redirectToNotification(context, item),

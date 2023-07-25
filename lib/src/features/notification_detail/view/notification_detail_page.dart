@@ -6,7 +6,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
-import '../../notification/bloc/notification_cubit.dart';
 
 class NotificationDetailPage extends StatelessWidget {
   final int notificationId;
@@ -35,13 +34,46 @@ class NotificationDetailPage extends StatelessWidget {
   }
 }
 
-class NotificationDetailView extends StatelessWidget {
+class NotificationDetailView extends StatefulWidget {
   final int campaignId;
 
   const NotificationDetailView({Key? key, required this.campaignId}) : super(key: key);
 
-  void refreshNotifications(BuildContext context, bool? refresh) {
-    context.read<OpenNotificationCubit>().refetch();
+  @override
+  State<NotificationDetailView> createState() => _NotificationDetailViewState();
+}
+
+class _NotificationDetailViewState extends State<NotificationDetailView> {
+  // @override
+  // void initState() {
+  //   if (!kIsWeb) {
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
+  //
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   redirectToNotificationPage();
+  //   return true;
+  // }
+  //
+  void redirectToNotificationPage() {
+    if (context.canPop()) {
+      context.pop(true);
+    } else {
+      context.goNamed(
+        NotificationRoute.name,
+        pathParameters: {
+          'cid': '${widget.campaignId}',
+        },
+      );
+    }
   }
 
   @override
@@ -49,14 +81,7 @@ class NotificationDetailView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () async {
-            final result = await context.pushNamed<bool>(
-                TaskRoute.name,
-                pathParameters: {'cid': '$campaignId'});
-            if (context.mounted && result != null && result) {
-              refreshNotifications(context, result);
-            }
-          },
+          onPressed: redirectToNotificationPage,
         ),
       ),
       body: BlocConsumer<NotificationDetailBloc, NotificationDetailState>(
