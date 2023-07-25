@@ -87,9 +87,9 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       MaterialPageRoute(
         builder: (context) => WebView(
           html: state.data.stage.richText,
-          onCloseCallback: () {
-            bloc.add(CloseTaskInfo());
-          },
+          allowOpenPrevious: state.data.stage.allowGoBack,
+          onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
+          onCloseCallback: () => bloc.add(CloseTaskInfo()),
         ),
       ),
     );
@@ -113,7 +113,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       builder: (context) => FormDialog(
         content: status,
         buttonText: context.loc.ok,
-      )
+      ),
     );
   }
 
@@ -124,7 +124,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
         title: context.loc.form_error,
         content: error,
         buttonText: context.loc.ok,
-      )
+      ),
     );
   }
 
@@ -170,11 +170,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           showDialog(
             context: context,
             builder: (context) {
-              return FormDialog(
-                title: context.loc.task_has_error,
-                content: context.loc.task_failed,
-                buttonText: context.loc.ok,
-              );
+              return const TaskReturnedDialog();
             },
           );
         }

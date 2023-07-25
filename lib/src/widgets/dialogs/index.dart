@@ -4,3 +4,4 @@ export 'release_task_dialog.dart';
 export 'form_dialog.dart';
 export 'offline_phone_message_dialog.dart';
 export 'delete_account_dialog.dart';
+export 'task_returned_dialog.dart';

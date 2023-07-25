@@ -172,11 +172,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   Future<void> _onGoBackToPreviousTask(GoBackToPreviousTask event, Emitter<TaskState> emit) async {
+    final _state = state as TaskInitialized;
     try {
+      emit(TaskFetching());
       final previousTaskId = await _repository.openPreviousTask(taskId);
-      emit(GoBackToPreviousTaskState.clone(state as TaskInitialized, previousTaskId));
+      emit(GoBackToPreviousTaskState.clone(_state, previousTaskId));
     } catch (e) {
-      emit(GoBackToPreviousTaskError.clone(state as TaskInitialized, e.toString()));
+      emit(GoBackToPreviousTaskError.clone(_state, e.toString()));
     }
   }
 }
