@@ -1,24 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../../bloc/bloc.dart';
-import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../view/language_picker.dart';
 import 'provider_buttons.dart';
 
 class LoginPanel extends StatelessWidget {
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry padding;
-  final void Function() onSubmit;
+  final bool? isLocaleSelected;
+  final String? errorMessage;
+  final void Function(String? value) onSubmit;
   final void Function(String phoneNumber) onChange;
 
   const LoginPanel({
     Key? key,
     this.padding = EdgeInsets.zero,
     this.constraints,
+    this.isLocaleSelected,
+    this.errorMessage,
     required this.onChange,
     required this.onSubmit,
   }) : super(key: key);
@@ -60,22 +61,35 @@ class LoginPanel extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  context.loc.sign_in_or_sign_up,
+                  (kIsWeb) ? context.loc.choose_language_and_sign_up : context.loc.sign_in_or_sign_up,
                   style: subtitleTextStyle,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: LanguagePicker(
-              isLocaleSelected: true,
-              campaignLocales: [],
+          if (kIsWeb)
+            Column(
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: LanguagePicker(
+                    errorMessage: (errorMessage != null && isLocaleSelected == false)
+                        ? errorMessage
+                        : null,
+                    isLocaleSelected: isLocaleSelected ?? true,
+                    campaignLocales: const [],
+                  ),
+                ),
+              ],
             ),
-          ),
           const SizedBox(height: 60),
-          const LoginProviderButtons(),
+          LoginProviderButtons(
+            isActive: isLocaleSelected ?? true,
+            onPressed: (errorMessage) {
+              onSubmit(errorMessage);
+            }
+          ),
           const SizedBox.shrink(),
           // Column(
           //   children: [

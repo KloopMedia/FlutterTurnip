@@ -10,6 +10,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../bloc/bloc.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
@@ -64,6 +65,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   String _phoneNumber = "";
   int? _resendToken;
+  bool isLocaleSelected = false;
+  String? errorMessage;
 
   void loginWithPhone([int? forceResendToken]) async {
     final authenticationRepository = context.read<AuthenticationRepository>();
@@ -99,6 +102,13 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<LocalizationBloc>().state;
+
+    if (state.firstLogin == false) {
+      setState(() {
+        isLocaleSelected = !state.firstLogin;
+      });
+    }
     final theme = Theme.of(context).colorScheme;
     const radius = Radius.circular(15);
 
@@ -171,7 +181,7 @@ class _LoginViewState extends State<LoginView> {
               return LoginPanel(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                 onChange: _onChange,
-                onSubmit: loginWithPhone,
+                onSubmit: (value) => loginWithPhone(),
               );
             } else {
               return Row(
@@ -246,7 +256,17 @@ class _LoginViewState extends State<LoginView> {
                               padding: const EdgeInsets.all(20),
                               constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
                               onChange: _onChange,
-                              onSubmit: loginWithPhone,
+                              onSubmit: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    errorMessage = value;
+                                  });
+                                } else {
+                                  loginWithPhone();
+                                }
+                              },
+                              isLocaleSelected: isLocaleSelected,
+                              errorMessage: errorMessage,
                             )
                           )
                         // Flexible(
