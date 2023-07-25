@@ -2,8 +2,9 @@
   "welcome": "Welcome!",
   "welcome_title": "Join the community of proactive people",
   "welcome_subtitle": "Here people unite and solve socially significant problems together. You can join campaigns that interest you or even create your own!",
-  "choose_language": "Choose language",
+  "choose_language": "Choose the language",
   "sign_in_or_sign_up": "Sign in or sign up to continue",
+  "choose_language_and_sign_up": "Choose language and sign up to continue",
   "sign_in": "Sign in",
   "continue_with_google": "Continue with Google",
   "continue_with_apple": "Continue with Apple",
@@ -75,6 +76,7 @@
 
   "read_notifications": "Read notifications",
   "unread_notifications": "Unread notifications",
+  "important_notification": "Important notification",
 
   "empty_richtext": "No explanation for the task",
   "empty_form_fields": "Your form has empty fields. Please correct them and submit again",

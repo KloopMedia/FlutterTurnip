@@ -27,7 +27,7 @@ class NotificationPage extends StatelessWidget {
               campaignId: campaignId,
             ),
           )..initialize(),
-          child: NotificationView<OpenNotificationCubit>(campaignId: campaignId),
+          child: NotificationView<OpenNotificationCubit>(campaignId: campaignId, isClosed: false),
         ),
         BlocProvider<ClosedNotificationCubit>(
           create: (context) => NotificationCubit(
@@ -36,7 +36,7 @@ class NotificationPage extends StatelessWidget {
               campaignId: campaignId,
             ),
           )..initialize(),
-          child: NotificationView<ClosedNotificationCubit>(campaignId: campaignId),
+          child: NotificationView<ClosedNotificationCubit>(campaignId: campaignId, isClosed: true),
         ),
       ],
       child: DefaultTabController(
@@ -60,8 +60,8 @@ class NotificationPage extends StatelessWidget {
           ),
           child: TabBarView(
             children: [
-              NotificationView<OpenNotificationCubit>(campaignId: campaignId),
-              NotificationView<ClosedNotificationCubit>(campaignId: campaignId),
+              NotificationView<OpenNotificationCubit>(campaignId: campaignId, isClosed: false),
+              NotificationView<ClosedNotificationCubit>(campaignId: campaignId, isClosed: true),
             ],
           ),
         ),
