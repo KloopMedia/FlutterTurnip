@@ -218,7 +218,7 @@ class _CampaignViewState extends State<CampaignView> {
                     : null,
                 tabs: [
                   Tab(
-                    child: Text(context.loc.open_campaigns, overflow: TextOverflow.ellipsis),
+                    child: Text(context.loc.my_campaigns, overflow: TextOverflow.ellipsis),
                   ),
                   Tab(
                     child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
