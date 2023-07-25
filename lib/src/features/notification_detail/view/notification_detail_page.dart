@@ -1,3 +1,5 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/notification_detail/bloc/notification_detail_bloc.dart';
@@ -34,28 +36,54 @@ class NotificationDetailPage extends StatelessWidget {
   }
 }
 
-class NotificationDetailView extends StatelessWidget {
+class NotificationDetailView extends StatefulWidget {
   final int campaignId;
 
   const NotificationDetailView({Key? key, required this.campaignId}) : super(key: key);
+
+  @override
+  State<NotificationDetailView> createState() => _NotificationDetailViewState();
+}
+
+class _NotificationDetailViewState extends State<NotificationDetailView> {
+  @override
+  void initState() {
+    if (!kIsWeb) {
+      BackButtonInterceptor.add(myInterceptor);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    redirectToNotificationPage();
+    return true;
+  }
+
+  void redirectToNotificationPage() {
+    if (context.canPop()) {
+      context.pop(true);
+    } else {
+      context.goNamed(
+        NotificationRoute.name,
+        pathParameters: {
+          'cid': '${widget.campaignId}',
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () async {
-            if (context.canPop()) {
-              context.pop(true);
-            } else {
-              context.goNamed(
-                NotificationRoute.name,
-                pathParameters: {
-                  'cid': '$campaignId',
-                },
-              );
-            }
-          },
+          onPressed: redirectToNotificationPage,
         ),
       ),
       body: BlocConsumer<NotificationDetailBloc, NotificationDetailState>(

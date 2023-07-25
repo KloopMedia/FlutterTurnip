@@ -1,3 +1,5 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -11,10 +13,47 @@ import 'package:go_router/go_router.dart';
 import '../bloc/notification_cubit.dart';
 import 'notification_view.dart';
 
-class NotificationPage extends StatelessWidget {
+class NotificationPage extends StatefulWidget {
   final int campaignId;
 
   const NotificationPage({Key? key, required this.campaignId}) : super(key: key);
+
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage> {
+  @override
+  void initState() {
+    if (!kIsWeb) {
+      BackButtonInterceptor.add(myInterceptor);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    redirectToTaskPage();
+    return true;
+  }
+
+  void redirectToTaskPage() {
+    if (context.canPop()) {
+      context.pop(true);
+    } else {
+      context.goNamed(
+        TaskRoute.name,
+        pathParameters: {
+          'cid': '${widget.campaignId}',
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,33 +63,26 @@ class NotificationPage extends StatelessWidget {
           create: (context) => NotificationCubit(
             OpenNotificationRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-              campaignId: campaignId,
+              campaignId: widget.campaignId,
             ),
           )..initialize(),
-          child: NotificationView<OpenNotificationCubit>(campaignId: campaignId, isClosed: false),
+          child: NotificationView<OpenNotificationCubit>(campaignId: widget.campaignId, isClosed: false),
         ),
         BlocProvider<ClosedNotificationCubit>(
           create: (context) => NotificationCubit(
             ClosedNotificationRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-              campaignId: campaignId,
+              campaignId: widget.campaignId,
             ),
           )..initialize(),
-          child: NotificationView<ClosedNotificationCubit>(campaignId: campaignId, isClosed: true),
+          child: NotificationView<ClosedNotificationCubit>(campaignId: widget.campaignId, isClosed: true),
         ),
       ],
       child: DefaultTabController(
         length: 2,
         child: DefaultAppBar(
           automaticallyImplyLeading: false,
-          leading: [
-            BackButton(
-              onPressed: () => context.goNamed(
-                TaskRoute.name,
-                pathParameters: GoRouterState.of(context).pathParameters,
-              ),
-            )
-          ],
+          leading: [BackButton(onPressed: redirectToTaskPage)],
           title: Text(context.loc.notifications),
           bottom: BaseTabBar(
             tabs: [
@@ -60,8 +92,8 @@ class NotificationPage extends StatelessWidget {
           ),
           child: TabBarView(
             children: [
-              NotificationView<OpenNotificationCubit>(campaignId: campaignId, isClosed: false),
-              NotificationView<ClosedNotificationCubit>(campaignId: campaignId, isClosed: true),
+              NotificationView<OpenNotificationCubit>(campaignId: widget.campaignId, isClosed: false),
+              NotificationView<ClosedNotificationCubit>(campaignId: widget.campaignId, isClosed: true),
             ],
           ),
         ),
