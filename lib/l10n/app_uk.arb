@@ -48,6 +48,8 @@
   "notsent" : "Не відправлено",
   "opentosee" : "Подивитися/Відкрити",
   "close": "Закрити",
+  "select_file": "Виберіть файл",
+  "to_upload": " для завантаження",
 
 
   "sign_in_with_google" : "Вхід з акаунтом Google",
@@ -108,8 +110,8 @@
   "my_campaigns" : "Мої кампанії",
   "join" : "Долучитися",
   "complete" : "Закінчений",
-  "open_notification" : "Відкриті сповіщення",
-  "closed_notification" : "Закриті сповіщення",
+  "open_notification" : "Прочитані сповіщення",
+  "closed_notification" : "Непрочитані сповіщення",
   "campaign_empty_title": "Поки що тут пусто",
   "campaign_empty_body": "Тут ви знайдете кампанії до яких ви приєдналися. Приєднатися до кампанії ви можете в розділі \"Доступні кампанії\"",
 
@@ -142,5 +144,8 @@
   "release_task_dialog_title": "Відмовитись від завдання",
   "release_task_dialog_body": "Ви впевнені, що хочете відмовитись від завдання?",
 
-  "go_back_to_previous_task": "Попереднє завдання"
+  "go_back_to_previous_task": "Попереднє завдання",
+
+  "task_has_error": "Помилка у формі",
+  "task_failed": "Ви не пройшли тест. Спробуйте ще раз."
 }

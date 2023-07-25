@@ -35,6 +35,12 @@ class ValidationFailed extends TaskEvent {
   const ValidationFailed(this.error);
 }
 
+class DownloadFile extends TaskEvent {
+  final String message;
+
+  const DownloadFile(this.message);
+}
+
 class ReleaseTask extends TaskEvent {}
 
 class GoBackToPreviousTask extends TaskEvent {}

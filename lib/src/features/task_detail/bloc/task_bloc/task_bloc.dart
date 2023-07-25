@@ -31,6 +31,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<CloseTaskInfo>(_onCloseTaskInfo);
     on<RefetchTask>(_onRefetchTask);
     on<ValidationFailed>(_onValidationFailed);
+    on<DownloadFile>(_onFileDownloaded);
     on<ReleaseTask>(_onReleaseTask);
     on<GoBackToPreviousTask>(_onGoBackToPreviousTask);
   }
@@ -82,7 +83,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final response = await _repository.saveData(taskId, data);
       final nextTaskId = response.nextDirectId;
 
-      emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
+      if (nextTaskId == taskId) {
+        emit(TaskReturned.clone(_state));
+      } else {
+        emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
+      }
     } on DioException catch (e) {
       print(e);
       final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
@@ -154,17 +159,26 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(TaskLoaded(_state.data, _state.previousTasks));
   }
 
+  Future<void> _onFileDownloaded(DownloadFile event, Emitter<TaskState> emit) async {
+    final _state = state as TaskInitialized;
+    final error = event.message;
+    emit(FileDownloaded.clone(_state, error));
+    emit(TaskLoaded(_state.data, _state.previousTasks));
+  }
+
   Future<void> _onReleaseTask(ReleaseTask event, Emitter<TaskState> emit) async {
     await _repository.releaseTask(taskId);
     emit(TaskReleased.clone(state as TaskInitialized));
   }
 
   Future<void> _onGoBackToPreviousTask(GoBackToPreviousTask event, Emitter<TaskState> emit) async {
+    final _state = state as TaskInitialized;
     try {
+      emit(TaskFetching());
       final previousTaskId = await _repository.openPreviousTask(taskId);
-      emit(GoBackToPreviousTaskState.clone(state as TaskInitialized, previousTaskId));
+      emit(GoBackToPreviousTaskState.clone(_state, previousTaskId));
     } catch (e) {
-      emit(GoBackToPreviousTaskError.clone(state as TaskInitialized, e.toString()));
+      emit(GoBackToPreviousTaskError.clone(_state, e.toString()));
     }
   }
 }

@@ -98,8 +98,9 @@ class AvailableTaskPage extends StatelessWidget {
                             disabled: true,
                             storage: generateStorageReference(
                                 item, context.read<AuthenticationRepository>().user),
-                            onDownloadFile: (url, filename) =>
-                                DownloadService().download(url: url, filename: filename),
+                            addFileText: [context.loc.select_file, context.loc.to_upload],
+                            onDownloadFile: (url, filename, bytes) =>
+                                DownloadService().download(url: url, filename: filename, bytes: bytes),
                           )
                         ],
                       ),
