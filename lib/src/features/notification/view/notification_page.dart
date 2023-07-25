@@ -1,5 +1,3 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -23,25 +21,25 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  @override
-  void initState() {
-    if (!kIsWeb) {
-      BackButtonInterceptor.add(myInterceptor);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    redirectToTaskPage();
-    return true;
-  }
-
+  // @override
+  // void initState() {
+  //   if (!kIsWeb) {
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
+  //
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   redirectToTaskPage();
+  //   return true;
+  // }
+  //
   void redirectToTaskPage() {
     if (context.canPop()) {
       context.pop(true);

@@ -1,5 +1,3 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/notification_detail/bloc/notification_detail_bloc.dart';
@@ -46,25 +44,25 @@ class NotificationDetailView extends StatefulWidget {
 }
 
 class _NotificationDetailViewState extends State<NotificationDetailView> {
-  @override
-  void initState() {
-    if (!kIsWeb) {
-      BackButtonInterceptor.add(myInterceptor);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    redirectToNotificationPage();
-    return true;
-  }
-
+  // @override
+  // void initState() {
+  //   if (!kIsWeb) {
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
+  //
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   redirectToNotificationPage();
+  //   return true;
+  // }
+  //
   void redirectToNotificationPage() {
     if (context.canPop()) {
       context.pop(true);

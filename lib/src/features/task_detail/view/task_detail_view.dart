@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,29 +32,33 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   final _pageStorageKey = const PageStorageKey('pageKey');
   final ScrollController scrollController = ScrollController(initialScrollOffset: 0);
 
-  @override
-  void initState() {
-    if (!kIsWeb) {
-      BackButtonInterceptor.add(myInterceptor);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
-    super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    context.goNamed(
-      TaskRoute.name,
-      pathParameters: {
-        'cid': '${widget.campaignId}',
-      },
-    );
-    return true;
-  }
+  // @override
+  // void initState() {
+  //   if (!kIsWeb) {
+  //     BackButtonInterceptor.add(myInterceptor);
+  //   }
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   BackButtonInterceptor.remove(myInterceptor);
+  //   super.dispose();
+  // }
+  //
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   if (context.canPop()) {
+  //     context.pop(true);
+  //   } else {
+  //     context.goNamed(
+  //       TaskRoute.name,
+  //       pathParameters: {
+  //         'cid': '${widget.campaignId}',
+  //       },
+  //     );
+  //   }
+  //   return true;
+  // }
 
   void redirect(BuildContext context, int? nextTaskId) {
     if (nextTaskId != null) {
