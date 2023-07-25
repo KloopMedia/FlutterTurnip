@@ -27,6 +27,8 @@ class OpenTaskInfo extends TaskEvent {}
 
 class CloseTaskInfo extends TaskEvent {}
 
+class CloseTask extends TaskEvent {}
+
 class RefetchTask extends TaskEvent {}
 
 class ValidationFailed extends TaskEvent {

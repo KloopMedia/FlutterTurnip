@@ -89,7 +89,8 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           html: state.data.stage.richText,
           allowOpenPrevious: state.data.stage.allowGoBack,
           onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
-          onCloseCallback: () => bloc.add(CloseTaskInfo()),
+          onCloseCallback: () => bloc.add(CloseTask()),
+          onSubmitCallback: () => bloc.add(CloseTaskInfo()),
         ),
       ),
     );

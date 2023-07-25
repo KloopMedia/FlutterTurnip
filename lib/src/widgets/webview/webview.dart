@@ -6,12 +6,14 @@ import 'mobile_webview.dart' if (dart.library.html) 'web_webview.dart' as multi_
 class WebView extends StatefulWidget {
   final String htmlText;
   final bool allowOpenPrevious;
+  final void Function()? onSubmitCallback;
   final void Function()? onCloseCallback;
   final void Function()? onOpenPreviousTask;
 
   const WebView({
     Key? key,
     String? html = "",
+    this.onSubmitCallback,
     this.onCloseCallback,
     this.onOpenPreviousTask,
     this.allowOpenPrevious = false,
@@ -26,6 +28,7 @@ class _WebViewState extends State<WebView> {
   @override
   Widget build(BuildContext context) {
     final onClose = widget.onCloseCallback;
+    final onSubmit = widget.onSubmitCallback;
     final onPrevious = widget.onOpenPreviousTask;
     final theme = Theme.of(context).colorScheme;
 
@@ -124,8 +127,8 @@ class _WebViewState extends State<WebView> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      if (onClose != null) {
-                        onClose();
+                      if (onSubmit != null) {
+                        onSubmit();
                       }
                     },
                     child: Text(context.loc.close),

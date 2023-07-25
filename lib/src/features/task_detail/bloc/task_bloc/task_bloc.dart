@@ -34,6 +34,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<DownloadFile>(_onFileDownloaded);
     on<ReleaseTask>(_onReleaseTask);
     on<GoBackToPreviousTask>(_onGoBackToPreviousTask);
+    on<CloseTask>(_onCloseTask);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -179,6 +180,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       emit(GoBackToPreviousTaskState.clone(_state, previousTaskId));
     } catch (e) {
       emit(GoBackToPreviousTaskError.clone(_state, e.toString()));
+    }
+  }
+
+  Future<void> _onCloseTask(CloseTask event, Emitter<TaskState> emit) async {
+    emit(TaskLoaded.clone(state as TaskInitialized));
+    final task = (state as TaskInitialized).data;
+    final isSchemaEmpty = task.schema?.isEmpty ?? true;
+    if (isSchemaEmpty) {
+      emit(TaskClosed());
     }
   }
 }
