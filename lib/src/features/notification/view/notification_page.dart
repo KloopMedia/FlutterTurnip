@@ -54,8 +54,8 @@ class NotificationPage extends StatelessWidget {
           title: Text(context.loc.notifications),
           bottom: BaseTabBar(
             tabs: [
-              Tab(text: context.loc.open_notification),
-              Tab(text: context.loc.closed_notification),
+              Tab(child: Text(context.loc.open_notification, overflow: TextOverflow.ellipsis)),
+              Tab(child: Text(context.loc.closed_notification, overflow: TextOverflow.ellipsis)),
             ],
           ),
           child: TabBarView(
