@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/notification/bloc/notification_cubit.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/theme/screen_type.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
@@ -35,24 +36,9 @@ class CardWithTitleAndTaskNotification extends StatelessWidget {
                     height: (context.isSmall || context.isMedium) ? 179 : 217,
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
-                      color: theme.primaryContainer,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x19454545),
-                          blurRadius: 3,
-                          offset: Offset(0, 1),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x19454545),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                          spreadRadius: 3,
-                        )
-                      ],
+                      color: theme.isLight ? theme.primaryContainer : const Color(0xFF37373C),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                      shadows: Shadows.elevation2,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -71,12 +57,10 @@ class CardWithTitleAndTaskNotification extends StatelessWidget {
                               SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  notificationWithReceiverTask.text,
-                                  // 'Ваше обращение возвращено, откройте форму, чтобы узнать подробнее',
+                                  notificationWithReceiverTask.title,
                                   style: TextStyle(
                                     color: theme.onSurfaceVariant,
                                     fontSize: 14,
-                                    fontFamily: 'Roboto',
                                     fontWeight: FontWeight.w400,
                                   ),
                                   maxLines: 2,
