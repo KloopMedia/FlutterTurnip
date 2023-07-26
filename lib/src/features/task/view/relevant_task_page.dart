@@ -86,8 +86,8 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     }
   }
 
-  void redirectToNotification(BuildContext context, Notification notification) {
-    context.pushNamed(
+  Future<void> redirectToNotification(BuildContext context, Notification notification) async {
+    final result = await context.pushNamed<bool>(
       NotificationDetailRoute.name,
       pathParameters: {
         'cid': '${widget.campaignId}',
@@ -95,6 +95,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       },
       extra: Notification,
     );
+    if (context.mounted && result != null && result) {
+      context.read<OpenNotificationCubit>().refetch();
+    }
   }
 
   @override
