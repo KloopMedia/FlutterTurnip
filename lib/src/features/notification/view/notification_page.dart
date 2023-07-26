@@ -41,16 +41,12 @@ class _NotificationPageState extends State<NotificationPage> {
   // }
   //
   void redirectToTaskPage() {
-    if (context.canPop()) {
-      context.pop(true);
-    } else {
-      context.goNamed(
-        TaskRoute.name,
-        pathParameters: {
-          'cid': '${widget.campaignId}',
-        },
-      );
-    }
+    context.goNamed(
+      TaskRoute.name,
+      pathParameters: {
+        'cid': '${widget.campaignId}',
+      },
+    );
   }
 
   @override

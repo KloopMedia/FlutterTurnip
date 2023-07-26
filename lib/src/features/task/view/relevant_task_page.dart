@@ -11,6 +11,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
@@ -84,8 +85,8 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     }
   }
 
-  void redirectToNotification(BuildContext context, Notification notification) {
-    context.pushNamed(
+  Future<void> redirectToNotification(BuildContext context, Notification notification) async {
+    final result = await context.pushNamed<bool>(
       NotificationDetailRoute.name,
       pathParameters: {
         'cid': '${widget.campaignId}',
@@ -93,6 +94,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       },
       extra: Notification,
     );
+    if (context.mounted && result != null && result) {
+      context.read<OpenNotificationCubit>().refetch();
+    }
   }
 
   @override
