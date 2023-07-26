@@ -6,11 +6,13 @@ import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart'
 import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/card/addons/card_with_title_and_task_notification.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
 import '../widgets/filter_bar.dart';
@@ -187,13 +189,16 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               itemBuilder: (context, index, item) {
                 final cardBody = CardDate(date: item.createdAt?.toLocal());
 
-                return CardWithTitle(
-                  chips: [CardChip(item.id.toString()), StatusCardChip(item)],
-                  title: item.name,
-                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
-                  flex: context.isSmall || context.isMedium ? 0 : 1,
-                  onTap: () => redirectToTask(context, item),
-                  bottom: cardBody,
+                return CardWithTitleAndTaskNotification(
+                  taskId: item.id,
+                  body: CardWithTitle(
+                    chips: [CardChip(item.id.toString()), StatusCardChip(item)],
+                    title: item.name,
+                    size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                    flex: context.isSmall || context.isMedium ? 0 : 1,
+                    onTap: () => redirectToTask(context, item),
+                    bottom: cardBody,
+                  ),
                 );
               },
             ),
