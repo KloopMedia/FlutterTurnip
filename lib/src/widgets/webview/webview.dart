@@ -57,20 +57,21 @@ class _WebViewState extends State<WebView> {
     final theme = Theme.of(context).colorScheme;
 
     final width = context.isSmall || context.isMedium ? '100%' : '70%';
-    final backgroundColor = theme.isLight ? 'rgba(255, 255, 255, 1)' : 'rgba(196, 199, 199, 1)';
+    final backgroundColor = theme.isLight ? 'rgba(0, 0, 0, 1)' : 'rgba(196, 199, 199, 1)';
 
     final fullHtml = '''
     <html>
       <style>  
       div {  
         padding: 15px 20px;  
-      }  
+      }
       #container {
         margin: auto;
         width: $width;
+        border-style: groove;
       }
       body {
-        background-color: $backgroundColor;
+        color: $backgroundColor;
       }
       </style>  
       <head>  
@@ -87,7 +88,6 @@ class _WebViewState extends State<WebView> {
     ''';
 
     return Scaffold(
-      backgroundColor: theme.isLight ? Colors.white : theme.neutral80,
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
@@ -98,18 +98,38 @@ class _WebViewState extends State<WebView> {
           },
         ),
       ),
-      body: Builder(builder: (context) {
-        if (widget.htmlText.isEmpty) {
-          return Center(
-            child: Text(
-              context.loc.empty_richtext,
-            ),
-          );
-        }
-        return multi_platform.CustomWebView(htmlText: fullHtml);
-      }),
+      body: Container(
+        // decoration: context.isSmall || context.isMedium
+        //     ? null
+        //     : BoxDecoration(
+        //   borderRadius: BorderRadius.circular(15),
+        //   boxShadow: Shadows.elevation3,
+        //   color: Theme.of(context).colorScheme.onSecondary,
+        // ),
+        // margin: EdgeInsets.symmetric(
+        //   vertical: context.isSmall || context.isMedium ? 0 : 8,
+        //   horizontal: context.isSmall || context.isMedium
+        //       ? 0
+        //       : MediaQuery.of(context).size.width / 5,
+        // ),
+        child: Builder(builder: (context) {
+          if (widget.htmlText.isEmpty) {
+            return Center(
+              child: Text(
+                context.loc.empty_richtext,
+              ),
+            );
+          }
+          return multi_platform.CustomWebView(htmlText: fullHtml);
+        }),
+      ),
       bottomNavigationBar: SafeArea(
         child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: context.isSmall || context.isMedium
+                ? 0
+                : MediaQuery.of(context).size.width / 5,
+          ),
           padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
           child: Row(
             mainAxisSize: MainAxisSize.min,

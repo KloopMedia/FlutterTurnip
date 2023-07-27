@@ -52,6 +52,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
                     (context, rowIndex) {
                       final rowCount = fillRow ? data[rowIndex].length : crossAxisCount;
                       return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(
                           rowCount,
                           (columnIndex) {
@@ -67,7 +68,7 @@ class SliverGridViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
                             return Expanded(
                               child: Padding(
                                 padding: EdgeInsets.only(
-                                  top: rowIndex == 0 ? 0 : verticalPadding,
+                                  top: rowIndex == 0 ? 10 : verticalPadding,
                                   bottom: rowIndex == data.length - 1 ? 0 : verticalPadding,
                                   left: columnIndex == 0 ? 0 : horizontalPadding,
                                   right: columnIndex == rowCount - 1 ? 0 : horizontalPadding,
