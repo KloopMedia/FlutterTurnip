@@ -329,7 +329,7 @@ class _CurrentTask extends StatelessWidget {
           onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
           onSubmit: (formData) {
             context.read<TaskBloc>().add(SubmitTask(formData));
-            if (scrollController.hasClients) scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+            scrollController.jumpTo(0);
           },
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
           onDownloadFile: (url, filename, bytes) async {
