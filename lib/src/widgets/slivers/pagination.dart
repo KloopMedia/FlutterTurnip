@@ -231,7 +231,7 @@ class _PaginationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       visualDensity: VisualDensity.compact,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      // padding: const EdgeInsets.symmetric(horizontal: 12),
       onPressed: onTap,
       icon: Text(
         '${page + 1}',
