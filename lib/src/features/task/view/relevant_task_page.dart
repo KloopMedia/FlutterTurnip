@@ -153,7 +153,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                       icon: const Icon(Icons.close))
                   ],
                   title: item.title,
-                  size: context.isSmall || context.isMedium ? null : const Size(400, 165),
+                  size: context.isSmall || context.isMedium ? null : const Size(400, 185),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   onTap: () => redirectToNotification(context, item),
                   bottom: Text(item.text, style: notificationStyle, maxLines: 3),
