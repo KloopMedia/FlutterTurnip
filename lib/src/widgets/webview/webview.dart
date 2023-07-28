@@ -62,9 +62,6 @@ class _WebViewState extends State<WebView> {
     final fullHtml = '''
     <html>
       <style>  
-      div {  
-        padding: 15px 20px;  
-      }
       #container {
         margin: auto;
         width: $width;
@@ -98,31 +95,16 @@ class _WebViewState extends State<WebView> {
           },
         ),
       ),
-      body: Container(
-        // decoration: context.isSmall || context.isMedium
-        //     ? null
-        //     : BoxDecoration(
-        //   borderRadius: BorderRadius.circular(15),
-        //   boxShadow: Shadows.elevation3,
-        //   color: Theme.of(context).colorScheme.onSecondary,
-        // ),
-        // margin: EdgeInsets.symmetric(
-        //   vertical: context.isSmall || context.isMedium ? 0 : 8,
-        //   horizontal: context.isSmall || context.isMedium
-        //       ? 0
-        //       : MediaQuery.of(context).size.width / 5,
-        // ),
-        child: Builder(builder: (context) {
-          if (widget.htmlText.isEmpty) {
-            return Center(
-              child: Text(
-                context.loc.empty_richtext,
-              ),
-            );
-          }
-          return multi_platform.CustomWebView(htmlText: fullHtml);
-        }),
-      ),
+      body: Builder(builder: (context) {
+        if (widget.htmlText.isEmpty) {
+          return Center(
+            child: Text(
+              context.loc.empty_richtext,
+            ),
+          );
+        }
+        return multi_platform.CustomWebView(htmlText: fullHtml);
+      }),
       bottomNavigationBar: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(
