@@ -123,7 +123,7 @@ class _TaskPageState extends State<TaskPage> {
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
-          )..initialize(),
+          )..initialize(query: {'completed': false}),
         ),
         BlocProvider<OpenNotificationCubit>(
           create: (context) => NotificationCubit(

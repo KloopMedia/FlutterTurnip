@@ -7,7 +7,7 @@ class FilterBar extends StatefulWidget {
   final String value;
   final Map<String, Map<String, dynamic>?> filters;
   final List<String> names;
-  final void Function(Map<String, dynamic>? value) onChanged;
+  final void Function(Map<String, dynamic>? value, String key) onChanged;
 
   const FilterBar({
     Key? key,
@@ -55,7 +55,7 @@ class _FilterBarState extends State<FilterBar> {
                     setState(() {
                       _activeFilter = keys[i];
                     });
-                    widget.onChanged(values[i]);
+                    widget.onChanged(values[i], keys[i]);
                   },
                 ),
             ],

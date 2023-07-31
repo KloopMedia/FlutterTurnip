@@ -117,6 +117,13 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       'Все': null,
     };
 
+    const individualChainFilterMap = {
+      'Активные': {'completed': false},
+      'Возвращенные': {'completed': false},
+      'Отправленные': {'completed': true},
+      'Все': null,
+    };
+
     var filterNames = [
       context.loc.task_filter_active,
       context.loc.task_filter_returned,
@@ -137,37 +144,42 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             // const SliverToBoxAdapter(
             //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
             // ),
-            if (!closeNotificationCard) ImportantAndOpenNotificationListView (
-              padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-              importantNotificationCount: 1,
-              itemBuilder: (context, item) {
-                return CardWithTitle(
-                  chips: [
-                    CardChip(context.loc.important_notification),
-                    IconButton(
-                      onPressed: () async {
-                        final repo = NotificationDetailRepository(gigaTurnipApiClient: context.read<GigaTurnipApiClient>());
-                        await repo.markNotificationAsViewed(item.id);
-                        setState(() => closeNotificationCard = true);
-                      },
-                      icon: const Icon(Icons.close))
-                  ],
-                  title: item.title,
-                  size: context.isSmall || context.isMedium ? null : const Size(400, 185),
-                  flex: context.isSmall || context.isMedium ? 0 : 1,
-                  onTap: () => redirectToNotification(context, item),
-                  bottom: Text(item.text, style: notificationStyle, maxLines: 3),
-                );
-              },
-            ),
+            if (!closeNotificationCard)
+              ImportantAndOpenNotificationListView(
+                padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+                importantNotificationCount: 1,
+                itemBuilder: (context, item) {
+                  return CardWithTitle(
+                    chips: [
+                      CardChip(context.loc.important_notification),
+                      IconButton(
+                          onPressed: () async {
+                            final repo = NotificationDetailRepository(
+                                gigaTurnipApiClient: context.read<GigaTurnipApiClient>());
+                            await repo.markNotificationAsViewed(item.id);
+                            setState(() => closeNotificationCard = true);
+                          },
+                          icon: const Icon(Icons.close))
+                    ],
+                    title: item.title,
+                    size: context.isSmall || context.isMedium ? null : const Size(400, 185),
+                    flex: context.isSmall || context.isMedium ? 0 : 1,
+                    onTap: () => redirectToNotification(context, item),
+                    bottom: Text(item.text, style: notificationStyle, maxLines: 3),
+                  );
+                },
+              ),
             AvailableTaskStages(
               onTap: (item) => redirectToAvailableTasks(context, item),
             ),
             SliverToBoxAdapter(
               child: FilterBar(
                 title: context.loc.mytasks,
-                onChanged: (query) {
+                onChanged: (query, key) {
                   context.read<RelevantTaskCubit>().refetchWithFilter(query);
+                  context
+                      .read<IndividualChainCubit>()
+                      .refetchWithFilter(individualChainFilterMap[key]);
                 },
                 value: taskFilterMap.keys.first,
                 filters: taskFilterMap,
