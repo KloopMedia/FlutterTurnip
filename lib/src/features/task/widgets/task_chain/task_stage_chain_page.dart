@@ -18,6 +18,9 @@ class TaskStageChainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<IndividualChainCubit, RemoteDataState<IndividualChain>>(
       builder: (context, state) {
+        if (state is RemoteDataLoading) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
         if (state is RemoteDataInitialized<IndividualChain> &&
             state.data.isNotEmpty) {
           final chains = state.data
