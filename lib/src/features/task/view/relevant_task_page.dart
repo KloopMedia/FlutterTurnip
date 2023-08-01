@@ -151,7 +151,29 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 itemBuilder: (context, item) {
                   return CardWithTitle(
                     chips: [
-                      CardChip(context.loc.important_notification),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.centerLeft,
+                        children: [
+                          Align(
+                            child: CardChip(
+                              context.loc.important_notification,
+                              fontColor: const Color(0xFF5E80FB),
+                              backgroundColor: const Color(0xFFF8FAFF),
+                            ),
+                          ),
+                          Align(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFF8FAFF),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 10.7),
+                              child: Image.asset('assets/images/important_notification_icon.png'),
+                            ),
+                          ),
+                        ],
+                      ),
                       IconButton(
                           onPressed: () async {
                             final repo = NotificationDetailRepository(
@@ -162,6 +184,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           icon: const Icon(Icons.close))
                     ],
                     title: item.title,
+                    backgroundColor: theme.primaryContainer,
                     size: context.isSmall || context.isMedium ? null : const Size(400, 185),
                     flex: context.isSmall || context.isMedium ? 0 : 1,
                     onTap: () => redirectToNotification(context, item),

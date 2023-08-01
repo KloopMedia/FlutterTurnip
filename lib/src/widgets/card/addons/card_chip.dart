@@ -20,6 +20,7 @@ class CardChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: backgroundColor ?? _backgroundColor,
       ),
+      padding:  const EdgeInsets.only(left: 35),///pass as parameter
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         child: Text(text, style: TextStyle(fontSize: 14, color: fontColor ?? _fontColor)),
