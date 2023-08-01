@@ -67,6 +67,9 @@ class _WebViewState extends State<WebView> {
         width: $width;
         border-style: groove;
       }
+      #spacer {
+        padding: 8px 16px;
+      }
       body {
         color: $backgroundColor;
       }
@@ -78,7 +81,9 @@ class _WebViewState extends State<WebView> {
       </head>
       <body>
         <div id="container">
-          ${widget.htmlText}
+          <div id="spacer">
+            ${widget.htmlText}
+          </div>
         </div>
       </body>
     </html>
