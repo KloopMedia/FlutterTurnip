@@ -5,6 +5,7 @@ class BaseCard extends StatefulWidget {
   final Widget body;
   final Widget? bottom;
   final Color? color;
+  final Color? backgroundColor;
   final Size? size;
   final int flex;
   final void Function()? onTap;
@@ -15,6 +16,7 @@ class BaseCard extends StatefulWidget {
     this.bottom,
     this.onTap,
     this.color,
+    this.backgroundColor,
     this.size,
     this.flex = 0,
   }) : super(key: key);
@@ -31,7 +33,7 @@ class _BaseCardState extends State<BaseCard> {
     final theme = Theme.of(context).colorScheme;
     final borderRadius = BorderRadius.circular(15);
     final shape = RoundedRectangleBorder(borderRadius: borderRadius);
-    final backgroundColor = theme.isLight ? theme.onSecondary : theme.neutral12;
+    final _backgroundColor = theme.isLight ? theme.onSecondary : theme.neutral12;
 
     return GestureDetector(
       onTap: widget.onTap,
@@ -49,7 +51,7 @@ class _BaseCardState extends State<BaseCard> {
           decoration: BoxDecoration(
             boxShadow: isHover ? Shadows.elevation4 : Shadows.elevation2,
             borderRadius: borderRadius,
-            color: backgroundColor,
+            color: widget.backgroundColor ?? _backgroundColor,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -59,7 +61,7 @@ class _BaseCardState extends State<BaseCard> {
                 child: Card(
                   margin: EdgeInsets.zero,
                   elevation: 0,
-                  color: backgroundColor,
+                  color: widget.backgroundColor ?? _backgroundColor,
                   shape: shape,
                   child: Padding(
                     padding: const EdgeInsets.all(10),

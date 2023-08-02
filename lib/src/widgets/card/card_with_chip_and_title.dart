@@ -12,6 +12,7 @@ class CardWithTitle extends StatelessWidget {
   final Widget? body;
   final Widget? bottom;
   final Size? size;
+  final Color? backgroundColor;
   final int flex;
   final void Function()? onTap;
 
@@ -25,6 +26,7 @@ class CardWithTitle extends StatelessWidget {
     this.onTap,
     this.elevation = 0,
     this.size,
+    this.backgroundColor,
     this.flex = 0,
   }) : super(key: key);
 
@@ -42,6 +44,7 @@ class CardWithTitle extends StatelessWidget {
       size: size,
       flex: flex,
       onTap: onTap,
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           Row(
