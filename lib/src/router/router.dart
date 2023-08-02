@@ -22,7 +22,9 @@ class AppRouter {
     final query = {...state.queryParameters};
 
     final queryString = toQueryString(query);
-    final fromPage = state.matchedLocation == _initialLocation ? '' : '?from=${state.matchedLocation}&$queryString';
+    final fromPage = state.matchedLocation == _initialLocation
+        ? ''
+        : '?from=${state.matchedLocation}&$queryString';
     return LoginRoute.path + fromPage;
   }
 
@@ -50,6 +52,19 @@ class AppRouter {
     return GoRouter(
       initialLocation: _initialLocation,
       refreshListenable: _authRouterNotifier,
+      onException: (_, GoRouterState state, GoRouter router) {
+        final location = state.location + (state.location.endsWith('/') ? '' : '/');
+        if (location.contains('#')) {
+          final routes = location.split('#');
+          final prefix = routes.first;
+
+          if (prefix == '/FlutterTurnip/') {
+            router.go(routes.last);
+          }
+        } else {
+          router.goNamed(CampaignRoute.name, pathParameters: state.pathParameters);
+        }
+      },
       redirect: (BuildContext context, GoRouterState state) async {
         final authenticationService = context.read<AuthenticationRepository>();
 

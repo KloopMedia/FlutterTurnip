@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CustomWebView extends StatefulWidget {
@@ -34,7 +35,9 @@ class _CustomWebViewState extends State<CustomWebView> {
               context.push(url);
               return NavigationDecision.prevent;
             } else {
-              return NavigationDecision.navigate;
+              final url = Uri.parse(request.url);
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+              return NavigationDecision.prevent;
             }
           },
         ),

@@ -6,8 +6,19 @@ class CardChip extends StatelessWidget {
   final String text;
   final Color? fontColor;
   final Color? backgroundColor;
+  final double? verticalPadding;
+  final double? leftPadding;
+  final double? rightPadding;
 
-  const CardChip(this.text, {Key? key, this.backgroundColor, this.fontColor}) : super(key: key);
+  const CardChip(
+    this.text, {
+    Key? key,
+    this.backgroundColor,
+    this.fontColor,
+    this.verticalPadding,
+    this.leftPadding,
+    this.rightPadding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +32,7 @@ class CardChip extends StatelessWidget {
         color: backgroundColor ?? _backgroundColor,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        padding: EdgeInsets.fromLTRB(leftPadding ?? 10, verticalPadding ?? 3, rightPadding ?? 10, verticalPadding ?? 3),
         child: Text(text, style: TextStyle(fontSize: 14, color: fontColor ?? _fontColor)),
       ),
     );

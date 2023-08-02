@@ -12,6 +12,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../widgets/card/tag_with_icon_and title.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
@@ -151,7 +152,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 itemBuilder: (context, item) {
                   return CardWithTitle(
                     chips: [
-                      CardChip(context.loc.important_notification),
+                      TagWithIconAndTitle(
+                        context.loc.important_notification,
+                        icon: Image.asset('assets/images/important_notification_icon.png'),
+                      ),
                       IconButton(
                           onPressed: () async {
                             final repo = NotificationDetailRepository(
@@ -159,9 +163,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                             await repo.markNotificationAsViewed(item.id);
                             setState(() => closeNotificationCard = true);
                           },
-                          icon: const Icon(Icons.close))
+                          icon: Icon(Icons.close, color: theme.onSurfaceVariant))
                     ],
                     title: item.title,
+                    backgroundColor: theme.primaryContainer,
                     size: context.isSmall || context.isMedium ? null : const Size(400, 185),
                     flex: context.isSmall || context.isMedium ? 0 : 1,
                     onTap: () => redirectToNotification(context, item),
@@ -218,6 +223,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               },
             ),
             TaskStageChainView(onTap: onChainTap),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),
       ),

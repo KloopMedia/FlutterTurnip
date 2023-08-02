@@ -8,8 +8,11 @@ import 'types.dart';
 
 class ChainRow extends StatelessWidget {
   final int index;
+  final int? activeTaskIndex;
   final String title;
-  final bool isCollapsed;
+  final bool lastTaskActive;
+  final bool isTopCollapsed;
+  final bool isBottomCollapsed;
   final ChainInfoStatus status;
   final ChainPosition position;
   final void Function()? onTap;
@@ -18,8 +21,11 @@ class ChainRow extends StatelessWidget {
     Key? key,
     required this.title,
     required this.status,
-    required this.isCollapsed,
+    required this.lastTaskActive,
+    required this.isTopCollapsed,
+    required this.isBottomCollapsed,
     required this.index,
+    required this.activeTaskIndex,
     required this.position,
     required this.onTap,
   }) : super(key: key);
@@ -93,7 +99,10 @@ class ChainRow extends StatelessWidget {
             child: GestureDetector(
               onTap: _onTap(),
               child: LessonIcon(
-                lessonNum: index + 1,
+                lessonNum: (isTopCollapsed)
+                  ? (lastTaskActive)
+                    ? index + 1 + activeTaskIndex! - 2 : index + 1 + activeTaskIndex! - 1
+                  : index + 1,
                 status: status,
               ),
             ),
@@ -103,10 +112,17 @@ class ChainRow extends StatelessWidget {
           style: style,
           endStyle: style.copyWith(color: endLineColor),
           isEven: isEven,
-          isCollapsed: isCollapsed,
+          index: index,
+          isTopCollapsed: isTopCollapsed,
+          isBottomCollapsed: isBottomCollapsed,
           position: position,
         ),
-        ChainRowIcon(position: position, isEven: isEven, isCollapsed: isCollapsed),
+        ChainRowIcon(
+          position: position,
+          isEven: isEven,
+          isTopCollapsed: isTopCollapsed,
+          isBottomCollapsed: isBottomCollapsed,
+        ),
       ],
     );
   }
