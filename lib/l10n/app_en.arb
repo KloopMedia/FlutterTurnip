@@ -149,5 +149,10 @@
   "go_back_to_previous_task": "Previous task",
 
   "task_has_error": "Form error",
-  "task_failed": "You failed the test. Try again."
+  "task_failed": "You failed the test. Try again.",
+
+  "show_previous": "Show previous",
+  "hide_previous": "Hide previous",
+  "show_next": "Show next",
+  "hide_next": "Hide next"
 }

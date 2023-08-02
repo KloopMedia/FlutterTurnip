@@ -6,27 +6,48 @@ import 'types.dart';
 
 class StraightLine extends CustomPainter {
   final PaintStyle style;
-  final bool isCollapsed;
+  final bool? isTopCollapsed;
+  final bool? isBottomCollapsed;
+  final bool isEven;
+  final int? index;
 
-  const StraightLine({required this.style, required this.isCollapsed});
+  const StraightLine({
+    required this.style,
+    required this.isEven,
+    this.index,
+    this.isTopCollapsed,
+    this.isBottomCollapsed,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     double startX = 0.0;
+    Offset from = Offset(startX, startX);
+    Offset to = Offset(size.width, startX);
+    List<Color> evenGradient = [Colors.transparent, style.color];
+    List<Color> oddGradient = [style.color, Colors.transparent];
 
     final paint = Paint()
       ..color = style.color
       ..strokeCap = StrokeCap.round
       ..strokeWidth = style.strokeWidth;
 
-    if (isCollapsed) {
+    if (index == 0 && isTopCollapsed != null && isTopCollapsed!) {
       paint.shader = ui.Gradient.linear(
-        Offset(size.width, startX),
-        Offset(startX, startX),
-        [
-          style.color,
-          Colors.transparent,
-        ],
+        from,
+        to,
+        (isEven)
+            ? evenGradient
+            : oddGradient,
+      );
+    }
+    if (isBottomCollapsed != null && isBottomCollapsed!) {
+      paint.shader = ui.Gradient.linear(
+        from,
+        to,
+        (isEven)
+          ? evenGradient
+          : oddGradient,
       );
     }
 

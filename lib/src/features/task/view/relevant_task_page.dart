@@ -223,6 +223,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               },
             ),
             TaskStageChainView(onTap: onChainTap),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),
       ),
