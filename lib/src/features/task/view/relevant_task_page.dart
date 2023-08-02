@@ -12,6 +12,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../widgets/card/tag_with_icon_and title.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
@@ -151,28 +152,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 itemBuilder: (context, item) {
                   return CardWithTitle(
                     chips: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.centerLeft,
-                        children: [
-                          Align(
-                            child: CardChip(
-                              context.loc.important_notification,
-                              fontColor: const Color(0xFF5E80FB),
-                              backgroundColor: const Color(0xFFF8FAFF),
-                            ),
-                          ),
-                          Align(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFF8FAFF),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 10.7),
-                              child: Image.asset('assets/images/important_notification_icon.png'),
-                            ),
-                          ),
-                        ],
+                      TagWithIconAndTitle(
+                        context.loc.important_notification,
+                        icon: Image.asset('assets/images/important_notification_icon.png'),
                       ),
                       IconButton(
                           onPressed: () async {
@@ -181,7 +163,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                             await repo.markNotificationAsViewed(item.id);
                             setState(() => closeNotificationCard = true);
                           },
-                          icon: const Icon(Icons.close))
+                          icon: Icon(Icons.close, color: theme.onSurfaceVariant))
                     ],
                     title: item.title,
                     backgroundColor: theme.primaryContainer,
