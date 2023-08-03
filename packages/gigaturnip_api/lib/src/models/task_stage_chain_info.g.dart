@@ -23,6 +23,12 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>).map((e) => e as int?).toList()),
           totalCount: $checkedConvert('total_count', (v) => v as int),
           completeCount: $checkedConvert('complete_count', (v) => v as int),
+          completed: $checkedConvert('completed',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          reopened: $checkedConvert('reopened',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          opened: $checkedConvert('opened',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
         );
         return val;
       },

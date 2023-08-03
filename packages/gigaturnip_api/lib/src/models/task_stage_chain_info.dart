@@ -9,6 +9,9 @@ class TaskStageChainInfo {
   final String assignType;
   final List<int?> inStages;
   final List<int?> outStages;
+  final List<int> completed;
+  final List<int> reopened;
+  final List<int> opened;
   final int totalCount;
   final int completeCount;
 
@@ -20,6 +23,9 @@ class TaskStageChainInfo {
     required this.outStages,
     required this.totalCount,
     required this.completeCount,
+    required this.completed,
+    required this.reopened,
+    required this.opened,
   });
 
   factory TaskStageChainInfo.fromJson(Map<String, dynamic> json) {

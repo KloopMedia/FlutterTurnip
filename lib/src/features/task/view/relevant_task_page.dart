@@ -72,18 +72,19 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     );
   }
 
-  void onChainTap(item, status) async {
-    if (status == ChainInfoStatus.complete || status == ChainInfoStatus.active) {
-      final repo = AllTaskRepository(
-        gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-        campaignId: widget.campaignId,
-      );
-      final data = await repo.fetchAndParseData(query: {'stage': item.id});
-      final task = data.results.where((element) => element.stage.id == item.id);
-      if (!mounted) return;
-      redirectToTaskWithId(context, task.first.id);
-    } else {
+  void onChainTap(TaskStageChainInfo item, ChainInfoStatus status) async {
+    if (status == ChainInfoStatus.notStarted) {
       context.read<ReactiveTasks>().createTaskById(item.id);
+    } else {
+      if (item.reopened.isNotEmpty) {
+        redirectToTaskWithId(context, item.reopened.first);
+      } else if (item.opened.isNotEmpty) {
+        redirectToTaskWithId(context, item.opened.first);
+      } else if (item.completed.isNotEmpty) {
+        redirectToTaskWithId(context, item.completed.first);
+      } else {
+        context.read<ReactiveTasks>().createTaskById(item.id);
+      }
     }
   }
 
