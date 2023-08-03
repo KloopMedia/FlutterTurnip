@@ -192,7 +192,6 @@ class _Content extends StatelessWidget {
             ),
           ),
           (context.isExtraLarge || context.isLarge) ? const SizedBox(height: 40.0) : const Spacer(),
-          if (data.canJoin)
             Padding(
               padding: const EdgeInsets.only(bottom: 45),
               child: SizedBox(

@@ -11,6 +11,9 @@ class TaskStageChainInfo extends Equatable {
   final String assignType;
   final List<int?> inStages;
   final List<int?> outStages;
+  final List<int> completed;
+  final List<int> reopened;
+  final List<int> opened;
   final int totalCount;
   final int completeCount;
 
@@ -22,6 +25,9 @@ class TaskStageChainInfo extends Equatable {
     required this.outStages,
     required this.totalCount,
     required this.completeCount,
+    required this.completed,
+    required this.reopened,
+    required this.opened,
   });
 
   factory TaskStageChainInfo.fromJson(Map<String, dynamic> json) {
@@ -37,6 +43,9 @@ class TaskStageChainInfo extends Equatable {
       outStages: model.outStages,
       totalCount: model.totalCount,
       completeCount: model.completeCount,
+      completed: model.completed,
+      reopened: model.reopened,
+      opened: model.opened,
     );
   }
 
@@ -50,6 +59,9 @@ class TaskStageChainInfo extends Equatable {
     inStages,
     outStages,
     totalCount,
-    completeCount
+    completeCount,
+    completed,
+    reopened,
+    opened,
   ];
 }
