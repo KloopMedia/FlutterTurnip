@@ -108,7 +108,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     final notificationStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
-      color: theme.onSurfaceVariant,
+      color: theme.isLight ? theme.onSurfaceVariant : theme.neutral80,
       overflow: TextOverflow.ellipsis,
     );
 
@@ -155,7 +155,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     chips: [
                       TagWithIconAndTitle(
                         context.loc.important_notification,
-                        icon: Image.asset('assets/images/important_notification_icon.png'),
+                        icon: Image.asset(
+                          'assets/images/important_notification_icon.png',
+                          color: theme.isLight ? const Color(0xFF5E80FB) : const Color(0xFF9BB1FF),
+                        ),
                       ),
                       IconButton(
                           onPressed: () async {
@@ -164,14 +167,18 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                             await repo.markNotificationAsViewed(item.id);
                             setState(() => closeNotificationCard = true);
                           },
-                          icon: Icon(Icons.close, color: theme.onSurfaceVariant))
+                          icon: Icon(
+                            Icons.close,
+                            color: theme.isLight ? theme.onSurfaceVariant : theme.neutralVariant70)
+                      )
                     ],
+                    hasBoxShadow: false,
                     title: item.title,
-                    backgroundColor: theme.primaryContainer,
-                    size: context.isSmall || context.isMedium ? null : const Size(400, 185),
+                    backgroundColor: theme.isLight ? theme.primaryContainer : theme.surfaceVariant,
+                    size: context.isSmall || context.isMedium ? null : const Size(400, 165),
                     flex: context.isSmall || context.isMedium ? 0 : 1,
                     onTap: () => redirectToNotification(context, item),
-                    bottom: Text(item.text, style: notificationStyle, maxLines: 3),
+                    body: Text(item.text, style: notificationStyle, maxLines: 3),
                   );
                 },
               ),
@@ -199,6 +206,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 return CardWithTitle(
                   chips: [CardChip(item.id.toString()), const Spacer()],
                   title: item.name,
+                  contentPadding: 20,
                   size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   onTap: () => context.read<ReactiveTasks>().createTask(item),
@@ -215,6 +223,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   body: CardWithTitle(
                     chips: [CardChip(item.id.toString()), StatusCardChip(item)],
                     title: item.name,
+                    contentPadding: 20,
                     size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                     flex: context.isSmall || context.isMedium ? 0 : 1,
                     onTap: () => redirectToTask(context, item),
