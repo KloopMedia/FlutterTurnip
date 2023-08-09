@@ -16,6 +16,7 @@ import '../../../widgets/card/tag_with_icon_and title.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
+import '../widgets/creatable_task_card.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/task_chain/types.dart';
 
@@ -167,10 +168,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                             await repo.markNotificationAsViewed(item.id);
                             setState(() => closeNotificationCard = true);
                           },
-                          icon: Icon(
-                            Icons.close,
-                            color: theme.isLight ? theme.onSurfaceVariant : theme.neutralVariant70)
-                      )
+                          icon: Icon(Icons.close,
+                              color:
+                                  theme.isLight ? theme.onSurfaceVariant : theme.neutralVariant70))
                     ],
                     hasBoxShadow: false,
                     title: item.title,
@@ -185,6 +185,16 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             AvailableTaskStages(
               onTap: (item) => redirectToAvailableTasks(context, item),
             ),
+            AdaptiveListView<TaskStage, ReactiveTasks>(
+              showLoader: false,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              itemBuilder: (context, index, item) {
+                return CreatableTaskCard(
+                  title: item.name,
+                  onPressed: () => context.read<ReactiveTasks>().createTask(item),
+                );
+              },
+            ),
             SliverToBoxAdapter(
               child: FilterBar(
                 title: context.loc.mytasks,
@@ -198,20 +208,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 filters: taskFilterMap,
                 names: filterNames,
               ),
-            ),
-            AdaptiveListView<TaskStage, ReactiveTasks>(
-              showLoader: false,
-              padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-              itemBuilder: (context, index, item) {
-                return CardWithTitle(
-                  chips: [CardChip(item.id.toString()), const Spacer()],
-                  title: item.name,
-                  contentPadding: 20,
-                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
-                  flex: context.isSmall || context.isMedium ? 0 : 1,
-                  onTap: () => context.read<ReactiveTasks>().createTask(item),
-                );
-              },
             ),
             AdaptiveListView<Task, RelevantTaskCubit>(
               padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
