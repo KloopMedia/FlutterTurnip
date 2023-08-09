@@ -8,6 +8,7 @@ class BaseCard extends StatefulWidget {
   final Color? backgroundColor;
   final Size? size;
   final int flex;
+  final bool hasBoxShadow;
   final void Function()? onTap;
 
   const BaseCard({
@@ -19,6 +20,7 @@ class BaseCard extends StatefulWidget {
     this.backgroundColor,
     this.size,
     this.flex = 0,
+    this.hasBoxShadow = true,
   }) : super(key: key);
 
   @override
@@ -49,7 +51,9 @@ class _BaseCardState extends State<BaseCard> {
           width: widget.size?.width,
           height: widget.size?.height,
           decoration: BoxDecoration(
-            boxShadow: isHover ? Shadows.elevation4 : Shadows.elevation2,
+            boxShadow: (widget.hasBoxShadow)
+              ? (isHover) ? Shadows.elevation4 : Shadows.elevation2
+              : [],
             borderRadius: borderRadius,
             color: widget.backgroundColor ?? _backgroundColor,
           ),

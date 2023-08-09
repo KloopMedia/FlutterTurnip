@@ -88,6 +88,7 @@ class AvailableTaskPage extends StatelessWidget {
                           child: Text(context.loc.opentosee),
                         ),
                       ],
+                      contentPadding: 20,
                       title: item.name,
                       bottom: TaskPreview(item),
                     );

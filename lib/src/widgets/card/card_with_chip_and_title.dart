@@ -14,6 +14,8 @@ class CardWithTitle extends StatelessWidget {
   final Size? size;
   final Color? backgroundColor;
   final int flex;
+  final double? contentPadding;
+  final bool hasBoxShadow;
   final void Function()? onTap;
 
   const CardWithTitle({
@@ -27,6 +29,8 @@ class CardWithTitle extends StatelessWidget {
     this.elevation = 0,
     this.size,
     this.backgroundColor,
+    this.contentPadding,
+    this.hasBoxShadow = true,
     this.flex = 0,
   }) : super(key: key);
 
@@ -44,6 +48,7 @@ class CardWithTitle extends StatelessWidget {
       size: size,
       flex: flex,
       onTap: onTap,
+      hasBoxShadow: hasBoxShadow,
       backgroundColor: backgroundColor,
       body: Column(
         children: [
@@ -54,7 +59,7 @@ class CardWithTitle extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: chips),
-                    SizedBox(height: (chips.isNotEmpty) ? 20 : 10),
+                    SizedBox(height: contentPadding ?? 10),
                     Text(title, maxLines: 2, style: titleStyle),
                   ],
                 ),
