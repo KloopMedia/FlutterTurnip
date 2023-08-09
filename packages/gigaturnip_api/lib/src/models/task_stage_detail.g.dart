@@ -45,6 +45,10 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               (v) => TaskStageDetail._stringToMap(v as String?)),
           cardUiSchema: $checkedConvert('card_ui_schema',
               (v) => TaskStageDetail._stringToMap(v as String?)),
+          availableTo: $checkedConvert('available_to',
+              (v) => v == null ? null : DateTime.parse(v as String)),
+          availableFrom: $checkedConvert('available_from',
+              (v) => v == null ? null : DateTime.parse(v as String)),
         );
         return val;
       },
@@ -60,6 +64,8 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         'allowRelease': 'allow_release',
         'externalMetadata': 'external_metadata',
         'cardJsonSchema': 'card_json_schema',
-        'cardUiSchema': 'card_ui_schema'
+        'cardUiSchema': 'card_ui_schema',
+        'availableTo': 'available_to',
+        'availableFrom': 'available_from'
       },
     );

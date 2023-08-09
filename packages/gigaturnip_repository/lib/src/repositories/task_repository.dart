@@ -42,7 +42,8 @@ class AllTaskRepository extends TaskRepository {
       return data.copyWith<Task>(results: parsed);
     } catch (e) {
       print(e);
-      final wrapper = await db.LocalDatabase.getTasks(campaignId, limit: limit, offset: query?['offset']);
+      final wrapper =
+          await db.LocalDatabase.getTasks(campaignId, limit: limit, offset: query?['offset']);
       final results = wrapper['results'] as List<Map<String, dynamic>>;
       final parsed = results.map(Task.fromJson).toList();
       return api.PaginationWrapper(count: wrapper['count'], results: parsed);
@@ -52,7 +53,7 @@ class AllTaskRepository extends TaskRepository {
   void fetchAllTaskStages() async {
     try {
       final data = await _gigaTurnipApiClient.getAvailableTaskStages(
-        query: {'chain__campaign': campaignId, 'limit': 1000},
+        query: {'chain__campaign': campaignId, 'limit': 100},
       );
 
       final parsed = data.results.map(TaskStageDetail.fromApiModel).toList();
@@ -63,7 +64,6 @@ class AllTaskRepository extends TaskRepository {
     } catch (e) {
       print('FETCHING ALL TASK STAGES ERROR $e');
     }
-
   }
 }
 
@@ -141,15 +141,29 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
       stageType = null;
     }
 
-    final data = await _gigaTurnipApiClient.getUserRelevantTaskStages(
-      query: {
-        'chain__campaign': campaignId,
-        'stage_type': stageType,
-        ...?query,
-      },
-    );
+    try {
+      final data = await _gigaTurnipApiClient.getUserRelevantTaskStages(
+        query: {
+          'chain__campaign': campaignId,
+          'stage_type': stageType,
+          ...?query,
+        },
+      );
+      final parsed = parseData(data.results);
 
-    return data.copyWith<TaskStage>(results: parseData(data.results));
+      for (final item in parsed) {
+        final entity = item.toDB();
+        db.LocalDatabase.insertRelevantTaskStage(entity);
+      }
+
+      return data.copyWith<TaskStage>(results: parsed);
+    } catch (e) {
+      print(e);
+      final results = await db.LocalDatabase.getRelevantTaskStages();
+      final parsed = results.map(TaskStage.fromRelevant).toList();
+      print(parsed);
+      return api.PaginationWrapper(count: results.length, results: parsed);
+    }
   }
 
   List<TaskStage> parseData(List<api.TaskStage> data) {

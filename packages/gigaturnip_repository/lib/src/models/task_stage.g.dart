@@ -14,6 +14,12 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
       campaign: json['campaign'] as int,
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
+      availableTo: json['availableTo'] == null
+          ? null
+          : DateTime.parse(json['availableTo'] as String),
+      availableFrom: json['availableFrom'] == null
+          ? null
+          : DateTime.parse(json['availableFrom'] as String),
     );
 
 Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
@@ -24,4 +30,6 @@ Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'campaign': instance.campaign,
       'cardJsonSchema': instance.cardJsonSchema,
       'cardUiSchema': instance.cardUiSchema,
+      'availableTo': instance.availableTo?.toIso8601String(),
+      'availableFrom': instance.availableFrom?.toIso8601String(),
     };

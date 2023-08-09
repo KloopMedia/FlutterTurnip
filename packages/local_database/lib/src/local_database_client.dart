@@ -21,6 +21,10 @@ class LocalDatabase {
     return database.select(database.taskStage).get();
   }
 
+  static Future<List<RelevantTaskStageData>> getRelevantTaskStages() async {
+    return database.select(database.relevantTaskStage).get();
+  }
+
   static Future<TaskData> getSingleTask(int id) async {
     return (database.select(database.task)..where((tbl) => tbl.id.equals(id))).getSingle();
   }
@@ -33,6 +37,22 @@ class LocalDatabase {
     final insert = await database
         .into(database.taskStage)
         .insertReturning(entity, mode: InsertMode.insertOrReplace);
+    return insert.id;
+  }
+
+  static Future<int> insertRelevantTaskStage(TaskStageCompanion entity) async {
+    final newEntity = RelevantTaskStageCompanion(
+      id: entity.id,
+      name: entity.name,
+      description: entity.description,
+      campaign: entity.campaign,
+      chain: entity.chain,
+      availableTo: entity.availableTo,
+      availableFrom: entity.availableFrom,
+    );
+    final insert = await database
+        .into(database.relevantTaskStage)
+        .insertReturning(newEntity, mode: InsertMode.insertOrReplace);
     return insert.id;
   }
 

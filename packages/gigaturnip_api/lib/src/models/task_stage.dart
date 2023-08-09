@@ -15,6 +15,8 @@ class TaskStage {
   final Map<String, dynamic> cardJsonSchema;
   @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
   final Map<String, dynamic> cardUiSchema;
+  final DateTime? availableTo;
+  final DateTime? availableFrom;
 
   TaskStage({
     required this.id,
@@ -24,6 +26,8 @@ class TaskStage {
     required this.campaign,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    required this.availableTo,
+    required this.availableFrom,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {

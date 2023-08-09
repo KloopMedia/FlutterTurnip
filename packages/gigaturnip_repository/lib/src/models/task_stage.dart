@@ -17,6 +17,8 @@ class TaskStage extends Equatable {
   final int campaign;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
+  final DateTime? availableTo;
+  final DateTime? availableFrom;
 
   const TaskStage({
     required this.id,
@@ -26,6 +28,8 @@ class TaskStage extends Equatable {
     required this.campaign,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    required this.availableTo,
+    required this.availableFrom,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,8 @@ class TaskStage extends Equatable {
       campaign: model.campaign,
       cardJsonSchema: model.cardJsonSchema,
       cardUiSchema: model.cardUiSchema,
+      availableTo: model.availableTo,
+      availableFrom: model.availableFrom,
     );
   }
 
@@ -51,6 +57,8 @@ class TaskStage extends Equatable {
       description: Value(description),
       chain: chain,
       campaign: campaign,
+      availableFrom: Value(availableFrom),
+      availableTo: Value(availableTo),
     );
   }
 
@@ -63,6 +71,22 @@ class TaskStage extends Equatable {
       cardUiSchema: jsonDecode(model.cardUiSchema ?? "{}"),
       chain: model.chain,
       campaign: model.campaign,
+      availableTo: model.availableTo,
+      availableFrom: model.availableFrom,
+    );
+  }
+
+  factory TaskStage.fromRelevant(db.RelevantTaskStageData model) {
+    return TaskStage(
+      id: model.id,
+      name: model.name,
+      description: model.description,
+      cardJsonSchema: null,
+      cardUiSchema: null,
+      chain: model.chain,
+      campaign: model.campaign,
+      availableTo: model.availableTo,
+      availableFrom: model.availableFrom,
     );
   }
 

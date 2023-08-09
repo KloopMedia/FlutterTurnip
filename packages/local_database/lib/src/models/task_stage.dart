@@ -17,4 +17,22 @@ class TaskStage extends Table {
 
   TextColumn get jsonSchema => text().nullable()();
   TextColumn get uiSchema => text().nullable()();
+
+  DateTimeColumn get availableFrom => dateTime().nullable()();
+  DateTimeColumn get availableTo => dateTime().nullable()();
+}
+
+
+class RelevantTaskStage extends Table {
+  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get name => text()();
+
+  TextColumn get description => text().nullable()();
+
+  IntColumn get chain => integer()();
+  IntColumn get campaign => integer()();
+
+  DateTimeColumn get availableFrom => dateTime().nullable()();
+  DateTimeColumn get availableTo => dateTime().nullable()();
 }

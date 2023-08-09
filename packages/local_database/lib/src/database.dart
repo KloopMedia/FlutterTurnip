@@ -5,7 +5,7 @@ import 'models/models.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [Campaign, TaskStage, Task])
+@DriftDatabase(tables: [Campaign, TaskStage, Task, RelevantTaskStage])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(impl.connect());
 
@@ -24,10 +24,17 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(campaign, campaign.smsCompleteTaskAllow);
           await m.addColumn(campaign, campaign.smsPhone);
         }
+        if (from < 4) {
+          // we added the dueDate property in the change from version 1 to
+          // version 2
+          await m.addColumn(taskStage, taskStage.availableTo);
+          await m.addColumn(taskStage, taskStage.availableFrom);
+          await m.createTable(relevantTaskStage);
+        }
       },
     );
   }
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 }

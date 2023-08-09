@@ -24,6 +24,9 @@ class TaskStageDetail extends Equatable {
   final List<Map<String, dynamic>>? dynamicJsonsTarget;
   final bool allowRelease;
   final bool allowGoBack;
+  final DateTime? availableTo;
+  final DateTime? availableFrom;
+
 
   const TaskStageDetail({
     required this.id,
@@ -40,6 +43,8 @@ class TaskStageDetail extends Equatable {
     required this.dynamicJsonsTarget,
     required this.allowRelease,
     required this.allowGoBack,
+    required this.availableTo,
+    required this.availableFrom,
   });
 
   factory TaskStageDetail.fromJson(Map<String, dynamic> json) {
@@ -62,6 +67,8 @@ class TaskStageDetail extends Equatable {
       dynamicJsonsTarget: model.dynamicJsonsTarget,
       allowRelease: model.allowRelease,
       allowGoBack: model.allowGoBack,
+      availableTo: model.availableTo,
+      availableFrom: model.availableFrom,
     );
   }
 
@@ -77,6 +84,8 @@ class TaskStageDetail extends Equatable {
       richText: Value(richText),
       jsonSchema: Value(jsonEncode(jsonSchema)),
       uiSchema: Value(jsonEncode(uiSchema)),
+      availableFrom: Value(availableFrom),
+      availableTo: Value(availableTo),
     );
   }
 
@@ -96,9 +105,11 @@ class TaskStageDetail extends Equatable {
       dynamicJsonsTarget: [],
       allowGoBack: false,
       allowRelease: false,
+      availableTo: model.availableTo,
+      availableFrom: model.availableFrom,
     );
   }
 
   @override
-  List<Object?> get props => [id, name, description, chain, richText];
+  List<Object?> get props => [id, name, description, chain, richText, availableFrom, availableTo];
 }
