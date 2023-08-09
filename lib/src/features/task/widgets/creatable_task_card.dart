@@ -4,17 +4,19 @@ import 'package:gigaturnip/src/theme/index.dart';
 class CreatableTaskCard extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
+  final BoxConstraints? constraints;
 
   const CreatableTaskCard({
     super.key,
     required this.title,
     required this.onPressed,
+    this.constraints,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return Container(
+      constraints: constraints,
       height: 52,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -25,7 +27,7 @@ class CreatableTaskCard extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           title,
-          textAlign: TextAlign.center,
+          maxLines: 2,
           style: TextStyle(
             color: Theme.of(context).colorScheme.isLight ? Colors.white : Colors.black,
             fontSize: 14,

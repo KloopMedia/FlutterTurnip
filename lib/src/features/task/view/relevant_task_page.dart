@@ -16,7 +16,7 @@ import '../../../widgets/card/tag_with_icon_and title.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
-import '../widgets/creatable_task_card.dart';
+import '../widgets/creatable_task_list.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/task_chain/types.dart';
 
@@ -185,16 +185,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             AvailableTaskStages(
               onTap: (item) => redirectToAvailableTasks(context, item),
             ),
-            AdaptiveListView<TaskStage, ReactiveTasks>(
-              showLoader: false,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              itemBuilder: (context, index, item) {
-                return CreatableTaskCard(
-                  title: item.name,
-                  onPressed: () => context.read<ReactiveTasks>().createTask(item),
-                );
-              },
-            ),
+            const CreatableTaskList(),
             SliverToBoxAdapter(
               child: FilterBar(
                 title: context.loc.mytasks,
