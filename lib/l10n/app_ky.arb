@@ -77,6 +77,8 @@
   "read_notifications": "Окулган билдирүүлөр",
   "unread_notifications": "Окула элек билдирүүлөр",
   "important_notification": "Маанилүү билдирүү",
+  "you_have": "Сизде",
+  "unread_message": "окула элек билдирүү бар",
 
   "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
   "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",

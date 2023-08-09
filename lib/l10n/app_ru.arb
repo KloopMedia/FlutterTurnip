@@ -77,6 +77,8 @@
   "read_notifications": "Прочитанные",
   "unread_notifications": "Непрочитанные",
   "important_notification": "Важное уведомление",
+  "you_have": "У вас",
+  "unread_message": "непрочитанное сообщение",
 
   "empty_richtext": "К заданию нет пояснений",
   "empty_form_fields": "В вашей форме есть пустые поля. Пожалуйста, исправьте их и отправьте снова",
