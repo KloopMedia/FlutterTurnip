@@ -8,6 +8,7 @@ class ChainRowIcon extends StatelessWidget {
   final bool isEven;
   final bool isTopCollapsed;
   final bool isBottomCollapsed;
+  final ChainInfoStatus status;
 
   const ChainRowIcon({
     Key? key,
@@ -15,6 +16,7 @@ class ChainRowIcon extends StatelessWidget {
     required this.isEven,
     required this.isTopCollapsed,
     required this.isBottomCollapsed,
+    required this.status,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,9 @@ class ChainRowIcon extends StatelessWidget {
           isEven ? const Position(left: 10, bottom: -15) : const Position(right: 10, bottom: -15);
     }
 
-    final color = theme.isLight ? const Color(0xFFE1E3E3) : theme.neutralVariant40;
+    final color = theme.isLight
+      ? (status == ChainInfoStatus.complete) ? const Color(0xFFDFC902) : const Color(0xFFE1E3E3)
+      : (status == ChainInfoStatus.complete) ? const Color(0xFFDFC902) :  theme.neutralVariant40;
 
     return Positioned(
       top: iconPosition?.top,
