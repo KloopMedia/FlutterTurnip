@@ -16,6 +16,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../widgets/button/dialog/dialog_button_outlined.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_divider.dart';
 
@@ -231,12 +232,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                   },
                   child: Text(context.loc.release_task_button),
                 ),
-              IconButton(
-                onPressed: () {
-                  context.read<TaskBloc>().add(OpenTaskInfo());
-                },
-                icon: const Icon(Icons.text_snippet),
-              )
             ],
             child: RefreshIndicator(
               onRefresh: () async => context.read<TaskBloc>().add(RefetchTask()),
@@ -260,6 +255,11 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                   ),
                   child: Column(
                     children: [
+                      if (state.data.stage.richText?.isNotEmpty ?? false)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: DialogButtonOutlined(child: Text(context.loc.open_richtext), onPressed: () => context.read<TaskBloc>().add(OpenTaskInfo())),
+                        ),
                       for (final task in state.previousTasks)
                         _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
                       if (state.previousTasks.isNotEmpty) const Divider(color: Colors.black, height: 36, thickness: 2),

@@ -77,8 +77,11 @@
   "read_notifications": "Read notifications",
   "unread_notifications": "Unread notifications",
   "important_notification": "Important notification",
+  "you_have": "You have",
+  "unread_message": "unread message",
 
   "empty_richtext": "No explanation for the task",
+  "open_richtext": "Open richtext",
   "empty_form_fields": "Your form has empty fields. Please correct them and submit again",
   "form_error": "Form error",
   "task_returned": "Returned",

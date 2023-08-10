@@ -77,8 +77,11 @@
   "read_notifications": "Прочитані",
   "unread_notifications": "Непрочитані",
   "important_notification": "Важливе повідомлення",
+  "you_have": "У вас",
+  "unread_message": "непрочитане повідомлення",
 
   "empty_richtext": "До завдання немає пояснень",
+  "open_richtext": "Щоб відкрити рич-текст",
   "empty_form_fields": "У вашій формі є порожні поля. Будь ласка, виправте їх і надішліть знову",
   "form_error": "Помилка форми",
   "task_returned": "Повернено",
