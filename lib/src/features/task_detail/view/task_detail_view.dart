@@ -257,7 +257,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                     children: [
                       if (state.data.stage.richText?.isNotEmpty ?? false)
                         Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
+                          padding: const EdgeInsets.only(top: 10.0, left: 10),
                           child: DialogButtonOutlined(child: Text(context.loc.open_richtext), onPressed: () => context.read<TaskBloc>().add(OpenTaskInfo())),
                         ),
                       for (final task in state.previousTasks)
