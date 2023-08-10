@@ -255,7 +255,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                   ),
                   child: Column(
                     children: [
-                      // final task = state;
                       if (state.data.stage.richText?.isNotEmpty ?? false)
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
