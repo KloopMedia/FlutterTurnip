@@ -48,10 +48,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(TaskFetchingError(e.toString()));
       }
     }
-    final task = state;
-    if (task is TaskInitialized && (task.data.stage.richText?.isNotEmpty ?? false)) {
-      add(OpenTaskInfo());
-    }
+    // final task = state;
+    // if (task is TaskInitialized && (task.data.stage.richText?.isNotEmpty ?? false)) {
+    //   add(OpenTaskInfo());
+    // }
   }
 
   Future<void> _onUpdateTask(UpdateTask event, Emitter<TaskState> emit) async {
