@@ -61,6 +61,7 @@ class Task extends Equatable {
       stage: stage.id,
       campaign: stage.campaign,
       createdAt: Value(createdAt),
+      responses: Value(jsonEncode(responses))
     );
   }
 

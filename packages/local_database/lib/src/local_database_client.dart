@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart';
 
 import 'database.dart';
@@ -57,6 +59,7 @@ class LocalDatabase {
   }
 
   static void updateTask(TaskData data) {
+    print('TASK UPDATED: $data');
     database.update(database.task)
       ..where((tbl) => tbl.id.equals(data.id))
       ..write(data);
@@ -92,6 +95,8 @@ class LocalDatabase {
             serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
 
         jsonTask['stage'] = jsonStage;
+        final String responses = jsonTask['responses'] ?? '{}';
+        jsonTask['responses'] = jsonDecode(responses);
 
         parsed.add(jsonTask);
       }
@@ -116,6 +121,6 @@ class LocalDatabase {
   }
 
   static Future<int> insertTask(TaskCompanion entity) {
-    return database.into(database.task).insert(entity, mode: InsertMode.insertOrIgnore);
+    return database.into(database.task).insert(entity, mode: InsertMode.insertOrReplace);
   }
 }
