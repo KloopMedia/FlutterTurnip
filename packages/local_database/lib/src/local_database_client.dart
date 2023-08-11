@@ -62,16 +62,23 @@ class LocalDatabase {
       ..write(data);
   }
 
-  static Future<Map<String, dynamic>> getTasks(int campaign, {int limit = 10, int? offset}) async {
-    final query = database.select(database.task).join([
+  static Future<Map<String, dynamic>> getTasks(int campaign, {Map<String, dynamic>? query}) async {
+    final limit = query?['limit'] ?? 10;
+    final offset = query?['offset'];
+    final bool? completed = query?['complete'];
+    final bool? reopened = query?['reopened'];
+
+    final dbQuery = database.select(database.task).join([
       leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
     ]);
 
-    query.where(database.task.campaign.equals(campaign));
+    dbQuery.where(database.task.campaign.equals(campaign));
+    if (completed != null) dbQuery.where(database.task.complete.equals(completed));
+    if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
 
-    query.limit(limit, offset: offset);
+    dbQuery.limit(limit, offset: offset);
 
-    final rows = await query.get();
+    final rows = await dbQuery.get();
 
     final List<Map<String, dynamic>> parsed = [];
     for (var row in rows) {
@@ -91,9 +98,19 @@ class LocalDatabase {
     }
 
     Expression<int> countTasks = database.task.id.count();
-    final countQuery = database.selectOnly(database.task)..addColumns([countTasks]);
-    final row = await countQuery.getSingle();
-    final count = row.read(countTasks);
+
+    final newQuery = database.select(database.task).join([
+      leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
+    ]);
+
+    newQuery.where(database.task.campaign.equals(campaign));
+
+    if (completed != null) newQuery.where(database.task.complete.equals(completed));
+    if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
+
+    newQuery.addColumns([countTasks]);
+    final row = await newQuery.getSingle();
+    final count = row.read(countTasks) ?? 0;
 
     return {'count': count, 'results': parsed};
   }

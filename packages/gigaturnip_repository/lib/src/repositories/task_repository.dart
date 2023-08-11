@@ -42,8 +42,7 @@ class AllTaskRepository extends TaskRepository {
       return data.copyWith<Task>(results: parsed);
     } catch (e) {
       print(e);
-      final wrapper =
-          await db.LocalDatabase.getTasks(campaignId, limit: limit, offset: query?['offset']);
+      final wrapper = await db.LocalDatabase.getTasks(campaignId, query: query);
       final results = wrapper['results'] as List<Map<String, dynamic>>;
       final parsed = results.map(Task.fromJson).toList();
       return api.PaginationWrapper(count: wrapper['count'], results: parsed);
@@ -171,8 +170,17 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
   }
 
   Future<int> createTask(int id) async {
-    final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
-    return response.id;
+    try {
+      final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
+      return response.id;
+    } catch (e) {
+      final cachedStage = await db.LocalDatabase.getSingleTaskStage(id);
+      final stage = TaskStage.fromDB(cachedStage);
+      final task = Task.blank(stage);
+      final cachedTask = task.toDB();
+      final cachedId = await db.LocalDatabase.insertTask(cachedTask);
+      return cachedId;
+    }
   }
 }
 
