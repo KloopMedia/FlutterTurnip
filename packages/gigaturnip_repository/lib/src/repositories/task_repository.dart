@@ -123,28 +123,23 @@ class AvailableTaskRepository extends TaskRepository {
 class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
-  final bool? isProactive;
+  final StageType stageType;
 
   CreatableTaskRepository({
     required api.GigaTurnipApiClient gigaTurnipApiClient,
     required this.campaignId,
-    this.isProactive,
+    required this.stageType,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
   Future<api.PaginationWrapper<TaskStage>> fetchAndParseData({Map<String, dynamic>? query}) async {
-    final String? stageType;
-    if (isProactive != null) {
-      stageType = isProactive! ? "PR" : "AC";
-    } else {
-      stageType = null;
-    }
+    final type = convertStageTypeToString(stageType);
 
     try {
       final data = await _gigaTurnipApiClient.getUserRelevantTaskStages(
         query: {
           'chain__campaign': campaignId,
-          'stage_type': stageType,
+          'stage_type': type,
           ...?query,
         },
       );

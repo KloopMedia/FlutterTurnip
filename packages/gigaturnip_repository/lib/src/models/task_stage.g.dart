@@ -20,6 +20,7 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
       availableFrom: json['availableFrom'] == null
           ? null
           : DateTime.parse(json['availableFrom'] as String),
+      stageType: $enumDecode(_$StageTypeEnumMap, json['stageType']),
     );
 
 Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
@@ -32,4 +33,11 @@ Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'cardUiSchema': instance.cardUiSchema,
       'availableTo': instance.availableTo?.toIso8601String(),
       'availableFrom': instance.availableFrom?.toIso8601String(),
+      'stageType': _$StageTypeEnumMap[instance.stageType]!,
     };
+
+const _$StageTypeEnumMap = {
+  StageType.pr: 'pr',
+  StageType.ac: 'ac',
+  StageType.pb: 'pb',
+};

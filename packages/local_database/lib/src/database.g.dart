@@ -505,6 +505,12 @@ class $TaskStageTable extends TaskStage
   late final GeneratedColumn<DateTime> availableTo = GeneratedColumn<DateTime>(
       'available_to', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _stageTypeMeta =
+      const VerificationMeta('stageType');
+  @override
+  late final GeneratedColumn<String> stageType = GeneratedColumn<String>(
+      'stage_type', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -518,7 +524,8 @@ class $TaskStageTable extends TaskStage
         jsonSchema,
         uiSchema,
         availableFrom,
-        availableTo
+        availableTo,
+        stageType
       ];
   @override
   String get aliasedName => _alias ?? 'task_stage';
@@ -594,6 +601,10 @@ class $TaskStageTable extends TaskStage
           availableTo.isAcceptableOrUnknown(
               data['available_to']!, _availableToMeta));
     }
+    if (data.containsKey('stage_type')) {
+      context.handle(_stageTypeMeta,
+          stageType.isAcceptableOrUnknown(data['stage_type']!, _stageTypeMeta));
+    }
     return context;
   }
 
@@ -627,6 +638,8 @@ class $TaskStageTable extends TaskStage
           DriftSqlType.dateTime, data['${effectivePrefix}available_from']),
       availableTo: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}available_to']),
+      stageType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}stage_type']),
     );
   }
 
@@ -649,6 +662,7 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
   final String? uiSchema;
   final DateTime? availableFrom;
   final DateTime? availableTo;
+  final String? stageType;
   const TaskStageData(
       {required this.id,
       required this.name,
@@ -661,7 +675,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       this.jsonSchema,
       this.uiSchema,
       this.availableFrom,
-      this.availableTo});
+      this.availableTo,
+      this.stageType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -692,6 +707,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
     }
     if (!nullToAbsent || availableTo != null) {
       map['available_to'] = Variable<DateTime>(availableTo);
+    }
+    if (!nullToAbsent || stageType != null) {
+      map['stage_type'] = Variable<String>(stageType);
     }
     return map;
   }
@@ -726,6 +744,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       availableTo: availableTo == null && nullToAbsent
           ? const Value.absent()
           : Value(availableTo),
+      stageType: stageType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(stageType),
     );
   }
 
@@ -745,6 +766,7 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       uiSchema: serializer.fromJson<String?>(json['uiSchema']),
       availableFrom: serializer.fromJson<DateTime?>(json['availableFrom']),
       availableTo: serializer.fromJson<DateTime?>(json['availableTo']),
+      stageType: serializer.fromJson<String?>(json['stageType']),
     );
   }
   @override
@@ -763,6 +785,7 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       'uiSchema': serializer.toJson<String?>(uiSchema),
       'availableFrom': serializer.toJson<DateTime?>(availableFrom),
       'availableTo': serializer.toJson<DateTime?>(availableTo),
+      'stageType': serializer.toJson<String?>(stageType),
     };
   }
 
@@ -778,7 +801,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
           Value<String?> jsonSchema = const Value.absent(),
           Value<String?> uiSchema = const Value.absent(),
           Value<DateTime?> availableFrom = const Value.absent(),
-          Value<DateTime?> availableTo = const Value.absent()}) =>
+          Value<DateTime?> availableTo = const Value.absent(),
+          Value<String?> stageType = const Value.absent()}) =>
       TaskStageData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -795,6 +819,7 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
         availableFrom:
             availableFrom.present ? availableFrom.value : this.availableFrom,
         availableTo: availableTo.present ? availableTo.value : this.availableTo,
+        stageType: stageType.present ? stageType.value : this.stageType,
       );
   @override
   String toString() {
@@ -810,7 +835,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
           ..write('availableFrom: $availableFrom, ')
-          ..write('availableTo: $availableTo')
+          ..write('availableTo: $availableTo, ')
+          ..write('stageType: $stageType')
           ..write(')'))
         .toString();
   }
@@ -828,7 +854,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       jsonSchema,
       uiSchema,
       availableFrom,
-      availableTo);
+      availableTo,
+      stageType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -844,7 +871,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
           other.jsonSchema == this.jsonSchema &&
           other.uiSchema == this.uiSchema &&
           other.availableFrom == this.availableFrom &&
-          other.availableTo == this.availableTo);
+          other.availableTo == this.availableTo &&
+          other.stageType == this.stageType);
 }
 
 class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
@@ -860,6 +888,7 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
   final Value<String?> uiSchema;
   final Value<DateTime?> availableFrom;
   final Value<DateTime?> availableTo;
+  final Value<String?> stageType;
   const TaskStageCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -873,6 +902,7 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     this.uiSchema = const Value.absent(),
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
+    this.stageType = const Value.absent(),
   });
   TaskStageCompanion.insert({
     this.id = const Value.absent(),
@@ -887,6 +917,7 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     this.uiSchema = const Value.absent(),
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
+    this.stageType = const Value.absent(),
   })  : name = Value(name),
         chain = Value(chain),
         campaign = Value(campaign);
@@ -903,6 +934,7 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     Expression<String>? uiSchema,
     Expression<DateTime>? availableFrom,
     Expression<DateTime>? availableTo,
+    Expression<String>? stageType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -917,6 +949,7 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
       if (uiSchema != null) 'ui_schema': uiSchema,
       if (availableFrom != null) 'available_from': availableFrom,
       if (availableTo != null) 'available_to': availableTo,
+      if (stageType != null) 'stage_type': stageType,
     });
   }
 
@@ -932,7 +965,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
       Value<String?>? jsonSchema,
       Value<String?>? uiSchema,
       Value<DateTime?>? availableFrom,
-      Value<DateTime?>? availableTo}) {
+      Value<DateTime?>? availableTo,
+      Value<String?>? stageType}) {
     return TaskStageCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -946,6 +980,7 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
       uiSchema: uiSchema ?? this.uiSchema,
       availableFrom: availableFrom ?? this.availableFrom,
       availableTo: availableTo ?? this.availableTo,
+      stageType: stageType ?? this.stageType,
     );
   }
 
@@ -988,6 +1023,9 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     if (availableTo.present) {
       map['available_to'] = Variable<DateTime>(availableTo.value);
     }
+    if (stageType.present) {
+      map['stage_type'] = Variable<String>(stageType.value);
+    }
     return map;
   }
 
@@ -1005,7 +1043,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
           ..write('availableFrom: $availableFrom, ')
-          ..write('availableTo: $availableTo')
+          ..write('availableTo: $availableTo, ')
+          ..write('stageType: $stageType')
           ..write(')'))
         .toString();
   }
@@ -1560,9 +1599,23 @@ class $RelevantTaskStageTable extends RelevantTaskStage
   late final GeneratedColumn<DateTime> availableTo = GeneratedColumn<DateTime>(
       'available_to', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _stageTypeMeta =
+      const VerificationMeta('stageType');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, description, chain, campaign, availableFrom, availableTo];
+  late final GeneratedColumn<String> stageType = GeneratedColumn<String>(
+      'stage_type', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        description,
+        chain,
+        campaign,
+        availableFrom,
+        availableTo,
+        stageType
+      ];
   @override
   String get aliasedName => _alias ?? 'relevant_task_stage';
   @override
@@ -1612,6 +1665,10 @@ class $RelevantTaskStageTable extends RelevantTaskStage
           availableTo.isAcceptableOrUnknown(
               data['available_to']!, _availableToMeta));
     }
+    if (data.containsKey('stage_type')) {
+      context.handle(_stageTypeMeta,
+          stageType.isAcceptableOrUnknown(data['stage_type']!, _stageTypeMeta));
+    }
     return context;
   }
 
@@ -1635,6 +1692,8 @@ class $RelevantTaskStageTable extends RelevantTaskStage
           DriftSqlType.dateTime, data['${effectivePrefix}available_from']),
       availableTo: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}available_to']),
+      stageType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}stage_type']),
     );
   }
 
@@ -1653,6 +1712,7 @@ class RelevantTaskStageData extends DataClass
   final int campaign;
   final DateTime? availableFrom;
   final DateTime? availableTo;
+  final String? stageType;
   const RelevantTaskStageData(
       {required this.id,
       required this.name,
@@ -1660,7 +1720,8 @@ class RelevantTaskStageData extends DataClass
       required this.chain,
       required this.campaign,
       this.availableFrom,
-      this.availableTo});
+      this.availableTo,
+      this.stageType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1676,6 +1737,9 @@ class RelevantTaskStageData extends DataClass
     }
     if (!nullToAbsent || availableTo != null) {
       map['available_to'] = Variable<DateTime>(availableTo);
+    }
+    if (!nullToAbsent || stageType != null) {
+      map['stage_type'] = Variable<String>(stageType);
     }
     return map;
   }
@@ -1695,6 +1759,9 @@ class RelevantTaskStageData extends DataClass
       availableTo: availableTo == null && nullToAbsent
           ? const Value.absent()
           : Value(availableTo),
+      stageType: stageType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(stageType),
     );
   }
 
@@ -1709,6 +1776,7 @@ class RelevantTaskStageData extends DataClass
       campaign: serializer.fromJson<int>(json['campaign']),
       availableFrom: serializer.fromJson<DateTime?>(json['availableFrom']),
       availableTo: serializer.fromJson<DateTime?>(json['availableTo']),
+      stageType: serializer.fromJson<String?>(json['stageType']),
     );
   }
   @override
@@ -1722,6 +1790,7 @@ class RelevantTaskStageData extends DataClass
       'campaign': serializer.toJson<int>(campaign),
       'availableFrom': serializer.toJson<DateTime?>(availableFrom),
       'availableTo': serializer.toJson<DateTime?>(availableTo),
+      'stageType': serializer.toJson<String?>(stageType),
     };
   }
 
@@ -1732,7 +1801,8 @@ class RelevantTaskStageData extends DataClass
           int? chain,
           int? campaign,
           Value<DateTime?> availableFrom = const Value.absent(),
-          Value<DateTime?> availableTo = const Value.absent()}) =>
+          Value<DateTime?> availableTo = const Value.absent(),
+          Value<String?> stageType = const Value.absent()}) =>
       RelevantTaskStageData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -1742,6 +1812,7 @@ class RelevantTaskStageData extends DataClass
         availableFrom:
             availableFrom.present ? availableFrom.value : this.availableFrom,
         availableTo: availableTo.present ? availableTo.value : this.availableTo,
+        stageType: stageType.present ? stageType.value : this.stageType,
       );
   @override
   String toString() {
@@ -1752,14 +1823,15 @@ class RelevantTaskStageData extends DataClass
           ..write('chain: $chain, ')
           ..write('campaign: $campaign, ')
           ..write('availableFrom: $availableFrom, ')
-          ..write('availableTo: $availableTo')
+          ..write('availableTo: $availableTo, ')
+          ..write('stageType: $stageType')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, name, description, chain, campaign, availableFrom, availableTo);
+  int get hashCode => Object.hash(id, name, description, chain, campaign,
+      availableFrom, availableTo, stageType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1770,7 +1842,8 @@ class RelevantTaskStageData extends DataClass
           other.chain == this.chain &&
           other.campaign == this.campaign &&
           other.availableFrom == this.availableFrom &&
-          other.availableTo == this.availableTo);
+          other.availableTo == this.availableTo &&
+          other.stageType == this.stageType);
 }
 
 class RelevantTaskStageCompanion
@@ -1782,6 +1855,7 @@ class RelevantTaskStageCompanion
   final Value<int> campaign;
   final Value<DateTime?> availableFrom;
   final Value<DateTime?> availableTo;
+  final Value<String?> stageType;
   const RelevantTaskStageCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -1790,6 +1864,7 @@ class RelevantTaskStageCompanion
     this.campaign = const Value.absent(),
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
+    this.stageType = const Value.absent(),
   });
   RelevantTaskStageCompanion.insert({
     this.id = const Value.absent(),
@@ -1799,6 +1874,7 @@ class RelevantTaskStageCompanion
     required int campaign,
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
+    this.stageType = const Value.absent(),
   })  : name = Value(name),
         chain = Value(chain),
         campaign = Value(campaign);
@@ -1810,6 +1886,7 @@ class RelevantTaskStageCompanion
     Expression<int>? campaign,
     Expression<DateTime>? availableFrom,
     Expression<DateTime>? availableTo,
+    Expression<String>? stageType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1819,6 +1896,7 @@ class RelevantTaskStageCompanion
       if (campaign != null) 'campaign': campaign,
       if (availableFrom != null) 'available_from': availableFrom,
       if (availableTo != null) 'available_to': availableTo,
+      if (stageType != null) 'stage_type': stageType,
     });
   }
 
@@ -1829,7 +1907,8 @@ class RelevantTaskStageCompanion
       Value<int>? chain,
       Value<int>? campaign,
       Value<DateTime?>? availableFrom,
-      Value<DateTime?>? availableTo}) {
+      Value<DateTime?>? availableTo,
+      Value<String?>? stageType}) {
     return RelevantTaskStageCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -1838,6 +1917,7 @@ class RelevantTaskStageCompanion
       campaign: campaign ?? this.campaign,
       availableFrom: availableFrom ?? this.availableFrom,
       availableTo: availableTo ?? this.availableTo,
+      stageType: stageType ?? this.stageType,
     );
   }
 
@@ -1865,6 +1945,9 @@ class RelevantTaskStageCompanion
     if (availableTo.present) {
       map['available_to'] = Variable<DateTime>(availableTo.value);
     }
+    if (stageType.present) {
+      map['stage_type'] = Variable<String>(stageType.value);
+    }
     return map;
   }
 
@@ -1877,7 +1960,8 @@ class RelevantTaskStageCompanion
           ..write('chain: $chain, ')
           ..write('campaign: $campaign, ')
           ..write('availableFrom: $availableFrom, ')
-          ..write('availableTo: $availableTo')
+          ..write('availableTo: $availableTo, ')
+          ..write('stageType: $stageType')
           ..write(')'))
         .toString();
   }

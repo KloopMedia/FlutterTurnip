@@ -14,8 +14,14 @@ mixin ProactiveTasks on RemoteDataCubit<TaskStage> {
 
   Future<void> createTaskById(int id);
 }
+mixin ProactiveTasksButtons on RemoteDataCubit<TaskStage> {
+  Future<void> createTask(TaskStage task);
 
-class CreatableTaskCubit extends RemoteDataCubit<TaskStage> with ReactiveTasks, ProactiveTasks {
+  Future<void> createTaskById(int id);
+}
+
+class CreatableTaskCubit extends RemoteDataCubit<TaskStage>
+    with ReactiveTasks, ProactiveTasks, ProactiveTasksButtons {
   final CreatableTaskRepository _repository;
 
   CreatableTaskCubit(this._repository);

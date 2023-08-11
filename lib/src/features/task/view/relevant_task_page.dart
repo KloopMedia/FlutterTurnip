@@ -200,6 +200,35 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                 names: filterNames,
               ),
             ),
+            AdaptiveListView<TaskStage, ReactiveTasks>(
+              showLoader: false,
+              padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+              itemBuilder: (context, index, item) {
+                return CardWithTitle(
+                  chips: [
+                    CardChip("Задача для выполнения"),
+                    const Spacer(),
+                    CardChip("Не присвоена", fontColor: Colors.white, backgroundColor: theme.neutral90,)
+                  ],
+                  title: item.name,
+                  contentPadding: 20,
+                  size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                  flex: context.isSmall || context.isMedium ? 0 : 1,
+                  bottom: Container(
+                      height: 40,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        onPressed: () => context.read<ReactiveTasks>().createTask(item),
+                        child: Text('Взять задачу'),
+                      )),
+                );
+              },
+            ),
             AdaptiveListView<Task, RelevantTaskCubit>(
               padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
               itemBuilder: (context, index, item) {
