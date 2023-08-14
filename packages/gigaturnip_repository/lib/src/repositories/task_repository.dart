@@ -134,14 +134,15 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
   @override
   Future<api.PaginationWrapper<TaskStage>> fetchAndParseData({Map<String, dynamic>? query}) async {
     final type = convertStageTypeToString(stageType);
+    final _query = {
+      'chain__campaign': campaignId,
+      'stage_type': type,
+      ...?query,
+    };
 
     try {
       final data = await _gigaTurnipApiClient.getUserRelevantTaskStages(
-        query: {
-          'chain__campaign': campaignId,
-          'stage_type': type,
-          ...?query,
-        },
+        query: _query,
       );
       final parsed = parseData(data.results);
 
@@ -152,10 +153,9 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
 
       return data.copyWith<TaskStage>(results: parsed);
     } catch (e) {
-      print(e);
-      final results = await db.LocalDatabase.getRelevantTaskStages();
+      print("ERROR IN CREATABLE REPOSITORY: $e");
+      final results = await db.LocalDatabase.getRelevantTaskStages(query: _query);
       final parsed = results.map(TaskStage.fromRelevant).toList();
-      print(parsed);
       return api.PaginationWrapper(count: results.length, results: parsed);
     }
   }

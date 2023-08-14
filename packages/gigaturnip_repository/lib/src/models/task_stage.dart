@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show TaskStage;
 import 'package:json_annotation/json_annotation.dart';
@@ -47,6 +47,7 @@ class TaskStage extends Equatable {
   final Map<String, dynamic>? cardUiSchema;
   final DateTime? availableTo;
   final DateTime? availableFrom;
+  @JsonKey(fromJson: convertStringToStageType, toJson: convertStageTypeToString)
   final StageType stageType;
 
   const TaskStage({

@@ -23,8 +23,16 @@ class LocalDatabase {
     return database.select(database.taskStage).get();
   }
 
-  static Future<List<RelevantTaskStageData>> getRelevantTaskStages() async {
-    return database.select(database.relevantTaskStage).get();
+  static Future<List<RelevantTaskStageData>> getRelevantTaskStages({
+    Map<String, dynamic>? query,
+  }) async {
+    final String stageType = query?['stage_type'];
+    final int campaign = query?['chain__campaign'];
+
+    final dbQuery = database.select(database.relevantTaskStage);
+    dbQuery.where((tbl) => tbl.campaign.equals(campaign));
+    dbQuery.where((tbl) => tbl.stageType.equals(stageType));
+    return dbQuery.get();
   }
 
   static Future<TaskData> getSingleTask(int id) async {
@@ -51,7 +59,9 @@ class LocalDatabase {
       chain: entity.chain,
       availableTo: entity.availableTo,
       availableFrom: entity.availableFrom,
+      stageType: entity.stageType,
     );
+
     final insert = await database
         .into(database.relevantTaskStage)
         .insertReturning(newEntity, mode: InsertMode.insertOrReplace);
@@ -59,7 +69,6 @@ class LocalDatabase {
   }
 
   static void updateTask(TaskData data) {
-    print('TASK UPDATED: $data');
     database.update(database.task)
       ..where((tbl) => tbl.id.equals(data.id))
       ..write(data);
