@@ -159,7 +159,7 @@
   "show_next": "Кийинкилерди көрсөтүү",
   "hide_next": "Кийинкилерди жашыруу",
 
-  "creatable_task": "Аткарыла турган тапшырма",
-	"creatable_task_not_assigned": "Дайындалбаган тапшырма",
+  "creatable_task": "Аткаруу үчүн тапшырма",
+	"creatable_task_not_assigned": "Ыйгарыла элек",
 	"creatable_task_assign_button": "Тапшырманы алуу"
 }
