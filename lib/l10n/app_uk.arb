@@ -157,5 +157,9 @@
   "show_previous": "Показати попередні",
   "hide_previous": "Свернуть попередні",
   "show_next": "Показати наступні",
-  "hide_next": "Свернуть наступні"
+  "hide_next": "Свернуть наступні",
+
+  "creatable_task": "Завдання для виконання",
+	"creatable_task_not_assigned": "Не присвоєно",
+	"creatable_task_assign_button": "Взяти завдання"
 }

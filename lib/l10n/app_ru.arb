@@ -157,5 +157,9 @@
   "show_previous": "Показать предыдущие",
   "hide_previous": "Свернуть предыдущие",
   "show_next": "Показать следующие",
-  "hide_next": "Свернуть следующие"
+  "hide_next": "Свернуть следующие",
+
+  "creatable_task": "Задача для выполнения",
+	"creatable_task_not_assigned": "Не присвоена",
+	"creatable_task_assign_button": "Взять задачу"
 }

@@ -157,5 +157,9 @@
   "show_previous": "Show previous",
   "hide_previous": "Hide previous",
   "show_next": "Show next",
-  "hide_next": "Hide next"
+  "hide_next": "Hide next",
+
+  "creatable_task": "Task to complete",
+  "creatable_task_not_assigned": "Task unassigned",
+  "creatable_task_assign_button": "Take a task"
 }

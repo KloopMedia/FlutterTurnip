@@ -206,9 +206,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               itemBuilder: (context, index, item) {
                 return CardWithTitle(
                   chips: [
-                    CardChip("Задача для выполнения"),
+                    CardChip(context.loc.creatable_task),
                     const Spacer(),
-                    CardChip("Не присвоена", fontColor: Colors.white, backgroundColor: theme.neutral90,)
+                    CardChip(context.loc.creatable_task_not_assigned, fontColor: Colors.white, backgroundColor: theme.neutral90,)
                   ],
                   title: item.name,
                   contentPadding: 20,
@@ -219,12 +219,13 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
                         onPressed: () => context.read<ReactiveTasks>().createTask(item),
-                        child: Text('Взять задачу'),
+                        child: Text(context.loc.creatable_task_assign_button),
                       )),
                 );
               },
