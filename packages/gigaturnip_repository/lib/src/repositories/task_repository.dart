@@ -151,17 +151,40 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
         db.LocalDatabase.insertRelevantTaskStage(entity);
       }
 
-      return data.copyWith<TaskStage>(results: parsed);
+      final filtered = _filterTasks(parsed);
+
+      return data.copyWith<TaskStage>(results: filtered);
     } catch (e) {
       print("ERROR IN CREATABLE REPOSITORY: $e");
       final results = await db.LocalDatabase.getRelevantTaskStages(query: _query);
       final parsed = results.map(TaskStage.fromRelevant).toList();
-      return api.PaginationWrapper(count: results.length, results: parsed);
+      final filtered = _filterTasks(parsed);
+      return api.PaginationWrapper(count: results.length, results: filtered);
     }
   }
 
   List<TaskStage> parseData(List<api.TaskStage> data) {
     return data.map(TaskStage.fromApiModel).toList();
+  }
+
+  List<TaskStage> _filterTasks(List<TaskStage> data) {
+    final now = DateTime.now();
+
+    final creatable = data.where((item) {
+      final startDate = item.availableFrom;
+      final endDate = item.availableTo;
+
+      if (startDate != null && endDate != null) {
+        if (startDate.isBefore(now) && endDate.isAfter(now)) {
+          return true;
+        }
+        return false;
+      }
+
+      return true;
+    }).toList();
+
+    return creatable;
   }
 
   Future<int> createTask(int id) async {

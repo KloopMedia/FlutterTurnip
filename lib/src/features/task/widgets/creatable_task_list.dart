@@ -10,26 +10,6 @@ import 'creatable_task_card.dart';
 class CreatableTaskList extends StatelessWidget {
   const CreatableTaskList({super.key});
 
-  List<TaskStage> filterTasks(List<TaskStage> data) {
-    final now = DateTime.now();
-
-    final creatable = data.where((item) {
-      final startDate = item.availableFrom;
-      final endDate = item.availableTo;
-
-      if (startDate != null && endDate != null) {
-        if (startDate.isBefore(now) && endDate.isAfter(now)) {
-          return true;
-        }
-        return false;
-      }
-
-      return true;
-    }).toList();
-
-    return creatable;
-  }
-
   List<Widget> createTasks(BuildContext context, List<TaskStage> data) {
     BoxConstraints constraints;
     if (context.isSmall) {
@@ -57,8 +37,7 @@ class CreatableTaskList extends StatelessWidget {
         child: BlocBuilder<ProactiveTasksButtons, RemoteDataState<TaskStage>>(
           builder: (context, state) {
             if (state is RemoteDataLoaded<TaskStage>) {
-              final data = filterTasks(state.data);
-              final items = createTasks(context, data);
+              final items = createTasks(context, state.data);
 
               return Wrap(
                 direction: Axis.horizontal,
