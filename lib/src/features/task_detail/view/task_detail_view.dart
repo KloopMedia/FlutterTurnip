@@ -135,6 +135,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<TaskBloc>();
     final colorScheme = Theme.of(context).colorScheme;
     final inputDecoration = InputDecorationTheme(
       enabledBorder: OutlineInputBorder(
@@ -158,6 +159,19 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) async {
         if (state is TaskSubmitted) {
           redirect(context, state.nextTaskId);
+        }
+        if (state is NotificationOpened) {
+          showDialog(
+            context: context,
+            builder: (context) => FormDialog(
+              title: context.loc.new_notification,
+              content: state.text,
+              buttonText: context.loc.got_it,
+              onPressed: () {
+                bloc.add(CloseNotification(state.previousTasks, state.data, state.nextTaskId));
+              },
+            ),
+          );
         }
         if (state is TaskClosed) {
           redirect(context, null);

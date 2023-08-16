@@ -41,7 +41,7 @@ class TaskDetailRepository {
           complete: data['complete'],
         ),
       );
-      return TaskResponse(id: id, nextDirectId: null);
+      return TaskResponse(id: id, nextDirectId: null, notifications: []);
     }
   }
 

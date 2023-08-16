@@ -6,10 +6,12 @@ class FormDialog extends StatelessWidget {
   final String? title;
   final String content;
   final String buttonText;
+  final Function? onPressed;
 
   const FormDialog({
     super.key,
     this.title,
+    this.onPressed,
     required this.content,
     required this.buttonText,
   });
@@ -28,6 +30,7 @@ class FormDialog extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             ),
             onPressed: () {
+              if (onPressed != null) onPressed!();
               Navigator.pop(context);
             },
             child: Text(buttonText),
