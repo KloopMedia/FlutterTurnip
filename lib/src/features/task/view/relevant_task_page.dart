@@ -190,10 +190,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               child: FilterBar(
                 title: context.loc.mytasks,
                 onChanged: (query, key) {
-                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
+                  context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
                   context
                       .read<IndividualChainCubit>()
-                      .refetchWithFilter(individualChainFilterMap[key]);
+                      .refetchWithFilter(query: individualChainFilterMap[key]);
                 },
                 value: taskFilterMap.keys.first,
                 filters: taskFilterMap,

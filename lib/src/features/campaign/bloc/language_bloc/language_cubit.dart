@@ -9,7 +9,11 @@ class LanguageCubit extends RemoteDataCubit<Language> {
   LanguageCubit(this._repository);
 
   @override
-  Future<PageData<Language>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<Language>> fetchAndParseData(
+    int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page);
   }
 }

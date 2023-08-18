@@ -64,6 +64,9 @@ abstract class GigaTurnipApiClient {
   @GET(selectableTasksRoute)
   Future<PaginationWrapper<Task>> getUserSelectableTasks({@Queries() Map<String, dynamic>? query});
 
+  @POST(selectableTasksRoute)
+  Future<PaginationWrapper<Task>> postUserSelectableTasks(@Body() Map<String, dynamic> data, {@Queries() Map<String, dynamic>? query});
+
   @GET(relevantTasksRoute)
   Future<PaginationWrapper<Task>> getUserRelevantTasks({@Queries() Map<String, dynamic>? query});
 
@@ -124,6 +127,12 @@ abstract class GigaTurnipApiClient {
   @GET(availableTaskStageRoute)
   Future<PaginationWrapper<TaskStageDetail>> getAvailableTaskStages({
     @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET("$taskStagesRoute/{id}")
+  Future<TaskStageDetail> getTaskStageById(
+    @Path("id") int id, {
+    @Queries() required Map<String, dynamic>? query,
   });
 
   // Notification methods

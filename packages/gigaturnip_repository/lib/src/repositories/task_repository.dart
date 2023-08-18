@@ -103,6 +103,32 @@ class AvailableTaskRepository extends TaskRepository {
     required this.stageId,
   });
 
+  Future<PageData<Task>> fetchWithPostAndParseData(int page, Map<String, dynamic> body,
+      [Map<String, dynamic>? query]) async {
+    final paginationQuery = {
+      'limit': limit,
+      'offset': calculateOffset(page),
+      ...?query,
+    };
+
+    final response = await _gigaTurnipApiClient.postUserSelectableTasks(
+      body,
+      query: {
+        'stage': stageId,
+        'stage__chain__campaign': campaignId,
+        ...paginationQuery,
+      },
+    );
+    final data = response.copyWith<Task>(results: parseData(response.results));
+
+    return PageData(
+      data: data.results,
+      currentPage: page,
+      total: calculateTotalPage(data.count),
+      count: data.count,
+    );
+  }
+
   @override
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
     final data = await _gigaTurnipApiClient.getUserSelectableTasks(

@@ -24,8 +24,20 @@ class AvailableTaskCubit extends RemoteDataCubit<Task> {
     }
   }
 
+  Future<void> search(String searchValue) async {
+    refetchWithFilter(query: {'responses_contains': searchValue});
+  }
+
+  Future<void> complexSearch(Map<String, dynamic> data) async {
+    refetchWithFilter(body: data);
+  }
+
   @override
-  Future<PageData<Task>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
-    return _repository.fetchDataOnPage(page);
+  Future<PageData<Task>> fetchAndParseData(
+    int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
+    return _repository.fetchWithPostAndParseData(page, body ?? {}, query);
   }
 }

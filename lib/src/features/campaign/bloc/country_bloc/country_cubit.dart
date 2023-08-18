@@ -9,7 +9,10 @@ class CountryCubit extends RemoteDataCubit<Country> {
   CountryCubit(this._repository);
 
   @override
-  Future<PageData<Country>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<Country>> fetchAndParseData(int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page);
   }
 }

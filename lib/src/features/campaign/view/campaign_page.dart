@@ -86,8 +86,8 @@ class _CampaignViewState extends State<CampaignView> {
   final Map<String, dynamic> queryMap = {};
 
   void onFilterTapByQuery(Map<String, dynamic> map) {
-    context.read<UserCampaignCubit>().refetchWithFilter(map);
-    context.read<SelectableCampaignCubit>().refetchWithFilter(map);
+    context.read<UserCampaignCubit>().refetchWithFilter(query: map);
+    context.read<SelectableCampaignCubit>().refetchWithFilter(query: map);
   }
 
   void addSelectedCategoryToQueries(Map<String, dynamic>? selectedCategory) {
