@@ -23,9 +23,6 @@ class CardWithTitleAndTaskNotification extends StatelessWidget {
 
     return BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
         builder: (context, state) {
-          if (state is RemoteDataFailed<Notification>) {
-            return Center(child: Text(state.error));
-          }
           if (state is RemoteDataInitialized<Notification>) {
             if (state.data.isNotEmpty) {
               bool containsReceiverTask = state.data.any((notification) => notification.receiverTask == taskId);
@@ -76,9 +73,8 @@ class CardWithTitleAndTaskNotification extends StatelessWidget {
                 }
               }
             }
-            return body;
           }
-          return const SizedBox.shrink();
+          return body;
         }
     );
   }

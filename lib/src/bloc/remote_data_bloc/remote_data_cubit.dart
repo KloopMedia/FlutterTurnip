@@ -12,7 +12,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
     try {
       emit(RemoteDataFetching());
 
-      final pageData = await fetchAndParseData(0, query);
+      final pageData = await fetchAndParseData(0, query: query);
 
       emit(
         RemoteDataLoaded(
@@ -36,15 +36,19 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
   Future<void> fetchData(int page) async {
     try {
       Map<String, dynamic>? query;
+      Map<String, dynamic>? body;
+
       if (state is RemoteDataInitialized<Data>) {
         emit(RemoteDataRefetching.clone(state as RemoteDataInitialized<Data>));
         query = (state as RemoteDataInitialized).query;
+        body = (state as RemoteDataInitialized).body;
       } else {
         emit(RemoteDataFetching());
         query = null;
+        body = null;
       }
 
-      final pageData = await fetchAndParseData(page, query);
+      final pageData = await fetchAndParseData(page, body: body, query: query);
 
       emit(
         RemoteDataLoaded(
@@ -53,6 +57,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
           total: pageData.total,
           count: pageData.count,
           query: query,
+          body: body,
         ),
       );
     } on Exception catch (e, c) {
@@ -65,9 +70,8 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
     }
   }
 
-  Future<void> setFilter(Map<String, dynamic>? query) async {
+  Future<void> setFilter(Map<String, dynamic>? query, Map<String, dynamic>? body) async {
     final _state = state;
-    print(_state.runtimeType);
     if (_state is RemoteDataLoaded<Data>) {
       emit(
         RemoteDataLoaded(
@@ -76,13 +80,14 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
           total: _state.total,
           count: _state.count,
           query: query,
+          body: body
         ),
       );
     }
   }
 
-  void refetchWithFilter(Map<String, dynamic>? query) {
-    setFilter(query);
+  void refetchWithFilter({Map<String, dynamic>? query, Map<String, dynamic>? body}) {
+    setFilter(query, body);
     fetchData(0);
   }
 
@@ -93,5 +98,9 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
     fetchData(page);
   }
 
-  Future<PageData<Data>> fetchAndParseData(int page, [Map<String, dynamic>? query]);
+  Future<PageData<Data>> fetchAndParseData(
+    int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  });
 }

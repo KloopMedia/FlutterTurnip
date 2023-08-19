@@ -6,13 +6,18 @@ part 'notification_state.dart';
 mixin ClosedNotificationCubit on RemoteDataCubit<Notification> {}
 mixin OpenNotificationCubit on RemoteDataCubit<Notification> {}
 
-class NotificationCubit extends RemoteDataCubit<Notification> with ClosedNotificationCubit, OpenNotificationCubit {
+class NotificationCubit extends RemoteDataCubit<Notification>
+    with ClosedNotificationCubit, OpenNotificationCubit {
   final NotificationRepository _repository;
 
   NotificationCubit(this._repository);
 
   @override
-  Future<PageData<Notification>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<Notification>> fetchAndParseData(
+    int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page, {'limit': 11});
   }
 }

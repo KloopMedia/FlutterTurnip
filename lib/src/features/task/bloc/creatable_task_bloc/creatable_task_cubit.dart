@@ -14,8 +14,14 @@ mixin ProactiveTasks on RemoteDataCubit<TaskStage> {
 
   Future<void> createTaskById(int id);
 }
+mixin ProactiveTasksButtons on RemoteDataCubit<TaskStage> {
+  Future<void> createTask(TaskStage task);
 
-class CreatableTaskCubit extends RemoteDataCubit<TaskStage> with ReactiveTasks, ProactiveTasks {
+  Future<void> createTaskById(int id);
+}
+
+class CreatableTaskCubit extends RemoteDataCubit<TaskStage>
+    with ReactiveTasks, ProactiveTasks, ProactiveTasksButtons {
   final CreatableTaskRepository _repository;
 
   CreatableTaskCubit(this._repository);
@@ -53,7 +59,10 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage> with ReactiveTasks, 
   }
 
   @override
-  Future<PageData<TaskStage>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<TaskStage>> fetchAndParseData(int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page);
   }
 }

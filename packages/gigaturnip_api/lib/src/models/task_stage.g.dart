@@ -22,11 +22,19 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
               'card_json_schema', (v) => TaskStage._stringToMap(v as String?)),
           cardUiSchema: $checkedConvert(
               'card_ui_schema', (v) => TaskStage._stringToMap(v as String?)),
+          availableTo: $checkedConvert('available_to',
+              (v) => v == null ? null : DateTime.parse(v as String)),
+          availableFrom: $checkedConvert('available_from',
+              (v) => v == null ? null : DateTime.parse(v as String)),
+          stageType: $checkedConvert('stage_type', (v) => v as String?),
         );
         return val;
       },
       fieldKeyMap: const {
         'cardJsonSchema': 'card_json_schema',
-        'cardUiSchema': 'card_ui_schema'
+        'cardUiSchema': 'card_ui_schema',
+        'availableTo': 'available_to',
+        'availableFrom': 'available_from',
+        'stageType': 'stage_type'
       },
     );

@@ -16,6 +16,7 @@ import '../../../widgets/card/tag_with_icon_and title.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
+import '../widgets/creatable_task_list.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/task_chain/types.dart';
 
@@ -108,7 +109,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     final notificationStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
-      color: theme.onSurfaceVariant,
+      color: theme.isLight ? theme.onSurfaceVariant : theme.neutral80,
       overflow: TextOverflow.ellipsis,
     );
 
@@ -155,7 +156,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     chips: [
                       TagWithIconAndTitle(
                         context.loc.important_notification,
-                        icon: Image.asset('assets/images/important_notification_icon.png'),
+                        icon: Image.asset(
+                          'assets/images/important_notification_icon.png',
+                          color: theme.isLight ? const Color(0xFF5E80FB) : const Color(0xFF9BB1FF),
+                        ),
                       ),
                       IconButton(
                           onPressed: () async {
@@ -164,28 +168,32 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                             await repo.markNotificationAsViewed(item.id);
                             setState(() => closeNotificationCard = true);
                           },
-                          icon: Icon(Icons.close, color: theme.onSurfaceVariant))
+                          icon: Icon(Icons.close,
+                              color:
+                                  theme.isLight ? theme.onSurfaceVariant : theme.neutralVariant70))
                     ],
+                    hasBoxShadow: false,
                     title: item.title,
-                    backgroundColor: theme.primaryContainer,
-                    size: context.isSmall || context.isMedium ? null : const Size(400, 185),
+                    backgroundColor: theme.isLight ? theme.primaryContainer : theme.surfaceVariant,
+                    size: context.isSmall || context.isMedium ? null : const Size(400, 165),
                     flex: context.isSmall || context.isMedium ? 0 : 1,
                     onTap: () => redirectToNotification(context, item),
-                    bottom: Text(item.text, style: notificationStyle, maxLines: 3),
+                    body: Text(item.text, style: notificationStyle, maxLines: 3),
                   );
                 },
               ),
             AvailableTaskStages(
               onTap: (item) => redirectToAvailableTasks(context, item),
             ),
+            const CreatableTaskList(),
             SliverToBoxAdapter(
               child: FilterBar(
                 title: context.loc.mytasks,
                 onChanged: (query, key) {
-                  context.read<RelevantTaskCubit>().refetchWithFilter(query);
+                  context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
                   context
                       .read<IndividualChainCubit>()
-                      .refetchWithFilter(individualChainFilterMap[key]);
+                      .refetchWithFilter(query: individualChainFilterMap[key]);
                 },
                 value: taskFilterMap.keys.first,
                 filters: taskFilterMap,
@@ -197,11 +205,28 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
               itemBuilder: (context, index, item) {
                 return CardWithTitle(
-                  chips: [CardChip(item.id.toString()), const Spacer()],
+                  chips: [
+                    CardChip(context.loc.creatable_task),
+                    const Spacer(),
+                    CardChip(context.loc.creatable_task_not_assigned, fontColor: Colors.white, backgroundColor: theme.neutral90,)
+                  ],
                   title: item.name,
+                  contentPadding: 20,
                   size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
-                  onTap: () => context.read<ReactiveTasks>().createTask(item),
+                  bottom: Container(
+                      height: 40,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        onPressed: () => context.read<ReactiveTasks>().createTask(item),
+                        child: Text(context.loc.creatable_task_assign_button),
+                      )),
                 );
               },
             ),
@@ -215,6 +240,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   body: CardWithTitle(
                     chips: [CardChip(item.id.toString()), StatusCardChip(item)],
                     title: item.name,
+                    contentPadding: 20,
                     size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                     flex: context.isSmall || context.isMedium ? 0 : 1,
                     onTap: () => redirectToTask(context, item),

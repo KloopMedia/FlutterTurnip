@@ -7,6 +7,7 @@ class CampaignLoaded extends RemoteDataInitialized<Campaign> {
     required super.total,
     required super.count,
     required super.query,
+    required super.body,
   });
 }
 

@@ -96,7 +96,7 @@ class _TaskPageState extends State<TaskPage> {
             CreatableTaskRepository(
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
-              isProactive: false,
+              stageType: StageType.ac,
             ),
           )..initialize(),
         ),
@@ -105,7 +105,16 @@ class _TaskPageState extends State<TaskPage> {
             CreatableTaskRepository(
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
-              isProactive: true,
+              stageType: StageType.pr,
+            ),
+          )..initialize(),
+        ),
+        BlocProvider<ProactiveTasksButtons>(
+          create: (context) => CreatableTaskCubit(
+            CreatableTaskRepository(
+              gigaTurnipApiClient: apiClient,
+              campaignId: widget.campaignId,
+              stageType: StageType.pb,
             ),
           )..initialize(),
         ),

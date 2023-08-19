@@ -9,7 +9,11 @@ class SelectableTaskStageCubit extends RemoteDataCubit<TaskStage> {
   SelectableTaskStageCubit(this._repository);
 
   @override
-  Future<PageData<TaskStage>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<TaskStage>> fetchAndParseData(
+    int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page);
   }
 }

@@ -20,6 +20,7 @@ dependencies:
     path: ../local_database
   dio: ^5.0.0
   drift: ^2.8.0
+  uuid: ^3.0.7
 
 
 dev_dependencies:

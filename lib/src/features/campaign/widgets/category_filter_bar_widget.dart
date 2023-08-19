@@ -10,6 +10,7 @@ import '../bloc/category_bloc/category_cubit.dart';
 class CategoryFilterBarWidget extends StatelessWidget {
   final List<dynamic> queries;
   final void Function(Map<String, dynamic>? query) onChanged;
+
   const CategoryFilterBarWidget({super.key, required this.queries, required this.onChanged});
 
   @override
@@ -24,31 +25,31 @@ class CategoryFilterBarWidget extends StatelessWidget {
       }
     }
 
-    return BlocBuilder<CategoryCubit, RemoteDataState<Category>>(
-        builder: (context, state) {
-          final Map<String, Map<String, dynamic>?> taskFilterMap = {'Все': {}};
-          final filterNames = ['Все'];
-          if (state is RemoteDataLoaded<Category> && state.data.isNotEmpty) {
-            for (var category in state.data) {
-              taskFilterMap.addAll({category.name: {'categories': category.id}});
-            }
-            for (var category in state.data) {
-              filterNames.add(category.name);
-            }
-            return CategoryFilterBar(
-              onChanged: (query) {
-                context.read<SelectableCampaignCubit>().refetchWithFilter(query!.values.first);
-                context.read<UserCampaignCubit>().refetchWithFilter(query.values.first);
-                onChanged(query);
-              },
-              value: queryValue ?? taskFilterMap.keys.first,
-              filters: taskFilterMap,
-              names: filterNames,
-            );
-          }
-          return const SizedBox.shrink();
+    return BlocBuilder<CategoryCubit, RemoteDataState<Category>>(builder: (context, state) {
+      final Map<String, Map<String, dynamic>?> taskFilterMap = {'Все': {}};
+      final filterNames = ['Все'];
+      if (state is RemoteDataLoaded<Category> && state.data.isNotEmpty) {
+        for (var category in state.data) {
+          taskFilterMap.addAll({
+            category.name: {'categories': category.id}
+          });
         }
-    );
+        for (var category in state.data) {
+          filterNames.add(category.name);
+        }
+        return CategoryFilterBar(
+          onChanged: (query) {
+            context.read<SelectableCampaignCubit>().refetchWithFilter(query: query!.values.first);
+            context.read<UserCampaignCubit>().refetchWithFilter(query: query.values.first);
+            onChanged(query);
+          },
+          value: queryValue ?? taskFilterMap.keys.first,
+          filters: taskFilterMap,
+          names: filterNames,
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }
 
@@ -71,7 +72,6 @@ class CategoryFilterBar extends StatefulWidget {
 }
 
 class _CategoryFilterBarState extends State<CategoryFilterBar> {
-
   @override
   Widget build(BuildContext context) {
     final keys = widget.filters.keys.toList();
@@ -89,7 +89,6 @@ class _CategoryFilterBarState extends State<CategoryFilterBar> {
             },
           ),
       ],
-
     );
   }
 }

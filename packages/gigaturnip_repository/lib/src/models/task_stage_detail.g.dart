@@ -26,6 +26,12 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
           .toList(),
       allowRelease: json['allowRelease'] as bool,
       allowGoBack: json['allowGoBack'] as bool,
+      availableTo: json['availableTo'] == null
+          ? null
+          : DateTime.parse(json['availableTo'] as String),
+      availableFrom: json['availableFrom'] == null
+          ? null
+          : DateTime.parse(json['availableFrom'] as String),
     );
 
 Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
@@ -44,4 +50,6 @@ Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
       'dynamicJsonsTarget': instance.dynamicJsonsTarget,
       'allowRelease': instance.allowRelease,
       'allowGoBack': instance.allowGoBack,
+      'availableTo': instance.availableTo?.toIso8601String(),
+      'availableFrom': instance.availableFrom?.toIso8601String(),
     };

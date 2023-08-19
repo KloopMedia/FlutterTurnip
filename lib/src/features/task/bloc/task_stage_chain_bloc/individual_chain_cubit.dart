@@ -8,7 +8,10 @@ class IndividualChainCubit extends RemoteDataCubit<IndividualChain> {
   IndividualChainCubit(this._repository);
 
   @override
-  Future<PageData<IndividualChain>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<IndividualChain>> fetchAndParseData(int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page, query);
   }
 }

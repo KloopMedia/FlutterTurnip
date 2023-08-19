@@ -27,6 +27,9 @@ class TaskStageDetail {
   final Map<String, dynamic> cardJsonSchema;
   @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
   final Map<String, dynamic> cardUiSchema;
+  final DateTime? availableTo;
+  final DateTime? availableFrom;
+  final List<Map<String, dynamic>>? filterFieldsSchema;
 
   TaskStageDetail({
     required this.id,
@@ -46,12 +49,15 @@ class TaskStageDetail {
     required this.externalMetadata,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    required this.availableTo,
+    required this.availableFrom,
+    required this.filterFieldsSchema
   });
 
   factory TaskStageDetail.fromJson(Map<String, dynamic> json) {
     return _$TaskStageDetailFromJson(json);
   }
-  
+
   static Map<String, dynamic> _stringToMap(String? json) {
     try {
       return json != null ? jsonDecode(json) : {};

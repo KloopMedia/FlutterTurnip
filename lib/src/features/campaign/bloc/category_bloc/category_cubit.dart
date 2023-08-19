@@ -9,7 +9,10 @@ class CategoryCubit extends RemoteDataCubit<Category> {
   CategoryCubit(this._repository);
 
   @override
-  Future<PageData<Category>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<Category>> fetchAndParseData(int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page);
   }
 }

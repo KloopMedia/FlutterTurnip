@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Task;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Task;
 import 'package:local_database/local_database.dart' as db;
 
 part 'task.g.dart';
@@ -37,6 +38,20 @@ class Task extends Equatable {
     return _$TaskFromJson(json);
   }
 
+  factory Task.blank(TaskStage stage) {
+    return Task(
+      id: Random().nextInt(100000000),
+      name: stage.name,
+      responses: {},
+      complete: false,
+      reopened: false,
+      createdAt: DateTime.now(),
+      cardJsonSchema: stage.cardJsonSchema,
+      cardUiSchema: stage.cardUiSchema,
+      stage: stage,
+    );
+  }
+
   db.TaskCompanion toDB() {
     return db.TaskCompanion.insert(
       id: Value(id),
@@ -46,6 +61,7 @@ class Task extends Equatable {
       stage: stage.id,
       campaign: stage.campaign,
       createdAt: Value(createdAt),
+      responses: Value(jsonEncode(responses))
     );
   }
 

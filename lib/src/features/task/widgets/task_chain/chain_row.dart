@@ -118,6 +118,7 @@ class ChainRow extends StatelessWidget {
           position: position,
         ),
         ChainRowIcon(
+          status: status,
           position: position,
           isEven: isEven,
           isTopCollapsed: isTopCollapsed,

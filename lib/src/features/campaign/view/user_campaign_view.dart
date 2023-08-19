@@ -35,7 +35,7 @@ class UserCampaignView extends StatelessWidget {
             ),
             itemBuilder: (context, index, item) {
               final cardBody = item.unreadNotifications > 0
-                  ? CardMessage('У вас ${item.unreadNotifications} непрочитанное сообщение')
+                  ? CardMessage('${context.loc.you_have} ${item.unreadNotifications} ${context.loc.unread_message}')
                   : null;
 
               if (context.isExtraLarge || context.isLarge) {

@@ -77,8 +77,11 @@
   "read_notifications": "Окулган билдирүүлөр",
   "unread_notifications": "Окула элек билдирүүлөр",
   "important_notification": "Маанилүү билдирүү",
+  "you_have": "Сизде",
+  "unread_message": "окула элек билдирүү бар",
 
   "empty_richtext": "Тапшырма үчүн түшүндүрмө жок",
+  "open_richtext": "Рич-текстти ачуу",
   "empty_form_fields": "Формаңызда боштук бар. Аларды оңдоп, кайра тапшырыңыз",
   "form_error": "Форма катасы",
   "task_returned": "Кайтарылды",
@@ -154,5 +157,17 @@
   "show_previous": "Мурункуларды көрсөтүү",
   "hide_previous": "Мурункуларды жашыруу",
   "show_next": "Кийинкилерди көрсөтүү",
-  "hide_next": "Кийинкилерди жашыруу"
+  "hide_next": "Кийинкилерди жашыруу",
+
+  "creatable_task": "Аткаруу үчүн тапшырма",
+	"creatable_task_not_assigned": "Ыйгарыла элек",
+	"creatable_task_assign_button": "Тапшырманы алуу",
+
+	"field": "Талаа",
+	"filter_value": "Мааниси",
+	"your_text": "Сиздин текст",
+	"sort": "Сорттоо",
+	"sort_by_new": "Биринчи жаңылар",
+	"sort_by_old": "Биринчи эскилер",
+	"date": "Дата"
 }

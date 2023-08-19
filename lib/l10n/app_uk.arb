@@ -77,8 +77,11 @@
   "read_notifications": "Прочитані",
   "unread_notifications": "Непрочитані",
   "important_notification": "Важливе повідомлення",
+  "you_have": "У вас",
+  "unread_message": "непрочитане повідомлення",
 
   "empty_richtext": "До завдання немає пояснень",
+  "open_richtext": "Щоб відкрити рич-текст",
   "empty_form_fields": "У вашій формі є порожні поля. Будь ласка, виправте їх і надішліть знову",
   "form_error": "Помилка форми",
   "task_returned": "Повернено",
@@ -154,5 +157,17 @@
   "show_previous": "Показати попередні",
   "hide_previous": "Свернуть попередні",
   "show_next": "Показати наступні",
-  "hide_next": "Свернуть наступні"
+  "hide_next": "Свернуть наступні",
+
+  "creatable_task": "Завдання для виконання",
+	"creatable_task_not_assigned": "Не присвоєно",
+	"creatable_task_assign_button": "Взяти завдання",
+
+	"field": "Поле",
+	"filter_value": "Значення",
+	"your_text": "Ваш текст",
+	"sort": "Сортувати",
+	"sort_by_new": "Спочатку нові",
+	"sort_by_old": "Спочатку старі",
+	"date": "Дата"
 }

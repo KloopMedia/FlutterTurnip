@@ -7,7 +7,7 @@ import 'dart:async';
 DatabaseConnection connect() {
   return DatabaseConnection.delayed(Future(() async {
     final db = await WasmDatabase.open(
-      databaseName: 'gigaturnip',
+      databaseName: 'gigaturnipV2',
       sqlite3Uri: Uri.parse('/FlutterTurnip/sqlite3.wasm'),
       driftWorkerUri: Uri.parse('/FlutterTurnip/drift_worker.js'),
     );
