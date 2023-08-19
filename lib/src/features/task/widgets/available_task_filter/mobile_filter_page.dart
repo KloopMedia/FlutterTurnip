@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 import 'date_filter.dart';
 import 'field_filter.dart';
@@ -57,7 +58,7 @@ class _MobileFilterState extends State<MobileFilter> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 46),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 46),
             sliver: SubmitButton(
               onSubmit: () => widget.onSubmit(filterValue),
             ),
@@ -76,7 +77,7 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: 52,
         child: ElevatedButton(
@@ -87,8 +88,8 @@ class SubmitButton extends StatelessWidget {
           ),
           onPressed: onSubmit,
           child: Text(
-            'Применить фильтр',
-            style: TextStyle(
+            context.loc.apply_filter,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
               fontFamily: 'Roboto',

@@ -25,7 +25,7 @@ class AvailableTaskCubit extends RemoteDataCubit<Task> {
   }
 
   Future<void> search(String searchValue) async {
-    refetchWithFilter(query: {'responses_contains': searchValue});
+    refetchWithFilter(query: {'responses__icontains': searchValue});
   }
 
   Future<void> complexSearch(Map<String, dynamic> data) async {

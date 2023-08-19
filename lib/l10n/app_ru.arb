@@ -161,5 +161,13 @@
 
   "creatable_task": "Задача для выполнения",
 	"creatable_task_not_assigned": "Не присвоена",
-	"creatable_task_assign_button": "Взять задачу"
+	"creatable_task_assign_button": "Взять задачу",
+
+	"field": "Поле",
+	"filter_value": "Значение",
+	"your_text": "Ваш текст",
+	"sort": "Сортировать",
+	"sort_by_new": "Сначала новые",
+	"sort_by_old": "Сначала старые",
+	"date": "Дата"
 }

@@ -161,5 +161,13 @@
 
   "creatable_task": "Аткаруу үчүн тапшырма",
 	"creatable_task_not_assigned": "Ыйгарыла элек",
-	"creatable_task_assign_button": "Тапшырманы алуу"
+	"creatable_task_assign_button": "Тапшырманы алуу",
+
+	"field": "Талаа",
+	"filter_value": "Мааниси",
+	"your_text": "Сиздин текст",
+	"sort": "Сорттоо",
+	"sort_by_new": "Биринчи жаңылар",
+	"sort_by_old": "Биринчи эскилер",
+	"date": "Дата"
 }

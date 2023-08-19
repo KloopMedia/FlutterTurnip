@@ -87,7 +87,7 @@ class AvailableTaskView extends StatelessWidget {
           backgroundColor: theme.background,
           elevation: 0,
           centerTitle: false,
-          title: const Text('Filters'),
+          title: Text(context.loc.filter),
         ),
         body: MobileFilter(
           stageId: stageId,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 
 import '../../../../widgets/widgets.dart';
 
@@ -16,9 +17,9 @@ class OrderFilter extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Сортировать',
-            style: TextStyle(
+          Text(
+            context.loc.sort,
+            style: const TextStyle(
               color: Color(0xFF5C5F5F),
               fontSize: 20,
               fontFamily: 'Roboto',
@@ -27,9 +28,9 @@ class OrderFilter extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           CustomRadioListTile(
-            title: const Text(
-              'Сначала новые',
-              style: TextStyle(
+            title: Text(
+              context.loc.sort_by_new,
+              style: const TextStyle(
                 color: Color(0xFF444748),
                 fontSize: 16,
                 fontFamily: 'Roboto',
@@ -46,9 +47,9 @@ class OrderFilter extends StatelessWidget {
             height: 1,
           ),
           CustomRadioListTile(
-            title: const Text(
-              'Сначала старые',
-              style: TextStyle(
+            title: Text(
+              context.loc.sort_by_old,
+              style: const TextStyle(
                 color: Color(0xFF444748),
                 fontSize: 16,
                 fontFamily: 'Roboto',

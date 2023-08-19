@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -60,7 +61,7 @@ class _FieldFilterState extends State<FieldFilter> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Поле ${field.title}',
+                      '${context.loc.field} ${field.title}',
                       style: const TextStyle(
                         color: Color(0xFF5C5F5F),
                         fontSize: 20,
@@ -71,11 +72,11 @@ class _FieldFilterState extends State<FieldFilter> {
                     const SizedBox(height: 5),
                     const Divider(height: 1),
                     const SizedBox(height: 10),
-                    const Padding(
+                    Padding(
                       padding: _padding,
                       child: Text(
-                        'Значение',
-                        style: TextStyle(
+                        context.loc.filter_value,
+                        style: const TextStyle(
                           color: Color(0xFF5C5F5F),
                           fontSize: 16,
                           fontFamily: 'Roboto',
@@ -84,7 +85,7 @@ class _FieldFilterState extends State<FieldFilter> {
                       ),
                     ),
                     FilterTextField(
-                      hintText: 'Ваш текст',
+                      hintText: context.loc.your_text,
                       type: field.type,
                       value: filterValue[field.name],
                       onChanged: (value) {
@@ -366,7 +367,7 @@ class FilterTextField extends StatelessWidget {
         keyboardType: inputType,
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 22, horizontal: 15),
+          contentPadding: const EdgeInsets.symmetric(vertical: 22, horizontal: 15),
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 class DateFilter extends StatelessWidget {
@@ -13,7 +14,7 @@ class DateFilter extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Дата',
+            context.loc.date,
             style: TextStyle(
               color: theme.neutral40,
               fontSize: 16,
