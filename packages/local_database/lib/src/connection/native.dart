@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 Future<File> get databaseFile async {
   // We use `path_provider` to find a suitable path to store our data in.
   final appDir = await getApplicationDocumentsDirectory();
-  final dbPath = p.join(appDir.path, 'gigaturnipV2.db');
+  final dbPath = p.join(appDir.path, 'gigaturnipV3.db');
   return File(dbPath);
 }
 

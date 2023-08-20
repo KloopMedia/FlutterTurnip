@@ -21,4 +21,6 @@ class Task extends Table {
   TextColumn get uiSchema => text().nullable()();
 
   DateTimeColumn get createdAt => dateTime().nullable()();
+
+  BoolColumn get createdOffline => boolean().withDefault(const Constant(false))();
 }

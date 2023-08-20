@@ -139,6 +139,16 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
         if (state is TaskCreated) {
           redirectToTaskWithId(context, state.createdTaskId);
         }
+        if (state is TaskCreatingError) {
+          showDialog(
+            context: context,
+            builder: (context) => FormDialog(
+              title: context.loc.form_error,
+              content: state.error,
+              buttonText: context.loc.ok,
+            ),
+          );
+        }
       },
       child: RefreshIndicator(
         onRefresh: () async => refreshAllTasks(context),
@@ -208,7 +218,11 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   chips: [
                     CardChip(context.loc.creatable_task),
                     const Spacer(),
-                    CardChip(context.loc.creatable_task_not_assigned, fontColor: Colors.white, backgroundColor: theme.neutral90,)
+                    CardChip(
+                      context.loc.creatable_task_not_assigned,
+                      fontColor: Colors.white,
+                      backgroundColor: theme.neutral90,
+                    )
                   ],
                   title: item.name,
                   contentPadding: 20,

@@ -50,15 +50,19 @@ class TaskDetailRepository {
   }
 
   Future<TaskResponse> submitTask(int id, Map<String, dynamic> data) async {
-    final response = await _gigaTurnipApiClient.saveTaskById(id, data);
+    try {
+      final task = await db.LocalDatabase.getSingleTask(id);
+      db.LocalDatabase.updateTask(
+        task.copyWith(
+          responses: Value(jsonEncode(data['responses'])),
+          complete: data['complete'],
+        ),
+      );
+    } catch (e) {
+      print("Submit task error: $e");
+    }
 
-    final task = await db.LocalDatabase.getSingleTask(id);
-    db.LocalDatabase.updateTask(
-      task.copyWith(
-        responses: Value(jsonEncode(data['responses'])),
-        complete: data['complete'],
-      ),
-    );
+    final response = await _gigaTurnipApiClient.saveTaskById(id, data);
 
     return response;
   }

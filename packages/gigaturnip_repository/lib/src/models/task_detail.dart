@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_repository/src/models/task_stage_detail.dart';
@@ -121,6 +122,19 @@ class TaskDetail extends Equatable {
       dynamicTarget: dynamicTarget,
       startPeriod: startPeriod,
       endPeriod: endPeriod,
+    );
+  }
+
+  db.TaskCompanion toDB() {
+    return db.TaskCompanion.insert(
+        id: Value(id),
+        name: name,
+        complete: complete,
+        reopened: reopened,
+        stage: stage.id,
+        campaign: stage.campaign,
+        createdAt: Value(createdAt),
+        responses: Value(jsonEncode(responses))
     );
   }
 

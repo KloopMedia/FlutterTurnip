@@ -25,26 +25,31 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(campaign, campaign.smsPhone);
         }
         if (from < 4) {
-          // we added the dueDate property in the change from version 1 to
-          // version 2
           await m.addColumn(taskStage, taskStage.availableTo);
           await m.addColumn(taskStage, taskStage.availableFrom);
           await m.createTable(relevantTaskStage);
         }
         if (from < 5) {
-          // we added the dueDate property in the change from version 1 to
-          // version 2
           await m.addColumn(taskStage, taskStage.stageType);
         }
         if (from < 6) {
-          // we added the dueDate property in the change from version 1 to
-          // version 2
           await m.addColumn(relevantTaskStage, relevantTaskStage.stageType);
+        }
+        if (from < 7) {
+          await m.addColumn(relevantTaskStage, relevantTaskStage.totalLimit);
+          await m.addColumn(relevantTaskStage, relevantTaskStage.openLimit);
+        }
+        if (from < 8) {
+          await m.addColumn(taskStage, taskStage.totalLimit);
+          await m.addColumn(taskStage, taskStage.openLimit);
+        }
+        if (from < 9) {
+          await m.addColumn(task, task.createdOffline);
         }
       },
     );
   }
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 9;
 }

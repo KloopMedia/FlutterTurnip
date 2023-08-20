@@ -21,6 +21,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
           ? null
           : DateTime.parse(json['availableFrom'] as String),
       stageType: convertStringToStageType(json['stageType'] as String?),
+      openLimit: json['openLimit'] as int? ?? 0,
+      totalLimit: json['totalLimit'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
@@ -34,4 +36,6 @@ Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{
       'availableTo': instance.availableTo?.toIso8601String(),
       'availableFrom': instance.availableFrom?.toIso8601String(),
       'stageType': convertStageTypeToString(instance.stageType),
+      'openLimit': instance.openLimit,
+      'totalLimit': instance.totalLimit,
     };

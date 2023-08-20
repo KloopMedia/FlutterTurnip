@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:drift/drift.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:local_database/local_database.dart' as db;
@@ -26,27 +29,43 @@ class AllTaskRepository extends TaskRepository {
 
   @override
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    int countOnlineTasks;
     try {
       fetchAllTaskStages();
       final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
         'stage__chain__campaign': campaignId,
         ...?query,
       });
-      final parsed = parseData(data.results);
 
-      for (final item in parsed) {
+      final parsedIn = parseData(data.results);
+      countOnlineTasks = data.count;
+
+      for (final item in parsedIn) {
         final entity = item.toDB();
-        db.LocalDatabase.insertTask(entity);
+        await db.LocalDatabase.insertTask(entity);
       }
-
-      return data.copyWith<Task>(results: parsed);
     } catch (e) {
-      print(e);
-      final wrapper = await db.LocalDatabase.getTasks(campaignId, query: query);
-      final results = wrapper['results'] as List<Map<String, dynamic>>;
-      final parsed = results.map(Task.fromJson).toList();
-      return api.PaginationWrapper(count: wrapper['count'], results: parsed);
+      countOnlineTasks = 0;
+      print('ALL TASK REPOSITORY ERROR: $e');
     }
+
+    final wrapper = await db.LocalDatabase.getTasks(campaignId, query: query);
+    int countOfflineTasks = wrapper['count'] ?? 0;
+
+    final results = wrapper['results'] as List<Map<String, dynamic>>;
+    final parsedOut = results.map(Task.fromJson).toList();
+
+    return api.PaginationWrapper(
+        count: max(countOfflineTasks, countOnlineTasks), results: parsedOut);
+
+    // return data.copyWith<Task>(results: parsed);
+    // } catch (e) {
+    //   print(e);
+    //   final wrapper = await db.LocalDatabase.getTasks(campaignId, query: query);
+    //   final results = wrapper['results'] as List<Map<String, dynamic>>;
+    //   final parsed = results.map(Task.fromJson).toList();
+    //   return api.PaginationWrapper(count: wrapper['count'], results: parsed);
+    // }
   }
 
   void fetchAllTaskStages() async {
@@ -173,7 +192,18 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
       final parsed = parseData(data.results);
 
       for (final item in parsed) {
-        final entity = item.toDB();
+        final entity = db.RelevantTaskStageCompanion.insert(
+          id: Value(item.id),
+          name: item.name,
+          description: Value(item.description),
+          campaign: item.campaign,
+          chain: item.chain,
+          availableTo: Value(item.availableTo),
+          availableFrom: Value(item.availableFrom),
+          stageType: Value(convertStageTypeToString(item.stageType)),
+          openLimit: item.openLimit,
+          totalLimit: item.totalLimit,
+        );
         db.LocalDatabase.insertRelevantTaskStage(entity);
       }
 
@@ -213,18 +243,53 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
     return creatable;
   }
 
+  Future<int> _countOpenedTasks(int stageId) async {
+    final tasks =
+        await db.LocalDatabase.getTasks(campaignId, query: {'stage': stageId, 'complete': false});
+    return tasks['count'];
+  }
+
+  Future<int> _countTotalTasks(int stageId) async {
+    final tasks = await db.LocalDatabase.getTasks(campaignId, query: {'stage': stageId});
+    return tasks.length;
+  }
+
   Future<int> createTask(int id) async {
     try {
       final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
+      final task = await _gigaTurnipApiClient.getTaskById(response.id);
+      final parsed = TaskDetail.fromApiModel(task);
+      db.LocalDatabase.insertTask(parsed.toDB());
       return response.id;
     } catch (e) {
-      final cachedStage = await db.LocalDatabase.getSingleTaskStage(id);
-      final stage = TaskStage.fromDB(cachedStage);
-      final task = Task.blank(stage);
-      final cachedTask = task.toDB();
-      final cachedId = await db.LocalDatabase.insertTask(cachedTask);
-      return cachedId;
+      final cachedStage = await db.LocalDatabase.getSingleRelevantTaskStage(id);
+      final stage = TaskStage.fromRelevant(cachedStage);
+      final openedTasksCount = await _countOpenedTasks(id);
+      final totalTaskCount = await _countTotalTasks(id);
+      if (stage.totalLimit == 0 || totalTaskCount < stage.totalLimit) {
+        if (stage.openLimit == 0 || openedTasksCount < stage.openLimit) {
+          final task = Task.blank(stage, true);
+          final cachedTask = task.toDB();
+          final cachedId = await db.LocalDatabase.insertTask(cachedTask);
+          return cachedId;
+        } else {
+          print('OPEN LIMIT EXCEEDED');
+          throw TaskLimitException();
+        }
+      } else {
+        print('TOTAL LIMIT EXCEEDED');
+        throw TaskLimitException();
+      }
     }
+  }
+}
+
+class TaskLimitException implements Exception {
+  final String error = 'Task limit exceeded.';
+
+  @override
+  String toString() {
+    return error;
   }
 }
 

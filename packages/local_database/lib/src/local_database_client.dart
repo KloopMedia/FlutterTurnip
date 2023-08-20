@@ -43,6 +43,10 @@ class LocalDatabase {
     return (database.select(database.taskStage)..where((tbl) => tbl.id.equals(id))).getSingle();
   }
 
+  static Future<RelevantTaskStageData> getSingleRelevantTaskStage(int id) async {
+    return (database.select(database.relevantTaskStage)..where((tbl) => tbl.id.equals(id))).getSingle();
+  }
+
   static Future<int> insertTaskStage(TaskStageCompanion entity) async {
     final insert = await database
         .into(database.taskStage)
@@ -50,7 +54,7 @@ class LocalDatabase {
     return insert.id;
   }
 
-  static Future<int> insertRelevantTaskStage(TaskStageCompanion entity) async {
+  static Future<int> insertRelevantTaskStage(RelevantTaskStageCompanion entity) async {
     final newEntity = RelevantTaskStageCompanion(
       id: entity.id,
       name: entity.name,
@@ -60,6 +64,8 @@ class LocalDatabase {
       availableTo: entity.availableTo,
       availableFrom: entity.availableFrom,
       stageType: entity.stageType,
+      openLimit: entity.openLimit,
+      totalLimit: entity.totalLimit
     );
 
     final insert = await database
@@ -79,12 +85,14 @@ class LocalDatabase {
     final offset = query?['offset'];
     final bool? completed = query?['complete'];
     final bool? reopened = query?['reopened'];
+    final int? stage = query?['stage'];
 
     final dbQuery = database.select(database.task).join([
       leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
     ]);
 
     dbQuery.where(database.task.campaign.equals(campaign));
+    if (stage != null) dbQuery.where(database.task.stage.equals(stage));
     if (completed != null) dbQuery.where(database.task.complete.equals(completed));
     if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
 
@@ -119,8 +127,9 @@ class LocalDatabase {
 
     newQuery.where(database.task.campaign.equals(campaign));
 
+    if (stage != null) newQuery.where(database.task.stage.equals(stage));
     if (completed != null) newQuery.where(database.task.complete.equals(completed));
-    if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
+    if (reopened != null) newQuery.where(database.task.reopened.equals(reopened));
 
     newQuery.addColumns([countTasks]);
     final row = await newQuery.getSingle();

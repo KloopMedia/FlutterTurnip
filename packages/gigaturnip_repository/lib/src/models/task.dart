@@ -21,6 +21,7 @@ class Task extends Equatable {
   final DateTime? createdAt;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
+  final bool createdOffline;
 
   const Task({
     required this.id,
@@ -32,13 +33,14 @@ class Task extends Equatable {
     required this.createdAt,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    this.createdOffline = false,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return _$TaskFromJson(json);
   }
 
-  factory Task.blank(TaskStage stage) {
+  factory Task.blank(TaskStage stage, bool offline) {
     return Task(
       id: Random().nextInt(100000000),
       name: stage.name,
@@ -49,20 +51,21 @@ class Task extends Equatable {
       cardJsonSchema: stage.cardJsonSchema,
       cardUiSchema: stage.cardUiSchema,
       stage: stage,
+      createdOffline: offline,
     );
   }
 
   db.TaskCompanion toDB() {
     return db.TaskCompanion.insert(
-      id: Value(id),
-      name: name,
-      complete: complete,
-      reopened: reopened,
-      stage: stage.id,
-      campaign: stage.campaign,
-      createdAt: Value(createdAt),
-      responses: Value(jsonEncode(responses))
-    );
+        id: Value(id),
+        name: name,
+        complete: complete,
+        reopened: reopened,
+        stage: stage.id,
+        campaign: stage.campaign,
+        createdAt: Value(createdAt),
+        responses: Value(jsonEncode(responses)),
+        createdOffline: Value(createdOffline));
   }
 
   factory Task.fromDB(db.TaskData model, db.TaskStageData stage) {
@@ -76,6 +79,7 @@ class Task extends Equatable {
       cardJsonSchema: jsonDecode(stage.cardJsonSchema ?? "{}"),
       cardUiSchema: jsonDecode(stage.cardUiSchema ?? "{}"),
       stage: TaskStage.fromDB(stage),
+      createdOffline: model.createdOffline,
     );
   }
 

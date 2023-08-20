@@ -49,6 +49,9 @@ class TaskStage extends Equatable {
   final DateTime? availableFrom;
   @JsonKey(fromJson: convertStringToStageType, toJson: convertStageTypeToString)
   final StageType stageType;
+  final int openLimit;
+  final int totalLimit;
+
 
   const TaskStage({
     required this.id,
@@ -61,6 +64,8 @@ class TaskStage extends Equatable {
     required this.availableTo,
     required this.availableFrom,
     required this.stageType,
+    this.openLimit = 0,
+    this.totalLimit = 0,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
@@ -79,6 +84,8 @@ class TaskStage extends Equatable {
       availableTo: model.availableTo,
       availableFrom: model.availableFrom,
       stageType: convertStringToStageType(model.stageType),
+      openLimit: model.rankLimit?['open_limit'] ?? 0,
+      totalLimit: model.rankLimit?['total_limit'] ?? 0
     );
   }
 
@@ -92,6 +99,8 @@ class TaskStage extends Equatable {
       availableFrom: Value(availableFrom),
       availableTo: Value(availableTo),
       stageType: Value(convertStageTypeToString(stageType)),
+      openLimit: openLimit,
+      totalLimit: totalLimit,
     );
   }
 
@@ -106,7 +115,10 @@ class TaskStage extends Equatable {
         campaign: model.campaign,
         availableTo: model.availableTo,
         availableFrom: model.availableFrom,
-        stageType: convertStringToStageType(model.stageType));
+        stageType: convertStringToStageType(model.stageType),
+        openLimit: model.openLimit,
+        totalLimit: model.totalLimit,
+    );
   }
 
   factory TaskStage.fromRelevant(db.RelevantTaskStageData model) {
@@ -121,6 +133,8 @@ class TaskStage extends Equatable {
       availableTo: model.availableTo,
       availableFrom: model.availableFrom,
       stageType: convertStringToStageType(model.stageType),
+      openLimit: model.openLimit,
+      totalLimit: model.totalLimit,
     );
   }
 
