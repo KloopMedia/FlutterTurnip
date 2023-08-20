@@ -44,7 +44,8 @@ class LocalDatabase {
   }
 
   static Future<RelevantTaskStageData> getSingleRelevantTaskStage(int id) async {
-    return (database.select(database.relevantTaskStage)..where((tbl) => tbl.id.equals(id))).getSingle();
+    return (database.select(database.relevantTaskStage)..where((tbl) => tbl.id.equals(id)))
+        .getSingle();
   }
 
   static Future<int> insertTaskStage(TaskStageCompanion entity) async {
@@ -56,17 +57,16 @@ class LocalDatabase {
 
   static Future<int> insertRelevantTaskStage(RelevantTaskStageCompanion entity) async {
     final newEntity = RelevantTaskStageCompanion(
-      id: entity.id,
-      name: entity.name,
-      description: entity.description,
-      campaign: entity.campaign,
-      chain: entity.chain,
-      availableTo: entity.availableTo,
-      availableFrom: entity.availableFrom,
-      stageType: entity.stageType,
-      openLimit: entity.openLimit,
-      totalLimit: entity.totalLimit
-    );
+        id: entity.id,
+        name: entity.name,
+        description: entity.description,
+        campaign: entity.campaign,
+        chain: entity.chain,
+        availableTo: entity.availableTo,
+        availableFrom: entity.availableFrom,
+        stageType: entity.stageType,
+        openLimit: entity.openLimit,
+        totalLimit: entity.totalLimit);
 
     final insert = await database
         .into(database.relevantTaskStage)
@@ -75,9 +75,22 @@ class LocalDatabase {
   }
 
   static void updateTask(TaskData data) {
+    print('UPDATING TASK');
     database.update(database.task)
       ..where((tbl) => tbl.id.equals(data.id))
       ..write(data);
+  }
+
+  static void deleteTask(int id) {
+    (database.delete(database.task)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  static Future<List<Map<String, dynamic>>> getLocallyCreatedTasks() async {
+    final dbQuery = database.select(database.task);
+    dbQuery.where((tbl) => tbl.createdOffline.equals(true));
+    final data = await dbQuery.get();
+    final dataJson = data.map((e) => e.toJson()).toList();
+    return dataJson;
   }
 
   static Future<Map<String, dynamic>> getTasks(int campaign, {Map<String, dynamic>? query}) async {
@@ -139,6 +152,6 @@ class LocalDatabase {
   }
 
   static Future<int> insertTask(TaskCompanion entity) {
-    return database.into(database.task).insert(entity, mode: InsertMode.insertOrReplace);
+    return database.into(database.task).insert(entity, mode: InsertMode.insertOrIgnore);
   }
 }

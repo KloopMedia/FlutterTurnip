@@ -884,13 +884,17 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<CreateTaskResponse> createTaskFromStageId(int id) async {
+  Future<TaskDetail> createTaskFromStageId(
+    int id, {
+    Map<String, dynamic> data = const {},
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<CreateTaskResponse>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<TaskDetail>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -906,7 +910,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = CreateTaskResponse.fromJson(_result.data!);
+    final value = TaskDetail.fromJson(_result.data!);
     return value;
   }
 

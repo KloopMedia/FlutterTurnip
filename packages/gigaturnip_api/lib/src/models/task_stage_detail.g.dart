@@ -54,6 +54,8 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>?)
                   ?.map((e) => e as Map<String, dynamic>)
                   .toList()),
+          rankLimit:
+              $checkedConvert('rank_limit', (v) => v as Map<String, dynamic>?),
         );
         return val;
       },
@@ -72,6 +74,7 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         'cardUiSchema': 'card_ui_schema',
         'availableTo': 'available_to',
         'availableFrom': 'available_from',
-        'filterFieldsSchema': 'filter_fields_schema'
+        'filterFieldsSchema': 'filter_fields_schema',
+        'rankLimit': 'rank_limit'
       },
     );

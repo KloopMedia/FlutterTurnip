@@ -22,5 +22,7 @@ class Task extends Table {
 
   DateTimeColumn get createdAt => dateTime().nullable()();
 
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+
   BoolColumn get createdOffline => boolean().withDefault(const Constant(false))();
 }

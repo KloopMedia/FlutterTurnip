@@ -4,6 +4,8 @@ mixin TaskErrorState on TaskState {
   late final String error;
 }
 
+mixin TaskLoadingState on TaskState {}
+
 abstract class TaskState extends Equatable {
   const TaskState();
 
@@ -13,7 +15,7 @@ abstract class TaskState extends Equatable {
 
 class TaskUninitialized extends TaskState {}
 
-class TaskFetching extends TaskState {}
+class TaskFetching extends TaskState with TaskLoadingState {}
 
 class TaskFetchingError extends TaskState with TaskErrorState {
   TaskFetchingError(String error) {
@@ -34,6 +36,12 @@ abstract class TaskInitialized extends TaskState {
 
   @override
   List<Object> get props => [data];
+}
+
+class TaskRefetching extends TaskInitialized with TaskLoadingState {
+  const TaskRefetching(super.data, super.previousTasks);
+
+  TaskRefetching.clone(TaskInitialized state) : super.clone(state);
 }
 
 class TaskLoaded extends TaskInitialized {

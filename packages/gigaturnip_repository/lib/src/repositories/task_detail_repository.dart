@@ -13,15 +13,15 @@ class TaskDetailRepository {
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   Future<TaskDetail> fetchData(int id) async {
-    try {
-      final task = await _gigaTurnipApiClient.getTaskById(id);
-      return TaskDetail.fromApiModel(task);
-    } catch (e) {
-      final data = await db.LocalDatabase.getSingleTask(id);
-      final stage = await db.LocalDatabase.getSingleTaskStage(data.stage);
-      print(data);
-      return TaskDetail.fromDB(data, stage);
-    }
+    // try {
+    //   final task = await _gigaTurnipApiClient.getTaskById(id);
+    //   return TaskDetail.fromApiModel(task);
+    // } catch (e) {
+    final data = await db.LocalDatabase.getSingleTask(id);
+    final stage = await db.LocalDatabase.getSingleTaskStage(data.stage);
+    print(data);
+    return TaskDetail.fromDB(data, stage);
+    // }
   }
 
   Future<List<TaskDetail>> fetchPreviousTaskData(int id) async {
@@ -50,21 +50,41 @@ class TaskDetailRepository {
   }
 
   Future<TaskResponse> submitTask(int id, Map<String, dynamic> data) async {
-    try {
-      final task = await db.LocalDatabase.getSingleTask(id);
+    int? newId;
+    int? newCachedId;
+    final task = await db.LocalDatabase.getSingleTask(id);
+    if (task.createdOffline) {
+      final response = await _gigaTurnipApiClient
+          .createTaskFromStageId(task.stage, data: {'responses': data['responses']});
+      newId = response.id;
+      db.LocalDatabase.deleteTask(task.id);
+      newCachedId = await db.LocalDatabase.insertTask(TaskDetail.fromApiModel(response).toDB());
+    } else {
+      newId = id;
       db.LocalDatabase.updateTask(
         task.copyWith(
           responses: Value(jsonEncode(data['responses'])),
           complete: data['complete'],
         ),
       );
-    } catch (e) {
-      print("Submit task error: $e");
     }
 
-    final response = await _gigaTurnipApiClient.saveTaskById(id, data);
+    final response = await _gigaTurnipApiClient.saveTaskById(newId, data);
 
-    return response;
+    if (response.nextDirectId == response.id && newCachedId != null) {
+      final task = await db.LocalDatabase.getSingleTask(newCachedId);
+
+      db.LocalDatabase.updateTask(
+        task.copyWith(
+          responses: Value(jsonEncode(data['responses'])),
+          complete: false,
+        ),
+      );
+    }
+
+    return api.TaskResponse(id: newId, nextDirectId: newId);
+
+    // return response;
   }
 
   Future<Map<String, dynamic>> triggerWebhook(int id) async {

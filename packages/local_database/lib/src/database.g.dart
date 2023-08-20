@@ -1212,6 +1212,12 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   static const VerificationMeta _createdOfflineMeta =
       const VerificationMeta('createdOffline');
   @override
@@ -1237,6 +1243,7 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
         jsonSchema,
         uiSchema,
         createdAt,
+        updatedAt,
         createdOffline
       ];
   @override
@@ -1299,6 +1306,10 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
     if (data.containsKey('created_offline')) {
       context.handle(
           _createdOfflineMeta,
@@ -1334,6 +1345,8 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
           .read(DriftSqlType.string, data['${effectivePrefix}ui_schema']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
       createdOffline: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}created_offline'])!,
     );
@@ -1356,6 +1369,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
   final String? jsonSchema;
   final String? uiSchema;
   final DateTime? createdAt;
+  final DateTime? updatedAt;
   final bool createdOffline;
   const TaskData(
       {required this.id,
@@ -1368,6 +1382,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       this.jsonSchema,
       this.uiSchema,
       this.createdAt,
+      this.updatedAt,
       required this.createdOffline});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1389,6 +1404,9 @@ class TaskData extends DataClass implements Insertable<TaskData> {
     }
     if (!nullToAbsent || createdAt != null) {
       map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
     }
     map['created_offline'] = Variable<bool>(createdOffline);
     return map;
@@ -1414,6 +1432,9 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
           : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
       createdOffline: Value(createdOffline),
     );
   }
@@ -1432,6 +1453,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       jsonSchema: serializer.fromJson<String?>(json['jsonSchema']),
       uiSchema: serializer.fromJson<String?>(json['uiSchema']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
       createdOffline: serializer.fromJson<bool>(json['createdOffline']),
     );
   }
@@ -1449,6 +1471,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       'jsonSchema': serializer.toJson<String?>(jsonSchema),
       'uiSchema': serializer.toJson<String?>(uiSchema),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
       'createdOffline': serializer.toJson<bool>(createdOffline),
     };
   }
@@ -1464,6 +1487,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           Value<String?> jsonSchema = const Value.absent(),
           Value<String?> uiSchema = const Value.absent(),
           Value<DateTime?> createdAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent(),
           bool? createdOffline}) =>
       TaskData(
         id: id ?? this.id,
@@ -1476,6 +1500,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
         jsonSchema: jsonSchema.present ? jsonSchema.value : this.jsonSchema,
         uiSchema: uiSchema.present ? uiSchema.value : this.uiSchema,
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
         createdOffline: createdOffline ?? this.createdOffline,
       );
   @override
@@ -1491,6 +1516,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
           ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('createdOffline: $createdOffline')
           ..write(')'))
         .toString();
@@ -1498,7 +1524,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
 
   @override
   int get hashCode => Object.hash(id, name, complete, reopened, stage, campaign,
-      responses, jsonSchema, uiSchema, createdAt, createdOffline);
+      responses, jsonSchema, uiSchema, createdAt, updatedAt, createdOffline);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1513,6 +1539,7 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           other.jsonSchema == this.jsonSchema &&
           other.uiSchema == this.uiSchema &&
           other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
           other.createdOffline == this.createdOffline);
 }
 
@@ -1527,6 +1554,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
   final Value<String?> jsonSchema;
   final Value<String?> uiSchema;
   final Value<DateTime?> createdAt;
+  final Value<DateTime?> updatedAt;
   final Value<bool> createdOffline;
   const TaskCompanion({
     this.id = const Value.absent(),
@@ -1539,6 +1567,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     this.jsonSchema = const Value.absent(),
     this.uiSchema = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.createdOffline = const Value.absent(),
   });
   TaskCompanion.insert({
@@ -1552,6 +1581,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     this.jsonSchema = const Value.absent(),
     this.uiSchema = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.createdOffline = const Value.absent(),
   })  : name = Value(name),
         complete = Value(complete),
@@ -1569,6 +1599,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     Expression<String>? jsonSchema,
     Expression<String>? uiSchema,
     Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
     Expression<bool>? createdOffline,
   }) {
     return RawValuesInsertable({
@@ -1582,6 +1613,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       if (jsonSchema != null) 'json_schema': jsonSchema,
       if (uiSchema != null) 'ui_schema': uiSchema,
       if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (createdOffline != null) 'created_offline': createdOffline,
     });
   }
@@ -1597,6 +1629,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       Value<String?>? jsonSchema,
       Value<String?>? uiSchema,
       Value<DateTime?>? createdAt,
+      Value<DateTime?>? updatedAt,
       Value<bool>? createdOffline}) {
     return TaskCompanion(
       id: id ?? this.id,
@@ -1609,6 +1642,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       jsonSchema: jsonSchema ?? this.jsonSchema,
       uiSchema: uiSchema ?? this.uiSchema,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       createdOffline: createdOffline ?? this.createdOffline,
     );
   }
@@ -1646,6 +1680,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
     if (createdOffline.present) {
       map['created_offline'] = Variable<bool>(createdOffline.value);
     }
@@ -1665,6 +1702,7 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
           ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('createdOffline: $createdOffline')
           ..write(')'))
         .toString();

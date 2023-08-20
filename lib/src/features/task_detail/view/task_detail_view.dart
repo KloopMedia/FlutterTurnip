@@ -211,7 +211,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
           }
         }
       }, builder: (context, state) {
-        if (state is TaskFetching) {
+        if (state is TaskLoadingState) {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is TaskFetchingError) {

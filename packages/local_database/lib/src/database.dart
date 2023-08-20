@@ -46,10 +46,13 @@ class AppDatabase extends _$AppDatabase {
         if (from < 9) {
           await m.addColumn(task, task.createdOffline);
         }
+        if (from < 10) {
+          await m.addColumn(task, task.updatedAt);
+        }
       },
     );
   }
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 }
