@@ -111,9 +111,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(RedirectToSms.clone(_state, campaign.smsPhone));
         emit(TaskLoaded(updatedTask, _state.previousTasks));
       } else {
-        final updatedTask = _state.data.copyWith(responses: formData);
-        emit(TaskSubmitError(updatedTask, _state.previousTasks, e.toString()));
-        emit(TaskLoaded(updatedTask, _state.previousTasks));
+        final updatedTask = _state.data.copyWith(responses: formData, complete: true);
+        emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: null));
       }
     } catch (e) {
       print(e);

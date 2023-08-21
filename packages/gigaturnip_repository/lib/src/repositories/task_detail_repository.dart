@@ -80,11 +80,11 @@ class TaskDetailRepository {
           complete: false,
         ),
       );
+
+      return api.TaskResponse(id: newId, nextDirectId: newId);
     }
 
-    return api.TaskResponse(id: newId, nextDirectId: newId);
-
-    // return response;
+    return response;
   }
 
   Future<Map<String, dynamic>> triggerWebhook(int id) async {
