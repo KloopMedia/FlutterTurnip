@@ -54,11 +54,22 @@ class TaskDetailRepository {
     int? newCachedId;
     final task = await db.LocalDatabase.getSingleTask(id);
     if (task.createdOffline) {
-      final response = await _gigaTurnipApiClient
-          .createTaskFromStageId(task.stage, data: {'responses': data['responses']});
-      newId = response.id;
-      db.LocalDatabase.deleteTask(task.id);
-      newCachedId = await db.LocalDatabase.insertTask(TaskDetail.fromApiModel(response).toDB());
+      try {
+        final response = await _gigaTurnipApiClient
+            .createTaskFromStageId(task.stage, data: {'responses': data['responses']});
+        newId = response.id;
+        db.LocalDatabase.deleteTask(task.id);
+        final parsed = TaskDetail.fromApiModel(response)..copyWith(complete: data['complete']);
+        newCachedId = await db.LocalDatabase.insertTask(parsed.toDB());
+      } catch (e) {
+        newId = id;
+        db.LocalDatabase.updateTask(
+          task.copyWith(
+            responses: Value(jsonEncode(data['responses'])),
+            complete: data['complete'],
+          ),
+        );
+      }
     } else {
       newId = id;
       db.LocalDatabase.updateTask(
