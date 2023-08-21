@@ -267,7 +267,7 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
 
   Future<int> _countTotalTasks(int stageId) async {
     final tasks = await db.LocalDatabase.getTasks(campaignId, query: {'stage': stageId});
-    return tasks.length;
+    return tasks['count'];
   }
 
   Future<int> createTask(int id) async {
