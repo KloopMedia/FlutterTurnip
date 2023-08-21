@@ -17,6 +17,9 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
       },
+      // beforeOpen: (details) async {
+      //   await customStatement('PRAGMA foreign_keys = ON');
+      // },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 3) {
           // we added the dueDate property in the change from version 1 to
@@ -49,10 +52,13 @@ class AppDatabase extends _$AppDatabase {
         if (from < 10) {
           await m.addColumn(task, task.updatedAt);
         }
+        if (from < 11) {
+          await m.addColumn(task, task.submittedOffline);
+        }
       },
     );
   }
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 }

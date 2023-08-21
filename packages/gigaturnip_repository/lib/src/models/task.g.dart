@@ -22,6 +22,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
       createdOffline: json['createdOffline'] as bool? ?? false,
+      submittedOffline: json['submittedOffline'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -36,4 +37,5 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'cardJsonSchema': instance.cardJsonSchema,
       'cardUiSchema': instance.cardUiSchema,
       'createdOffline': instance.createdOffline,
+      'submittedOffline': instance.submittedOffline,
     };

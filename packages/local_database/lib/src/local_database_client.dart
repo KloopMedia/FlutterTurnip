@@ -111,37 +111,16 @@ class LocalDatabase {
     final bool? reopened = query?['reopened'];
     final int? stage = query?['stage'];
 
-    final dbQuery = database.select(database.task).join([
-      leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
-    ]);
+    final dbQuery = database.select(database.task);
 
-    dbQuery.where(database.task.campaign.equals(campaign));
-    if (stage != null) dbQuery.where(database.task.stage.equals(stage));
-    if (completed != null) dbQuery.where(database.task.complete.equals(completed));
-    if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
+    dbQuery.where((tbl) => tbl.campaign.equals(campaign));
+    if (stage != null) dbQuery.where((tbl) => tbl.stage.equals(stage));
+    if (completed != null) dbQuery.where((tbl) => tbl.complete.equals(completed));
+    if (reopened != null) dbQuery.where((tbl) => tbl.reopened.equals(reopened));
 
     dbQuery.limit(limit, offset: offset);
 
     final rows = await dbQuery.get();
-
-    final List<Map<String, dynamic>> parsed = [];
-    for (var row in rows) {
-      final task = row.readTable(database.task);
-      final stage = row.readTableOrNull(database.taskStage);
-
-      if (stage != null) {
-        final jsonTask = task.toJson(
-            serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
-        final jsonStage = stage.toJson(
-            serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
-
-        jsonTask['stage'] = jsonStage;
-        final String responses = jsonTask['responses'] ?? '{}';
-        jsonTask['responses'] = jsonDecode(responses);
-
-        parsed.add(jsonTask);
-      }
-    }
 
     Expression<int> countTasks = database.task.id.count();
 
@@ -159,7 +138,7 @@ class LocalDatabase {
     final row = await newQuery.getSingle();
     final count = row.read(countTasks) ?? 0;
 
-    return {'count': count, 'results': parsed};
+    return {'count': count, 'results': rows};
   }
 
   static Future<int> insertTask(TaskCompanion entity) {

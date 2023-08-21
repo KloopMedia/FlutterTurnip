@@ -31,8 +31,8 @@ class AllTaskRepository extends TaskRepository {
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
     api.PaginationWrapper<Task>? onlineData;
     try {
-      fetchAllTaskStages();
-      syncRemoteData();
+      // fetchAllTaskStages();
+      // syncRemoteData();
       final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
         'stage__chain__campaign': campaignId,
         ...?query,
@@ -53,9 +53,24 @@ class AllTaskRepository extends TaskRepository {
     int countOfflineTasks = wrapper['count'] ?? 0;
     int countOnlineTasks = onlineData?.count ?? 0;
 
-    final results = wrapper['results'] as List<Map<String, dynamic>>;
-    List<Task> parsedOut;
-    parsedOut = results.map(Task.fromJson).toList();
+    final results = wrapper['results'] as List<db.TaskData>;
+    List<Task> parsedOut = [];
+
+    for (var taskData in results) {
+      db.TaskStageData stageData;
+      try {
+        stageData = await db.LocalDatabase.getSingleTaskStage(taskData.stage);
+      } catch (e) {
+        final _stage = await _gigaTurnipApiClient.getTaskStageById(taskData.stage);
+        final stage = TaskStageDetail.fromApiModel(_stage);
+        db.LocalDatabase.insertTaskStage(stage.toDB());
+        stageData = await db.LocalDatabase.getSingleTaskStage(taskData.stage);
+      }
+
+      final task = Task.fromDB(taskData, stageData);
+
+      parsedOut.add(task);
+    }
 
     return api.PaginationWrapper(
       count: max(countOfflineTasks, countOnlineTasks),
@@ -66,7 +81,7 @@ class AllTaskRepository extends TaskRepository {
   void fetchAllTaskStages() async {
     try {
       final data = await _gigaTurnipApiClient.getAvailableTaskStages(
-        query: {'chain__campaign': campaignId, 'limit': 100},
+        query: {'chain__campaign': campaignId, 'limit': 200},
       );
 
       final parsed = data.results.map(TaskStageDetail.fromApiModel).toList();
@@ -80,25 +95,30 @@ class AllTaskRepository extends TaskRepository {
   }
 
   /// Send locally created tasks to remote and replace them.
-  void syncRemoteData() async {
-    print('SYNC REMOTE');
-    final results = await db.LocalDatabase.getLocallyCreatedTasks();
-    for (var task in results) {
-      print(task['id']);
-      final data = {
-        'responses': task['responses'],
-        'complete': task['complete'],
-      };
-      try {
-        final response =
-            await _gigaTurnipApiClient.createTaskFromStageId(task['stage'], data: data);
-        db.LocalDatabase.deleteTask(task['id']);
-        db.LocalDatabase.insertTask(TaskDetail.fromApiModel(response).toDB());
-      } catch (e) {
-        print('SYNC FAILED $e');
-      }
-    }
-  }
+// void syncRemoteData() async {
+//   print('SYNC REMOTE');
+//   final results = await db.LocalDatabase.getLocallyCreatedTasks();
+//   for (var task in results) {
+//     print(task['id']);
+//     final data = {
+//       'responses': task['responses'],
+//       'complete': task['complete'],
+//     };
+//     try {
+//       final response = await _gigaTurnipApiClient.createTaskFromStageId(
+//         task['stage'],
+//         data: data,
+//       );
+//       final newTask = TaskDetail.fromApiModel(response)
+//           .toDB()
+//           .copyWith(submittedOffline: task['submittedOffline']);
+//       db.LocalDatabase.insertTask(newTask);
+//       db.LocalDatabase.deleteTask(task['id']);
+//     } catch (e) {
+//       print('SYNC FAILED $e');
+//     }
+//   }
+// }
 }
 
 class ClosedTaskRepository extends TaskRepository {
@@ -300,7 +320,7 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
 }
 
 class TaskLimitException implements Exception {
-  final String error = 'Task limit exceeded.';
+  final String error = 'You created required amount of this form, now go to the next form.';
 
   @override
   String toString() {

@@ -136,7 +136,7 @@ abstract class GigaTurnipApiClient {
   @GET("$taskStagesRoute/{id}")
   Future<TaskStageDetail> getTaskStageById(
     @Path("id") int id, {
-    @Queries() required Map<String, dynamic>? query,
+    @Queries() Map<String, dynamic>? query,
   });
 
   // Notification methods

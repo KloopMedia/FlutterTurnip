@@ -25,4 +25,6 @@ class Task extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
   BoolColumn get createdOffline => boolean().withDefault(const Constant(false))();
+
+  BoolColumn get submittedOffline => boolean().withDefault(const Constant(false))();
 }
