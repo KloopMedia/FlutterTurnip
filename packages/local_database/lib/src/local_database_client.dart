@@ -88,9 +88,20 @@ class LocalDatabase {
   static Future<List<Map<String, dynamic>>> getLocallyCreatedTasks() async {
     final dbQuery = database.select(database.task);
     dbQuery.where((tbl) => tbl.createdOffline.equals(true));
-    final data = await dbQuery.get();
-    final dataJson = data.map((e) => e.toJson()).toList();
-    return dataJson;
+
+    final rows = await dbQuery.get();
+
+    final List<Map<String, dynamic>> parsed = [];
+    for (var task in rows) {
+      final jsonTask = task.toJson(
+          serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
+
+      final String responses = jsonTask['responses'] ?? '{}';
+      jsonTask['responses'] = jsonDecode(responses);
+
+      parsed.add(jsonTask);
+    }
+    return parsed;
   }
 
   static Future<Map<String, dynamic>> getTasks(int campaign, {Map<String, dynamic>? query}) async {
