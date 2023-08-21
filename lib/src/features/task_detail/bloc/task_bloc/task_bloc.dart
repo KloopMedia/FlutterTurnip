@@ -45,7 +45,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         final data = await _repository.fetchData(taskId);
         final previousTasks = await _repository.fetchPreviousTaskData(taskId);
         emit(TaskLoaded(data, previousTasks));
-      } catch (e) {
+      } catch (e, t) {
+        print("TASK FETCHING ERROR: ${e.toString()}");
+        print(t.toString());
         emit(TaskFetchingError(e.toString()));
       }
     }
@@ -103,7 +105,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
       }
     } on DioException catch (e) {
-      print(e);
+      print("SUBMIT NETWORK ERROR: $e");
       final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
       if (campaign.smsCompleteTaskAllow &&
           (e.type == DioExceptionType.connectionError || e.type == DioExceptionType.unknown)) {
@@ -115,7 +117,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: null));
       }
     } catch (e) {
-      print(e);
+      print("SUBMIT ERROR: $e");
       final updatedTask = _state.data.copyWith(responses: formData);
       emit(TaskSubmitError(updatedTask, _state.previousTasks, e.toString()));
       emit(TaskLoaded(updatedTask, _state.previousTasks));

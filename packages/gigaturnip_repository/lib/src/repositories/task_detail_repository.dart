@@ -13,15 +13,14 @@ class TaskDetailRepository {
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   Future<TaskDetail> fetchData(int id) async {
-    // try {
-    //   final task = await _gigaTurnipApiClient.getTaskById(id);
-    //   return TaskDetail.fromApiModel(task);
-    // } catch (e) {
-    final data = await db.LocalDatabase.getSingleTask(id);
-    final stage = await db.LocalDatabase.getSingleTaskStage(data.stage);
-    print(data);
-    return TaskDetail.fromDB(data, stage);
-    // }
+    try {
+      final data = await db.LocalDatabase.getSingleTask(id);
+      final stage = await db.LocalDatabase.getSingleTaskStage(data.stage);
+      return TaskDetail.fromDB(data, stage);
+    } catch (e) {
+      final task = await _gigaTurnipApiClient.getTaskById(id);
+      return TaskDetail.fromApiModel(task);
+    }
   }
 
   Future<List<TaskDetail>> fetchPreviousTaskData(int id) async {

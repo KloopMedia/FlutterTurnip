@@ -33,34 +33,6 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   final _pageStorageKey = const PageStorageKey('pageKey');
   final ScrollController scrollController = ScrollController(initialScrollOffset: 0);
 
-  // @override
-  // void initState() {
-  //   if (!kIsWeb) {
-  //     BackButtonInterceptor.add(myInterceptor);
-  //   }
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   BackButtonInterceptor.remove(myInterceptor);
-  //   super.dispose();
-  // }
-  //
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   if (context.canPop()) {
-  //     context.pop(true);
-  //   } else {
-  //     context.goNamed(
-  //       TaskRoute.name,
-  //       pathParameters: {
-  //         'cid': '${widget.campaignId}',
-  //       },
-  //     );
-  //   }
-  //   return true;
-  // }
-
   void redirect(BuildContext context, int? nextTaskId) {
     if (nextTaskId != null) {
       context.goNamed(
@@ -156,160 +128,155 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
     return Theme(
       data: colorScheme.isLight ? lightTheme : darkTheme,
-      child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) async {
-        if (state is TaskSubmitted) {
-          redirect(context, state.nextTaskId);
-        }
-        if (state is NotificationOpened) {
-          showDialog(
-            context: context,
-            builder: (context) => FormDialog(
-              title: context.loc.new_notification,
-              content: state.text,
-              buttonText: context.loc.got_it,
-              onPressed: () {
-                bloc.add(CloseNotification(state.previousTasks, state.data, state.nextTaskId));
+      child: BlocListener<TaskBloc, TaskState>(
+        listener: (context, state) async {
+          if (state is TaskSubmitted) {
+            redirect(context, state.nextTaskId);
+          }
+          if (state is NotificationOpened) {
+            showDialog(
+              context: context,
+              builder: (context) => FormDialog(
+                title: context.loc.new_notification,
+                content: state.text,
+                buttonText: context.loc.got_it,
+                onPressed: () {
+                  bloc.add(CloseNotification(state.previousTasks, state.data, state.nextTaskId));
+                },
+              ),
+            );
+          }
+          if (state is TaskClosed) {
+            redirect(context, null);
+          }
+          if (state is TaskInfoOpened) {
+            openWebView(context);
+          }
+          if (state is TaskReleased) {
+            redirect(context, null);
+          }
+          if (state is GoBackToPreviousTaskState) {
+            redirect(context, state.previousTaskId);
+          }
+          if (state is TaskReturned) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return const TaskReturnedDialog();
+              },
+            );
+          }
+          if (state is FileDownloaded) {
+            if (!kIsWeb) showFileStatus(context, state.message);
+          }
+          if (state is TaskErrorState) {
+            showFormError(context, state.error);
+          }
+          if (state is RedirectToSms) {
+            final phoneNumber = state.phoneNumber;
+            final payload = {'stage': state.data.stage, 'responses': state.data.responses};
+            final message = jsonEncode(payload);
+            try {
+              final uri = Uri.parse('sms:$phoneNumber?body=$message');
+              await launchUrl(uri);
+            } catch (e) {
+              openOfflineDialog(context, phoneNumber ?? '', message);
+            }
+          }
+        },
+        child: DefaultAppBar(
+          title: BlocBuilder<TaskBloc, TaskState>(
+            builder: (context, state) {
+              return Text(
+                state is TaskInitialized ? state.data.name : '',
+                overflow: TextOverflow.ellipsis,
+              );
+            },
+          ),
+          automaticallyImplyLeading: false,
+          leading: [
+            BackButton(
+              onPressed: () => redirect(context, null),
+            )
+          ],
+          actions: [
+            BlocBuilder<TaskBloc, TaskState>(
+              builder: (context, state) {
+                if (state is TaskInitialized && state.data.stage.allowRelease) {
+                  return TextButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return ReleaseTaskDialog(
+                            onConfirm: () {
+                              context.read<TaskBloc>().add(ReleaseTask());
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Text(context.loc.release_task_button),
+                  );
+                }
+                return const SizedBox.shrink();
               },
             ),
-          );
-        }
-        if (state is TaskClosed) {
-          redirect(context, null);
-        }
-        if (state is TaskInfoOpened) {
-          openWebView(context);
-        }
-        if (state is TaskReleased) {
-          redirect(context, null);
-        }
-        if (state is GoBackToPreviousTaskState) {
-          redirect(context, state.previousTaskId);
-        }
-        if (state is TaskReturned) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const TaskReturnedDialog();
-            },
-          );
-        }
-        if (state is FileDownloaded) {
-          if (!kIsWeb) showFileStatus(context, state.message);
-        }
-        if (state is TaskErrorState) {
-          showFormError(context, state.error);
-        }
-        if (state is RedirectToSms) {
-          final phoneNumber = state.phoneNumber;
-          final payload = {'stage': state.data.stage, 'responses': state.data.responses};
-          final message = jsonEncode(payload);
-          try {
-            final uri = Uri.parse('sms:$phoneNumber?body=$message');
-            await launchUrl(uri);
-          } catch (e) {
-            openOfflineDialog(context, phoneNumber ?? '', message);
-          }
-        }
-      }, builder: (context, state) {
-        if (state is TaskLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is TaskFetchingError) {
-          return Center(child: Text(state.error));
-        }
-        if (state is TaskInitialized) {
-          return DefaultAppBar(
-            title: Text(
-              state.data.name,
-              overflow: TextOverflow.ellipsis,
-            ),
-            automaticallyImplyLeading: false,
-            leading: [
-              BackButton(
-                onPressed: () => redirect(context, null),
-              )
-            ],
-            actions: [
-              if (state.data.stage.allowRelease)
-                TextButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return ReleaseTaskDialog(
-                          onConfirm: () {
-                            context.read<TaskBloc>().add(ReleaseTask());
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: Text(context.loc.release_task_button),
+          ],
+          child: RefreshIndicator(
+            onRefresh: () async => context.read<TaskBloc>().add(RefetchTask()),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              key: _pageStorageKey,
+              child: Container(
+                decoration: context.isSmall || context.isMedium
+                    ? null
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: Shadows.elevation3,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                margin: EdgeInsets.symmetric(
+                  vertical: context.isSmall || context.isMedium ? 0 : 40,
+                  horizontal: context.isSmall || context.isMedium
+                      ? 0
+                      : MediaQuery.of(context).size.width / 5,
                 ),
-            ],
-            child: RefreshIndicator(
-              onRefresh: () async => context.read<TaskBloc>().add(RefetchTask()),
-              child: SingleChildScrollView(
-                controller: scrollController,
-                key: _pageStorageKey,
-                child: Container(
-                  decoration: context.isSmall || context.isMedium
-                      ? null
-                      : BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: Shadows.elevation3,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  margin: EdgeInsets.symmetric(
-                    vertical: context.isSmall || context.isMedium ? 0 : 40,
-                    horizontal: context.isSmall || context.isMedium
-                        ? 0
-                        : MediaQuery.of(context).size.width / 5,
-                  ),
-                  child: Column(
-                    children: [
-                      if (state.data.stage.richText?.isNotEmpty ?? false)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0, left: 10),
-                          child: DialogButtonOutlined(child: Text(context.loc.open_richtext), onPressed: () => context.read<TaskBloc>().add(OpenTaskInfo())),
-                        ),
-                      for (final task in state.previousTasks)
-                        _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                      if (state.previousTasks.isNotEmpty) const Divider(color: Colors.black, height: 36, thickness: 2),
-                      _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey, scrollController: scrollController),
-                      // if (state.data.stage.allowGoBack)
-                      //   Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: SizedBox(
-                      //       height: 52,
-                      //       width: double.infinity,
-                      //       child: OutlinedButton(
-                      //         style: OutlinedButton.styleFrom(
-                      //           side: BorderSide(
-                      //             width: 1,
-                      //             color: Theme.of(context).colorScheme.primary,
-                      //           ),
-                      //           shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(15),
-                      //           ),
-                      //         ),
-                      //         onPressed: () {
-                      //           context.read<TaskBloc>().add(GoBackToPreviousTask());
-                      //         },
-                      //         child: Text(context.loc.go_back_to_previous_task),
-                      //       ),
-                      //     ),
-                      //   ),
-                    ],
-                  ),
+                child: BlocBuilder<TaskBloc, TaskState>(
+                  builder: (context, state) {
+                    if (state is TaskLoadingState) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state is TaskInitialized) {
+                      return Column(
+                        children: [
+                          if (state.data.stage.richText?.isNotEmpty ?? false)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0, left: 10),
+                              child: DialogButtonOutlined(
+                                  child: Text(context.loc.open_richtext),
+                                  onPressed: () => context.read<TaskBloc>().add(OpenTaskInfo())),
+                            ),
+                          for (final task in state.previousTasks)
+                            _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
+                          if (state.previousTasks.isNotEmpty)
+                            const Divider(color: Colors.black, height: 36, thickness: 2),
+                          _CurrentTask(
+                              task: state.data,
+                              pageStorageKey: _pageStorageKey,
+                              scrollController: scrollController),
+                        ],
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
                 ),
               ),
             ),
-          );
-        }
-        return const SizedBox.shrink();
-      }),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -347,12 +314,14 @@ class _CurrentTask extends StatelessWidget {
           },
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
           onDownloadFile: (url, filename, bytes) async {
-            var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
+            var status =
+                await DownloadService().download(url: url, filename: filename, bytes: bytes);
             taskBloc.add(DownloadFile(status!));
             return status;
           },
           submitButtonText: Text(context.loc.form_submit_button),
-          onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          onValidationFailed: (errorMessage) =>
+              context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
           addFileText: [context.loc.select_file, context.loc.to_upload],
           onOpenPreviousTask: () => context.read<TaskBloc>().add(GoBackToPreviousTask()),
           openPreviousButtonText: Text(context.loc.go_back_to_previous_task),
@@ -391,7 +360,8 @@ class _PreviousTask extends StatelessWidget {
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
             addFileText: [context.loc.select_file, context.loc.to_upload],
             onDownloadFile: (url, filename, bytes) async {
-              var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
+              var status =
+                  await DownloadService().download(url: url, filename: filename, bytes: bytes);
               taskBloc.add(DownloadFile(status!));
               return status;
             },

@@ -19,7 +19,7 @@ class TaskFetching extends TaskState with TaskLoadingState {}
 
 class TaskFetchingError extends TaskState with TaskErrorState {
   TaskFetchingError(String error) {
-    this.error = error;
+    this.error = "TASK_FETCHING_ERROR $error";
   }
 
   @override
@@ -76,7 +76,7 @@ class NotificationOpened extends TaskInitialized {
 
 class TaskSubmitError extends TaskInitialized with TaskErrorState {
   TaskSubmitError(super.data, super.previousTasks, String error) {
-    this.error = error;
+    this.error = "SUBMIT_ERROR $error";
   }
 
   TaskSubmitError.clone(TaskInitialized state, String error) : super.clone(state) {
@@ -98,7 +98,7 @@ class TaskWebhookTriggered extends TaskInitialized {
 
 class TaskWebhookTriggerError extends TaskInitialized with TaskErrorState {
   TaskWebhookTriggerError(super.data, super.previousTasks, String error) {
-    this.error = error;
+    this.error = "WEBHOOK_TRIGGER_ERROR $error";
   }
 
   TaskWebhookTriggerError.clone(TaskInitialized state, String error) : super.clone(state) {
@@ -130,7 +130,7 @@ class GoBackToPreviousTaskState extends TaskInitialized {
 
 class GoBackToPreviousTaskError extends TaskInitialized with TaskErrorState {
   GoBackToPreviousTaskError(super.data, super.previousTasks, String error) {
-    this.error = error;
+    this.error = "GO_BACK_TO_PREVIOUS_TASK_ERROR $error";
   }
 
   GoBackToPreviousTaskError.clone(TaskInitialized state, String error) : super.clone(state) {
