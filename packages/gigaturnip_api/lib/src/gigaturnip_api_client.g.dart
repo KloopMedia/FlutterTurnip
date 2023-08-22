@@ -464,6 +464,42 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
+  Future<PaginationWrapper<Task>> postUserSelectableTasks(
+    Map<String, dynamic> data, {
+    Map<String, dynamic>? query,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaginationWrapper<Task>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'tasks/user_selectable/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = PaginationWrapper<Task>.fromJson(
+      _result.data!,
+      (json) => Task.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<PaginationWrapper<Task>> getUserRelevantTasks(
       {Map<String, dynamic>? query}) async {
     const _extra = <String, dynamic>{};
@@ -904,6 +940,38 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
       _result.data!,
       (json) => TaskStageDetail.fromJson(json as Map<String, dynamic>),
     );
+    return value;
+  }
+
+  @override
+  Future<TaskStageDetail> getTaskStageById(
+    int id, {
+    Map<String, dynamic>? query,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TaskStageDetail>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'taskstages//${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = TaskStageDetail.fromJson(_result.data!);
     return value;
   }
 

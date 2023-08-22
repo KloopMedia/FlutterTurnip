@@ -20,6 +20,8 @@ class TaskStage extends Table {
 
   DateTimeColumn get availableFrom => dateTime().nullable()();
   DateTimeColumn get availableTo => dateTime().nullable()();
+
+  TextColumn get stageType => text().nullable()();
 }
 
 
@@ -35,4 +37,6 @@ class RelevantTaskStage extends Table {
 
   DateTimeColumn get availableFrom => dateTime().nullable()();
   DateTimeColumn get availableTo => dateTime().nullable()();
+
+  TextColumn get stageType => text().nullable()();
 }

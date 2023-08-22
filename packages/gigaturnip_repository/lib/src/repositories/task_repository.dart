@@ -42,8 +42,7 @@ class AllTaskRepository extends TaskRepository {
       return data.copyWith<Task>(results: parsed);
     } catch (e) {
       print(e);
-      final wrapper =
-          await db.LocalDatabase.getTasks(campaignId, limit: limit, offset: query?['offset']);
+      final wrapper = await db.LocalDatabase.getTasks(campaignId, query: query);
       final results = wrapper['results'] as List<Map<String, dynamic>>;
       final parsed = results.map(Task.fromJson).toList();
       return api.PaginationWrapper(count: wrapper['count'], results: parsed);
@@ -104,6 +103,32 @@ class AvailableTaskRepository extends TaskRepository {
     required this.stageId,
   });
 
+  Future<PageData<Task>> fetchWithPostAndParseData(int page, Map<String, dynamic> body,
+      [Map<String, dynamic>? query]) async {
+    final paginationQuery = {
+      'limit': limit,
+      'offset': calculateOffset(page),
+      ...?query,
+    };
+
+    final response = await _gigaTurnipApiClient.postUserSelectableTasks(
+      body,
+      query: {
+        'stage': stageId,
+        'stage__chain__campaign': campaignId,
+        ...paginationQuery,
+      },
+    );
+    final data = response.copyWith<Task>(results: parseData(response.results));
+
+    return PageData(
+      data: data.results,
+      currentPage: page,
+      total: calculateTotalPage(data.count),
+      count: data.count,
+    );
+  }
+
   @override
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
     final data = await _gigaTurnipApiClient.getUserSelectableTasks(
@@ -124,30 +149,26 @@ class AvailableTaskRepository extends TaskRepository {
 class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
   final api.GigaTurnipApiClient _gigaTurnipApiClient;
   final int campaignId;
-  final bool? isProactive;
+  final StageType stageType;
 
   CreatableTaskRepository({
     required api.GigaTurnipApiClient gigaTurnipApiClient,
     required this.campaignId,
-    this.isProactive,
+    required this.stageType,
   }) : _gigaTurnipApiClient = gigaTurnipApiClient;
 
   @override
   Future<api.PaginationWrapper<TaskStage>> fetchAndParseData({Map<String, dynamic>? query}) async {
-    final String? stageType;
-    if (isProactive != null) {
-      stageType = isProactive! ? "PR" : "AC";
-    } else {
-      stageType = null;
-    }
+    final type = convertStageTypeToString(stageType);
+    final _query = {
+      'chain__campaign': campaignId,
+      'stage_type': type,
+      ...?query,
+    };
 
     try {
       final data = await _gigaTurnipApiClient.getUserRelevantTaskStages(
-        query: {
-          'chain__campaign': campaignId,
-          'stage_type': stageType,
-          ...?query,
-        },
+        query: _query,
       );
       final parsed = parseData(data.results);
 
@@ -156,13 +177,15 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
         db.LocalDatabase.insertRelevantTaskStage(entity);
       }
 
-      return data.copyWith<TaskStage>(results: parsed);
+      final filtered = _filterTasks(parsed);
+
+      return data.copyWith<TaskStage>(results: filtered);
     } catch (e) {
-      print(e);
-      final results = await db.LocalDatabase.getRelevantTaskStages();
+      print("ERROR IN CREATABLE REPOSITORY: $e");
+      final results = await db.LocalDatabase.getRelevantTaskStages(query: _query);
       final parsed = results.map(TaskStage.fromRelevant).toList();
-      print(parsed);
-      return api.PaginationWrapper(count: results.length, results: parsed);
+      final filtered = _filterTasks(parsed);
+      return api.PaginationWrapper(count: results.length, results: filtered);
     }
   }
 
@@ -170,9 +193,38 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
     return data.map(TaskStage.fromApiModel).toList();
   }
 
+  List<TaskStage> _filterTasks(List<TaskStage> data) {
+    final now = DateTime.now();
+
+    final creatable = data.where((item) {
+      final startDate = item.availableFrom;
+      final endDate = item.availableTo;
+
+      if (startDate != null && endDate != null) {
+        if (startDate.isBefore(now) && endDate.isAfter(now)) {
+          return true;
+        }
+        return false;
+      }
+
+      return true;
+    }).toList();
+
+    return creatable;
+  }
+
   Future<int> createTask(int id) async {
-    final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
-    return response.id;
+    try {
+      final response = await _gigaTurnipApiClient.createTaskFromStageId(id);
+      return response.id;
+    } catch (e) {
+      final cachedStage = await db.LocalDatabase.getSingleTaskStage(id);
+      final stage = TaskStage.fromDB(cachedStage);
+      final task = Task.blank(stage);
+      final cachedTask = task.toDB();
+      final cachedId = await db.LocalDatabase.insertTask(cachedTask);
+      return cachedId;
+    }
   }
 }
 

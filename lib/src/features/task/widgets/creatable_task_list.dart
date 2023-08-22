@@ -10,44 +10,34 @@ import 'creatable_task_card.dart';
 class CreatableTaskList extends StatelessWidget {
   const CreatableTaskList({super.key});
 
+  List<Widget> createTasks(BuildContext context, List<TaskStage> data) {
+    BoxConstraints constraints;
+    if (context.isSmall) {
+      constraints = const BoxConstraints(minWidth: double.infinity);
+    } else {
+      constraints = const BoxConstraints(minWidth: 216, maxWidth: 340);
+    }
+
+    final List<Widget> items = data.map((item) {
+      return CreatableTaskCard(
+        title: item.name,
+        constraints: constraints,
+        onPressed: () => context.read<ReactiveTasks>().createTask(item),
+      );
+    }).toList();
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: BlocBuilder<ReactiveTasks, RemoteDataState<TaskStage>>(
+        child: BlocBuilder<ProactiveTasksButtons, RemoteDataState<TaskStage>>(
           builder: (context, state) {
             if (state is RemoteDataLoaded<TaskStage>) {
-              final now = DateTime.now();
-
-              final creatable = state.data.where((item) {
-                final startDate = item.availableFrom;
-                final endDate = item.availableTo;
-
-                if (startDate != null && endDate != null) {
-                  if (startDate.isBefore(now) && endDate.isAfter(now)) {
-                    return true;
-                  }
-                  return false;
-                }
-
-                return true;
-              });
-
-              BoxConstraints constraints;
-              if (context.isSmall) {
-                constraints = const BoxConstraints(minWidth: double.infinity);
-              } else {
-                constraints = const BoxConstraints(minWidth: 216, maxWidth: 340);
-              }
-
-              final List<Widget> items = creatable.map((item) {
-                return CreatableTaskCard(
-                  title: item.name,
-                  constraints: constraints,
-                  onPressed: () => context.read<ReactiveTasks>().createTask(item),
-                );
-              }).toList();
+              final items = createTasks(context, state.data);
 
               return Wrap(
                 direction: Axis.horizontal,

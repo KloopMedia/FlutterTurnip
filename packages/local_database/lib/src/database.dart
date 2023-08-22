@@ -31,10 +31,20 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(taskStage, taskStage.availableFrom);
           await m.createTable(relevantTaskStage);
         }
+        if (from < 5) {
+          // we added the dueDate property in the change from version 1 to
+          // version 2
+          await m.addColumn(taskStage, taskStage.stageType);
+        }
+        if (from < 6) {
+          // we added the dueDate property in the change from version 1 to
+          // version 2
+          await m.addColumn(relevantTaskStage, relevantTaskStage.stageType);
+        }
       },
     );
   }
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 }

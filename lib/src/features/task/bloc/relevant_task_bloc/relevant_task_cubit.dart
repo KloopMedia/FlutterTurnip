@@ -12,7 +12,10 @@ class RelevantTaskCubit extends RemoteDataCubit<Task> with OpenTaskCubit, Closed
   RelevantTaskCubit(this._repository);
 
   @override
-  Future<PageData<Task>> fetchAndParseData(int page, [Map<String, dynamic>? query]) {
+  Future<PageData<Task>> fetchAndParseData(int page, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) {
     return _repository.fetchDataOnPage(page, query);
   }
 }

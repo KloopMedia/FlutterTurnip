@@ -158,5 +158,17 @@
   "show_previous": "Show previous",
   "hide_previous": "Hide previous",
   "show_next": "Show next",
-  "hide_next": "Hide next"
+  "hide_next": "Hide next",
+
+  "creatable_task": "Task to complete",
+  "creatable_task_not_assigned": "Task unassigned",
+  "creatable_task_assign_button": "Take a task",
+
+  "field": "Field",
+	"filter_value": "Value",
+	"your_text": "Your text",
+	"sort": "Sort",
+	"sort_by_new": "New first",
+	"sort_by_old": "Old first",
+	"date": "Date"
 }

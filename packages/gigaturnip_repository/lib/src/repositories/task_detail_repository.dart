@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:drift/drift.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:local_database/local_database.dart' as db;
@@ -16,6 +19,7 @@ class TaskDetailRepository {
     } catch (e) {
       final data = await db.LocalDatabase.getSingleTask(id);
       final stage = await db.LocalDatabase.getSingleTaskStage(data.stage);
+      print(data);
       return TaskDetail.fromDB(data, stage);
     }
   }
@@ -31,18 +35,32 @@ class TaskDetailRepository {
   }
 
   Future<TaskResponse> saveData(int id, Map<String, dynamic> data) async {
+    final task = await db.LocalDatabase.getSingleTask(id);
+    db.LocalDatabase.updateTask(
+      task.copyWith(
+        responses: Value(jsonEncode(data['responses'])),
+        complete: data['complete'],
+      ),
+    );
     try {
       return _gigaTurnipApiClient.saveTaskById(id, data);
     } catch (e) {
-      final task = await db.LocalDatabase.getSingleTask(id);
-      db.LocalDatabase.updateTask(
-        task.copyWith(
-          responses: data['responses'],
-          complete: data['complete'],
-        ),
-      );
       return TaskResponse(id: id, nextDirectId: null, notifications: []);
     }
+  }
+
+  Future<TaskResponse> submitTask(int id, Map<String, dynamic> data) async {
+    final response = await _gigaTurnipApiClient.saveTaskById(id, data);
+
+    final task = await db.LocalDatabase.getSingleTask(id);
+    db.LocalDatabase.updateTask(
+      task.copyWith(
+        responses: Value(jsonEncode(data['responses'])),
+        complete: data['complete'],
+      ),
+    );
+
+    return response;
   }
 
   Future<Map<String, dynamic>> triggerWebhook(int id) async {

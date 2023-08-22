@@ -49,6 +49,11 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               (v) => v == null ? null : DateTime.parse(v as String)),
           availableFrom: $checkedConvert('available_from',
               (v) => v == null ? null : DateTime.parse(v as String)),
+          filterFieldsSchema: $checkedConvert(
+              'filter_fields_schema',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => e as Map<String, dynamic>)
+                  .toList()),
         );
         return val;
       },
@@ -66,6 +71,7 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         'cardJsonSchema': 'card_json_schema',
         'cardUiSchema': 'card_ui_schema',
         'availableTo': 'available_to',
-        'availableFrom': 'available_from'
+        'availableFrom': 'available_from',
+        'filterFieldsSchema': 'filter_fields_schema'
       },
     );

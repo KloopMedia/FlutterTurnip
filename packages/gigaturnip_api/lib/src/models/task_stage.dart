@@ -17,6 +17,7 @@ class TaskStage {
   final Map<String, dynamic> cardUiSchema;
   final DateTime? availableTo;
   final DateTime? availableFrom;
+  final String? stageType;
 
   TaskStage({
     required this.id,
@@ -28,6 +29,7 @@ class TaskStage {
     required this.cardUiSchema,
     required this.availableTo,
     required this.availableFrom,
+    required this.stageType,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {

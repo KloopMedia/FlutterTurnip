@@ -30,6 +30,7 @@ abstract class RemoteDataInitialized<Data> extends RemoteDataState<Data> {
   final int total;
   final int count;
   final Map<String, dynamic>? query;
+  final Map<String, dynamic>? body;
 
   RemoteDataInitialized({
     required this.data,
@@ -37,6 +38,7 @@ abstract class RemoteDataInitialized<Data> extends RemoteDataState<Data> {
     required this.total,
     required this.count,
     required this.query,
+    required this.body,
   });
 
   RemoteDataInitialized.clone(RemoteDataInitialized<Data> state)
@@ -46,10 +48,11 @@ abstract class RemoteDataInitialized<Data> extends RemoteDataState<Data> {
           total: state.total,
           count: state.count,
           query: state.query,
+          body: state.body,
         );
 
   @override
-  List<Object?> get props => [data, currentPage, total, query, count];
+  List<Object?> get props => [data, currentPage, total, query, count, body];
 }
 
 class RemoteDataLoaded<Data> extends RemoteDataInitialized<Data> {
@@ -59,6 +62,7 @@ class RemoteDataLoaded<Data> extends RemoteDataInitialized<Data> {
     required super.total,
     required super.count,
     super.query,
+    super.body,
   });
 
   RemoteDataLoaded.clone(RemoteDataInitialized<Data> state) : super.clone(state);
@@ -71,6 +75,7 @@ class RemoteDataRefetching<Data> extends RemoteDataInitialized<Data> with Remote
     required super.total,
     required super.count,
     super.query,
+    super.body,
   });
 
   RemoteDataRefetching.clone(RemoteDataInitialized<Data> state) : super.clone(state);
@@ -85,6 +90,7 @@ class RemoteDataRefetchingError<Data> extends RemoteDataInitialized<Data>
     required super.total,
     required super.count,
     super.query,
+    super.body,
   }) {
     this.error = error;
   }

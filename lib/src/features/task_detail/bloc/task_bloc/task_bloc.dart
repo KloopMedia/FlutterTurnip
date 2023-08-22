@@ -82,7 +82,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     try {
       emit(TaskFetching());
       final updatedTask = _state.data.copyWith(responses: formData);
-      final response = await _repository.saveData(taskId, data);
+      final response = await _repository.submitTask(taskId, data);
       final nextTaskId = response.nextDirectId;
       final notifications = response.notifications;
 
@@ -105,7 +105,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     } on DioException catch (e) {
       print(e);
       final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
-      if (campaign.smsCompleteTaskAllow && e.type == DioExceptionType.connectionError) {
+      if (campaign.smsCompleteTaskAllow &&
+          (e.type == DioExceptionType.connectionError || e.type == DioExceptionType.unknown)) {
         final updatedTask = _state.data.copyWith(responses: formData);
         emit(RedirectToSms.clone(_state, campaign.smsPhone));
         emit(TaskLoaded(updatedTask, _state.previousTasks));
