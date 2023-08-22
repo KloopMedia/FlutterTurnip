@@ -61,7 +61,11 @@ class TaskDetailRepository {
       db.LocalDatabase.updateTask(copyTask);
       return response;
     } on DioException catch (e) {
-      if (e.response?.statusCode != null && e.response?.statusCode == 403 && task.createdOffline) {
+      print(e);
+      final isNotFoundOrAuthorised = e.response?.statusCode != null &&
+          (e.response?.statusCode == 403 || e.response?.statusCode == 404);
+
+      if (isNotFoundOrAuthorised && task.createdOffline) {
         print("CREATED NEW TASK");
         final newTask = await _gigaTurnipApiClient.createTaskFromStageId(
           task.stage,
@@ -81,7 +85,7 @@ class TaskDetailRepository {
         );
         db.LocalDatabase.updateTask(copyTask);
         print('LOCAL TASK UPDATED ${copyTask.id}');
-        return api.TaskResponse(id: id, nextDirectId: null);
+        return api.TaskResponse(id: id, nextDirectId: null, notifications: []);
       }
     }
   }
