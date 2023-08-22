@@ -135,6 +135,7 @@ class _TaskDetailViewState extends State<TaskDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<TaskBloc>();
     final colorScheme = Theme.of(context).colorScheme;
     final inputDecoration = InputDecorationTheme(
       enabledBorder: OutlineInputBorder(
@@ -158,6 +159,19 @@ class _TaskDetailViewState extends State<TaskDetailView> {
       child: BlocConsumer<TaskBloc, TaskState>(listener: (context, state) async {
         if (state is TaskSubmitted) {
           redirect(context, state.nextTaskId);
+        }
+        if (state is NotificationOpened) {
+          showDialog(
+            context: context,
+            builder: (context) => FormDialog(
+              title: context.loc.new_notification,
+              content: state.text,
+              buttonText: context.loc.got_it,
+              onPressed: () {
+                bloc.add(CloseNotification(state.previousTasks, state.data, state.nextTaskId));
+              },
+            ),
+          );
         }
         if (state is TaskClosed) {
           redirect(context, null);
@@ -257,19 +271,13 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                     children: [
                       if (state.data.stage.richText?.isNotEmpty ?? false)
                         Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: DialogButtonOutlined(
-                              child: Text(context.loc.open_richtext),
-                              onPressed: () => context.read<TaskBloc>().add(OpenTaskInfo())),
+                          padding: const EdgeInsets.only(top: 10.0, left: 10),
+                          child: DialogButtonOutlined(child: Text(context.loc.open_richtext), onPressed: () => context.read<TaskBloc>().add(OpenTaskInfo())),
                         ),
                       for (final task in state.previousTasks)
                         _PreviousTask(task: task, pageStorageKey: _pageStorageKey),
-                      if (state.previousTasks.isNotEmpty)
-                        const Divider(color: Colors.black, height: 36, thickness: 2),
-                      _CurrentTask(
-                          task: state.data,
-                          pageStorageKey: _pageStorageKey,
-                          scrollController: scrollController),
+                      if (state.previousTasks.isNotEmpty) const Divider(color: Colors.black, height: 36, thickness: 2),
+                      _CurrentTask(task: state.data, pageStorageKey: _pageStorageKey, scrollController: scrollController),
                       // if (state.data.stage.allowGoBack)
                       //   Padding(
                       //     padding: const EdgeInsets.all(8.0),
@@ -339,14 +347,12 @@ class _CurrentTask extends StatelessWidget {
           },
           onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
           onDownloadFile: (url, filename, bytes) async {
-            var status =
-                await DownloadService().download(url: url, filename: filename, bytes: bytes);
+            var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
             taskBloc.add(DownloadFile(status!));
             return status;
           },
           submitButtonText: Text(context.loc.form_submit_button),
-          onValidationFailed: (errorMessage) =>
-              context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
+          onValidationFailed: (errorMessage) => context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
           addFileText: [context.loc.select_file, context.loc.to_upload],
           onOpenPreviousTask: () => context.read<TaskBloc>().add(GoBackToPreviousTask()),
           openPreviousButtonText: Text(context.loc.go_back_to_previous_task),
@@ -385,8 +391,7 @@ class _PreviousTask extends StatelessWidget {
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
             addFileText: [context.loc.select_file, context.loc.to_upload],
             onDownloadFile: (url, filename, bytes) async {
-              var status =
-                  await DownloadService().download(url: url, filename: filename, bytes: bytes);
+              var status = await DownloadService().download(url: url, filename: filename, bytes: bytes);
               taskBloc.add(DownloadFile(status!));
               return status;
             },

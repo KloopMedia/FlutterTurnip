@@ -45,7 +45,7 @@ class TaskDetailRepository {
     try {
       return _gigaTurnipApiClient.saveTaskById(id, data);
     } catch (e) {
-      return TaskResponse(id: id, nextDirectId: null);
+      return TaskResponse(id: id, nextDirectId: null, notifications: []);
     }
   }
 

@@ -74,6 +74,7 @@
   "no_available_tasks": "No available tasks",
   "no_completed_tasks": "No completed tasks",
 
+  "new_notification": "New notification",
   "read_notifications": "Read notifications",
   "unread_notifications": "Unread notifications",
   "important_notification": "Important notification",

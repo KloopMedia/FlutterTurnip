@@ -48,6 +48,24 @@ class TaskSubmitted extends TaskInitialized {
   const TaskSubmitted(super.data, super.previousTasks, {this.nextTaskId});
 }
 
+class NotificationOpened extends TaskInitialized {
+  final TaskDetail task;
+  final List<TaskDetail> previousTask;
+  final int? nextTaskId;
+  final String text;
+
+  const NotificationOpened(
+    super.data,
+    super.previousTasks, {
+    required this.task,
+    required this.previousTask,
+    required this.text,
+    this.nextTaskId
+  });
+
+  NotificationOpened.clone(TaskInitialized state, this.task, this.previousTask, this.nextTaskId, this.text) : super.clone(state);
+}
+
 class TaskSubmitError extends TaskInitialized with TaskErrorState {
   TaskSubmitError(super.data, super.previousTasks, String error) {
     this.error = error;

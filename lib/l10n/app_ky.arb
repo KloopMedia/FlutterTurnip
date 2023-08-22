@@ -74,6 +74,7 @@
   "no_available_tasks": "Жаңы тапшырмалар жок",
   "no_completed_tasks": "Аткарылган тапшырмалар жок",
 
+  "new_notification": "Жаңы билдирүү",
   "read_notifications": "Окулган билдирүүлөр",
   "unread_notifications": "Окула элек билдирүүлөр",
   "important_notification": "Маанилүү билдирүү",

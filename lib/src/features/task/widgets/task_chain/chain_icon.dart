@@ -32,8 +32,8 @@ class ChainRowIcon extends StatelessWidget {
     }
 
     final color = theme.isLight
-      ? (status == ChainInfoStatus.complete) ? const Color(0xFFDFC902) : const Color(0xFFE1E3E3)
-      : (status == ChainInfoStatus.complete) ? const Color(0xFFDFC902) :  theme.neutralVariant40;
+      ? (status == ChainInfoStatus.complete) ? const Color(0xFFEAD620) : const Color(0xFFE1E3E3)
+      : (status == ChainInfoStatus.complete) ? const Color(0xFFEAD620) :  theme.neutralVariant40;
 
     return Positioned(
       top: iconPosition?.top,

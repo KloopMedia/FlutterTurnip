@@ -7,11 +7,13 @@ class TaskResponse {
   final String message;
   final int id;
   final int? nextDirectId;
+  final List? notifications;
 
   TaskResponse({
     this.message = "",
     required this.id,
     required this.nextDirectId,
+    required this.notifications,
   });
 
   factory TaskResponse.fromJson(Map<String, dynamic> json) {

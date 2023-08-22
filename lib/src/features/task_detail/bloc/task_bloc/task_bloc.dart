@@ -35,6 +35,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<ReleaseTask>(_onReleaseTask);
     on<GoBackToPreviousTask>(_onGoBackToPreviousTask);
     on<CloseTask>(_onCloseTask);
+    on<CloseNotification>(_onCloseNotification);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -47,6 +48,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       } catch (e) {
         emit(TaskFetchingError(e.toString()));
       }
+    }
+    final task = state;
+    if (task is TaskInitialized && (task.data.stage.richText?.isNotEmpty ?? false)) {
+      add(OpenTaskInfo());
     }
   }
 
@@ -79,9 +84,21 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final updatedTask = _state.data.copyWith(responses: formData);
       final response = await _repository.submitTask(taskId, data);
       final nextTaskId = response.nextDirectId;
+      final notifications = response.notifications;
 
       if (nextTaskId == taskId) {
         emit(TaskReturned.clone(_state));
+      } else if (notifications != null) {
+        final text = notifications.first['text'];
+        emit(NotificationOpened(
+          updatedTask,
+          _state.previousTasks,
+          text: text,
+          task: updatedTask,
+          previousTask:
+          _state.previousTasks,
+          nextTaskId: nextTaskId
+        ));
       } else {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
       }
@@ -100,6 +117,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       emit(TaskSubmitError(updatedTask, _state.previousTasks, e.toString()));
       emit(TaskLoaded(updatedTask, _state.previousTasks));
     }
+  }
+
+  FutureOr<void> _onCloseNotification(CloseNotification event, Emitter<TaskState> emit) {
+    emit(TaskSubmitted(event.data, event.previousTasks, nextTaskId: event.nextTaskId));
   }
 
   Future<void> _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {

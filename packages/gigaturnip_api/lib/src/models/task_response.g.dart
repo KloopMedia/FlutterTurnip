@@ -17,6 +17,8 @@ TaskResponse _$TaskResponseFromJson(Map<String, dynamic> json) =>
           message: $checkedConvert('message', (v) => v as String? ?? ""),
           id: $checkedConvert('id', (v) => v as int),
           nextDirectId: $checkedConvert('next_direct_id', (v) => v as int?),
+          notifications:
+              $checkedConvert('notifications', (v) => v as List<dynamic>?),
         );
         return val;
       },
