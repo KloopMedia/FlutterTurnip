@@ -45,21 +45,34 @@ class TaskDetailRepository {
     try {
       return _gigaTurnipApiClient.saveTaskById(id, data);
     } catch (e) {
-      return TaskResponse(id: id, nextDirectId: null, notifications: []);
+      return TaskResponse(id: id, nextDirectId: null, notifications: null);
     }
   }
 
   Future<TaskResponse> submitTask(int id, Map<String, dynamic> data) async {
     final task = await db.LocalDatabase.getSingleTask(id);
+    print(task.createdOffline);
     try {
-      final response = await _gigaTurnipApiClient.saveTaskById(id, data);
-      final copyTask = task.copyWith(
-        responses: Value(jsonEncode(data['responses'])),
-        complete: true,
-        submittedOffline: false,
-      );
-      db.LocalDatabase.updateTask(copyTask);
-      return response;
+      if (task.createdOffline) {
+        final newTask = await _gigaTurnipApiClient.createTaskFromStageId(
+          task.stage,
+          data: {'responses': data['responses']},
+        );
+        final response = await _gigaTurnipApiClient.saveTaskById(newTask.id, {'complete': true});
+        db.LocalDatabase.deleteTask(task.id);
+        final parsed = TaskDetail.fromApiModel(newTask);
+        await db.LocalDatabase.insertTask(parsed.copyWith(complete: true).toDB());
+        return response;
+      } else {
+        final response = await _gigaTurnipApiClient.saveTaskById(id, data);
+        final copyTask = task.copyWith(
+          responses: Value(jsonEncode(data['responses'])),
+          complete: true,
+          submittedOffline: false,
+        );
+        db.LocalDatabase.updateTask(copyTask);
+        return response;
+      }
     } on DioException catch (e) {
       print(e);
       final isNotFoundOrAuthorised = e.response?.statusCode != null &&
@@ -71,21 +84,30 @@ class TaskDetailRepository {
           task.stage,
           data: {'responses': data['responses']},
         );
-        final response = await _gigaTurnipApiClient.saveTaskById(newTask.id, data);
+        final response = await _gigaTurnipApiClient.saveTaskById(newTask.id, {'complete': true});
 
         db.LocalDatabase.deleteTask(task.id);
-        final parsed = TaskDetail.fromApiModel(newTask)..copyWith(complete: data['complete']);
-        await db.LocalDatabase.insertTask(parsed.toDB());
+        final parsed = TaskDetail.fromApiModel(newTask);
+        await db.LocalDatabase.insertTask(parsed.copyWith(complete: true).toDB());
         return response;
       } else {
-        final copyTask = task.copyWith(
-          responses: Value(jsonEncode(data['responses'])),
-          complete: false,
-          submittedOffline: true,
-        );
-        db.LocalDatabase.updateTask(copyTask);
-        print('LOCAL TASK UPDATED ${copyTask.id}');
-        return api.TaskResponse(id: id, nextDirectId: null, notifications: []);
+        final isNotAuthorised = e.response?.statusCode != null && e.response?.statusCode == 403;
+        if (isNotAuthorised) {
+          final _task = await _gigaTurnipApiClient.getTaskById(id);
+          final parsedTask = TaskDetail.fromApiModel(_task).toDB();
+          db.LocalDatabase.deleteTask(task.id);
+          await db.LocalDatabase.insertTask(parsedTask);
+          print('GET REMOTE AND ADD TASK');
+        } else {
+          final copyTask = task.copyWith(
+            responses: Value(jsonEncode(data['responses'])),
+            complete: false,
+            submittedOffline: true,
+          );
+          db.LocalDatabase.updateTask(copyTask);
+          print('LOCAL TASK UPDATED ${copyTask.id}');
+        }
+        return api.TaskResponse(id: id, nextDirectId: null, notifications: null);
       }
     }
   }
