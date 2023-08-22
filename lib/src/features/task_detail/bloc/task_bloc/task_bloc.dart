@@ -79,12 +79,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final _state = state as TaskInitialized;
     final formData = event.formData;
 
-    final data = {'responses': formData, 'complete': true};
-
     try {
       emit(TaskRefetching.clone(_state));
       final updatedTask = _state.data.copyWith(responses: formData, complete: true);
-      final response = await _repository.submitTask(taskId, data);
+      final response = await _repository.submitTask(updatedTask);
       final nextTaskId = response.nextDirectId;
       final notifications = response.notifications;
 
@@ -92,15 +90,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(TaskReturned.clone(_state));
       } else if (notifications != null) {
         final text = notifications.first['text'];
-        emit(NotificationOpened(
-          updatedTask,
-          _state.previousTasks,
-          text: text,
-          task: updatedTask,
-          previousTask:
-          _state.previousTasks,
-          nextTaskId: nextTaskId
-        ));
+        emit(NotificationOpened(updatedTask, _state.previousTasks,
+            text: text,
+            task: updatedTask,
+            previousTask: _state.previousTasks,
+            nextTaskId: nextTaskId));
       } else {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
       }
