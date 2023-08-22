@@ -511,6 +511,18 @@ class $TaskStageTable extends TaskStage
   late final GeneratedColumn<String> stageType = GeneratedColumn<String>(
       'stage_type', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _openLimitMeta =
+      const VerificationMeta('openLimit');
+  @override
+  late final GeneratedColumn<int> openLimit = GeneratedColumn<int>(
+      'open_limit', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _totalLimitMeta =
+      const VerificationMeta('totalLimit');
+  @override
+  late final GeneratedColumn<int> totalLimit = GeneratedColumn<int>(
+      'total_limit', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -525,7 +537,9 @@ class $TaskStageTable extends TaskStage
         uiSchema,
         availableFrom,
         availableTo,
-        stageType
+        stageType,
+        openLimit,
+        totalLimit
       ];
   @override
   String get aliasedName => _alias ?? 'task_stage';
@@ -605,6 +619,20 @@ class $TaskStageTable extends TaskStage
       context.handle(_stageTypeMeta,
           stageType.isAcceptableOrUnknown(data['stage_type']!, _stageTypeMeta));
     }
+    if (data.containsKey('open_limit')) {
+      context.handle(_openLimitMeta,
+          openLimit.isAcceptableOrUnknown(data['open_limit']!, _openLimitMeta));
+    } else if (isInserting) {
+      context.missing(_openLimitMeta);
+    }
+    if (data.containsKey('total_limit')) {
+      context.handle(
+          _totalLimitMeta,
+          totalLimit.isAcceptableOrUnknown(
+              data['total_limit']!, _totalLimitMeta));
+    } else if (isInserting) {
+      context.missing(_totalLimitMeta);
+    }
     return context;
   }
 
@@ -640,6 +668,10 @@ class $TaskStageTable extends TaskStage
           .read(DriftSqlType.dateTime, data['${effectivePrefix}available_to']),
       stageType: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}stage_type']),
+      openLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}open_limit'])!,
+      totalLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}total_limit'])!,
     );
   }
 
@@ -663,6 +695,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
   final DateTime? availableFrom;
   final DateTime? availableTo;
   final String? stageType;
+  final int openLimit;
+  final int totalLimit;
   const TaskStageData(
       {required this.id,
       required this.name,
@@ -676,7 +710,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       this.uiSchema,
       this.availableFrom,
       this.availableTo,
-      this.stageType});
+      this.stageType,
+      required this.openLimit,
+      required this.totalLimit});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -711,6 +747,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
     if (!nullToAbsent || stageType != null) {
       map['stage_type'] = Variable<String>(stageType);
     }
+    map['open_limit'] = Variable<int>(openLimit);
+    map['total_limit'] = Variable<int>(totalLimit);
     return map;
   }
 
@@ -747,6 +785,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       stageType: stageType == null && nullToAbsent
           ? const Value.absent()
           : Value(stageType),
+      openLimit: Value(openLimit),
+      totalLimit: Value(totalLimit),
     );
   }
 
@@ -767,6 +807,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       availableFrom: serializer.fromJson<DateTime?>(json['availableFrom']),
       availableTo: serializer.fromJson<DateTime?>(json['availableTo']),
       stageType: serializer.fromJson<String?>(json['stageType']),
+      openLimit: serializer.fromJson<int>(json['openLimit']),
+      totalLimit: serializer.fromJson<int>(json['totalLimit']),
     );
   }
   @override
@@ -786,6 +828,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       'availableFrom': serializer.toJson<DateTime?>(availableFrom),
       'availableTo': serializer.toJson<DateTime?>(availableTo),
       'stageType': serializer.toJson<String?>(stageType),
+      'openLimit': serializer.toJson<int>(openLimit),
+      'totalLimit': serializer.toJson<int>(totalLimit),
     };
   }
 
@@ -802,7 +846,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
           Value<String?> uiSchema = const Value.absent(),
           Value<DateTime?> availableFrom = const Value.absent(),
           Value<DateTime?> availableTo = const Value.absent(),
-          Value<String?> stageType = const Value.absent()}) =>
+          Value<String?> stageType = const Value.absent(),
+          int? openLimit,
+          int? totalLimit}) =>
       TaskStageData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -820,6 +866,8 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
             availableFrom.present ? availableFrom.value : this.availableFrom,
         availableTo: availableTo.present ? availableTo.value : this.availableTo,
         stageType: stageType.present ? stageType.value : this.stageType,
+        openLimit: openLimit ?? this.openLimit,
+        totalLimit: totalLimit ?? this.totalLimit,
       );
   @override
   String toString() {
@@ -836,7 +884,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
           ..write('uiSchema: $uiSchema, ')
           ..write('availableFrom: $availableFrom, ')
           ..write('availableTo: $availableTo, ')
-          ..write('stageType: $stageType')
+          ..write('stageType: $stageType, ')
+          ..write('openLimit: $openLimit, ')
+          ..write('totalLimit: $totalLimit')
           ..write(')'))
         .toString();
   }
@@ -855,7 +905,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
       uiSchema,
       availableFrom,
       availableTo,
-      stageType);
+      stageType,
+      openLimit,
+      totalLimit);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -872,7 +924,9 @@ class TaskStageData extends DataClass implements Insertable<TaskStageData> {
           other.uiSchema == this.uiSchema &&
           other.availableFrom == this.availableFrom &&
           other.availableTo == this.availableTo &&
-          other.stageType == this.stageType);
+          other.stageType == this.stageType &&
+          other.openLimit == this.openLimit &&
+          other.totalLimit == this.totalLimit);
 }
 
 class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
@@ -889,6 +943,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
   final Value<DateTime?> availableFrom;
   final Value<DateTime?> availableTo;
   final Value<String?> stageType;
+  final Value<int> openLimit;
+  final Value<int> totalLimit;
   const TaskStageCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -903,6 +959,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
     this.stageType = const Value.absent(),
+    this.openLimit = const Value.absent(),
+    this.totalLimit = const Value.absent(),
   });
   TaskStageCompanion.insert({
     this.id = const Value.absent(),
@@ -918,9 +976,13 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
     this.stageType = const Value.absent(),
+    required int openLimit,
+    required int totalLimit,
   })  : name = Value(name),
         chain = Value(chain),
-        campaign = Value(campaign);
+        campaign = Value(campaign),
+        openLimit = Value(openLimit),
+        totalLimit = Value(totalLimit);
   static Insertable<TaskStageData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -935,6 +997,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     Expression<DateTime>? availableFrom,
     Expression<DateTime>? availableTo,
     Expression<String>? stageType,
+    Expression<int>? openLimit,
+    Expression<int>? totalLimit,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -950,6 +1014,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
       if (availableFrom != null) 'available_from': availableFrom,
       if (availableTo != null) 'available_to': availableTo,
       if (stageType != null) 'stage_type': stageType,
+      if (openLimit != null) 'open_limit': openLimit,
+      if (totalLimit != null) 'total_limit': totalLimit,
     });
   }
 
@@ -966,7 +1032,9 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
       Value<String?>? uiSchema,
       Value<DateTime?>? availableFrom,
       Value<DateTime?>? availableTo,
-      Value<String?>? stageType}) {
+      Value<String?>? stageType,
+      Value<int>? openLimit,
+      Value<int>? totalLimit}) {
     return TaskStageCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -981,6 +1049,8 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
       availableFrom: availableFrom ?? this.availableFrom,
       availableTo: availableTo ?? this.availableTo,
       stageType: stageType ?? this.stageType,
+      openLimit: openLimit ?? this.openLimit,
+      totalLimit: totalLimit ?? this.totalLimit,
     );
   }
 
@@ -1026,6 +1096,12 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
     if (stageType.present) {
       map['stage_type'] = Variable<String>(stageType.value);
     }
+    if (openLimit.present) {
+      map['open_limit'] = Variable<int>(openLimit.value);
+    }
+    if (totalLimit.present) {
+      map['total_limit'] = Variable<int>(totalLimit.value);
+    }
     return map;
   }
 
@@ -1044,7 +1120,9 @@ class TaskStageCompanion extends UpdateCompanion<TaskStageData> {
           ..write('uiSchema: $uiSchema, ')
           ..write('availableFrom: $availableFrom, ')
           ..write('availableTo: $availableTo, ')
-          ..write('stageType: $stageType')
+          ..write('stageType: $stageType, ')
+          ..write('openLimit: $openLimit, ')
+          ..write('totalLimit: $totalLimit')
           ..write(')'))
         .toString();
   }
@@ -1134,6 +1212,38 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _createdOfflineMeta =
+      const VerificationMeta('createdOffline');
+  @override
+  late final GeneratedColumn<bool> createdOffline =
+      GeneratedColumn<bool>('created_offline', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("created_offline" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(false));
+  static const VerificationMeta _submittedOfflineMeta =
+      const VerificationMeta('submittedOffline');
+  @override
+  late final GeneratedColumn<bool> submittedOffline =
+      GeneratedColumn<bool>('submitted_offline', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("submitted_offline" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1145,7 +1255,10 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
         responses,
         jsonSchema,
         uiSchema,
-        createdAt
+        createdAt,
+        updatedAt,
+        createdOffline,
+        submittedOffline
       ];
   @override
   String get aliasedName => _alias ?? 'task';
@@ -1207,6 +1320,22 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    if (data.containsKey('created_offline')) {
+      context.handle(
+          _createdOfflineMeta,
+          createdOffline.isAcceptableOrUnknown(
+              data['created_offline']!, _createdOfflineMeta));
+    }
+    if (data.containsKey('submitted_offline')) {
+      context.handle(
+          _submittedOfflineMeta,
+          submittedOffline.isAcceptableOrUnknown(
+              data['submitted_offline']!, _submittedOfflineMeta));
+    }
     return context;
   }
 
@@ -1236,6 +1365,12 @@ class $TaskTable extends Task with TableInfo<$TaskTable, TaskData> {
           .read(DriftSqlType.string, data['${effectivePrefix}ui_schema']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+      createdOffline: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}created_offline'])!,
+      submittedOffline: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}submitted_offline'])!,
     );
   }
 
@@ -1256,6 +1391,9 @@ class TaskData extends DataClass implements Insertable<TaskData> {
   final String? jsonSchema;
   final String? uiSchema;
   final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final bool createdOffline;
+  final bool submittedOffline;
   const TaskData(
       {required this.id,
       required this.name,
@@ -1266,7 +1404,10 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       this.responses,
       this.jsonSchema,
       this.uiSchema,
-      this.createdAt});
+      this.createdAt,
+      this.updatedAt,
+      required this.createdOffline,
+      required this.submittedOffline});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1288,6 +1429,11 @@ class TaskData extends DataClass implements Insertable<TaskData> {
     if (!nullToAbsent || createdAt != null) {
       map['created_at'] = Variable<DateTime>(createdAt);
     }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    map['created_offline'] = Variable<bool>(createdOffline);
+    map['submitted_offline'] = Variable<bool>(submittedOffline);
     return map;
   }
 
@@ -1311,6 +1457,11 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
           : Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      createdOffline: Value(createdOffline),
+      submittedOffline: Value(submittedOffline),
     );
   }
 
@@ -1328,6 +1479,9 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       jsonSchema: serializer.fromJson<String?>(json['jsonSchema']),
       uiSchema: serializer.fromJson<String?>(json['uiSchema']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+      createdOffline: serializer.fromJson<bool>(json['createdOffline']),
+      submittedOffline: serializer.fromJson<bool>(json['submittedOffline']),
     );
   }
   @override
@@ -1344,6 +1498,9 @@ class TaskData extends DataClass implements Insertable<TaskData> {
       'jsonSchema': serializer.toJson<String?>(jsonSchema),
       'uiSchema': serializer.toJson<String?>(uiSchema),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+      'createdOffline': serializer.toJson<bool>(createdOffline),
+      'submittedOffline': serializer.toJson<bool>(submittedOffline),
     };
   }
 
@@ -1357,7 +1514,10 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           Value<String?> responses = const Value.absent(),
           Value<String?> jsonSchema = const Value.absent(),
           Value<String?> uiSchema = const Value.absent(),
-          Value<DateTime?> createdAt = const Value.absent()}) =>
+          Value<DateTime?> createdAt = const Value.absent(),
+          Value<DateTime?> updatedAt = const Value.absent(),
+          bool? createdOffline,
+          bool? submittedOffline}) =>
       TaskData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -1369,6 +1529,9 @@ class TaskData extends DataClass implements Insertable<TaskData> {
         jsonSchema: jsonSchema.present ? jsonSchema.value : this.jsonSchema,
         uiSchema: uiSchema.present ? uiSchema.value : this.uiSchema,
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+        createdOffline: createdOffline ?? this.createdOffline,
+        submittedOffline: submittedOffline ?? this.submittedOffline,
       );
   @override
   String toString() {
@@ -1382,14 +1545,29 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           ..write('responses: $responses, ')
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('createdOffline: $createdOffline, ')
+          ..write('submittedOffline: $submittedOffline')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, complete, reopened, stage, campaign,
-      responses, jsonSchema, uiSchema, createdAt);
+  int get hashCode => Object.hash(
+      id,
+      name,
+      complete,
+      reopened,
+      stage,
+      campaign,
+      responses,
+      jsonSchema,
+      uiSchema,
+      createdAt,
+      updatedAt,
+      createdOffline,
+      submittedOffline);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1403,7 +1581,10 @@ class TaskData extends DataClass implements Insertable<TaskData> {
           other.responses == this.responses &&
           other.jsonSchema == this.jsonSchema &&
           other.uiSchema == this.uiSchema &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.createdOffline == this.createdOffline &&
+          other.submittedOffline == this.submittedOffline);
 }
 
 class TaskCompanion extends UpdateCompanion<TaskData> {
@@ -1417,6 +1598,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
   final Value<String?> jsonSchema;
   final Value<String?> uiSchema;
   final Value<DateTime?> createdAt;
+  final Value<DateTime?> updatedAt;
+  final Value<bool> createdOffline;
+  final Value<bool> submittedOffline;
   const TaskCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -1428,6 +1612,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     this.jsonSchema = const Value.absent(),
     this.uiSchema = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.createdOffline = const Value.absent(),
+    this.submittedOffline = const Value.absent(),
   });
   TaskCompanion.insert({
     this.id = const Value.absent(),
@@ -1440,6 +1627,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     this.jsonSchema = const Value.absent(),
     this.uiSchema = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.createdOffline = const Value.absent(),
+    this.submittedOffline = const Value.absent(),
   })  : name = Value(name),
         complete = Value(complete),
         reopened = Value(reopened),
@@ -1456,6 +1646,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     Expression<String>? jsonSchema,
     Expression<String>? uiSchema,
     Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? createdOffline,
+    Expression<bool>? submittedOffline,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1468,6 +1661,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       if (jsonSchema != null) 'json_schema': jsonSchema,
       if (uiSchema != null) 'ui_schema': uiSchema,
       if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (createdOffline != null) 'created_offline': createdOffline,
+      if (submittedOffline != null) 'submitted_offline': submittedOffline,
     });
   }
 
@@ -1481,7 +1677,10 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       Value<String?>? responses,
       Value<String?>? jsonSchema,
       Value<String?>? uiSchema,
-      Value<DateTime?>? createdAt}) {
+      Value<DateTime?>? createdAt,
+      Value<DateTime?>? updatedAt,
+      Value<bool>? createdOffline,
+      Value<bool>? submittedOffline}) {
     return TaskCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -1493,6 +1692,9 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
       jsonSchema: jsonSchema ?? this.jsonSchema,
       uiSchema: uiSchema ?? this.uiSchema,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdOffline: createdOffline ?? this.createdOffline,
+      submittedOffline: submittedOffline ?? this.submittedOffline,
     );
   }
 
@@ -1529,6 +1731,15 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (createdOffline.present) {
+      map['created_offline'] = Variable<bool>(createdOffline.value);
+    }
+    if (submittedOffline.present) {
+      map['submitted_offline'] = Variable<bool>(submittedOffline.value);
+    }
     return map;
   }
 
@@ -1544,7 +1755,10 @@ class TaskCompanion extends UpdateCompanion<TaskData> {
           ..write('responses: $responses, ')
           ..write('jsonSchema: $jsonSchema, ')
           ..write('uiSchema: $uiSchema, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('createdOffline: $createdOffline, ')
+          ..write('submittedOffline: $submittedOffline')
           ..write(')'))
         .toString();
   }
@@ -1605,6 +1819,18 @@ class $RelevantTaskStageTable extends RelevantTaskStage
   late final GeneratedColumn<String> stageType = GeneratedColumn<String>(
       'stage_type', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _openLimitMeta =
+      const VerificationMeta('openLimit');
+  @override
+  late final GeneratedColumn<int> openLimit = GeneratedColumn<int>(
+      'open_limit', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _totalLimitMeta =
+      const VerificationMeta('totalLimit');
+  @override
+  late final GeneratedColumn<int> totalLimit = GeneratedColumn<int>(
+      'total_limit', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1614,7 +1840,9 @@ class $RelevantTaskStageTable extends RelevantTaskStage
         campaign,
         availableFrom,
         availableTo,
-        stageType
+        stageType,
+        openLimit,
+        totalLimit
       ];
   @override
   String get aliasedName => _alias ?? 'relevant_task_stage';
@@ -1669,6 +1897,20 @@ class $RelevantTaskStageTable extends RelevantTaskStage
       context.handle(_stageTypeMeta,
           stageType.isAcceptableOrUnknown(data['stage_type']!, _stageTypeMeta));
     }
+    if (data.containsKey('open_limit')) {
+      context.handle(_openLimitMeta,
+          openLimit.isAcceptableOrUnknown(data['open_limit']!, _openLimitMeta));
+    } else if (isInserting) {
+      context.missing(_openLimitMeta);
+    }
+    if (data.containsKey('total_limit')) {
+      context.handle(
+          _totalLimitMeta,
+          totalLimit.isAcceptableOrUnknown(
+              data['total_limit']!, _totalLimitMeta));
+    } else if (isInserting) {
+      context.missing(_totalLimitMeta);
+    }
     return context;
   }
 
@@ -1694,6 +1936,10 @@ class $RelevantTaskStageTable extends RelevantTaskStage
           .read(DriftSqlType.dateTime, data['${effectivePrefix}available_to']),
       stageType: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}stage_type']),
+      openLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}open_limit'])!,
+      totalLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}total_limit'])!,
     );
   }
 
@@ -1713,6 +1959,8 @@ class RelevantTaskStageData extends DataClass
   final DateTime? availableFrom;
   final DateTime? availableTo;
   final String? stageType;
+  final int openLimit;
+  final int totalLimit;
   const RelevantTaskStageData(
       {required this.id,
       required this.name,
@@ -1721,7 +1969,9 @@ class RelevantTaskStageData extends DataClass
       required this.campaign,
       this.availableFrom,
       this.availableTo,
-      this.stageType});
+      this.stageType,
+      required this.openLimit,
+      required this.totalLimit});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1741,6 +1991,8 @@ class RelevantTaskStageData extends DataClass
     if (!nullToAbsent || stageType != null) {
       map['stage_type'] = Variable<String>(stageType);
     }
+    map['open_limit'] = Variable<int>(openLimit);
+    map['total_limit'] = Variable<int>(totalLimit);
     return map;
   }
 
@@ -1762,6 +2014,8 @@ class RelevantTaskStageData extends DataClass
       stageType: stageType == null && nullToAbsent
           ? const Value.absent()
           : Value(stageType),
+      openLimit: Value(openLimit),
+      totalLimit: Value(totalLimit),
     );
   }
 
@@ -1777,6 +2031,8 @@ class RelevantTaskStageData extends DataClass
       availableFrom: serializer.fromJson<DateTime?>(json['availableFrom']),
       availableTo: serializer.fromJson<DateTime?>(json['availableTo']),
       stageType: serializer.fromJson<String?>(json['stageType']),
+      openLimit: serializer.fromJson<int>(json['openLimit']),
+      totalLimit: serializer.fromJson<int>(json['totalLimit']),
     );
   }
   @override
@@ -1791,6 +2047,8 @@ class RelevantTaskStageData extends DataClass
       'availableFrom': serializer.toJson<DateTime?>(availableFrom),
       'availableTo': serializer.toJson<DateTime?>(availableTo),
       'stageType': serializer.toJson<String?>(stageType),
+      'openLimit': serializer.toJson<int>(openLimit),
+      'totalLimit': serializer.toJson<int>(totalLimit),
     };
   }
 
@@ -1802,7 +2060,9 @@ class RelevantTaskStageData extends DataClass
           int? campaign,
           Value<DateTime?> availableFrom = const Value.absent(),
           Value<DateTime?> availableTo = const Value.absent(),
-          Value<String?> stageType = const Value.absent()}) =>
+          Value<String?> stageType = const Value.absent(),
+          int? openLimit,
+          int? totalLimit}) =>
       RelevantTaskStageData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -1813,6 +2073,8 @@ class RelevantTaskStageData extends DataClass
             availableFrom.present ? availableFrom.value : this.availableFrom,
         availableTo: availableTo.present ? availableTo.value : this.availableTo,
         stageType: stageType.present ? stageType.value : this.stageType,
+        openLimit: openLimit ?? this.openLimit,
+        totalLimit: totalLimit ?? this.totalLimit,
       );
   @override
   String toString() {
@@ -1824,14 +2086,16 @@ class RelevantTaskStageData extends DataClass
           ..write('campaign: $campaign, ')
           ..write('availableFrom: $availableFrom, ')
           ..write('availableTo: $availableTo, ')
-          ..write('stageType: $stageType')
+          ..write('stageType: $stageType, ')
+          ..write('openLimit: $openLimit, ')
+          ..write('totalLimit: $totalLimit')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, name, description, chain, campaign,
-      availableFrom, availableTo, stageType);
+      availableFrom, availableTo, stageType, openLimit, totalLimit);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1843,7 +2107,9 @@ class RelevantTaskStageData extends DataClass
           other.campaign == this.campaign &&
           other.availableFrom == this.availableFrom &&
           other.availableTo == this.availableTo &&
-          other.stageType == this.stageType);
+          other.stageType == this.stageType &&
+          other.openLimit == this.openLimit &&
+          other.totalLimit == this.totalLimit);
 }
 
 class RelevantTaskStageCompanion
@@ -1856,6 +2122,8 @@ class RelevantTaskStageCompanion
   final Value<DateTime?> availableFrom;
   final Value<DateTime?> availableTo;
   final Value<String?> stageType;
+  final Value<int> openLimit;
+  final Value<int> totalLimit;
   const RelevantTaskStageCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -1865,6 +2133,8 @@ class RelevantTaskStageCompanion
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
     this.stageType = const Value.absent(),
+    this.openLimit = const Value.absent(),
+    this.totalLimit = const Value.absent(),
   });
   RelevantTaskStageCompanion.insert({
     this.id = const Value.absent(),
@@ -1875,9 +2145,13 @@ class RelevantTaskStageCompanion
     this.availableFrom = const Value.absent(),
     this.availableTo = const Value.absent(),
     this.stageType = const Value.absent(),
+    required int openLimit,
+    required int totalLimit,
   })  : name = Value(name),
         chain = Value(chain),
-        campaign = Value(campaign);
+        campaign = Value(campaign),
+        openLimit = Value(openLimit),
+        totalLimit = Value(totalLimit);
   static Insertable<RelevantTaskStageData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -1887,6 +2161,8 @@ class RelevantTaskStageCompanion
     Expression<DateTime>? availableFrom,
     Expression<DateTime>? availableTo,
     Expression<String>? stageType,
+    Expression<int>? openLimit,
+    Expression<int>? totalLimit,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1897,6 +2173,8 @@ class RelevantTaskStageCompanion
       if (availableFrom != null) 'available_from': availableFrom,
       if (availableTo != null) 'available_to': availableTo,
       if (stageType != null) 'stage_type': stageType,
+      if (openLimit != null) 'open_limit': openLimit,
+      if (totalLimit != null) 'total_limit': totalLimit,
     });
   }
 
@@ -1908,7 +2186,9 @@ class RelevantTaskStageCompanion
       Value<int>? campaign,
       Value<DateTime?>? availableFrom,
       Value<DateTime?>? availableTo,
-      Value<String?>? stageType}) {
+      Value<String?>? stageType,
+      Value<int>? openLimit,
+      Value<int>? totalLimit}) {
     return RelevantTaskStageCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -1918,6 +2198,8 @@ class RelevantTaskStageCompanion
       availableFrom: availableFrom ?? this.availableFrom,
       availableTo: availableTo ?? this.availableTo,
       stageType: stageType ?? this.stageType,
+      openLimit: openLimit ?? this.openLimit,
+      totalLimit: totalLimit ?? this.totalLimit,
     );
   }
 
@@ -1948,6 +2230,12 @@ class RelevantTaskStageCompanion
     if (stageType.present) {
       map['stage_type'] = Variable<String>(stageType.value);
     }
+    if (openLimit.present) {
+      map['open_limit'] = Variable<int>(openLimit.value);
+    }
+    if (totalLimit.present) {
+      map['total_limit'] = Variable<int>(totalLimit.value);
+    }
     return map;
   }
 
@@ -1961,7 +2249,9 @@ class RelevantTaskStageCompanion
           ..write('campaign: $campaign, ')
           ..write('availableFrom: $availableFrom, ')
           ..write('availableTo: $availableTo, ')
-          ..write('stageType: $stageType')
+          ..write('stageType: $stageType, ')
+          ..write('openLimit: $openLimit, ')
+          ..write('totalLimit: $totalLimit')
           ..write(')'))
         .toString();
   }

@@ -27,6 +27,11 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
           availableFrom: $checkedConvert('available_from',
               (v) => v == null ? null : DateTime.parse(v as String)),
           stageType: $checkedConvert('stage_type', (v) => v as String?),
+          rankLimit: $checkedConvert(
+              'rank_limit',
+              (v) => (v as Map<String, dynamic>?)?.map(
+                    (k, e) => MapEntry(k, e as int),
+                  )),
         );
         return val;
       },
@@ -35,6 +40,7 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
         'cardUiSchema': 'card_ui_schema',
         'availableTo': 'available_to',
         'availableFrom': 'available_from',
-        'stageType': 'stage_type'
+        'stageType': 'stage_type',
+        'rankLimit': 'rank_limit'
       },
     );

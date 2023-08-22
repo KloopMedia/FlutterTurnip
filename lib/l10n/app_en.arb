@@ -74,6 +74,7 @@
   "no_available_tasks": "No available tasks",
   "no_completed_tasks": "No completed tasks",
 
+  "new_notification": "New notification",
   "read_notifications": "Read notifications",
   "unread_notifications": "Unread notifications",
   "important_notification": "Important notification",
@@ -169,5 +170,6 @@
 	"sort": "Sort",
 	"sort_by_new": "New first",
 	"sort_by_old": "Old first",
-	"date": "Date"
+	"date": "Date",
+	"search": "Search"
 }

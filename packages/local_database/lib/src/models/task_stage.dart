@@ -22,6 +22,9 @@ class TaskStage extends Table {
   DateTimeColumn get availableTo => dateTime().nullable()();
 
   TextColumn get stageType => text().nullable()();
+
+  IntColumn get openLimit => integer()();
+  IntColumn get totalLimit => integer()();
 }
 
 
@@ -39,4 +42,7 @@ class RelevantTaskStage extends Table {
   DateTimeColumn get availableTo => dateTime().nullable()();
 
   TextColumn get stageType => text().nullable()();
+
+  IntColumn get openLimit => integer()();
+  IntColumn get totalLimit => integer()();
 }

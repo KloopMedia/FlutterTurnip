@@ -26,6 +26,8 @@ class TaskStageDetail extends Equatable {
   final bool allowGoBack;
   final DateTime? availableTo;
   final DateTime? availableFrom;
+  final int openLimit;
+  final int totalLimit;
 
 
   const TaskStageDetail({
@@ -45,6 +47,8 @@ class TaskStageDetail extends Equatable {
     required this.allowGoBack,
     required this.availableTo,
     required this.availableFrom,
+    this.openLimit = 0,
+    this.totalLimit = 0,
   });
 
   factory TaskStageDetail.fromJson(Map<String, dynamic> json) {
@@ -69,6 +73,8 @@ class TaskStageDetail extends Equatable {
       allowGoBack: model.allowGoBack,
       availableTo: model.availableTo,
       availableFrom: model.availableFrom,
+      openLimit: model.rankLimit?['open_limit'] ?? 0,
+      totalLimit: model.rankLimit?['total_limit'] ?? 0
     );
   }
 
@@ -86,6 +92,8 @@ class TaskStageDetail extends Equatable {
       uiSchema: Value(jsonEncode(uiSchema)),
       availableFrom: Value(availableFrom),
       availableTo: Value(availableTo),
+      openLimit: openLimit,
+      totalLimit: totalLimit,
     );
   }
 
@@ -107,6 +115,8 @@ class TaskStageDetail extends Equatable {
       allowRelease: false,
       availableTo: model.availableTo,
       availableFrom: model.availableFrom,
+      openLimit: model.openLimit,
+      totalLimit: model.totalLimit,
     );
   }
 

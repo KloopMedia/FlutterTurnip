@@ -35,6 +35,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<ReleaseTask>(_onReleaseTask);
     on<GoBackToPreviousTask>(_onGoBackToPreviousTask);
     on<CloseTask>(_onCloseTask);
+    on<CloseNotification>(_onCloseNotification);
   }
 
   Future<void> _onInitializeTask(InitializeTask event, Emitter<TaskState> emit) async {
@@ -44,9 +45,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         final data = await _repository.fetchData(taskId);
         final previousTasks = await _repository.fetchPreviousTaskData(taskId);
         emit(TaskLoaded(data, previousTasks));
-      } catch (e) {
+      } catch (e, t) {
+        print("TASK FETCHING ERROR: ${e.toString()}");
+        print(t.toString());
         emit(TaskFetchingError(e.toString()));
       }
+    }
+    final task = state;
+    if (task is TaskInitialized && (task.data.stage.richText?.isNotEmpty ?? false)) {
+      add(OpenTaskInfo());
     }
   }
 
@@ -75,31 +82,50 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final data = {'responses': formData, 'complete': true};
 
     try {
-      emit(TaskFetching());
-      final updatedTask = _state.data.copyWith(responses: formData);
+      emit(TaskRefetching.clone(_state));
+      final updatedTask = _state.data.copyWith(responses: formData, complete: true);
       final response = await _repository.submitTask(taskId, data);
       final nextTaskId = response.nextDirectId;
+      final notifications = response.notifications;
 
       if (nextTaskId == taskId) {
         emit(TaskReturned.clone(_state));
+      } else if (notifications != null) {
+        final text = notifications.first['text'];
+        emit(NotificationOpened(
+          updatedTask,
+          _state.previousTasks,
+          text: text,
+          task: updatedTask,
+          previousTask:
+          _state.previousTasks,
+          nextTaskId: nextTaskId
+        ));
       } else {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
       }
     } on DioException catch (e) {
-      print(e);
+      print("SUBMIT NETWORK ERROR: $e");
       final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
       if (campaign.smsCompleteTaskAllow &&
           (e.type == DioExceptionType.connectionError || e.type == DioExceptionType.unknown)) {
         final updatedTask = _state.data.copyWith(responses: formData);
         emit(RedirectToSms.clone(_state, campaign.smsPhone));
         emit(TaskLoaded(updatedTask, _state.previousTasks));
+      } else {
+        final updatedTask = _state.data.copyWith(responses: formData, complete: true);
+        emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: null));
       }
     } catch (e) {
-      print(e);
+      print("SUBMIT ERROR: $e");
       final updatedTask = _state.data.copyWith(responses: formData);
       emit(TaskSubmitError(updatedTask, _state.previousTasks, e.toString()));
       emit(TaskLoaded(updatedTask, _state.previousTasks));
     }
+  }
+
+  FutureOr<void> _onCloseNotification(CloseNotification event, Emitter<TaskState> emit) {
+    emit(TaskSubmitted(event.data, event.previousTasks, nextTaskId: event.nextTaskId));
   }
 
   Future<void> _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {

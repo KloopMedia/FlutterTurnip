@@ -23,6 +23,14 @@ class SubmitTask extends TaskEvent {
 
 class TriggerWebhook extends TaskEvent {}
 
+class CloseNotification extends TaskEvent {
+  final TaskDetail data;
+  final List<TaskDetail> previousTasks;
+  final int? nextTaskId;
+
+  const CloseNotification(this.previousTasks, this.data, this.nextTaskId);
+}
+
 class OpenTaskInfo extends TaskEvent {}
 
 class CloseTaskInfo extends TaskEvent {}

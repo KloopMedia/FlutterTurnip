@@ -74,6 +74,7 @@
   "no_available_tasks": "Жаңы тапшырмалар жок",
   "no_completed_tasks": "Аткарылган тапшырмалар жок",
 
+  "new_notification": "Жаңы билдирүү",
   "read_notifications": "Окулган билдирүүлөр",
   "unread_notifications": "Окула элек билдирүүлөр",
   "important_notification": "Маанилүү билдирүү",
@@ -169,5 +170,6 @@
 	"sort": "Сорттоо",
 	"sort_by_new": "Биринчи жаңылар",
 	"sort_by_old": "Биринчи эскилер",
-	"date": "Дата"
+	"date": "Дата",
+	"search": "Поиск"
 }

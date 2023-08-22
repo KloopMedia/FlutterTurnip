@@ -16,8 +16,13 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
+      createdOffline: json['createdOffline'] as bool? ?? false,
+      submittedOffline: json['submittedOffline'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -28,6 +33,9 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'reopened': instance.reopened,
       'stage': instance.stage.toJson(),
       'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
       'cardJsonSchema': instance.cardJsonSchema,
       'cardUiSchema': instance.cardUiSchema,
+      'createdOffline': instance.createdOffline,
+      'submittedOffline': instance.submittedOffline,
     };

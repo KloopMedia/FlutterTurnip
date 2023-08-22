@@ -74,6 +74,7 @@
   "no_available_tasks": "Нет доступных заданий",
   "no_completed_tasks": "Нет выполненных заданий",
 
+  "new_notification": "Новое уведомление",
   "read_notifications": "Прочитанные",
   "unread_notifications": "Непрочитанные",
   "important_notification": "Важное уведомление",
@@ -169,5 +170,6 @@
 	"sort": "Сортировать",
 	"sort_by_new": "Сначала новые",
 	"sort_by_old": "Сначала старые",
-	"date": "Дата"
+	"date": "Дата",
+	"search": "Поиск"
 }

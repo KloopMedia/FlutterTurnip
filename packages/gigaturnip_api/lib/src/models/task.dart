@@ -12,6 +12,7 @@ class Task {
   final bool? reopened;
   final TaskStage stage;
   final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const Task({
     required this.id,
@@ -21,6 +22,7 @@ class Task {
     required this.forceComplete,
     required this.stage,
     required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {

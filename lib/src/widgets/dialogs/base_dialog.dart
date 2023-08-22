@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
@@ -28,10 +29,13 @@ class BaseDialog extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: theme.onSurface),
       ),
-      content: Text(
-        content,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16, color: theme.neutral40),
+      content: SizedBox(
+        width: (kIsWeb) ? 450 : double.infinity,
+        child: Text(
+          content,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, color: theme.neutral40),
+        ),
       ),
       actions: actions,
       actionsAlignment: actionsAlignment,

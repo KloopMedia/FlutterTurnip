@@ -262,13 +262,13 @@ class _SearchBarState extends State<SearchBar> {
       child: TextField(
         focusNode: _focus,
         controller: _controller,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 12, 12, 12),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
           isDense: true,
           border: InputBorder.none,
-          prefixIcon: Icon(Icons.search, size: 24),
-          hintText: 'Ключевые слова',
-          hintStyle: TextStyle(
+          prefixIcon: const Icon(Icons.search, size: 24),
+          hintText: context.loc.search,
+          hintStyle: const TextStyle(
             color: Color(0xFFC4C7C7),
             fontSize: 16,
             fontFamily: 'Roboto',

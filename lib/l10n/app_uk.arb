@@ -74,6 +74,7 @@
   "no_available_tasks": "Немає доступних завдань",
   "no_completed_tasks": "Немає виконаних завдань",
 
+  "new_notification": "Нове повідомлення",
   "read_notifications": "Прочитані",
   "unread_notifications": "Непрочитані",
   "important_notification": "Важливе повідомлення",
@@ -169,5 +170,6 @@
 	"sort": "Сортувати",
 	"sort_by_new": "Спочатку нові",
 	"sort_by_old": "Спочатку старі",
-	"date": "Дата"
+	"date": "Дата",
+	"search": "Поиск"
 }

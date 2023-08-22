@@ -4,6 +4,8 @@ mixin TaskErrorState on TaskState {
   late final String error;
 }
 
+mixin TaskLoadingState on TaskState {}
+
 abstract class TaskState extends Equatable {
   const TaskState();
 
@@ -13,11 +15,11 @@ abstract class TaskState extends Equatable {
 
 class TaskUninitialized extends TaskState {}
 
-class TaskFetching extends TaskState {}
+class TaskFetching extends TaskState with TaskLoadingState {}
 
 class TaskFetchingError extends TaskState with TaskErrorState {
   TaskFetchingError(String error) {
-    this.error = error;
+    this.error = "TASK_FETCHING_ERROR $error";
   }
 
   @override
@@ -36,6 +38,12 @@ abstract class TaskInitialized extends TaskState {
   List<Object> get props => [data];
 }
 
+class TaskRefetching extends TaskInitialized with TaskLoadingState {
+  const TaskRefetching(super.data, super.previousTasks);
+
+  TaskRefetching.clone(TaskInitialized state) : super.clone(state);
+}
+
 class TaskLoaded extends TaskInitialized {
   const TaskLoaded(super.data, super.previousTasks);
 
@@ -48,9 +56,27 @@ class TaskSubmitted extends TaskInitialized {
   const TaskSubmitted(super.data, super.previousTasks, {this.nextTaskId});
 }
 
+class NotificationOpened extends TaskInitialized {
+  final TaskDetail task;
+  final List<TaskDetail> previousTask;
+  final int? nextTaskId;
+  final String text;
+
+  const NotificationOpened(
+    super.data,
+    super.previousTasks, {
+    required this.task,
+    required this.previousTask,
+    required this.text,
+    this.nextTaskId
+  });
+
+  NotificationOpened.clone(TaskInitialized state, this.task, this.previousTask, this.nextTaskId, this.text) : super.clone(state);
+}
+
 class TaskSubmitError extends TaskInitialized with TaskErrorState {
   TaskSubmitError(super.data, super.previousTasks, String error) {
-    this.error = error;
+    this.error = "SUBMIT_ERROR $error";
   }
 
   TaskSubmitError.clone(TaskInitialized state, String error) : super.clone(state) {
@@ -72,7 +98,7 @@ class TaskWebhookTriggered extends TaskInitialized {
 
 class TaskWebhookTriggerError extends TaskInitialized with TaskErrorState {
   TaskWebhookTriggerError(super.data, super.previousTasks, String error) {
-    this.error = error;
+    this.error = "WEBHOOK_TRIGGER_ERROR $error";
   }
 
   TaskWebhookTriggerError.clone(TaskInitialized state, String error) : super.clone(state) {
@@ -104,7 +130,7 @@ class GoBackToPreviousTaskState extends TaskInitialized {
 
 class GoBackToPreviousTaskError extends TaskInitialized with TaskErrorState {
   GoBackToPreviousTaskError(super.data, super.previousTasks, String error) {
-    this.error = error;
+    this.error = "GO_BACK_TO_PREVIOUS_TASK_ERROR $error";
   }
 
   GoBackToPreviousTaskError.clone(TaskInitialized state, String error) : super.clone(state) {

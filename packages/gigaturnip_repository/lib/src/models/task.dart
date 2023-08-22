@@ -19,8 +19,11 @@ class Task extends Equatable {
   final bool reopened;
   final TaskStage stage;
   final DateTime? createdAt;
+  final DateTime? updatedAt;
   final Map<String, dynamic>? cardJsonSchema;
   final Map<String, dynamic>? cardUiSchema;
+  final bool createdOffline;
+  final bool submittedOffline;
 
   const Task({
     required this.id,
@@ -30,15 +33,18 @@ class Task extends Equatable {
     required this.reopened,
     required this.stage,
     required this.createdAt,
+    required this.updatedAt,
     required this.cardJsonSchema,
     required this.cardUiSchema,
+    this.createdOffline = false,
+    this.submittedOffline = false,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return _$TaskFromJson(json);
   }
 
-  factory Task.blank(TaskStage stage) {
+  factory Task.blank(TaskStage stage, bool offline) {
     return Task(
       id: Random().nextInt(100000000),
       name: stage.name,
@@ -46,9 +52,12 @@ class Task extends Equatable {
       complete: false,
       reopened: false,
       createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
       cardJsonSchema: stage.cardJsonSchema,
       cardUiSchema: stage.cardUiSchema,
       stage: stage,
+      createdOffline: offline,
+      submittedOffline: false,
     );
   }
 
@@ -61,7 +70,10 @@ class Task extends Equatable {
       stage: stage.id,
       campaign: stage.campaign,
       createdAt: Value(createdAt),
-      responses: Value(jsonEncode(responses))
+      responses: Value(jsonEncode(responses)),
+      createdOffline: Value(createdOffline),
+      updatedAt: Value(updatedAt),
+      submittedOffline: Value(submittedOffline),
     );
   }
 
@@ -73,9 +85,12 @@ class Task extends Equatable {
       complete: model.complete,
       reopened: model.reopened,
       createdAt: model.createdAt,
+      updatedAt: model.updatedAt,
       cardJsonSchema: jsonDecode(stage.cardJsonSchema ?? "{}"),
       cardUiSchema: jsonDecode(stage.cardUiSchema ?? "{}"),
       stage: TaskStage.fromDB(stage),
+      createdOffline: model.createdOffline,
+      submittedOffline: model.submittedOffline,
     );
   }
 
@@ -87,6 +102,7 @@ class Task extends Equatable {
       complete: model.complete,
       reopened: model.reopened ?? false,
       createdAt: model.createdAt,
+      updatedAt: model.updatedAt,
       cardJsonSchema: model.stage.cardJsonSchema,
       cardUiSchema: model.stage.cardUiSchema,
       stage: TaskStage.fromApiModel(model.stage),
@@ -101,6 +117,7 @@ class Task extends Equatable {
       name: name,
       reopened: reopened,
       createdAt: createdAt,
+      updatedAt: updatedAt,
       stage: stage,
       cardJsonSchema: cardJsonSchema,
       cardUiSchema: cardUiSchema,

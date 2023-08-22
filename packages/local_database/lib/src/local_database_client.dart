@@ -43,6 +43,11 @@ class LocalDatabase {
     return (database.select(database.taskStage)..where((tbl) => tbl.id.equals(id))).getSingle();
   }
 
+  static Future<RelevantTaskStageData> getSingleRelevantTaskStage(int id) async {
+    return (database.select(database.relevantTaskStage)..where((tbl) => tbl.id.equals(id)))
+        .getSingle();
+  }
+
   static Future<int> insertTaskStage(TaskStageCompanion entity) async {
     final insert = await database
         .into(database.taskStage)
@@ -50,17 +55,18 @@ class LocalDatabase {
     return insert.id;
   }
 
-  static Future<int> insertRelevantTaskStage(TaskStageCompanion entity) async {
+  static Future<int> insertRelevantTaskStage(RelevantTaskStageCompanion entity) async {
     final newEntity = RelevantTaskStageCompanion(
-      id: entity.id,
-      name: entity.name,
-      description: entity.description,
-      campaign: entity.campaign,
-      chain: entity.chain,
-      availableTo: entity.availableTo,
-      availableFrom: entity.availableFrom,
-      stageType: entity.stageType,
-    );
+        id: entity.id,
+        name: entity.name,
+        description: entity.description,
+        campaign: entity.campaign,
+        chain: entity.chain,
+        availableTo: entity.availableTo,
+        availableFrom: entity.availableFrom,
+        stageType: entity.stageType,
+        openLimit: entity.openLimit,
+        totalLimit: entity.totalLimit);
 
     final insert = await database
         .into(database.relevantTaskStage)
@@ -69,9 +75,33 @@ class LocalDatabase {
   }
 
   static void updateTask(TaskData data) {
+    print('UPDATING TASK');
     database.update(database.task)
       ..where((tbl) => tbl.id.equals(data.id))
       ..write(data);
+  }
+
+  static void deleteTask(int id) {
+    (database.delete(database.task)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  static Future<List<Map<String, dynamic>>> getLocallyCreatedTasks() async {
+    final dbQuery = database.select(database.task);
+    dbQuery.where((tbl) => tbl.createdOffline.equals(true));
+
+    final rows = await dbQuery.get();
+
+    final List<Map<String, dynamic>> parsed = [];
+    for (var task in rows) {
+      final jsonTask = task.toJson(
+          serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
+
+      final String responses = jsonTask['responses'] ?? '{}';
+      jsonTask['responses'] = jsonDecode(responses);
+
+      parsed.add(jsonTask);
+    }
+    return parsed;
   }
 
   static Future<Map<String, dynamic>> getTasks(int campaign, {Map<String, dynamic>? query}) async {
@@ -79,37 +109,18 @@ class LocalDatabase {
     final offset = query?['offset'];
     final bool? completed = query?['complete'];
     final bool? reopened = query?['reopened'];
+    final int? stage = query?['stage'];
 
-    final dbQuery = database.select(database.task).join([
-      leftOuterJoin(database.taskStage, database.taskStage.id.equalsExp(database.task.stage)),
-    ]);
+    final dbQuery = database.select(database.task);
 
-    dbQuery.where(database.task.campaign.equals(campaign));
-    if (completed != null) dbQuery.where(database.task.complete.equals(completed));
-    if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
+    dbQuery.where((tbl) => tbl.campaign.equals(campaign));
+    if (stage != null) dbQuery.where((tbl) => tbl.stage.equals(stage));
+    if (completed != null) dbQuery.where((tbl) => tbl.complete.equals(completed));
+    if (reopened != null) dbQuery.where((tbl) => tbl.reopened.equals(reopened));
 
     dbQuery.limit(limit, offset: offset);
 
     final rows = await dbQuery.get();
-
-    final List<Map<String, dynamic>> parsed = [];
-    for (var row in rows) {
-      final task = row.readTable(database.task);
-      final stage = row.readTableOrNull(database.taskStage);
-
-      if (stage != null) {
-        final jsonTask = task.toJson(
-            serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
-        final jsonStage = stage.toJson(
-            serializer: const ValueSerializer.defaults(serializeDateTimeValuesAsString: true));
-
-        jsonTask['stage'] = jsonStage;
-        final String responses = jsonTask['responses'] ?? '{}';
-        jsonTask['responses'] = jsonDecode(responses);
-
-        parsed.add(jsonTask);
-      }
-    }
 
     Expression<int> countTasks = database.task.id.count();
 
@@ -119,17 +130,18 @@ class LocalDatabase {
 
     newQuery.where(database.task.campaign.equals(campaign));
 
+    if (stage != null) newQuery.where(database.task.stage.equals(stage));
     if (completed != null) newQuery.where(database.task.complete.equals(completed));
-    if (reopened != null) dbQuery.where(database.task.reopened.equals(reopened));
+    if (reopened != null) newQuery.where(database.task.reopened.equals(reopened));
 
     newQuery.addColumns([countTasks]);
     final row = await newQuery.getSingle();
     final count = row.read(countTasks) ?? 0;
 
-    return {'count': count, 'results': parsed};
+    return {'count': count, 'results': rows};
   }
 
   static Future<int> insertTask(TaskCompanion entity) {
-    return database.into(database.task).insert(entity, mode: InsertMode.insertOrReplace);
+    return database.into(database.task).insert(entity, mode: InsertMode.insertOrIgnore);
   }
 }
