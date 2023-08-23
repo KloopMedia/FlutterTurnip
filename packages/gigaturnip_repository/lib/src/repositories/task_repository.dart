@@ -44,6 +44,11 @@ class AllTaskRepository extends TaskRepository {
       for (final item in parsedIn) {
         final entity = item.toDB();
         await db.LocalDatabase.insertTask(entity);
+        final _task = await db.LocalDatabase.getSingleTask(item.id);
+        db.LocalDatabase.updateTask(_task.copyWith(
+          complete: item.complete,
+          reopened: item.reopened,
+        ));
       }
     } catch (e) {
       print('ALL TASK REPOSITORY ERROR: $e');
