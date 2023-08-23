@@ -16,10 +16,7 @@ dependencies:
     path: ../gigaturnip_api
   authentication_repository:
     path: ../authentication_repository
-  local_database:
-    path: ../local_database
   dio: ^5.3.2
-  drift: ^2.8.0
 
 
 dev_dependencies:

@@ -1,13 +1,8 @@
-import 'dart:convert';
-
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_repository/src/models/task_stage_detail.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
-import 'package:local_database/local_database.dart' as db;
-
 
 part 'task_detail.g.dart';
 
@@ -55,29 +50,6 @@ class TaskDetail extends Equatable {
     return _$TaskDetailFromJson(json);
   }
 
-  factory TaskDetail.fromDB(db.TaskData model, db.TaskStageData stage) {
-    final taskStage = TaskStageDetail.fromDB(stage);
-    return TaskDetail(
-      id: model.id,
-      name: model.name,
-      responses: jsonDecode(model.responses ?? "{}"),
-      complete: model.complete,
-      reopened: model.reopened,
-      createdAt: model.createdAt,
-      cardJsonSchema: jsonDecode(stage.cardJsonSchema ?? "{}"),
-      cardUiSchema: jsonDecode(stage.cardUiSchema ?? "{}"),
-      dynamicSource: [],
-      dynamicTarget: [],
-      endPeriod: null,
-      startPeriod: null,
-      isIntegrated: false,
-      schema: taskStage.jsonSchema,
-      uiSchema: taskStage.uiSchema,
-      displayedPrevTasks: [],
-      stage: taskStage,
-    );
-  }
-
   factory TaskDetail.fromApiModel(api.TaskDetail model) {
     return TaskDetail(
       id: model.id,
@@ -122,19 +94,6 @@ class TaskDetail extends Equatable {
       dynamicTarget: dynamicTarget,
       startPeriod: startPeriod,
       endPeriod: endPeriod,
-    );
-  }
-
-  db.TaskCompanion toDB() {
-    return db.TaskCompanion.insert(
-        id: Value(id),
-        name: name,
-        complete: complete,
-        reopened: reopened,
-        stage: stage.id,
-        campaign: stage.campaign,
-        createdAt: Value(createdAt),
-        responses: Value(jsonEncode(responses))
     );
   }
 
