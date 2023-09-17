@@ -41,3 +41,10 @@ class OTPCodeSend extends LoginState {
   @override
   List<Object?> get props => [verificationId, resendToken];
 }
+
+class  OnboardingClosed extends LoginState {
+  const OnboardingClosed();
+  @override
+  List<Object?> get props => [];
+
+}

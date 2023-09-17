@@ -15,6 +15,7 @@ class Campaign extends Equatable {
   final String logo;
   final int unreadNotifications;
   final List<int>? languages;
+  final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
 
@@ -27,6 +28,7 @@ class Campaign extends Equatable {
     required this.smsLoginAllow,
     required this.unreadNotifications,
     required this.languages,
+    required this.countries,
     this.canJoin = false,
     required this.smsPhone,
     required this.smsCompleteTaskAllow,
@@ -51,6 +53,7 @@ class Campaign extends Equatable {
       smsLoginAllow: model.smsLoginAllow,
       unreadNotifications: model.notificationsCount,
       languages: model.languages,
+      countries: model.countries,
       smsPhone: model.smsPhone,
       smsCompleteTaskAllow: model.smsCompleteTaskAllow,
     );

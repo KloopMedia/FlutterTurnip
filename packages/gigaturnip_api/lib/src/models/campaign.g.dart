@@ -31,6 +31,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
               $checkedConvert('notifications_count', (v) => v as int),
           languages: $checkedConvert('languages',
               (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
+          countries: $checkedConvert('countries',
+              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
           smsPhone: $checkedConvert('sms_phone', (v) => v as String?),
           smsCompleteTaskAllow: $checkedConvert(
               'sms_complete_task_allow', (v) => v as bool? ?? false),

@@ -40,7 +40,7 @@ class LoginPage extends StatelessWidget {
             campaignId: campaignId!,
           )..add(InitializeCampaign()),
         ),
-        if (campaignId != null) BlocProvider(
+        BlocProvider(
           create: (context) => LanguageCubit(
             LanguageRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
@@ -65,7 +65,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   String _phoneNumber = "";
   int? _resendToken;
-  bool isLocaleSelected = false;
   String? errorMessage;
 
   void loginWithPhone([int? forceResendToken]) async {
@@ -102,13 +101,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<LocalizationBloc>().state;
-
-    if (state.firstLogin == false) {
-      setState(() {
-        isLocaleSelected = !state.firstLogin;
-      });
-    }
     final theme = Theme.of(context).colorScheme;
     const radius = Radius.circular(15);
 
@@ -127,7 +119,7 @@ class _LoginViewState extends State<LoginView> {
               // );
             }
           },
-          builder: (context, state) {
+          builder: (context, loginState) {
             // if (state is OTPCodeSend) {
             //   return VerificationPage(
             //     onResend: () => loginWithPhone(_resendToken),
@@ -136,153 +128,353 @@ class _LoginViewState extends State<LoginView> {
             //     },
             //   );
             // }
-            if (context.isSmall) {
-              if (state is LoginInitial && state.firstTime) {
-                if (widget.campaignId != null) {
-                  return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                      builder: (context, state) {
-                        if (state is CampaignFetching) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        if (state is CampaignFetchingError) {
-                          return Center(child: Text(state.error));
-                        }
-                        if (state is CampaignJoinError) {
-                          return Center(child: Text(state.error));
-                        }
-                        if (state is CampaignLoaded) {
-                          final data = state.data;
-                          return OnBoarding(
-                            onContinue: () {
-                              context.read<LoginBloc>().add(CloseOnBoarding());
-                            },
-                            campaignName: data.name,
-                            campaignDescription: data.description,
-                            campaignLanguages: data.languages,
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      }
-                  );
-                }
-                return OnBoarding(
-                  onContinue: () {
-                    context.read<LoginBloc>().add(CloseOnBoarding());
-                  },
-                );
-              } else if (state is OTPCodeSend) {
-                return VerificationPage(
-                  onResend: () => loginWithPhone(_resendToken),
-                  onConfirm: (smsCode) {
-                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                  },
-                );
-              }
-              return LoginPanel(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
-                onChange: _onChange,
-                onSubmit: (value) => loginWithPhone(),
-              );
-            } else {
-              return Row(
-                children: [
-                  Container(
-                    width: context.isMedium
-                        ? MediaQuery.of(context).size.width / 2
-                        : MediaQuery.of(context).size.width / 3,
-                    decoration: BoxDecoration(
-                      color: theme.primary,
-                      borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24/*45*/),
-                      child: Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Container(
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(15),
-                              //     color: Colors.grey,
-                              //   ),
-                              //   alignment: Alignment.center,
-                              //   width: 70,
-                              //   height: 70,
-                              //   child: const Text('Logo'),
-                              // ),
-                              const SizedBox(height: 90),
-                              Text(
-                                context.loc.welcome_title,
-                                style: const TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              Text(
-                                context.loc.welcome_subtitle,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white.withOpacity(0.85),
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w300
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          (context.isSmall) ? Image.asset('assets/images/people.png') : Image.asset('assets/images/people_web.png'),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
+
+            return (widget.campaignId != null)
+              ? BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+                builder: (context, state) {
+                  if (state is CampaignFetching) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  // if (state is CampaignFetchingError) {
+                  //   return Center(child: Text(state.error));
+                  // }
+                  if (state is CampaignJoinError) {
+                    return Center(child: Text(state.error));
+                  }
+                  if (state is CampaignLoaded) {
+                    final data = state.data;
+                      return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        (state is OTPCodeSend)
-                           ? VerificationPage(
-                            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
-                            onResend: () => loginWithPhone(_resendToken),
-                            onConfirm: (smsCode) {
-                            context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                            },
-                          )
-                           : Flexible(
-                            child: LoginPanel(
-                              padding: const EdgeInsets.all(20),
-                              constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
-                              onChange: _onChange,
-                              onSubmit: (value) {
-                                if (value != null) {
-                                  setState(() {
-                                    errorMessage = value;
-                                  });
-                                } else {
-                                  loginWithPhone();
-                                }
-                              },
-                              isLocaleSelected: isLocaleSelected,
-                              errorMessage: errorMessage,
-                            )
-                          )
-                        // Flexible(
-                        //   child: LoginPanel(
-                        //     padding: const EdgeInsets.all(20),
-                        //     constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
-                        //     onChange: _onChange,
-                        //     onSubmit: loginWithPhone,
-                        //   ),
-                        // ),
+                        if (!context.isSmall) Container(
+                          width: context.isMedium
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width / 3,
+                          decoration: BoxDecoration(
+                            color: theme.primary,
+                            borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24),
+                            child: Column(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Image.asset('assets/images/people_2.png'),
+                                    const SizedBox(height: 80),
+                                    Text(
+                                      data.name,
+                                      style: const TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 30),
+                                    Text(
+                                      data.description,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white.withOpacity(0.85),
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w300
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (loginState is LoginInitial && loginState.firstTime)
+                                Flexible(
+                                  child: OnBoarding(
+                                    title: data.name,
+                                    description: data.description,
+                                    constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 417),
+                                    onContinue: () {
+                                      context.read<LoginBloc>().add(CloseOnBoarding());
+                                    },
+                                  ),
+                                ),
+                              if (loginState is LoginSuccess || loginState is OnboardingClosed)
+                                LoginPanel(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
+                                  onChange: _onChange,
+                                  onSubmit: (value) => loginWithPhone(),
+                                ),
+                              if (loginState is OTPCodeSend)
+                                VerificationPage(
+                                  constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
+                                  onResend: () => loginWithPhone(_resendToken),
+                                  onConfirm: (smsCode) {
+                                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, loginState.verificationId));
+                                  },
+                                ),
+                              // if (context.isSmall)
+                              //   if (state is CampaignFetchingError)
+                                  ///TODO: campaign name, description, join button
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }
+            )
+            : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (!context.isSmall) Container(
+                  width: context.isMedium
+                      ? MediaQuery.of(context).size.width / 2
+                      : MediaQuery.of(context).size.width / 3,
+                  decoration: BoxDecoration(
+                    color: theme.primary,
+                    borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24/*45*/),
+                    child: Column(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Container(
+                            //   decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(15),
+                            //     color: Colors.grey,
+                            //   ),
+                            //   alignment: Alignment.center,
+                            //   width: 70,
+                            //   height: 70,
+                            //   child: const Text('Logo'),
+                            // ),
+                            Image.asset('assets/images/people_2.png'),
+                            const SizedBox(height: 80),
+                            Text(
+                              context.loc.welcome_title,
+                              style: const TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 30),
+                            Text(
+                              context.loc.welcome_subtitle,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white.withOpacity(0.85),
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w300
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                ],
-              );
-            }
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: (context.isSmall) ? MainAxisAlignment.start : MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (loginState is LoginInitial && loginState.firstTime)
+                        Flexible(
+                          child: OnBoarding(
+                            title: context.loc.welcome_title,
+                            description: context.loc.welcome_subtitle,
+                            constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 417),
+                            onContinue: () {
+                              context.read<LoginBloc>().add(CloseOnBoarding());
+                            },
+                          ),
+                        ),
+                      if (/*loginState is LoginSuccess || */loginState is OnboardingClosed)
+                        LoginPanel(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
+                          onChange: _onChange,
+                          onSubmit: (value) => loginWithPhone(),
+                        ),
+                      if (loginState is OTPCodeSend)
+                        VerificationPage(
+                        constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
+                        onResend: () => loginWithPhone(_resendToken),
+                        onConfirm: (smsCode) {
+                          context.read<LoginBloc>().add(ConfirmOTP(smsCode, loginState.verificationId));
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+
+
+
+            // if (context.isSmall) {
+            //   if (state is LoginInitial && state.firstTime) {
+            //     if (widget.campaignId != null) {
+            //       return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+            //           builder: (context, state) {
+            //             if (state is CampaignFetching) {
+            //               return const Center(child: CircularProgressIndicator());
+            //             }
+            //             if (state is CampaignFetchingError) {
+            //               return Center(child: Text(state.error));
+            //             }
+            //             if (state is CampaignJoinError) {
+            //               return Center(child: Text(state.error));
+            //             }
+            //             if (state is CampaignLoaded) {
+            //               final data = state.data;
+            //               return OnBoarding(
+            //                 onContinue: () {
+            //                   context.read<LoginBloc>().add(CloseOnBoarding());
+            //                 },
+            //                 campaignName: data.name,
+            //                 campaignDescription: data.description,
+            //                 campaignLanguages: data.languages,
+            //               );
+            //             }
+            //             return const SizedBox.shrink();
+            //           }
+            //       );
+            //     }
+            //     return OnBoarding(
+            //       onContinue: () {
+            //         context.read<LoginBloc>().add(CloseOnBoarding());
+            //       },
+            //     );
+            //   } else if (state is OTPCodeSend) {
+            //     return VerificationPage(
+            //       onResend: () => loginWithPhone(_resendToken),
+            //       onConfirm: (smsCode) {
+            //         context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+            //       },
+            //     );
+            //   }
+            //   return LoginPanel(
+            //     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
+            //     onChange: _onChange,
+            //     onSubmit: (value) => loginWithPhone(),
+            //   );
+            // } else {
+            //   return Row(
+            //     children: [
+            //       Container(
+            //         width: context.isMedium
+            //             ? MediaQuery.of(context).size.width / 2
+            //             : MediaQuery.of(context).size.width / 3,
+            //         decoration: BoxDecoration(
+            //           color: theme.primary,
+            //           borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
+            //         ),
+            //         child: Padding(
+            //           padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24/*45*/),
+            //           child: Column(
+            //             children: [
+            //               Column(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   // Container(
+            //                   //   decoration: BoxDecoration(
+            //                   //     borderRadius: BorderRadius.circular(15),
+            //                   //     color: Colors.grey,
+            //                   //   ),
+            //                   //   alignment: Alignment.center,
+            //                   //   width: 70,
+            //                   //   height: 70,
+            //                   //   child: const Text('Logo'),
+            //                   // ),
+            //                   Image.asset('assets/images/people_2.png'),
+            //                   const SizedBox(height: 80),
+            //                   Text(
+            //                     context.loc.welcome_title,
+            //                     style: const TextStyle(
+            //                       fontSize: 40,
+            //                       fontWeight: FontWeight.w500,
+            //                       color: Colors.white,
+            //                     ),
+            //                     textAlign: TextAlign.center,
+            //                   ),
+            //                   const SizedBox(height: 30),
+            //                   Text(
+            //                     context.loc.welcome_subtitle,
+            //                     style: TextStyle(
+            //                         fontSize: 18,
+            //                         color: Colors.white.withOpacity(0.85),
+            //                         fontFamily: 'Inter',
+            //                         fontWeight: FontWeight.w300
+            //                     ),
+            //                     textAlign: TextAlign.center,
+            //                   ),
+            //                 ],
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //       Expanded(
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           children: [
+            //             (state is OTPCodeSend)
+            //                ? VerificationPage(
+            //                 constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
+            //                 onResend: () => loginWithPhone(_resendToken),
+            //                 onConfirm: (smsCode) {
+            //                 context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+            //                 },
+            //               )
+            //                : Flexible(
+            //                 child: LoginPanel(
+            //                   padding: const EdgeInsets.all(20),
+            //                   constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
+            //                   onChange: _onChange,
+            //                   onSubmit: (value) {
+            //                     // if (value != null) {
+            //                     //   setState(() {
+            //                     //     errorMessage = value;
+            //                     //   });
+            //                     // } else {
+            //                       loginWithPhone();
+            //                     // }
+            //                   },
+            //                   // isLocaleSelected: isLocaleSelected,
+            //                   // errorMessage: errorMessage,
+            //                 )
+            //               )
+            //             // Flexible(
+            //             //   child: LoginPanel(
+            //             //     padding: const EdgeInsets.all(20),
+            //             //     constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
+            //             //     onChange: _onChange,
+            //             //     onSubmit: loginWithPhone,
+            //             //   ),
+            //             // ),
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   );
+            // }
           },
         ),
       ),
