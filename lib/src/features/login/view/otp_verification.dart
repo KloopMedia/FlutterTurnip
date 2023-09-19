@@ -107,6 +107,7 @@ class _VerificationPageState extends State<VerificationPage> {
               ],
             ),
             SignUpButton(
+              buttonText: context.loc.further,
               width: double.infinity,
               focusNode: focusNode,
               onPressed: () => pinCode.length != _length ? null : () => widget.onConfirm(pinCode),

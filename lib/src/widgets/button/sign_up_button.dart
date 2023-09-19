@@ -4,6 +4,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 
 class SignUpButton extends StatelessWidget {
   final double? width;
+  final String buttonText;
   final bool? isActive;
   final FocusNode? focusNode;
   final void Function() onPressed;
@@ -11,6 +12,7 @@ class SignUpButton extends StatelessWidget {
   const SignUpButton({
     Key? key,
     required this.onPressed,
+    required this.buttonText,
     this.width,
     this.isActive,
     this.focusNode,
@@ -35,7 +37,7 @@ class SignUpButton extends StatelessWidget {
           onPressed();
         },
         child: Text(
-          context.loc.further,
+          buttonText,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,

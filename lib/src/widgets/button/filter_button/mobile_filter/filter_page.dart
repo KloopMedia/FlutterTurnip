@@ -39,6 +39,7 @@ class FilterPage extends StatelessWidget {
             LanguageRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
             ),
+            context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
         ),
       ],

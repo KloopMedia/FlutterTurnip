@@ -45,6 +45,7 @@ class LoginPage extends StatelessWidget {
             LanguageRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
             ),
+            context.read<GigaTurnipApiClient>(),
           )..initialize(),
         ),
       ],
@@ -195,7 +196,7 @@ class _LoginViewState extends State<LoginView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              if (loginState is LoginInitial && loginState.firstTime)
+                              if (loginState is LoginInitial)
                                 Flexible(
                                   child: OnBoarding(
                                     title: data.name,
@@ -206,7 +207,7 @@ class _LoginViewState extends State<LoginView> {
                                     },
                                   ),
                                 ),
-                              if (loginState is LoginSuccess || loginState is OnboardingClosed)
+                              if (loginState is OnboardingClosed)
                                 LoginPanel(
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                                   onChange: _onChange,
@@ -294,7 +295,7 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: (context.isSmall) ? MainAxisAlignment.start : MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (loginState is LoginInitial && loginState.firstTime)
+                      if (loginState is LoginInitial)
                         Flexible(
                           child: OnBoarding(
                             title: context.loc.welcome_title,
@@ -305,7 +306,7 @@ class _LoginViewState extends State<LoginView> {
                             },
                           ),
                         ),
-                      if (/*loginState is LoginSuccess || */loginState is OnboardingClosed)
+                      if (loginState is OnboardingClosed)
                         LoginPanel(
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                           onChange: _onChange,

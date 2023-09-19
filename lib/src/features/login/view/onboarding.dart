@@ -63,7 +63,20 @@ class _OnBoardingState extends State<OnBoarding> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: (secondPage && context.isSmall) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
             children: [
-              if (context.isSmall) Align(
+              if (secondPage && context.isSmall)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      setState(() {
+                        secondPage = false;
+                      });
+                    },
+                  ),
+                ),
+              if (context.isSmall)
+                Align(
                 alignment: Alignment.center,
                 child: Column(
                   children: [
@@ -194,6 +207,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         }
                       }
                     },
+                    buttonText: context.loc.further,
                     isActive: isLocaleSelected,// && isCountrySelected,
                   ),
                 ],
@@ -202,15 +216,10 @@ class _OnBoardingState extends State<OnBoarding> {
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     // context.read<UserCampaignCubit>().refetchWithFilter(query: countryMap);
-                    if (!secondPage) {
-                      setState(() {
-                        secondPage = true;
-                      });
-                    } else {
-                      widget.onContinue();
-                    }
+                    widget.onContinue();
                   }
                 },
+                buttonText: context.loc.further,
                 width: double.infinity,
                 isActive: isLocaleSelected,// && isCountrySelected,
               ),
