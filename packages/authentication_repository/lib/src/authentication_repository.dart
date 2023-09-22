@@ -33,10 +33,10 @@ class AuthenticationRepository {
     } else {
       await _googleSignIn.signOut();
       final googleUser = await _googleSignIn.signIn();
-      final googleAuth = await googleUser!.authentication;
+      final googleAuth = await googleUser?.authentication;
       credential = firebase_auth.GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
     }
