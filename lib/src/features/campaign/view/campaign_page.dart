@@ -7,9 +7,12 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import '../../../utilities/constants.dart';
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
-import '../../../widgets/dialogs/search_bar_dialog.dart';
+import '../../../widgets/dialogs/selection_dialogs.dart';
+import '../../login/view/pickers.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
@@ -26,6 +29,8 @@ class CampaignPage extends StatefulWidget {
 }
 
 class _CampaignPageState extends State<CampaignPage> {
+
+
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
@@ -75,6 +80,7 @@ class _CampaignPageState extends State<CampaignPage> {
     );
   }
 }
+
 class CampaignView extends StatefulWidget {
   const CampaignView({Key? key}) : super(key: key);
 
@@ -83,10 +89,12 @@ class CampaignView extends StatefulWidget {
 }
 
 class _CampaignViewState extends State<CampaignView> {
-  bool isDialogShown = true;
+  late SharedPreferences sharedPreferences;
+  String? selectedCountry;
+  bool isDialogShown = false;
   bool showFilters = false;
   List<dynamic> queries = [];
-  final Map<String, dynamic> queryMap = {};
+  Map<String, dynamic> queryMap = {};
 
   void _onFilterTapByQuery(Map<String, dynamic> map) {
     context.read<UserCampaignCubit>().refetchWithFilter(query: map);
@@ -112,58 +120,54 @@ class _CampaignViewState extends State<CampaignView> {
     }
   }
 
-   @override
-   void initState() {
+  @override
+  void initState() {
     super.initState();
-    isDialogShown = false;
+    initializeSharedPreferences();
   }
-  // if (context.isSmall) {
-  //   showModalBottomSheet(context: context, builder: (context){
-  //     return BaseDialog(
-  //       title: context.loc.indicate_country,
-  //       content: context.loc.indicate_your_country,
-  //       actions: [
-  //         Text('bnm'),
-  //         SizedBox(
-  //           height: 52,
-  //           width: double.infinity,
-  //           child: ElevatedButton(
-  //             style: ElevatedButton.styleFrom(
-  //               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //             ),
-  //             onPressed: () {
-  //               // if (onPressed != null) onPressed!();
-  //               Navigator.pop(context);
-  //             },
-  //             child: Text('buttonText'),
-  //           ),
-  //         )
-  //       ],
-  //     );
-  //   });
-  // } else {
+
+  void initializeSharedPreferences() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    // List<String>? list = sharedPreferences.getStringList(Constants.selectedCountry) ?? [];
+    // if (list.isNotEmpty) {
+    //   isDialogShown = true;
+    //   queries.add(Country(id: int.tryParse(list[0])!, name: list[1]));
+    //   _onFilterTapByQuery({'countries__name': list[1]});
+    // }
+  }
+
   _searchBarDialog({
     required List data,
     required Function(String value) onSubmit,
   }) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return SimpleDialog(
-          titlePadding: EdgeInsets.zero,
-          contentPadding: const EdgeInsets.all(20),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-          children: [
-            SearchBarDialogContent(
-              data: data,
-              onSubmit: (value) {
-                onSubmit(value);
-              }
-            )
-          ],
-        );
-    });
+    if (context.isSmall) {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15.0))),
+        context: context,
+        builder: (context) {
+          return DropdownDialog(
+            // selectedCountry: selectedCountry,
+            data: data,
+            onSubmit: (value) {
+              onSubmit(value);
+            }
+          );
+        });
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SearchBarDialog(
+            // selectedCountry: selectedCountry,
+            data: data,
+            onSubmit: (value) {
+             onSubmit(value);
+            }
+          );
+      });
+    }
   }
 
   @override

@@ -80,6 +80,7 @@ class TaskRoute {
         final campaign = state.extra;
         final createTaskIdQueryValue = state.queryParameters['create_task'] ?? '';
 
+        print('>>> TaskPage');
         final campaignId = int.tryParse(id);
         if (campaignId == null) {
           return const Text('Error: Failed to parse id');

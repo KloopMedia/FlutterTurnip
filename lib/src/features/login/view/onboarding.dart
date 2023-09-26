@@ -10,13 +10,14 @@ import '../../../widgets/widgets.dart';
 import '../../campaign/bloc/campaign_cubit.dart';
 import '../../campaign/bloc/country_bloc/country_cubit.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
-import 'language_picker.dart';
+import 'pickers.dart';
 
 class OnBoarding extends StatefulWidget {
   final BoxConstraints? constraints;
-  final void Function() onContinue;
+  final void Function(List value) onContinue;
   final String title;
   final String description;
+  final String? selectedCountry;
   final List<int?>? campaignLanguages;
   final List<int?>? campaignCountries;
 
@@ -25,6 +26,7 @@ class OnBoarding extends StatefulWidget {
     required this.onContinue,
     required this.title,
     required this.description,
+    this.selectedCountry,
     this.constraints,
     this.campaignLanguages,
     this.campaignCountries,
@@ -35,6 +37,7 @@ class OnBoarding extends StatefulWidget {
 
 class _OnBoardingState extends State<OnBoarding> {
   String? errorMessage;
+  List country = [];
   bool secondPage = false;
   bool isLocaleSelected = false;
   bool isCountrySelected = false;
@@ -47,7 +50,7 @@ class _OnBoardingState extends State<OnBoarding> {
     final state = context.watch<LocalizationBloc>().state;
     final formKey = GlobalKey<FormState>();
 
-    if (state.firstLogin == false) {
+    if (state.firstLogin == false || widget.selectedCountry != null) {
       setState(() {
         isLocaleSelected = !state.firstLogin;
       });
@@ -135,52 +138,27 @@ class _OnBoardingState extends State<OnBoarding> {
                  campaignLocales: const [],
                ),
               if (!secondPage) const SizedBox(height: 20),
-              // BlocBuilder<CountryCubit, RemoteDataState<repo.Country>>(
+              // BlocBuilder<LanguageCubit, RemoteDataState<repo.Language>>(
               //     builder: (context, state) {
-              //         if (state is RemoteDataLoaded<repo.Country> && state.data.isNotEmpty) {
+              //         if (state is RemoteDataLoaded<repo.Language> && state.data.isNotEmpty) {
               //         final countries = state.data;
               //         final List<String> campaignCountries = [];
-              //         String? countryname;
-              //         if (widget.campaignCountries !=  null && widget.campaignCountries!.isNotEmpty) {
-              //           for (var id in widget.campaignLanguages!) {
-              //             final matchedCountry = countries.where((e) => e.id == id).toList();
-              //             countryname = matchedCountry.first.name;
-              //           }
-              //         }
-              //         // return WebFilter<repo.Country, CountryCubit>(
-              //         //   width: double.infinity,
-              //         //   title: context.loc.country,
-              //         //   queries: campaignCountries,
-              //         //   onTap: (selectedItem) {
-              //         //     if (selectedItem != null) {
-              //         //       campaignCountries.removeWhere((item) => item == selectedItem);
-              //         //       campaignCountries.add(selectedItem);
-              //         //       countryMap.addAll({'countries__name': selectedItem.name});
-              //         //       setState(() {
-              //         //         isCountrySelected = true;
-              //         //         context.read<UserCampaignCubit>().refetchWithFilter(query: countryMap);
-              //         //         context.read<SelectableCampaignCubit>().refetchWithFilter(query: countryMap);
-              //         //       });
-              //         //     } else {
-              //         //       campaignCountries.removeWhere((item) => item == selectedItem);
-              //         //       countryMap.removeWhere((key, value) => key == 'countries__name');
-              //         //       setState(() {
-              //         //         isCountrySelected = false;
-              //         //         context.read<UserCampaignCubit>().refetchWithFilter(query: countryMap);
-              //         //         context.read<SelectableCampaignCubit>().refetchWithFilter(query: countryMap);
-              //         //       });
-              //         //     }
+              //         // if (widget.campaignCountries !=  null && widget.campaignCountries!.isNotEmpty) {
+              //         //   for (var id in widget.campaignLanguages!) {
+              //         //     final matchedCountry = countries.where((e) => e.id == id).toList();
+              //         //     countryname = matchedCountry.first.name;
               //         //   }
-              //         // );
+              //         // }
               //           return CountryPicker(
-              //             campaignCountry: countryname,
+              //             campaignCountry: widget.selectedCountry,
               //             countries: countries,
-              //             onTap: (country) {
-              //               campaignCountries.removeWhere((item) => item == country);
-              //               campaignCountries.add(country);
-              //               countryMap.addAll({'countries__name': country});
+              //             onTap: (value) {
+              //               // campaignCountries.removeWhere((item) => item == country);
+              //               // campaignCountries.add(country);
+              //               // countryMap.addAll({'countries__name': country});
               //               setState(() {
               //                 isCountrySelected = true;
+              //                 country = value;
               //               });
               //             },
               //           );
@@ -197,13 +175,12 @@ class _OnBoardingState extends State<OnBoarding> {
                   SignUpButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        // context.read<UserCampaignCubit>().refetchWithFilter(query: countryMap);
                         if (!secondPage) {
                           setState(() {
                             secondPage = true;
                           });
                         } else {
-                          widget.onContinue();
+                          widget.onContinue(country);
                         }
                       }
                     },
@@ -215,8 +192,7 @@ class _OnBoardingState extends State<OnBoarding> {
               : SignUpButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    // context.read<UserCampaignCubit>().refetchWithFilter(query: countryMap);
-                    widget.onContinue();
+                    widget.onContinue(country);
                   }
                 },
                 buttonText: context.loc.further,

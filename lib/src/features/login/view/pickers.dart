@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart' as repo;
 
 class SupportedLocale {
@@ -116,8 +117,8 @@ class LanguagePicker extends StatelessWidget {
 
 class CountryPicker extends StatelessWidget {
   final String? campaignCountry;
-  final List<repo.Country> countries;
-  final Function(String country) onTap;
+  final List countries;
+  final Function(List country) onTap;
 
   const CountryPicker({
     super.key,
@@ -191,9 +192,9 @@ class CountryPicker extends StatelessWidget {
           icon: Icon(Icons.keyboard_arrow_down, color: theme.primary),
           value: campaignCountry ?? '',
           onChanged: (countryName) {
-            onTap(countryName!);
+            final country = countries.where((element) => element.name == countryName).toList();
+            onTap(country);
           },
-          // items: [],
           items: countries.map((country) => DropdownMenuItem<String>(
             value: country.name,
             child: Padding(

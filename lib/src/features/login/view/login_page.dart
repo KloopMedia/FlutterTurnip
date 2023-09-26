@@ -11,6 +11,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/bloc.dart';
+import '../../../utilities/constants.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
@@ -64,9 +65,27 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  late SharedPreferences sharedPreferences;
   String _phoneNumber = "";
-  int? _resendToken;
   String? errorMessage;
+  String? selectedCountry;
+  int? _resendToken;
+
+  @override
+  void initState() {
+    super.initState();
+    // if (widget.campaignId != null) {
+      // sharedPreferences.setInt(Constants.linkedByCampaign, widget.campaignId);
+    // }
+  }
+
+  void initializeSharedPreferences() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    // List<String>? list = sharedPreferences.getStringList(Constants.selectedCountry) ?? [];
+    // if (list.isNotEmpty) {
+    //   selectedCountry = list[1];
+    // }
+  }
 
   void loginWithPhone([int? forceResendToken]) async {
     final authenticationRepository = context.read<AuthenticationRepository>();
@@ -136,15 +155,15 @@ class _LoginViewState extends State<LoginView> {
                   if (state is CampaignFetching) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  // if (state is CampaignFetchingError) {
-                  //   return Center(child: Text(state.error));
-                  // }
+                  if (state is CampaignFetchingError) {
+                    return Center(child: Text(state.error));
+                  }
                   if (state is CampaignJoinError) {
                     return Center(child: Text(state.error));
                   }
                   if (state is CampaignLoaded) {
                     final data = state.data;
-                      return Row(
+                    return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -201,9 +220,10 @@ class _LoginViewState extends State<LoginView> {
                                   child: OnBoarding(
                                     title: data.name,
                                     description: data.description,
+                                    selectedCountry: selectedCountry,
                                     constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 417),
-                                    onContinue: () {
-                                      context.read<LoginBloc>().add(CloseOnBoarding());
+                                    onContinue: (country) {
+                                      context.read<LoginBloc>().add(CloseOnBoarding(country));
                                     },
                                   ),
                                 ),
@@ -301,8 +321,8 @@ class _LoginViewState extends State<LoginView> {
                             title: context.loc.welcome_title,
                             description: context.loc.welcome_subtitle,
                             constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 417),
-                            onContinue: () {
-                              context.read<LoginBloc>().add(CloseOnBoarding());
+                            onContinue: (country) {
+                              context.read<LoginBloc>().add(CloseOnBoarding(country));
                             },
                           ),
                         ),

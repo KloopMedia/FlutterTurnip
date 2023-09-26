@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
-import '../view/language_picker.dart';
+import '../view/pickers.dart';
 import 'provider_buttons.dart';
 
 class LoginPanel extends StatelessWidget {
