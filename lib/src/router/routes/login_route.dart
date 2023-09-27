@@ -17,7 +17,7 @@ class LoginRoute {
       name: name,
       path: path,
       builder: (BuildContext context, GoRouterState state) {
-        final query = state.queryParameters;
+        final query = state.uri.queryParameters;
         if (query.isNotEmpty) {
           final queryString = query.values.first;
           final id = queryString[queryString.length - 1];
