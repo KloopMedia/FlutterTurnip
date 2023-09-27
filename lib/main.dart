@@ -37,15 +37,6 @@ Future<void> main() async {
     sound: true,
   );
 
-  var fcmToken;
-  if (kIsWeb) {
-    fcmToken = await messaging.getToken(vapidKey: DefaultFirebaseOptions.cloudMessageId);
-  } else {
-    fcmToken = await messaging.getToken();
-  }
-
-  print("fcmToken: $fcmToken");
-
   runApp(
     MultiRepositoryProvider(
       providers: [
