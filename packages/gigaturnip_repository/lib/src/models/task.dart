@@ -1,12 +1,9 @@
-import 'dart:convert';
 import 'dart:math';
 
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Task;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:local_database/local_database.dart' as db;
 
 part 'task.g.dart';
 
@@ -58,39 +55,6 @@ class Task extends Equatable {
       stage: stage,
       createdOffline: offline,
       submittedOffline: false,
-    );
-  }
-
-  db.TaskCompanion toDB() {
-    return db.TaskCompanion.insert(
-      id: Value(id),
-      name: name,
-      complete: complete,
-      reopened: reopened,
-      stage: stage.id,
-      campaign: stage.campaign,
-      createdAt: Value(createdAt),
-      responses: Value(jsonEncode(responses)),
-      createdOffline: Value(createdOffline),
-      updatedAt: Value(updatedAt),
-      submittedOffline: Value(submittedOffline),
-    );
-  }
-
-  factory Task.fromDB(db.TaskData model, db.TaskStageData stage) {
-    return Task(
-      id: model.id,
-      name: model.name,
-      responses: jsonDecode(model.responses ?? "{}"),
-      complete: model.complete,
-      reopened: model.reopened,
-      createdAt: model.createdAt,
-      updatedAt: model.updatedAt,
-      cardJsonSchema: jsonDecode(stage.cardJsonSchema ?? "{}"),
-      cardUiSchema: jsonDecode(stage.cardUiSchema ?? "{}"),
-      stage: TaskStage.fromDB(stage),
-      createdOffline: model.createdOffline,
-      submittedOffline: model.submittedOffline,
     );
   }
 

@@ -1,10 +1,6 @@
-import 'dart:convert';
-
-import 'package:drift/drift.dart' show Value;
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show TaskStage;
 import 'package:json_annotation/json_annotation.dart';
-import 'package:local_database/local_database.dart' as db;
 
 part 'task_stage.g.dart';
 
@@ -86,55 +82,6 @@ class TaskStage extends Equatable {
       stageType: convertStringToStageType(model.stageType),
       openLimit: model.rankLimit?['open_limit'] ?? 0,
       totalLimit: model.rankLimit?['total_limit'] ?? 0
-    );
-  }
-
-  db.TaskStageCompanion toDB() {
-    return db.TaskStageCompanion.insert(
-      id: Value(id),
-      name: name,
-      description: Value(description),
-      chain: chain,
-      campaign: campaign,
-      availableFrom: Value(availableFrom),
-      availableTo: Value(availableTo),
-      stageType: Value(convertStageTypeToString(stageType)),
-      openLimit: openLimit,
-      totalLimit: totalLimit,
-    );
-  }
-
-  factory TaskStage.fromDB(db.TaskStageData model) {
-    return TaskStage(
-        id: model.id,
-        name: model.name,
-        description: model.description,
-        cardJsonSchema: jsonDecode(model.cardJsonSchema ?? "{}"),
-        cardUiSchema: jsonDecode(model.cardUiSchema ?? "{}"),
-        chain: model.chain,
-        campaign: model.campaign,
-        availableTo: model.availableTo,
-        availableFrom: model.availableFrom,
-        stageType: convertStringToStageType(model.stageType),
-        openLimit: model.openLimit,
-        totalLimit: model.totalLimit,
-    );
-  }
-
-  factory TaskStage.fromRelevant(db.RelevantTaskStageData model) {
-    return TaskStage(
-      id: model.id,
-      name: model.name,
-      description: model.description,
-      cardJsonSchema: null,
-      cardUiSchema: null,
-      chain: model.chain,
-      campaign: model.campaign,
-      availableTo: model.availableTo,
-      availableFrom: model.availableFrom,
-      stageType: convertStringToStageType(model.stageType),
-      openLimit: model.openLimit,
-      totalLimit: model.totalLimit,
     );
   }
 
