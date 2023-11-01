@@ -90,7 +90,7 @@ class CampaignView extends StatefulWidget {
 
 class _CampaignViewState extends State<CampaignView> {
   late SharedPreferences sharedPreferences;
-  String? selectedCountry;
+  List<String>? selectedCountry = [];
   bool isDialogShown = false;
   bool showFilters = false;
   List<dynamic> queries = [];
@@ -128,26 +128,28 @@ class _CampaignViewState extends State<CampaignView> {
 
   void initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    // List<String>? list = sharedPreferences.getStringList(Constants.selectedCountry) ?? [];
-    // if (list.isNotEmpty) {
+    selectedCountry = sharedPreferences.getStringList(Constants.selectedCountry);
+    // final selectedCountry = sharedPreferences.getStringList(Constants.selectedCountry);
+    // print('*** $selectedCountry'); //[1, Kyrgyzstan]
+    // if (selectedCountry != null && selectedCountry.isNotEmpty) {
     //   isDialogShown = true;
-    //   queries.add(Country(id: int.tryParse(list[0])!, name: list[1]));
-    //   _onFilterTapByQuery({'countries__name': list[1]});
+    //   _onFilterTapByQuery({'countries__name': selectedCountry[1]});
+    //   queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
     // }
   }
 
   _searchBarDialog({
     required List data,
-    required Function(String value) onSubmit,
+    required Function(List value) onSubmit,
   }) {
     if (context.isSmall) {
       showModalBottomSheet(
+        isDismissible: false,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15.0))),
         context: context,
         builder: (context) {
           return DropdownDialog(
-            // selectedCountry: selectedCountry,
             data: data,
             onSubmit: (value) {
               onSubmit(value);
@@ -160,7 +162,6 @@ class _CampaignViewState extends State<CampaignView> {
         barrierDismissible: false,
         builder: (context) {
           return SearchBarDialog(
-            // selectedCountry: selectedCountry,
             data: data,
             onSubmit: (value) {
              onSubmit(value);
@@ -181,7 +182,12 @@ class _CampaignViewState extends State<CampaignView> {
               _searchBarDialog(
                 data: snapshot.data!,
                 onSubmit: (selectedCountry) {
-                  context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry});
+                  setState(() {
+                    queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
+                  });
+                  sharedPreferences.setStringList(Constants.selectedCountry, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
+                  context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
+                  context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
                 }
               );
             });

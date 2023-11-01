@@ -232,7 +232,7 @@ class _LoginViewState extends State<LoginView> {
                                     campaignCountries: data.countries,
                                     constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
                                     onContinue: (country) {
-                                      sharedPreferences.setString(Constants.selectedCountry, country.first.name);
+                                      sharedPreferences.setStringList(Constants.selectedCountry, [country.first.id.toString(), country.first.name]);
                                       context.read<LoginBloc>().add(CloseOnBoarding(country));
                                     },
                                   ),
@@ -332,7 +332,7 @@ class _LoginViewState extends State<LoginView> {
                             description: context.loc.welcome_subtitle,
                             constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
                             onContinue: (country) {
-                              sharedPreferences.setString(Constants.selectedCountry, country.first.name);
+                              sharedPreferences.setStringList(Constants.selectedCountry, [country.first.id.toString(), country.first.name]);
                               context.read<LoginBloc>().add(CloseOnBoarding(country));
                             },
                           ),

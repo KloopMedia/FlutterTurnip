@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../features/login/view/pickers.dart';
 
 class SearchBarDialog extends StatefulWidget{
-  // final String? selectedCountry;
   final List data;
-  final Function(String value) onSubmit;
+  final Function(List value) onSubmit;
 
   const SearchBarDialog({
     super.key,
-    // this.selectedCountry,
     required this.data,
     required this.onSubmit,
   });
@@ -22,7 +21,8 @@ class SearchBarDialog extends StatefulWidget{
 
 class SearchBarDialogState extends State<SearchBarDialog> {
   final textController = TextEditingController();
-  String country = '';
+  List country = [];
+  String countryName = '';
   String searchText = '';
   bool found = true;
   List filteredItems = [];
@@ -31,11 +31,10 @@ class SearchBarDialogState extends State<SearchBarDialog> {
   void initState() {
     super.initState();
     filteredItems = widget.data;
-    // textController.text = widget.selectedCountry ?? '';
     textController.addListener(() {
       if (textController.text.isEmpty) {
         setState(() {
-          country = '';
+          countryName = '';
           searchText = '';
           found = true;
           filteredItems = widget.data;
@@ -112,7 +111,7 @@ class SearchBarDialogState extends State<SearchBarDialog> {
               ),
               const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: const Color(0xFFEFF1F1),
@@ -132,13 +131,14 @@ class SearchBarDialogState extends State<SearchBarDialog> {
                         itemCount: filteredItems.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.only(top: 7),
                             child: TextButton(
                               onPressed: () {
                                 setState(() {
-                                  country = filteredItems[index].name;
+                                  country.add(filteredItems[index]);
+                                  countryName = filteredItems[index].name;
                                 });
-                                textController.text = country;
+                                textController.text = countryName;
                               },
                               child: Align(
                                 alignment: Alignment.centerLeft,
@@ -166,8 +166,10 @@ class SearchBarDialogState extends State<SearchBarDialog> {
               const SizedBox(height: 10),
               SignUpButton(
                 onPressed: () {
-                  widget.onSubmit(country);
-                  Navigator.pop(context);
+                  if (country.isNotEmpty) {
+                    widget.onSubmit(country);
+                    Navigator.pop(context);
+                  }
                 },
                 buttonText: context.loc.confirm,
                 width: double.infinity,
@@ -183,12 +185,10 @@ class SearchBarDialogState extends State<SearchBarDialog> {
 
 class DropdownDialog extends StatefulWidget {
   final List data;
-  final Function(String value) onSubmit;
-  // final String? selectedCountry;
+  final Function(List value) onSubmit;
 
   const DropdownDialog({
     Key? key,
-    // this.selectedCountry,
     required this.data,
     required this.onSubmit,
   }) : super(key: key);
@@ -198,60 +198,68 @@ class DropdownDialog extends StatefulWidget {
 }
 
 class _DropdownDialogState extends State<DropdownDialog> {
-  String country = '';
+  List country = [];
 
   @override
   void initState() {
     super.initState();
-    // country = widget.selectedCountry ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+
     return Wrap(
       children: [
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.loc.indicate_country,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF444748),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.loc.indicate_country,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF444748),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                context.loc.indicate_your_country,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF5C5F5F),
+                const SizedBox(height: 5),
+                Text(
+                  context.loc.indicate_your_country,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF5C5F5F),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              // CountryPicker(
-              //   // campaignCountry: widget.selectedCountry,
-              //   countries: widget.data,
-              //   onTap: (value) {
-              //     country = value;
-              //   },
-              // ),
-              const SizedBox(height: 40),
-              SignUpButton(
-                width: double.infinity,
-                onPressed: () {
-                  widget.onSubmit(country);
-                  Navigator.pop(context);
-                },
-                buttonText: context.loc.further,
-                isActive: country.isNotEmpty,
-              )
-            ],
+                const SizedBox(height: 10),
+                CountryPicker(
+                  campaignCountry: (country.isNotEmpty) ? country.first.name : null,
+                  countries: widget.data,
+                  onTap: (value) {
+                    setState(() {
+                      country = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 40),
+                SignUpButton(
+                  width: double.infinity,
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      widget.onSubmit(country);
+                      Navigator.pop(context);
+                    }
+                  },
+                  buttonText: context.loc.further,
+                  isActive: country.isNotEmpty,
+                )
+              ],
+            ),
           ),
         ),
       ],

@@ -52,7 +52,7 @@ class LanguagePicker extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Text(
-            context.loc.language,
+            context.loc.language_label,
             style: textStyle,
           ),
         ),
@@ -170,7 +170,7 @@ class CountryPicker extends StatelessWidget {
               borderSide: BorderSide(color: theme.isLight ? theme.error : theme.error),
               borderRadius: BorderRadius.circular(15.0),
             ),
-            hintText: context.loc.choose_language,
+            hintText: context.loc.choose_country,
             hintStyle: TextStyle(
               color: hintTextColor,
               fontSize: 16.0,

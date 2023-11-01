@@ -121,8 +121,6 @@ class _OnBoardingState extends State<OnBoarding> {
                       campaignLocales.add(locale);
                     }
                     return LanguagePicker(
-                        errorMessage: (errorMessage != null && isLocaleSelected == false)
-                            ? errorMessage : 'null',
                         isLocaleSelected: isLocaleSelected,
                         campaignLocales: campaignLocales);
                   }
@@ -130,9 +128,6 @@ class _OnBoardingState extends State<OnBoarding> {
                 },
                )
                : LanguagePicker(
-                 errorMessage: (errorMessage != null && isLocaleSelected == false)
-                     ? errorMessage
-                     : null,
                  isLocaleSelected: isLocaleSelected,
                  campaignLocales: const [],
                ),
@@ -151,9 +146,6 @@ class _OnBoardingState extends State<OnBoarding> {
                             campaignCountry: countryName,
                             countries: countries,
                             onTap: (value) {
-                              // campaignCountries.removeWhere((item) => item == country);
-                              // campaignCountries.add(country);
-                              // countryMap.addAll({'countries__name': country});
                               setState(() {
                                 isCountrySelected = true;
                                 country = value;
@@ -166,9 +158,6 @@ class _OnBoardingState extends State<OnBoarding> {
                           campaignCountry: (country.isNotEmpty) ? '${country.first.name}' : null,
                           countries: countries,
                           onTap: (value) {
-                            // campaignCountries.removeWhere((item) => item == country);
-                            // campaignCountries.add(country);
-                            // countryMap.addAll({'countries__name': country});
                             setState(() {
                               isCountrySelected = true;
                               country = value;
@@ -206,7 +195,7 @@ class _OnBoardingState extends State<OnBoarding> {
               : SignUpButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    widget.onContinue(country ?? []);
+                    widget.onContinue(country);
                   }
                 },
                 buttonText: context.loc.further,
