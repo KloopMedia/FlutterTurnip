@@ -190,7 +190,7 @@ class CountryPicker extends StatelessWidget {
           isExpanded: true,
           isDense: true,
           icon: Icon(Icons.keyboard_arrow_down, color: theme.primary),
-          value: campaignCountry ?? '',
+          value: campaignCountry,
           onChanged: (countryName) {
             final country = countries.where((element) => element.name == countryName).toList();
             onTap(country);

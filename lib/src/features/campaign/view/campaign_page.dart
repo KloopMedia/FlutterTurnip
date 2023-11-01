@@ -65,6 +65,7 @@ class _CampaignPageState extends State<CampaignPage> {
             CountryRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
             ),
+            context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
         ),
         BlocProvider(
@@ -72,7 +73,6 @@ class _CampaignPageState extends State<CampaignPage> {
             LanguageRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
             ),
-            context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
         ),
       ],
@@ -173,7 +173,7 @@ class _CampaignViewState extends State<CampaignView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: context.read<LanguageCubit>().loadData(),
+      future: context.read<CountryCubit>().loadData(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (!isDialogShown) {

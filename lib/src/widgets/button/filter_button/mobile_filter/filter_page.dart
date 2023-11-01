@@ -32,6 +32,7 @@ class FilterPage extends StatelessWidget {
             CountryRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
             ),
+            context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
         ),
         BlocProvider(
@@ -39,7 +40,6 @@ class FilterPage extends StatelessWidget {
             LanguageRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
             ),
-            context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
         ),
       ],

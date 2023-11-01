@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/bloc.dart';
 import '../../../utilities/constants.dart';
+import '../../campaign/bloc/country_bloc/country_cubit.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
@@ -46,6 +47,13 @@ class LoginPage extends StatelessWidget {
             LanguageRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
             ),
+          )..initialize(),
+        ),
+        BlocProvider(
+          create: (context) => CountryCubit(
+            CountryRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+            ),
             context.read<GigaTurnipApiClient>(),
           )..initialize(),
         ),
@@ -74,6 +82,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
+    initializeSharedPreferences();
     // if (widget.campaignId != null) {
       // sharedPreferences.setInt(Constants.linkedByCampaign, widget.campaignId);
     // }
@@ -182,8 +191,8 @@ class _LoginViewState extends State<LoginView> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Image.asset('assets/images/people_2.png'),
-                                    const SizedBox(height: 80),
+                                    Image.asset('assets/images/people_3.png'),
+                                    const SizedBox(height: 50),
                                     Text(
                                       data.name,
                                       style: const TextStyle(
@@ -220,9 +229,10 @@ class _LoginViewState extends State<LoginView> {
                                   child: OnBoarding(
                                     title: data.name,
                                     description: data.description,
-                                    selectedCountry: selectedCountry,
-                                    constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 417),
+                                    campaignCountries: data.countries,
+                                    constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
                                     onContinue: (country) {
+                                      sharedPreferences.setString(Constants.selectedCountry, country.first.name);
                                       context.read<LoginBloc>().add(CloseOnBoarding(country));
                                     },
                                   ),
@@ -282,8 +292,8 @@ class _LoginViewState extends State<LoginView> {
                             //   height: 70,
                             //   child: const Text('Logo'),
                             // ),
-                            Image.asset('assets/images/people_2.png'),
-                            const SizedBox(height: 80),
+                            Image.asset('assets/images/people_3.png'),
+                            const SizedBox(height: 50),
                             Text(
                               context.loc.welcome_title,
                               style: const TextStyle(
@@ -320,8 +330,9 @@ class _LoginViewState extends State<LoginView> {
                           child: OnBoarding(
                             title: context.loc.welcome_title,
                             description: context.loc.welcome_subtitle,
-                            constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 417),
+                            constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
                             onContinue: (country) {
+                              sharedPreferences.setString(Constants.selectedCountry, country.first.name);
                               context.read<LoginBloc>().add(CloseOnBoarding(country));
                             },
                           ),

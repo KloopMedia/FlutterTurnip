@@ -58,7 +58,7 @@ class _OnBoardingState extends State<OnBoarding> {
 
     return Container(
       constraints: widget.constraints,
-      padding: const EdgeInsets.all(24.0),
+      padding: (context.isSmall) ? const EdgeInsets.all(24.0) : null,
       child: SingleChildScrollView(
         child: Form(
           key: formKey,
@@ -83,12 +83,11 @@ class _OnBoardingState extends State<OnBoarding> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    (secondPage && context.isSmall) ? Image.asset('assets/images/people_2.png') : Image.asset('assets/images/group.png'),
-                    Container(height: 1, color: const Color(0xFFB8B8AE))
+                    (secondPage && context.isSmall) ? Image.asset('assets/images/people_3.png') : Image.asset('assets/images/earth.png'),
                   ],
                 ),
               ),
-              const SizedBox(height: 60),
+              if (context.isSmall) const SizedBox(height: 60),
               Text(
                 (secondPage && context.isSmall) ? widget.title : context.loc.welcome,
                 style: TextStyle(
@@ -138,34 +137,49 @@ class _OnBoardingState extends State<OnBoarding> {
                  campaignLocales: const [],
                ),
               if (!secondPage) const SizedBox(height: 20),
-              // BlocBuilder<LanguageCubit, RemoteDataState<repo.Language>>(
-              //     builder: (context, state) {
-              //         if (state is RemoteDataLoaded<repo.Language> && state.data.isNotEmpty) {
-              //         final countries = state.data;
-              //         final List<String> campaignCountries = [];
-              //         // if (widget.campaignCountries !=  null && widget.campaignCountries!.isNotEmpty) {
-              //         //   for (var id in widget.campaignLanguages!) {
-              //         //     final matchedCountry = countries.where((e) => e.id == id).toList();
-              //         //     countryname = matchedCountry.first.name;
-              //         //   }
-              //         // }
-              //           return CountryPicker(
-              //             campaignCountry: widget.selectedCountry,
-              //             countries: countries,
-              //             onTap: (value) {
-              //               // campaignCountries.removeWhere((item) => item == country);
-              //               // campaignCountries.add(country);
-              //               // countryMap.addAll({'countries__name': country});
-              //               setState(() {
-              //                 isCountrySelected = true;
-              //                 country = value;
-              //               });
-              //             },
-              //           );
-              //       }
-              //       return const SizedBox.shrink();
-              //     },
-              //   ),
+              if (!secondPage)
+                BlocBuilder<CountryCubit, RemoteDataState<repo.Country>>(
+                  builder: (context, state) {
+                    if (state is RemoteDataLoaded<repo.Country> && state.data.isNotEmpty) {
+                      final countries = state.data;
+                      if (widget.campaignCountries !=  null && widget.campaignCountries!.isNotEmpty) {
+                        for (var id in widget.campaignCountries!) {
+                          final matchedCountry = countries.where((e) => e.id == id).toList();
+                          final countryName = matchedCountry.first.name ?? '';
+                          isCountrySelected = true;
+                          return CountryPicker(
+                            campaignCountry: countryName,
+                            countries: countries,
+                            onTap: (value) {
+                              // campaignCountries.removeWhere((item) => item == country);
+                              // campaignCountries.add(country);
+                              // countryMap.addAll({'countries__name': country});
+                              setState(() {
+                                isCountrySelected = true;
+                                country = value;
+                              });
+                            },
+                          );
+                        }
+                      } else {
+                        return CountryPicker(
+                          campaignCountry: (country.isNotEmpty) ? '${country.first.name}' : null,
+                          countries: countries,
+                          onTap: (value) {
+                            // campaignCountries.removeWhere((item) => item == country);
+                            // campaignCountries.add(country);
+                            // countryMap.addAll({'countries__name': country});
+                            setState(() {
+                              isCountrySelected = true;
+                              country = value;
+                            });
+                          },
+                        );
+                      }
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
               const SizedBox(height: 60),
               (context.isSmall)
                 ? Row (
@@ -185,19 +199,19 @@ class _OnBoardingState extends State<OnBoarding> {
                       }
                     },
                     buttonText: context.loc.further,
-                    isActive: isLocaleSelected,// && isCountrySelected,
+                    isActive: isLocaleSelected && isCountrySelected,
                   ),
                 ],
               )
               : SignUpButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    widget.onContinue(country);
+                    widget.onContinue(country ?? []);
                   }
                 },
                 buttonText: context.loc.further,
                 width: double.infinity,
-                isActive: isLocaleSelected,// && isCountrySelected,
+                isActive: isLocaleSelected && isCountrySelected,
               ),
             ],
           ),
