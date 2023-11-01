@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
@@ -26,12 +27,13 @@ class SearchBarDialogState extends State<SearchBarDialog> {
   String searchText = '';
   bool found = true;
   List filteredItems = [];
+  bool hasText = false;
 
   @override
   void initState() {
-    super.initState();
     filteredItems = widget.data;
     textController.addListener(() {
+      _onTextChanged();
       if (textController.text.isEmpty) {
         setState(() {
           countryName = '';
@@ -45,6 +47,13 @@ class SearchBarDialogState extends State<SearchBarDialog> {
         });
         searchFunc();
       }
+    });
+    super.initState();
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      hasText = textController.text.isNotEmpty;
     });
   }
 
@@ -70,43 +79,52 @@ class SearchBarDialogState extends State<SearchBarDialog> {
   }
 
   @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final theme = Theme.of(context).colorScheme;
 
     return SimpleDialog(
       titlePadding: EdgeInsets.zero,
       contentPadding: const EdgeInsets.all(20),
+      backgroundColor: theme.background,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
       children: [
-        SizedBox(
+        Container(
           width: 428,
+          color: theme.background,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 context.loc.indicate_country,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF444748),
+                  color: theme.isLight ? theme.neutral30 : theme.neutral90,
                 ),
               ),
               const SizedBox(height: 5),
               Text(
                 context.loc.indicate_your_country,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF5C5F5F),
+                  color: theme.isLight ? theme.neutral40 : theme.neutral80,
                 ),
               ),
               const SizedBox(height: 20),
               Text(
                 context.loc.country,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF5C5F5F),
+                  color: theme.isLight ? theme.neutral40 : theme.neutral90,
                 ),
               ),
               const SizedBox(height: 10),
@@ -114,14 +132,23 @@ class SearchBarDialogState extends State<SearchBarDialog> {
                 padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: const Color(0xFFEFF1F1),
+                  color: theme.isLight ? theme.neutral95 : theme.neutral12
                 ),
                 child: Column(
                   children: [
                     TextField(
                       controller: textController,
+                      style: TextStyle(
+                        color: theme.isLight ? theme.neutral20 : theme.neutral90,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
                       decoration: InputDecoration(
-                        prefixIcon: Image.asset('assets/images/search.png', color: const Color(0xFFC4C7C7))
+                        prefixIcon: Image.asset(
+                          'assets/images/search.png',
+                          color: hasText
+                            ? theme.primary
+                            : theme.isLight ? theme.neutral80 : theme.neutral90)
                       ),
                     ),
 
@@ -144,10 +171,10 @@ class SearchBarDialogState extends State<SearchBarDialog> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   filteredItems[index].name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF45464F)
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.onSurfaceVariant
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
@@ -208,10 +235,12 @@ class _DropdownDialogState extends State<DropdownDialog> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+    final theme = Theme.of(context).colorScheme;
 
     return Wrap(
       children: [
         Container(
+          color: theme.background,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
           child: Form(
@@ -221,19 +250,19 @@ class _DropdownDialogState extends State<DropdownDialog> {
               children: [
                 Text(
                   context.loc.indicate_country,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF444748),
+                    color: theme.isLight ? theme.neutral30 : theme.neutral90,
                   ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   context.loc.indicate_your_country,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF5C5F5F),
+                    color: theme.isLight ? theme.neutral40 : theme.neutral80,
                   ),
                 ),
                 const SizedBox(height: 10),

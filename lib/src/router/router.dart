@@ -69,7 +69,6 @@ class AppRouter {
         final authenticationService = context.read<AuthenticationRepository>();
 
         final query = {...state.queryParameters};
-        print('>>> $query');
         final bool loggedIn = authenticationService.user.isNotEmpty;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final campaignIdQueryValue = query['join_campaign'];

@@ -31,7 +31,9 @@ class SignUpButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          backgroundColor: (isActive != null && !isActive!) ? theme.neutral95  : theme.primary,
+          backgroundColor: (isActive != null && !isActive!)
+            ? theme.isLight ? theme.neutral95 : theme.neutral12
+            : theme.primary,
         ),
         onPressed: () {
           onPressed();

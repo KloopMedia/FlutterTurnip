@@ -17,7 +17,6 @@ class CampaignRoute {
       name: name,
       path: path,
       builder: (BuildContext context, GoRouterState state) {
-        print('>>> CampaignPage');
         return const CampaignPage();
       },
     );
