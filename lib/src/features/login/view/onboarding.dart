@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart' as repo;
 
 import '../../../widgets/widgets.dart';
-import '../../campaign/bloc/campaign_cubit.dart';
 import '../../campaign/bloc/country_bloc/country_cubit.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import 'pickers.dart';
@@ -141,7 +139,10 @@ class _OnBoardingState extends State<OnBoarding> {
                         for (var id in widget.campaignCountries!) {
                           final matchedCountry = countries.where((e) => e.id == id).toList();
                           final countryName = matchedCountry.first.name ?? '';
-                          isCountrySelected = true;
+                          if (matchedCountry.isNotEmpty) {
+                            isCountrySelected = true;
+                            country = matchedCountry;
+                          }
                           return CountryPicker(
                             campaignCountry: countryName,
                             countries: countries,

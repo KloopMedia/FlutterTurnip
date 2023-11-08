@@ -239,6 +239,7 @@ class _LoginViewState extends State<LoginView> {
                                 ),
                               if (loginState is OnboardingClosed)
                                 LoginPanel(
+                                  constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                                   onChange: _onChange,
                                   onSubmit: (value) => loginWithPhone(),
@@ -339,6 +340,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       if (loginState is OnboardingClosed)
                         LoginPanel(
+                          constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
                           onChange: _onChange,
                           onSubmit: (value) => loginWithPhone(),

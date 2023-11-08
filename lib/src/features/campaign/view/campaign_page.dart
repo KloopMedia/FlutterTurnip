@@ -12,7 +12,6 @@ import 'dart:async';
 import '../../../utilities/constants.dart';
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../../../widgets/dialogs/selection_dialogs.dart';
-import '../../login/view/pickers.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
@@ -43,6 +42,7 @@ class _CampaignPageState extends State<CampaignPage> {
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
               limit: isGridView ? 9 : 10,
             ),
+            context.read<SharedPreferences>(),
           )..initialize(),
         ),
         BlocProvider<UserCampaignCubit>(
@@ -51,6 +51,7 @@ class _CampaignPageState extends State<CampaignPage> {
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
               limit: isGridView ? 9 : 10,
             ),
+            context.read<SharedPreferences>(),
           )..initialize(),
         ),
         BlocProvider(
@@ -128,14 +129,11 @@ class _CampaignViewState extends State<CampaignView> {
 
   void initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    selectedCountry = sharedPreferences.getStringList(Constants.selectedCountry);
-    // final selectedCountry = sharedPreferences.getStringList(Constants.selectedCountry);
-    // print('*** $selectedCountry'); //[1, Kyrgyzstan]
-    // if (selectedCountry != null && selectedCountry.isNotEmpty) {
-    //   isDialogShown = true;
-    //   _onFilterTapByQuery({'countries__name': selectedCountry[1]});
-    //   queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
-    // }
+    final selectedCountry = sharedPreferences.getStringList(Constants.selectedCountry);
+    if (selectedCountry != null && selectedCountry.isNotEmpty) {
+      isDialogShown = true;
+      queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
+    }
   }
 
   _searchBarDialog({
@@ -223,6 +221,7 @@ class _CampaignViewState extends State<CampaignView> {
                               queries.addAll(selectedItems);
                               _onFilterTapByQuery(queryMap);
                             } else {
+                              sharedPreferences.setStringList(Constants.selectedCountry, []);
                               _onFilterTapByQuery(queryMap);
                             }
                           },
@@ -252,6 +251,7 @@ class _CampaignViewState extends State<CampaignView> {
                               } else {
                                 queries.removeWhere((item) => item is Country);
                                 queryMap.removeWhere((key, value) => key =='countries__name');
+                                sharedPreferences.setStringList(Constants.selectedCountry, []);
                                 _onFilterTapByQuery(queryMap);
                               }
                             },
