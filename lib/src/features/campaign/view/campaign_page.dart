@@ -129,7 +129,7 @@ class _CampaignViewState extends State<CampaignView> {
 
   void initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    final selectedCountry = sharedPreferences.getStringList(Constants.selectedCountry);
+    final selectedCountry = sharedPreferences.getStringList(Constants.sharedPrefSelectedCountry);
     if (selectedCountry != null && selectedCountry.isNotEmpty) {
       isDialogShown = true;
       queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
@@ -183,7 +183,7 @@ class _CampaignViewState extends State<CampaignView> {
                   setState(() {
                     queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
                   });
-                  sharedPreferences.setStringList(Constants.selectedCountry, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
+                  sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
                   context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
                   context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
                 }
@@ -221,7 +221,7 @@ class _CampaignViewState extends State<CampaignView> {
                               queries.addAll(selectedItems);
                               _onFilterTapByQuery(queryMap);
                             } else {
-                              sharedPreferences.setStringList(Constants.selectedCountry, []);
+                              sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, []);
                               _onFilterTapByQuery(queryMap);
                             }
                           },
@@ -251,7 +251,7 @@ class _CampaignViewState extends State<CampaignView> {
                               } else {
                                 queries.removeWhere((item) => item is Country);
                                 queryMap.removeWhere((key, value) => key =='countries__name');
-                                sharedPreferences.setStringList(Constants.selectedCountry, []);
+                                sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, []);
                                 _onFilterTapByQuery(queryMap);
                               }
                             },

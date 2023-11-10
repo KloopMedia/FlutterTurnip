@@ -18,9 +18,9 @@ class LoginRoute {
       path: path,
       builder: (BuildContext context, GoRouterState state) {
         final query = state.queryParameters;
-        if (query.isNotEmpty) {
+        if (query.isNotEmpty && query.values.first.contains('campaign')) {
           final queryString = query.values.first;
-          final id = queryString[queryString.length - 1];
+          final id = queryString.substring(queryString.lastIndexOf('/') + 1);
           final campaignId = int.tryParse(id);
           return LoginPage(campaignId: campaignId);
         }

@@ -83,16 +83,12 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     super.initState();
     initializeSharedPreferences();
-    // if (widget.campaignId != null) {
-      // sharedPreferences.setInt(Constants.linkedByCampaign, widget.campaignId);
-    // }
   }
 
   void initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    // List<String>? list = sharedPreferences.getStringList(Constants.selectedCountry) ?? [];
-    // if (list.isNotEmpty) {
-    //   selectedCountry = list[1];
+    // if (widget.campaignId != null) {
+    //   sharedPreferences.setInt(Constants.sharedPrefCampaignLink, widget.campaignId!);
     // }
   }
 
@@ -232,7 +228,7 @@ class _LoginViewState extends State<LoginView> {
                                     campaignCountries: data.countries,
                                     constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
                                     onContinue: (country) {
-                                      sharedPreferences.setStringList(Constants.selectedCountry, [country.first.id.toString(), country.first.name]);
+                                      sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, [country.first.id.toString(), country.first.name]);
                                       context.read<LoginBloc>().add(CloseOnBoarding(country));
                                     },
                                   ),
@@ -252,9 +248,6 @@ class _LoginViewState extends State<LoginView> {
                                     context.read<LoginBloc>().add(ConfirmOTP(smsCode, loginState.verificationId));
                                   },
                                 ),
-                              // if (context.isSmall)
-                              //   if (state is CampaignFetchingError)
-                                  ///TODO: campaign name, description, join button
                             ],
                           ),
                         ),
@@ -333,7 +326,7 @@ class _LoginViewState extends State<LoginView> {
                             description: context.loc.welcome_subtitle,
                             constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
                             onContinue: (country) {
-                              sharedPreferences.setStringList(Constants.selectedCountry, [country.first.id.toString(), country.first.name]);
+                              sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, [country.first.id.toString(), country.first.name]);
                               context.read<LoginBloc>().add(CloseOnBoarding(country));
                             },
                           ),

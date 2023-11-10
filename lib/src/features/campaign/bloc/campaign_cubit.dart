@@ -23,7 +23,7 @@ class CampaignCubit extends RemoteDataCubit<Campaign> with UserCampaignCubit, Se
     Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) {
-    final selectedCountry = _sharedPreferences.getStringList(Constants.selectedCountry);
+    final selectedCountry = _sharedPreferences.getStringList(Constants.sharedPrefSelectedCountry);
     if (selectedCountry != null && selectedCountry.isNotEmpty) {
       final countryQuery = {'countries__name': selectedCountry[1]};
       return _repository.fetchDataOnPage(page, countryQuery);
