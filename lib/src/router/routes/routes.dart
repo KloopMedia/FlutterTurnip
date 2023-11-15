@@ -7,3 +7,4 @@ export 'task_route.dart';
 export 'notification_route.dart';
 export 'available_task_route.dart';
 export 'settings_route.dart';
+export 'chain_route.dart';
