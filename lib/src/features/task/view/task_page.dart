@@ -13,7 +13,6 @@ import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_page_floating_action_button.dart';
 import 'relevant_task_page.dart';
-import 'settings_page.dart';
 
 class TaskPage extends StatefulWidget {
   final int campaignId;
@@ -187,13 +186,8 @@ class SettingsButton extends StatelessWidget {
         if (state is CampaignInitialized) {
           return IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SettingsPage();
-                  },
-                ),
-              );
+              final params = GoRouterState.of(context).pathParameters;
+              context.pushNamed(SettingsRoute.name, pathParameters: params);
             },
             icon: const Icon(Icons.settings),
           );

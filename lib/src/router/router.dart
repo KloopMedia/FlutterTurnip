@@ -98,6 +98,7 @@ class AppRouter {
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
         NotificationRoute(parentKey: _rootNavigatorKey).route,
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,
+        SettingsRoute(parentKey: _rootNavigatorKey).route,
       ],
     );
   }

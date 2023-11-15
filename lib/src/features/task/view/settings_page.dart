@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/router/routes/chain_route.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/list_tile/custom_list_tile.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -35,7 +37,10 @@ class SettingsPage extends StatelessWidget {
             leading: Image.asset('assets/icon/chain.png', height: 24, width: 24),
             title: Text(context.loc.settings_chains, style: textStyle),
             trailing: trailing,
-            onTap: () {},
+            onTap: () {
+              final params = GoRouterState.of(context).pathParameters;
+              context.pushNamed(ChainRoute.name, pathParameters: params);
+            },
           ),
           CustomListTile(
             height: 64,
