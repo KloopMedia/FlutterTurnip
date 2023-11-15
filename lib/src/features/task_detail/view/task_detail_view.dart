@@ -333,7 +333,7 @@ class _CurrentTask extends StatelessWidget {
             shrinkWrap: true,
             locale: context.read<LocalizationBloc>().state.locale,
             correctFormData: task.stage.quizAnswers,
-            showCorrectFields: showAnswers,
+            showCorrectFields: task.complete,
             extraButtons: [
               if (showAnswers)
                 ElevatedButton(
