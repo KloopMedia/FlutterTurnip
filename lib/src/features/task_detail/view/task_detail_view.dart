@@ -264,9 +264,14 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                           if (state.previousTasks.isNotEmpty)
                             const Divider(color: Colors.black, height: 36, thickness: 2),
                           _CurrentTask(
-                              task: state.data,
-                              pageStorageKey: _pageStorageKey,
-                              scrollController: scrollController),
+                            task: state.data,
+                            pageStorageKey: _pageStorageKey,
+                            scrollController: scrollController,
+                            showAnswers: state is ShowAnswers,
+                            redirect: state is ShowAnswers
+                                ? () => redirect(context, state.nextTaskId)
+                                : null,
+                          ),
                         ],
                       );
                     }
@@ -286,12 +291,16 @@ class _CurrentTask extends StatelessWidget {
   final TaskDetail task;
   final PageStorageKey pageStorageKey;
   final ScrollController scrollController;
+  final bool showAnswers;
+  final void Function()? redirect;
 
   const _CurrentTask({
     Key? key,
     required this.task,
     required this.pageStorageKey,
     required this.scrollController,
+    required this.redirect,
+    required this.showAnswers,
   }) : super(key: key);
 
   @override
@@ -324,8 +333,19 @@ class _CurrentTask extends StatelessWidget {
             shrinkWrap: true,
             locale: context.read<LocalizationBloc>().state.locale,
             correctFormData: task.stage.quizAnswers,
-            showCorrectFields: task.complete,
+            showCorrectFields: showAnswers,
             extraButtons: [
+              if (showAnswers)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: redirect,
+                  child: Text(context.loc.form_submit_button),
+                ),
               if (task.stage.allowGoBack)
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
