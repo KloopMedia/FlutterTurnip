@@ -171,5 +171,10 @@
 	"sort_by_new": "New first",
 	"sort_by_old": "Old first",
 	"date": "Date",
-	"search": "Search"
+	"search": "Search",
+
+	"settings_chains": "Chains",
+	"settings_tracks": "Tracks",
+	"settings_ranks": "Ranks",
+	"settings_messages": "Messages"
 }

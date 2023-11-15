@@ -171,5 +171,10 @@
 	"sort_by_new": "Спочатку нові",
 	"sort_by_old": "Спочатку старі",
 	"date": "Дата",
-	"search": "Поиск"
+	"search": "Поиск",
+
+	"settings_chains": "Цепочки",
+	"settings_tracks": "Треки",
+	"settings_ranks": "Ранги",
+	"settings_messages": "Сообщения"
 }

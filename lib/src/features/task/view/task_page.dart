@@ -13,6 +13,7 @@ import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
 import '../widgets/task_page_floating_action_button.dart';
 import 'relevant_task_page.dart';
+import 'settings_page.dart';
 
 class TaskPage extends StatefulWidget {
   final int campaignId;
@@ -166,12 +167,39 @@ class _TaskPageState extends State<TaskPage> {
               ),
             ),
         ],
-        actions: [NotificationButton()],
+        actions: [NotificationButton(), SettingsButton()],
         floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
         child: RelevantTaskPage(
           campaignId: widget.campaignId,
         ),
       ),
+    );
+  }
+}
+
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+      builder: (context, state) {
+        if (state is CampaignInitialized) {
+          return IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SettingsPage();
+                  },
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+          );
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }
