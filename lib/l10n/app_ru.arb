@@ -176,5 +176,7 @@
 	"settings_chains": "Цепочки",
 	"settings_tracks": "Треки",
 	"settings_ranks": "Ранги",
-	"settings_messages": "Сообщения"
+	"settings_messages": "Сообщения",
+
+	"chains": "Цепочки"
 }

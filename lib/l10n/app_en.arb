@@ -176,5 +176,7 @@
 	"settings_chains": "Chains",
 	"settings_tracks": "Tracks",
 	"settings_ranks": "Ranks",
-	"settings_messages": "Messages"
+	"settings_messages": "Messages",
+
+	"chains": "Chains"
 }
