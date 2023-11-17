@@ -835,13 +835,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  local_database:
-    dependency: transitive
-    description:
-      path: "packages/local_database"
-      relative: true
-    source: path
-    version: "0.0.1"
   logger:
     dependency: transitive
     description:
@@ -1335,14 +1328,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  sqlite3_flutter_libs:
-    dependency: transitive
-    description:
-      name: sqlite3_flutter_libs
-      sha256: "1e20a88d5c7ae8400e009f38ddbe8b001800a6dffa37832481a86a219bc904c7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.15"
   stack_trace:
     dependency: transitive
     description:
@@ -1696,5 +1681,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.0.2 <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.7.0"

@@ -35,6 +35,10 @@ class AppRouter {
     return '${state.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
+  String redirectToTaskPage(BuildContext context, GoRouterState state) {
+    return TaskRoute.path;
+  }
+
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
     final query = {...state.queryParameters};
     final queryString = toQueryString(query, 'join_campaign');
@@ -69,19 +73,25 @@ class AppRouter {
         final authenticationService = context.read<AuthenticationRepository>();
 
         final query = {...state.queryParameters};
+        print('>>> router = $query');
         final bool loggedIn = authenticationService.user.isNotEmpty;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
-        final campaignIdQueryValue = query['join_campaign'];
+        final campaignJoinQueryValue = query['join_campaign'];
+        final queryValues = query.values;
+        final campaignIdQueryValue = (queryValues.isNotEmpty ) ? queryValues.first.contains('/campaigns/') : null;
 
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
+
+        // if there is campaign id query parameter, then send user to relevant task page or to join campaign page
+        if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToTaskPage(context, state);
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
         if (loggingIn) return redirectToInitialPage(context, state);
 
         // if there is query parameter <join_campaign>, then join campaign and send them to relevant task page
-        if (loggedIn && campaignIdQueryValue != null) {
+        if (loggedIn && campaignJoinQueryValue != null) {
           return await joinCampaign(context, state);
         }
 

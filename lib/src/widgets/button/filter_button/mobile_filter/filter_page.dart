@@ -32,6 +32,7 @@ class FilterPage extends StatelessWidget {
             CountryRepository(
               gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
             ),
+            context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
         ),
         BlocProvider(
@@ -58,6 +59,7 @@ class FilterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List selectedItems = [];
+    selectedItems = List.from(queries);
     final theme = Theme.of(context).colorScheme;
     final backgroundColor = theme.isLight ? Colors.white : theme.background;
     final textColor = theme.isLight ? theme.neutral30 : theme.neutral90;
@@ -207,11 +209,7 @@ class Filter<Data, Cubit extends RemoteDataCubit<Data>> extends StatelessWidget 
               data: data,
               title: title,
               onTap: (selectedItem) {
-                final List<dynamic> list;
-                list = List.from(queries);
-                list.removeWhere((element) => element is Data);
-                if (selectedItem != null) list.add(selectedItem);
-                onTap(list);
+                onTap((selectedItem == null) ? [] : [selectedItem]);
               },
             )
           ],

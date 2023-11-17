@@ -1,5 +1,7 @@
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'campaign_state.dart';
 
@@ -8,8 +10,9 @@ mixin SelectableCampaignCubit on RemoteDataCubit<Campaign> {}
 
 class CampaignCubit extends RemoteDataCubit<Campaign> with UserCampaignCubit, SelectableCampaignCubit {
   final CampaignRepository _repository;
+  final SharedPreferences _sharedPreferences;
 
-  CampaignCubit(this._repository);
+  CampaignCubit(this._repository, this._sharedPreferences);
 
   void openCampaignInfo(Campaign campaign) async {
     emit(CampaignInfo.clone(state as RemoteDataInitialized<Campaign>, campaign));
@@ -20,6 +23,12 @@ class CampaignCubit extends RemoteDataCubit<Campaign> with UserCampaignCubit, Se
     Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) {
-    return _repository.fetchDataOnPage(page, query);
+    final selectedCountry = _sharedPreferences.getStringList(Constants.sharedPrefSelectedCountry);
+    if (selectedCountry != null && selectedCountry.isNotEmpty) {
+      final countryQuery = {'countries__name': selectedCountry[1]};
+      return _repository.fetchDataOnPage(page, countryQuery);
+    } else {
+      return _repository.fetchDataOnPage(page, query);
+    }
   }
 }

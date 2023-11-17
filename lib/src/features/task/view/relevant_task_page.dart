@@ -32,17 +32,6 @@ class RelevantTaskPage extends StatefulWidget {
 class _RelevantTaskPageState extends State<RelevantTaskPage> {
   bool closeNotificationCard = false;
 
-  @override
-  void initState() {
-    final repo = AllTaskRepository(
-      gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-      campaignId: widget.campaignId,
-      limit: 10,
-    );
-    repo.fetchAllTaskStages();
-    super.initState();
-  }
-
   void refreshAllTasks(BuildContext context) {
     context.read<RelevantTaskCubit>().refetch();
     context.read<SelectableTaskStageCubit>().refetch();

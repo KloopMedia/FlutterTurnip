@@ -1,10 +1,6 @@
-import 'dart:convert';
-
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:json_annotation/json_annotation.dart';
-import 'package:local_database/local_database.dart' as db;
 
 part 'task_stage_detail.g.dart';
 
@@ -79,46 +75,6 @@ class TaskStageDetail extends Equatable {
   }
 
   Map<String, dynamic> toJson() => _$TaskStageDetailToJson(this);
-
-  db.TaskStageCompanion toDB() {
-    return db.TaskStageCompanion.insert(
-      id: Value(id),
-      name: name,
-      description: Value(description),
-      chain: chain,
-      campaign: campaign,
-      richText: Value(richText),
-      jsonSchema: Value(jsonEncode(jsonSchema)),
-      uiSchema: Value(jsonEncode(uiSchema)),
-      availableFrom: Value(availableFrom),
-      availableTo: Value(availableTo),
-      openLimit: openLimit,
-      totalLimit: totalLimit,
-    );
-  }
-
-  factory TaskStageDetail.fromDB(db.TaskStageData model) {
-    return TaskStageDetail(
-      id: model.id,
-      name: model.name,
-      description: model.description,
-      cardJsonSchema: jsonDecode(model.cardJsonSchema ?? "{}"),
-      cardUiSchema: jsonDecode(model.cardUiSchema ?? "{}"),
-      chain: model.chain,
-      campaign: model.campaign,
-      jsonSchema: jsonDecode(model.jsonSchema ?? "{}"),
-      uiSchema: jsonDecode(model.uiSchema ?? "{}"),
-      richText: model.richText,
-      dynamicJsonsSource: [],
-      dynamicJsonsTarget: [],
-      allowGoBack: false,
-      allowRelease: false,
-      availableTo: model.availableTo,
-      availableFrom: model.availableFrom,
-      openLimit: model.openLimit,
-      totalLimit: model.totalLimit,
-    );
-  }
 
   @override
   List<Object?> get props => [id, name, description, chain, richText, availableFrom, availableTo];

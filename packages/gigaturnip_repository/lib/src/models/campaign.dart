@@ -1,8 +1,6 @@
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api show Campaign;
-import 'package:local_database/local_database.dart' as db;
+import 'package:json_annotation/json_annotation.dart';
 
 part 'campaign.g.dart';
 
@@ -17,6 +15,7 @@ class Campaign extends Equatable {
   final String logo;
   final int unreadNotifications;
   final List<int>? languages;
+  final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
 
@@ -29,6 +28,7 @@ class Campaign extends Equatable {
     required this.smsLoginAllow,
     required this.unreadNotifications,
     required this.languages,
+    required this.countries,
     this.canJoin = false,
     required this.smsPhone,
     required this.smsCompleteTaskAllow,
@@ -42,19 +42,6 @@ class Campaign extends Equatable {
     return _$CampaignToJson(this);
   }
 
-  db.CampaignCompanion toDB(bool joined) {
-    return db.CampaignCompanion(
-      id: Value(id),
-      name: Value(name),
-      description: Value(description),
-      descriptor: Value(descriptor),
-      logo: Value(logo),
-      joined: Value(joined),
-      smsPhone: Value(smsPhone),
-      smsCompleteTaskAllow: Value(smsCompleteTaskAllow),
-    );
-  }
-
   factory Campaign.fromApiModel(api.Campaign model, bool canJoin) {
     return Campaign(
       id: model.id,
@@ -66,21 +53,7 @@ class Campaign extends Equatable {
       smsLoginAllow: model.smsLoginAllow,
       unreadNotifications: model.notificationsCount,
       languages: model.languages,
-      smsPhone: model.smsPhone,
-      smsCompleteTaskAllow: model.smsCompleteTaskAllow,
-    );
-  }
-
-  factory Campaign.fromDB(db.CampaignData model) {
-    return Campaign(
-      id: model.id,
-      name: model.name,
-      description: model.description,
-      descriptor: model.descriptor,
-      logo: model.logo,
-      smsLoginAllow: false,
-      unreadNotifications: 0,
-      languages: const [],
+      countries: model.countries,
       smsPhone: model.smsPhone,
       smsCompleteTaskAllow: model.smsCompleteTaskAllow,
     );

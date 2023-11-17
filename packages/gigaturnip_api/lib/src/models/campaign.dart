@@ -17,6 +17,7 @@ class Campaign {
   final String logo;
   final int notificationsCount;
   final List<int>? languages;
+  final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
 
@@ -34,6 +35,7 @@ class Campaign {
     required this.descriptor,
     required this.notificationsCount,
     required this.languages,
+    required this.countries,
     required this.smsPhone,
     this.smsCompleteTaskAllow = false,
   });

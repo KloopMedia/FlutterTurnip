@@ -5,6 +5,10 @@ abstract class LoginEvent extends Equatable {
 }
 
 class CloseOnBoarding extends LoginEvent {
+  final List country;
+
+  const CloseOnBoarding(this.country);
+
   @override
   List<Object> get props => [];
 }
