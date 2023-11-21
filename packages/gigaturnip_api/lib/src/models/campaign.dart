@@ -20,6 +20,7 @@ class Campaign {
   final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
+  final bool isJoined;
 
   Campaign({
     required this.id,
@@ -37,6 +38,7 @@ class Campaign {
     required this.languages,
     required this.countries,
     required this.smsPhone,
+    required this.isJoined,
     this.smsCompleteTaskAllow = false,
   });
 

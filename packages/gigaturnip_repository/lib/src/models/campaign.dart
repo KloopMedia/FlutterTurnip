@@ -18,6 +18,7 @@ class Campaign extends Equatable {
   final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
+  final bool isJoined;
 
   const Campaign({
     required this.id,
@@ -32,6 +33,7 @@ class Campaign extends Equatable {
     this.canJoin = false,
     required this.smsPhone,
     required this.smsCompleteTaskAllow,
+    required this.isJoined,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
@@ -56,6 +58,7 @@ class Campaign extends Equatable {
       countries: model.countries,
       smsPhone: model.smsPhone,
       smsCompleteTaskAllow: model.smsCompleteTaskAllow,
+      isJoined: model.isJoined,
     );
   }
 

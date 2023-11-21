@@ -35,8 +35,14 @@ class AppRouter {
     return '${state.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
-  String redirectToTaskPage(BuildContext context, GoRouterState state) {
-    return TaskRoute.path;
+  String redirectToCampaignDetailPage(BuildContext context, GoRouterState state) {
+    final query = {...state.queryParameters};
+    final queryString = query['from'];
+    if (queryString != null && queryString.isNotEmpty) {
+      final campaignId = queryString.substring(queryString.lastIndexOf("/") + 1);
+      return '${CampaignDetailRoute.path.replaceFirst(':cid', campaignId)}/?$queryString';
+    }
+    return _initialLocation;
   }
 
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
@@ -73,18 +79,17 @@ class AppRouter {
         final authenticationService = context.read<AuthenticationRepository>();
 
         final query = {...state.queryParameters};
-        print('>>> router = $query');
         final bool loggedIn = authenticationService.user.isNotEmpty;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final campaignJoinQueryValue = query['join_campaign'];
         final queryValues = query.values;
-        final campaignIdQueryValue = (queryValues.isNotEmpty ) ? queryValues.first.contains('/campaigns/') : null;
+        final campaignIdQueryValue = (queryValues.isNotEmpty ) ? queryValues.first.contains('/campaign/') : null;
 
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
 
-        // if there is campaign id query parameter, then send user to relevant task page or to join campaign page
-        if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToTaskPage(context, state);
+        // if there is campaign id query parameter, then send user to CampaignDetailPage
+        if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToCampaignDetailPage(context, state);
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)

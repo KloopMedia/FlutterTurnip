@@ -16,6 +16,7 @@ class UserCampaignView extends StatelessWidget {
     context.pushNamed(
       TaskRoute.name,
       pathParameters: {'cid': '${item.id}'},
+      extra: item,
     );
   }
 

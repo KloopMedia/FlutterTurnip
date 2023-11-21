@@ -216,19 +216,9 @@ class _TaskPageState extends State<TaskPage> {
           )
         ],
         floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-        // child: RelevantTaskPage(
-        //   campaignId: widget.campaignId,
-        // ),
-          child: BlocListener<RelevantTaskCubit, RemoteDataState<Task>>(
-            listener: (context, state) {
-              print('>>> listener state = $state');
-              if (state is RemoteDataFetchingError) {
-                print('>>> listener redirect');
-                _redirectToCampaignDetail(context);
-              }
-            },
-            child: RelevantTaskPage(campaignId: widget.campaignId),
-          )
+        child: RelevantTaskPage(
+          campaignId: widget.campaignId,
+        ),
       ),
     );
   }
