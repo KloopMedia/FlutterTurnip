@@ -19,7 +19,7 @@ class AppRouter {
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
   String redirectToLoginPage(BuildContext context, GoRouterState state) {
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query);
     final fromPage = state.matchedLocation == _initialLocation
@@ -29,10 +29,10 @@ class AppRouter {
   }
 
   String redirectToInitialPage(BuildContext context, GoRouterState state) {
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
-    return '${state.queryParameters['from'] ?? _initialLocation}?$queryString';
+    return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
   String redirectToCampaignDetailPage(BuildContext context, GoRouterState state) {
@@ -46,7 +46,7 @@ class AppRouter {
   }
 
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
     final queryString = toQueryString(query, 'join_campaign');
 
     try {
@@ -63,7 +63,7 @@ class AppRouter {
       initialLocation: _initialLocation,
       refreshListenable: _authRouterNotifier,
       onException: (_, GoRouterState state, GoRouter router) {
-        final location = state.location + (state.location.endsWith('/') ? '' : '/');
+        final location = state.uri.toString() + (state.uri.toString().endsWith('/') ? '' : '/');
         if (location.contains('#')) {
           final routes = location.split('#');
           final prefix = routes.first;
@@ -78,7 +78,7 @@ class AppRouter {
       redirect: (BuildContext context, GoRouterState state) async {
         final authenticationService = context.read<AuthenticationRepository>();
 
-        final query = {...state.queryParameters};
+        final query = {...state.uri.queryParameters};
         final bool loggedIn = authenticationService.user.isNotEmpty;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final campaignJoinQueryValue = query['join_campaign'];

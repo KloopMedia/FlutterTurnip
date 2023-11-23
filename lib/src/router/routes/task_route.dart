@@ -23,7 +23,7 @@ class TaskRoute {
 
   Future<String?> createTask(BuildContext context, GoRouterState state) async {
     final params = {...state.pathParameters};
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
     final queryString = toQueryString(query, 'create_task');
 
     try {
@@ -37,7 +37,7 @@ class TaskRoute {
 
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
     final params = {...state.pathParameters};
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
     final queryString = toQueryString(query, 'join');
 
     try {
@@ -53,7 +53,7 @@ class TaskRoute {
   }
 
   FutureOr<String?> redirect(BuildContext context, GoRouterState state) async {
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
 
     final joinCampaignQueryValue = query['join']?.toLowerCase() == 'true';
     // final createTaskIdQueryValue = query['create_task'];
@@ -78,7 +78,7 @@ class TaskRoute {
       builder: (BuildContext context, GoRouterState state) {
         final id = state.pathParameters['cid'] ?? '';
         final campaign = state.extra;
-        final createTaskIdQueryValue = state.queryParameters['create_task'] ?? '';
+        final createTaskIdQueryValue = state.uri.queryParameters['create_task'] ?? '';
 
         final campaignId = int.tryParse(id);
         if (campaignId == null) {
