@@ -187,7 +187,7 @@ class _LoginViewState extends State<LoginView> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Image.asset('assets/images/people_3.png'),
+                                    Image.asset('assets/images/people_3.png', width: 378, height: 365),
                                     const SizedBox(height: 50),
                                     Text(
                                       data.name,
@@ -286,7 +286,7 @@ class _LoginViewState extends State<LoginView> {
                             //   height: 70,
                             //   child: const Text('Logo'),
                             // ),
-                            Image.asset('assets/images/people_3.png'),
+                            Image.asset('assets/images/people_3.png', width: 378, height: 365),
                             const SizedBox(height: 50),
                             Text(
                               context.loc.welcome_title,

@@ -81,7 +81,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    (secondPage && context.isSmall) ? Image.asset('assets/images/people_3.png') : Image.asset('assets/images/earth.png'),
+                    (secondPage && context.isSmall) ? Image.asset('assets/images/people_3.png', width: 378, height: 365) : Image.asset('assets/images/earth.png'),
                   ],
                 ),
               ),
@@ -175,7 +175,49 @@ class _OnBoardingState extends State<OnBoarding> {
                 ? Row (
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  (secondPage && context.isSmall) ? Image.asset('assets/images/indicator_2.png') : Image.asset('assets/images/indicator_1.png'),
+                  (secondPage && context.isSmall) //? Image.asset('assets/images/indicator_2.png') : Image.asset('assets/images/indicator_1.png'),
+                    ? Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.grey
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Container(
+                          width: 40,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.blue
+                          ),
+                        ),
+                      ],
+                    )
+                    : Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.blue
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.grey
+                        ),
+                      )
+                    ],
+                  ),
                   SignUpButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
