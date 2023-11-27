@@ -90,7 +90,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onCloseOnBoarding(CloseOnBoarding event, Emitter<LoginState> emit) {
     _sharedPreferences.setBool(Constants.sharedPrefFirstTimeKey, false);
-    // _sharedPreferences.setStringList(Constants.selectedCountry, [event.country[0], event.country[1]]);
     emit(const LoginInitial(firstTime: false));
     emit(const OnboardingClosed());
   }

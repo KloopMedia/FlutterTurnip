@@ -22,7 +22,7 @@ class CampaignDetailRoute {
         final cid = state.pathParameters['cid'] ?? '';
 
         bool isCampaignLink = false;
-        if (state.queryParameters.isNotEmpty) isCampaignLink = true;
+        if (state.uri.queryParameters.isNotEmpty) isCampaignLink = true;
 
         final campaignId = int.parse(cid);
 

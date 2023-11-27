@@ -129,10 +129,11 @@ class _CampaignViewState extends State<CampaignView> {
 
   void initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    final selectedCountry = sharedPreferences.getStringList(Constants.sharedPrefSelectedCountry);
-    if (selectedCountry != null && selectedCountry.isNotEmpty) {
+    final selectedCountry = sharedPreferences.getStringList(Constants.sharedPrefCountryKey);
+    final firstTimeCountry = sharedPreferences.getBool(Constants.sharedPrefFirstTimeCountryKey);
+    if (firstTimeCountry != null && firstTimeCountry) {
       isDialogShown = true;
-      queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
+      if (selectedCountry != null && selectedCountry.isNotEmpty) queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
     }
   }
 
@@ -183,7 +184,8 @@ class _CampaignViewState extends State<CampaignView> {
                   setState(() {
                     queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
                   });
-                  sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
+                  sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
+                  sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
                   context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
                   context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
                 }
@@ -212,6 +214,7 @@ class _CampaignViewState extends State<CampaignView> {
                               for (var selectedItem in selectedItems) {
                                 if (selectedItem is Country) {
                                   queryMap.addAll({'countries__name': selectedItem.name});
+                                  sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
                                 } else if (selectedItem is Category) {
                                   queryMap.addAll({'categories': selectedItem.id});
                                 } else if (selectedItem is Language){
@@ -221,7 +224,7 @@ class _CampaignViewState extends State<CampaignView> {
                               queries.addAll(selectedItems);
                               _onFilterTapByQuery(queryMap);
                             } else {
-                              sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, []);
+                              sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
                               _onFilterTapByQuery(queryMap);
                             }
                           },
@@ -247,11 +250,12 @@ class _CampaignViewState extends State<CampaignView> {
                                 queries.removeWhere((item) => item is Country);
                                 queries.add(selectedItem);
                                 queryMap.addAll({'countries__name': selectedItem.name});
+                                sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
                                 _onFilterTapByQuery(queryMap);
                               } else {
                                 queries.removeWhere((item) => item is Country);
                                 queryMap.removeWhere((key, value) => key =='countries__name');
-                                sharedPreferences.setStringList(Constants.sharedPrefSelectedCountry, []);
+                                sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
                                 _onFilterTapByQuery(queryMap);
                               }
                             },

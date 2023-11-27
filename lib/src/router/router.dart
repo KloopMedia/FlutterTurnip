@@ -36,7 +36,7 @@ class AppRouter {
   }
 
   String redirectToCampaignDetailPage(BuildContext context, GoRouterState state) {
-    final query = {...state.queryParameters};
+    final query = {...state.uri.queryParameters};
     final queryString = query['from'];
     if (queryString != null && queryString.isNotEmpty) {
       final campaignId = queryString.substring(queryString.lastIndexOf("/") + 1);

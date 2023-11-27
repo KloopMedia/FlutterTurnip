@@ -57,6 +57,7 @@ class LanguagePicker extends StatelessWidget {
           ),
         ),
         DropdownButtonFormField<String>(
+          elevation: 0,
           style: textStyle,
           borderRadius: borderRadius,
           validator: (value) {
@@ -94,7 +95,6 @@ class LanguagePicker extends StatelessWidget {
             fillColor: theme.isLight ? theme.neutral95 : theme.onSecondary,
           ),
           isExpanded: true,
-          isDense: true,
           icon: Icon(Icons.keyboard_arrow_down, color: theme.primary),
           value: (isLocaleSelected == false) ? null : context.read<LocalizationBloc>().state.locale.languageCode.split('_').first,
           onChanged: (locale) {
@@ -188,7 +188,6 @@ class CountryPicker extends StatelessWidget {
             fillColor: theme.isLight ? theme.neutral95 : theme.onSecondary,
           ),
           isExpanded: true,
-          isDense: true,
           icon: Icon(Icons.keyboard_arrow_down, color: theme.primary),
           value: campaignCountry,
           onChanged: (countryName) {

@@ -23,8 +23,9 @@ class CampaignCubit extends RemoteDataCubit<Campaign> with UserCampaignCubit, Se
     Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) {
-    final selectedCountry = _sharedPreferences.getStringList(Constants.sharedPrefSelectedCountry);
-    if (selectedCountry != null && selectedCountry.isNotEmpty) {
+    final selectedCountry = _sharedPreferences.getStringList(Constants.sharedPrefCountryKey);
+    final firstTimeCountry = _sharedPreferences.getBool(Constants.sharedPrefFirstTimeCountryKey);
+    if (selectedCountry != null && selectedCountry.isNotEmpty && firstTimeCountry != null && firstTimeCountry) {
       final countryQuery = {'countries__name': selectedCountry[1]};
       return _repository.fetchDataOnPage(page, countryQuery);
     } else {

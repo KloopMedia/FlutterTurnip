@@ -240,9 +240,12 @@ class _DropdownDialogState extends State<DropdownDialog> {
     return Wrap(
       children: [
         Container(
-          color: theme.background,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
+            color: theme.background,
+          ),
           child: Form(
             key: formKey,
             child: Column(

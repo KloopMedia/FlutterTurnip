@@ -56,16 +56,16 @@ class _OnBoardingState extends State<OnBoarding> {
 
     return Container(
       constraints: widget.constraints,
-      padding: (context.isSmall) ? const EdgeInsets.all(24.0) : null,
-      child: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: (secondPage && context.isSmall) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-            children: [
-              if (secondPage && context.isSmall)
-                Align(
+      padding: (context.isSmall) ? const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0) : null,
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisAlignment: (secondPage) ? MainAxisAlignment.start : MainAxisAlignment.spaceBetween,
+          children: [
+            if (context.isSmall && secondPage)
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Align(
                   alignment: Alignment.topLeft,
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back_ios),
@@ -76,114 +76,126 @@ class _OnBoardingState extends State<OnBoarding> {
                     },
                   ),
                 ),
-              if (context.isSmall)
-                Align(
-                alignment: Alignment.center,
+              ),
+            if (context.isSmall)
+              Align(
+                alignment: Alignment.topCenter,
                 child: Column(
                   children: [
-                    (secondPage && context.isSmall) ? Image.asset('assets/images/people_3.png', width: 378, height: 365) : Image.asset('assets/images/earth.png'),
+                    (secondPage)
+                      ? Image.asset('assets/images/people_3.png', height: 300)
+                      : Image.asset('assets/images/earth.png', height: 300),
                   ],
                 ),
               ),
-              if (context.isSmall) const SizedBox(height: 60),
-              Text(
-                (secondPage && context.isSmall) ? widget.title : context.loc.welcome,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
-                  color: fontColor,
+            if (context.isSmall && secondPage) const Spacer(),
+            Column(
+              crossAxisAlignment: (secondPage) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (secondPage && context.isSmall) ? widget.title : context.loc.welcome,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    color: fontColor,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                (secondPage && context.isSmall) ? widget.description : context.loc.choose_language_and_country,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: fontColor,
+                const SizedBox(height: 10),
+                Text(
+                  (secondPage && context.isSmall) ? widget.description : context.loc.choose_language_and_country,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: fontColor,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              if (!secondPage) const SizedBox(height: 20),
-              if (!secondPage)
-                (widget.campaignLanguages !=  null && widget.campaignLanguages!.isNotEmpty)
-                ? BlocBuilder<LanguageCubit, RemoteDataState<repo.Language>>(
-                builder: (context, state) {
-                  if (state is RemoteDataLoaded<repo.Language> && state.data.isNotEmpty) {
-                    final data = state.data;
-                    final List<SupportedLocale> campaignLocales = [];
-                    for (var id in widget.campaignLanguages!) {
-                      final matchedLanguage = data.where((e) => e.id == id).toList();
-                      final locale = SupportedLocale(matchedLanguage.first.name, matchedLanguage.first.code);
-                      campaignLocales.add(locale);
-                    }
-                    return LanguagePicker(
-                        isLocaleSelected: isLocaleSelected,
-                        campaignLocales: campaignLocales);
-                  }
-                  return const SizedBox.shrink();
-                },
-               )
-               : LanguagePicker(
-                 isLocaleSelected: isLocaleSelected,
-                 campaignLocales: const [],
-               ),
-              if (!secondPage) const SizedBox(height: 20),
-              if (!secondPage)
-                BlocBuilder<CountryCubit, RemoteDataState<repo.Country>>(
-                  builder: (context, state) {
-                    if (state is RemoteDataLoaded<repo.Country> && state.data.isNotEmpty) {
-                      final countries = state.data;
-                      if (widget.campaignCountries !=  null && widget.campaignCountries!.isNotEmpty) {
-                        for (var id in widget.campaignCountries!) {
-                          final matchedCountry = countries.where((e) => e.id == id).toList();
-                          final countryName = matchedCountry.first.name ?? '';
-                          if (matchedCountry.isNotEmpty) {
-                            isCountrySelected = true;
-                            country = matchedCountry;
-                          }
-                          return CountryPicker(
-                            campaignCountry: countryName,
-                            countries: countries,
-                            onTap: (value) {
-                              setState(() {
-                                isCountrySelected = true;
-                                country = value;
-                              });
-                            },
-                          );
-                        }
-                      } else {
-                        return CountryPicker(
-                          campaignCountry: (country.isNotEmpty) ? '${country.first.name}' : null,
-                          countries: countries,
-                          onTap: (value) {
-                            setState(() {
-                              isCountrySelected = true;
-                              country = value;
-                            });
+                SizedBox(height: (context.isSmall) ? 10 : 30),
+                if (!secondPage)
+                  Column(
+                    children: [
+                      (widget.campaignLanguages !=  null && widget.campaignLanguages!.isNotEmpty)
+                        ? BlocBuilder<LanguageCubit, RemoteDataState<repo.Language>>(
+                          builder: (context, state) {
+                            if (state is RemoteDataLoaded<repo.Language> && state.data.isNotEmpty) {
+                              final data = state.data;
+                              final List<SupportedLocale> campaignLocales = [];
+                              for (var id in widget.campaignLanguages!) {
+                                final matchedLanguage = data.where((e) => e.id == id).toList();
+                                final locale = SupportedLocale(matchedLanguage.first.name, matchedLanguage.first.code);
+                                campaignLocales.add(locale);
+                              }
+                              return LanguagePicker(
+                                isLocaleSelected: isLocaleSelected,
+                                campaignLocales: campaignLocales);
+                            }
+                            return const SizedBox.shrink();
                           },
-                        );
-                      }
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-              const SizedBox(height: 60),
-              (context.isSmall)
-                ? Row (
+                        )
+                        : LanguagePicker(
+                          isLocaleSelected: isLocaleSelected,
+                          campaignLocales: const [],
+                        ),
+                      SizedBox(height: (context.isSmall) ? 10 : 20),
+                      BlocBuilder<CountryCubit, RemoteDataState<repo.Country>>(
+                        builder: (context, state) {
+                          if (state is RemoteDataLoaded<repo.Country> && state.data.isNotEmpty) {
+                            final countries = state.data;
+                            if (widget.campaignCountries !=  null && widget.campaignCountries!.isNotEmpty) {
+                              for (var id in widget.campaignCountries!) {
+                                final matchedCountry = countries.where((e) => e.id == id).toList();
+                                final countryName = matchedCountry.first.name ?? '';
+                                if (matchedCountry.isNotEmpty) {
+                                  isCountrySelected = true;
+                                  country = matchedCountry;
+                                }
+                                return CountryPicker(
+                                  campaignCountry: countryName,
+                                  countries: countries,
+                                  onTap: (value) {
+                                    setState(() {
+                                      isCountrySelected = true;
+                                      country = value;
+                                    });
+                                  },
+                                );
+                              }
+                            } else {
+                              return CountryPicker(
+                                campaignCountry: (country.isNotEmpty) ? '${country.first.name}' : null,
+                                countries: countries,
+                                onTap: (value) {
+                                  setState(() {
+                                    isCountrySelected = true;
+                                    country = value;
+                                  });
+                                },
+                              );
+                            }
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+            if (!context.isSmall) const SizedBox(height: 30),
+            if (secondPage) const SizedBox(height: 60),
+            (context.isSmall)
+              ? Row (
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  (secondPage && context.isSmall) //? Image.asset('assets/images/indicator_2.png') : Image.asset('assets/images/indicator_1.png'),
+                  (secondPage)
                     ? Row(
                       children: [
                         Container(
                           width: 10,
                           height: 10,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.grey
+                            borderRadius: BorderRadius.circular(5),
+                            color: theme.neutral90
                           ),
                         ),
                         const SizedBox(width: 5),
@@ -191,33 +203,33 @@ class _OnBoardingState extends State<OnBoarding> {
                           width: 40,
                           height: 10,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.blue
+                            borderRadius: BorderRadius.circular(5),
+                            color: theme.primary
                           ),
                         ),
                       ],
                     )
                     : Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 10,
-                        decoration: BoxDecoration(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 10,
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: Colors.blue
+                            color: theme.primary
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
+                        const SizedBox(width: 5),
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: Colors.grey
-                        ),
-                      )
-                    ],
-                  ),
+                            color: theme.neutral90
+                          ),
+                        )
+                      ],
+                    ),
                   SignUpButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
@@ -244,9 +256,8 @@ class _OnBoardingState extends State<OnBoarding> {
                 buttonText: context.loc.further,
                 width: double.infinity,
                 isActive: isLocaleSelected && isCountrySelected,
-              ),
-            ],
-          ),
+                ),
+          ],
         ),
       ),
     );

@@ -28,6 +28,7 @@ class SignUpButton extends StatelessWidget {
       child: ElevatedButton(
         focusNode: focusNode,
         style: ElevatedButton.styleFrom(
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
