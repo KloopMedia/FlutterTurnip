@@ -37,6 +37,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     context.read<SelectableTaskStageCubit>().refetch();
     context.read<ReactiveTasks>().refetch();
     context.read<ProactiveTasks>().refetch();
+    context.read<IndividualChainCubit>().refetch();
   }
 
   void redirectToTask(BuildContext context, Task task) async {
