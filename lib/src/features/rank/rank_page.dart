@@ -2,17 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../router/routes/routes.dart';
+import 'widgets/widgets.dart';
+import '../../theme/index.dart';
 
-import '../../../theme/index.dart';
-
-class RanksPage extends StatefulWidget {
-  const RanksPage({Key? key}) : super(key: key);
+class RankPage extends StatefulWidget {
+  const RankPage({Key? key}) : super(key: key);
 
   @override
-  State<RanksPage> createState() => _RanksPageState();
+  State<RankPage> createState() => _RankPageState();
 }
 
-class _RanksPageState extends State<RanksPage> {
+class _RankPageState extends State<RankPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class _RanksPageState extends State<RanksPage> {
         backgroundColor: theme.neutralVariant100,
       ),
       backgroundColor: theme.neutralVariant100,
-      body: Stack(
+      body: Stack( ///replace with CustomScrollView or ListView
         alignment: Alignment.center,
         children: [
           Container(
@@ -53,7 +54,7 @@ class _RanksPageState extends State<RanksPage> {
                 topRight: Radius.circular(30),
               ),
             ),
-            child: Column( ///replace with CustomScrollView or ListView
+            child: Column(
               children: [
                 const SizedBox(height: 60),
                 Text(
@@ -82,7 +83,8 @@ class _RanksPageState extends State<RanksPage> {
                 ),
                 const SizedBox(height: 30),
 
-                Container(
+                InkWell(
+                  onTap: () => context.pushNamed(RankDetailRoute.name),
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
@@ -104,12 +106,12 @@ class _RanksPageState extends State<RanksPage> {
                                       child: Container(
                                         width: 90,
                                         padding: const EdgeInsets.symmetric(vertical: 7),
-                                        child: Text(
+                                        child: const Text(
                                           '200/200',
                                           style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
-                                            color: theme.neutral100,
+                                            color: Colors.white,
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
@@ -136,20 +138,37 @@ class _RanksPageState extends State<RanksPage> {
                       ),
 
                       Positioned(
+                        top: 1,
                         left: 5,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ///TODO: white border around image
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5),
+                            Container(
+                              width: 32,
+                              margin: const EdgeInsets.only(left: 5),
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: Shadows.elevation3,
+                              ),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
-                                  child: const Image(image: AssetImage('assets/images/rank_icon_sample.png'), width: 32)),
+                                  child: const Image(image: AssetImage('assets/images/rank_icon_sample.png'))),
                             ),
-                            ClipRRect(
+                            Container(
+                              width: 32,
+                              margin: const EdgeInsets.only(left: 5),
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(16),
-                                child: const Image(image: AssetImage('assets/images/rank_icon_sample.png'), width: 32)),
+                                boxShadow: Shadows.elevation3,
+                              ),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: const Image(image: AssetImage('assets/images/rank_icon_sample.png'))),
+                            ),
                           ],
                         ),
                       ),
