@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/rank/rank_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
@@ -69,7 +70,8 @@ class _CampaignPageState extends State<CampaignPage> {
           )..initialize(),
         ),
       ],
-      child: const CampaignView(),
+      child: const RankPage(),
+      // child: const CampaignView(),
     );
   }
 }

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/rank/rank_page.dart';
 
+import '../../features/rank_task_detail/rank_task_detail_page.dart';
 
-class RankRoute {
-  static String name = 'ranks';
+class RankTaskDetailRoute {
+  static String name = 'rankTaskDetail';
 
-  static String path = "/ranks";
+  static String path = "/ranktaskdetail";
+  // static String path = "/rank/:rid/tasks/:tid";
 
   final GlobalKey<NavigatorState> parentKey;
 
-  RankRoute({required this.parentKey});
+  RankTaskDetailRoute({required this.parentKey});
 
   GoRoute get route {
     return GoRoute(
@@ -25,7 +26,7 @@ class RankRoute {
         //   final campaignId = int.tryParse(id);
         //   return LoginPage(campaignId: campaignId);
         // }
-        return const RankPage();
+        return const RankTaskDetailPage();
       },
     );
   }

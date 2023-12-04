@@ -7,4 +7,5 @@ export 'task_route.dart';
 export 'notification_route.dart';
 export 'available_task_route.dart';
 export 'rank_route.dart';
-export 'rank_detail_route.dart';
+export 'rank_task_route.dart';
+export 'rank_task_detail_route.dart';

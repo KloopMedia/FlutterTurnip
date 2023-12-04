@@ -84,7 +84,7 @@ class _RankPageState extends State<RankPage> {
                 const SizedBox(height: 30),
 
                 InkWell(
-                  onTap: () => context.pushNamed(RankDetailRoute.name),
+                  onTap: () => context.pushNamed(RankTaskRoute.name),
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
@@ -159,15 +159,22 @@ class _RankPageState extends State<RankPage> {
                             Container(
                               width: 32,
                               margin: const EdgeInsets.only(left: 5),
-                              padding: const EdgeInsets.all(1),
+                              padding: const EdgeInsets.only(left: 6, top: 7, right: 6, bottom: 6),
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
+                                color: theme.primary,
+                                shape: BoxShape.circle,
                                 boxShadow: Shadows.elevation3,
+                                border: Border.all(color: Colors.white)
                               ),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: const Image(image: AssetImage('assets/images/rank_icon_sample.png'))),
+                              child: const Text(
+                                '+4',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              )
                             ),
                           ],
                         ),

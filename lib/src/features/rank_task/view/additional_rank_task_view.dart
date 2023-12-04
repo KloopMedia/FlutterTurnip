@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
 
-class AdditionalRanksRankPage extends StatelessWidget {
-  const AdditionalRanksRankPage({Key? key}) : super(key: key);
+class AdditionalRankTaskView extends StatelessWidget {
+  const AdditionalRankTaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

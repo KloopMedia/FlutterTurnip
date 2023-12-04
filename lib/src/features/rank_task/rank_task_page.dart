@@ -3,14 +3,14 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
 import 'view/view.dart';
 
-class RankDetailPage extends StatefulWidget {
-  const RankDetailPage({Key? key}) : super(key: key);
+class RankTaskPage extends StatefulWidget {
+  const RankTaskPage({Key? key}) : super(key: key);
 
   @override
-  State<RankDetailPage> createState() => _RankDetailPageState();
+  State<RankTaskPage> createState() => _RankTaskPageState();
 }
 
-class _RankDetailPageState extends State<RankDetailPage> {
+class _RankTaskPageState extends State<RankTaskPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -35,9 +35,9 @@ class _RankDetailPageState extends State<RankDetailPage> {
       ),
       body: const Padding(
         padding: EdgeInsets.only(left: 24, top: 20, right: 24, bottom: 34),
-        child: IndividualChainRankView(),
-        // child: AdditionalRanksRankPage(),
-        // child: AdditionalRanksRankPage(),
+        child: IndividualChainRankTaskView(),
+        // child: ChainRankTaskView(),
+        // child: AdditionalRankTaskView(),
       ),
     );
   }
