@@ -8,6 +8,7 @@ class CustomListTile extends StatelessWidget {
   final EdgeInsetsGeometry? leadingPadding;
   final EdgeInsetsGeometry? trailingPadding;
   final void Function()? onTap;
+  final double height;
 
   const CustomListTile({
     Key? key,
@@ -18,6 +19,7 @@ class CustomListTile extends StatelessWidget {
     this.contentPadding,
     this.leadingPadding,
     this.trailingPadding,
+    this.height = 48.0,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class CustomListTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 48.0,
+        height: height,
         padding: contentPadding,
         child: Row(
           children: [
