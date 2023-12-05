@@ -24,6 +24,7 @@ class TaskStageDetail extends Equatable {
   final DateTime? availableFrom;
   final int openLimit;
   final int totalLimit;
+  final Map<String, dynamic>? quizAnswers;
 
 
   const TaskStageDetail({
@@ -43,6 +44,7 @@ class TaskStageDetail extends Equatable {
     required this.allowGoBack,
     required this.availableTo,
     required this.availableFrom,
+    required this.quizAnswers,
     this.openLimit = 0,
     this.totalLimit = 0,
   });
@@ -69,6 +71,7 @@ class TaskStageDetail extends Equatable {
       allowGoBack: model.allowGoBack,
       availableTo: model.availableTo,
       availableFrom: model.availableFrom,
+      quizAnswers: model.quizAnswers,
       openLimit: model.rankLimit?['open_limit'] ?? 0,
       totalLimit: model.rankLimit?['total_limit'] ?? 0
     );

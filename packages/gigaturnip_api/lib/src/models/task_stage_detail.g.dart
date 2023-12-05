@@ -54,6 +54,8 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>?)
                   ?.map((e) => e as Map<String, dynamic>)
                   .toList()),
+          quizAnswers: $checkedConvert(
+              'quiz_answers', (v) => v as Map<String, dynamic>?),
           rankLimit:
               $checkedConvert('rank_limit', (v) => v as Map<String, dynamic>?),
         );
@@ -75,6 +77,7 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         'availableTo': 'available_to',
         'availableFrom': 'available_from',
         'filterFieldsSchema': 'filter_fields_schema',
+        'quizAnswers': 'quiz_answers',
         'rankLimit': 'rank_limit'
       },
     );

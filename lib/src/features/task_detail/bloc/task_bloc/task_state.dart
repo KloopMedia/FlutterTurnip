@@ -151,3 +151,11 @@ class FileDownloaded extends TaskInitialized {
 
   FileDownloaded.clone(TaskInitialized state, this.message) : super.clone(state);
 }
+
+class ShowAnswers extends TaskInitialized {
+  final int? nextTaskId;
+
+  const ShowAnswers(super.data, super.previousTasks, this.nextTaskId);
+
+  ShowAnswers.clone(TaskInitialized state, this.nextTaskId) : super.clone(state);
+}

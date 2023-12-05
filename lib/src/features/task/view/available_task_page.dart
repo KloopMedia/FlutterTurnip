@@ -197,9 +197,10 @@ class TaskPreviewState extends State<TaskPreview> {
                   uiSchema: item.uiSchema,
                   formData: item.responses,
                   disabled: true,
+                  shrinkWrap: true,
+                  locale: context.read<LocalizationBloc>().state.locale,
                   storage:
                       generateStorageReference(item, context.read<AuthenticationRepository>().user),
-                  addFileText: [context.loc.select_file, context.loc.to_upload],
                   onDownloadFile: (url, filename, bytes) =>
                       DownloadService().download(url: url, filename: filename, bytes: bytes),
                 ));
@@ -212,9 +213,10 @@ class TaskPreviewState extends State<TaskPreview> {
                 uiSchema: widget.task.cardUiSchema,
                 formData: widget.task.responses,
                 disabled: true,
+                shrinkWrap: true,
+                locale: context.read<LocalizationBloc>().state.locale,
                 storage: generateStorageReference(
                     widget.task, context.read<AuthenticationRepository>().user),
-                addFileText: [context.loc.select_file, context.loc.to_upload],
                 onDownloadFile: (url, filename, bytes) =>
                     DownloadService().download(url: url, filename: filename, bytes: bytes),
               ));
