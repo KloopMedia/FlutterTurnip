@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
+import '../../router/routes/routes.dart';
 import 'view/view.dart';
 
 class RankTaskDetailPage extends StatefulWidget {
@@ -11,6 +12,20 @@ class RankTaskDetailPage extends StatefulWidget {
 }
 
 class _RankTaskDetailPageState extends State<RankTaskDetailPage> {
+
+  void redirect(BuildContext context) {
+    if (context.canPop()) {
+      context.pop(true);
+    } else {
+      context.goNamed(
+        RankTaskRoute.name,
+        pathParameters: {
+          // 'cid': '${widget.campaignId}',
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -28,7 +43,7 @@ class _RankTaskDetailPageState extends State<RankTaskDetailPage> {
         ),
         elevation: 0,
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => redirect(context),
           icon: Icon(Icons.arrow_back_ios, size: 20, color: theme.neutral30),
         ),
         backgroundColor: theme.background,
@@ -36,9 +51,9 @@ class _RankTaskDetailPageState extends State<RankTaskDetailPage> {
       body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 24, top: 20, right: 24, bottom: 34),
-          // child: AdditionalRankTaskDetailView(),
+          child: AdditionalRankTaskDetailView(),
           // child: ArticleChainRankTaskDetailView(),
-          child: IndividualChainRankTaskDetailView(),
+          // child: IndividualChainRankTaskDetailView(),
         ),
       ),
     );

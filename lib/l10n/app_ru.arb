@@ -173,5 +173,14 @@
 	"date": "Дата",
 	"search": "Поиск",
 
-  "achievements": "Достижения"
+  "achievements": "Достижения",
+  "receive_rank": "Получение ранга",
+  "receive_rank_description": "Чтобы получить ранг {rank}, Вам необходимо получить следующие ранги:",
+  "@pageHomeInboxCount" : {
+    "placeholders": {
+      "rank": {}
+    }
+  },
+  "job_status": "Статус задания",
+  "take_on_execution": "Взять на выполнение"
 }

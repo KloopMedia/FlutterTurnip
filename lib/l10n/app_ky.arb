@@ -173,5 +173,14 @@
 	"date": "Дата",
 	"search": "Поиск",
 
-  "achievements": "Жетишкендиктер"
+  "achievements": "Жетишкендиктер",
+  "receive_rank": "Наам алуу",
+  "receive_rank_description": "{rank} наамын алуу үчүн төмөнкү даражаларды алуу керек:",
+  "@pageHomeInboxCount" : {
+    "placeholders": {
+      "rank": {}
+    }
+  },
+  "job_status": "Тапшырма статусу",
+  "take_on_execution": "Аткарууга алуу"
 }

@@ -173,5 +173,14 @@
 	"date": "Дата",
 	"search": "Поиск",
 
-  "achievements": "Досягнення"
+  "achievements": "Досягнення",
+  "receive_rank": "Отримання рангу",
+  "receive_rank_description": "Щоб отримати ранг {rank}, Вам необхідно отримати наступні ранги:",
+  "@pageHomeInboxCount" : {
+    "placeholders": {
+      "rank": {}
+    }
+  },
+  "job_status": "Статус завдання",
+  "take_on_execution": "Взяти на виконання"
 }

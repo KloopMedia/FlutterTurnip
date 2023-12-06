@@ -1,8 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../rank/widgets/widgets.dart';
+import '../../rank_task/widgets/widgets.dart';
+import '../custom_elevated_button.dart';
 
 class AdditionalRankTaskDetailView extends StatelessWidget {
   const AdditionalRankTaskDetailView({Key? key}) : super(key: key);
@@ -10,12 +15,17 @@ class AdditionalRankTaskDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final titles = [
+      'Название стейджа',
+      'Проверка статьи редактором',
+      'Публикация'
+    ];
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Получение ранга',
+          'Получите ранг',
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -24,116 +34,49 @@ class AdditionalRankTaskDetailView extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          'Чтобы получить ранг “Журналист интервью-криейтинг” Вам необходимо получить следующие ранги:',
+          'Чтобы взять задание на выполнение получите следующие ранги:',
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: theme.onSurfaceVariant
+              color: theme.neutral50
           ),
-          textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 29),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        const SizedBox(height: 10),
+        const Row(
           children: [
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              width: 130,
-              height: 138,
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(45),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        const Image(image: AssetImage('assets/images/rank_icon_sample.png')),
-                        ClipRRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                            child: Container(
-                              width: 90,
-                              padding: const EdgeInsets.symmetric(vertical: 7),
-                              child: const Text(
-                                '200/200',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    'Журналист интервьюер',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: theme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              width: 130,
-              height: 138,
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(45),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        const Image(image: AssetImage('assets/images/rank_icon_sample.png')),
-                        ClipRRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                            child: Container(
-                              width: 90,
-                              padding: const EdgeInsets.symmetric(vertical: 7),
-                              child: const Text(
-                                '200/200',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    'Журналист интервьюер',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: theme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            RankImage(),
+            RankImage(),
           ],
-        )
+        ),
+        const SizedBox(height: 20),
+        const RankTaskInstruction(),
+        const SizedBox(height: 20),
+        Text(
+          context.loc.job_status,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: theme.neutral40,
+          ),
+        ),
+        const SizedBox(height: 20),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: titles.length,
+          itemBuilder: (BuildContext context, int index) {
+            return RankTaskCardWithTimeline(
+              title: titles[index],
+              isLastRow: index == titles.length - 1,
+            );
+          }
+        ),
+        const SizedBox(height: 60),
+        CustomElevatedButton(
+          title: context.loc.take_on_execution,
+          onPressed: () {
+            ///TODO
+          },
+        ),
       ],
     );
   }

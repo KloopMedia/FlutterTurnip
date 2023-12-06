@@ -1,56 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip/src/widgets/card/card_with_chip_and_title.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../router/routes/routes.dart';
-import '../../../widgets/widgets.dart';
+class RankTaskCardWithTimeline extends StatelessWidget {
+  const RankTaskCardWithTimeline({
+    Key? key,
+    required this.title,
+    required this.isLastRow,
+  }) : super(key: key);
 
-class ArticleChainRankTaskDetailView extends StatefulWidget {
-  const ArticleChainRankTaskDetailView({Key? key}) : super(key: key);
+  final String title;
+  final bool isLastRow;
 
-  @override
-  State<ArticleChainRankTaskDetailView> createState() => _ArticleChainRankTaskDetailViewState();
-}
-
-class _ArticleChainRankTaskDetailViewState extends State<ArticleChainRankTaskDetailView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        Text(
-          'Написать статью на свободную тему',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: theme.neutral40,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          'Место для описания задания В данном задании вам предлагается написать статью на выбранную тему. Статьи являются важным средством передачи информаци.Ваша задача состоит в том, чтобы создать информативную и увлекательную статью, которая заинтересует читателей и передаст ключевую информацию о выбранной теме. Место для описания задания. В данном задании вам предлагается написать статью на выбранную тему. Статьи являются важным средством передачи информаци.Ваша задача состоит в том, чтобы создать информативную и увлекательную статью, которая заинтересует читателей и передаст ключевую информацию о выбранной теме.',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: theme.onSurfaceVariant,
-          ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          'Статус задания',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: theme.neutral40,
-          ),
-        ),
-        const SizedBox(height: 20),
-        ///RankTaskCard
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -68,20 +34,11 @@ class _ArticleChainRankTaskDetailViewState extends State<ArticleChainRankTaskDet
                     shape: BoxShape.circle,
                   ),
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,//theme.primary
+                    decoration: BoxDecoration(
+                      color: theme.primary,//Colors.white,
                       shape: BoxShape.circle,
                     ),
                   ),
-                ),
-                Container(
-                  width: 2,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: theme.primary,//neutral80
-                    shape: BoxShape.rectangle,
-                  ),
-                  child: const Text(''),
                 ),
               ],
             ),
@@ -92,7 +49,7 @@ class _ArticleChainRankTaskDetailViewState extends State<ArticleChainRankTaskDet
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Прочитать текст и заполнить недостающие буквы',
+                    title,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 16,
@@ -101,7 +58,18 @@ class _ArticleChainRankTaskDetailViewState extends State<ArticleChainRankTaskDet
                     softWrap: true,
                     maxLines: 2,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 7),
+
+                  ///Выполнено 11 Мая 12:30
+                  // const Text(
+                  //   'Выполнено 11 Мая 12:30', //Проверяется //Выполняется //Ожидает проверки
+                  //   style: TextStyle(
+                  //       fontSize: 14,
+                  //       fontWeight: FontWeight.w400,
+                  //       color: Color(0xFFB9B9B9)
+                  //   ),
+                  // ),
+
                   ///Начато
                   Row(
                     children: [
@@ -140,7 +108,16 @@ class _ArticleChainRankTaskDetailViewState extends State<ArticleChainRankTaskDet
                       ),
                     ],
                   ),
-                  const SizedBox(height: 7),
+
+                  ///Выполнено
+                  // Text(
+                  //     'Выполнено', //'Ожидает выполнения' //'Невыполнено'
+                  //     style: TextStyle(
+                  //         fontWeight: FontWeight.w400,
+                  //         fontSize: 14,
+                  //         color: theme.tertiary
+                  //     )
+                  // ),
 
                   ///Выполнить/ещё  button
                   TextButton(
@@ -170,39 +147,29 @@ class _ArticleChainRankTaskDetailViewState extends State<ArticleChainRankTaskDet
                       ],
                     ),
                   ),
-                  Divider(height: 1, color: theme.neutral90)
+
+                  const SizedBox(height: 16),
+                  Divider(height: 1, color: theme.neutral90),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
           ],
         ),
-
-
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 52.0,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
+        if (!isLastRow)
+          Positioned(
+            top: 14,
+            bottom: 0,
+            left: 6.3,
+            child: Container(
+              width: 2,
+              decoration: BoxDecoration(
+                color: theme.primary,//neutral80
+                shape: BoxShape.rectangle,
               ),
-              onPressed: () {},
-              child: Text(
-                'Взять на выполнение',
-                style: TextStyle(
-                  color: theme.isLight ? theme.onPrimary : theme.neutral0,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: const Text(''),
             ),
           ),
-        ),
-
       ],
     );
   }

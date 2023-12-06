@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
 import '../../../widgets/widgets.dart';
+import '../../rank_task/widgets/widgets.dart';
 
 class IndividualChainRankTaskDetailView extends StatefulWidget {
   const IndividualChainRankTaskDetailView({Key? key}) : super(key: key);
@@ -51,82 +52,9 @@ class _IndividualChainRankTaskDetailViewState extends State<IndividualChainRankT
         ),
         const SizedBox(height: 20),
 
-        Stack(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                      width: 14,
-                      height: 14,
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: theme.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,//theme.primary
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Прочитать текст и заполнить',// недостающие буквы',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: theme.neutral40,
-                        ),
-                        softWrap: true,
-                        maxLines: 2,
-                      ),
-                      const SizedBox(height: 7),
-                      const Text(
-                        'Выполнено 11 Мая 12:30', //Проверяется //Выполняется //Ожидает проверки
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFFB9B9B9)
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Divider(height: 1, color: theme.neutral90),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: 14,
-              bottom: 0,
-              left: 6.3,
-              child: Container(
-                width: 2,
-                decoration: BoxDecoration(
-                  color: theme.primary,//neutral80
-                  shape: BoxShape.rectangle,
-                ),
-                child: const Text(''),
-              ),
-            )
-          ],
-        ),
         const SizedBox(height: 20),
+
+        /// Ещё button
         Row(
           children: [
             Column(

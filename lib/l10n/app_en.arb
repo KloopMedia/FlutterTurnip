@@ -173,5 +173,14 @@
 	"date": "Date",
 	"search": "Search",
 
-  "achievements": "Achievements"
+  "achievements": "Achievements",
+  "receive_rank": "Receiving a rank",
+  "receive_rank_description": "To obtain the rank of {rank} You need to obtain the following ranks:",
+  "@pageHomeInboxCount" : {
+    "placeholders": {
+      "rank": {}
+    }
+  },
+  "job_status": "Task status",
+  "take_on_execution": "Take on execution"
 }

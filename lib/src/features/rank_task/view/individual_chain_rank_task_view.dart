@@ -91,6 +91,8 @@ class _IndividualChainRankTaskViewState extends State<IndividualChainRankTaskVie
                           maxLines: 2,
                         ),
                         const SizedBox(height: 4),
+
+                        ///Выполнено
                         Text(
                           'Выполнено', //'Ожидает выполнения' //'Невыполнено'
                           style: TextStyle(
@@ -99,28 +101,8 @@ class _IndividualChainRankTaskViewState extends State<IndividualChainRankTaskVie
                               color: theme.tertiary
                           )
                         ),
-                        const SizedBox(height: 7),
-                        // Row(
-                        //   children: [
-                        //     Text(
-                        //       'Начато: ', //'Закончено: '
-                        //       style: TextStyle(
-                        //         fontWeight: FontWeight.w400,
-                        //         fontSize: 14,
-                        //         color: theme.neutral60
-                        //       )
-                        //     ),
-                        //     Text(
-                        //       '0', //'Ожидает выполнения' //'Невыполнено'
-                        //       style: TextStyle(
-                        //           fontWeight: FontWeight.w500,
-                        //           fontSize: 16,
-                        //           color: theme.primary
-                        //       )
-                        //     ),
-                        //   ],
-                        // ),
 
+                        const SizedBox(height: 7),
                         TextButton(
                           onPressed: () {},
                           style: TextButton.styleFrom(

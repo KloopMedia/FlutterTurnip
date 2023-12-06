@@ -1,8 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../router/routes/routes.dart';
+import '../../rank/widgets/widgets.dart';
 
 class AdditionalRankTaskView extends StatelessWidget {
   const AdditionalRankTaskView({Key? key}) : super(key: key);
@@ -15,7 +19,7 @@ class AdditionalRankTaskView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Получение ранга',
+          context.loc.receive_rank,
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -24,7 +28,7 @@ class AdditionalRankTaskView extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          'Чтобы получить ранг “Журналист интервью-криейтинг” Вам необходимо получить следующие ранги:',
+          context.loc.receive_rank_description('"Журналист"'),
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
@@ -32,105 +36,17 @@ class AdditionalRankTaskView extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 29),
+        const SizedBox(height: 30),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              width: 130,
-              height: 138,
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(45),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        const Image(image: AssetImage('assets/images/rank_icon_sample.png')),
-                        ClipRRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                            child: Container(
-                              width: 90,
-                              padding: const EdgeInsets.symmetric(vertical: 7),
-                              child: const Text(
-                                '200/200',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    'Журналист интервьюер',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: theme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
+            InkWell(
+              child: const RankImage(),
+              onTap: () => context.goNamed(RankTaskDetailRoute.name),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              width: 130,
-              height: 138,
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(45),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        const Image(image: AssetImage('assets/images/rank_icon_sample.png')),
-                        ClipRRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                            child: Container(
-                              width: 90,
-                              padding: const EdgeInsets.symmetric(vertical: 7),
-                              child: const Text(
-                                '200/200',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    'Журналист интервьюер',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: theme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
+            InkWell(
+              child: const RankImage(),
+              onTap: () => context.goNamed(RankTaskDetailRoute.name),
             ),
           ],
         )

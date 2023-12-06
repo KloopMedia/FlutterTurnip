@@ -142,9 +142,9 @@ class _RankPageState extends State<RankPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const RankTaskImageCard(),
-                              (listOfLists[index].length > 1) ? const RankTaskImageCard() : const SizedBox.square(dimension: 130),
-                              if (index % 2 == 0 && listOfLists[index].length == 3) const RankTaskImageCard(),
+                              const RankImageCard(),
+                              (listOfLists[index].length > 1) ? const RankImageCard() : const SizedBox.square(dimension: 130),
+                              if (index % 2 == 0 && listOfLists[index].length == 3) const RankImageCard(),
                             ],
                           ),
                         );
