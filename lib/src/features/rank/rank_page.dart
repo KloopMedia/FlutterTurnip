@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:go_router/go_router.dart';
 import '../../router/routes/routes.dart';
 import 'widgets/widgets.dart';
@@ -15,6 +17,49 @@ class RankPage extends StatefulWidget {
 
 class _RankPageState extends State<RankPage> {
 
+  void redirect(BuildContext context, int? id) {
+    if (id == null) {
+      if (context.canPop()) {
+        context.pop(true);
+      } else {
+        context.goNamed(
+          TaskRoute.name,
+          pathParameters: {
+            // 'cid': '${widget.campaignId}',
+          },
+        );
+      }
+    } else {
+      context.goNamed(
+        RankTaskRoute.name,
+        pathParameters: {
+          ///rank task id
+        }
+      );
+    }
+  }
+
+  List<List<String>> getSortedList(List<String> items) {
+    List<List<String>> listOfLists = [];
+
+    for (int i = 0; i < items.length; i += 5) {
+      int endIndex = i + 5;
+      if (endIndex > items.length) {
+        endIndex = items.length;
+      }
+
+      List<String> sublist = items.sublist(i, endIndex);
+
+      if (sublist.length > 3) {
+        listOfLists.add(sublist.sublist(0, 3));
+        listOfLists.add(sublist.sublist(3));
+      } else {
+        listOfLists.add(sublist);
+      }
+    }
+    return listOfLists;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -22,10 +67,13 @@ class _RankPageState extends State<RankPage> {
     //     ? NetworkImage(url!)
     //     : const AssetImage('assets/images/placeholder.png')) as ImageProvider;
 
+    List<String> items = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    List<List<String>> listOfLists = getSortedList(items);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Достижения',
+          context.loc.achievements,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -34,169 +82,83 @@ class _RankPageState extends State<RankPage> {
         ),
         elevation: 0,
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => redirect(context, null),
           icon: Icon(Icons.arrow_back_ios, size: 20, color: theme.neutral90),
         ),
         backgroundColor: theme.neutralVariant100,
       ),
       backgroundColor: theme.neutralVariant100,
-      body: Stack( ///replace with CustomScrollView or ListView
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(top: 60),
-            decoration: BoxDecoration(
-              color: theme.background,
-              boxShadow: Shadows.elevation3,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+      body: SingleChildScrollView(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 60),
+              padding: const EdgeInsets.symmetric(vertical: 24, /*horizontal: 24*/),
+              decoration: BoxDecoration(
+                color: theme.background,
+                boxShadow: Shadows.elevation3,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 60),
-                Text(
-                  'Name Surname',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                    color: theme.onSurfaceVariant,
+              child: Column(
+                children: [
+                  const SizedBox(height: 60),
+                  Text(
+                    'Name Surname',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: theme.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(image: AssetImage('assets/images/achievement_star.png'), width: 24),
-                    const SizedBox(width: 5),
-                    Text(
-                      '568',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: theme.primary,
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 30),
-
-                InkWell(
-                  onTap: () => context.pushNamed(RankTaskRoute.name),
-                  child: Stack(
-                    alignment: Alignment.topCenter,
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 5),
-                        width: 130,
-                        height: 138,
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(45),
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  const Image(image: AssetImage('assets/images/rank_icon_sample.png')),
-                                  ClipRRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                                      child: Container(
-                                        width: 90,
-                                        padding: const EdgeInsets.symmetric(vertical: 7),
-                                        child: const Text(
-                                          '200/200',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10.0),
-                            Text(
-                              'Журналист интервьюер',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: theme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
+                      const Image(image: AssetImage('assets/images/achievement_star.png'), width: 24),
+                      const SizedBox(width: 5),
+                      Text(
+                        '568',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: theme.primary,
                         ),
-                      ),
-
-                      Positioned(
-                        top: 1,
-                        left: 5,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 32,
-                              margin: const EdgeInsets.only(left: 5),
-                              padding: const EdgeInsets.all(1),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: Shadows.elevation3,
-                              ),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: const Image(image: AssetImage('assets/images/rank_icon_sample.png'))),
-                            ),
-                            Container(
-                              width: 32,
-                              margin: const EdgeInsets.only(left: 5),
-                              padding: const EdgeInsets.only(left: 6, top: 7, right: 6, bottom: 6),
-                              decoration: BoxDecoration(
-                                color: theme.primary,
-                                shape: BoxShape.circle,
-                                boxShadow: Shadows.elevation3,
-                                border: Border.all(color: Colors.white)
-                              ),
-                              child: const Text(
-                                '+4',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              )
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: -8,
-                        right: -5,
-                        child: Image.asset('assets/images/medal.png'),
                       )
-
                     ],
                   ),
-                ),
-
-              ],
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: listOfLists.length,
+                      itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Row(
+                            mainAxisAlignment: (index % 2 == 0) ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const RankTaskImageCard(),
+                              (listOfLists[index].length > 1) ? const RankTaskImageCard() : const SizedBox.square(dimension: 130),
+                              if (index % 2 == 0 && listOfLists[index].length == 3) const RankTaskImageCard(),
+                            ],
+                          ),
+                        );
+                      },
+                  ),
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            top: 10,
-            child: Image.asset('assets/images/user_achievement_ava.png'),
-          ),
-        ],
+            Positioned(
+              top: 10,
+              child: Image.asset('assets/images/user_achievement_ava.png'),
+            ),
+          ],
+        ),
       ),
     );
   }

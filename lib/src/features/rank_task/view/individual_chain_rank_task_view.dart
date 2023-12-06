@@ -135,7 +135,7 @@ class _IndividualChainRankTaskViewState extends State<IndividualChainRankTaskVie
                                 'Выполнить',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
                                   color: theme.primary
                                 ),
                               ),
@@ -148,7 +148,10 @@ class _IndividualChainRankTaskViewState extends State<IndividualChainRankTaskVie
                             ],
                           ),
                         ),
-                        Divider(height: 1, color: theme.neutral90)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Divider(height: 1, color: theme.neutral90),
+                        )
                       ],
                     ),
                   ),
