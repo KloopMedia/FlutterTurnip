@@ -181,6 +181,13 @@
       "rank": {}
     }
   },
-  "job_status": "Task status",
-  "take_on_execution": "Take on execution"
+  "task_status": "Task status",
+  "take_on_execution": "Take on execution",
+  "started": "Started",
+  "pending": "Expected to be completed",
+  "in_review": "In review",
+  "awaiting_review": "Awaiting review",
+  "in_progress": "In progress",
+  "execute": "Execute",
+  "not_completed": "Not completed"
 }

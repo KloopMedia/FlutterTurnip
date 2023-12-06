@@ -57,11 +57,13 @@ class _RankTaskPageState extends State<RankTaskPage> {
         ),
         backgroundColor: theme.background,
       ),
-      body: const Padding(
-        padding: EdgeInsets.only(left: 24, top: 20, right: 24, bottom: 34),
-        // child: IndividualChainRankTaskView(),
-        // child: ChainRankTaskView(),
-        child: AdditionalRankTaskView(),
+      body: const SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left: 24, top: 20, right: 24, bottom: 34),
+          // child: IndividualChainRankTaskView(),
+          child: ArticleChainRankTaskView(),
+          // child: AdditionalRankTaskView(),
+        ),
       ),
     );
   }

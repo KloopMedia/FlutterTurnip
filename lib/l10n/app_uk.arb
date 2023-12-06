@@ -181,6 +181,13 @@
       "rank": {}
     }
   },
-  "job_status": "Статус завдання",
-  "take_on_execution": "Взяти на виконання"
+  "task_status": "Статус завдання",
+  "take_on_execution": "Взяти на виконання",
+  "started": "Почато",
+  "pending": "Чекає на виконання",
+  "in_review": "Перевіряється",
+  "awaiting_review": "Чекає на перевірки",
+  "in_progress": "Виконується",
+  "execute": "Виконати",
+  "not_completed": "Не виконано"
 }

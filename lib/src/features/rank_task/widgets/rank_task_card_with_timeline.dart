@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+
+import 'custom_text_button.dart';
 
 class RankTaskCardWithTimeline extends StatelessWidget {
   const RankTaskCardWithTimeline({
@@ -61,20 +64,23 @@ class RankTaskCardWithTimeline extends StatelessWidget {
                   const SizedBox(height: 7),
 
                   ///Выполнено 11 Мая 12:30
-                  // const Text(
-                  //   'Выполнено 11 Мая 12:30', //Проверяется //Выполняется //Ожидает проверки
-                  //   style: TextStyle(
-                  //       fontSize: 14,
-                  //       fontWeight: FontWeight.w400,
-                  //       color: Color(0xFFB9B9B9)
-                  //   ),
-                  // ),
+                  Text(
+                    '${context.loc.task_status_submitted} 11 Мая 12:30',
+                   // context.loc.awaiting_review,
+                   // context.loc.in_progress,
+                   // context.loc.in_review,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFFB9B9B9)
+                    ),
+                  ),
 
                   ///Начато
                   Row(
                     children: [
                       Text(
-                          'Начато: ',
+                          '${context.loc.started}: ',
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
@@ -91,7 +97,7 @@ class RankTaskCardWithTimeline extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                          'Закончено: ',
+                          '${context.loc.task_status_submitted}: ',
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
@@ -110,43 +116,19 @@ class RankTaskCardWithTimeline extends StatelessWidget {
                   ),
 
                   ///Выполнено
-                  // Text(
-                  //     'Выполнено', //'Ожидает выполнения' //'Невыполнено'
-                  //     style: TextStyle(
-                  //         fontWeight: FontWeight.w400,
-                  //         fontSize: 14,
-                  //         color: theme.tertiary
-                  //     )
-                  // ),
+                  Text(
+                      context.loc.task_status_submitted,
+                      // context.loc.pending,
+                      // context.loc.not_completed,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: theme.tertiary
+                      )
+                  ),
 
                   ///Выполнить/ещё  button
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        alignment: Alignment.centerLeft
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Выполнить',//'Выполнить ещё'
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: theme.primary
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: theme.primary,
-                          size: 16,
-                        ),
-                      ],
-                    ),
-                  ),
+                  CustomTextButton(title: context.loc.execute),
 
                   const SizedBox(height: 16),
                   Divider(height: 1, color: theme.neutral90),

@@ -181,6 +181,13 @@
       "rank": {}
     }
   },
-  "job_status": "Статус задания",
-  "take_on_execution": "Взять на выполнение"
+  "task_status": "Статус задания",
+  "take_on_execution": "Взять на выполнение",
+  "started": "Начато",
+  "pending": "Ожидает выполнения",
+  "in_review": "Проверяется",
+  "awaiting_review": "Ожидает проверки",
+  "in_progress": "Выполняется",
+  "execute": "Выполнить",
+  "not_completed": "Невыполнено"
 }

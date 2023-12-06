@@ -181,6 +181,13 @@
       "rank": {}
     }
   },
-  "job_status": "Тапшырма статусу",
-  "take_on_execution": "Аткарууга алуу"
+  "task_status": "Тапшырма статусу",
+  "take_on_execution": "Аткарууга алуу",
+  "started": "Башталды",
+  "pending": "Аткарышын күтүүдө",
+  "in_review": "Текшерүү астында",
+  "awaiting_review": "Текшерүүнү күтүүдө",
+  "in_progress": "Аткарылып жатат",
+  "execute": "Аткаруу",
+  "not_completed": "Аткарылган эмес"
 }

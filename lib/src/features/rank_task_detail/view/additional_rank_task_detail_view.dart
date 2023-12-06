@@ -52,7 +52,7 @@ class AdditionalRankTaskDetailView extends StatelessWidget {
         const RankTaskInstruction(),
         const SizedBox(height: 20),
         Text(
-          context.loc.job_status,
+          context.loc.task_status,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
