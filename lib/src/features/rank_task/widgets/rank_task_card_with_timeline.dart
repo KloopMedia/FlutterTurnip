@@ -64,56 +64,56 @@ class RankTaskCardWithTimeline extends StatelessWidget {
                   const SizedBox(height: 7),
 
                   ///Выполнено 11 Мая 12:30
-                  Text(
-                    '${context.loc.task_status_submitted} 11 Мая 12:30',
-                   // context.loc.awaiting_review,
-                   // context.loc.in_progress,
-                   // context.loc.in_review,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFFB9B9B9)
-                    ),
-                  ),
+                  // Text(
+                  //   '${context.loc.task_status_submitted} 11 Мая 12:30',
+                  //  // context.loc.awaiting_review,
+                  //  // context.loc.in_progress,
+                  //  // context.loc.in_review,
+                  //   style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontWeight: FontWeight.w400,
+                  //       color: Color(0xFFB9B9B9)
+                  //   ),
+                  // ),
 
                   ///Начато
-                  Row(
-                    children: [
-                      Text(
-                          '${context.loc.started}: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: theme.neutral60
-                          )
-                      ),
-                      Text(
-                          '0',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: theme.primary
-                          )
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                          '${context.loc.task_status_submitted}: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: theme.neutral60
-                          )
-                      ),
-                      Text(
-                          '0',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: theme.primary
-                          )
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //         '${context.loc.started}: ',
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w400,
+                  //             fontSize: 14,
+                  //             color: theme.neutral60
+                  //         )
+                  //     ),
+                  //     Text(
+                  //         '0',
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w500,
+                  //             fontSize: 16,
+                  //             color: theme.primary
+                  //         )
+                  //     ),
+                  //     const SizedBox(width: 8),
+                  //     Text(
+                  //         '${context.loc.task_status_submitted}: ',
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w400,
+                  //             fontSize: 14,
+                  //             color: theme.neutral60
+                  //         )
+                  //     ),
+                  //     Text(
+                  //         '0',
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w500,
+                  //             fontSize: 16,
+                  //             color: theme.primary
+                  //         )
+                  //     ),
+                  //   ],
+                  // ),
 
                   ///Выполнено
                   Text(
@@ -129,10 +129,11 @@ class RankTaskCardWithTimeline extends StatelessWidget {
 
                   ///Выполнить/ещё  button
                   CustomTextButton(title: context.loc.execute),
-
-                  const SizedBox(height: 16),
-                  Divider(height: 1, color: theme.neutral90),
-                  const SizedBox(height: 16),
+                  if (!isLastRow)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Divider(height: 1, color: theme.neutral90),
+                    ),
                 ],
               ),
             ),

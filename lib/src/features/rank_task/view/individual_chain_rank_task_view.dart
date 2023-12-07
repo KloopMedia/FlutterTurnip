@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
 import '../../../widgets/widgets.dart';
+import '../widgets/widgets.dart';
 
 class IndividualChainRankTaskView extends StatefulWidget {
   const IndividualChainRankTaskView({Key? key}) : super(key: key);
@@ -17,6 +18,13 @@ class _IndividualChainRankTaskViewState extends State<IndividualChainRankTaskVie
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final titles = [
+      '`Прочитать текст и заполнить недостающие буквы',
+      'Пройти тест по восприятию языка на слух',
+      'Название задания',
+      'Название задания',
+      'Название задания',
+    ];
 
     return Column(
       children: [
@@ -39,107 +47,16 @@ class _IndividualChainRankTaskViewState extends State<IndividualChainRankTaskVie
                 maxLines: 3
               ),
               const SizedBox(height: 20),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        width: 14,
-                        height: 14,
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: theme.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,//theme.primary
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 2,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: theme.primary,//neutral80
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: const Text(''),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Прочитать текст и заполнить недостающие буквы',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: theme.neutral40,
-                          ),
-                          softWrap: true,
-                          maxLines: 2,
-                        ),
-                        const SizedBox(height: 4),
-
-                        ///Выполнено
-                        Text(
-                          'Выполнено', //'Ожидает выполнения' //'Невыполнено'
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                              color: theme.tertiary
-                          )
-                        ),
-
-                        const SizedBox(height: 7),
-                        TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            alignment: Alignment.centerLeft
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Выполнить',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: theme.primary
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: theme.primary,
-                                size: 16,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Divider(height: 1, color: theme.neutral90),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: titles.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RankTaskCardWithTimeline(
+                      title: titles[index],
+                      isLastRow: index == titles.length - 1,
+                    );
+                  }
               ),
-
             ],
           ),
         ),

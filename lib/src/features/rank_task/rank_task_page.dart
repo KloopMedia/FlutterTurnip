@@ -60,8 +60,8 @@ class _RankTaskPageState extends State<RankTaskPage> {
       body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 24, top: 20, right: 24, bottom: 34),
-          // child: IndividualChainRankTaskView(),
-          child: ArticleChainRankTaskView(),
+          child: IndividualChainRankTaskView(),
+          // child: ArticleChainRankTaskView(),
           // child: AdditionalRankTaskView(),
         ),
       ),

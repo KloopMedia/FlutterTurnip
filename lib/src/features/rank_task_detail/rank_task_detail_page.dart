@@ -52,8 +52,8 @@ class _RankTaskDetailPageState extends State<RankTaskDetailPage> {
         child: Padding(
           padding: EdgeInsets.only(left: 24, top: 20, right: 24, bottom: 34),
           // child: AdditionalRankTaskDetailView(),
-          child: ArticleChainRankTaskDetailView(),
-          // child: IndividualChainRankTaskDetailView(),
+          // child: ArticleChainRankTaskDetailView(),
+          child: IndividualChainRankTaskDetailView(),
         ),
       ),
     );

@@ -129,7 +129,16 @@ class _ArticleChainRankTaskViewState extends State<ArticleChainRankTaskView> {
                   maxLines: 3
               ),
               const SizedBox(height: 20),
-
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: titles.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RankTaskCardWithTimeline(
+                      title: titles[index],
+                      isLastRow: index == titles.length - 1,
+                    );
+                  }
+              ),
             ],
           ),
         ),
