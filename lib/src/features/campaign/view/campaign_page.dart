@@ -9,6 +9,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
+import '../../task_detail/view/submitted_task_info_page.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
@@ -69,7 +70,8 @@ class _CampaignPageState extends State<CampaignPage> {
           )..initialize(),
         ),
       ],
-      child: const CampaignView(),
+      child: const SubmittedTaskInfoPage(),
+      // child: const CampaignView(),
     );
   }
 }
