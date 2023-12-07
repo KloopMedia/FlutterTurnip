@@ -101,13 +101,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
 
       final quizAnswers = _state.data.stage.quizAnswers;
-      if (quizAnswers != null && quizAnswers.isNotEmpty) {
-        emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
-        return;
-      }
 
       if (nextTaskId == taskId) {
         emit(TaskReturned.clone(_state));
+      } else if (quizAnswers != null && quizAnswers.isNotEmpty) {
+        emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
       } else {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
       }
