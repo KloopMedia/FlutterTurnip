@@ -84,17 +84,28 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final updatedTask = _state.data.copyWith(responses: formData, complete: true);
       final response = await _repository.submitTask(updatedTask);
       final nextTaskId = response.nextDirectId;
-      final notifications = response.notifications;
 
-      if (nextTaskId == taskId) {
-        emit(TaskReturned.clone(_state));
-      } else if (notifications != null) {
+      final notifications = response.notifications;
+      if (notifications != null) {
         final text = notifications.first['text'];
-        emit(NotificationOpened(updatedTask, _state.previousTasks,
+        emit(
+          NotificationOpened(
+            updatedTask,
+            _state.previousTasks,
             text: text,
             task: updatedTask,
             previousTask: _state.previousTasks,
-            nextTaskId: nextTaskId));
+            nextTaskId: nextTaskId,
+          ),
+        );
+      }
+
+      final quizAnswers = _state.data.stage.quizAnswers;
+
+      if (nextTaskId == taskId) {
+        emit(TaskReturned.clone(_state));
+      } else if (quizAnswers != null && quizAnswers.isNotEmpty) {
+        emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
       } else {
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
       }

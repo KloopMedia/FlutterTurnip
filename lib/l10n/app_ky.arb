@@ -171,5 +171,12 @@
 	"sort_by_new": "Биринчи жаңылар",
 	"sort_by_old": "Биринчи эскилер",
 	"date": "Дата",
-	"search": "Поиск"
+	"search": "Поиск",
+
+	"settings_chains": "Цепочки",
+	"settings_tracks": "Треки",
+	"settings_ranks": "Ранги",
+	"settings_messages": "Сообщения",
+
+	"chains": "Цепочки"
 }
