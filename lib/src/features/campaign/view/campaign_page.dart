@@ -70,8 +70,8 @@ class _CampaignPageState extends State<CampaignPage> {
           )..initialize(),
         ),
       ],
-      child: const SubmittedTaskInfoPage(),
-      // child: const CampaignView(),
+      // child: const SubmittedTaskInfoPage(),
+      child: const CampaignView(),
     );
   }
 }

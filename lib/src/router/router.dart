@@ -25,6 +25,8 @@ class AppRouter {
     final fromPage = state.matchedLocation == _initialLocation
         ? ''
         : '?from=${state.matchedLocation}&$queryString';
+    print('>>> formPage = $fromPage');
+    print('>>> Login = ${LoginRoute.path + fromPage}');
     return LoginRoute.path + fromPage;
   }
 
@@ -32,6 +34,7 @@ class AppRouter {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
+    print('>>> initial = ${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString');
     return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
@@ -42,6 +45,7 @@ class AppRouter {
     try {
       final campaignId = int.parse(query['join_campaign']!);
       await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
+      print('>>> join = ${TaskRoute.path.replaceFirst(':cid', '$campaignId')}/?$queryString');
       return '${TaskRoute.path.replaceFirst(':cid', '$campaignId')}/?$queryString';
     } on FormatException {
       return '${state.matchedLocation}?$queryString';
@@ -72,6 +76,18 @@ class AppRouter {
         final bool loggedIn = authenticationService.user.isNotEmpty;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final campaignIdQueryValue = query['join_campaign'];
+        // final embedded = query['embed'];
+        // print('>>>  = $campaignIdQueryValue / $embedded');
+        //
+        // if (!loggedIn && campaignIdQueryValue != null && embedded != null) {
+        //   final campaignId = int.parse(query['join_campaign']!);
+        //   final taskStageId = int.parse(query['create_task']!);
+        //   // await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
+        //   final string = TaskDetailRoute.path.replaceAll(':cid', '$campaignId');
+        //   final string2 = string.replaceAll(':tid', '$taskStageId');
+        //   print('>>> string2 = $string2');
+        //   return string2;
+        // }
 
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
