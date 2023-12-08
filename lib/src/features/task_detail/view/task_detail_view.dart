@@ -331,6 +331,7 @@ class _CurrentTask extends StatelessWidget {
               return status;
             },
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             locale: context.read<LocalizationBloc>().state.locale,
             correctFormData: task.stage.quizAnswers,
             showCorrectFields: task.complete,
@@ -395,6 +396,7 @@ class _PreviousTask extends StatelessWidget {
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             locale: context.read<LocalizationBloc>().state.locale,
             onDownloadFile: (url, filename, bytes) async {
               var status =

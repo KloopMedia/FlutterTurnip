@@ -198,6 +198,7 @@ class TaskPreviewState extends State<TaskPreview> {
                   formData: item.responses,
                   disabled: true,
                   shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   locale: context.read<LocalizationBloc>().state.locale,
                   storage:
                       generateStorageReference(item, context.read<AuthenticationRepository>().user),
@@ -214,6 +215,7 @@ class TaskPreviewState extends State<TaskPreview> {
                 formData: widget.task.responses,
                 disabled: true,
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 locale: context.read<LocalizationBloc>().state.locale,
                 storage: generateStorageReference(
                     widget.task, context.read<AuthenticationRepository>().user),
