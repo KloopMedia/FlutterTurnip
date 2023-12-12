@@ -73,7 +73,6 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            crunchPngs false
         }
     }
 }
