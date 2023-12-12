@@ -75,7 +75,10 @@ dependencies:
   url_launcher: ^6.1.11
   back_button_interceptor: ^7.0.0
   background_downloader: ^7.4.1
-#  firebase_messaging: ^14.6.7
+  firebase_messaging: ^14.6.7
+
+dependency_overrides:
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

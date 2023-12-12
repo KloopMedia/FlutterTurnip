@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/notification_detail/view/notification_detail_page.dart';
@@ -34,6 +35,8 @@ class NotificationDetailRoute {
         final notificationId = int.parse(nid);
         final campaignId = int.parse(cid);
 
+        final message = ModalRoute.of(context)?.settings.arguments as RemoteMessage;
+
         if (notification != null && notification is Notification) {
           return NotificationDetailPage(
             key: ValueKey(nid),
@@ -46,6 +49,7 @@ class NotificationDetailRoute {
           key: ValueKey(nid),
           notificationId: notificationId,
           campaignId: campaignId,
+          message: message,
         );
       },
     );

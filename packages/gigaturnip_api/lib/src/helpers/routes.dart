@@ -51,3 +51,7 @@ const openNotificationActionRoute = 'open_notification/';
 const usersRoute = 'users/';
 const deleteInitRoute = '$usersRoute/delete_init/';
 const deleteUserAction = '/delete_user/';
+
+// FCM routes
+const fcmRoute = 'fcm/fcm/';
+const updateFcmTokenActionRoute = '$fcmRoute/update_fcm_token/';

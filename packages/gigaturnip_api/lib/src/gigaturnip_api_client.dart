@@ -156,4 +156,9 @@ abstract class GigaTurnipApiClient {
 
   @GET("$notificationsRoute/{id}/$openNotificationActionRoute")
   Future<void> openNotification(@Path("id") int id);
+
+  // FCM methods
+
+  @POST(updateFcmTokenActionRoute)
+  Future<void> updateFcmToken(@Body() Map<String, dynamic> data);
 }
