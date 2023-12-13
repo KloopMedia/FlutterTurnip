@@ -13,9 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
 import 'src/bloc/bloc.dart';
 import 'src/router/router.dart';
-import 'src/router/routes/routes.dart';
-
-final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,19 +25,7 @@ Future<void> main() async {
   final router = AppRouter(authenticationRepository).router;
   ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) => SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
 
-  void handleMessage(RemoteMessage? message) {
-    if (message == null) return;
-
-    navigatorKey.currentState?.pushNamed(
-        NotificationDetailRoute.name,
-        arguments: message
-    );
-  }
-
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  final token = await messaging.getToken();
-  await gigaTurnipApiClient.updateFcmToken({'fcm_token': token});
-
   await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -50,12 +35,6 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
-
-  /// handle notification if the app was terminated and now opened
-  FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
-
-  /// attach event listeners for when a notification opens the app
-  FirebaseMessaging.onMessageOpenedApp.listen((handleMessage));
 
   runApp(
     MultiRepositoryProvider(

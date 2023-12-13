@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/notification_detail/bloc/notification_detail_bloc.dart';
@@ -12,14 +11,12 @@ class NotificationDetailPage extends StatelessWidget {
   final int notificationId;
   final int campaignId;
   final Notification? notification;
-  final RemoteMessage? message;
 
   const NotificationDetailPage({
     Key? key,
     required this.notificationId,
     required this.campaignId,
     this.notification,
-    this.message,
   }) : super(key: key);
 
   @override
@@ -32,19 +29,17 @@ class NotificationDetailPage extends StatelessWidget {
         notificationId: notificationId,
         notification: notification,
       ),
-      child: NotificationDetailView(campaignId: campaignId, message: message),
+      child: NotificationDetailView(campaignId: campaignId),
     );
   }
 }
 
 class NotificationDetailView extends StatefulWidget {
   final int campaignId;
-  final RemoteMessage? message;
 
   const NotificationDetailView({
     Key? key,
     required this.campaignId,
-    this.message,
   }) : super(key: key);
 
   @override
@@ -113,7 +108,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView> {
                   child: Column(
                     children: [
                       Text(
-                        (widget.message?.notification == null) ? state.data.title : widget.message!.notification!.title!,
+                        state.data.title,
                         style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
@@ -121,7 +116,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView> {
                         height: 20,
                       ),
                       Text(
-                        (widget.message?.notification == null) ? state.data.text : widget.message!.notification!.body!,
+                        state.data.text,
                         textAlign: TextAlign.center
                       ),
                     ],

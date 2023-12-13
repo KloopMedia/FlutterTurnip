@@ -35,8 +35,6 @@ class NotificationDetailRoute {
         final notificationId = int.parse(nid);
         final campaignId = int.parse(cid);
 
-        final message = ModalRoute.of(context)?.settings.arguments as RemoteMessage;
-
         if (notification != null && notification is Notification) {
           return NotificationDetailPage(
             key: ValueKey(nid),
@@ -49,7 +47,6 @@ class NotificationDetailRoute {
           key: ValueKey(nid),
           notificationId: notificationId,
           campaignId: campaignId,
-          message: message,
         );
       },
     );
