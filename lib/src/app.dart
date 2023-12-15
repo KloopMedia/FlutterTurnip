@@ -4,22 +4,36 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
+import 'package:gigaturnip/src/utilities/notification_services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'bloc/theme_bloc/theme_cubit.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   final GoRouter router;
 
   const App({Key? key, required this.router}) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final NotificationServices notificationServices = NotificationServices();
+
+  @override
+  void initState() {
+    notificationServices.initialize(widget.router);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routeInformationProvider: router.routeInformationProvider,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
+      routeInformationProvider: widget.router.routeInformationProvider,
+      routeInformationParser: widget.router.routeInformationParser,
+      routerDelegate: widget.router.routerDelegate,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         checkboxTheme: CheckboxThemeData(
