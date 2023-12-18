@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
   final EdgeInsets? padding;
@@ -16,7 +17,7 @@ class CustomFloatingActionButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         backgroundColor: theme.primary,
         onPressed: onPressed,
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add, color: theme.isLight ? Colors.white : Colors.black,),
       ),
     );
   }
