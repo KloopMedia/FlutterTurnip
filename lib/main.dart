@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/app.dart';
+import 'package:gigaturnip/src/utilities/notification_services.dart';
 import 'package:gigaturnip/src/widgets/error_screen.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
   final gigaTurnipApiClient = GigaTurnipApiClient(dio, baseUrl: AppConfig.apiUrl);
   final sharedPreferences = await SharedPreferences.getInstance();
   final router = AppRouter(authenticationRepository).router;
+  NotificationServices notificationServices = NotificationServices();
   ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) => SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -35,6 +37,12 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
+
+  try {
+    messaging.onTokenRefresh.listen((fcmToken) {
+      notificationServices.getDeviceToken(gigaTurnipApiClient, fcmToken);
+    }).onError((err) {});
+  } catch(e) {}
 
   runApp(
     MultiRepositoryProvider(

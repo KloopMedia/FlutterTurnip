@@ -6,7 +6,6 @@ import '../router/routes/routes.dart';
 
 class NotificationServices {
 
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel',
@@ -15,8 +14,7 @@ class NotificationServices {
     importance: Importance.max,
   );
 
-  void getDeviceToken(gigaTurnipApiClient) async {
-    final token = await _messaging.getToken();
+  void getDeviceToken(gigaTurnipApiClient, token) async {
     await gigaTurnipApiClient.updateFcmToken({'fcm_token': token});
   }
 
