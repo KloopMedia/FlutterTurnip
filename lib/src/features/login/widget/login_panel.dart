@@ -111,11 +111,12 @@ class LoginPanel extends StatelessWidget {
               // ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                context.loc.privacy_policy_acceptance,
+                context.loc.privacy_policy_acceptance_1,
                 style: TextStyle(
                   color: fontColor,
                   fontSize: 14,
@@ -123,13 +124,10 @@ class LoginPanel extends StatelessWidget {
                 ),
               ),
               TextButton(
-                child: Text(
-                  context.loc.privacy_policy,
-                  style: TextStyle(
-                    color: theme.primary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(50, 30),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 onPressed: () async {
                   final url = Uri.parse('https://docs.google.com/document/d/1Jn8WkyVbnpLt-MDPowyDEVM0_vDdSm8d/edit?usp=sharing&ouid=101664496780696593737&rtpof=true&sd=true');
@@ -139,6 +137,14 @@ class LoginPanel extends StatelessWidget {
                     throw 'Could not launch $url';
                   }
                 },
+                child: Text(
+                  context.loc.privacy_policy_acceptance_2,
+                  style: TextStyle(
+                    color: theme.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               )
             ],
           ),
