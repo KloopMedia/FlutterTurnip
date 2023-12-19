@@ -94,6 +94,8 @@
   "delete_account_confirmation": "Delete",
 
   "settings": "Settings",
+  "privacy_policy": "Privacy Policy",
+  "privacy_policy_acceptance": "By registering, I accept",
   "form_submit_button": "Enter",
   "form_divider": "Your form starts here",
   "join_campaign": "Join campaign",

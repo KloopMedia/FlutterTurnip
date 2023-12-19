@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../view/language_picker.dart';
 import 'provider_buttons.dart';
@@ -45,66 +46,102 @@ class LoginPanel extends StatelessWidget {
       margin: padding,
       constraints: constraints,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  context.loc.welcome,
-                  style: titleTextStyle,
-                ),
+              Column(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.loc.welcome,
+                      style: titleTextStyle,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      (kIsWeb) ? context.loc.choose_language_and_sign_up : context.loc.sign_in_or_sign_up,
+                      style: subtitleTextStyle,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 14),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  (kIsWeb) ? context.loc.choose_language_and_sign_up : context.loc.sign_in_or_sign_up,
-                  style: subtitleTextStyle,
+              if (kIsWeb)
+                Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: LanguagePicker(
+                        errorMessage: (errorMessage != null && isLocaleSelected == false)
+                            ? errorMessage
+                            : null,
+                        isLocaleSelected: isLocaleSelected ?? true,
+                        campaignLocales: const [],
+                      ),
+                    ),
+                  ],
                 ),
+              const SizedBox(height: 60),
+              LoginProviderButtons(
+                isActive: isLocaleSelected ?? true,
+                onPressed: (errorMessage) {
+                  onSubmit(errorMessage);
+                }
               ),
+              const SizedBox.shrink(),
+              // Column(
+              //   children: [
+              //     PhoneNumberField(onChanged: onChange),
+              //     const SizedBox(height: 20),
+              //     SignUpButton(onPressed: (_) => onSubmit()),
+              //     DividerWithLabel(
+              //       label: context.loc.or,
+              //       padding: const EdgeInsets.symmetric(vertical: 47.0),
+              //       color: theme.isLight ? theme.neutral50 : theme.neutral60,
+              //       thickness: 0.2,
+              //     ),
+              //     const LoginProviderButtons(),
+              //   ],
+              // ),
             ],
           ),
-          if (kIsWeb)
-            Column(
-              children: [
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: LanguagePicker(
-                    errorMessage: (errorMessage != null && isLocaleSelected == false)
-                        ? errorMessage
-                        : null,
-                    isLocaleSelected: isLocaleSelected ?? true,
-                    campaignLocales: const [],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                context.loc.privacy_policy_acceptance,
+                style: TextStyle(
+                  color: fontColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              TextButton(
+                child: Text(
+                  context.loc.privacy_policy,
+                  style: TextStyle(
+                    color: theme.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-              ],
-            ),
-          const SizedBox(height: 60),
-          LoginProviderButtons(
-            isActive: isLocaleSelected ?? true,
-            onPressed: (errorMessage) {
-              onSubmit(errorMessage);
-            }
+                onPressed: () async {
+                  final url = Uri.parse('https://docs.google.com/document/d/1Jn8WkyVbnpLt-MDPowyDEVM0_vDdSm8d/edit?usp=sharing&ouid=101664496780696593737&rtpof=true&sd=true');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+              )
+            ],
           ),
-          const SizedBox.shrink(),
-          // Column(
-          //   children: [
-          //     PhoneNumberField(onChanged: onChange),
-          //     const SizedBox(height: 20),
-          //     SignUpButton(onPressed: (_) => onSubmit()),
-          //     DividerWithLabel(
-          //       label: context.loc.or,
-          //       padding: const EdgeInsets.symmetric(vertical: 47.0),
-          //       color: theme.isLight ? theme.neutral50 : theme.neutral60,
-          //       thickness: 0.2,
-          //     ),
-          //     const LoginProviderButtons(),
-          //   ],
-          // ),
         ],
       ),
     );

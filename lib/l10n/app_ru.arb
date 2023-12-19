@@ -94,6 +94,8 @@
   "delete_account_confirmation": "Удалить",
 
   "settings": "Настройки",
+  "privacy_policy": "Политика конфиденциальности",
+  "privacy_policy_acceptance": "Регистрируясь, я принимаю",
   "form_submit_button": "Отправить",
   "form_divider": "Ваша форма начинается здесь",
   "join_campaign": "Присоединиться к кампании",

@@ -113,6 +113,7 @@ class AppRouter {
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,
         SettingsRoute(parentKey: _rootNavigatorKey).route,
         ChainRoute(parentKey: _rootNavigatorKey).route,
+        PrivacyPolicyRoute(parentKey: _rootNavigatorKey).route,
       ],
     );
   }
