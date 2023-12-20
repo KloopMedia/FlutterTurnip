@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/notification_detail/bloc/notification_detail_bloc.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -102,24 +103,30 @@ class _NotificationDetailViewState extends State<NotificationDetailView> {
           }
           if (state is NotificationLoaded) {
             return Center(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        state.data.title,
-                        style: Theme.of(context).textTheme.titleLarge,
-                        textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  color: Colors.white,
+                  child: SizedBox(
+                    width: context.isSmall || context.isMedium
+                        ? double.infinity
+                        : MediaQuery.of(context).size.width * 0.7,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            state.data.title,
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text(state.data.text, textAlign: TextAlign.center),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        state.data.text,
-                        textAlign: TextAlign.center
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
