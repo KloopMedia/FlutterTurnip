@@ -2,8 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../router/routes/routes.dart';
 import '../view/language_picker.dart';
 import 'provider_buttons.dart';
 
@@ -129,13 +130,8 @@ class LoginPanel extends StatelessWidget {
                     minimumSize: const Size(50, 30),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                onPressed: () async {
-                  final url = Uri.parse('https://docs.google.com/document/d/1Jn8WkyVbnpLt-MDPowyDEVM0_vDdSm8d/edit?usp=sharing&ouid=101664496780696593737&rtpof=true&sd=true');
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
+                onPressed: () {
+                  context.goNamed(PrivacyPolicyRoute.name);
                 },
                 child: Text(
                   context.loc.privacy_policy_acceptance_2,
