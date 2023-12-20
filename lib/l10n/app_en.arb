@@ -95,7 +95,7 @@
 
   "settings": "Settings",
   "privacy_policy": "Privacy Policy",
-  "privacy_policy_acceptance_1": "By registering, I accept",
+  "privacy_policy_acceptance_1": "By registering, I accept ",
   "privacy_policy_acceptance_2": "Privacy Policy",
   "privacy_policy_acceptance_3": "",
   "form_submit_button": "Enter",
