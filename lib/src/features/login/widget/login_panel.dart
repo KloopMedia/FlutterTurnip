@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../router/routes/routes.dart';
 import '../view/language_picker.dart';
@@ -115,7 +116,7 @@ class LoginPanel extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              if (!kIsWeb) Text(
                 context.loc.privacy_policy_acceptance_1,
                 style: TextStyle(
                   color: fontColor,
@@ -126,14 +127,31 @@ class LoginPanel extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  if (kIsWeb) Text(
+                    context.loc.privacy_policy_acceptance_1,
+                    style: TextStyle(
+                      color: fontColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                   TextButton(
                     style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(50, 30),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    onPressed: () {
-                      context.goNamed(PrivacyPolicyRoute.name);
+                    onPressed: () async {
+                      if (kIsWeb) {
+                        final url = Uri.parse('https://docs.google.com/document/d/1Jn8WkyVbnpLt-MDPowyDEVM0_vDdSm8d/edit?usp=sharing&ouid=101664496780696593737&rtpof=true&sd=true');
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      } else {
+                        context.goNamed(PrivacyPolicyRoute.name);
+                      }
                     },
                     child: Text(
                       context.loc.privacy_policy_acceptance_2,
