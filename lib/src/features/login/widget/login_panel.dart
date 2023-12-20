@@ -113,7 +113,6 @@ class LoginPanel extends StatelessWidget {
             ],
           ),
           Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -124,24 +123,37 @@ class LoginPanel extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(50, 30),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                onPressed: () {
-                  context.goNamed(PrivacyPolicyRoute.name);
-                },
-                child: Text(
-                  context.loc.privacy_policy_acceptance_2,
-                  style: TextStyle(
-                    color: theme.primary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {
+                      context.goNamed(PrivacyPolicyRoute.name);
+                    },
+                    child: Text(
+                      context.loc.privacy_policy_acceptance_2,
+                      style: TextStyle(
+                        color: theme.primary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ),
-                ),
-              )
+                  Text(
+                    context.loc.privacy_policy_acceptance_3,
+                    style: TextStyle(
+                      color: fontColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ],

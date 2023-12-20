@@ -95,8 +95,9 @@
 
   "settings": "Настройки",
   "privacy_policy": "Политика конфиденциальности",
-  "privacy_policy_acceptance_2": "Политику конфиденциальности",
   "privacy_policy_acceptance_1": "Регистрируясь, я принимаю",
+  "privacy_policy_acceptance_2": "Политику конфиденциальности",
+  "privacy_policy_acceptance_3": "",
   "form_submit_button": "Отправить",
   "form_divider": "Ваша форма начинается здесь",
   "join_campaign": "Присоединиться к кампании",

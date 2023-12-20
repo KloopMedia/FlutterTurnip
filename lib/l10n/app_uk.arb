@@ -95,8 +95,9 @@
 
   "settings": "Налаштування",
   "privacy_policy": "Політика конфіденційності",
-  "privacy_policy_acceptance_2": "Політику конфіденційності",
   "privacy_policy_acceptance_1": "Реєструючись, я приймаю",
+  "privacy_policy_acceptance_2": "Політику конфіденційності",
+  "privacy_policy_acceptance_3": "",
   "form_submit_button": "Надіслати",
   "form_divider": "Ваша форма починається тут",
   "join_campaign": "Долучитися до кампанії",
