@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
+import '../../../utilities/notification_services.dart';
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
@@ -25,6 +26,7 @@ class CampaignPage extends StatefulWidget {
 }
 
 class _CampaignPageState extends State<CampaignPage> {
+  NotificationServices notificationServices = NotificationServices();
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _CampaignPageState extends State<CampaignPage> {
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
     final gigaTurnipApiClient = context.read<api.GigaTurnipApiClient>();
+    notificationServices.getDeviceToken(gigaTurnipApiClient, null);
 
     return MultiBlocProvider(
       providers: [

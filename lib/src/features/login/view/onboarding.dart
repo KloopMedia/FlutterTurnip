@@ -88,7 +88,6 @@ class _OnBoardingState extends State<OnBoarding> {
                     ),
                 ),
               Container(
-                height: 200,
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

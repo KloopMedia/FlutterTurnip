@@ -1,11 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
 
 import '../router/routes/routes.dart';
 
 class NotificationServices {
 
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel',
@@ -14,8 +16,10 @@ class NotificationServices {
     importance: Importance.max,
   );
 
-  void getDeviceToken(gigaTurnipApiClient, token) async {
-    await gigaTurnipApiClient.updateFcmToken({'fcm_token': token});
+  void getDeviceToken(GigaTurnipApiClient gigaTurnipApiClient, String? fcmToken) async {
+    final token = await messaging.getToken();
+    await gigaTurnipApiClient.updateFcmToken({'fcm_token': fcmToken ?? token});
+
   }
 
   Future<void> initialize(GoRouter router) async {
@@ -23,7 +27,15 @@ class NotificationServices {
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
-    await FirebaseMessaging.instance.getInitialMessage();
+    messaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true);
+
+    RemoteMessage? terminatedMessage = await messaging.getInitialMessage();
+    if (terminatedMessage != null) {
+      _handleMessage(terminatedMessage, router);
+    }
 
     onMessageListen(router);
 
