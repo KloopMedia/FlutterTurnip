@@ -29,7 +29,7 @@ class ApiInterceptor extends Interceptor {
       }
       return handler.next(options);
     } catch (e) {
-      return handler.reject(DioError(requestOptions: options));
+      return handler.reject(DioException(requestOptions: options));
     }
   }
 }
