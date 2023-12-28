@@ -56,7 +56,7 @@ class _AppState extends State<App> {
       builder: (context, child) {
         final MediaQueryData data = MediaQuery.of(context);
         return MediaQuery(
-          data: data.copyWith(textScaleFactor: 0.9),
+          data: data.copyWith(textScaler: const TextScaler.linear(0.9)),
           child: child!,
         );
       },
