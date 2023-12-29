@@ -4,26 +4,44 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'utilities.dart';
 
 class AppRouter {
   final RouterNotifier _authRouterNotifier;
+  final SharedPreferences _sharedPreferences;
 
-  AppRouter(AuthenticationRepository authenticationRepository)
-      : _authRouterNotifier = RouterNotifier(authenticationRepository);
+  AppRouter(AuthenticationRepository authenticationRepository, SharedPreferences sharedPreferences)
+      : _authRouterNotifier = RouterNotifier(authenticationRepository),
+        _sharedPreferences = sharedPreferences;
 
   final _initialLocation = CampaignRoute.path;
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
+  String? _getActiveCampaignRoute() {
+    final activeCampaignId = _sharedPreferences.getString(Constants.sharedPrefActiveCampaignKey);
+
+    if (activeCampaignId == null) {
+      return null;
+    }
+
+    return TaskRoute.path.replaceFirst(':cid', activeCampaignId);
+  }
+
+  String _getActiveFromPath() {
+    return _getActiveCampaignRoute() != null ? '?from=${_getActiveCampaignRoute()}' : '';
+  }
 
   String redirectToLoginPage(BuildContext context, GoRouterState state) {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query);
     final fromPage = state.matchedLocation == _initialLocation
-        ? ''
+        ? '${_getActiveFromPath()}&$queryString'
         : '?from=${state.matchedLocation}&$queryString';
     return LoginRoute.path + fromPage;
   }
@@ -32,14 +50,15 @@ class AppRouter {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
-    return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
+    return '${state.uri.queryParameters['from'] ?? _getActiveCampaignRoute() ?? _initialLocation}?$queryString';
   }
 
   String redirectToNotificationDetailPage(BuildContext context, GoRouterState state) {
     final query = {...state.uri.queryParameters};
     final queryString = toQueryString(query, 'from');
+
     final fromPage = state.matchedLocation == NotificationDetailRoute.path
-        ? ''
+        ? '${_getActiveFromPath()}&$queryString'
         : '?from=${state.matchedLocation}&$queryString';
     return NotificationDetailRoute.path + fromPage;
   }
@@ -48,7 +67,7 @@ class AppRouter {
     final query = {...state.uri.queryParameters};
     final queryString = toQueryString(query, 'from');
     final fromPage = state.matchedLocation == PrivacyPolicyRoute.path
-        ? ''
+        ? '${_getActiveFromPath()}&$queryString'
         : '?from=${state.matchedLocation}&$queryString';
     return PrivacyPolicyRoute.path + fromPage;
   }
@@ -66,9 +85,9 @@ class AppRouter {
     }
   }
 
-  get router {
+  GoRouter get router {
     return GoRouter(
-      initialLocation: _initialLocation,
+      initialLocation: _getActiveCampaignRoute() ?? _initialLocation,
       refreshListenable: _authRouterNotifier,
       onException: (_, GoRouterState state, GoRouter router) {
         final location = state.uri.toString() + (state.uri.toString().endsWith('/') ? '' : '/');
@@ -99,7 +118,6 @@ class AppRouter {
 
         // if there is push notification, then send user to NotificationDetailPage
         if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
-
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
