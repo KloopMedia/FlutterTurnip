@@ -34,10 +34,6 @@ class UserCampaignView extends StatelessWidget {
               body: context.loc.campaign_empty_body,
             ),
             itemBuilder: (context, index, item) {
-              final cardBody = item.unreadNotifications > 0
-                  ? CardMessage('${context.loc.you_have} ${item.unreadNotifications} ${context.loc.unread_message}')
-                  : null;
-
               if (context.isExtraLarge || context.isLarge) {
                 return CardWithTitle(
                   title: item.name,
@@ -45,14 +41,12 @@ class UserCampaignView extends StatelessWidget {
                   imageUrl: item.logo,
                   flex: 1,
                   onTap: () => redirectToTaskMenu(context, item),
-                  body: cardBody,
                 );
               } else {
                 return CardWithTitle(
                   title: item.name,
                   imageUrl: item.logo,
                   onTap: () => redirectToTaskMenu(context, item),
-                  body: cardBody,
                 );
               }
             },
