@@ -5,20 +5,18 @@ import 'package:gigaturnip/src/features/campaign/bloc/campaign_cubit.dart';
 import 'package:gigaturnip/src/features/campaign/view/empty_campaign_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserCampaignView extends StatelessWidget {
   const UserCampaignView({Key? key}) : super(key: key);
 
   void redirectToTaskMenu(BuildContext context, Campaign item) {
-    context
-        .read<SharedPreferences>()
-        .setString(Constants.sharedPrefActiveCampaignKey, item.id.toString());
-    context.pushNamed(TaskRoute.name, pathParameters: {'cid': '${item.id}'});
+    context.pushNamed(
+      TaskRoute.name,
+      pathParameters: {'cid': '${item.id}'},
+    );
   }
 
   @override
@@ -39,7 +37,7 @@ class UserCampaignView extends StatelessWidget {
               if (context.isExtraLarge || context.isLarge) {
                 return CardWithTitle(
                   title: item.name,
-                  size: const Size.fromHeight(125),
+                  size: const Size.fromHeight(125),//165
                   imageUrl: item.logo,
                   flex: 1,
                   onTap: () => redirectToTaskMenu(context, item),
