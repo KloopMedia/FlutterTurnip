@@ -26,6 +26,11 @@
   },
   "further": "Продовжити",
   "or": "АБО",
+  "skip": "Пропустити",
+  "section_selection_title": "Чим Ви хочете займатися?",
+  "section_selection": "Виберіть цікавий для вас розділ вивчення",
+  "english_section": "Вивчення англійської мови",
+  "mobilography_section": "Вивчення навички мобілографії",
 
   "login" : "Зареєструватися",
   "logout_from_email" : "ВИЙТИ З ПОШТИ",

@@ -19,6 +19,7 @@ class LoginInitial extends LoginState {
 }
 
 class LoginSuccess extends LoginState {
+  const LoginSuccess();
   @override
   List<Object> get props => [];
 }

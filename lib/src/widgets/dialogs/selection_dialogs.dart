@@ -90,6 +90,7 @@ class SearchBarDialogState extends State<SearchBarDialog> {
     final theme = Theme.of(context).colorScheme;
 
     return SimpleDialog(
+      surfaceTintColor: theme.background,
       titlePadding: EdgeInsets.zero,
       contentPadding: const EdgeInsets.all(20),
       backgroundColor: theme.background,

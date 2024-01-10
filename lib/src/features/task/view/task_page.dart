@@ -162,7 +162,7 @@ class _TaskPageState extends State<TaskPage> {
               icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
                 builder: (context, state) {
                   if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
-                    return Image.network(state.data.logo);
+                    return Image.network(state.data.logo, height: 24);
                   } else {
                     return const Icon(Icons.info_outline);
                   }

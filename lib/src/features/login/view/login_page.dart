@@ -150,7 +150,7 @@ class _LoginViewState extends State<LoginView> {
             //   );
             // }
 
-            return (widget.campaignId != null)
+            return /*(widget.campaignId != null)
               ? BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
                 builder: (context, state) {
                   if (state is CampaignFetching) {
@@ -251,7 +251,7 @@ class _LoginViewState extends State<LoginView> {
                   return const SizedBox.shrink();
                 }
             )
-            : Row(
+            :*/ Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -311,20 +311,20 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: (context.isSmall) ? MainAxisAlignment.start : MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (loginState is LoginInitial)
+                      if (loginState is LoginSuccess)
                         Flexible(
                           child: OnBoarding(
-                            title: context.loc.welcome_title,
-                            description: context.loc.welcome_subtitle,
+                            // title: context.loc.welcome_title,
+                            // description: context.loc.welcome_subtitle,
                             constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
-                            onContinue: (country) {
-                              sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [country.first.id.toString(), country.first.name]);
-                              sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
-                              context.read<LoginBloc>().add(CloseOnBoarding(country));
-                            },
+                            // onContinue: (country) {
+                            //   sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [country.first.id.toString(), country.first.name]);
+                            //   sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
+                            //   context.read<LoginBloc>().add(CloseOnBoarding(country));
+                            // },
                           ),
                         ),
-                      if (loginState is OnboardingClosed)
+                      if (loginState is LoginInitial)
                         LoginPanel(
                           constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),

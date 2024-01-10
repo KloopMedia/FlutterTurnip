@@ -83,7 +83,7 @@ class AppRouter {
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final campaignJoinQueryValue = query['join_campaign'];
         final queryValues = query.values;
-        final campaignIdQueryValue = (queryValues.isNotEmpty ) ? queryValues.first.contains('/campaign/') : null;
+        final campaignIdQueryValue = (queryValues.isNotEmpty) ? queryValues.first.contains('/campaign/') : null;
 
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
@@ -93,7 +93,7 @@ class AppRouter {
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
-        if (loggingIn) return redirectToInitialPage(context, state);
+        // if (loggingIn) return redirectToInitialPage(context, state);
 
         // if there is query parameter <join_campaign>, then join campaign and send them to relevant task page
         if (loggedIn && campaignJoinQueryValue != null) {
