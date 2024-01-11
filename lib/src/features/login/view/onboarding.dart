@@ -44,18 +44,9 @@ class OnBoarding extends StatelessWidget {
       final campaign = await context.read<GigaTurnipApiClient>().getCampaignById(campaignId);
       final isJoined = campaign.isJoined;
 
-      if (!context.mounted) return;
+      if (context.mounted && !isJoined) await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
 
-      if (isJoined) {
-        context.pushNamed(
-          TaskRoute.name,
-          pathParameters: {'cid': '$campaignId'}
-        );
-      } else {
-        await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
-        if (!context.mounted) return;
-        context.go(CampaignRoute.name);
-      }
+      if (context.mounted) context.pushNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
     }
 
     return Container(
@@ -71,6 +62,7 @@ class OnBoarding extends StatelessWidget {
             children: [
               if (context.isSmall)
                 IconButton(
+                  padding: const EdgeInsets.only(bottom: 30),
                   alignment: Alignment.centerLeft,
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -104,9 +96,9 @@ class OnBoarding extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15)
                     ),
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Image(image: AssetImage('assets/images/english_image.png'), height: 126.5),
+                        const SizedBox(height: 10),
                         Text(context.loc.english_section, style: textStyle, textAlign: TextAlign.center),
                       ],
                     ),
@@ -129,9 +121,9 @@ class OnBoarding extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.only(left:15, top: 8.5, right: 15/*, bottom: 27.5*/),
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Image(image: AssetImage('assets/images/mobilography_image.png'), height: 126.5),
+                        const SizedBox(height: 10),
                         Text(context.loc.mobilography_section, style: textStyle, textAlign: TextAlign.center),
                       ],
                     ),

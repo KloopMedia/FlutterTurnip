@@ -89,7 +89,7 @@ class AppRouter {
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
 
         // if there is campaign id query parameter, then send user to CampaignDetailPage
-        if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToCampaignDetailPage(context, state);
+        if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToInitialPage(context, state);
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
