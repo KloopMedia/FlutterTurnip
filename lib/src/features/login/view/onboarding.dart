@@ -8,10 +8,17 @@ import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
 
-class OnBoarding extends StatelessWidget {
+class OnBoarding extends StatefulWidget {
   final BoxConstraints? constraints;
 
   const OnBoarding({super.key, this.constraints});
+
+  @override
+  State<StatefulWidget> createState() => _OnBoardingState();
+}
+
+class _OnBoardingState extends State<OnBoarding> {
+  bool isHover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +52,7 @@ class OnBoarding extends StatelessWidget {
 
     return Container(
       padding: (context.isSmall) ? const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0) : null,
-      constraints: constraints,
+      constraints: widget.constraints,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,19 +89,28 @@ class OnBoarding extends StatelessWidget {
                     const campaignId = 7;
                     redirect(context, campaignId);
                   },
-                  child: Container(
-                    height: 217,
-                    padding: const EdgeInsets.only(left:15, top: 14.5, right:15/*, bottom: 27.5*/),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE9EAFD),
-                      borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: Column(
-                      children: [
-                        const Image(image: AssetImage('assets/images/english_image.png'), height: 126.5),
-                        const SizedBox(height: 10),
-                        Text(context.loc.english_section, style: textStyle, textAlign: TextAlign.center),
-                      ],
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    onEnter: (details) => setState(() {
+                      isHover = true;
+                    }),
+                    onExit: (details) => setState(() {
+                      isHover = false;
+                    }),
+                    child: Container(
+                      height: 217,
+                      padding: const EdgeInsets.only(left:15, top: 14.5, right:15/*, bottom: 27.5*/),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE9EAFD),
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Column(
+                        children: [
+                          const Image(image: AssetImage('assets/images/english_image.png'), height: 126.5),
+                          const SizedBox(height: 10),
+                          Text(context.loc.english_section, style: textStyle, textAlign: TextAlign.center),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -107,19 +123,28 @@ class OnBoarding extends StatelessWidget {
                     const campaignId = 42;
                     redirect(context, campaignId);
                   },
-                  child: Container(
-                    height: 217,
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFFDF0E9),
-                        borderRadius: BorderRadius.circular(15)
-                    ),
-                    padding: const EdgeInsets.only(left:15, top: 8.5, right: 15/*, bottom: 27.5*/),
-                    child: Column(
-                      children: [
-                        const Image(image: AssetImage('assets/images/mobilography_image.png'), height: 126.5),
-                        const SizedBox(height: 10),
-                        Text(context.loc.mobilography_section, style: textStyle, textAlign: TextAlign.center),
-                      ],
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    onEnter: (details) => setState(() {
+                      isHover = true;
+                    }),
+                    onExit: (details) => setState(() {
+                      isHover = false;
+                    }),
+                    child: Container(
+                      height: 217,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFFDF0E9),
+                          borderRadius: BorderRadius.circular(15)
+                      ),
+                      padding: const EdgeInsets.only(left:15, top: 8.5, right: 15/*, bottom: 27.5*/),
+                      child: Column(
+                        children: [
+                          const Image(image: AssetImage('assets/images/mobilography_image.png'), height: 126.5),
+                          const SizedBox(height: 10),
+                          Text(context.loc.mobilography_section, style: textStyle, textAlign: TextAlign.center),
+                        ],
+                      ),
                     ),
                   ),
                 ),
