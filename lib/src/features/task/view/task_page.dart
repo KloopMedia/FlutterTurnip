@@ -29,11 +29,6 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  void _redirectToNotificationPage(BuildContext context) {
-    final params = GoRouterState.of(context).pathParameters;
-    context.pushNamed(NotificationRoute.name, pathParameters: params);
-  }
-
   void _redirectToCampaignDetail(BuildContext context) {
     context.pushNamed(
       CampaignDetailRoute.name,
@@ -41,6 +36,7 @@ class _TaskPageState extends State<TaskPage> {
       extra: widget.campaign,
     );
   }
+
   //
   // @override
   // void initState() {
@@ -162,7 +158,20 @@ class _TaskPageState extends State<TaskPage> {
               icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
                 builder: (context, state) {
                   if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
-                    return Image.network(state.data.logo, height: 24);
+                    return Container(
+                      width: 24,
+                      height: 24,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(state.data.logo),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                    );
                   } else {
                     return const Icon(Icons.info_outline);
                   }
@@ -170,55 +179,86 @@ class _TaskPageState extends State<TaskPage> {
               ),
             ),
         ],
-        actions: [
-          IconButton(
-            onPressed: () => _redirectToNotificationPage(context),
-            icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
-              builder: (context, state) {
-                if (state is RemoteDataLoaded<Notification>) {
-                  final notifications = state.data.where((item) => item.importance > 0).toList();
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.topLeft,
-                    children: [
-                      const Positioned(
-                        right: 12,
-                        top: 5,
-                        child: Icon(Icons.notifications_outlined),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          width: 22.0,
-                          height: 20.0,
-                          margin: EdgeInsets.zero,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Theme.of(context).colorScheme.tertiary),
-                          child: Center(
-                            child: Text(
-                                (notifications.length > 10)
-                                    ? '10+'
-                                    : notifications.length.toString(),
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Theme.of(context).colorScheme.onPrimary)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-          )
-        ],
+        actions: [NotificationButton(), SettingsButton()],
         floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
         child: RelevantTaskPage(
           campaignId: widget.campaignId,
         ),
+      ),
+    );
+  }
+}
+
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+      builder: (context, state) {
+        if (state is CampaignInitialized) {
+          return IconButton(
+            onPressed: () {
+              final params = GoRouterState.of(context).pathParameters;
+              context.pushNamed(SettingsRoute.name, pathParameters: params);
+            },
+            icon: const Icon(Icons.settings),
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class NotificationButton extends StatelessWidget {
+  const NotificationButton({super.key});
+
+  void _redirectToNotificationPage(BuildContext context) {
+    final params = GoRouterState.of(context).pathParameters;
+    context.pushNamed(NotificationRoute.name, pathParameters: params);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () => _redirectToNotificationPage(context),
+      icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
+        builder: (context, state) {
+          if (state is RemoteDataLoaded<Notification>) {
+            final notifications = state.data.where((item) => item.importance > 0).toList();
+            return Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topLeft,
+              children: [
+                const Positioned(
+                  right: 12,
+                  top: 5,
+                  child: Icon(Icons.notifications_outlined),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: 22.0,
+                    height: 20.0,
+                    margin: EdgeInsets.zero,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Theme.of(context).colorScheme.tertiary),
+                    child: Center(
+                      child: Text(
+                          (notifications.length > 10) ? '10+' : notifications.length.toString(),
+                          style: TextStyle(
+                              fontSize: 14.0, color: Theme.of(context).colorScheme.onPrimary)),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }

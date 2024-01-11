@@ -31,6 +31,7 @@ class TaskStageDetail {
   final DateTime? availableFrom;
   final List<Map<String, dynamic>>? filterFieldsSchema;
   final Map<String, dynamic>? rankLimit;
+  final Map<String, dynamic>? quizAnswers;
 
   TaskStageDetail({
     required this.id,
@@ -53,6 +54,7 @@ class TaskStageDetail {
     required this.availableTo,
     required this.availableFrom,
     required this.filterFieldsSchema,
+    required this.quizAnswers,
     this.rankLimit
   });
 

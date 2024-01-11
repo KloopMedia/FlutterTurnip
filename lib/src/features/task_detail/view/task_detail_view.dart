@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/utilities/download_service.dart';
@@ -263,9 +264,14 @@ class _TaskDetailViewState extends State<TaskDetailView> {
                           if (state.previousTasks.isNotEmpty)
                             const Divider(color: Colors.black, height: 36, thickness: 2),
                           _CurrentTask(
-                              task: state.data,
-                              pageStorageKey: _pageStorageKey,
-                              scrollController: scrollController),
+                            task: state.data,
+                            pageStorageKey: _pageStorageKey,
+                            scrollController: scrollController,
+                            showAnswers: state is ShowAnswers,
+                            redirect: state is ShowAnswers
+                                ? () => redirect(context, state.nextTaskId)
+                                : null,
+                          ),
                         ],
                       );
                     }
@@ -285,47 +291,80 @@ class _CurrentTask extends StatelessWidget {
   final TaskDetail task;
   final PageStorageKey pageStorageKey;
   final ScrollController scrollController;
+  final bool showAnswers;
+  final void Function()? redirect;
 
   const _CurrentTask({
     Key? key,
     required this.task,
     required this.pageStorageKey,
     required this.scrollController,
+    required this.redirect,
+    required this.showAnswers,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final taskBloc = context.read<TaskBloc>();
+    final theme = Theme.of(context).colorScheme;
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FlutterJsonSchemaForm(
-          schema: task.schema ?? {},
-          uiSchema: task.uiSchema,
-          formData: task.responses,
-          disabled: task.complete,
-          pageStorageKey: pageStorageKey,
-          storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-          onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
-          onSubmit: (formData) {
-            context.read<TaskBloc>().add(SubmitTask(formData));
-            scrollController.jumpTo(0);
-          },
-          onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-          onDownloadFile: (url, filename, bytes) async {
-            var status =
-                await DownloadService().download(url: url, filename: filename, bytes: bytes);
-            taskBloc.add(DownloadFile(status!));
-            return status;
-          },
-          submitButtonText: Text(context.loc.form_submit_button),
-          onValidationFailed: (errorMessage) =>
-              context.read<TaskBloc>().add(ValidationFailed(context.loc.empty_form_fields)),
-          addFileText: [context.loc.select_file, context.loc.to_upload],
-          onOpenPreviousTask: () => context.read<TaskBloc>().add(GoBackToPreviousTask()),
-          openPreviousButtonText: Text(context.loc.go_back_to_previous_task),
-          allowOpenPrevious: task.stage.allowGoBack,
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FlutterJsonSchemaForm(
+            schema: task.schema ?? {},
+            uiSchema: task.uiSchema,
+            formData: task.responses,
+            disabled: task.complete,
+            pageStorageKey: pageStorageKey,
+            storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
+            onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
+            onSubmit: (formData) {
+              context.read<TaskBloc>().add(SubmitTask(formData));
+              scrollController.jumpTo(0);
+            },
+            onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
+            onDownloadFile: (url, filename, bytes) async {
+              var status =
+                  await DownloadService().download(url: url, filename: filename, bytes: bytes);
+              taskBloc.add(DownloadFile(status!));
+              return status;
+            },
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            locale: context.read<LocalizationBloc>().state.locale,
+            correctFormData: task.stage.quizAnswers,
+            showCorrectFields: task.complete,
+            extraButtons: [
+              if (showAnswers)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    backgroundColor: theme.primary,
+                    foregroundColor: theme.isLight ? Colors.white : Colors.black,
+                  ),
+                  onPressed: redirect,
+                  child: Text(context.loc.form_submit_button),
+                ),
+              if (task.stage.allowGoBack)
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      width: 1,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  onPressed: () => taskBloc.add(GoBackToPreviousTask()),
+                  child: Text(context.loc.go_back_to_previous_task),
+                )
+            ],
+          ),
         ),
       ),
     );
@@ -358,7 +397,9 @@ class _PreviousTask extends StatelessWidget {
             disabled: true,
             pageStorageKey: pageStorageKey,
             storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-            addFileText: [context.loc.select_file, context.loc.to_upload],
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            locale: context.read<LocalizationBloc>().state.locale,
             onDownloadFile: (url, filename, bytes) async {
               var status =
                   await DownloadService().download(url: url, filename: filename, bytes: bytes);

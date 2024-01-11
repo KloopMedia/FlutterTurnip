@@ -7,9 +7,8 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
-import '../../../utilities/constants.dart';
+
+import '../../../utilities/notification_services.dart';
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
 import '../../../widgets/dialogs/selection_dialogs.dart';
 import '../bloc/campaign_cubit.dart';
@@ -28,18 +27,24 @@ class CampaignPage extends StatefulWidget {
 }
 
 class _CampaignPageState extends State<CampaignPage> {
+  NotificationServices notificationServices = NotificationServices();
 
-
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
+    final gigaTurnipApiClient = context.read<api.GigaTurnipApiClient>();
+    notificationServices.getDeviceToken(gigaTurnipApiClient, null);
 
     return MultiBlocProvider(
       providers: [
         BlocProvider<SelectableCampaignCubit>(
           create: (context) => CampaignCubit(
             SelectableCampaignRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              gigaTurnipApiClient: gigaTurnipApiClient,
               limit: isGridView ? 9 : 10,
             ),
             context.read<SharedPreferences>(),
@@ -48,7 +53,7 @@ class _CampaignPageState extends State<CampaignPage> {
         BlocProvider<UserCampaignCubit>(
           create: (context) => CampaignCubit(
             UserCampaignRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              gigaTurnipApiClient: gigaTurnipApiClient,
               limit: isGridView ? 9 : 10,
             ),
             context.read<SharedPreferences>(),
@@ -57,14 +62,14 @@ class _CampaignPageState extends State<CampaignPage> {
         BlocProvider(
           create: (context) => CategoryCubit(
             CategoryRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              gigaTurnipApiClient: gigaTurnipApiClient,
             ),
           )..initialize(),
         ),
         BlocProvider(
           create: (context) => CountryCubit(
             CountryRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              gigaTurnipApiClient: gigaTurnipApiClient,
             ),
             context.read<api.GigaTurnipApiClient>(),
           )..initialize(),
@@ -72,7 +77,7 @@ class _CampaignPageState extends State<CampaignPage> {
         BlocProvider(
           create: (context) => LanguageCubit(
             LanguageRepository(
-              gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+              gigaTurnipApiClient: gigaTurnipApiClient,
             ),
           )..initialize(),
         ),

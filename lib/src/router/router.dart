@@ -35,6 +35,24 @@ class AppRouter {
     return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
+  String redirectToNotificationDetailPage(BuildContext context, GoRouterState state) {
+    final query = {...state.uri.queryParameters};
+    final queryString = toQueryString(query, 'from');
+    final fromPage = state.matchedLocation == NotificationDetailRoute.path
+        ? ''
+        : '?from=${state.matchedLocation}&$queryString';
+    return NotificationDetailRoute.path + fromPage;
+  }
+
+  String redirectToPrivacyPolicyPage(BuildContext context, GoRouterState state) {
+    final query = {...state.uri.queryParameters};
+    final queryString = toQueryString(query, 'from');
+    final fromPage = state.matchedLocation == PrivacyPolicyRoute.path
+        ? ''
+        : '?from=${state.matchedLocation}&$queryString';
+    return PrivacyPolicyRoute.path + fromPage;
+  }
+
   String redirectToCampaignDetailPage(BuildContext context, GoRouterState state) {
     final query = {...state.uri.queryParameters};
     final queryString = query['from'];
@@ -77,16 +95,24 @@ class AppRouter {
       },
       redirect: (BuildContext context, GoRouterState state) async {
         final authenticationService = context.read<AuthenticationRepository>();
-
         final query = {...state.uri.queryParameters};
         final bool loggedIn = authenticationService.user.isNotEmpty;
+        final bool isPrivacyPolicyRoute = state.matchedLocation == PrivacyPolicyRoute.path;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
+        final bool gettingPushNotification = state.matchedLocation == NotificationDetailRoute.path;
+        final campaignIdQueryValue = query['join_campaign'];
         final campaignJoinQueryValue = query['join_campaign'];
         final queryValues = query.values;
         final campaignIdQueryValue = (queryValues.isNotEmpty) ? queryValues.first.contains('/campaign/') : null;
 
+        if (isPrivacyPolicyRoute) return redirectToPrivacyPolicyPage(context, state);
+
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
+
+        // if there is push notification, then send user to NotificationDetailPage
+        if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
+
 
         // if there is campaign id query parameter, then send user to CampaignDetailPage
         if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToInitialPage(context, state);
@@ -113,6 +139,9 @@ class AppRouter {
         TaskDetailRoute(parentKey: _rootNavigatorKey).route,
         NotificationRoute(parentKey: _rootNavigatorKey).route,
         NotificationDetailRoute(parentKey: _rootNavigatorKey).route,
+        SettingsRoute(parentKey: _rootNavigatorKey).route,
+        ChainRoute(parentKey: _rootNavigatorKey).route,
+        PrivacyPolicyRoute(parentKey: _rootNavigatorKey).route,
       ],
     );
   }

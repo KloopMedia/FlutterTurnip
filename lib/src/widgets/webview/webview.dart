@@ -154,7 +154,8 @@ class _WebViewState extends State<WebView> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: theme.primary,
+                      foregroundColor: theme.isLight ? Colors.white : Colors.black,
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();

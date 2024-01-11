@@ -103,6 +103,10 @@
   "delete_account_confirmation": "Удалить",
 
   "settings": "Настройки",
+  "privacy_policy": "Политика конфиденциальности",
+  "privacy_policy_acceptance_1": "Регистрируясь, я принимаю ",
+  "privacy_policy_acceptance_2": "Политику конфиденциальности",
+  "privacy_policy_acceptance_3": "",
   "form_submit_button": "Отправить",
   "form_divider": "Ваша форма начинается здесь",
   "join_campaign": "Присоединиться к кампании",
@@ -180,5 +184,12 @@
 	"sort_by_new": "Сначала новые",
 	"sort_by_old": "Сначала старые",
 	"date": "Дата",
-	"search": "Поиск"
+	"search": "Поиск",
+
+	"settings_chains": "Цепочки",
+	"settings_tracks": "Треки",
+	"settings_ranks": "Ранги",
+	"settings_messages": "Сообщения",
+
+	"chains": "Цепочки"
 }
