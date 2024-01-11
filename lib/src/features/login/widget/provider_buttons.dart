@@ -9,8 +9,9 @@ import '../bloc/login_bloc.dart';
 import 'login_provider_button.dart';
 
 class LoginProviderButtons extends StatelessWidget {
+  final bool isActive;
   final void Function(String? errorMessage) onPressed;
-  const LoginProviderButtons({Key? key, required this.onPressed}) : super(key: key);
+  const LoginProviderButtons({Key? key, required this.isActive, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +27,32 @@ class LoginProviderButtons extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         LoginProviderButton(
-          color: theme.isLight ? Colors.white : Colors.black,
+          color: (isActive)
+              ? theme.isLight ? Colors.white : Colors.black
+              : theme.neutralVariant95,
           border: BorderSide(
-            color: theme.isLight ? Colors.black.withOpacity(0.5) : theme.neutral90,
+            color: (isActive)
+                ? theme.isLight ? Colors.black.withOpacity(0.5) : theme.neutral90
+                : Colors.transparent,
           ),
           onPressed: () {
+            if (isActive) {
               context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.google));
+            } else {
+              final helperText = (context.loc.localeName == 'ky') ? ' / Choose the language' : '';
+              onPressed(context.loc.choose_language + helperText);
+            }
           },
-          icon: Image.asset('assets/icon/google_icon.png',
-            height: 24.0
+          icon: Image.asset(
+              (isActive) ? 'assets/icon/google_icon.png' : 'assets/icon/google_icon_inactive.png',
+              height: 24.0
           ),
           child: Text(
             context.loc.continue_with_google,
             style: textStyle.copyWith(
-              color: theme.isLight ? theme.neutral30 : theme.neutral90,
+              color:  (isActive)
+                  ? theme.isLight ? theme.neutral30 : theme.neutral90
+                  : theme.neutralVariant90,
             ),
           ),
         ),
@@ -48,21 +61,31 @@ class LoginProviderButtons extends StatelessWidget {
           height: 20,
         ),
         LoginProviderButton(
-          color: theme.isLight ? Colors.black : Colors.white,
+          color: (isActive)
+              ? theme.isLight ? Colors.black : Colors.white
+              : theme.neutralVariant95,
           onPressed: () {
+            if (isActive) {
               context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.apple));
+            } else {
+              final helperText = (context.loc.localeName == 'ky') ? ' / Choose the language' : '';
+              onPressed(context.loc.choose_language + helperText);
+            }
           },
-          icon: Image.asset('assets/icon/apple_icon.png',
+          icon: Image.asset(
+            (isActive) ? 'assets/icon/apple_icon.png' : 'assets/icon/apple_icon_inactive.png',
             height: 22.0,
             color: theme.isLight ? Colors.white : Colors.black,
           ),
           child: Text(
             context.loc.continue_with_apple,
             style: const CupertinoTextThemeData().textStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: theme.isLight ? theme.neutral90 : theme.neutral30,
-                ),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: (isActive)
+                  ? theme.isLight ? theme.neutral90 : theme.neutral30
+                  : theme.neutralVariant90,
+            ),
           ),
         ),
       ],

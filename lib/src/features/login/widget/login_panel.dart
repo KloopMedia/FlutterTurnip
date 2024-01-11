@@ -5,7 +5,6 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
-import '../view/language_picker.dart';
 import '../view/pickers.dart';
 import 'provider_buttons.dart';
 
@@ -54,49 +53,39 @@ class LoginPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.loc.welcome,
-                      style: titleTextStyle,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      (kIsWeb) ? context.loc.choose_language_and_sign_up : context.loc.sign_in_or_sign_up,
-                      style: subtitleTextStyle,
-                    ),
-                  ),
-                ],
-              ),
-              if (kIsWeb)
-                Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: LanguagePicker(
-                        errorMessage: (errorMessage != null && isLocaleSelected == false)
-                            ? errorMessage
-                            : null,
-                        isLocaleSelected: isLocaleSelected ?? true,
-                        campaignLocales: const [],
-                      ),
-                    ),
-                  ],
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  context.loc.welcome,
+                  style: titleTextStyle,
                 ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  (kIsWeb) ? context.loc.choose_language_and_sign_up : context.loc.sign_in_or_sign_up,
+                  style: subtitleTextStyle,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: LanguagePicker(
+                    errorMessage: (errorMessage != null && isLocaleSelected == false)
+                        ? errorMessage
+                        : null,
+                    isLocaleSelected: isLocaleSelected ?? true
+                ),
+              ),
               const SizedBox(height: 60),
               LoginProviderButtons(
-                isActive: isLocaleSelected ?? true,
-                onPressed: (errorMessage) {
-                  onSubmit(errorMessage);
-                }
+                  isActive: isLocaleSelected ?? true,
+                  onPressed: (errorMessage) {
+                    onSubmit(errorMessage);
+                  }
               ),
-              const SizedBox.shrink(),
+              // const SizedBox.shrink(),
               // Column(
               //   children: [
               //     PhoneNumberField(onChanged: onChange),
@@ -137,9 +126,9 @@ class LoginPanel extends StatelessWidget {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(50, 30),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(50, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     onPressed: () async {
                       context.goNamed(PrivacyPolicyRoute.name);
@@ -165,49 +154,6 @@ class LoginPanel extends StatelessWidget {
               ),
             ],
           ),
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  context.loc.welcome,
-                  style: titleTextStyle,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  context.loc.sign_in_or_sign_up,
-                  style: subtitleTextStyle,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 60),
-          LoginProviderButtons(
-            onPressed: (errorMessage) {
-              onSubmit(errorMessage);
-            }
-          ),
-          const SizedBox.shrink(),
-          // Column(
-          //   children: [
-          //     PhoneNumberField(onChanged: onChange),
-          //     const SizedBox(height: 20),
-          //     SignUpButton(onPressed: (_) => onSubmit()),
-          //     DividerWithLabel(
-          //       label: context.loc.or,
-          //       padding: const EdgeInsets.symmetric(vertical: 47.0),
-          //       color: theme.isLight ? theme.neutral50 : theme.neutral60,
-          //       thickness: 0.2,
-          //     ),
-          //     const LoginProviderButtons(),
-          //   ],
-          // ),
         ],
       ),
     );

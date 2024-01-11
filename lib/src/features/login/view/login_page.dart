@@ -10,7 +10,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utilities/constants.dart';
+import '../../../bloc/bloc.dart';
 import '../../campaign/bloc/country_bloc/country_cubit.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
@@ -75,7 +75,7 @@ class _LoginViewState extends State<LoginView> {
   late SharedPreferences sharedPreferences;
   String _phoneNumber = "";
   String? errorMessage;
-  String? selectedCountry;
+  bool isLocaleSelected = false;
   int? _resendToken;
 
   @override
@@ -125,6 +125,13 @@ class _LoginViewState extends State<LoginView> {
     final theme = Theme.of(context).colorScheme;
     const radius = Radius.circular(15);
 
+    final state = context.watch<LocalizationBloc>().state;
+    if (state.firstLogin == false) {
+      setState(() {
+        isLocaleSelected = !state.firstLogin;
+      });
+    }
+
     return SafeArea(
       child: Scaffold(
         body: BlocConsumer<LoginBloc, LoginState>(
@@ -150,108 +157,7 @@ class _LoginViewState extends State<LoginView> {
             //   );
             // }
 
-            return /*(widget.campaignId != null)
-              ? BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                builder: (context, state) {
-                  if (state is CampaignFetching) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (state is CampaignFetchingError) {
-                    return Center(child: Text(state.error));
-                  }
-                  if (state is CampaignJoinError) {
-                    return Center(child: Text(state.error));
-                  }
-                  if (state is CampaignLoaded) {
-                    final data = state.data;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (!context.isSmall) Container(
-                          width: context.isMedium
-                              ? MediaQuery.of(context).size.width / 2
-                              : MediaQuery.of(context).size.width / 3,
-                          decoration: BoxDecoration(
-                            color: theme.primary,
-                            borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24),
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Image.asset('assets/images/people_3.png', height: 330),
-                                  const SizedBox(height: 30),
-                                  Text(
-                                    data.name,
-                                    style: const TextStyle(
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Text(
-                                    data.description,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white.withOpacity(0.85),
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w300
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              if (loginState is LoginInitial)
-                                Flexible(
-                                  child: OnBoarding(
-                                    title: data.name,
-                                    description: data.description,
-                                    campaignCountries: data.countries,
-                                    constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
-                                    onContinue: (country) {
-                                      sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [country.first.id.toString(), country.first.name]);
-                                      sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
-                                      context.read<LoginBloc>().add(CloseOnBoarding(country));
-                                    },
-                                  ),
-                                ),
-                              if (loginState is OnboardingClosed)
-                                LoginPanel(
-                                  constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
-                                  onChange: _onChange,
-                                  onSubmit: (value) => loginWithPhone(),
-                                ),
-                              if (loginState is OTPCodeSend)
-                                VerificationPage(
-                                  constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
-                                  onResend: () => loginWithPhone(_resendToken),
-                                  onConfirm: (smsCode) {
-                                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, loginState.verificationId));
-                                  },
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }
-            )
-            :*/ Row(
+            return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -314,22 +220,27 @@ class _LoginViewState extends State<LoginView> {
                       if (loginState is LoginSuccess)
                         Flexible(
                           child: OnBoarding(
-                            // title: context.loc.welcome_title,
-                            // description: context.loc.welcome_subtitle,
                             constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
-                            // onContinue: (country) {
-                            //   sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [country.first.id.toString(), country.first.name]);
-                            //   sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
-                            //   context.read<LoginBloc>().add(CloseOnBoarding(country));
-                            // },
                           ),
                         ),
                       if (loginState is LoginInitial)
-                        LoginPanel(
-                          constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
-                          onChange: _onChange,
-                          onSubmit: (value) => loginWithPhone(),
+                        Flexible(
+                          child: LoginPanel(
+                            constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+                            onChange: _onChange,
+                            onSubmit: (value) {
+                              if (value != null) {
+                                setState(() {
+                                  errorMessage = value;
+                                });
+                              } else {
+                                loginWithPhone();
+                              }
+                            },
+                            isLocaleSelected: isLocaleSelected,
+                            errorMessage: errorMessage,
+                          ),
                         ),
                       if (loginState is OTPCodeSend)
                         VerificationPage(

@@ -32,6 +32,8 @@ class AppRouter {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
+    print('>>> query = $query');
+    print('>>> queryString = $queryString');
     return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 
@@ -100,7 +102,6 @@ class AppRouter {
         final bool isPrivacyPolicyRoute = state.matchedLocation == PrivacyPolicyRoute.path;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final bool gettingPushNotification = state.matchedLocation == NotificationDetailRoute.path;
-        final campaignIdQueryValue = query['join_campaign'];
         final campaignJoinQueryValue = query['join_campaign'];
         final queryValues = query.values;
         final campaignIdQueryValue = (queryValues.isNotEmpty) ? queryValues.first.contains('/campaign/') : null;
