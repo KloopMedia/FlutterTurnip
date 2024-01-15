@@ -101,8 +101,6 @@ class AppRouter {
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final bool gettingPushNotification = state.matchedLocation == NotificationDetailRoute.path;
         final campaignJoinQueryValue = query['join_campaign'];
-        final queryValues = query.values;
-        final campaignIdQueryValue = (queryValues.isNotEmpty) ? queryValues.first.contains('/campaign/') : null;
 
         if (isPrivacyPolicyRoute) return redirectToPrivacyPolicyPage(context, state);
 
@@ -112,13 +110,12 @@ class AppRouter {
         // if there is push notification, then send user to NotificationDetailPage
         if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
 
-
-        // if there is campaign id query parameter, then send user to CampaignDetailPage
-        if (loggedIn && campaignIdQueryValue != null && campaignIdQueryValue) return redirectToInitialPage(context, state);
+        // if user comes from root path. Then keep staying on login page to show onboarding.
+        if (loggingIn && query.isEmpty) return null;
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
-        // if (loggingIn) return redirectToInitialPage(context, state);
+        if (loggingIn) return redirectToInitialPage(context, state);
 
         // if there is query parameter <join_campaign>, then join campaign and send them to relevant task page
         if (loggedIn && campaignJoinQueryValue != null) {

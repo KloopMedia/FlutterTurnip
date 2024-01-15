@@ -49,7 +49,7 @@ class _OnBoardingState extends State<OnBoarding> {
 
       if (context.mounted && !isJoined) await context.read<api.GigaTurnipApiClient>().joinCampaign(campaignId);
 
-      if (context.mounted) context.pushNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
+      if (context.mounted) context.goNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
     }
 
     return Container(
