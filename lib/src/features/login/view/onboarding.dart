@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
+import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
+import '../../campaign/bloc/campaign_cubit.dart';
 
 class OnBoarding extends StatefulWidget {
   final BoxConstraints? constraints;
@@ -42,16 +44,16 @@ class _OnBoardingState extends State<OnBoarding> {
     );
 
     Future<void> redirect (BuildContext context, int campaignId) async {
-      final campaign = await context.read<GigaTurnipApiClient>().getCampaignById(campaignId);
+      final campaign = await context.read<api.GigaTurnipApiClient>().getCampaignById(campaignId);
       final isJoined = campaign.isJoined;
 
-      if (context.mounted && !isJoined) await context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
+      if (context.mounted && !isJoined) await context.read<api.GigaTurnipApiClient>().joinCampaign(campaignId);
 
       if (context.mounted) context.pushNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
     }
 
     return Container(
-      padding: (context.isSmall) ? const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0) : null,
+      padding: (context.isSmall) ? const EdgeInsets.all(24) : null,
       constraints: widget.constraints,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +65,6 @@ class _OnBoardingState extends State<OnBoarding> {
             children: [
               if (context.isSmall)
                 IconButton(
-                  padding: const EdgeInsets.only(bottom: 30),
                   alignment: Alignment.centerLeft,
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -80,76 +81,68 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    const campaignId = 7;
-                    redirect(context, campaignId);
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    onEnter: (details) => setState(() {
-                      isHover = true;
-                    }),
-                    onExit: (details) => setState(() {
-                      isHover = false;
-                    }),
-                    child: Container(
-                      height: 217,
-                      padding: const EdgeInsets.only(left:15, top: 14.5, right:15/*, bottom: 27.5*/),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE9EAFD),
-                        borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Column(
-                        children: [
-                          const Image(image: AssetImage('assets/images/english_image.png'), height: 126.5),
-                          const SizedBox(height: 10),
-                          Text(context.loc.english_section, style: textStyle, textAlign: TextAlign.center),
-                        ],
-                      ),
+          FutureBuilder<List<Campaign>>(
+            future: context.read<CampaignCubit>().fetchCampaigns(query: {'featured': true}),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('${snapshot.error}'));
+              }
+              if (snapshot.hasData) {
+                final featuredList = snapshot.data ?? [];
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    const campaignId = 42;
-                    redirect(context, campaignId);
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    onEnter: (details) => setState(() {
-                      isHover = true;
-                    }),
-                    onExit: (details) => setState(() {
-                      isHover = false;
-                    }),
-                    child: Container(
-                      height: 217,
-                      decoration: BoxDecoration(
-                          color: const Color(0xFFFDF0E9),
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      padding: const EdgeInsets.only(left:15, top: 8.5, right: 15/*, bottom: 27.5*/),
-                      child: Column(
-                        children: [
-                          const Image(image: AssetImage('assets/images/mobilography_image.png'), height: 126.5),
-                          const SizedBox(height: 10),
-                          Text(context.loc.mobilography_section, style: textStyle, textAlign: TextAlign.center),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                    itemCount: featuredList.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          redirect(context, featuredList[index].id);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (details) => setState(() {
+                            isHover = true;
+                          }),
+                          onExit: (details) => setState(() {
+                            isHover = false;
+                          }),
+                          child: Container(
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE9EAFD),
+                              borderRadius: BorderRadius.circular(15)
+                            ),
+                            child: Column(
+                              children: [
+                                // if (featuredList[index].featuredLogo != null)
+                                //   Align(
+                                //     alignment: Alignment.topCenter,
+                                //     child: SizedBox(
+                                //       height: 126,
+                                //       child: Image.network(featuredList[index].logo),
+                                //       // child: Image.network(featuredList[index].featuredLogo),
+                                //     ),
+                                //   ),
+                                const SizedBox(height: 10),
+                                Text(
+                                    (featuredList[index].descriptor != null) ? featuredList[index].descriptor! : '',
+                                    style: textStyle,
+                                    textAlign: TextAlign.center
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                );
+              }
+              return const SizedBox.shrink();
+            }
           ),
           Align(
             alignment: Alignment.bottomCenter,

@@ -35,6 +35,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
           smsPhone: $checkedConvert('sms_phone', (v) => v as String?),
           isJoined: $checkedConvert('is_joined', (v) => v as bool),
+          featured: $checkedConvert('featured', (v) => v as bool),
           smsCompleteTaskAllow: $checkedConvert(
               'sms_complete_task_allow', (v) => v as bool? ?? false),
         );

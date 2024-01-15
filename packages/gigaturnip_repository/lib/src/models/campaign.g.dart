@@ -22,6 +22,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       smsPhone: json['smsPhone'] as String?,
       smsCompleteTaskAllow: json['smsCompleteTaskAllow'] as bool,
       isJoined: json['isJoined'] as bool,
+      featured: json['featured'] as bool,
     );
 
 Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
@@ -38,4 +39,5 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'smsPhone': instance.smsPhone,
       'smsCompleteTaskAllow': instance.smsCompleteTaskAllow,
       'isJoined': instance.isJoined,
+      'featured': instance.featured,
     };

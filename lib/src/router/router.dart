@@ -32,8 +32,6 @@ class AppRouter {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
-    print('>>> query = $query');
-    print('>>> queryString = $queryString');
     return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
   }
 

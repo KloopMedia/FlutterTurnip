@@ -18,6 +18,10 @@ class CampaignCubit extends RemoteDataCubit<Campaign> with UserCampaignCubit, Se
     emit(CampaignInfo.clone(state as RemoteDataInitialized<Campaign>, campaign));
   }
 
+  Future<List<Campaign>> fetchCampaigns({Map<String, dynamic>? query}) {
+    return _repository.fetchData(query: query);
+  }
+
   @override
   Future<PageData<Campaign>> fetchAndParseData(int page, {
     Map<String, dynamic>? body,

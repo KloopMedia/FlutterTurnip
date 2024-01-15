@@ -11,6 +11,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/bloc.dart';
+import '../../campaign/bloc/campaign_cubit.dart';
 import '../../campaign/bloc/country_bloc/country_cubit.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
@@ -32,6 +33,15 @@ class LoginPage extends StatelessWidget {
             sharedPreferences: context.read<SharedPreferences>(),
             authenticationRepository: context.read<AuthenticationRepository>(),
           ),
+        ),
+        BlocProvider<CampaignCubit>(
+          create: (context) => CampaignCubit(
+            SelectableCampaignRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              limit: 10,
+            ),
+            context.read<SharedPreferences>(),
+          )..initialize(),
         ),
         if (campaignId != null) BlocProvider(
           create: (context) => CampaignDetailBloc(
