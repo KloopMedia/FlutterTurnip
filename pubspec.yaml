@@ -93,6 +93,7 @@ dev_dependencies:
   build_runner: ^2.1.11
   json_serializable: ^6.2.0
   flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.9
   integration_test:
     sdk: flutter
 
@@ -105,8 +106,15 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/logo/okutool_logo_short.png"
-    background_color: "#ffffff"
-    theme_color: "#ffffff"
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/logo/okutool_logo_full_with_padding.png
+  android_12:
+    color: "#ffffff"
+    image: assets/logo/okutool_logo_full_with_padding.png
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
