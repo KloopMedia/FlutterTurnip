@@ -551,12 +551,12 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "0d434cf87756b28668638d53f8f4f29f23825d27"
+      resolved-ref: "777115e7f1a128e93e64e1f532d2a531ab18b080"
       url: "https://github.com/KloopMedia/flutter-jsonschema-form.git"
     source: git
     version: "0.0.2"
   flutter_launcher_icons:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_launcher_icons
       sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
