@@ -21,6 +21,9 @@ class CampaignDetailRoute {
         final campaign = state.extra;
         final cid = state.pathParameters['cid'] ?? '';
 
+        bool isCampaignLink = false;
+        if (state.uri.queryParameters.isNotEmpty) isCampaignLink = true;
+
         final campaignId = int.parse(cid);
 
         if (campaign != null && campaign is Campaign) {
@@ -28,9 +31,14 @@ class CampaignDetailRoute {
             key: ValueKey(cid),
             campaignId: campaignId,
             campaign: campaign,
+            isCampaignLink: isCampaignLink,
           );
         }
-        return CampaignDetailPage(key: ValueKey(cid), campaignId: campaignId);
+        return CampaignDetailPage(
+          key: ValueKey(cid),
+          campaignId: campaignId,
+          isCampaignLink: isCampaignLink,
+        );
       },
     );
   }

@@ -14,6 +14,12 @@ abstract class CampaignRepository extends GigaTurnipRepository<Campaign> {
   List<Campaign> parseData(List<api.Campaign> data) {
     return data.map((api.Campaign campaign) => Campaign.fromApiModel(campaign, true)).toList();
   }
+
+  Future<List<Campaign>> fetchData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getCampaigns(query: query);
+    return parseData(data.results);
+  }
+
 }
 
 class UserCampaignRepository extends CampaignRepository {

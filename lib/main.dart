@@ -26,25 +26,29 @@ Future<void> main() async {
   final gigaTurnipApiClient = GigaTurnipApiClient(dio, baseUrl: AppConfig.apiUrl);
   final sharedPreferences = await SharedPreferences.getInstance();
   final router = AppRouter(authenticationRepository).router;
-  NotificationServices notificationServices = NotificationServices();
-  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) => SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
-
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
+      SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
 
   try {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    NotificationServices notificationServices = NotificationServices();
+
     messaging.onTokenRefresh.listen((fcmToken) {
       notificationServices.getDeviceToken(gigaTurnipApiClient, fcmToken);
     }).onError((err) {});
-  } catch(e) {}
+  } catch (e) {
+    print("PUSH NOTIFICATION ERROR: $e");
+  }
 
   runApp(
     MultiRepositoryProvider(
@@ -68,7 +72,7 @@ Future<void> main() async {
             ),
           ),
           BlocProvider(
-            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences, /*showSavedLocale: true*/),
+            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences),
           ),
           BlocProvider(
             create: (_) => ThemeCubit(sharedPreferences: sharedPreferences),

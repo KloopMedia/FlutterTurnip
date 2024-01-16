@@ -3,13 +3,17 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 class SignUpButton extends StatelessWidget {
+  final double? width;
+  final String buttonText;
   final bool? isActive;
   final FocusNode? focusNode;
-  final void Function(String? errorMessage) onPressed;
+  final void Function() onPressed;
 
   const SignUpButton({
     Key? key,
     required this.onPressed,
+    required this.buttonText,
+    this.width,
     this.isActive,
     this.focusNode,
   }) : super(key: key);
@@ -20,25 +24,23 @@ class SignUpButton extends StatelessWidget {
 
     return SizedBox(
       height: 52,
-      width: double.infinity,
+      width: width,
       child: ElevatedButton(
         focusNode: focusNode,
         style: ElevatedButton.styleFrom(
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          backgroundColor: (isActive != null && !isActive!) ? theme.neutral95  : theme.primary,
+          backgroundColor: (isActive != null && !isActive!)
+            ? theme.isLight ? theme.neutral95 : theme.neutral12
+            : theme.primary,
         ),
         onPressed: () {
-          if (isActive != null && !isActive!) {
-            final helperText = (context.loc.localeName == 'ky') ? ' / Choose the language' : '';
-            onPressed(context.loc.choose_language + helperText);
-          } else {
-            onPressed(null);
-          }
+          onPressed();
         },
         child: Text(
-          context.loc.further,
+          buttonText,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,

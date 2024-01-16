@@ -53,6 +53,16 @@ class AppRouter {
     return PrivacyPolicyRoute.path + fromPage;
   }
 
+  String redirectToCampaignDetailPage(BuildContext context, GoRouterState state) {
+    final query = {...state.uri.queryParameters};
+    final queryString = query['from'];
+    if (queryString != null && queryString.isNotEmpty) {
+      final campaignId = queryString.substring(queryString.lastIndexOf("/") + 1);
+      return '${CampaignDetailRoute.path.replaceFirst(':cid', campaignId)}/?$queryString';
+    }
+    return _initialLocation;
+  }
+
   Future<String?> joinCampaign(BuildContext context, GoRouterState state) async {
     final query = {...state.uri.queryParameters};
     final queryString = toQueryString(query, 'join_campaign');
@@ -90,7 +100,7 @@ class AppRouter {
         final bool isPrivacyPolicyRoute = state.matchedLocation == PrivacyPolicyRoute.path;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final bool gettingPushNotification = state.matchedLocation == NotificationDetailRoute.path;
-        final campaignIdQueryValue = query['join_campaign'];
+        final campaignJoinQueryValue = query['join_campaign'];
 
         if (isPrivacyPolicyRoute) return redirectToPrivacyPolicyPage(context, state);
 
@@ -100,13 +110,15 @@ class AppRouter {
         // if there is push notification, then send user to NotificationDetailPage
         if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
 
+        // if user comes from root path. Then keep staying on login page to show onboarding.
+        if (loggingIn && query.isEmpty) return null;
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
         if (loggingIn) return redirectToInitialPage(context, state);
 
         // if there is query parameter <join_campaign>, then join campaign and send them to relevant task page
-        if (loggedIn && campaignIdQueryValue != null) {
+        if (loggedIn && campaignJoinQueryValue != null) {
           return await joinCampaign(context, state);
         }
 

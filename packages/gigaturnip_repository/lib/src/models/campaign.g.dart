@@ -16,9 +16,13 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       unreadNotifications: json['unreadNotifications'] as int,
       languages:
           (json['languages'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      countries:
+          (json['countries'] as List<dynamic>?)?.map((e) => e as int).toList(),
       canJoin: json['canJoin'] as bool? ?? false,
       smsPhone: json['smsPhone'] as String?,
       smsCompleteTaskAllow: json['smsCompleteTaskAllow'] as bool,
+      isJoined: json['isJoined'] as bool,
+      featured: json['featured'] as bool,
     );
 
 Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
@@ -31,6 +35,9 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'logo': instance.logo,
       'unreadNotifications': instance.unreadNotifications,
       'languages': instance.languages,
+      'countries': instance.countries,
       'smsPhone': instance.smsPhone,
       'smsCompleteTaskAllow': instance.smsCompleteTaskAllow,
+      'isJoined': instance.isJoined,
+      'featured': instance.featured,
     };
