@@ -100,9 +100,11 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo/okutool_logo_short.png"
+  image_path: "assets/logo/okutool_logo_short_with_padding.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   remove_alpha_ios: true
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logo/okutool_logo_short_with_padding.png"
   web:
     generate: true
     image_path: "assets/logo/okutool_logo_short.png"
