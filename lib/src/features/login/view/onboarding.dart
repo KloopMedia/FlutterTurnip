@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -37,10 +38,10 @@ class _OnBoardingState extends State<OnBoarding> {
       fontWeight: FontWeight.w500,
       color: fontColor,
     );
-    const textStyle = TextStyle(
+    final textStyle = TextStyle(
         fontWeight: FontWeight.w500,
-        fontSize: 16,
-        color: Colors.black
+        fontSize: 14,
+        color: theme.primary
     );
 
     Future<void> redirect (BuildContext context, int campaignId) async {
@@ -89,58 +90,60 @@ class _OnBoardingState extends State<OnBoarding> {
               }
               if (snapshot.hasData) {
                 final featuredList = snapshot.data ?? [];
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20
+                final itemCount = featuredList.length;
+
+                if (itemCount == 1) {
+                  final item = featuredList.first;
+
+                  return Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        redirect(context, item.id);
+                      },
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        onEnter: (details) => setState(() {
+                          isHover = true;
+                        }),
+                        onExit: (details) => setState(() {
+                          isHover = false;
+                        }),
+                        child: FeaturedCampaignCard(item: item, itemCount: itemCount),
+                      ),
                     ),
-                    itemCount: featuredList.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          redirect(context, featuredList[index].id);
-                        },
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          onEnter: (details) => setState(() {
-                            isHover = true;
-                          }),
-                          onExit: (details) => setState(() {
-                            isHover = false;
-                          }),
-                          child: Container(
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE9EAFD),
-                              borderRadius: BorderRadius.circular(15)
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (featuredList[index].featuredImage != null && featuredList[index].featuredImage!.isNotEmpty)
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: SizedBox(
-                                      height: 126,
-                                      child: Image.network(featuredList[index].featuredImage!),
-                                    ),
-                                  ),
-                                const SizedBox(height: 20),
-                                Text(
-                                    (featuredList[index].shortDescription != null && featuredList[index].shortDescription!.isNotEmpty)
-                                        ? featuredList[index].shortDescription! : '',
-                                    style: textStyle,
-                                    textAlign: TextAlign.center
-                                ),
-                              ],
-                            ),
+                  );
+                }
+
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: (!kIsWeb) ? 0 : 30),
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: (!kIsWeb) ? 20 : 30,
+                          mainAxisSpacing: (!kIsWeb) ? 20 : 30,
+                          childAspectRatio: (!kIsWeb) ? 0.75 : 1
+                      ),
+                      itemCount: itemCount,
+                      itemBuilder: (context, index) {
+                        final item = featuredList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            redirect(context, featuredList[index].id);
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (details) => setState(() {
+                              isHover = true;
+                            }),
+                            onExit: (details) => setState(() {
+                              isHover = false;
+                            }),
+                            child: FeaturedCampaignCard(item: item, itemCount: itemCount),
                           ),
-                        ),
-                      );
-                    }
+                        );
+                      }
+                  ),
                 );
               }
               return const SizedBox.shrink();
@@ -154,13 +157,59 @@ class _OnBoardingState extends State<OnBoarding> {
               },
               child: Text(
                 context.loc.skip,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  color: theme.primary
-                )
+                style: textStyle
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FeaturedCampaignCard extends StatelessWidget {
+  final Campaign item;
+  final int itemCount;
+
+  const FeaturedCampaignCard({
+    super.key,
+    required this.item,
+    required this.itemCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const textStyle = TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+        color: Colors.black
+    );
+
+    return Container(
+      width: (itemCount == 1) ? 220 : null,
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+          color: const Color(0xFFE9EAFD),
+          borderRadius: BorderRadius.circular(15)
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (item.featuredImage != null && item.featuredImage!.isNotEmpty)
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                height: 100,
+                child: Image.network(item.featuredImage!),
+              ),
+            ),
+          const SizedBox(height: 20),
+          Text(
+              (item.shortDescription != null && item.shortDescription!.isNotEmpty)
+                  ? item.shortDescription! : '',
+              style: textStyle,
+              textAlign: TextAlign.center
           ),
         ],
       ),

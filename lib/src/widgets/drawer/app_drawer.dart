@@ -25,6 +25,7 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isAuthenticated = (context.read<AuthenticationRepository>().user != User.empty);
     final user = context.read<AuthenticationRepository>().user;
     final avatar = user.photo;
     final theme = Theme.of(context).colorScheme;
@@ -79,13 +80,14 @@ class AppDrawer extends StatelessWidget {
                 icon: const Padding(padding: iconPadding, child: Icon(Icons.language)),
               ),
               const Divider(),
-              CustomListTile(
-                contentPadding: contentPadding,
-                leadingPadding: iconPadding,
-                leading: Icon(Icons.grid_view, color: theme.primary),
-                title: Text(context.loc.drawer_campaigns, style: titleTextStyle),
-                onTap: () => context.pushNamed(CampaignRoute.name),
-              ),
+              if (isAuthenticated)
+                CustomListTile(
+                  contentPadding: contentPadding,
+                  leadingPadding: iconPadding,
+                  leading: Icon(Icons.grid_view, color: theme.primary),
+                  title: Text(context.loc.drawer_campaigns, style: titleTextStyle),
+                  onTap: () => context.pushNamed(CampaignRoute.name),
+                ),
               // CustomListTile(
               //   contentPadding: contentPadding,
               //   leadingPadding: iconPadding,
@@ -99,13 +101,14 @@ class AppDrawer extends StatelessWidget {
                 icon: Icon(Icons.mode_night_outlined, color: theme.primary),
                 title: Text(context.loc.drawer_theme, style: titleTextStyle),
               ),
-              CustomListTile(
-                contentPadding: contentPadding,
-                leadingPadding: iconPadding,
-                leading: Icon(Icons.privacy_tip_outlined, color: theme.primary),
-                title: Text(context.loc.privacy_policy, style: titleTextStyle),
-                onTap: () => context.pushNamed(PrivacyPolicyRoute.name),
-              ),
+              if (isAuthenticated)
+                CustomListTile(
+                  contentPadding: contentPadding,
+                  leadingPadding: iconPadding,
+                  leading: Icon(Icons.privacy_tip_outlined, color: theme.primary),
+                  title: Text(context.loc.privacy_policy, style: titleTextStyle),
+                  onTap: () => context.pushNamed(PrivacyPolicyRoute.name),
+                ),
               const Spacer(),
               // CustomListTile(
               //   contentPadding: contentPadding,
@@ -114,32 +117,34 @@ class AppDrawer extends StatelessWidget {
               //   title: Text(context.loc.drawer_help, style: titleTextStyle),
               //   onTap: () {},
               // ),
-              CustomListTile(
-                contentPadding: contentPadding,
-                leadingPadding: iconPadding,
-                leading: Icon(Icons.logout, color: theme.primary),
-                title: Text(context.loc.drawer_exit, style: titleTextStyle),
-                onTap: () {
-                  context.read<AuthBloc>().add(AuthLogoutRequested());
-                },
-              ),
-              CustomListTile(
-                contentPadding: contentPadding,
-                leadingPadding: iconPadding,
-                leading: Icon(Icons.remove_circle_outline, color: theme.error),
-                title: Text(
-                  context.loc.delete_account_button,
-                  style: titleTextStyle.copyWith(color: theme.error),
+              if (isAuthenticated)
+                CustomListTile(
+                  contentPadding: contentPadding,
+                  leadingPadding: iconPadding,
+                  leading: Icon(Icons.logout, color: theme.primary),
+                  title: Text(context.loc.drawer_exit, style: titleTextStyle),
+                  onTap: () {
+                    context.read<AuthBloc>().add(AuthLogoutRequested());
+                  },
                 ),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const DeleteAccountDialog();
-                    },
-                  );
-                },
-              ),
+              if (isAuthenticated)
+                CustomListTile(
+                  contentPadding: contentPadding,
+                  leadingPadding: iconPadding,
+                  leading: Icon(Icons.remove_circle_outline, color: theme.error),
+                  title: Text(
+                    context.loc.delete_account_button,
+                    style: titleTextStyle.copyWith(color: theme.error),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const DeleteAccountDialog();
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         ),
