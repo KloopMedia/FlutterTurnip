@@ -182,25 +182,26 @@ class _CampaignViewState extends State<CampaignView> {
     return FutureBuilder(
       future: context.read<CountryCubit>().loadData(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (!isDialogShown) {
-            Future.delayed(Duration.zero, () {
-              _searchBarDialog(
-                data: snapshot.data!,
-                onSubmit: (selectedCountry) {
-                  setState(() {
-                    queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
-                  });
-                  sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
-                  sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
-                  context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
-                  context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
-                }
-              );
-            });
-            isDialogShown = true;
-          }
-        }
+        /// comment until new countries appear
+        // if (snapshot.hasData) {
+        //   if (!isDialogShown) {
+        //     Future.delayed(Duration.zero, () {
+        //       _searchBarDialog(
+        //         data: snapshot.data!,
+        //         onSubmit: (selectedCountry) {
+        //           setState(() {
+        //             queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
+        //           });
+        //           sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
+        //           sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
+        //           context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
+        //           context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
+        //         }
+        //       );
+        //     });
+        //     isDialogShown = true;
+        //   }
+        // }
 
         return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
               builder: (context, state) {
