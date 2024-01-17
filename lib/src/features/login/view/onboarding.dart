@@ -117,19 +117,21 @@ class _OnBoardingState extends State<OnBoarding> {
                               borderRadius: BorderRadius.circular(15)
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // if (featuredList[index].featuredLogo != null)
-                                //   Align(
-                                //     alignment: Alignment.topCenter,
-                                //     child: SizedBox(
-                                //       height: 126,
-                                //       child: Image.network(featuredList[index].logo),
-                                //       // child: Image.network(featuredList[index].featuredLogo),
-                                //     ),
-                                //   ),
-                                const SizedBox(height: 10),
+                                if (featuredList[index].featuredImage != null && featuredList[index].featuredImage!.isNotEmpty)
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: SizedBox(
+                                      height: 126,
+                                      child: Image.network(featuredList[index].featuredImage!),
+                                    ),
+                                  ),
+                                const SizedBox(height: 20),
                                 Text(
-                                    (featuredList[index].descriptor != null) ? featuredList[index].descriptor! : '',
+                                    (featuredList[index].shortDescription != null && featuredList[index].shortDescription!.isNotEmpty)
+                                        ? featuredList[index].shortDescription! : '',
                                     style: textStyle,
                                     textAlign: TextAlign.center
                                 ),

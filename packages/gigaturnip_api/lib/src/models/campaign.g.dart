@@ -26,7 +26,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
           smsLoginAllow: $checkedConvert('sms_login_allow', (v) => v as bool),
           logo: $checkedConvert('logo', (v) => v as String),
-          descriptor: $checkedConvert('descriptor', (v) => v as String?),
+          shortDescription:
+              $checkedConvert('short_description', (v) => v as String?),
           notificationsCount:
               $checkedConvert('notifications_count', (v) => v as int),
           languages: $checkedConvert('languages',
@@ -36,6 +37,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           smsPhone: $checkedConvert('sms_phone', (v) => v as String?),
           isJoined: $checkedConvert('is_joined', (v) => v as bool),
           featured: $checkedConvert('featured', (v) => v as bool),
+          featuredImage: $checkedConvert('featured_image', (v) => v as String?),
           smsCompleteTaskAllow: $checkedConvert(
               'sms_complete_task_allow', (v) => v as bool? ?? false),
         );
@@ -46,9 +48,11 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
         'updatedAt': 'updated_at',
         'defaultTrack': 'default_track',
         'smsLoginAllow': 'sms_login_allow',
+        'shortDescription': 'short_description',
         'notificationsCount': 'notifications_count',
         'smsPhone': 'sms_phone',
         'isJoined': 'is_joined',
+        'featuredImage': 'featured_image',
         'smsCompleteTaskAllow': 'sms_complete_task_allow'
       },
     );
