@@ -158,7 +158,20 @@ class _TaskPageState extends State<TaskPage> {
               icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
                 builder: (context, state) {
                   if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
-                    return Image.network(state.data.logo);
+                    return Container(
+                      width: 24,
+                      height: 24,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(state.data.logo),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                    );
                   } else {
                     return const Icon(Icons.info_outline);
                   }
@@ -166,7 +179,8 @@ class _TaskPageState extends State<TaskPage> {
               ),
             ),
         ],
-        actions: [NotificationButton(), SettingsButton()],
+        // TODO: add filter to show settings button only to moderators.
+        actions: const [NotificationButton()], // SettingsButton()
         floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
         child: RelevantTaskPage(
           campaignId: widget.campaignId,

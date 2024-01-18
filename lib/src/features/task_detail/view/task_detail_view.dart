@@ -306,6 +306,7 @@ class _CurrentTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskBloc = context.read<TaskBloc>();
+    final theme = Theme.of(context).colorScheme;
 
     return SafeArea(
       child: SizedBox(
@@ -342,7 +343,8 @@ class _CurrentTask extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: theme.primary,
+                    foregroundColor: theme.isLight ? Colors.white : Colors.black,
                   ),
                   onPressed: redirect,
                   child: Text(context.loc.form_submit_button),

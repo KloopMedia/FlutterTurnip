@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:go_router/go_router.dart';
 
-import '../view/language_picker.dart';
+import '../../../router/routes/routes.dart';
+import '../view/pickers.dart';
 import 'provider_buttons.dart';
 
 class LoginPanel extends StatelessWidget {
@@ -45,10 +47,11 @@ class LoginPanel extends StatelessWidget {
       margin: padding,
       constraints: constraints,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 alignment: Alignment.centerLeft,
@@ -65,46 +68,92 @@ class LoginPanel extends StatelessWidget {
                   style: subtitleTextStyle,
                 ),
               ),
-            ],
-          ),
-          if (kIsWeb)
-            Column(
-              children: [
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: LanguagePicker(
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: LanguagePicker(
                     errorMessage: (errorMessage != null && isLocaleSelected == false)
                         ? errorMessage
                         : null,
-                    isLocaleSelected: isLocaleSelected ?? true,
-                    campaignLocales: const [],
-                  ),
+                    isLocaleSelected: isLocaleSelected ?? true
                 ),
-              ],
-            ),
-          const SizedBox(height: 60),
-          LoginProviderButtons(
-            isActive: isLocaleSelected ?? true,
-            onPressed: (errorMessage) {
-              onSubmit(errorMessage);
-            }
+              ),
+              const SizedBox(height: 60),
+              LoginProviderButtons(
+                  isActive: isLocaleSelected ?? true,
+                  onPressed: (errorMessage) {
+                    onSubmit(errorMessage);
+                  }
+              ),
+              // const SizedBox.shrink(),
+              // Column(
+              //   children: [
+              //     PhoneNumberField(onChanged: onChange),
+              //     const SizedBox(height: 20),
+              //     SignUpButton(onPressed: (_) => onSubmit()),
+              //     DividerWithLabel(
+              //       label: context.loc.or,
+              //       padding: const EdgeInsets.symmetric(vertical: 47.0),
+              //       color: theme.isLight ? theme.neutral50 : theme.neutral60,
+              //       thickness: 0.2,
+              //     ),
+              //     const LoginProviderButtons(),
+              //   ],
+              // ),
+            ],
           ),
-          const SizedBox.shrink(),
-          // Column(
-          //   children: [
-          //     PhoneNumberField(onChanged: onChange),
-          //     const SizedBox(height: 20),
-          //     SignUpButton(onPressed: (_) => onSubmit()),
-          //     DividerWithLabel(
-          //       label: context.loc.or,
-          //       padding: const EdgeInsets.symmetric(vertical: 47.0),
-          //       color: theme.isLight ? theme.neutral50 : theme.neutral60,
-          //       thickness: 0.2,
-          //     ),
-          //     const LoginProviderButtons(),
-          //   ],
-          // ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!kIsWeb) Text(
+                context.loc.privacy_policy_acceptance_1,
+                style: TextStyle(
+                  color: fontColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (kIsWeb) Text(
+                    context.loc.privacy_policy_acceptance_1,
+                    style: TextStyle(
+                      color: fontColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(50, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () async {
+                      context.goNamed(PrivacyPolicyRoute.name);
+                    },
+                    child: Text(
+                      context.loc.privacy_policy_acceptance_2,
+                      style: TextStyle(
+                        color: theme.primary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    context.loc.privacy_policy_acceptance_3,
+                    style: TextStyle(
+                      color: fontColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     );

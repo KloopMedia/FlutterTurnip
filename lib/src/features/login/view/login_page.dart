@@ -11,6 +11,8 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/bloc.dart';
+import '../../campaign/bloc/campaign_cubit.dart';
+import '../../campaign/bloc/country_bloc/country_cubit.dart';
 import '../../campaign/bloc/language_bloc/language_cubit.dart';
 import '../../campaign_detail/bloc/campaign_detail_bloc.dart';
 import '../bloc/login_bloc.dart';
@@ -32,6 +34,15 @@ class LoginPage extends StatelessWidget {
             authenticationRepository: context.read<AuthenticationRepository>(),
           ),
         ),
+        BlocProvider<CampaignCubit>(
+          create: (context) => CampaignCubit(
+            SelectableCampaignRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+              limit: 10,
+            ),
+            context.read<SharedPreferences>(),
+          )..initialize(),
+        ),
         if (campaignId != null) BlocProvider(
           create: (context) => CampaignDetailBloc(
             repository: CampaignDetailRepository(
@@ -40,11 +51,19 @@ class LoginPage extends StatelessWidget {
             campaignId: campaignId!,
           )..add(InitializeCampaign()),
         ),
-        if (campaignId != null) BlocProvider(
+        BlocProvider(
           create: (context) => LanguageCubit(
             LanguageRepository(
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
             ),
+          )..initialize(),
+        ),
+        BlocProvider(
+          create: (context) => CountryCubit(
+            CountryRepository(
+              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
+            ),
+            context.read<GigaTurnipApiClient>(),
           )..initialize(),
         ),
       ],
@@ -63,10 +82,21 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  late SharedPreferences sharedPreferences;
   String _phoneNumber = "";
-  int? _resendToken;
-  bool isLocaleSelected = false;
   String? errorMessage;
+  bool isLocaleSelected = false;
+  int? _resendToken;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeSharedPreferences();
+  }
+
+  void initializeSharedPreferences() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   void loginWithPhone([int? forceResendToken]) async {
     final authenticationRepository = context.read<AuthenticationRepository>();
@@ -102,15 +132,15 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<LocalizationBloc>().state;
+    final theme = Theme.of(context).colorScheme;
+    const radius = Radius.circular(15);
 
+    final state = context.watch<LocalizationBloc>().state;
     if (state.firstLogin == false) {
       setState(() {
         isLocaleSelected = !state.firstLogin;
       });
     }
-    final theme = Theme.of(context).colorScheme;
-    const radius = Radius.circular(15);
 
     return SafeArea(
       child: Scaffold(
@@ -127,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
               // );
             }
           },
-          builder: (context, state) {
+          builder: (context, loginState) {
             // if (state is OTPCodeSend) {
             //   return VerificationPage(
             //     onResend: () => loginWithPhone(_resendToken),
@@ -136,153 +166,105 @@ class _LoginViewState extends State<LoginView> {
             //     },
             //   );
             // }
-            if (context.isSmall) {
-              if (state is LoginInitial && state.firstTime) {
-                if (widget.campaignId != null) {
-                  return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                      builder: (context, state) {
-                        if (state is CampaignFetching) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        if (state is CampaignFetchingError) {
-                          return Center(child: Text(state.error));
-                        }
-                        if (state is CampaignJoinError) {
-                          return Center(child: Text(state.error));
-                        }
-                        if (state is CampaignLoaded) {
-                          final data = state.data;
-                          return OnBoarding(
-                            onContinue: () {
-                              context.read<LoginBloc>().add(CloseOnBoarding());
-                            },
-                            campaignName: data.name,
-                            campaignDescription: data.description,
-                            campaignLanguages: data.languages,
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      }
-                  );
-                }
-                return OnBoarding(
-                  onContinue: () {
-                    context.read<LoginBloc>().add(CloseOnBoarding());
-                  },
-                );
-              } else if (state is OTPCodeSend) {
-                return VerificationPage(
-                  onResend: () => loginWithPhone(_resendToken),
-                  onConfirm: (smsCode) {
-                    context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
-                  },
-                );
-              }
-              return LoginPanel(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 69),
-                onChange: _onChange,
-                onSubmit: (value) => loginWithPhone(),
-              );
-            } else {
-              return Row(
-                children: [
-                  Container(
-                    width: context.isMedium
-                        ? MediaQuery.of(context).size.width / 2
-                        : MediaQuery.of(context).size.width / 3,
-                    decoration: BoxDecoration(
-                      color: theme.primary,
-                      borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24/*45*/),
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (!context.isSmall) Container(
+                  width: context.isMedium
+                      ? MediaQuery.of(context).size.width / 2
+                      : MediaQuery.of(context).size.width / 3,
+                  decoration: BoxDecoration(
+                    color: theme.primary,
+                    borderRadius: const BorderRadius.only(topRight: radius, bottomRight: radius),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24),
+                    child: Center(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Container(
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(15),
-                              //     color: Colors.grey,
-                              //   ),
-                              //   alignment: Alignment.center,
-                              //   width: 70,
-                              //   height: 70,
-                              //   child: const Text('Logo'),
-                              // ),
-                              const SizedBox(height: 90),
-                              Text(
-                                context.loc.welcome_title,
-                                style: const TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              Text(
-                                context.loc.welcome_subtitle,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white.withOpacity(0.85),
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w300
-                                ),
-                              ),
-                            ],
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(15),
+                          //     color: Colors.grey,
+                          //   ),
+                          //   alignment: Alignment.center,
+                          //   width: 70,
+                          //   height: 70,
+                          //   child: const Text('Logo'),
+                          // ),
+                          Image.asset('assets/images/people_3.png', height: 330),
+                          const SizedBox(height: 30),
+                          Text(
+                            context.loc.welcome_title,
+                            style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          const Spacer(),
-                          (context.isSmall) ? Image.asset('assets/images/people.png') : Image.asset('assets/images/people_web.png'),
+                          const SizedBox(height: 30),
+                          Text(
+                            context.loc.welcome_subtitle,
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white.withOpacity(0.85),
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w300
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        (state is OTPCodeSend)
-                           ? VerificationPage(
-                            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 450),
-                            onResend: () => loginWithPhone(_resendToken),
-                            onConfirm: (smsCode) {
-                            context.read<LoginBloc>().add(ConfirmOTP(smsCode, state.verificationId));
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: (context.isSmall) ? MainAxisAlignment.start : MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (loginState is LoginSuccess)
+                        Flexible(
+                          child: OnBoarding(
+                            constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 650, maxHeight: 430),
+                          ),
+                        ),
+                      if (loginState is LoginInitial)
+                        Flexible(
+                          child: LoginPanel(
+                            constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+                            onChange: _onChange,
+                            onSubmit: (value) {
+                              if (value != null) {
+                                setState(() {
+                                  errorMessage = value;
+                                });
+                              } else {
+                                loginWithPhone();
+                              }
                             },
-                          )
-                           : Flexible(
-                            child: LoginPanel(
-                              padding: const EdgeInsets.all(20),
-                              constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
-                              onChange: _onChange,
-                              onSubmit: (value) {
-                                if (value != null) {
-                                  setState(() {
-                                    errorMessage = value;
-                                  });
-                                } else {
-                                  loginWithPhone();
-                                }
-                              },
-                              isLocaleSelected: isLocaleSelected,
-                              errorMessage: errorMessage,
-                            )
-                          )
-                        // Flexible(
-                        //   child: LoginPanel(
-                        //     padding: const EdgeInsets.all(20),
-                        //     constraints: const BoxConstraints(maxWidth: 500, maxHeight: 500),
-                        //     onChange: _onChange,
-                        //     onSubmit: loginWithPhone,
-                        //   ),
-                        // ),
-                      ],
-                    ),
+                            isLocaleSelected: isLocaleSelected,
+                            errorMessage: errorMessage,
+                          ),
+                        ),
+                      if (loginState is OTPCodeSend)
+                        VerificationPage(
+                        constraints: (kIsWeb) ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
+                        onResend: () => loginWithPhone(_resendToken),
+                        onConfirm: (smsCode) {
+                          context.read<LoginBloc>().add(ConfirmOTP(smsCode, loginState.verificationId));
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              );
-            }
+                ),
+              ],
+            );
           },
         ),
       ),

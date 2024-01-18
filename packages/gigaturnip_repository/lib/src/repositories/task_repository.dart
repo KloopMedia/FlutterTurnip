@@ -211,8 +211,10 @@ class CreatableTaskRepository extends GigaTurnipRepository<TaskStage> {
     return creatable;
   }
 
-  Future<int> createTask(int id) async {
-    final task = await _gigaTurnipApiClient.createTaskFromStageId(id);
+  Future<int> createTask(int id, {bool fastTrack = false}) async {
+    final task = await _gigaTurnipApiClient.createTaskFromStageId(id, data: {
+      "fast_track": fastTrack,
+    });
     return task.id;
   }
 }

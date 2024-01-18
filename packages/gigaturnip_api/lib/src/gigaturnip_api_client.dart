@@ -4,7 +4,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
 
-@RestApi(baseUrl: "https://journal-bb5e3.uc.r.appspot.com/api/v1/")
+@RestApi(baseUrl: "https://front-test-dot-journal-bb5e3.uc.r.appspot.com/api/v1/")
 abstract class GigaTurnipApiClient {
   factory GigaTurnipApiClient(Dio dio, {String baseUrl}) = _GigaTurnipApiClient;
 
@@ -156,4 +156,9 @@ abstract class GigaTurnipApiClient {
 
   @GET("$notificationsRoute/{id}/$openNotificationActionRoute")
   Future<void> openNotification(@Path("id") int id);
+
+  // FCM methods
+
+  @POST(updateFcmTokenActionRoute)
+  Future<void> updateFcmToken(@Body() Map<String, dynamic> data);
 }

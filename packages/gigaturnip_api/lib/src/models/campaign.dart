@@ -13,12 +13,16 @@ class Campaign {
   final int? defaultTrack;
   final List<int>? managers;
   final bool smsLoginAllow;
-  final String? descriptor;
+  final String? shortDescription;
   final String logo;
   final int notificationsCount;
   final List<int>? languages;
+  final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
+  final bool isJoined;
+  final bool featured;
+  final String? featuredImage;
 
   Campaign({
     required this.id,
@@ -31,10 +35,14 @@ class Campaign {
     required this.managers,
     required this.smsLoginAllow,
     required this.logo,
-    required this.descriptor,
+    required this.shortDescription,
     required this.notificationsCount,
     required this.languages,
+    required this.countries,
     required this.smsPhone,
+    required this.isJoined,
+    required this.featured,
+    required this.featuredImage,
     this.smsCompleteTaskAllow = false,
   });
 

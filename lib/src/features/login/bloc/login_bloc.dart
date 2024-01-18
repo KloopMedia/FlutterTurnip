@@ -43,12 +43,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  void _onLoginWithAuthProvider(LoginWithAuthProvider event, Emitter<LoginState> emit) {
+  Future<void> _onLoginWithAuthProvider(LoginWithAuthProvider event, Emitter<LoginState> emit) async {
     final provider = event.provider;
 
     try {
-      _login(provider);
-      emit(LoginSuccess());
+      await _login(provider);
+      emit(const LoginSuccess());
     } catch (e) {
       emit(LoginFailed(e.toString()));
     }
@@ -79,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final credential = event.credential;
     try {
       await _authenticationRepository.signInWithCredential(credential);
-      emit(LoginSuccess());
+      emit(const LoginSuccess());
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -91,5 +91,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _onCloseOnBoarding(CloseOnBoarding event, Emitter<LoginState> emit) {
     _sharedPreferences.setBool(Constants.sharedPrefFirstTimeKey, false);
     emit(const LoginInitial(firstTime: false));
+    emit(const OnboardingClosed());
   }
 }

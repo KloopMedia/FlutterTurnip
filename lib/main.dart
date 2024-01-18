@@ -1,14 +1,16 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/firebase_options.dart';
 import 'package:gigaturnip/src/app.dart';
+import 'package:gigaturnip/src/utilities/notification_services.dart';
 import 'package:gigaturnip/src/widgets/error_screen.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'config.dart';
 import 'src/bloc/bloc.dart';
@@ -16,6 +18,7 @@ import 'src/router/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  usePathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final authenticationRepository = AuthenticationRepository();
@@ -23,18 +26,29 @@ Future<void> main() async {
   final gigaTurnipApiClient = GigaTurnipApiClient(dio, baseUrl: AppConfig.apiUrl);
   final sharedPreferences = await SharedPreferences.getInstance();
   final router = AppRouter(authenticationRepository).router;
-  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) => SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) =>
+      SliverToBoxAdapter(child: ErrorScreen(detailsException: flutterErrorDetails.exception));
 
-  // FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // await messaging.requestPermission(
-  //   alert: true,
-  //   announcement: false,
-  //   badge: true,
-  //   carPlay: false,
-  //   criticalAlert: false,
-  //   provisional: false,
-  //   sound: true,
-  // );
+  try {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    NotificationServices notificationServices = NotificationServices();
+
+    messaging.onTokenRefresh.listen((fcmToken) {
+      notificationServices.getDeviceToken(gigaTurnipApiClient, fcmToken);
+    }).onError((err) {});
+  } catch (e) {
+    print("PUSH NOTIFICATION ERROR: $e");
+  }
 
   runApp(
     MultiRepositoryProvider(
@@ -58,7 +72,7 @@ Future<void> main() async {
             ),
           ),
           BlocProvider(
-            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences, /*showSavedLocale: true*/),
+            create: (_) => LocalizationBloc(sharedPreferences: sharedPreferences),
           ),
           BlocProvider(
             create: (_) => ThemeCubit(sharedPreferences: sharedPreferences),

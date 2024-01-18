@@ -15,7 +15,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://journal-bb5e3.uc.r.appspot.com/api/v1/';
+    baseUrl ??= 'https://front-test-dot-journal-bb5e3.uc.r.appspot.com/api/v1/';
   }
 
   final Dio _dio;
@@ -1086,6 +1086,31 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
         .compose(
           _dio.options,
           'notifications//${id}/open_notification/',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> updateFcmToken(Map<String, dynamic> data) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'fcm/fcm//update_fcm_token/',
           queryParameters: queryParameters,
           data: _data,
         )

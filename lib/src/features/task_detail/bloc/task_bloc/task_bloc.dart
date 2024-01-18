@@ -79,36 +79,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final _state = state as TaskInitialized;
     final formData = event.formData;
 
+    final updatedTask = _state.data.copyWith(responses: formData, complete: true);
+    TaskResponse response;
     try {
       emit(TaskRefetching.clone(_state));
-      final updatedTask = _state.data.copyWith(responses: formData, complete: true);
-      final response = await _repository.submitTask(updatedTask);
-      final nextTaskId = response.nextDirectId;
-
-      final notifications = response.notifications;
-      if (notifications != null) {
-        final text = notifications.first['text'];
-        emit(
-          NotificationOpened(
-            updatedTask,
-            _state.previousTasks,
-            text: text,
-            task: updatedTask,
-            previousTask: _state.previousTasks,
-            nextTaskId: nextTaskId,
-          ),
-        );
-      }
-
-      final quizAnswers = _state.data.stage.quizAnswers;
-
-      if (nextTaskId == taskId) {
-        emit(TaskReturned.clone(_state));
-      } else if (quizAnswers != null && quizAnswers.isNotEmpty) {
-        emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
-      } else {
-        emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
-      }
+      response = await _repository.submitTask(updatedTask);
     } on DioException catch (e) {
       print("SUBMIT NETWORK ERROR: $e");
       final campaign = await _campaignRepository.fetchData(_state.data.stage.campaign);
@@ -121,11 +96,39 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         final updatedTask = _state.data.copyWith(responses: formData, complete: true);
         emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: null));
       }
+      return;
     } catch (e) {
       print("SUBMIT ERROR: $e");
       final updatedTask = _state.data.copyWith(responses: formData);
       emit(TaskSubmitError(updatedTask, _state.previousTasks, e.toString()));
       emit(TaskLoaded(updatedTask, _state.previousTasks));
+      return;
+    }
+
+    final nextTaskId = response.nextDirectId;
+    final quizAnswers = _state.data.stage.quizAnswers;
+
+    final notifications = response.notifications;
+    if (notifications != null && notifications.isNotEmpty) {
+      final text = notifications.first['text'];
+      emit(
+        NotificationOpened(
+          updatedTask,
+          _state.previousTasks,
+          text: text,
+          task: updatedTask,
+          previousTask: _state.previousTasks,
+          nextTaskId: nextTaskId,
+        ),
+      );
+    }
+
+    if (nextTaskId == taskId) {
+      emit(TaskReturned.clone(_state));
+    } else if (quizAnswers != null && quizAnswers.isNotEmpty) {
+      emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
+    } else {
+      emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
     }
   }
 

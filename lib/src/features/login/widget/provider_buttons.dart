@@ -28,12 +28,12 @@ class LoginProviderButtons extends StatelessWidget {
       children: [
         LoginProviderButton(
           color: (isActive)
-            ? theme.isLight ? Colors.white : Colors.black
-            : theme.neutralVariant95,
+              ? theme.isLight ? Colors.white : Colors.black
+              : theme.neutralVariant95,
           border: BorderSide(
             color: (isActive)
-              ? theme.isLight ? Colors.black.withOpacity(0.5) : theme.neutral90
-              : Colors.transparent,
+                ? theme.isLight ? Colors.black.withOpacity(0.5) : theme.neutral90
+                : Colors.transparent,
           ),
           onPressed: () {
             if (isActive) {
@@ -44,15 +44,15 @@ class LoginProviderButtons extends StatelessWidget {
             }
           },
           icon: Image.asset(
-            (isActive) ? 'assets/icon/google_icon.png' : 'assets/icon/google_icon_inactive.png',
-            height: 24.0
+              (isActive) ? 'assets/icon/google_icon.png' : 'assets/icon/google_icon_inactive.png',
+              height: 24.0
           ),
           child: Text(
             context.loc.continue_with_google,
             style: textStyle.copyWith(
-              color: (isActive)
-                ? theme.isLight ? theme.neutral30 : theme.neutral90
-                : theme.neutralVariant90,
+              color:  (isActive)
+                  ? theme.isLight ? theme.neutral30 : theme.neutral90
+                  : theme.neutralVariant90,
             ),
           ),
         ),
@@ -62,8 +62,8 @@ class LoginProviderButtons extends StatelessWidget {
         ),
         LoginProviderButton(
           color: (isActive)
-            ? theme.isLight ? Colors.black : Colors.white
-            : theme.neutralVariant95,
+              ? theme.isLight ? Colors.black : Colors.white
+              : theme.neutralVariant95,
           onPressed: () {
             if (isActive) {
               context.read<LoginBloc>().add(const LoginWithAuthProvider(AuthProvider.apple));
@@ -80,12 +80,12 @@ class LoginProviderButtons extends StatelessWidget {
           child: Text(
             context.loc.continue_with_apple,
             style: const CupertinoTextThemeData().textStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: (isActive)
-                    ? theme.isLight ? theme.neutral90 : theme.neutral30
-                    : theme.neutralVariant90,
-                ),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: (isActive)
+                  ? theme.isLight ? theme.neutral90 : theme.neutral30
+                  : theme.neutralVariant90,
+            ),
           ),
         ),
       ],

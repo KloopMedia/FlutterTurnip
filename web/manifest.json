@@ -1,11 +1,11 @@
 {
-    "name": "gigaturnip",
-    "short_name": "gigaturnip",
+    "name": "Okutool",
+    "short_name": "Okutool",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "description": "Study and apply your skills on one platform.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
