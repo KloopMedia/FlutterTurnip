@@ -70,12 +70,13 @@ class CampaignDetailView extends StatelessWidget {
       child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
         listener: (context, state) async {
           if (state is CampaignJoinSuccess) {
-            showDialog(context: context, builder: (context) => JoinCampaignDialog(
-              title: context.loc.joined,
-              content: context.loc.joined_campaigns,
-              buttonText: context.loc.got_it,
-            ))
-                .then((value) => redirectToTaskMenu(context, state.data.id));
+            showDialog(
+                context: context,
+                builder: (context) => JoinCampaignDialog(
+                      title: context.loc.joined,
+                      content: context.loc.joined_campaigns,
+                      buttonText: context.loc.got_it,
+                    )).then((value) => redirectToTaskMenu(context, state.data.id));
           }
         },
         builder: (context, state) {
@@ -99,7 +100,8 @@ class CampaignDetailView extends StatelessWidget {
                 title: const Text(''),
                 leading: [
                   IconButton(
-                    onPressed: () => context.canPop() ? context.pop() : redirectToCampaignPage(context),
+                    onPressed: () =>
+                        context.canPop() ? context.pop() : redirectToCampaignPage(context),
                     icon: const Icon(Icons.arrow_back_ios, size: 20),
                   ),
                 ],
@@ -136,7 +138,11 @@ class _CampaignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       if (context.isExtraLarge || context.isLarge) {
-        return _Content(data: data);
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 50),
+          child: _Content(data: data),
+        );
       } else {
         return Container(
           width: double.infinity,
