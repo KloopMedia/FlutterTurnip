@@ -230,7 +230,7 @@ class _LoginViewState extends State<LoginView> {
                       if (loginState is LoginSuccess)
                         Flexible(
                           child: OnBoarding(
-                            constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 568, maxHeight: 430),
+                            constraints: (context.isSmall) ? null : const BoxConstraints(maxWidth: 650, maxHeight: 430),
                           ),
                         ),
                       if (loginState is LoginInitial)

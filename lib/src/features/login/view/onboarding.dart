@@ -21,7 +21,6 @@ class OnBoarding extends StatefulWidget {
 }
 
 class _OnBoardingState extends State<OnBoarding> {
-  bool isHover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,129 +52,201 @@ class _OnBoardingState extends State<OnBoarding> {
       if (context.mounted) context.goNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
     }
 
-    return Container(
-      padding: (context.isSmall) ? const EdgeInsets.all(24) : null,
-      constraints: widget.constraints,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (context.isSmall)
-                IconButton(
-                  alignment: Alignment.centerLeft,
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    context.read<AuthBloc>().add(AuthLogoutRequested());
-                  },
-                ),
-              Text(
-                context.loc.section_selection_title,
-                style: titleTextStyle,
-              ),
-              Text(
-                context.loc.section_selection,
-                style: subtitleTextStyle,
-              ),
-            ],
-          ),
-          FutureBuilder<List<Campaign>>(
-            future: context.read<CampaignCubit>().fetchCampaigns(query: {'featured': true}),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text('${snapshot.error}'));
-              }
-              if (snapshot.hasData) {
-                final featuredList = snapshot.data ?? [];
-                final itemCount = featuredList.length;
+    return FutureBuilder<List<Campaign>>(
+        future: context.read<CampaignCubit>().fetchCampaigns(query: {'featured': true}),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('${snapshot.error}'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            final featuredList = snapshot.data ?? [];
+            final itemCount = featuredList.length;
 
-                if (itemCount == 1) {
-                  final item = featuredList.first;
+            return Container(
+              padding: (context.isSmall) ? const EdgeInsets.all(24) : null,
+              constraints: (kIsWeb && itemCount > 3) ? const BoxConstraints(maxWidth: 680, maxHeight: 600) : widget.constraints,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (context.isSmall)
+                        IconButton(
+                          alignment: Alignment.centerLeft,
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: () {
+                            context.read<AuthBloc>().add(AuthLogoutRequested());
+                          },
+                        ),
+                      Align(
+                        alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
+                        child: Text(
+                          context.loc.section_selection_title,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                      Align(
+                        alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
+                        child: Text(
+                          context.loc.section_selection,
+                          style: subtitleTextStyle,
+                        ),
+                      ),
+                    ],
+                  ),
 
-                  return Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        redirect(context, item.id);
-                      },
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onEnter: (details) => setState(() {
-                          isHover = true;
-                        }),
-                        onExit: (details) => setState(() {
-                          isHover = false;
-                        }),
-                        child: FeaturedCampaignCard(item: item, itemCount: itemCount),
+                  if (itemCount == 1)
+                    Center(
+                      child: FeaturedCampaignCard(
+                        item: featuredList.first,
+                        width: 200,
+                        height: 230,
+                        onTap: () => redirect(context, featuredList.first.id),
                       ),
                     ),
-                  );
-                }
 
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: (!kIsWeb) ? 0 : 30),
-                  child: GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: (!kIsWeb) ? 20 : 30,
-                          mainAxisSpacing: (!kIsWeb) ? 20 : 30,
-                          childAspectRatio: (!kIsWeb) ? 0.75 : 1
-                      ),
-                      itemCount: itemCount,
-                      itemBuilder: (context, index) {
-                        final item = featuredList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            redirect(context, featuredList[index].id);
+                  if (kIsWeb && itemCount > 1 && itemCount < 4)
+                    Expanded(
+                      child: Center(
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final item = featuredList[index];
+                            return  FeaturedCampaignCard(
+                              item: item,
+                              width: 200,
+                              height: 230,
+                              verticalMargin: 60,
+                              onTap: () => redirect(context, item.id),
+                            );
                           },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            onEnter: (details) => setState(() {
-                              isHover = true;
-                            }),
-                            onExit: (details) => setState(() {
-                              isHover = false;
-                            }),
-                            child: FeaturedCampaignCard(item: item, itemCount: itemCount),
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(width: 20);
+                          },
+                          itemCount: itemCount,
+                        ),
+                      ),
+                    ),
+
+                  if (kIsWeb && itemCount > 3)
+                    Expanded(
+                      child: GridView.builder(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          shrinkWrap: false,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 1
                           ),
-                        );
-                      }
+                          itemCount: itemCount,
+                          itemBuilder: (context, index) {
+                            final item = featuredList[index];
+                            return FeaturedCampaignCard(
+                              item: item,
+                              onTap: () => redirect(context, item.id),
+                            );
+                          }
+                      ),
+                    ),
+
+                  if (!kIsWeb && itemCount == 2)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: FeaturedCampaignCard(
+                            item: featuredList[0],
+                            height: 230,
+                            onTap: () => redirect(context, featuredList[0].id),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: FeaturedCampaignCard(
+                            item: featuredList[1],
+                            height: 230,
+                            onTap: () => redirect(context, featuredList[1].id),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  if (!kIsWeb && itemCount > 2)
+                    Expanded(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        shrinkWrap: false,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: 0.75
+                        ),
+                        itemCount: itemCount,
+                        itemBuilder: (context, index) {
+                          final item = featuredList[index];
+                          return FeaturedCampaignCard(
+                            item: item,
+                            onTap: () => redirect(context, item.id),
+                          );
+                        }
+                      ),
+                    ),
+
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: TextButton(
+                      onPressed: () {
+                        context.go(CampaignRoute.name);
+                      },
+                      child: Text(
+                        context.loc.skip,
+                        style: textStyle
+                      ),
+                    ),
                   ),
-                );
-              }
-              return const SizedBox.shrink();
-            }
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: TextButton(
-              onPressed: () {
-                context.go(CampaignRoute.name);
-              },
-              child: Text(
-                context.loc.skip,
-                style: textStyle
+                ],
               ),
-            ),
-          ),
-        ],
-      ),
+            );
+          }
+          return const SizedBox.shrink();
+        }
     );
   }
 }
 
-class FeaturedCampaignCard extends StatelessWidget {
+class FeaturedCampaignCard extends StatefulWidget {
   final Campaign item;
-  final int itemCount;
+  final double? width;
+  final double? height;
+  final double? verticalMargin;
+  final Function() onTap;
 
   const FeaturedCampaignCard({
     super.key,
     required this.item,
-    required this.itemCount,
+    required this.onTap,
+    this.verticalMargin,
+    this.width,
+    this.height,
   });
+
+  @override
+  State<FeaturedCampaignCard> createState() => _FeaturedCampaignCardState();
+}
+
+class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
+  bool isHover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -185,33 +256,49 @@ class FeaturedCampaignCard extends StatelessWidget {
         color: Colors.black
     );
 
-    return Container(
-      width: (itemCount == 1) ? 220 : null,
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-          color: const Color(0xFFE9EAFD),
-          borderRadius: BorderRadius.circular(15)
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (item.featuredImage != null && item.featuredImage!.isNotEmpty)
-            Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                height: 100,
-                child: Image.network(item.featuredImage!),
-              ),
-            ),
-          const SizedBox(height: 20),
-          Text(
-              (item.shortDescription != null && item.shortDescription!.isNotEmpty)
-                  ? item.shortDescription! : '',
-              style: textStyle,
-              textAlign: TextAlign.center
+    return GestureDetector(
+      onTap: () => widget.onTap(),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (details) =>
+          setState(() {
+            isHover = true;
+          }),
+        onExit: (details) =>
+          setState(() {
+            isHover = false;
+          }),
+        child: Container(
+          width: widget.width,
+          height: widget.height,
+          padding: const EdgeInsets.all(15),
+          margin: (widget.verticalMargin == null) ? null : EdgeInsets.symmetric(vertical: widget.verticalMargin!),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE9EAFD),
+            borderRadius: BorderRadius.circular(15)
           ),
-        ],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.item.featuredImage != null && widget.item.featuredImage!.isNotEmpty)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    height: 100,
+                    child: Image.network(widget.item.featuredImage!),
+                  ),
+                ),
+              const SizedBox(height: 20),
+              Text(
+                (widget.item.shortDescription != null && widget.item.shortDescription!.isNotEmpty)
+                   ? widget.item.shortDescription! : '',
+                style: textStyle,
+                textAlign: TextAlign.center
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
