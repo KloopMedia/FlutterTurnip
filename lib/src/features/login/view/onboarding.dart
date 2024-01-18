@@ -64,6 +64,10 @@ class _OnBoardingState extends State<OnBoarding> {
             final featuredList = snapshot.data ?? [];
             final itemCount = featuredList.length;
 
+            if (featuredList.isEmpty) {
+              context.goNamed(CampaignRoute.name);
+            }
+
             return Container(
               padding: (context.isSmall) ? const EdgeInsets.all(24) : null,
               constraints: (kIsWeb && itemCount > 3) ? const BoxConstraints(maxWidth: 680, maxHeight: 600) : widget.constraints,
@@ -198,7 +202,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     alignment: Alignment.bottomCenter,
                     child: TextButton(
                       onPressed: () {
-                        context.go(CampaignRoute.name);
+                        context.goNamed(CampaignRoute.name);
                       },
                       child: Text(
                         context.loc.skip,
