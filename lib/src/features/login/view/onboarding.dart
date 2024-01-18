@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -76,14 +75,6 @@ class _OnBoardingState extends State<OnBoarding> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (context.isSmall)
-                        IconButton(
-                          alignment: Alignment.centerLeft,
-                          icon: const Icon(Icons.arrow_back_ios),
-                          onPressed: () {
-                            context.read<AuthBloc>().add(AuthLogoutRequested());
-                          },
-                        ),
                       Align(
                         alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
                         child: Text(
