@@ -179,7 +179,8 @@ class _TaskPageState extends State<TaskPage> {
               ),
             ),
         ],
-        actions: [NotificationButton(), SettingsButton()],
+        // TODO: add filter to show settings button only to moderators.
+        actions: const [NotificationButton()], // SettingsButton()
         floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
         child: RelevantTaskPage(
           campaignId: widget.campaignId,
