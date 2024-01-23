@@ -77,23 +77,26 @@ class AuthenticationRepository {
     await _reAuthenticateAndDelete();
   }
 
+  Future<firebase_auth.UserCredential>? _reAuthenticateWithProvider(
+      firebase_auth.AuthProvider provider) {
+    if (kIsWeb) {
+      return _firebaseAuth.currentUser?.reauthenticateWithPopup(provider);
+    } else {
+      return _firebaseAuth.currentUser?.reauthenticateWithProvider(provider);
+    }
+  }
+
   Future<void> _reAuthenticateAndDelete() async {
     try {
       final providerData = _firebaseAuth.currentUser?.providerData.first;
 
       if (firebase_auth.AppleAuthProvider().providerId == providerData!.providerId) {
-        final userCredential = await _firebaseAuth.currentUser!
-            .reauthenticateWithProvider(firebase_auth.AppleAuthProvider());
-        // Keep the authorization code returned from Apple platforms
-        String? authCode = userCredential.additionalUserInfo?.authorizationCode;
-        // Revoke Apple auth token
+        final userCredential = await _reAuthenticateWithProvider(firebase_auth.AppleAuthProvider());
+        String? authCode = userCredential?.additionalUserInfo?.authorizationCode;
         await _firebaseAuth.revokeTokenWithAuthorizationCode(authCode!);
       } else if (firebase_auth.GoogleAuthProvider().providerId == providerData.providerId) {
-        await _firebaseAuth.currentUser!
-            .reauthenticateWithProvider(firebase_auth.GoogleAuthProvider());
+        await _reAuthenticateWithProvider(firebase_auth.GoogleAuthProvider());
       }
-
-      await _firebaseAuth.currentUser?.delete();
     } catch (e) {
       // Handle exceptions
       print(e);
