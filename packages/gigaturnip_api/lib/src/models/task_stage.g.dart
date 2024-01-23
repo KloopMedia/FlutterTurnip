@@ -32,6 +32,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) => (v as Map<String, dynamic>?)?.map(
                     (k, e) => MapEntry(k, e as int),
                   )),
+          takeTaskButtonText:
+              $checkedConvert('take_task_button_text', (v) => v as String?),
         );
         return val;
       },
@@ -41,6 +43,7 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
         'availableTo': 'available_to',
         'availableFrom': 'available_from',
         'stageType': 'stage_type',
-        'rankLimit': 'rank_limit'
+        'rankLimit': 'rank_limit',
+        'takeTaskButtonText': 'take_task_button_text'
       },
     );

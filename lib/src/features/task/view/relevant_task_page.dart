@@ -240,7 +240,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           ),
                         ),
                         onPressed: () => context.read<ReactiveTasks>().createTask(item),
-                        child: Text(context.loc.creatable_task_assign_button),
+                        child: Text(
+                          item.takeTaskButtonText ?? context.loc.creatable_task_assign_button,
+                        ),
                       )),
                 );
               },

@@ -19,6 +19,7 @@ class TaskStage {
   final DateTime? availableFrom;
   final String? stageType;
   final Map<String, int>? rankLimit;
+  final String? takeTaskButtonText;
 
   TaskStage({
     required this.id,
@@ -32,6 +33,7 @@ class TaskStage {
     required this.availableFrom,
     required this.stageType,
     required this.rankLimit,
+    required this.takeTaskButtonText,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {
