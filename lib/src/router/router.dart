@@ -4,8 +4,10 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'utilities.dart';
 
@@ -28,11 +30,26 @@ class AppRouter {
     return LoginRoute.path + fromPage;
   }
 
-  String redirectToInitialPage(BuildContext context, GoRouterState state) {
+  String? redirectToInitialPage(BuildContext context, GoRouterState state) {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
-    return '${state.uri.queryParameters['from'] ?? _initialLocation}?$queryString';
+    final userId = context.read<AuthenticationRepository>().user.id;
+    final activeCampaign = context
+        .read<SharedPreferences>()
+        .getString('${Constants.sharedPrefActiveCampaignKey}_$userId');
+
+    if (state.uri.queryParameters['from'] != null) {
+      return "${state.uri.queryParameters['from']}?$queryString";
+    } else if (activeCampaign != null) {
+      // if user has active campaign, then redirect to it.
+      return "${TaskRoute.path.replaceFirst(':cid', activeCampaign)}?$queryString";
+    } else if (query.isEmpty) {
+      // if user comes from root path. Then keep staying on login page to show onboarding.
+      return null;
+    } else {
+      return "$_initialLocation?$queryString";
+    }
   }
 
   String redirectToNotificationDetailPage(BuildContext context, GoRouterState state) {
@@ -109,9 +126,6 @@ class AppRouter {
 
         // if there is push notification, then send user to NotificationDetailPage
         if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
-
-        // if user comes from root path. Then keep staying on login page to show onboarding.
-        if (loggingIn && query.isEmpty) return null;
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
