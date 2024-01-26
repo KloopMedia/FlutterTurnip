@@ -81,18 +81,21 @@ class _OnBoardingState extends State<OnBoarding> {
                     children: [
                       Align(
                         alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
-                        child: Text(
-                          context.loc.section_selection_title,
-                          style: titleTextStyle,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 35),
+                          child: Text(
+                            context.loc.section_selection_title,
+                            style: titleTextStyle,
+                          ),
                         ),
                       ),
-                      Align(
-                        alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
-                        child: Text(
-                          context.loc.section_selection,
-                          style: subtitleTextStyle,
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
+                      //   child: Text(
+                      //     context.loc.section_selection,
+                      //     style: subtitleTextStyle,
+                      //   ),
+                      // ),
                     ],
                   ),
 
