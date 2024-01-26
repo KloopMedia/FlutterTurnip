@@ -125,6 +125,7 @@ class LoginPanel extends StatelessWidget {
                     ),
                   ),
                   TextButton(
+                    key: const Key('policy'),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: const Size(50, 30),
