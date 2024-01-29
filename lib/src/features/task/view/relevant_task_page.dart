@@ -226,7 +226,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     )
                   ],
                   title: item.name,
-                  contentPadding: 20,
                   size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   bottom: Container(
