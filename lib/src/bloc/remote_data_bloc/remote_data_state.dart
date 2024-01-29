@@ -8,7 +8,7 @@ abstract class RemoteDataState<Data> extends Equatable {
 mixin RemoteDataLoading<Data> on RemoteDataState<Data> {}
 
 mixin RemoteDataFailed<Data> on RemoteDataState<Data> {
-  late final String error;
+  late final Exception error;
 }
 
 class RemoteDataUninitialized<Data> extends RemoteDataState<Data> {}
@@ -16,7 +16,7 @@ class RemoteDataUninitialized<Data> extends RemoteDataState<Data> {}
 class RemoteDataFetching<Data> extends RemoteDataState<Data> with RemoteDataLoading<Data> {}
 
 class RemoteDataFetchingError<Data> extends RemoteDataState<Data> with RemoteDataFailed<Data> {
-  RemoteDataFetchingError(String error) {
+  RemoteDataFetchingError(Exception error) {
     this.error = error;
   }
 
@@ -84,7 +84,7 @@ class RemoteDataRefetching<Data> extends RemoteDataInitialized<Data> with Remote
 class RemoteDataRefetchingError<Data> extends RemoteDataInitialized<Data>
     with RemoteDataFailed<Data> {
   RemoteDataRefetchingError({
-    required String error,
+    required Exception error,
     required super.data,
     required super.currentPage,
     required super.total,
@@ -95,7 +95,7 @@ class RemoteDataRefetchingError<Data> extends RemoteDataInitialized<Data>
     this.error = error;
   }
 
-  RemoteDataRefetchingError.clone(RemoteDataInitialized<Data> state, String error)
+  RemoteDataRefetchingError.clone(RemoteDataInitialized<Data> state, Exception error)
       : super.clone(state) {
     this.error = error;
   }

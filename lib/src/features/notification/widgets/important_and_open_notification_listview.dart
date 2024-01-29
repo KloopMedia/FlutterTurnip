@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/notification/bloc/notification_cubit.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:sliver_tools/sliver_tools.dart';
+import 'package:gigaturnip/src/widgets/error_box.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 class ImportantAndOpenNotificationListView extends StatelessWidget {
@@ -25,7 +25,15 @@ class ImportantAndOpenNotificationListView extends StatelessWidget {
     return BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
       builder: (context, state) {
         if (state is RemoteDataFailed<Notification>) {
-          return SliverToBoxAdapter(child: Center(child: Text(state.error)));
+          return SliverFillRemaining(
+            child: Center(
+              child: NetworkErrorBox(
+                state.error,
+                buttonText: 'Retry',
+                onPressed: () => context.read<OpenNotificationCubit>().refetch(),
+              ),
+            ),
+          );
         }
         if (state is RemoteDataInitialized<Notification>) {
           if (state.data.isNotEmpty) {
@@ -34,7 +42,9 @@ class ImportantAndOpenNotificationListView extends StatelessWidget {
               data = state.data.where((item) => item.importance > 0).toList();
             } else {
               bool containsImportantNotification = state.data.any((item) => item.importance == 0);
-              if (containsImportantNotification) data = [state.data.firstWhere((item) => item.importance == 0)];
+              if (containsImportantNotification) {
+                data = [state.data.firstWhere((item) => item.importance == 0)];
+              }
             }
             if (data.isNotEmpty) {
               if (importantNotificationCount != null) {
@@ -44,8 +54,8 @@ class ImportantAndOpenNotificationListView extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 15
+                            vertical: 10,
+                            horizontal: 15,
                           ),
                           child: itemBuilder(context, data[0])!,
                         ),

@@ -28,10 +28,12 @@ class ListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>> extends 
           BlocBuilder<Cubit, RemoteDataState<Data>>(
             builder: (context, state) {
               if (state is RemoteDataLoading<Data>) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
               if (state is RemoteDataFailed<Data>) {
-                return Center(child: Text(state.error));
+                return Center(child: Text(state.error.toString()));
               }
               if (state is RemoteDataLoaded<Data>) {
                 return ListView.separated(

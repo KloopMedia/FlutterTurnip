@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/error_box.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +22,6 @@ class OnBoarding extends StatefulWidget {
 }
 
 class _OnBoardingState extends State<OnBoarding> {
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -37,16 +38,18 @@ class _OnBoardingState extends State<OnBoarding> {
       color: fontColor,
     );
     final textStyle = TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 14,
-        color: theme.primary
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+      color: theme.primary,
     );
 
-    Future<void> redirect (BuildContext context, int campaignId) async {
+    Future<void> redirect(BuildContext context, int campaignId) async {
       final campaign = await context.read<api.GigaTurnipApiClient>().getCampaignById(campaignId);
       final isJoined = campaign.isJoined;
 
-      if (context.mounted && !isJoined) await context.read<api.GigaTurnipApiClient>().joinCampaign(campaignId);
+      if (context.mounted && !isJoined) {
+        await context.read<api.GigaTurnipApiClient>().joinCampaign(campaignId);
+      }
 
       if (context.mounted) context.goNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});
     }
@@ -55,7 +58,15 @@ class _OnBoardingState extends State<OnBoarding> {
         future: context.read<CampaignCubit>().fetchCampaigns(query: {'featured': true}),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('${snapshot.error}'));
+            return Center(
+              child: NetworkErrorBox(
+                snapshot.error as DioException,
+                buttonText: 'Home',
+                onPressed: () {
+                  context.goNamed(CampaignRoute.name);
+                },
+              ),
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -70,7 +81,9 @@ class _OnBoardingState extends State<OnBoarding> {
 
             return Container(
               padding: (context.isSmall) ? const EdgeInsets.all(24) : null,
-              constraints: (kIsWeb && itemCount > 3) ? const BoxConstraints(maxWidth: 680, maxHeight: 600) : widget.constraints,
+              constraints: (kIsWeb && itemCount > 3)
+                  ? const BoxConstraints(maxWidth: 680, maxHeight: 600)
+                  : widget.constraints,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,7 +93,8 @@ class _OnBoardingState extends State<OnBoarding> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Align(
-                        alignment: (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
+                        alignment:
+                            (kIsWeb && itemCount < 3) ? Alignment.topCenter : Alignment.topLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 35),
                           child: Text(
@@ -98,7 +112,6 @@ class _OnBoardingState extends State<OnBoarding> {
                       // ),
                     ],
                   ),
-
                   if (itemCount == 1)
                     Center(
                       child: FeaturedCampaignCard(
@@ -108,7 +121,6 @@ class _OnBoardingState extends State<OnBoarding> {
                         onTap: () => redirect(context, featuredList.first.id),
                       ),
                     ),
-
                   if (kIsWeb && itemCount > 1 && itemCount < 4)
                     Expanded(
                       child: Center(
@@ -117,7 +129,7 @@ class _OnBoardingState extends State<OnBoarding> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             final item = featuredList[index];
-                            return  FeaturedCampaignCard(
+                            return FeaturedCampaignCard(
                               item: item,
                               width: 200,
                               height: 230,
@@ -132,7 +144,6 @@ class _OnBoardingState extends State<OnBoarding> {
                         ),
                       ),
                     ),
-
                   if (kIsWeb && itemCount > 3)
                     Expanded(
                       child: GridView.builder(
@@ -143,8 +154,7 @@ class _OnBoardingState extends State<OnBoarding> {
                               crossAxisCount: 3,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
-                              childAspectRatio: 1
-                          ),
+                              childAspectRatio: 1),
                           itemCount: itemCount,
                           itemBuilder: (context, index) {
                             final item = featuredList[index];
@@ -152,10 +162,8 @@ class _OnBoardingState extends State<OnBoarding> {
                               item: item,
                               onTap: () => redirect(context, item.id),
                             );
-                          }
-                      ),
+                          }),
                     ),
-
                   if (!kIsWeb && itemCount == 2)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -177,40 +185,33 @@ class _OnBoardingState extends State<OnBoarding> {
                         ),
                       ],
                     ),
-
                   if (!kIsWeb && itemCount > 2)
                     Expanded(
                       child: GridView.builder(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
-                        shrinkWrap: false,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 0.75
-                        ),
-                        itemCount: itemCount,
-                        itemBuilder: (context, index) {
-                          final item = featuredList[index];
-                          return FeaturedCampaignCard(
-                            item: item,
-                            onTap: () => redirect(context, item.id),
-                          );
-                        }
-                      ),
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          shrinkWrap: false,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.75),
+                          itemCount: itemCount,
+                          itemBuilder: (context, index) {
+                            final item = featuredList[index];
+                            return FeaturedCampaignCard(
+                              item: item,
+                              onTap: () => redirect(context, item.id),
+                            );
+                          }),
                     ),
-
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: TextButton(
                       onPressed: () {
                         context.goNamed(CampaignRoute.name);
                       },
-                      child: Text(
-                        context.loc.skip,
-                        style: textStyle
-                      ),
+                      child: Text(context.loc.skip, style: textStyle),
                     ),
                   ),
                 ],
@@ -218,8 +219,7 @@ class _OnBoardingState extends State<OnBoarding> {
             );
           }
           return const SizedBox.shrink();
-        }
-    );
+        });
   }
 }
 
@@ -248,33 +248,27 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-        color: Colors.black
-    );
+    const textStyle = TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
 
     return GestureDetector(
       onTap: () => widget.onTap(),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
-        onEnter: (details) =>
-          setState(() {
-            isHover = true;
-          }),
-        onExit: (details) =>
-          setState(() {
-            isHover = false;
-          }),
+        onEnter: (details) => setState(() {
+          isHover = true;
+        }),
+        onExit: (details) => setState(() {
+          isHover = false;
+        }),
         child: Container(
           width: widget.width,
           height: widget.height,
           padding: const EdgeInsets.all(15),
-          margin: (widget.verticalMargin == null) ? null : EdgeInsets.symmetric(vertical: widget.verticalMargin!),
+          margin: (widget.verticalMargin == null)
+              ? null
+              : EdgeInsets.symmetric(vertical: widget.verticalMargin!),
           decoration: BoxDecoration(
-            color: const Color(0xFFE9EAFD),
-            borderRadius: BorderRadius.circular(15)
-          ),
+              color: const Color(0xFFE9EAFD), borderRadius: BorderRadius.circular(15)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -289,11 +283,11 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
                 ),
               const SizedBox(height: 20),
               Text(
-                (widget.item.shortDescription != null && widget.item.shortDescription!.isNotEmpty)
-                   ? widget.item.shortDescription! : '',
-                style: textStyle,
-                textAlign: TextAlign.center
-              ),
+                  (widget.item.shortDescription != null && widget.item.shortDescription!.isNotEmpty)
+                      ? widget.item.shortDescription!
+                      : '',
+                  style: textStyle,
+                  textAlign: TextAlign.center),
             ],
           ),
         ),
