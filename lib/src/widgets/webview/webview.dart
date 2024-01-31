@@ -1,8 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-
-import 'mobile_webview.dart' if (dart.library.html) 'web_webview.dart' as multi_platform;
 
 class WebView extends StatefulWidget {
   final String htmlText;
@@ -26,28 +26,16 @@ class WebView extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebView> {
-  // @override
-  // void initState() {
-  //   if (!kIsWeb) {
-  //     BackButtonInterceptor.add(myInterceptor);
-  //   }
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   BackButtonInterceptor.remove(myInterceptor);
-  //   super.dispose();
-  // }
-  //
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   print('intercepting');
-  //   Navigator.of(context).pop();
-  //   if (widget.onCloseCallback != null) {
-  //     widget.onCloseCallback!();
-  //   }
-  //   return false;
-  // }
+  final GlobalKey webViewKey = GlobalKey();
+
+  InAppWebViewController? webViewController;
+  InAppWebViewSettings settings = InAppWebViewSettings(
+      isInspectable: kDebugMode,
+      mediaPlaybackRequiresUserGesture: false,
+      allowsInlineMediaPlayback: true,
+      supportZoom: false,
+      iframeAllow: "camera; microphone",
+      iframeAllowFullscreen: true);
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +96,14 @@ class _WebViewState extends State<WebView> {
             ),
           );
         }
-        return multi_platform.CustomWebView(htmlText: fullHtml);
+        return InAppWebView(
+          key: webViewKey,
+          initialSettings: settings,
+          initialData: InAppWebViewInitialData(data: fullHtml),
+          onWebViewCreated: (controller) {
+            webViewController = controller;
+          },
+        );
       }),
       bottomNavigationBar: SafeArea(
         child: Container(
