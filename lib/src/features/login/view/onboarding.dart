@@ -209,7 +209,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     alignment: Alignment.bottomCenter,
                     child: TextButton(
                       onPressed: () {
-                        context.goNamed(CampaignRoute.name);
+                        context.goNamed(CampaignRoute.name, extra: true);
                       },
                       child: Text(context.loc.skip, style: textStyle),
                     ),

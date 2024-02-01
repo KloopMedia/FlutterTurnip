@@ -43,18 +43,12 @@ class AppRouter {
     final query = {...state.uri.queryParameters};
 
     final queryString = toQueryString(query, 'from');
-    final activeCampaign = _getActiveCampaign(context);
 
     if (state.uri.queryParameters['from'] != null) {
       return "${state.uri.queryParameters['from']}?$queryString";
-    } else if (activeCampaign != null) {
-      // if user has active campaign, then redirect to it.
-      return "${TaskRoute.path.replaceFirst(':cid', activeCampaign)}?$queryString";
-    } else if (query.isEmpty) {
+    } else {
       // if user comes from root path. Then keep staying on login page to show onboarding.
       return null;
-    } else {
-      return "$_initialLocation?$queryString";
     }
   }
 
