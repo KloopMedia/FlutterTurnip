@@ -73,6 +73,36 @@ class AuthenticationRepository {
     return await _firebaseAuth.signInWithPhoneNumber(phoneNumber);
   }
 
+  Future<void> deleteUserAccount() async {
+    await _reAuthenticateAndDelete();
+  }
+
+  Future<firebase_auth.UserCredential>? _reAuthenticateWithProvider(
+      firebase_auth.AuthProvider provider) {
+    if (kIsWeb) {
+      return _firebaseAuth.currentUser?.reauthenticateWithPopup(provider);
+    } else {
+      return _firebaseAuth.currentUser?.reauthenticateWithProvider(provider);
+    }
+  }
+
+  Future<void> _reAuthenticateAndDelete() async {
+    try {
+      final providerData = _firebaseAuth.currentUser?.providerData.first;
+
+      if (firebase_auth.AppleAuthProvider().providerId == providerData!.providerId) {
+        final userCredential = await _reAuthenticateWithProvider(firebase_auth.AppleAuthProvider());
+        String? authCode = userCredential?.additionalUserInfo?.authorizationCode;
+        await _firebaseAuth.revokeTokenWithAuthorizationCode(authCode!);
+      } else if (firebase_auth.GoogleAuthProvider().providerId == providerData.providerId) {
+        await _reAuthenticateWithProvider(firebase_auth.GoogleAuthProvider());
+      }
+    } catch (e) {
+      // Handle exceptions
+      print(e);
+    }
+  }
+
   Future<void> logOut() async {
     await Future.wait([
       _firebaseAuth.signOut(),

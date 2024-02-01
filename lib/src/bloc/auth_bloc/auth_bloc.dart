@@ -55,6 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final response = await _gigaTurnipApiClient.deleteUserInit();
     final pk = response.data['delete_pk'];
     await _gigaTurnipApiClient.deleteUser(pk, {"artifact": email});
+    await _authenticationRepository.deleteUserAccount();
     add(AuthLogoutRequested());
   }
 

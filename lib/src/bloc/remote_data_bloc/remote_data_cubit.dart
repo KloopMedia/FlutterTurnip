@@ -28,8 +28,7 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
         print(e);
         print(c);
       }
-      emit(RemoteDataFetchingError(e.toString()));
-      emit(state);
+      emit(RemoteDataFetchingError(e));
     }
   }
 
@@ -65,8 +64,11 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
         print(e);
         print(c);
       }
-      emit(RemoteDataRefetchingError.clone(state as RemoteDataInitialized<Data>, e.toString()));
-      // emit(state);
+      if (state is RemoteDataInitialized<Data>) {
+        emit(RemoteDataRefetchingError.clone(state as RemoteDataInitialized<Data>, e));
+      } else {
+        emit(RemoteDataFetchingError(e));
+      }
     }
   }
 
@@ -75,13 +77,12 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
     if (_state is RemoteDataLoaded<Data>) {
       emit(
         RemoteDataLoaded(
-          data: _state.data,
-          currentPage: _state.currentPage,
-          total: _state.total,
-          count: _state.count,
-          query: query,
-          body: body
-        ),
+            data: _state.data,
+            currentPage: _state.currentPage,
+            total: _state.total,
+            count: _state.count,
+            query: query,
+            body: body),
       );
     }
   }

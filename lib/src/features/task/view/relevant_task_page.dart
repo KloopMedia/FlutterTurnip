@@ -226,7 +226,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     )
                   ],
                   title: item.name,
-                  contentPadding: 20,
                   size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
                   flex: context.isSmall || context.isMedium ? 0 : 1,
                   bottom: Container(
@@ -240,7 +239,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           ),
                         ),
                         onPressed: () => context.read<ReactiveTasks>().createTask(item),
-                        child: Text(context.loc.creatable_task_assign_button),
+                        child: Text(
+                          item.takeTaskButtonText ?? context.loc.creatable_task_assign_button,
+                        ),
                       )),
                 );
               },

@@ -47,6 +47,7 @@ class TaskStage extends Equatable {
   final StageType stageType;
   final int openLimit;
   final int totalLimit;
+  final String? takeTaskButtonText;
 
 
   const TaskStage({
@@ -60,6 +61,7 @@ class TaskStage extends Equatable {
     required this.availableTo,
     required this.availableFrom,
     required this.stageType,
+    required this.takeTaskButtonText,
     this.openLimit = 0,
     this.totalLimit = 0,
   });
@@ -81,7 +83,8 @@ class TaskStage extends Equatable {
       availableFrom: model.availableFrom,
       stageType: convertStringToStageType(model.stageType),
       openLimit: model.rankLimit?['open_limit'] ?? 0,
-      totalLimit: model.rankLimit?['total_limit'] ?? 0
+      totalLimit: model.rankLimit?['total_limit'] ?? 0,
+      takeTaskButtonText: model.takeTaskButtonText,
     );
   }
 

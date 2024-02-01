@@ -1,12 +1,15 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/task/view/task_page.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utilities.dart';
 import 'routes.dart';
@@ -92,6 +95,11 @@ class TaskRoute {
         // if (createTaskId != null) {
         //   return CreateTaskPage(taskId: createTaskId);
         // }
+
+        final userId = context.read<AuthenticationRepository>().user.id;
+        context
+            .read<SharedPreferences>()
+            .setString('${Constants.sharedPrefActiveCampaignKey}_$userId', id);
 
         if (campaign != null && campaign is Campaign) {
           return TaskPage(campaignId: campaignId, campaign: campaign);

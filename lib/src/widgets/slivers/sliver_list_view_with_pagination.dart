@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+import '../error_box.dart';
+import '../widgets.dart';
 import 'pagination.dart';
 
 class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
@@ -29,10 +31,22 @@ class SliverListViewWithPagination<Data, Cubit extends RemoteDataCubit<Data>>
     return BlocBuilder<Cubit, RemoteDataState<Data>>(
       builder: (context, state) {
         if (state is RemoteDataLoading<Data> && showLoader) {
-          return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
+          return const SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         }
         if (state is RemoteDataFailed<Data>) {
-          return SliverToBoxAdapter(child: Center(child: Text(state.error)));
+          return SliverFillRemaining(
+            child: Center(
+              child: NetworkErrorBox(
+                state.error,
+                buttonText: 'Retry',
+                onPressed: () => context.read<Cubit>().refetch(),
+              ),
+            ),
+          );
         }
         if (state is RemoteDataInitialized<Data>) {
           if (state.data.isNotEmpty) {
