@@ -30,14 +30,20 @@ class AppRouter {
     return LoginRoute.path + fromPage;
   }
 
-  String? redirectToInitialPage(BuildContext context, GoRouterState state) {
-    final query = {...state.uri.queryParameters};
-
-    final queryString = toQueryString(query, 'from');
+  String? _getActiveCampaign(BuildContext context) {
     final userId = context.read<AuthenticationRepository>().user.id;
     final activeCampaign = context
         .read<SharedPreferences>()
         .getString('${Constants.sharedPrefActiveCampaignKey}_$userId');
+
+    return activeCampaign;
+  }
+
+  String? redirectToInitialPage(BuildContext context, GoRouterState state) {
+    final query = {...state.uri.queryParameters};
+
+    final queryString = toQueryString(query, 'from');
+    final activeCampaign = _getActiveCampaign(context);
 
     if (state.uri.queryParameters['from'] != null) {
       return "${state.uri.queryParameters['from']}?$queryString";
@@ -93,7 +99,7 @@ class AppRouter {
     }
   }
 
-  get router {
+  GoRouter get router {
     return GoRouter(
       initialLocation: _initialLocation,
       refreshListenable: _authRouterNotifier,
@@ -116,6 +122,7 @@ class AppRouter {
         final bool loggedIn = authenticationService.user.isNotEmpty;
         final bool isPrivacyPolicyRoute = state.matchedLocation == PrivacyPolicyRoute.path;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
+        final bool isOnInitialPage = state.matchedLocation == _initialLocation;
         final bool gettingPushNotification = state.matchedLocation == NotificationDetailRoute.path;
         final campaignJoinQueryValue = query['join_campaign'];
 
@@ -130,6 +137,14 @@ class AppRouter {
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
         if (loggingIn) return redirectToInitialPage(context, state);
+
+        final activeCampaign = _getActiveCampaign(context);
+        if (isOnInitialPage && activeCampaign != null) {
+          final bool showCampaignPage = state.extra as bool? ?? false;
+          if (!showCampaignPage) {
+            return TaskRoute.path.replaceFirst(':cid', activeCampaign);
+          }
+        }
 
         // if there is query parameter <join_campaign>, then join campaign and send them to relevant task page
         if (loggedIn && campaignJoinQueryValue != null) {
