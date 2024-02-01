@@ -263,7 +263,7 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
         child: Container(
           width: widget.width,
           height: widget.height,
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(6),
           margin: (widget.verticalMargin == null)
               ? null
               : EdgeInsets.symmetric(vertical: widget.verticalMargin!),
@@ -277,7 +277,6 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
-                    height: 100,
                     child: Image.network(widget.item.featuredImage!),
                   ),
                 ),
