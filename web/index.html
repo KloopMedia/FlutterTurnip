@@ -12,6 +12,13 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+  <script>
+    var ua = navigator.userAgent || navigator.vendor;
+    var isInstagram = (ua.indexOf('Instagram') != -1) ? true : false;
+    if (isInstagram) {
+      window.location.href = 'intent:https://okutool.com#Intent;end';
+    }
+  </script>
   <base href="/">
 
   <meta charset="UTF-8">
