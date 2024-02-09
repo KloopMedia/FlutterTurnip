@@ -28,8 +28,6 @@ class WebView extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebView> {
-  final GlobalKey webViewKey = GlobalKey();
-
   InAppWebViewController? webViewController;
   InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: kDebugMode,
@@ -138,19 +136,39 @@ class _WebViewState extends State<WebView> {
       return luma > 0.5 ? "black" : "white";
     }
 
-    Color? _parseColorFromString(String rgb) {
-      final start = rgb.indexOf('(');
-      final end = rgb.indexOf(')');
+    Color? _parseColorFromString(String color) {
+      final value = color.replaceFirst("#", "aa");
+      final parsedValue = int.tryParse(value, radix: 16);
+      if (parsedValue != null) {
+        return Color(parsedValue);
+      }
+
+      final start = color.indexOf('(');
+      final end = color.indexOf(')');
       if (start >= 0 && end >= 0) {
-        final colorList = rgb.substring(start + 1, end).split(',');
+        final colorList = color.substring(start + 1, end).split(',');
         final parsedColor = colorList.map((e) => int.parse(e)).toList();
         return Color.fromRGBO(parsedColor[0], parsedColor[1], parsedColor[2], 1);
       }
       return null;
     }
 
+    html.Element? _closest(html.Element element, String attribute, String selector) {
+      final parent = element.parent;
+      if (parent == null) {
+        return null;
+      }
+
+      final parentStyle = parent.getAttribute(attribute);
+      if (parentStyle?.contains(selector) ?? false) {
+        return parent;
+      } else {
+        return _closest(parent, attribute, selector);
+      }
+    }
+
     String calculateFontColor(html.Element element) {
-      final closestParentWithBackgroundColor = element.closest("[style*='background-color']");
+      final closestParentWithBackgroundColor = _closest(element, 'style', 'background-color');
       final backgroundColor = closestParentWithBackgroundColor?.style.backgroundColor ?? "";
       final parsedColor = _parseColorFromString(backgroundColor);
       if (parsedColor != null) {
@@ -206,7 +224,6 @@ class _WebViewState extends State<WebView> {
         final dataString = parsedData.documentElement?.innerHtml ?? "";
 
         return InAppWebView(
-          key: webViewKey,
           initialSettings: settings,
           initialData: InAppWebViewInitialData(data: dataString),
           onWebViewCreated: (controller) {
