@@ -93,6 +93,7 @@ class _WebViewState extends State<WebView> {
       <head>  
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         
         <style>
           body {
@@ -115,7 +116,19 @@ class _WebViewState extends State<WebView> {
             padding: 8px 16px;
           }
           
-          ${context.isSmall ? smallAudioPlayer : ""}  
+          .audioButton {
+            background-color: #04AA6D;
+            border: none;
+            color: white;
+            padding: 20px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size:24px;
+            margin: 4px 4px;
+            cursor: pointer;
+            border-radius: 10px;
+          }
         </style>
       </head>
       <body>
@@ -202,24 +215,28 @@ class _WebViewState extends State<WebView> {
           el.style.color = calculateFontColor(el);
         });
 
+        final displaySize = MediaQuery.of(context).size;
+        var iframeWidth = "100%";
+        var iframeHeight = "${displaySize.height * 9 / 16}px";
         parsedData.querySelectorAll("iframe").forEach((element) {
-          element.setAttribute("style", "width: 100%; aspect-ratio: 16 / 9;");
+          element.setAttribute("style", "width: $iframeWidth; height: $iframeHeight; aspect-ratio: 16 / 9;");
         });
 
-        // parsedData.querySelectorAll("audio").forEach((element) {
-        //   final audioButton = html.Element.tag('input')
-        //     ..attributes.addAll(
-        //       {
-        //         "type": "button",
-        //         "value": "sound",
-        //         "onclick": """
-        //       var music = new Audio('${element.attributes["src"]}');
-        //       music.play();
-        //       """
-        //       },
-        //     );
-        //   element.replaceWith(audioButton);
-        // });
+        parsedData.querySelectorAll("audio").forEach((element) {
+          // if (element.innerHtml == "short") {
+            final audioButton = html.Element.tag('button')
+              ..attributes.addAll(
+                {
+                  "class": "audioButton",
+                  "onclick": """
+              var music = new Audio('${element.attributes["src"]}');
+              music.play();
+              """
+                },
+              )..setInnerHtml("""<i class="fa-solid fa-volume-high"></i>""");
+            element.replaceWith(audioButton);
+          // }
+        });
 
         final dataString = parsedData.documentElement?.innerHtml ?? "";
 
