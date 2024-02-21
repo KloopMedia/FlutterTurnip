@@ -32,6 +32,8 @@ class TaskStageDetail {
   final List<Map<String, dynamic>>? filterFieldsSchema;
   final Map<String, dynamic>? rankLimit;
   final Map<String, dynamic>? quizAnswers;
+  final String? externalRendererUrl;
+
 
   TaskStageDetail({
     required this.id,
@@ -55,7 +57,8 @@ class TaskStageDetail {
     required this.availableFrom,
     required this.filterFieldsSchema,
     required this.quizAnswers,
-    this.rankLimit
+    this.rankLimit,
+    required this.externalRendererUrl,
   });
 
   factory TaskStageDetail.fromJson(Map<String, dynamic> json) {

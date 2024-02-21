@@ -48,6 +48,7 @@ class TaskStage extends Equatable {
   final int openLimit;
   final int totalLimit;
   final String? takeTaskButtonText;
+  final String? externalRendererUrl;
 
 
   const TaskStage({
@@ -62,6 +63,7 @@ class TaskStage extends Equatable {
     required this.availableFrom,
     required this.stageType,
     required this.takeTaskButtonText,
+    this.externalRendererUrl,
     this.openLimit = 0,
     this.totalLimit = 0,
   });
@@ -85,6 +87,7 @@ class TaskStage extends Equatable {
       openLimit: model.rankLimit?['open_limit'] ?? 0,
       totalLimit: model.rankLimit?['total_limit'] ?? 0,
       takeTaskButtonText: model.takeTaskButtonText,
+      externalRendererUrl: model.externalRendererUrl,
     );
   }
 

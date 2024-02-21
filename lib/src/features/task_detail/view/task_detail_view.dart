@@ -12,6 +12,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/utilities/download_service.dart';
 import 'package:gigaturnip/src/utilities/functions.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
+import 'package:gigaturnip/src/widgets/webview/webview_for_games.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -60,17 +61,28 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   void openWebView(BuildContext context) {
     final bloc = context.read<TaskBloc>();
     final state = bloc.state as TaskInitialized;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => WebView(
-          html: state.data.stage.richText,
-          allowOpenPrevious: state.data.stage.allowGoBack,
-          onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
-          onCloseCallback: () => bloc.add(CloseTask()),
-          onSubmitCallback: () => bloc.add(CloseTaskInfo()),
+    if (state.data.stage.externalRendererUrl != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => WebViewForGames(
+            url: state.data.stage.externalRendererUrl!,
+            onCloseCallback: () => bloc.add(CloseTask()),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => WebView(
+            html: state.data.stage.externalRendererUrl ?? state.data.stage.richText,
+            allowOpenPrevious: state.data.stage.allowGoBack,
+            onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
+            onCloseCallback: () => bloc.add(CloseTask()),
+            onSubmitCallback: () => bloc.add(CloseTaskInfo()),
+          ),
+        ),
+      );
+    }
   }
 
   void openOfflineDialog(BuildContext context, String phoneNumber, String message) {

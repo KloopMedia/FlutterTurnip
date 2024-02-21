@@ -47,47 +47,6 @@ class _WebViewState extends State<WebView> {
     final width = context.isSmall || context.isMedium ? '100%' : '70%';
     final backgroundColor = theme.isLight ? 'rgba(0, 0, 0, 1)' : 'rgba(196, 199, 199, 1)';
 
-    final smallAudioPlayer = """
-          audio {
-            width: 110px;
-            height: 40px;
-            animation: audioWidth 0.1s forwards;
-          }
-
-          auto::-webkit-media-controls-panel {
-            justify-content: center;
-          }
-          
-          audio::-webkit-media-controls-volume-slider {
-            display: none !important;
-            min-width: 0;
-          }
-          
-          audio::-webkit-media-controls-timeline-container {
-            display: none !important;
-            min-width: 0;
-          }
-          
-          audio::-webkit-media-controls-time-remaining-display {
-            display: none !important;
-            min-width: 0;
-          }
-          
-          audio::-webkit-media-controls-timeline {
-            display: none !important;
-            min-width: 0;
-          }
-          
-          @keyframes audioWidth {
-            from {
-              width: 110px;
-            }
-            to {
-              width: 84px;
-            }
-          }
-    """;
-
     final fullHtml = '''
     <html>
       <head>  

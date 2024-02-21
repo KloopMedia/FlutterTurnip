@@ -58,6 +58,8 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               'quiz_answers', (v) => v as Map<String, dynamic>?),
           rankLimit:
               $checkedConvert('rank_limit', (v) => v as Map<String, dynamic>?),
+          externalRendererUrl:
+              $checkedConvert('external_renderer_url', (v) => v as String?),
         );
         return val;
       },
@@ -78,6 +80,7 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         'availableFrom': 'available_from',
         'filterFieldsSchema': 'filter_fields_schema',
         'quizAnswers': 'quiz_answers',
-        'rankLimit': 'rank_limit'
+        'rankLimit': 'rank_limit',
+        'externalRendererUrl': 'external_renderer_url'
       },
     );

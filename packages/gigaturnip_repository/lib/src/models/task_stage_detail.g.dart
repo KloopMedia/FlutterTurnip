@@ -33,6 +33,7 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['availableFrom'] as String),
       quizAnswers: json['quizAnswers'] as Map<String, dynamic>?,
+      externalRendererUrl: json['externalRendererUrl'] as String?,
       openLimit: json['openLimit'] as int? ?? 0,
       totalLimit: json['totalLimit'] as int? ?? 0,
     );
@@ -58,4 +59,5 @@ Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
       'openLimit': instance.openLimit,
       'totalLimit': instance.totalLimit,
       'quizAnswers': instance.quizAnswers,
+      'externalRendererUrl': instance.externalRendererUrl,
     };
