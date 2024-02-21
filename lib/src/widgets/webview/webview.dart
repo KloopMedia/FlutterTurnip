@@ -99,6 +99,14 @@ class _WebViewState extends State<WebView> {
         <script>
           ${theme.isLight ? "" : 'document.body.classList.toggle("dark-mode");'}
         </script>
+        <script>
+          var audio = new Audio();
+          function playAudio(url) {
+            audio.pause();
+            audio = new Audio(url);
+            audio.play();
+          }
+        </script>
       </body>
     </html>
     ''';
@@ -187,10 +195,7 @@ class _WebViewState extends State<WebView> {
               ..attributes.addAll(
                 {
                   "class": "audioButton",
-                  "onclick": """
-              var music = new Audio('${element.attributes["src"]}');
-              music.play();
-              """
+                  "onclick": """playAudio('${element.attributes["src"]}');"""
                 },
               )..setInnerHtml("""<i class="fa-solid fa-volume-high"></i>""");
             element.replaceWith(audioButton);
