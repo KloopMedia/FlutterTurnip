@@ -121,7 +121,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         onTap: () => redirect(context, featuredList.first.id),
                       ),
                     ),
-                  if (kIsWeb && itemCount > 1 && itemCount < 4)
+                  if (!context.isSmall && itemCount > 1 && itemCount < 4)
                     Expanded(
                       child: Center(
                         child: ListView.separated(
@@ -132,8 +132,7 @@ class _OnBoardingState extends State<OnBoarding> {
                             return FeaturedCampaignCard(
                               item: item,
                               width: 200,
-                              height: 230,
-                              verticalMargin: 60,
+                              verticalMargin: 20,
                               onTap: () => redirect(context, item.id),
                             );
                           },
@@ -144,7 +143,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         ),
                       ),
                     ),
-                  if (kIsWeb && itemCount > 3)
+                  if (!context.isSmall && itemCount > 3)
                     Expanded(
                       child: GridView.builder(
                           padding: const EdgeInsets.symmetric(vertical: 24),
@@ -164,14 +163,13 @@ class _OnBoardingState extends State<OnBoarding> {
                             );
                           }),
                     ),
-                  if (!kIsWeb && itemCount == 2)
+                  if (context.isSmall && itemCount == 2)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           child: FeaturedCampaignCard(
                             item: featuredList[0],
-                            height: 230,
                             onTap: () => redirect(context, featuredList[0].id),
                           ),
                         ),
@@ -179,13 +177,12 @@ class _OnBoardingState extends State<OnBoarding> {
                         Expanded(
                           child: FeaturedCampaignCard(
                             item: featuredList[1],
-                            height: 230,
                             onTap: () => redirect(context, featuredList[1].id),
                           ),
                         ),
                       ],
                     ),
-                  if (!kIsWeb && itemCount > 2)
+                  if (context.isSmall && itemCount > 2)
                     Expanded(
                       child: GridView.builder(
                           padding: const EdgeInsets.symmetric(vertical: 24),
