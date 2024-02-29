@@ -58,7 +58,7 @@ class _WebViewState extends State<WebView> {
       #spacer {
         padding: 8px 16px;
       }
-      p, h1, h2, h3, h4, h5, em, li {
+      p, h1, h2, h3, h4, h5, li {
         color: $backgroundColor !important;
       }
       </style>  
