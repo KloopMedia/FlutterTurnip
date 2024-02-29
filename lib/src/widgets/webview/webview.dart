@@ -71,6 +71,10 @@ class _WebViewState extends State<WebView> {
             border-style: groove;
           }
           
+          p, h1, h2, h3, h4, h5, li {
+            color: $backgroundColor !important;
+          }
+          
           #spacer {
             padding: 8px 16px;
           }
