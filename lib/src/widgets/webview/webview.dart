@@ -79,6 +79,20 @@ class _WebViewState extends State<WebView> {
             padding: 8px 16px;
           }
           
+          table {
+            display: block;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            width: 100% !important;
+            height: auto !important;
+          }
+          
+          table tbody {
+            display: table;
+            width: 100% !important;
+          }
+          
           .audioButton {
             background-color: #04AA6D;
             border: none;
