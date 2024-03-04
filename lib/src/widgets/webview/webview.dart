@@ -71,10 +71,6 @@ class _WebViewState extends State<WebView> {
             border-style: groove;
           }
           
-          p, h1, h2, h3, h4, h5, li {
-            color: $backgroundColor !important;
-          }
-          
           #spacer {
             padding: 8px 16px;
           }
@@ -197,7 +193,9 @@ class _WebViewState extends State<WebView> {
         final parsedData = parseHtmlDocument(fullHtml);
 
         parsedData.querySelectorAll("span[style*='#000000']").forEach((el) {
-          el.style.color = calculateFontColor(el);
+          if (theme.isDark) {
+            el.style.color = calculateFontColor(el);
+          }
         });
 
         final displaySize = MediaQuery.of(context).size;
