@@ -60,11 +60,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final pk = response.data['delete_pk'];
       emit(DeletingAccount(state.user));
       await _gigaTurnipApiClient.deleteUser(pk, {"artifact": _authenticationRepository.user.id});
-      await _authenticationRepository.deleteUserAccount();
-      await _sharedPreferences.clear();
     } catch (e) {
       print(e);
-      emit(AuthState.unauthenticated());
+    }
+    try {
+      await _authenticationRepository.deleteUserAccount();
+    } on Exception catch (e) {
+      print(e);
+    }
+    try {
+      await _sharedPreferences.clear();
+    } on Exception catch (e) {
+      print(e);
     }
   }
 
