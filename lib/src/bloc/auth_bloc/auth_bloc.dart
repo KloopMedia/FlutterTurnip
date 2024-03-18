@@ -55,12 +55,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   // }
 
   void _onDeleteAccount(DeleteAccount event, Emitter<AuthState> emit) async {
+    emit(DeletingAccount(state.user));
+
     try {
       final response = await _gigaTurnipApiClient.deleteUserInit();
       final pk = response.data['delete_pk'];
-      emit(DeletingAccount(state.user));
       await _gigaTurnipApiClient.deleteUser(pk, {"artifact": _authenticationRepository.user.id});
     } catch (e) {
+      print(e);
+    }
+    try {
+      await _authenticationRepository.revokeToken();
+    } on Exception catch (e) {
       print(e);
     }
     try {

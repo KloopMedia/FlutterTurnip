@@ -74,7 +74,19 @@ class AuthenticationRepository {
   }
 
   Future<void> deleteUserAccount() async {
-    await _reAuthenticateAndDelete();
+    await _firebaseAuth.currentUser?.delete();
+  }
+
+  Future<void> revokeToken() async {
+    final providerData = _firebaseAuth.currentUser?.providerData.first;
+
+    if (firebase_auth.AppleAuthProvider().providerId == providerData!.providerId) {
+      final appleProvider = firebase_auth.AppleAuthProvider();
+      appleProvider.addScope("email");
+      final userCredential = await _reAuthenticateWithProvider(appleProvider);
+      String? authCode = userCredential?.additionalUserInfo?.authorizationCode;
+      await _firebaseAuth.revokeTokenWithAuthorizationCode(authCode!);
+    }
   }
 
   Future<firebase_auth.UserCredential>? _reAuthenticateWithProvider(
@@ -83,26 +95,6 @@ class AuthenticationRepository {
       return _firebaseAuth.currentUser?.reauthenticateWithPopup(provider);
     } else {
       return _firebaseAuth.currentUser?.reauthenticateWithProvider(provider);
-    }
-  }
-
-  Future<void> _reAuthenticateAndDelete() async {
-    try {
-      final providerData = _firebaseAuth.currentUser?.providerData.first;
-
-      if (firebase_auth.AppleAuthProvider().providerId == providerData!.providerId) {
-        final appleProvider = firebase_auth.AppleAuthProvider();
-        appleProvider.addScope("email");
-        final userCredential = await _reAuthenticateWithProvider(appleProvider);
-        String? authCode = userCredential?.additionalUserInfo?.authorizationCode;
-        await _firebaseAuth.revokeTokenWithAuthorizationCode(authCode!);
-        await _firebaseAuth.currentUser?.delete();
-      }
-    } catch (e) {
-      // Handle exceptions
-      if (kDebugMode) {
-        print("DELETE USER ERROR: $e");
-      }
     }
   }
 
