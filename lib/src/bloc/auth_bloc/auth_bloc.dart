@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_event.dart';
 
@@ -12,13 +13,16 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationRepository _authenticationRepository;
   final GigaTurnipApiClient _gigaTurnipApiClient;
+  final SharedPreferences _sharedPreferences;
   late final StreamSubscription<User> _userSubscription;
 
   AuthBloc({
     required GigaTurnipApiClient gigaTurnipApiClient,
     required AuthenticationRepository authenticationRepository,
+    required SharedPreferences sharedPreferences,
   })  : _authenticationRepository = authenticationRepository,
         _gigaTurnipApiClient = gigaTurnipApiClient,
+        _sharedPreferences = sharedPreferences,
         super(const AuthState.unauthenticated()) {
     on<_AuthUserChanged>(_onUserChanged);
     on<AuthLogoutRequested>(_onLogoutRequested);
@@ -51,12 +55,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   // }
 
   void _onDeleteAccount(DeleteAccount event, Emitter<AuthState> emit) async {
-    final email = state.user.email;
-    final response = await _gigaTurnipApiClient.deleteUserInit();
-    final pk = response.data['delete_pk'];
-    await _gigaTurnipApiClient.deleteUser(pk, {"artifact": email});
-    await _authenticationRepository.deleteUserAccount();
-    add(AuthLogoutRequested());
+    try {
+      final response = await _gigaTurnipApiClient.deleteUserInit();
+      final pk = response.data['delete_pk'];
+      emit(DeletingAccount(state.user));
+      await _gigaTurnipApiClient.deleteUser(pk, {"artifact": _authenticationRepository.user.id});
+      await _authenticationRepository.deleteUserAccount();
+      await _sharedPreferences.clear();
+    } catch (e) {
+      print(e);
+      emit(AuthState.unauthenticated());
+    }
   }
 
   @override

@@ -22,3 +22,7 @@ class AuthState extends Equatable {
   @override
   List<Object> get props => [status, user];
 }
+
+class DeletingAccount extends AuthState {
+  const DeletingAccount(User user) : super.authenticated(user);
+}

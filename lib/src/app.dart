@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gigaturnip/src/bloc/auth_bloc/auth_bloc.dart';
 import 'package:gigaturnip/src/bloc/localization_bloc/localization_bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/theme/theme.dart';
@@ -57,7 +58,15 @@ class _AppState extends State<App> {
         final MediaQueryData data = MediaQuery.of(context);
         return MediaQuery(
           data: data.copyWith(textScaler: const TextScaler.linear(0.9)),
-          child: child!,
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (BuildContext context, AuthState state) {
+              if (state is DeletingAccount) {
+                return const Scaffold(body: Center(child: CircularProgressIndicator()));
+              }
+
+              return child!;
+            },
+          ),
         );
       },
     );

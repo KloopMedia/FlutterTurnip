@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'models/user.dart';
@@ -91,15 +91,18 @@ class AuthenticationRepository {
       final providerData = _firebaseAuth.currentUser?.providerData.first;
 
       if (firebase_auth.AppleAuthProvider().providerId == providerData!.providerId) {
-        final userCredential = await _reAuthenticateWithProvider(firebase_auth.AppleAuthProvider());
+        final appleProvider = firebase_auth.AppleAuthProvider();
+        appleProvider.addScope("email");
+        final userCredential = await _reAuthenticateWithProvider(appleProvider);
         String? authCode = userCredential?.additionalUserInfo?.authorizationCode;
         await _firebaseAuth.revokeTokenWithAuthorizationCode(authCode!);
-      } else if (firebase_auth.GoogleAuthProvider().providerId == providerData.providerId) {
-        await _reAuthenticateWithProvider(firebase_auth.GoogleAuthProvider());
+        await _firebaseAuth.currentUser?.delete();
       }
     } catch (e) {
       // Handle exceptions
-      print(e);
+      if (kDebugMode) {
+        print("DELETE USER ERROR: $e");
+      }
     }
   }
 
