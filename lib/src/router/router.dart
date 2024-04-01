@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
@@ -23,11 +24,15 @@ class AppRouter {
   String redirectToLoginPage(BuildContext context, GoRouterState state) {
     final query = {...state.uri.queryParameters};
 
-    final queryString = toQueryString(query);
-    final fromPage = state.matchedLocation == _initialLocation
-        ? ''
-        : '?from=${state.matchedLocation}&$queryString';
-    return LoginRoute.path + fromPage;
+    if (kIsWeb) {
+      final queryString = toQueryString(query);
+      final fromPage = state.matchedLocation == _initialLocation
+          ? ''
+          : '?from=${state.matchedLocation}&$queryString';
+      return LoginRoute.path + fromPage;
+    } else {
+      return LoginRoute.path;
+    }
   }
 
   String? _getActiveCampaign(BuildContext context) {
