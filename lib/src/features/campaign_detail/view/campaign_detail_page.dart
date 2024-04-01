@@ -217,6 +217,7 @@ class _Content extends StatelessWidget {
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: theme.onPrimary,
                     backgroundColor: theme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
