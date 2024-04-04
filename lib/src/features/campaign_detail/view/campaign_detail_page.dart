@@ -66,65 +66,63 @@ class CampaignDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
-        listener: (context, state) async {
-          if (state is CampaignJoinSuccess) {
-            showDialog(
-                context: context,
-                builder: (context) => JoinCampaignDialog(
-                      title: context.loc.joined,
-                      content: context.loc.joined_campaigns,
-                      buttonText: context.loc.got_it,
-                    )).then((value) => redirectToTaskMenu(context, state.data.id));
-          }
-        },
-        builder: (context, state) {
-          if (state is CampaignFetching) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is CampaignFetchingError) {
-            return Center(child: Text(state.error));
-          }
-          if (state is CampaignJoinError) {
-            return Center(child: Text(state.error));
-          }
-          if (state is CampaignLoaded) {
-            final data = state.data;
+    return BlocConsumer<CampaignDetailBloc, CampaignDetailState>(
+      listener: (context, state) async {
+        if (state is CampaignJoinSuccess) {
+          showDialog(
+              context: context,
+              builder: (context) => JoinCampaignDialog(
+                    title: context.loc.joined,
+                    content: context.loc.joined_campaigns,
+                    buttonText: context.loc.got_it,
+                  )).then((value) => redirectToTaskMenu(context, state.data.id));
+        }
+      },
+      builder: (context, state) {
+        if (state is CampaignFetching) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is CampaignFetchingError) {
+          return Center(child: Text(state.error));
+        }
+        if (state is CampaignJoinError) {
+          return Center(child: Text(state.error));
+        }
+        if (state is CampaignLoaded) {
+          final data = state.data;
 
-            if (data.isJoined && isCampaignLink) {
-              redirectToTaskMenu(context, state.data.id);
-            } else {
-              return DefaultAppBar(
-                automaticallyImplyLeading: false,
-                title: const Text(''),
-                leading: [
-                  IconButton(
-                    onPressed: () =>
-                        context.canPop() ? context.pop() : redirectToCampaignPage(context),
-                    icon: const Icon(Icons.arrow_back_ios, size: 20),
-                  ),
-                ],
-                child: Stack(
-                  children: [
-                    _CampaignCard(data: state.data),
-                    if (state.data.logo.isNotEmpty)
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Image.network(state.data.logo),
-                        ),
-                      ),
-                  ],
+          if (data.isJoined && isCampaignLink) {
+            redirectToTaskMenu(context, state.data.id);
+          } else {
+            return DefaultAppBar(
+              automaticallyImplyLeading: false,
+              title: const Text(''),
+              leading: [
+                IconButton(
+                  onPressed: () =>
+                      context.canPop() ? context.pop() : redirectToCampaignPage(context),
+                  icon: const Icon(Icons.arrow_back_ios, size: 20),
                 ),
-              );
-            }
+              ],
+              child: Stack(
+                children: [
+                  _CampaignCard(data: state.data),
+                  if (state.data.logo.isNotEmpty)
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Image.network(state.data.logo),
+                      ),
+                    ),
+                ],
+              ),
+            );
           }
-          return const SizedBox.shrink();
-        },
-      ),
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }
@@ -219,6 +217,7 @@ class _Content extends StatelessWidget {
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: theme.onPrimary,
                     backgroundColor: theme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),

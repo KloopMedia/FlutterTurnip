@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:universal_html/parsing.dart';
+import "package:universal_html/html.dart" as html;
 
 class WebView extends StatefulWidget {
   final String htmlText;
@@ -26,16 +28,14 @@ class WebView extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebView> {
-  final GlobalKey webViewKey = GlobalKey();
-
   InAppWebViewController? webViewController;
   InAppWebViewSettings settings = InAppWebViewSettings(
-      isInspectable: kDebugMode,
-      mediaPlaybackRequiresUserGesture: false,
-      allowsInlineMediaPlayback: true,
-      supportZoom: false,
-      iframeAllow: "camera; microphone",
-      iframeAllowFullscreen: true);
+    isInspectable: kDebugMode,
+    mediaPlaybackRequiresUserGesture: false,
+    allowsInlineMediaPlayback: true,
+    supportZoom: false,
+    iframeAllowFullscreen: true,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +49,46 @@ class _WebViewState extends State<WebView> {
 
     final fullHtml = '''
     <html>
-      <style>  
-      #container {
-        margin: auto;
-        width: $width;
-        border-style: groove;
-      }
-      #spacer {
-        padding: 8px 16px;
-      }
-      body, span, p, h1, h2, h3, h4, h5 {
-        color: $backgroundColor !important;
-      }
-      </style>  
       <head>  
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        <style>
+          body {
+            background-color: white;
+            color: black;
+          }
+          
+          .dark-mode {
+            background-color: black;
+            color: white;
+          }
+          
+          #container {
+            margin: auto;
+            width: $width;
+            border-style: groove;
+          }
+          
+          #spacer {
+            padding: 8px 16px;
+          }
+          
+          .audioButton {
+            background-color: #04AA6D;
+            border: none;
+            color: white;
+            padding: 20px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size:24px;
+            margin: 4px 4px;
+            cursor: pointer;
+            border-radius: 10px;
+          }
+        </style>
       </head>
       <body>
         <div id="container">
@@ -73,9 +96,66 @@ class _WebViewState extends State<WebView> {
             ${widget.htmlText}
           </div>
         </div>
+        <script>
+          ${theme.isLight ? "" : 'document.body.classList.toggle("dark-mode");'}
+        </script>
+        <script>
+          var audio = new Audio();
+          function playAudio(url) {
+            audio.pause();
+            audio = new Audio(url);
+            audio.play();
+          }
+        </script>
       </body>
     </html>
     ''';
+
+    String _calculateColorFromBackgroundColor(Color color) {
+      double luma = ((0.299 * color.red) + (0.587 * color.green) + (0.114 * color.blue)) / 255;
+      return luma > 0.5 ? "black" : "white";
+    }
+
+    Color? _parseColorFromString(String color) {
+      final value = color.replaceFirst("#", "aa");
+      final parsedValue = int.tryParse(value, radix: 16);
+      if (parsedValue != null) {
+        return Color(parsedValue);
+      }
+
+      final start = color.indexOf('(');
+      final end = color.indexOf(')');
+      if (start >= 0 && end >= 0) {
+        final colorList = color.substring(start + 1, end).split(',');
+        final parsedColor = colorList.map((e) => int.parse(e)).toList();
+        return Color.fromRGBO(parsedColor[0], parsedColor[1], parsedColor[2], 1);
+      }
+      return null;
+    }
+
+    html.Element? _closest(html.Element element, String attribute, String selector) {
+      final parent = element.parent;
+      if (parent == null) {
+        return null;
+      }
+
+      final parentStyle = parent.getAttribute(attribute);
+      if (parentStyle?.contains(selector) ?? false) {
+        return parent;
+      } else {
+        return _closest(parent, attribute, selector);
+      }
+    }
+
+    String calculateFontColor(html.Element element) {
+      final closestParentWithBackgroundColor = _closest(element, 'style', 'background-color');
+      final backgroundColor = closestParentWithBackgroundColor?.style.backgroundColor ?? "";
+      final parsedColor = _parseColorFromString(backgroundColor);
+      if (parsedColor != null) {
+        return _calculateColorFromBackgroundColor(parsedColor);
+      }
+      return "white";
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -96,10 +176,39 @@ class _WebViewState extends State<WebView> {
             ),
           );
         }
+        final parsedData = parseHtmlDocument(fullHtml);
+
+        parsedData.querySelectorAll("span[style*='#000000']").forEach((el) {
+          if (theme.isDark) {
+            el.style.color = calculateFontColor(el);
+          }
+        });
+
+        final displaySize = MediaQuery.of(context).size;
+        var iframeWidth = "100%";
+        var iframeHeight = "${displaySize.height * 9 / 16}px";
+        parsedData.querySelectorAll("iframe").forEach((element) {
+          element.setAttribute("style", "width: $iframeWidth; height: $iframeHeight; aspect-ratio: 16 / 9;");
+        });
+
+        parsedData.querySelectorAll("audio").forEach((element) {
+          // if (element.innerHtml == "short") {
+            final audioButton = html.Element.tag('button')
+              ..attributes.addAll(
+                {
+                  "class": "audioButton",
+                  "onclick": """playAudio('${element.attributes["src"]}');"""
+                },
+              )..setInnerHtml("""<i class="fa-solid fa-volume-high"></i>""");
+            element.replaceWith(audioButton);
+          // }
+        });
+
+        final dataString = parsedData.documentElement?.innerHtml ?? "";
+
         return InAppWebView(
-          key: webViewKey,
           initialSettings: settings,
-          initialData: InAppWebViewInitialData(data: fullHtml),
+          initialData: InAppWebViewInitialData(data: dataString),
           onWebViewCreated: (controller) {
             webViewController = controller;
           },
@@ -108,9 +217,8 @@ class _WebViewState extends State<WebView> {
       bottomNavigationBar: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(
-            horizontal: context.isSmall || context.isMedium
-                ? 0
-                : MediaQuery.of(context).size.width / 5,
+            horizontal:
+                context.isSmall || context.isMedium ? 0 : MediaQuery.of(context).size.width / 5,
           ),
           padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
           child: Row(

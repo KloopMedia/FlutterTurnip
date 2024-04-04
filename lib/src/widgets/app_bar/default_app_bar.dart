@@ -43,64 +43,68 @@ class DefaultAppBar extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
     final formFactor = context.formFactor;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: backgroundColor ?? theme.background,
-        drawerEnableOpenDragGesture: false,
-        drawer: const AppDrawer(),
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        body: Builder(
-          builder: (context) {
-            if (formFactor == FormFactor.extraLarge) {
-              return Row(
-                children: [
-                  const AppDrawer(),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        _DefaultAppBar(
-                          title: title,
-                          leading: leading,
-                          actions: actions,
-                          subActions: subActions,
-                          middle: middle,
-                          bottom: bottom,
-                          automaticallyImplyLeading: false,
-                          color: color,
-                          boxShadow: boxShadow,
-                          titleSpacing: titleSpacing,
-                        ),
-                        Expanded(
-                          child: child,
-                        )
-                      ],
+    return Container(
+      color: theme.background,
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          backgroundColor: backgroundColor ?? theme.background,
+          drawerEnableOpenDragGesture: false,
+          drawer: const AppDrawer(),
+          floatingActionButton: floatingActionButton,
+          floatingActionButtonLocation: floatingActionButtonLocation,
+          body: Builder(
+            builder: (context) {
+              if (formFactor == FormFactor.extraLarge) {
+                return Row(
+                  children: [
+                    const AppDrawer(),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _DefaultAppBar(
+                            title: title,
+                            leading: leading,
+                            actions: actions,
+                            subActions: subActions,
+                            middle: middle,
+                            bottom: bottom,
+                            automaticallyImplyLeading: false,
+                            color: color,
+                            boxShadow: boxShadow,
+                            titleSpacing: titleSpacing,
+                          ),
+                          Expanded(
+                            child: child,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            } else {
-              return Column(
-                children: [
-                  _DefaultAppBar(
-                    title: title,
-                    leading: leading,
-                    actions: actions,
-                    subActions: subActions,
-                    middle: middle,
-                    bottom: bottom,
-                    automaticallyImplyLeading: automaticallyImplyLeading,
-                    color: color,
-                    boxShadow: boxShadow,
-                    titleSpacing: titleSpacing,
-                  ),
-                  Expanded(
-                    child: child,
-                  ),
-                ],
-              );
-            }
-          },
+                  ],
+                );
+              } else {
+                return Column(
+                  children: [
+                    _DefaultAppBar(
+                      title: title,
+                      leading: leading,
+                      actions: actions,
+                      subActions: subActions,
+                      middle: middle,
+                      bottom: bottom,
+                      automaticallyImplyLeading: automaticallyImplyLeading,
+                      color: color,
+                      boxShadow: boxShadow,
+                      titleSpacing: titleSpacing,
+                    ),
+                    Expanded(
+                      child: child,
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );

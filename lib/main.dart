@@ -69,6 +69,7 @@ Future<void> main() async {
             create: (_) => AuthBloc(
               authenticationRepository: authenticationRepository,
               gigaTurnipApiClient: gigaTurnipApiClient,
+              sharedPreferences: sharedPreferences,
             ),
           ),
           BlocProvider(

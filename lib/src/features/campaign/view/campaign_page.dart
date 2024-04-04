@@ -208,125 +208,123 @@ class _CampaignViewState extends State<CampaignView> {
                 final theme = Theme.of(context).colorScheme;
                 return DefaultTabController(
                   length: 2,
-                  child: SafeArea(
-                    child: DefaultAppBar(
-                      title: Text(context.loc.campaigns),
-                      actions: [
-                        IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                        FilterButton(
-                          queries: queries,
-                          onPressed: (selectedItems) {
-                            queries.clear();
-                            queryMap.clear();
-                            if (selectedItems.isNotEmpty) {
-                              for (var selectedItem in selectedItems) {
-                                if (selectedItem is Country) {
-                                  queryMap.addAll({'countries__name': selectedItem.name});
-                                  sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
-                                } else if (selectedItem is Category) {
-                                  queryMap.addAll({'categories': selectedItem.id});
-                                } else if (selectedItem is Language){
-                                  queryMap.addAll({'language__code': selectedItem.code});
-                                }
+                  child: DefaultAppBar(
+                    title: Text(context.loc.campaigns),
+                    actions: [
+                      IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                      FilterButton(
+                        queries: queries,
+                        onPressed: (selectedItems) {
+                          queries.clear();
+                          queryMap.clear();
+                          if (selectedItems.isNotEmpty) {
+                            for (var selectedItem in selectedItems) {
+                              if (selectedItem is Country) {
+                                queryMap.addAll({'countries__name': selectedItem.name});
+                                sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
+                              } else if (selectedItem is Category) {
+                                queryMap.addAll({'categories': selectedItem.id});
+                              } else if (selectedItem is Language){
+                                queryMap.addAll({'language__code': selectedItem.code});
                               }
-                              queries.addAll(selectedItems);
+                            }
+                            queries.addAll(selectedItems);
+                            _onFilterTapByQuery(queryMap);
+                          } else {
+                            sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
+                            _onFilterTapByQuery(queryMap);
+                          }
+                        },
+                        openCloseFilter: (openClose) {
+                          setState((){
+                            showFilters = openClose;
+                          });
+                      }),
+                    ],
+                    middle: CategoryFilterBarWidget(
+                      queries: queries,
+                      onChanged: (query) {
+                        _addSelectedCategoryToQueries(query!);
+                      },
+                    ),
+                    subActions: (showFilters)
+                      ? [
+                        WebFilter<Country, CountryCubit>(
+                          queries: queries,
+                          title: context.loc.country,
+                          onTap: (selectedItem) {
+                            if (selectedItem != null) {
+                              queries.removeWhere((item) => item is Country);
+                              queries.add(selectedItem);
+                              queryMap.addAll({'countries__name': selectedItem.name});
+                              sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
                               _onFilterTapByQuery(queryMap);
                             } else {
+                              queries.removeWhere((item) => item is Country);
+                              queryMap.removeWhere((key, value) => key =='countries__name');
                               sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
                               _onFilterTapByQuery(queryMap);
                             }
                           },
-                          openCloseFilter: (openClose) {
-                            setState((){
-                              showFilters = openClose;
-                            });
-                        }),
+                        ),
+                        WebFilter<Category, CategoryCubit>(
+                          queries: queries,
+                          title: context.loc.category,
+                          onTap: (selectedItem) {
+                            if (selectedItem != null) {
+                              queries.removeWhere((item) => item is Category);
+                              queries.add(selectedItem);
+                              queryMap.addAll({'categories': selectedItem.id});
+                              _onFilterTapByQuery(queryMap);
+                            } else {
+                              queries.removeWhere((item) => item is Category);
+                              queryMap.removeWhere((key, value) => key == 'categories');
+                              _onFilterTapByQuery(queryMap);
+                            }
+                          },
+                        ),
+                        WebFilter<Language, LanguageCubit>(
+                          queries: queries,
+                          title: context.loc.language,
+                          onTap: (selectedItem) {
+                            if (selectedItem != null) {
+                              queries.removeWhere((item) => item is Language);
+                              queries.add(selectedItem);
+                              queryMap.addAll({'language__code': selectedItem.code});
+                              _onFilterTapByQuery(queryMap);
+                            } else {
+                              queries.removeWhere((item) => item is Language);
+                              queryMap.removeWhere((key, value) => key == 'language__code');
+                              _onFilterTapByQuery(queryMap);
+                            }
+                          },
+                        ),
+                      ]
+                      : null,
+                    bottom: BaseTabBar(
+                      width: calculateTabWidth(context),
+                      border: context.formFactor == FormFactor.small
+                          ? Border(
+                              bottom: BorderSide(
+                                color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
+                                width: 2,
+                              ),
+                            )
+                          : null,
+                      tabs: [
+                        Tab(
+                          child: Text(context.loc.my_campaigns, overflow: TextOverflow.ellipsis),
+                        ),
+                        Tab(
+                          child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
+                        ),
                       ],
-                      middle: CategoryFilterBarWidget(
-                        queries: queries,
-                        onChanged: (query) {
-                          _addSelectedCategoryToQueries(query!);
-                        },
-                      ),
-                      subActions: (showFilters)
-                        ? [
-                          WebFilter<Country, CountryCubit>(
-                            queries: queries,
-                            title: context.loc.country,
-                            onTap: (selectedItem) {
-                              if (selectedItem != null) {
-                                queries.removeWhere((item) => item is Country);
-                                queries.add(selectedItem);
-                                queryMap.addAll({'countries__name': selectedItem.name});
-                                sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
-                                _onFilterTapByQuery(queryMap);
-                              } else {
-                                queries.removeWhere((item) => item is Country);
-                                queryMap.removeWhere((key, value) => key =='countries__name');
-                                sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
-                                _onFilterTapByQuery(queryMap);
-                              }
-                            },
-                          ),
-                          WebFilter<Category, CategoryCubit>(
-                            queries: queries,
-                            title: context.loc.category,
-                            onTap: (selectedItem) {
-                              if (selectedItem != null) {
-                                queries.removeWhere((item) => item is Category);
-                                queries.add(selectedItem);
-                                queryMap.addAll({'categories': selectedItem.id});
-                                _onFilterTapByQuery(queryMap);
-                              } else {
-                                queries.removeWhere((item) => item is Category);
-                                queryMap.removeWhere((key, value) => key == 'categories');
-                                _onFilterTapByQuery(queryMap);
-                              }
-                            },
-                          ),
-                          WebFilter<Language, LanguageCubit>(
-                            queries: queries,
-                            title: context.loc.language,
-                            onTap: (selectedItem) {
-                              if (selectedItem != null) {
-                                queries.removeWhere((item) => item is Language);
-                                queries.add(selectedItem);
-                                queryMap.addAll({'language__code': selectedItem.code});
-                                _onFilterTapByQuery(queryMap);
-                              } else {
-                                queries.removeWhere((item) => item is Language);
-                                queryMap.removeWhere((key, value) => key == 'language__code');
-                                _onFilterTapByQuery(queryMap);
-                              }
-                            },
-                          ),
-                        ]
-                        : null,
-                      bottom: BaseTabBar(
-                        width: calculateTabWidth(context),
-                        border: context.formFactor == FormFactor.small
-                            ? Border(
-                                bottom: BorderSide(
-                                  color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
-                                  width: 2,
-                                ),
-                              )
-                            : null,
-                        tabs: [
-                          Tab(
-                            child: Text(context.loc.my_campaigns, overflow: TextOverflow.ellipsis),
-                          ),
-                          Tab(
-                            child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
-                          ),
-                        ],
-                      ),
-                      child: const TabBarView(
-                        children: [
-                          UserCampaignView(),
-                          AvailableCampaignView(),
-                        ],
-                      ),
+                    ),
+                    child: const TabBarView(
+                      children: [
+                        UserCampaignView(),
+                        AvailableCampaignView(),
+                      ],
                     ),
                   ),
                 );

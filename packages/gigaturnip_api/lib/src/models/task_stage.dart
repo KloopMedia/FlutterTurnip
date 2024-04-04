@@ -20,6 +20,7 @@ class TaskStage {
   final String? stageType;
   final Map<String, int>? rankLimit;
   final String? takeTaskButtonText;
+  final String? externalRendererUrl;
 
   TaskStage({
     required this.id,
@@ -34,6 +35,7 @@ class TaskStage {
     required this.stageType,
     required this.rankLimit,
     required this.takeTaskButtonText,
+    required this.externalRendererUrl,
   });
 
   factory TaskStage.fromJson(Map<String, dynamic> json) {

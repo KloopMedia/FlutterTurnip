@@ -34,6 +34,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
                   )),
           takeTaskButtonText:
               $checkedConvert('take_task_button_text', (v) => v as String?),
+          externalRendererUrl:
+              $checkedConvert('external_renderer_url', (v) => v as String?),
         );
         return val;
       },
@@ -44,6 +46,7 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
         'availableFrom': 'available_from',
         'stageType': 'stage_type',
         'rankLimit': 'rank_limit',
-        'takeTaskButtonText': 'take_task_button_text'
+        'takeTaskButtonText': 'take_task_button_text',
+        'externalRendererUrl': 'external_renderer_url'
       },
     );

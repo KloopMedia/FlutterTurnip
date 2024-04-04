@@ -12,6 +12,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/utilities/download_service.dart';
 import 'package:gigaturnip/src/utilities/functions.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
+import 'package:gigaturnip/src/widgets/webview/webview_for_games.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -60,17 +61,28 @@ class _TaskDetailViewState extends State<TaskDetailView> {
   void openWebView(BuildContext context) {
     final bloc = context.read<TaskBloc>();
     final state = bloc.state as TaskInitialized;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => WebView(
-          html: state.data.stage.richText,
-          allowOpenPrevious: state.data.stage.allowGoBack,
-          onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
-          onCloseCallback: () => bloc.add(CloseTask()),
-          onSubmitCallback: () => bloc.add(CloseTaskInfo()),
+    if (state.data.stage.externalRendererUrl != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => WebViewForGames(
+            url: state.data.stage.externalRendererUrl!,
+            onCloseCallback: () => bloc.add(CloseTask()),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => WebView(
+            html: state.data.stage.externalRendererUrl ?? state.data.stage.richText,
+            allowOpenPrevious: state.data.stage.allowGoBack,
+            onOpenPreviousTask: () => bloc.add(GoBackToPreviousTask()),
+            onCloseCallback: () => bloc.add(CloseTask()),
+            onSubmitCallback: () => bloc.add(CloseTaskInfo()),
+          ),
+        ),
+      );
+    }
   }
 
   void openOfflineDialog(BuildContext context, String phoneNumber, String message) {
@@ -308,63 +320,61 @@ class _CurrentTask extends StatelessWidget {
     final taskBloc = context.read<TaskBloc>();
     final theme = Theme.of(context).colorScheme;
 
-    return SafeArea(
-      child: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FlutterJsonSchemaForm(
-            schema: task.schema ?? {},
-            uiSchema: task.uiSchema,
-            formData: task.responses,
-            disabled: task.complete,
-            pageStorageKey: pageStorageKey,
-            storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
-            onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
-            onSubmit: (formData) {
-              context.read<TaskBloc>().add(SubmitTask(formData));
-              scrollController.jumpTo(0);
-            },
-            onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
-            onDownloadFile: (url, filename, bytes) async {
-              var status =
-                  await DownloadService().download(url: url, filename: filename, bytes: bytes);
-              taskBloc.add(DownloadFile(status!));
-              return status;
-            },
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            locale: context.read<LocalizationBloc>().state.locale,
-            correctFormData: task.stage.quizAnswers,
-            showCorrectFields: task.complete,
-            extraButtons: [
-              if (showAnswers)
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    backgroundColor: theme.primary,
-                    foregroundColor: theme.isLight ? Colors.white : Colors.black,
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FlutterJsonSchemaForm(
+          schema: task.schema ?? {},
+          uiSchema: task.uiSchema,
+          formData: task.responses,
+          disabled: task.complete,
+          pageStorageKey: pageStorageKey,
+          storage: generateStorageReference(task, context.read<AuthenticationRepository>().user),
+          onChange: (formData, path) => context.read<TaskBloc>().add(UpdateTask(formData)),
+          onSubmit: (formData) {
+            context.read<TaskBloc>().add(SubmitTask(formData));
+            scrollController.jumpTo(0);
+          },
+          onWebhookTrigger: () => context.read<TaskBloc>().add(TriggerWebhook()),
+          onDownloadFile: (url, filename, bytes) async {
+            var status =
+                await DownloadService().download(url: url, filename: filename, bytes: bytes);
+            taskBloc.add(DownloadFile(status!));
+            return status;
+          },
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          locale: context.read<LocalizationBloc>().state.locale,
+          correctFormData: task.stage.quizAnswers,
+          showCorrectFields: task.complete,
+          extraButtons: [
+            if (showAnswers)
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  onPressed: redirect,
-                  child: Text(context.loc.form_submit_button),
+                  backgroundColor: theme.primary,
+                  foregroundColor: theme.isLight ? Colors.white : Colors.black,
                 ),
-              if (task.stage.allowGoBack)
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      width: 1,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                onPressed: redirect,
+                child: Text(context.loc.form_submit_button),
+              ),
+            if (task.stage.allowGoBack)
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    width: 1,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: () => taskBloc.add(GoBackToPreviousTask()),
-                  child: Text(context.loc.go_back_to_previous_task),
-                )
-            ],
-          ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                onPressed: () => taskBloc.add(GoBackToPreviousTask()),
+                child: Text(context.loc.go_back_to_previous_task),
+              )
+          ],
         ),
       ),
     );

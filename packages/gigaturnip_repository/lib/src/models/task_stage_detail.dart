@@ -25,6 +25,7 @@ class TaskStageDetail extends Equatable {
   final int openLimit;
   final int totalLimit;
   final Map<String, dynamic>? quizAnswers;
+  final String? externalRendererUrl;
 
 
   const TaskStageDetail({
@@ -45,6 +46,7 @@ class TaskStageDetail extends Equatable {
     required this.availableTo,
     required this.availableFrom,
     required this.quizAnswers,
+    required this.externalRendererUrl,
     this.openLimit = 0,
     this.totalLimit = 0,
   });
@@ -73,7 +75,8 @@ class TaskStageDetail extends Equatable {
       availableFrom: model.availableFrom,
       quizAnswers: model.quizAnswers,
       openLimit: model.rankLimit?['open_limit'] ?? 0,
-      totalLimit: model.rankLimit?['total_limit'] ?? 0
+      totalLimit: model.rankLimit?['total_limit'] ?? 0,
+      externalRendererUrl: model.externalRendererUrl,
     );
   }
 
