@@ -155,12 +155,13 @@ class NotificationListItem extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          "${localTime.hour}:${localTime.minute}",
+          DateFormat("Hm").format(localTime),
           style: const TextStyle(
-              color: Color(0xFFAEAEAE),
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Inter"),
+            color: Color(0xFFAEAEAE),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            fontFamily: "Inter",
+          ),
         )
       ],
     );
