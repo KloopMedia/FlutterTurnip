@@ -15,6 +15,21 @@ abstract class NotificationRepository extends GigaTurnipRepository<Notification>
   }
 }
 
+class AllNotificationRepository extends NotificationRepository {
+  AllNotificationRepository({required super.gigaTurnipApiClient, required super.campaignId});
+
+  @override
+  Future<api.PaginationWrapper<Notification>> fetchAndParseData(
+      {Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getUserNotifications(query: {
+      'campaign': campaignId,
+      ...?query,
+    });
+
+    return data.copyWith<Notification>(results: parseData(data.results));
+  }
+}
+
 class ClosedNotificationRepository extends NotificationRepository {
   ClosedNotificationRepository({required super.gigaTurnipApiClient, required super.campaignId});
 
