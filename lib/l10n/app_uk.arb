@@ -191,5 +191,6 @@
 	"settings_ranks": "Ранги",
 	"settings_messages": "Сообщения",
 
-	"chains": "Цепочки"
+	"chains": "Цепочки",
+	"no_notifications": "Нічого не знайдено"
 }

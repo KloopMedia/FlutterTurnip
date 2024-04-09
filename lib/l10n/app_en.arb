@@ -191,5 +191,6 @@
 	"settings_ranks": "Ranks",
 	"settings_messages": "Messages",
 
-	"chains": "Chains"
+	"chains": "Chains",
+	"no_notifications": "No items found"
 }
