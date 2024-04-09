@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -35,6 +37,8 @@ class _WebViewState extends State<WebView> {
     allowsInlineMediaPlayback: true,
     supportZoom: false,
     iframeAllowFullscreen: true,
+    supportMultipleWindows: true,
+    javaScriptCanOpenWindowsAutomatically: true,
   );
 
   @override
@@ -209,6 +213,11 @@ class _WebViewState extends State<WebView> {
         return InAppWebView(
           initialSettings: settings,
           initialData: InAppWebViewInitialData(data: dataString),
+          onCreateWindow: (controller, action) async {
+            if (Platform.isAndroid) {
+              await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
+            }
+          },
           onWebViewCreated: (controller) {
             webViewController = controller;
           },
