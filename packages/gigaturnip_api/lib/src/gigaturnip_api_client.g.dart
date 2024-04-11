@@ -1046,6 +1046,32 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
+  Future<void> readAllNotifications({Map<String, dynamic>? query}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(query ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'notifications/read_all_notifications/',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
   Future<Notification> getNotificationById(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

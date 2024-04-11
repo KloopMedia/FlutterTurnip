@@ -38,6 +38,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     context.read<ReactiveTasks>().refetch();
     context.read<ProactiveTasks>().refetch();
     context.read<IndividualChainCubit>().refetch();
+    context.read<OpenNotificationCubit>().refetch();
   }
 
   void redirectToTask(BuildContext context, Task task) async {

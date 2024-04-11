@@ -43,6 +43,7 @@ const reopenTaskActionRoute = 'uncomplete/';
 // Notifications routes
 const notificationsRoute = 'notifications/';
 const userNotificationsRoute = '${notificationsRoute}list_user_notifications/';
+const readAllNotificationRoute = '${notificationsRoute}read_all_notifications/';
 
 // Notifications actions
 const openNotificationActionRoute = 'open_notification/';

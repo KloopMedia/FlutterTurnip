@@ -151,6 +151,11 @@ abstract class GigaTurnipApiClient {
     @Queries() Map<String, dynamic>? query,
   });
 
+  @GET(readAllNotificationRoute)
+  Future<void> readAllNotifications({
+    @Queries() Map<String, dynamic>? query,
+  });
+
   @GET("$notificationsRoute/{id}")
   Future<Notification> getNotificationById(@Path("id") int id);
 

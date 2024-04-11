@@ -30,6 +30,7 @@ class _NotificationPageState extends State<NotificationPage> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    _markAsRead();
     super.initState();
   }
 
@@ -53,6 +54,18 @@ class _NotificationPageState extends State<NotificationPage> {
         final nextPageKey = pageKey + results.length;
         _pagingController.appendPage(results, nextPageKey);
       }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  Future<void> _markAsRead() async {
+    try {
+      final client = context.read<api.GigaTurnipApiClient>();
+
+      await client.readAllNotifications(query: {
+        'campaign': widget.campaignId,
+      });
     } catch (error) {
       _pagingController.error = error;
     }
