@@ -33,23 +33,21 @@ class _WebViewState extends State<WebView> {
   InAppWebViewController? webViewController;
   InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: kDebugMode,
-    mediaPlaybackRequiresUserGesture: false,
+    mediaPlaybackRequiresUserGesture: true,
     allowsInlineMediaPlayback: true,
-    supportZoom: false,
+    supportZoom: true,
     iframeAllowFullscreen: true,
     supportMultipleWindows: true,
     javaScriptCanOpenWindowsAutomatically: true,
+
   );
 
-  @override
-  Widget build(BuildContext context) {
-    final onClose = widget.onCloseCallback;
-    final onSubmit = widget.onSubmitCallback;
-    final onPrevious = widget.onOpenPreviousTask;
-    final theme = Theme.of(context).colorScheme;
+  late String _data;
 
+  @override
+  void didChangeDependencies() {
+    final theme = Theme.of(context).colorScheme;
     final width = context.isSmall || context.isMedium ? '100%' : '70%';
-    final backgroundColor = theme.isLight ? 'rgba(0, 0, 0, 1)' : 'rgba(196, 199, 199, 1)';
 
     final fullHtml = '''
     <html>
@@ -115,51 +113,106 @@ class _WebViewState extends State<WebView> {
     </html>
     ''';
 
-    String _calculateColorFromBackgroundColor(Color color) {
-      double luma = ((0.299 * color.red) + (0.587 * color.green) + (0.114 * color.blue)) / 255;
-      return luma > 0.5 ? "black" : "white";
+    final parsedData = parseHtmlDocument(fullHtml);
+
+    parsedData.querySelectorAll("span[style*='#000000']").forEach((el) {
+      if (theme.isDark) {
+        el.style.color = calculateFontColor(el);
+      }
+    });
+
+    final displaySize = MediaQuery.of(context).size;
+    var iframeWidth = "100%";
+    var iframeHeight = "${displaySize.height * 9 / 16}px";
+    parsedData.querySelectorAll("iframe").forEach((element) {
+      element.setAttribute(
+          "style", "width: $iframeWidth; height: $iframeHeight; aspect-ratio: 16 / 9;");
+    });
+
+    parsedData.querySelectorAll("audio").forEach((element) {
+      // if (element.innerHtml == "short") {
+      final audioButton = html.Element.tag('button')
+        ..attributes.addAll(
+          {"class": "audioButton", "onclick": """playAudio('${element.attributes["src"]}');"""},
+        )
+        ..setInnerHtml("""<i class="fa-solid fa-volume-high"></i>""");
+      element.replaceWith(audioButton);
+      // }
+    });
+
+    parsedData.querySelectorAll("img").forEach((element) {
+      print(element.attributes);
+      final link = html.Element.a();
+      link.setAttribute("href", element.attributes['src'] ?? "");
+
+      final imageWidth = double.tryParse(element.attributes['width'] ?? "");
+      if (imageWidth != null && imageWidth > displaySize.width) {
+        element.setAttribute('width', '100%');
+        element.setAttribute('height', 'auto');
+      }
+
+      link.appendHtml(element.outerHtml!, treeSanitizer: html.NodeTreeSanitizer.trusted);
+      element.replaceWith(link);
+    });
+
+    _data = parsedData.documentElement?.innerHtml ?? "";
+
+    super.didChangeDependencies();
+  }
+
+  String _calculateColorFromBackgroundColor(Color color) {
+    double luma = ((0.299 * color.red) + (0.587 * color.green) + (0.114 * color.blue)) / 255;
+    return luma > 0.5 ? "black" : "white";
+  }
+
+  Color? _parseColorFromString(String color) {
+    final value = color.replaceFirst("#", "aa");
+    final parsedValue = int.tryParse(value, radix: 16);
+    if (parsedValue != null) {
+      return Color(parsedValue);
     }
 
-    Color? _parseColorFromString(String color) {
-      final value = color.replaceFirst("#", "aa");
-      final parsedValue = int.tryParse(value, radix: 16);
-      if (parsedValue != null) {
-        return Color(parsedValue);
-      }
+    final start = color.indexOf('(');
+    final end = color.indexOf(')');
+    if (start >= 0 && end >= 0) {
+      final colorList = color.substring(start + 1, end).split(',');
+      final parsedColor = colorList.map((e) => int.parse(e)).toList();
+      return Color.fromRGBO(parsedColor[0], parsedColor[1], parsedColor[2], 1);
+    }
+    return null;
+  }
 
-      final start = color.indexOf('(');
-      final end = color.indexOf(')');
-      if (start >= 0 && end >= 0) {
-        final colorList = color.substring(start + 1, end).split(',');
-        final parsedColor = colorList.map((e) => int.parse(e)).toList();
-        return Color.fromRGBO(parsedColor[0], parsedColor[1], parsedColor[2], 1);
-      }
+  html.Element? _closest(html.Element element, String attribute, String selector) {
+    final parent = element.parent;
+    if (parent == null) {
       return null;
     }
 
-    html.Element? _closest(html.Element element, String attribute, String selector) {
-      final parent = element.parent;
-      if (parent == null) {
-        return null;
-      }
-
-      final parentStyle = parent.getAttribute(attribute);
-      if (parentStyle?.contains(selector) ?? false) {
-        return parent;
-      } else {
-        return _closest(parent, attribute, selector);
-      }
+    final parentStyle = parent.getAttribute(attribute);
+    if (parentStyle?.contains(selector) ?? false) {
+      return parent;
+    } else {
+      return _closest(parent, attribute, selector);
     }
+  }
 
-    String calculateFontColor(html.Element element) {
-      final closestParentWithBackgroundColor = _closest(element, 'style', 'background-color');
-      final backgroundColor = closestParentWithBackgroundColor?.style.backgroundColor ?? "";
-      final parsedColor = _parseColorFromString(backgroundColor);
-      if (parsedColor != null) {
-        return _calculateColorFromBackgroundColor(parsedColor);
-      }
-      return "white";
+  String calculateFontColor(html.Element element) {
+    final closestParentWithBackgroundColor = _closest(element, 'style', 'background-color');
+    final backgroundColor = closestParentWithBackgroundColor?.style.backgroundColor ?? "";
+    final parsedColor = _parseColorFromString(backgroundColor);
+    if (parsedColor != null) {
+      return _calculateColorFromBackgroundColor(parsedColor);
     }
+    return "white";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final onSubmit = widget.onSubmitCallback;
+    final onPrevious = widget.onOpenPreviousTask;
+    final onClose = widget.onCloseCallback;
+
+    final theme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -180,46 +233,19 @@ class _WebViewState extends State<WebView> {
             ),
           );
         }
-        final parsedData = parseHtmlDocument(fullHtml);
-
-        parsedData.querySelectorAll("span[style*='#000000']").forEach((el) {
-          if (theme.isDark) {
-            el.style.color = calculateFontColor(el);
-          }
-        });
-
-        final displaySize = MediaQuery.of(context).size;
-        var iframeWidth = "100%";
-        var iframeHeight = "${displaySize.height * 9 / 16}px";
-        parsedData.querySelectorAll("iframe").forEach((element) {
-          element.setAttribute("style", "width: $iframeWidth; height: $iframeHeight; aspect-ratio: 16 / 9;");
-        });
-
-        parsedData.querySelectorAll("audio").forEach((element) {
-          // if (element.innerHtml == "short") {
-            final audioButton = html.Element.tag('button')
-              ..attributes.addAll(
-                {
-                  "class": "audioButton",
-                  "onclick": """playAudio('${element.attributes["src"]}');"""
-                },
-              )..setInnerHtml("""<i class="fa-solid fa-volume-high"></i>""");
-            element.replaceWith(audioButton);
-          // }
-        });
-
-        final dataString = parsedData.documentElement?.innerHtml ?? "";
 
         return InAppWebView(
           initialSettings: settings,
-          initialData: InAppWebViewInitialData(data: dataString),
+          initialData: InAppWebViewInitialData(data: _data),
           onCreateWindow: (controller, action) async {
             if (Platform.isAndroid) {
               await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
             }
           },
           onWebViewCreated: (controller) {
-            webViewController = controller;
+            setState(() {
+              webViewController = controller;
+            });
           },
         );
       }),
