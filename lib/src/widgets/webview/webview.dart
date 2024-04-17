@@ -39,7 +39,6 @@ class _WebViewState extends State<WebView> {
     iframeAllowFullscreen: true,
     supportMultipleWindows: true,
     javaScriptCanOpenWindowsAutomatically: true,
-
   );
 
   late String _data;
@@ -55,6 +54,7 @@ class _WebViewState extends State<WebView> {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         
         <style>
           body {
@@ -77,7 +77,7 @@ class _WebViewState extends State<WebView> {
             padding: 8px 16px;
           }
           
-          .audioButton {
+          .player-button {
             background-color: #04AA6D;
             border: none;
             color: white;
@@ -89,6 +89,10 @@ class _WebViewState extends State<WebView> {
             margin: 4px 4px;
             cursor: pointer;
             border-radius: 10px;
+          }
+          
+          .pause-icon {
+            background: red;
           }
         </style>
       </head>
@@ -102,13 +106,27 @@ class _WebViewState extends State<WebView> {
           ${theme.isLight ? "" : 'document.body.classList.toggle("dark-mode");'}
         </script>
         <script>
-          var audio = new Audio();
-          function playAudio(url) {
-            audio.pause();
-            audio = new Audio(url);
-            audio.play();
-          }
-        </script>
+          ${r"""$(document).ready(function(){
+            $(document).on('click' , '.player-button' , function(){
+              var This_Button = $(this),
+                  This_audio = $(this).parent().find('audio')[0];
+           
+              This_Button.toggleClass('fa-volume-high fa-stop pause-icon');
+              if (This_audio.paused) 
+              {
+                This_audio.play();
+              } 
+              else {
+              This_audio.pause();
+              This_audio.currentTime = 0;
+              }
+            })
+          });
+      
+          function on_playing_ended(el){
+            $(el).parent().find('.player-button').toggleClass('fa-volume-high fa-stop pause-icon');
+          }"""}
+      </script>
       </body>
     </html>
     ''';
@@ -130,18 +148,15 @@ class _WebViewState extends State<WebView> {
     });
 
     parsedData.querySelectorAll("audio").forEach((element) {
-      // if (element.innerHtml == "short") {
-      final audioButton = html.Element.tag('button')
-        ..attributes.addAll(
-          {"class": "audioButton", "onclick": """playAudio('${element.attributes["src"]}');"""},
-        )
-        ..setInnerHtml("""<i class="fa-solid fa-volume-high"></i>""");
-      element.replaceWith(audioButton);
-      // }
+      element.replaceWith(html.Element.html("""
+      <div class="">
+        <audio class="player" src="${element.attributes["src"]}" onended="on_playing_ended(this);"></audio>
+        <div class="player-button fa-solid fa-volume-high"></div>
+      </div>
+      """, treeSanitizer: html.NodeTreeSanitizer.trusted));
     });
 
     parsedData.querySelectorAll("img").forEach((element) {
-      print(element.attributes);
       final link = html.Element.a();
       link.setAttribute("href", element.attributes['src'] ?? "");
 

@@ -65,7 +65,7 @@ dependencies:
   permission_handler: ^11.0.0
   rxdart: ^0.27.7
   sliver_tools: ^0.2.9
-  universal_html: ^2.2.1
+  universal_html: ^2.2.4
   path_provider: ^2.0.14
   dio: ^5.1.1
   pinput: ^3.0.1
