@@ -148,12 +148,14 @@ class _WebViewState extends State<WebView> {
     });
 
     parsedData.querySelectorAll("audio").forEach((element) {
-      element.replaceWith(html.Element.html("""
+      if (!(element.innerHtml?.trim().contains(RegExp('/fullsize/')) ?? false)) {
+        element.replaceWith(html.Element.html("""
       <div class="">
         <audio class="player" src="${element.attributes["src"]}" onended="on_playing_ended(this);"></audio>
         <div class="player-button fa-solid fa-volume-high"></div>
       </div>
       """, treeSanitizer: html.NodeTreeSanitizer.trusted));
+      }
     });
 
     parsedData.querySelectorAll("img").forEach((element) {
