@@ -42,6 +42,7 @@ class _WebViewState extends State<WebView> {
   );
 
   late String _data;
+  final List<WebUri> _history = [];
 
   @override
   void didChangeDependencies() {
@@ -235,9 +236,19 @@ class _WebViewState extends State<WebView> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            Navigator.of(context).pop();
-            if (onClose != null) {
-              onClose();
+            if (_history.isNotEmpty) {
+              _history.removeLast();
+              if (_history.isNotEmpty) {
+                final lastPage = _history.last;
+                webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage));
+              } else {
+                webViewController?.loadData(data: _data);
+              }
+            } else {
+              Navigator.of(context).pop();
+              if (onClose != null) {
+                onClose();
+              }
             }
           },
         ),
@@ -263,6 +274,13 @@ class _WebViewState extends State<WebView> {
             setState(() {
               webViewController = controller;
             });
+          },
+          onLoadStop: (controller, uri) {
+            if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
+              setState(() {
+                _history.add(uri);
+              });
+            }
           },
         );
       }),
