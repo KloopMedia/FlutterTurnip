@@ -52,9 +52,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
     }
     final task = state;
-    if (task is TaskInitialized && (task.data.stage.richText?.isNotEmpty ?? false)) {
-      add(OpenTaskInfo());
-    }
+    try {
+      if (task is TaskInitialized) {
+        final richText = task.data.stage.richText;
+        final externalUrl = task.data.stage.externalRendererUrl;
+
+        if (richText!.isNotEmpty || externalUrl!.isNotEmpty) {
+          add(OpenTaskInfo());
+        }
+      }
+    } catch (e) {}
   }
 
   Future<void> _onUpdateTask(UpdateTask event, Emitter<TaskState> emit) async {
