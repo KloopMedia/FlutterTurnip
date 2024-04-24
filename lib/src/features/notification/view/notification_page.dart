@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
@@ -7,6 +8,7 @@ import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/no_items_found_indicator.dart';
 
@@ -161,9 +163,14 @@ class NotificationListItem extends StatelessWidget {
             color: const Color(0xFFF2F4F4),
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Text(
-            notification.text,
+          child: Linkify(
+            text: notification.text,
             style: const TextStyle(fontSize: 18),
+            onOpen: (link) async {
+              if (!await launchUrl(Uri.parse(link.url))) {
+                throw Exception('Could not launch ${link.url}');
+              }
+            },
           ),
         ),
         const SizedBox(height: 10),
