@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -149,7 +150,10 @@ class _WebViewState extends State<WebView> {
     });
 
     parsedData.querySelectorAll("audio").forEach((element) {
-      if (!(element.innerHtml?.trim().contains(RegExp('/fullsize/')) ?? false)) {
+      final audioInnerHtml = element.innerHtml?.trim();
+      final isFullSize =  audioInnerHtml == 'fullsize';
+
+      if (!isFullSize) {
         element.replaceWith(html.Element.html("""
       <div class="">
         <audio class="player" src="${element.attributes["src"]}" onended="on_playing_ended(this);"></audio>
