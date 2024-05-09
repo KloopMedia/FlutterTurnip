@@ -192,5 +192,7 @@
 	"settings_messages": "Сообщения",
 
 	"chains": "Цепочки",
-	"no_notifications": "Ничего не найдено"
+	"no_notifications": "Ничего не найдено",
+
+	"webview_return_to_lesson": "Вернуться к уроку"
 }

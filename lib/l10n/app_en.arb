@@ -192,5 +192,7 @@
 	"settings_messages": "Messages",
 
 	"chains": "Chains",
-	"no_notifications": "No items found"
+	"no_notifications": "No items found",
+
+	"webview_return_to_lesson": "Back to the lesson"
 }

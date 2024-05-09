@@ -192,5 +192,7 @@
 	"settings_messages": "Сообщения",
 
 	"chains": "Цепочки",
-	"no_notifications": "Эч нерсе табылган жок"
+	"no_notifications": "Эч нерсе табылган жок",
+
+	"webview_return_to_lesson": "Сабакка кайтуу"
 }

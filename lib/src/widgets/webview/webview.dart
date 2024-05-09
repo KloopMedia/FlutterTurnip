@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -151,7 +150,7 @@ class _WebViewState extends State<WebView> {
 
     parsedData.querySelectorAll("audio").forEach((element) {
       final audioInnerHtml = element.innerHtml?.trim();
-      final isFullSize =  audioInnerHtml == 'fullsize';
+      final isFullSize = audioInnerHtml == 'fullsize';
 
       if (!isFullSize) {
         element.replaceWith(html.Element.html("""
@@ -166,6 +165,9 @@ class _WebViewState extends State<WebView> {
     parsedData.querySelectorAll("img").forEach((element) {
       final link = html.Element.a();
       link.setAttribute("href", element.attributes['src'] ?? "");
+      if (kIsWeb) {
+        link.setAttribute("target", "_blank");
+      }
 
       final imageWidth = double.tryParse(element.attributes['width'] ?? "");
       if (imageWidth != null && imageWidth > displaySize.width) {
@@ -228,123 +230,141 @@ class _WebViewState extends State<WebView> {
     return "white";
   }
 
+  void goBack(VoidCallback callback) {
+    if (_history.isNotEmpty) {
+      setState(() {
+        _history.removeLast();
+      });
+      if (_history.isNotEmpty) {
+        final lastPage = _history.last;
+        webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage));
+      } else {
+        webViewController?.loadData(data: _data);
+      }
+    } else {
+      callback();
+    }
+  }
+
+  void goBackOrClose() {
+    goBack(() {
+      Navigator.of(context).pop();
+      if (widget.onCloseCallback != null) {
+        widget.onCloseCallback!();
+      }
+    });
+  }
+
+  void goBackOrSubmit() {
+    goBack(() {
+      Navigator.of(context).pop();
+      if (widget.onSubmitCallback != null) {
+        widget.onSubmitCallback!();
+      }
+    });
+  }
+
+  void goToPreviousTask() {
+    Navigator.of(context).pop();
+    if (widget.onOpenPreviousTask != null) {
+      widget.onOpenPreviousTask!();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final onSubmit = widget.onSubmitCallback;
-    final onPrevious = widget.onOpenPreviousTask;
-    final onClose = widget.onCloseCallback;
-
     final theme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () {
-            if (_history.isNotEmpty) {
-              _history.removeLast();
-              if (_history.isNotEmpty) {
-                final lastPage = _history.last;
-                webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage));
-              } else {
-                webViewController?.loadData(data: _data);
-              }
-            } else {
-              Navigator.of(context).pop();
-              if (onClose != null) {
-                onClose();
-              }
-            }
-          },
-        ),
-      ),
-      body: Builder(builder: (context) {
-        if (widget.htmlText.isEmpty) {
-          return Center(
-            child: Text(
-              context.loc.empty_richtext,
-            ),
-          );
-        }
-
-        return InAppWebView(
-          initialSettings: settings,
-          initialData: InAppWebViewInitialData(data: _data),
-          onCreateWindow: (controller, action) async {
-            if (Platform.isAndroid) {
-              await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
-            }
-          },
-          onWebViewCreated: (controller) {
-            setState(() {
-              webViewController = controller;
-            });
-          },
-          onLoadStop: (controller, uri) {
-            if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
-              setState(() {
-                _history.add(uri);
-              });
-            }
-          },
-        );
-      }),
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal:
-                context.isSmall || context.isMedium ? 0 : MediaQuery.of(context).size.width / 5,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {},
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: goBackOrClose,
           ),
-          padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.allowOpenPrevious)
+        ),
+        body: Builder(builder: (context) {
+          if (widget.htmlText.isEmpty) {
+            return Center(
+              child: Text(
+                context.loc.empty_richtext,
+              ),
+            );
+          }
+
+          return InAppWebView(
+            initialSettings: settings,
+            initialData: InAppWebViewInitialData(data: _data),
+            onCreateWindow: (controller, action) async {
+              if (Platform.isAndroid) {
+                await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
+              }
+            },
+            onWebViewCreated: (controller) {
+              setState(() {
+                webViewController = controller;
+              });
+            },
+            onLoadStop: (controller, uri) {
+              if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
+                setState(() {
+                  _history.add(uri);
+                });
+              }
+            },
+          );
+        }),
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            margin: EdgeInsets.symmetric(
+              horizontal:
+                  context.isSmall || context.isMedium ? 0 : MediaQuery.of(context).size.width / 5,
+            ),
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.allowOpenPrevious)
+                  Expanded(
+                    child: SizedBox(
+                      height: 52,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            width: 1,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: goToPreviousTask,
+                        child: Text(context.loc.go_back_to_previous_task),
+                      ),
+                    ),
+                  ),
+                if (widget.allowOpenPrevious) const SizedBox(width: 10),
                 Expanded(
                   child: SizedBox(
                     height: 52,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
+                        backgroundColor: theme.primary,
+                        foregroundColor: theme.isLight ? Colors.white : Colors.black,
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        if (onPrevious != null) {
-                          onPrevious();
-                        }
-                      },
-                      child: Text(context.loc.go_back_to_previous_task),
+                      onPressed: goBackOrSubmit,
+                      child: Text(_history.isNotEmpty
+                          ? context.loc.webview_return_to_lesson
+                          : context.loc.close),
                     ),
                   ),
                 ),
-              if (widget.allowOpenPrevious) const SizedBox(width: 10),
-              Expanded(
-                child: SizedBox(
-                  height: 52,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      backgroundColor: theme.primary,
-                      foregroundColor: theme.isLight ? Colors.white : Colors.black,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      if (onSubmit != null) {
-                        onSubmit();
-                      }
-                    },
-                    child: Text(context.loc.close),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
