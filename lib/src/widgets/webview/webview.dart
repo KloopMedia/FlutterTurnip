@@ -8,6 +8,14 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:universal_html/parsing.dart';
 import "package:universal_html/html.dart" as html;
 
+class Page {
+  final WebUri uri;
+  final int scrollX;
+  final int scrollY;
+
+  Page({required this.uri, required this.scrollX, required this.scrollY});
+}
+
 class WebView extends StatefulWidget {
   final String htmlText;
   final bool allowOpenPrevious;
@@ -42,7 +50,7 @@ class _WebViewState extends State<WebView> {
   );
 
   late String _data;
-  final List<WebUri> _history = [];
+  final List<Page> _history = [];
 
   @override
   void didChangeDependencies() {
@@ -230,16 +238,18 @@ class _WebViewState extends State<WebView> {
     return "white";
   }
 
-  void goBack(VoidCallback callback) {
+  void goBack(VoidCallback callback) async {
     if (_history.isNotEmpty) {
-      setState(() {
-        _history.removeLast();
-      });
+      final removedPage = _history.removeLast();
+      setState(() {});
       if (_history.isNotEmpty) {
         final lastPage = _history.last;
-        webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage));
+        webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage.uri));
+        webViewController?.platform.scrollTo(x: lastPage.scrollX, y: lastPage.scrollY);
       } else {
-        webViewController?.loadData(data: _data);
+        await webViewController?.loadData(data: _data);
+        await Future.delayed(const Duration(milliseconds: 150));
+        await webViewController?.platform.scrollTo(x: removedPage.scrollX, y: removedPage.scrollY);
       }
     } else {
       callback();
@@ -306,10 +316,13 @@ class _WebViewState extends State<WebView> {
                 webViewController = controller;
               });
             },
-            onLoadStop: (controller, uri) {
+            onLoadStop: (controller, uri) async {
               if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
+                final scrollX = await controller.platform.getScrollX() ?? 0;
+                final scrollY = await controller.platform.getScrollY() ?? 0;
+                final page = Page(uri: uri, scrollX: scrollX, scrollY: scrollY);
                 setState(() {
-                  _history.add(uri);
+                  _history.add(page);
                 });
               }
             },
