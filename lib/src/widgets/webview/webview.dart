@@ -316,7 +316,7 @@ class _WebViewState extends State<WebView> {
                 webViewController = controller;
               });
             },
-            onLoadStop: (controller, uri) async {
+            onLoadStart: (controller, uri) async {
               if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
                 final scrollX = await controller.platform.getScrollX() ?? 0;
                 final scrollY = await controller.platform.getScrollY() ?? 0;
