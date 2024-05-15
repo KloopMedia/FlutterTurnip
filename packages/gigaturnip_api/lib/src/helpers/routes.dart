@@ -21,6 +21,8 @@ const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
 const selectableTaskStageRoute = '${taskStagesRoute}selectable/';
 const availableTaskStageRoute = '${taskStagesRoute}available_stages/';
 
+// ConditionalStages routes
+const conditionalStagesRoute = 'conditionalstages/';
 
 // TaskStages actions
 const createTaskActionRoute = 'create_task/';

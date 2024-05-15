@@ -106,6 +106,22 @@ abstract class GigaTurnipApiClient {
 
   // TaskStage methods
 
+  @GET(taskStagesRoute)
+  Future<PaginationWrapper<TaskStageDetail>> getTaskStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET(conditionalStagesRoute)
+  Future<PaginationWrapper<ConditionalStage>> getConditionalStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET("$conditionalStagesRoute/{id}")
+  Future<ConditionalStage> getConditionalStageById(
+      @Path("id") int id, {
+      @Queries() Map<String, dynamic>? query,
+  });
+
   @GET("$taskStagesRoute/{id}/$loadDynamicSchema")
   Future<DynamicSchema> getDynamicSchema(
     @Path("id") int id, {
