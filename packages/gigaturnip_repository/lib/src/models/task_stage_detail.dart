@@ -1,15 +1,13 @@
-import 'package:equatable/equatable.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
+import 'package:gigaturnip_api/gigaturnip_api.dart' show BaseStageType;
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../gigaturnip_repository.dart';
 
 part 'task_stage_detail.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class TaskStageDetail extends Equatable {
-  final int id;
-  final String name;
-  final String? description;
-  final int chain;
+class TaskStageDetail extends BaseStage {
   final int campaign;
   final String? richText;
   final Map<String, dynamic>? cardJsonSchema;
@@ -27,12 +25,11 @@ class TaskStageDetail extends Equatable {
   final Map<String, dynamic>? quizAnswers;
   final String? externalRendererUrl;
 
-
   const TaskStageDetail({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.chain,
+    required super.id,
+    required super.name,
+    required super.description,
+    required super.chain,
     required this.campaign,
     required this.richText,
     required this.cardJsonSchema,
@@ -49,6 +46,11 @@ class TaskStageDetail extends Equatable {
     required this.externalRendererUrl,
     this.openLimit = 0,
     this.totalLimit = 0,
+    required super.inStages,
+    required super.outStages,
+    required super.xPos,
+    required super.yPos,
+    super.type = api.BaseStageType.task,
   });
 
   factory TaskStageDetail.fromJson(Map<String, dynamic> json) {
@@ -77,6 +79,11 @@ class TaskStageDetail extends Equatable {
       openLimit: model.rankLimit?['open_limit'] ?? 0,
       totalLimit: model.rankLimit?['total_limit'] ?? 0,
       externalRendererUrl: model.externalRendererUrl,
+      inStages: model.inStages,
+      outStages: model.outStages,
+      xPos: model.xPos,
+      yPos: model.yPos,
+      type: model.type,
     );
   }
 

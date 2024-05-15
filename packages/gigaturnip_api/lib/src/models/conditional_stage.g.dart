@@ -19,21 +19,39 @@ ConditionalStage<T> _$ConditionalStageFromJson<T>(
         final val = ConditionalStage<T>(
           id: $checkedConvert('id', (v) => v as int),
           name: $checkedConvert('name', (v) => v as String),
-          description: $checkedConvert('description', (v) => v as String),
-          chain: $checkedConvert(
-              'chain', (v) => Chain.fromJson(v as Map<String, dynamic>)),
+          description: $checkedConvert('description', (v) => v as String?),
+          chain: $checkedConvert('chain', (v) => v as int),
           inStages: $checkedConvert('in_stages',
               (v) => (v as List<dynamic>).map((e) => e as int).toList()),
-          xPos: $checkedConvert('x_pos', (v) => v as int),
-          yPos: $checkedConvert('y_pos', (v) => v as int),
-          conditions: $checkedConvert('conditions', (v) => v as int?),
-          pinpong: $checkedConvert('pinpong', (v) => v as bool),
+          outStages: $checkedConvert('out_stages',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          xPos: $checkedConvert(
+              'x_pos', (v) => BaseStage.parseStringToDouble(v as String)),
+          yPos: $checkedConvert(
+              'y_pos', (v) => BaseStage.parseStringToDouble(v as String)),
+          conditions: $checkedConvert(
+              'conditions',
+              (v) => (v as List<dynamic>)
+                  .map((e) => e as Map<String, dynamic>)
+                  .toList()),
+          pingpong: $checkedConvert('pingpong', (v) => v as bool),
+          type: $checkedConvert(
+              'type',
+              (v) =>
+                  $enumDecodeNullable(_$BaseStageTypeEnumMap, v) ??
+                  BaseStageType.conditional),
         );
         return val;
       },
       fieldKeyMap: const {
         'inStages': 'in_stages',
+        'outStages': 'out_stages',
         'xPos': 'x_pos',
         'yPos': 'y_pos'
       },
     );
+
+const _$BaseStageTypeEnumMap = {
+  BaseStageType.task: 'task',
+  BaseStageType.conditional: 'conditional',
+};

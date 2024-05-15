@@ -1,15 +1,12 @@
 import 'dart:convert';
 
+import 'package:gigaturnip_api/src/models/base_stage.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'task_stage_detail.g.dart';
 
 @JsonSerializable()
-class TaskStageDetail {
-  final int id;
-  final String name;
-  final String description;
-  final int chain;
+class TaskStageDetail extends BaseStage {
   final int campaign;
   @JsonKey(fromJson: _stringToMap, toJson: _stringFromMap)
   final Map<String, dynamic> jsonSchema;
@@ -34,12 +31,13 @@ class TaskStageDetail {
   final Map<String, dynamic>? quizAnswers;
   final String? externalRendererUrl;
 
-
   TaskStageDetail({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.chain,
+    required super.id,
+    required super.name,
+    required super.description,
+    required super.chain,
+    required super.xPos,
+    required super.yPos,
     required this.campaign,
     required this.jsonSchema,
     required this.uiSchema,
@@ -59,6 +57,9 @@ class TaskStageDetail {
     required this.quizAnswers,
     this.rankLimit,
     required this.externalRendererUrl,
+    required super.inStages,
+    required super.outStages,
+    super.type = BaseStageType.task,
   });
 
   factory TaskStageDetail.fromJson(Map<String, dynamic> json) {

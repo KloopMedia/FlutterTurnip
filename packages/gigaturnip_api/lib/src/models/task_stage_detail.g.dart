@@ -16,8 +16,12 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         final val = TaskStageDetail(
           id: $checkedConvert('id', (v) => v as int),
           name: $checkedConvert('name', (v) => v as String),
-          description: $checkedConvert('description', (v) => v as String),
+          description: $checkedConvert('description', (v) => v as String?),
           chain: $checkedConvert('chain', (v) => v as int),
+          xPos: $checkedConvert(
+              'x_pos', (v) => BaseStage.parseStringToDouble(v as String)),
+          yPos: $checkedConvert(
+              'y_pos', (v) => BaseStage.parseStringToDouble(v as String)),
           campaign: $checkedConvert('campaign', (v) => v as int),
           jsonSchema: $checkedConvert(
               'json_schema', (v) => TaskStageDetail._stringToMap(v as String?)),
@@ -60,10 +64,21 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               $checkedConvert('rank_limit', (v) => v as Map<String, dynamic>?),
           externalRendererUrl:
               $checkedConvert('external_renderer_url', (v) => v as String?),
+          inStages: $checkedConvert('in_stages',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          outStages: $checkedConvert('out_stages',
+              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          type: $checkedConvert(
+              'type',
+              (v) =>
+                  $enumDecodeNullable(_$BaseStageTypeEnumMap, v) ??
+                  BaseStageType.task),
         );
         return val;
       },
       fieldKeyMap: const {
+        'xPos': 'x_pos',
+        'yPos': 'y_pos',
         'jsonSchema': 'json_schema',
         'uiSchema': 'ui_schema',
         'isCreatable': 'is_creatable',
@@ -81,6 +96,13 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
         'filterFieldsSchema': 'filter_fields_schema',
         'quizAnswers': 'quiz_answers',
         'rankLimit': 'rank_limit',
-        'externalRendererUrl': 'external_renderer_url'
+        'externalRendererUrl': 'external_renderer_url',
+        'inStages': 'in_stages',
+        'outStages': 'out_stages'
       },
     );
+
+const _$BaseStageTypeEnumMap = {
+  BaseStageType.task: 'task',
+  BaseStageType.conditional: 'conditional',
+};
