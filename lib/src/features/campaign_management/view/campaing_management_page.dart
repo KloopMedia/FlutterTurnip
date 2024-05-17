@@ -9,6 +9,7 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../router/routes/routes.dart';
 
@@ -117,6 +118,36 @@ class StatisticView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final List<SalesData> chartData = [
+      SalesData(DateTime(2010), 35),
+      SalesData(DateTime(2011), 28),
+      SalesData(DateTime(2012), 34),
+      SalesData(DateTime(2013), 32),
+      SalesData(DateTime(2014), 40)
+    ];
+
+    return Scaffold(
+      body: Center(
+        child: Container(
+          child: SfCartesianChart(
+            primaryXAxis: DateTimeAxis(),
+            series: <CartesianSeries>[
+              // Renders line chart
+              LineSeries<SalesData, DateTime>(
+                  dataSource: chartData,
+                  xValueMapper: (SalesData sales, _) => sales.year,
+                  yValueMapper: (SalesData sales, _) => sales.sales)
+            ],
+          ),
+        ),
+      ),
+    );
   }
+}
+
+class SalesData {
+  SalesData(this.year, this.sales);
+
+  final DateTime year;
+  final double sales;
 }

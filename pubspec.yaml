@@ -81,6 +81,7 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   flutter_linkify: ^6.0.0
   graphview: ^1.2.0
+  syncfusion_flutter_charts: ^25.2.4
 
 dependency_overrides:
   intl: ^0.19.0
