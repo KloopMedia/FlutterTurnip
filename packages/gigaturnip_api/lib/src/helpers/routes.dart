@@ -58,3 +58,6 @@ const deleteUserAction = '/delete_user/';
 // FCM routes
 const fcmRoute = 'fcm/fcm/';
 const updateFcmTokenActionRoute = '$fcmRoute/update_fcm_token/';
+
+// Volume routes
+const volumesRoute = 'volumes/';

@@ -182,4 +182,11 @@ abstract class GigaTurnipApiClient {
 
   @POST(updateFcmTokenActionRoute)
   Future<void> updateFcmToken(@Body() Map<String, dynamic> data);
+
+  // Volume methods
+
+  @GET(volumesRoute)
+  Future<PaginationWrapper<Volume>> getVolumes({
+    @Queries() Map<String, dynamic>? query,
+  });
 }

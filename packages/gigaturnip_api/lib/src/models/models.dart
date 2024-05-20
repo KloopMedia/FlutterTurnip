@@ -18,3 +18,4 @@ export 'individual_chain.dart';
 export 'country.dart';
 export 'language.dart';
 export 'base_stage.dart';
+export 'volume.dart';
