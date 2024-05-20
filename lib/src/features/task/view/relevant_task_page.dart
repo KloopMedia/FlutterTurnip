@@ -13,6 +13,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../widgets/card/tag_with_icon_and title.dart';
+import '../../../widgets/chip_bar/default_chip.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
@@ -194,6 +195,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   );
                 },
               ),
+            Volumes(),
             AvailableTaskStages(
               onTap: (item) => redirectToAvailableTasks(context, item),
             ),
@@ -290,6 +292,90 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Volumes extends StatefulWidget {
+  const Volumes({super.key});
+
+  @override
+  State<Volumes> createState() => _VolumesState();
+}
+
+class _VolumesState extends State<Volumes> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 24),
+        shape: Border(),
+        title: Text(
+          'Expandable List',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+        children: <Widget>[
+          Container(
+            constraints: BoxConstraints(maxHeight: 141),
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return VolumeCard();
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(width: 8);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class VolumeCard extends StatelessWidget {
+  const VolumeCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: 238,
+      height: 141,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CardChip('Volume 1'),
+          SizedBox(height: 8),
+          Text(
+            'Name: Volume 1',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Description: Volume 1',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }
