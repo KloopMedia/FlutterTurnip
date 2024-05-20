@@ -14,21 +14,34 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = TaskStageChainInfo(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           assignType: $checkedConvert('assign_type', (v) => v as String),
-          inStages: $checkedConvert('in_stages',
-              (v) => (v as List<dynamic>).map((e) => e as int?).toList()),
-          outStages: $checkedConvert('out_stages',
-              (v) => (v as List<dynamic>).map((e) => e as int?).toList()),
-          totalCount: $checkedConvert('total_count', (v) => v as int),
-          completeCount: $checkedConvert('complete_count', (v) => v as int),
-          completed: $checkedConvert('completed',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
-          reopened: $checkedConvert('reopened',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
-          opened: $checkedConvert('opened',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          inStages: $checkedConvert(
+              'in_stages',
+              (v) => (v as List<dynamic>)
+                  .map((e) => (e as num?)?.toInt())
+                  .toList()),
+          outStages: $checkedConvert(
+              'out_stages',
+              (v) => (v as List<dynamic>)
+                  .map((e) => (e as num?)?.toInt())
+                  .toList()),
+          totalCount: $checkedConvert('total_count', (v) => (v as num).toInt()),
+          completeCount:
+              $checkedConvert('complete_count', (v) => (v as num).toInt()),
+          completed: $checkedConvert(
+              'completed',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+          reopened: $checkedConvert(
+              'reopened',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+          opened: $checkedConvert(
+              'opened',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
         );
         return val;
       },

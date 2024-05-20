@@ -13,7 +13,7 @@ TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) => $checkedCreate(
       json,
       ($checkedConvert) {
         final val = TaskDetail(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           responses:
               $checkedConvert('responses', (v) => v as Map<String, dynamic>?),
           complete: $checkedConvert('complete', (v) => v as bool),
@@ -21,19 +21,24 @@ TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) => $checkedCreate(
           forceComplete: $checkedConvert('force_complete', (v) => v as bool?),
           stage: $checkedConvert('stage',
               (v) => TaskStageDetail.fromJson(v as Map<String, dynamic>)),
-          assignee: $checkedConvert('assignee', (v) => v as int?),
+          assignee: $checkedConvert('assignee', (v) => (v as num?)?.toInt()),
           case_: $checkedConvert(
               'case_',
               (v) =>
                   v == null ? null : Case.fromJson(v as Map<String, dynamic>)),
-          inTasks: $checkedConvert('in_tasks',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          inTasks: $checkedConvert(
+              'in_tasks',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
           createdAt: $checkedConvert('created_at',
               (v) => v == null ? null : DateTime.parse(v as String)),
           updatedAt: $checkedConvert('updated_at',
               (v) => v == null ? null : DateTime.parse(v as String)),
-          displayedPrevTasks: $checkedConvert('displayed_prev_tasks',
-              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
+          displayedPrevTasks: $checkedConvert(
+              'displayed_prev_tasks',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => (e as num).toInt())
+                  .toList()),
           integratorGroup: $checkedConvert(
               'integrator_group', (v) => v as Map<String, dynamic>?),
           startPeriod: $checkedConvert('start_period',

@@ -17,7 +17,7 @@ PaginationWrapper<T> _$PaginationWrapperFromJson<T>(
       json,
       ($checkedConvert) {
         final val = PaginationWrapper<T>(
-          count: $checkedConvert('count', (v) => v as int),
+          count: $checkedConvert('count', (v) => (v as num).toInt()),
           next: $checkedConvert('next', (v) => v as String?),
           previous: $checkedConvert('previous', (v) => v as String?),
           results: $checkedConvert(

@@ -14,15 +14,15 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = TaskStageDetail(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           description: $checkedConvert('description', (v) => v as String?),
-          chain: $checkedConvert('chain', (v) => v as int),
+          chain: $checkedConvert('chain', (v) => (v as num).toInt()),
           xPos: $checkedConvert(
               'x_pos', (v) => BaseStage.parseStringToDouble(v as String)),
           yPos: $checkedConvert(
               'y_pos', (v) => BaseStage.parseStringToDouble(v as String)),
-          campaign: $checkedConvert('campaign', (v) => v as int),
+          campaign: $checkedConvert('campaign', (v) => (v as num).toInt()),
           jsonSchema: $checkedConvert(
               'json_schema', (v) => TaskStageDetail._stringToMap(v as String?)),
           uiSchema: $checkedConvert(
@@ -64,10 +64,14 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
               $checkedConvert('rank_limit', (v) => v as Map<String, dynamic>?),
           externalRendererUrl:
               $checkedConvert('external_renderer_url', (v) => v as String?),
-          inStages: $checkedConvert('in_stages',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
-          outStages: $checkedConvert('out_stages',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          inStages: $checkedConvert(
+              'in_stages',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+          outStages: $checkedConvert(
+              'out_stages',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
           type: $checkedConvert(
               'type',
               (v) =>

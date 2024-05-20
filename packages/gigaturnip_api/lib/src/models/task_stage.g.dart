@@ -13,11 +13,11 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
       json,
       ($checkedConvert) {
         final val = TaskStage(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           description: $checkedConvert('description', (v) => v as String?),
-          chain: $checkedConvert('chain', (v) => v as int),
-          campaign: $checkedConvert('campaign', (v) => v as int),
+          chain: $checkedConvert('chain', (v) => (v as num).toInt()),
+          campaign: $checkedConvert('campaign', (v) => (v as num).toInt()),
           cardJsonSchema: $checkedConvert(
               'card_json_schema', (v) => TaskStage._stringToMap(v as String?)),
           cardUiSchema: $checkedConvert(
@@ -30,7 +30,7 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => $checkedCreate(
           rankLimit: $checkedConvert(
               'rank_limit',
               (v) => (v as Map<String, dynamic>?)?.map(
-                    (k, e) => MapEntry(k, e as int),
+                    (k, e) => MapEntry(k, (e as num).toInt()),
                   )),
           takeTaskButtonText:
               $checkedConvert('take_task_button_text', (v) => v as String?),

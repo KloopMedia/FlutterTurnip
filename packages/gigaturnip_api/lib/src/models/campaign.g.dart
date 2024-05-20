@@ -13,7 +13,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
       json,
       ($checkedConvert) {
         final val = Campaign(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           description: $checkedConvert('description', (v) => v as String),
           createdAt:
@@ -21,19 +21,29 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           updatedAt:
               $checkedConvert('updated_at', (v) => DateTime.parse(v as String)),
           open: $checkedConvert('open', (v) => v as bool),
-          defaultTrack: $checkedConvert('default_track', (v) => v as int?),
-          managers: $checkedConvert('managers',
-              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
+          defaultTrack:
+              $checkedConvert('default_track', (v) => (v as num?)?.toInt()),
+          managers: $checkedConvert(
+              'managers',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => (e as num).toInt())
+                  .toList()),
           smsLoginAllow: $checkedConvert('sms_login_allow', (v) => v as bool),
           logo: $checkedConvert('logo', (v) => v as String),
           shortDescription:
               $checkedConvert('short_description', (v) => v as String?),
           notificationsCount:
-              $checkedConvert('notifications_count', (v) => v as int),
-          languages: $checkedConvert('languages',
-              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
-          countries: $checkedConvert('countries',
-              (v) => (v as List<dynamic>?)?.map((e) => e as int).toList()),
+              $checkedConvert('notifications_count', (v) => (v as num).toInt()),
+          languages: $checkedConvert(
+              'languages',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => (e as num).toInt())
+                  .toList()),
+          countries: $checkedConvert(
+              'countries',
+              (v) => (v as List<dynamic>?)
+                  ?.map((e) => (e as num).toInt())
+                  .toList()),
           smsPhone: $checkedConvert('sms_phone', (v) => v as String?),
           isJoined: $checkedConvert('is_joined', (v) => v as bool),
           featured: $checkedConvert('featured', (v) => v as bool),

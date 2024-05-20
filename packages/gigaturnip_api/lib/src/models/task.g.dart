@@ -13,7 +13,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) => $checkedCreate(
       json,
       ($checkedConvert) {
         final val = Task(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           responses:
               $checkedConvert('responses', (v) => v as Map<String, dynamic>?),
           complete: $checkedConvert('complete', (v) => v as bool),

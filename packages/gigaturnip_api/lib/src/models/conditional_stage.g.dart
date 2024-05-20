@@ -17,14 +17,18 @@ ConditionalStage<T> _$ConditionalStageFromJson<T>(
       json,
       ($checkedConvert) {
         final val = ConditionalStage<T>(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           description: $checkedConvert('description', (v) => v as String?),
-          chain: $checkedConvert('chain', (v) => v as int),
-          inStages: $checkedConvert('in_stages',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
-          outStages: $checkedConvert('out_stages',
-              (v) => (v as List<dynamic>).map((e) => e as int).toList()),
+          chain: $checkedConvert('chain', (v) => (v as num).toInt()),
+          inStages: $checkedConvert(
+              'in_stages',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+          outStages: $checkedConvert(
+              'out_stages',
+              (v) =>
+                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
           xPos: $checkedConvert(
               'x_pos', (v) => BaseStage.parseStringToDouble(v as String)),
           yPos: $checkedConvert(
