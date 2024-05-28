@@ -194,5 +194,8 @@
 	"chains": "Chains",
 	"no_notifications": "No items found",
 
-	"webview_return_to_lesson": "Back to the lesson"
+	"webview_return_to_lesson": "Back to the lesson",
+
+	"in_progress": "In progress",
+	"volume": "Volume"
 }

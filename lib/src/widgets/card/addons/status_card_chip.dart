@@ -7,8 +7,11 @@ import 'card_chip.dart';
 
 class StatusCardChip extends StatelessWidget {
   final Task item;
+  final String? openText;
+  final String? closedText;
+  final String? returnedText;
 
-  const StatusCardChip(this.item, {Key? key}) : super(key: key);
+  const StatusCardChip(this.item, {Key? key, this.openText, this.closedText, this.returnedText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +20,19 @@ class StatusCardChip extends StatelessWidget {
 
     if (item.complete) {
       return CardChip(
-        context.loc.task_status_submitted,
+        closedText ?? context.loc.task_status_submitted,
         fontColor: fontColor,
         backgroundColor: theme.statusGreen,
       );
     } else if (item.reopened) {
       return CardChip(
-        context.loc.task_status_returned,
+        returnedText ?? context.loc.task_status_returned,
         fontColor: fontColor,
         backgroundColor: theme.statusYellow,
       );
     } else {
       return CardChip(
-        context.loc.task_status_not_submitted,
+        openText ?? context.loc.task_status_not_submitted,
         fontColor: fontColor,
         backgroundColor: theme.statusRed,
       );

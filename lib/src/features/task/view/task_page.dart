@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import '../../../bloc/bloc.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
+import '../bloc/volume_bloc/volume_cubit.dart';
 import '../widgets/task_page_floating_action_button.dart';
 import 'relevant_task_page.dart';
 
@@ -37,34 +38,9 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-  //
-  // @override
-  // void initState() {
-  //   if (!kIsWeb) {
-  //     BackButtonInterceptor.add(myInterceptor);
-  //   }
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   BackButtonInterceptor.remove(myInterceptor);
-  //   super.dispose();
-  // }
-  //
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   context.goNamed(CampaignRoute.name);
-  //   return true;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
-    // final theme = Theme.of(context).colorScheme;
-    // final appBarColor = theme.isLight
-    //     ? const Color.fromRGBO(241, 243, 255, 1)
-    //     : const Color.fromRGBO(40, 41, 49, 1);
-
     final apiClient = context.read<GigaTurnipApiClient>();
 
     return MultiBlocProvider(
@@ -85,7 +61,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               limit: isGridView ? 9 : 10,
             ),
-          )..initialize(query: {'complete': false}),
+          ),
         ),
         BlocProvider<ReactiveTasks>(
           create: (context) => CreatableTaskCubit(
@@ -128,7 +104,19 @@ class _TaskPageState extends State<TaskPage> {
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
-          )..initialize(query: {'completed': false}),
+          ),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => VolumeCubit(
+            VolumeRepository(gigaTurnipApiClient: apiClient, campaignId: widget.campaignId),
+          )..initialize(query: {'limit': 50}),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => SelectedVolumeCubit(
+            volumeSubscription: context.read<VolumeCubit>().stream,
+          ),
         ),
         BlocProvider<OpenNotificationCubit>(
           create: (context) => NotificationCubit(
@@ -139,51 +127,67 @@ class _TaskPageState extends State<TaskPage> {
           )..initialize(),
         ),
       ],
-      child: DefaultAppBar(
-        // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
-        title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-          builder: (context, state) {
-            if (state is CampaignInitialized) {
-              return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        titleSpacing: 0,
-        leading: [
-          const SizedBox(width: 20),
-          if (!context.isSmall || context.isMedium)
-            IconButton(
-              onPressed: () => _redirectToCampaignDetail(context),
-              icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                builder: (context, state) {
-                  if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
-                    return Container(
-                      width: 24,
-                      height: 24,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(state.data.logo),
-                          fit: BoxFit.fill,
+      child: BlocListener<SelectedVolumeCubit, SelectedVolumeState>(
+        listener: (context, state) {
+          if (state.volume != null) {
+            context
+                .read<RelevantTaskCubit>()
+                .initialize(query: {'complete': false, 'stage__volumes': state.volume!.id});
+            context
+                .read<IndividualChainCubit>()
+                .initialize(query: {'completed': false, 'stage__volumes': state.volume!.id});
+          } else {
+            context.read<RelevantTaskCubit>().initialize(query: {'complete': false});
+            context.read<IndividualChainCubit>().initialize(query: {'completed': false});
+          }
+        },
+        child: DefaultAppBar(
+          // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
+          title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+            builder: (context, state) {
+              if (state is CampaignInitialized) {
+                return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+          titleSpacing: 0,
+          leading: [
+            const SizedBox(width: 20),
+            if (!context.isSmall || context.isMedium)
+              IconButton(
+                onPressed: () => _redirectToCampaignDetail(context),
+                icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+                  builder: (context, state) {
+                    if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
+                      return Container(
+                        width: 24,
+                        height: 24,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: ShapeDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(state.data.logo),
+                            fit: BoxFit.fill,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                    );
-                  } else {
-                    return const Icon(Icons.info_outline);
-                  }
-                },
+                      );
+                    } else {
+                      return const Icon(Icons.info_outline);
+                    }
+                  },
+                ),
               ),
-            ),
-        ],
-        // TODO: add filter to show settings button only to moderators.
-        actions: const [NotificationButton()], // SettingsButton()
-        floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-        child: RelevantTaskPage(
-          campaignId: widget.campaignId,
+          ],
+          // TODO: add filter to show settings button only to moderators.
+          actions: const [NotificationButton()],
+          // SettingsButton()
+          floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
+          child: RelevantTaskPage(
+            campaignId: widget.campaignId,
+          ),
         ),
       ),
     );

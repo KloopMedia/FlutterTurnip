@@ -194,5 +194,8 @@
 	"chains": "Цепочки",
 	"no_notifications": "Эч нерсе табылган жок",
 
-	"webview_return_to_lesson": "Сабакка кайтуу"
+	"webview_return_to_lesson": "Сабакка кайтуу",
+
+	"in_progress": "Аткарылууда",
+	"volume": "Бөлүм"
 }

@@ -194,5 +194,8 @@
 	"chains": "Цепочки",
 	"no_notifications": "Нічого не знайдено",
 
-	"webview_return_to_lesson": "Назад до уроку"
+	"webview_return_to_lesson": "Назад до уроку",
+
+	"in_progress": "Виконується",
+	"volume": "Розділ"
 }
