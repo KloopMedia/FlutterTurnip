@@ -8,3 +8,4 @@ export 'notification_repository.dart';
 export 'notification_detail_repository.dart';
 export 'country_repository.dart';
 export 'language_repository.dart';
+export 'volume_repository.dart';
