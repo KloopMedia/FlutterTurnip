@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
@@ -30,32 +31,46 @@ class _VolumesState extends State<Volumes> {
           }
           if (state is RemoteDataLoaded) {
             final volumes = state.data;
-            return Container(
-              constraints: const BoxConstraints(maxHeight: 141),
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                scrollDirection: Axis.horizontal,
-                itemCount: volumes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final volume = volumes[index];
-                  return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
-                    builder: (context, selectedVolumeState) {
-                      return VolumeCard(
-                        name: volume.name,
-                        description: volume.description,
-                        isSelected: selectedVolumeState.volume?.id == volume.id,
-                        index: index,
-                        onTap: () {
-                          widget.onChanged(volume);
+            return ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 24),
+              shape: const Border(),
+              title: Text(
+                context.read<SelectedVolumeCubit>().state.volume?.name ?? context.loc.volume,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20,
+                  color: Color(0xFF444748),
+                ),
+              ),
+              children: [
+                Container(
+                  constraints: const BoxConstraints(maxHeight: 141),
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: volumes.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final volume = volumes[index];
+                      return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
+                        builder: (context, selectedVolumeState) {
+                          return VolumeCard(
+                            name: volume.name,
+                            description: volume.description,
+                            isSelected: selectedVolumeState.volume?.id == volume.id,
+                            index: index,
+                            onTap: () {
+                              widget.onChanged(volume);
+                            },
+                          );
                         },
                       );
                     },
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(width: 8);
-                },
-              ),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(width: 8);
+                    },
+                  ),
+                )
+              ],
             );
           }
           return const SizedBox();
