@@ -33,6 +33,7 @@ class _VolumesState extends State<Volumes> {
             final volumes = state.data;
             return ExpansionTile(
               tilePadding: const EdgeInsets.symmetric(horizontal: 24),
+              initiallyExpanded: true,
               shape: const Border(),
               title: Text(
                 context.read<SelectedVolumeCubit>().state.volume?.name ?? context.loc.volume,
