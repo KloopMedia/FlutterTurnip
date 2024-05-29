@@ -45,6 +45,7 @@ class _VolumesState extends State<Volumes> {
               ),
               children: [
                 Container(
+                  height: volumes.isEmpty ? 0 : null,
                   constraints: const BoxConstraints(maxHeight: 141),
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
