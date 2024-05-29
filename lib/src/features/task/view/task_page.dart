@@ -110,7 +110,7 @@ class _TaskPageState extends State<TaskPage> {
           lazy: false,
           create: (context) => VolumeCubit(
             VolumeRepository(gigaTurnipApiClient: apiClient, campaignId: widget.campaignId),
-          )..initialize(query: {'limit': 50}),
+          )..initialize(query: {'limit': 50, 'track_fk__campaign': widget.campaignId}),
         ),
         BlocProvider(
           lazy: false,
