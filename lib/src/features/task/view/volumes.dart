@@ -29,7 +29,7 @@ class _VolumesState extends State<Volumes> {
           if (state is RemoteDataLoading<Volume>) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is RemoteDataLoaded) {
+          if (state is RemoteDataLoaded && state.data.isNotEmpty) {
             final volumes = state.data;
             return ExpansionTile(
               tilePadding: const EdgeInsets.symmetric(horizontal: 24),
