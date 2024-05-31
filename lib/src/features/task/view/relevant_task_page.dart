@@ -219,7 +219,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   onTap: (item) => redirectToAvailableTasks(context, item),
                 ),
                 const CreatableTaskList(),
-                SliverToBoxAdapter(
+                if (selectedVolume?.showTagsFilter ?? true) SliverToBoxAdapter(
                   child: FilterBar(
                     title: context.loc.mytasks,
                     onChanged: (query, key) {
