@@ -14,6 +14,7 @@ class Volume {
   final String notYetOpenMessage;
   final String alreadyClosedMessage;
   final bool showTags;
+  final bool showTagsFilter;
   final String myTasksText;
   final String activeTasksText;
   final String returnedTasksText;
@@ -32,6 +33,7 @@ class Volume {
     required this.notYetOpenMessage,
     required this.alreadyClosedMessage,
     required this.showTags,
+    required this.showTagsFilter,
     required this.myTasksText,
     required this.activeTasksText,
     required this.returnedTasksText,
@@ -56,6 +58,7 @@ class Volume {
       notYetOpenMessage: model.notYetOpenMessage,
       alreadyClosedMessage: model.alreadyClosedMessage,
       showTags: model.showTags,
+      showTagsFilter: model.showTagsFilter,
       myTasksText: model.myTasksText,
       activeTasksText: model.activeTasksText,
       returnedTasksText: model.returnedTasksText,

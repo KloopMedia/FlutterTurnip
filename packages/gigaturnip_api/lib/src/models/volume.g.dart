@@ -26,6 +26,7 @@ Volume _$VolumeFromJson(Map<String, dynamic> json) => $checkedCreate(
           alreadyClosedMessage:
               $checkedConvert('already_closed_message', (v) => v as String),
           showTags: $checkedConvert('show_tags', (v) => v as bool),
+          showTagsFilter: $checkedConvert('show_tags_filter', (v) => v as bool),
           myTasksText: $checkedConvert('my_tasks_text', (v) => v as String),
           activeTasksText:
               $checkedConvert('active_tasks_text', (v) => v as String),
@@ -51,6 +52,7 @@ Volume _$VolumeFromJson(Map<String, dynamic> json) => $checkedCreate(
         'notYetOpenMessage': 'not_yet_open_message',
         'alreadyClosedMessage': 'already_closed_message',
         'showTags': 'show_tags',
+        'showTagsFilter': 'show_tags_filter',
         'myTasksText': 'my_tasks_text',
         'activeTasksText': 'active_tasks_text',
         'returnedTasksText': 'returned_tasks_text',

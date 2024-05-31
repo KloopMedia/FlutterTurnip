@@ -13,6 +13,7 @@ class Volume {
   final String notYetOpenMessage;
   final String alreadyClosedMessage;
   final bool showTags;
+  final bool showTagsFilter;
   final String myTasksText;
   final String activeTasksText;
   final String returnedTasksText;
@@ -31,6 +32,7 @@ class Volume {
     required this.notYetOpenMessage,
     required this.alreadyClosedMessage,
     required this.showTags,
+    required this.showTagsFilter,
     required this.myTasksText,
     required this.activeTasksText,
     required this.returnedTasksText,
