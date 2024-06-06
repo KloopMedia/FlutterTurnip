@@ -33,7 +33,7 @@ class SelectedVolumeCubit extends Cubit<SelectedVolumeState> {
     _volumeSubscription = volumeSubscription.listen(
       (volumeState) {
         if (volumeState is RemoteDataLoaded<Volume>) {
-          emit(SelectedVolumeState(volumeState.data.firstOrNull));
+          emit(SelectedVolumeLoaded(volumeState.data.firstOrNull));
         }
       },
     );

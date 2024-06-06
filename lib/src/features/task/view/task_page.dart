@@ -70,7 +70,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               stageType: StageType.ac,
             ),
-          )..initialize(),
+          ),
         ),
         BlocProvider<ProactiveTasks>(
           create: (context) => CreatableTaskCubit(
@@ -79,7 +79,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               stageType: StageType.pr,
             ),
-          )..initialize(),
+          ),
         ),
         BlocProvider<ProactiveTasksButtons>(
           create: (context) => CreatableTaskCubit(
@@ -88,7 +88,7 @@ class _TaskPageState extends State<TaskPage> {
               campaignId: widget.campaignId,
               stageType: StageType.pb,
             ),
-          )..initialize(),
+          ),
         ),
         BlocProvider(
           create: (context) => SelectableTaskStageCubit(
@@ -96,7 +96,7 @@ class _TaskPageState extends State<TaskPage> {
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
-          )..initialize(),
+          ),
         ),
         BlocProvider(
           create: (context) => IndividualChainCubit(
@@ -129,16 +129,30 @@ class _TaskPageState extends State<TaskPage> {
       ],
       child: BlocListener<SelectedVolumeCubit, SelectedVolumeState>(
         listener: (context, state) {
-          if (state.volume != null) {
-            context
-                .read<RelevantTaskCubit>()
-                .initialize(query: {'complete': false, 'stage__volumes': state.volume!.id});
-            context
-                .read<IndividualChainCubit>()
-                .initialize(query: {'completed': false, 'stage__volumes': state.volume!.id});
-          } else {
-            context.read<RelevantTaskCubit>().initialize(query: {'complete': false});
-            context.read<IndividualChainCubit>().initialize(query: {'completed': false});
+          if (state is SelectedVolumeLoaded) {
+            if (state.volume != null) {
+              context
+                  .read<RelevantTaskCubit>()
+                  .initialize(query: {'complete': false, 'stage__volumes': state.volume!.id});
+              context
+                  .read<IndividualChainCubit>()
+                  .initialize(query: {'completed': false, 'stage__volumes': state.volume!.id});
+              context.read<ReactiveTasks>().initialize(query: {'volumes': state.volume!.id});
+              context.read<ProactiveTasks>().initialize(query: {'volumes': state.volume!.id});
+              context
+                  .read<ProactiveTasksButtons>()
+                  .initialize(query: {'volumes': state.volume!.id});
+              context
+                  .read<SelectableTaskStageCubit>()
+                  .initialize(query: {'volumes': state.volume!.id});
+            } else {
+              context.read<RelevantTaskCubit>().initialize(query: {'complete': false});
+              context.read<IndividualChainCubit>().initialize(query: {'completed': false});
+              context.read<ReactiveTasks>().initialize();
+              context.read<ProactiveTasks>().initialize();
+              context.read<ProactiveTasksButtons>().initialize();
+              context.read<SelectableTaskStageCubit>().initialize();
+            }
           }
         },
         child: DefaultAppBar(

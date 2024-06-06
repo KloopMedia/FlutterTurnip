@@ -63,6 +63,6 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage>
     Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) {
-    return _repository.fetchDataOnPage(page);
+    return _repository.fetchDataOnPage(page, query);
   }
 }

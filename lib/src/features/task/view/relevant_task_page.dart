@@ -213,29 +213,35 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     context.read<SelectedVolumeCubit>().selectVolume(volume);
                     context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
                     context.read<IndividualChainCubit>().refetchWithFilter(query: taskQuery);
+
+                    final stageQuery = {'volumes': volume.id};
+                    context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
+                    context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
+                    context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
                   },
                 ),
                 AvailableTaskStages(
                   onTap: (item) => redirectToAvailableTasks(context, item),
                 ),
                 const CreatableTaskList(),
-                if (selectedVolume?.showTagsFilter ?? true) SliverToBoxAdapter(
-                  child: FilterBar(
-                    title: context.loc.mytasks,
-                    onChanged: (query, key) {
-                      setState(() {
-                        taskQuery = {...taskQuery, ...?query};
-                      });
-                      context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
-                      context
-                          .read<IndividualChainCubit>()
-                          .refetchWithFilter(query: individualChainFilterMap[key]);
-                    },
-                    value: taskFilterMap.keys.first,
-                    filters: taskFilterMap,
-                    names: filterNames,
+                if (selectedVolume?.showTagsFilter ?? true)
+                  SliverToBoxAdapter(
+                    child: FilterBar(
+                      title: context.loc.mytasks,
+                      onChanged: (query, key) {
+                        setState(() {
+                          taskQuery = {...taskQuery, ...?query};
+                        });
+                        context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
+                        context
+                            .read<IndividualChainCubit>()
+                            .refetchWithFilter(query: individualChainFilterMap[key]);
+                      },
+                      value: taskFilterMap.keys.first,
+                      filters: taskFilterMap,
+                      names: filterNames,
+                    ),
                   ),
-                ),
                 AdaptiveListView<TaskStage, ReactiveTasks>(
                   showLoader: false,
                   padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
