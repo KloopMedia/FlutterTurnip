@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../router/routes/routes.dart';
 
@@ -105,7 +106,15 @@ class _NotificationDetailViewState extends State<NotificationDetailView> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Linkify(text: state.data.text, textAlign: TextAlign.center),
+                          Linkify(
+                            text: state.data.text,
+                            textAlign: TextAlign.center,
+                            onOpen: (link) async {
+                              if (!await launchUrl(Uri.parse(link.url))) {
+                                throw Exception('Could not launch ${link.url}');
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
