@@ -207,12 +207,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   ),
                 Volumes(
                   onChanged: (Volume volume) {
-                    setState(() {
-                      taskQuery = {...taskQuery, 'stage__volumes': volume.id};
-                    });
+                    final query = {...taskQuery, 'stage__volumes': volume.id};
                     context.read<SelectedVolumeCubit>().selectVolume(volume);
-                    context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
-                    context.read<IndividualChainCubit>().refetchWithFilter(query: taskQuery);
+                    context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
+                    context.read<IndividualChainCubit>().refetchWithFilter(query: query);
 
                     final stageQuery = {'volumes': volume.id};
                     context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
@@ -229,8 +227,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     child: FilterBar(
                       title: context.loc.mytasks,
                       onChanged: (query, key) {
+                        final selectedVolume = selectedVolumeState.volume;
                         setState(() {
-                          taskQuery = {...taskQuery, ...?query};
+                          taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
                         });
                         context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
                         context
