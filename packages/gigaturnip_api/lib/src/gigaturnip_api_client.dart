@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/user_activity.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
@@ -103,6 +104,9 @@ abstract class GigaTurnipApiClient {
 
   @GET("$tasksRoute/{id}/$reopenTaskActionRoute")
   Future<void> reopenTask(@Path("id") int id);
+
+  @GET("$tasksRoute/user_activity")
+  Future<PaginationWrapper<UserActivity>> getUserActivity({@Queries() Map<String, dynamic>? query});
 
   // TaskStage methods
 

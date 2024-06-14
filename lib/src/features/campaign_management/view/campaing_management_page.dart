@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/campaign_management/bloc/user_activity_cubit.dart';
 import 'package:gigaturnip/src/features/chain/bloc/chain_cubit.dart';
 import 'package:gigaturnip/src/features/chain/widgets/chain_card.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -9,7 +11,6 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../router/routes/routes.dart';
 
@@ -22,6 +23,7 @@ class CampaignManagementPage extends StatefulWidget {
 
 class _CampaignPageState extends State<CampaignManagementPage> {
   late final colorScheme = Theme.of(context).colorScheme;
+  late final campaignId = int.parse(GoRouterState.of(context).pathParameters['cid']!);
 
   @override
   void initState() {
@@ -62,15 +64,35 @@ class _CampaignPageState extends State<CampaignManagementPage> {
               child: Text(context.loc.chains, overflow: TextOverflow.ellipsis),
             ),
             Tab(
-              child: Text("Statistics", overflow: TextOverflow.ellipsis),
+              child: Text(context.loc.statistics, overflow: TextOverflow.ellipsis),
             ),
           ],
         ),
-        child: const TabBarView(
-          children: [
-            ChainView(),
-            StatisticView(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => ChainCubit(
+                ChainRepository(
+                  campaignId: campaignId,
+                  gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+                ),
+              )..initialize(),
+            ),
+            BlocProvider(
+              create: (context) => UserActivityCubit(
+                UserActivityRepository(
+                  campaignId: campaignId,
+                  gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+                ),
+              )..initialize(query: {'limit': 300}),
+            ),
           ],
+          child: const TabBarView(
+            children: [
+              ChainView(),
+              StatisticView(),
+            ],
+          ),
         ),
       ),
     );
@@ -82,33 +104,25 @@ class ChainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChainCubit(
-        ChainRepository(
-          campaignId: 3,
-          gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-        ),
-      )..initialize(),
-      child: CustomScrollView(
-        slivers: [
-          AdaptiveListView<Chain, ChainCubit>(
-            padding: const EdgeInsets.all(24),
-            mainAxisSpacing: 20,
-            itemBuilder: (context, state, item) {
-              return ChainCard(
-                title: item.name,
-                description: item.description,
-                onTap: () {
-                  context.goNamed(TaskManagementRoute.name, pathParameters: {
-                    ...GoRouterState.of(context).pathParameters,
-                    'chainId': item.id.toString()
-                  });
-                },
-              );
-            },
-          )
-        ],
-      ),
+    return CustomScrollView(
+      slivers: [
+        AdaptiveListView<Chain, ChainCubit>(
+          padding: const EdgeInsets.all(24),
+          mainAxisSpacing: 20,
+          itemBuilder: (context, state, item) {
+            return ChainCard(
+              title: item.name,
+              description: item.description,
+              onTap: () {
+                context.goNamed(TaskManagementRoute.name, pathParameters: {
+                  ...GoRouterState.of(context).pathParameters,
+                  'chainId': item.id.toString()
+                });
+              },
+            );
+          },
+        )
+      ],
     );
   }
 }
@@ -118,36 +132,81 @@ class StatisticView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<SalesData> chartData = [
-      SalesData(DateTime(2010), 35),
-      SalesData(DateTime(2011), 28),
-      SalesData(DateTime(2012), 34),
-      SalesData(DateTime(2013), 32),
-      SalesData(DateTime(2014), 40)
-    ];
-
     return Scaffold(
-      body: Center(
-        child: Container(
-          child: SfCartesianChart(
-            primaryXAxis: DateTimeAxis(),
-            series: <CartesianSeries>[
-              // Renders line chart
-              LineSeries<SalesData, DateTime>(
-                  dataSource: chartData,
-                  xValueMapper: (SalesData sales, _) => sales.year,
-                  yValueMapper: (SalesData sales, _) => sales.sales)
-            ],
-          ),
-        ),
+      body: BlocBuilder<UserActivityCubit, RemoteDataState<UserActivity>>(
+        builder: (context, state) {
+          if (state is RemoteDataLoaded<UserActivity>) {
+            return SelectionArea(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: PaginatedDataTable(
+                    rowsPerPage: 10,
+                    columns: const [
+                      DataColumn(label: Text('ID')),
+                      DataColumn(label: Text('Stage name')),
+                      DataColumn(label: Text('Total')),
+                      DataColumn(label: Text('Opened')),
+                      DataColumn(label: Text('Closed')),
+                    ],
+                    source: TableDataSource(state.data),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
 }
 
-class SalesData {
-  SalesData(this.year, this.sales);
+class TableDataSource extends DataTableSource {
+  final List<UserActivity> data;
 
-  final DateTime year;
-  final double sales;
+  TableDataSource(this.data);
+
+  DataRow buildTableRow(UserActivity data) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Text(data.stage.toString()),
+        ),
+        DataCell(
+          Text(data.stageName.toString()),
+        ),
+        DataCell(
+          Text(data.countTasks.toString()),
+        ),
+        DataCell(
+          Text(data.completeFalse.toString()),
+        ),
+        DataCell(
+          Text(data.completeTrue.toString()),
+        ),
+      ],
+    );
+  }
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= data.length) {
+      return null;
+    }
+
+    final item = data[index];
+
+    return buildTableRow(item);
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => data.length;
+
+  @override
+  int get selectedRowCount => 0;
 }

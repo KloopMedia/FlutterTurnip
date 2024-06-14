@@ -197,5 +197,7 @@
 	"webview_return_to_lesson": "Назад до уроку",
 
 	"in_progress": "Виконується",
-	"volume": "Розділ"
+	"volume": "Розділ",
+
+	"statistics": "Статистика"
 }

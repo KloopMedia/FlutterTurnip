@@ -252,3 +252,29 @@ class SelectableTaskStageRepository extends GigaTurnipRepository<TaskStage> {
     return data.map(TaskStage.fromApiModel).toList();
   }
 }
+
+class UserActivityRepository extends GigaTurnipRepository<UserActivity> {
+  final api.GigaTurnipApiClient _gigaTurnipApiClient;
+  final int campaignId;
+
+  UserActivityRepository({
+    required api.GigaTurnipApiClient gigaTurnipApiClient,
+    required this.campaignId,
+  }) : _gigaTurnipApiClient = gigaTurnipApiClient;
+
+  @override
+  Future<api.PaginationWrapper<UserActivity>> fetchAndParseData({Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getUserActivity(
+      query: {
+        'stage__chain__campaign': campaignId,
+        'exclude_managers': true,
+        ...?query,
+      },
+    );
+    return data.copyWith<UserActivity>(results: parseData(data.results));
+  }
+
+  List<UserActivity> parseData(List<api.UserActivity> data) {
+    return data.map(UserActivity.fromApiModel).toList();
+  }
+}

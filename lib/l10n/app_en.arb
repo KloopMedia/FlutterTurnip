@@ -197,5 +197,7 @@
 	"webview_return_to_lesson": "Back to the lesson",
 
 	"in_progress": "In progress",
-	"volume": "Volume"
+	"volume": "Volume",
+
+	"statistics": "Statistics"
 }

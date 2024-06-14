@@ -19,3 +19,4 @@ export 'country.dart';
 export 'language.dart';
 export 'base_stage.dart';
 export 'volume.dart';
+export 'user_activity.dart';
