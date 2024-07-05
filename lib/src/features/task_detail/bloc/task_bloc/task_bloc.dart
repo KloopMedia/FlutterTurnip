@@ -128,19 +128,39 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           nextTaskId: nextTaskId,
         ),
       );
-    }
-
-    if (nextTaskId == taskId) {
-      emit(TaskReturned.clone(_state));
-    } else if (quizAnswers != null && quizAnswers.isNotEmpty) {
-      emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
     } else {
-      emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: nextTaskId));
+      if (nextTaskId == taskId) {
+        emit(TaskReturned.clone(_state));
+      } else if (quizAnswers != null && quizAnswers.isNotEmpty) {
+        emit(ShowAnswers(updatedTask, _state.previousTasks, nextTaskId));
+      } else {
+        int? parsedNextTaskId;
+        if (nextTaskId != null) {
+          final nextTask = await _repository.fetchData(nextTaskId);
+          if (nextTask.complete || nextTask.reopened) {
+            parsedNextTaskId = null;
+          } else {
+            parsedNextTaskId = nextTaskId;
+          }
+        }
+        emit(TaskSubmitted(updatedTask, _state.previousTasks, nextTaskId: parsedNextTaskId));
+      }
     }
   }
 
-  FutureOr<void> _onCloseNotification(CloseNotification event, Emitter<TaskState> emit) {
-    emit(TaskSubmitted(event.data, event.previousTasks, nextTaskId: event.nextTaskId));
+  FutureOr<void> _onCloseNotification(CloseNotification event, Emitter<TaskState> emit) async {
+    final nextTaskId = event.nextTaskId;
+    int? parsedNextTaskId;
+
+    if (nextTaskId != null) {
+      final nextTask = await _repository.fetchData(nextTaskId);
+      if (nextTask.complete || nextTask.reopened) {
+        parsedNextTaskId = null;
+      } else {
+        parsedNextTaskId = nextTaskId;
+      }
+    }
+    emit(TaskSubmitted(event.data, event.previousTasks, nextTaskId: parsedNextTaskId));
   }
 
   Future<void> _onTriggerWebhook(TriggerWebhook event, Emitter<TaskState> emit) async {
