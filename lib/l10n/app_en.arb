@@ -199,5 +199,8 @@
 	"in_progress": "In progress",
 	"volume": "Volume",
 
-	"statistics": "Statistics"
+	"statistics": "Statistics",
+	"your_courses": "Your courses",
+	"join_other_courses": "Join other courses",
+	"courses": "Courses"
 }

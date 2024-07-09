@@ -199,5 +199,8 @@
 	"in_progress": "Выполняется",
 	"volume": "Раздел",
 
-	"statistics": "Статистика"
+	"statistics": "Статистика",
+	"your_courses": "Ваши курсы",
+  "join_other_courses": "Присоединяйтесь к другим курсам",
+  "courses": "Курсы"
 }
