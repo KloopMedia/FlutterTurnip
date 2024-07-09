@@ -27,6 +27,7 @@ class AllTaskRepository extends TaskRepository {
   Future<api.PaginationWrapper<Task>> fetchAndParseData({Map<String, dynamic>? query}) async {
     final data = await _gigaTurnipApiClient.getUserRelevantTasks(query: {
       'stage__chain__campaign': campaignId,
+      'ordering':'-created_at',
       ...?query,
     });
 
