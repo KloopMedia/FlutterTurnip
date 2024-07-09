@@ -232,9 +232,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
                         });
                         context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
-                        context
-                            .read<IndividualChainCubit>()
-                            .refetchWithFilter(query: individualChainFilterMap[key]);
+                        context.read<IndividualChainCubit>().refetchWithFilter(query: {
+                          ...?individualChainFilterMap[key],
+                          'stages__volumes': selectedVolume?.id
+                        });
                       },
                       value: taskFilterMap.keys.first,
                       filters: taskFilterMap,
