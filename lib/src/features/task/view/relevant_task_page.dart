@@ -210,7 +210,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     final query = {...taskQuery, 'stage__volumes': volume.id};
                     context.read<SelectedVolumeCubit>().selectVolume(volume);
                     context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
-                    context.read<IndividualChainCubit>().refetchWithFilter(query: query);
+                    context
+                        .read<IndividualChainCubit>()
+                        .refetchWithFilter(query: {...taskQuery, 'stages__volumes': volume.id});
 
                     final stageQuery = {'volumes': volume.id};
                     context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
