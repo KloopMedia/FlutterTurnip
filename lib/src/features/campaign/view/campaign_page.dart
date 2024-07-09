@@ -211,7 +211,7 @@ class _CampaignViewState extends State<CampaignView> {
             builder: (context, state) {
               final theme = Theme.of(context).colorScheme;
               return DefaultAppBar(
-                title: Text(context.loc.campaigns),
+                title: Text(context.loc.courses),
                 actions: [
                   IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
                   FilterButton(
@@ -440,7 +440,7 @@ class AvailableCampaignView extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        bottom: Container(
+                        bottom: SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -451,7 +451,7 @@ class AvailableCampaignView extends StatelessWidget {
                               ),
                             ),
                             onPressed: () => redirectToCampaignDetail(context, item),
-                            child: Text('buton'),
+                            child: Text(context.loc.join),
                           ),
                         ),
                         size: const Size(340, 150),
