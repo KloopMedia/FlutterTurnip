@@ -132,13 +132,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       'Все': null,
     };
 
-    var filterNames = [
-      context.loc.task_filter_active,
-      context.loc.task_filter_returned,
-      context.loc.task_filter_submitted,
-      context.loc.task_filter_all,
-    ];
-
     return BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
       listener: (context, state) {
         if (state is TaskCreated) {
@@ -158,6 +151,13 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       child: BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
         builder: (context, selectedVolumeState) {
           final selectedVolume = selectedVolumeState.volume;
+
+          var filterNames = [
+            selectedVolume?.activeTasksText ?? context.loc.task_filter_active,
+            selectedVolume?.returnedTasksText ?? context.loc.task_filter_returned,
+            selectedVolume?.completedTasksText ?? context.loc.task_filter_submitted,
+            context.loc.task_filter_all,
+          ];
 
           return RefreshIndicator(
             onRefresh: () async => refreshAllTasks(context),
