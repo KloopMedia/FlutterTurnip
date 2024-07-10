@@ -191,5 +191,16 @@
 	"settings_ranks": "Ранги",
 	"settings_messages": "Сообщения",
 
-	"chains": "Цепочки"
+	"chains": "Цепочки",
+	"no_notifications": "Нічого не знайдено",
+
+	"webview_return_to_lesson": "Назад до уроку",
+
+	"in_progress": "Виконується",
+	"volume": "Розділ",
+
+	"statistics": "Статистика",
+	"your_courses": "Ваші курси",
+	"join_other_courses": "Приєднуйтесь до інших курсів",
+	"courses": "Курси"
 }

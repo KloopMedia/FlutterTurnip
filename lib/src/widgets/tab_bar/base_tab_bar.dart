@@ -52,6 +52,7 @@ class BaseTabBar extends StatelessWidget {
               labelStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               unselectedLabelColor: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
               indicatorColor: theme.primary,
+              indicatorSize: TabBarIndicatorSize.tab,
               tabs: tabs,
             )
           ],

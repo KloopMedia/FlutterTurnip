@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/chain/bloc/chain_cubit.dart';
+import 'package:gigaturnip/src/router/routes/task_management_route.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/button/custom_floating_action_button.dart';
 import 'package:gigaturnip/src/widgets/slivers/adaptive_list_view.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/chain_card.dart';
 
@@ -53,7 +55,9 @@ class ChainView extends StatelessWidget {
               return ChainCard(
                 title: item.name,
                 description: item.description,
-                onTap: () {},
+                onTap: () {
+                  context.goNamed(TaskManagementRoute.name, pathParameters: {...GoRouterState.of(context).pathParameters, 'chainId': item.id.toString()});
+                },
               );
             },
           )

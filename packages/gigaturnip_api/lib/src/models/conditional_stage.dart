@@ -4,28 +4,22 @@ import 'package:json_annotation/json_annotation.dart';
 part 'conditional_stage.g.dart';
 
 @JsonSerializable(genericArgumentFactories: true)
-class ConditionalStage<T> {
-  final int id;
-  final String name;
-  final String description;
-  final Chain chain;
-  final List<int> inStages;
-  final int xPos;
-  final int yPos;
-  final int? conditions;
-  final bool pinpong;
+class ConditionalStage<T> extends BaseStage {
+  final List<Map<String, dynamic>> conditions;
+  final bool pingpong;
 
   ConditionalStage({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.chain,
-    required this.inStages,
-    required this.xPos,
-    required this.yPos,
+    required super.id,
+    required super.name,
+    required super.description,
+    required super.chain,
+    required super.inStages,
+    required super.outStages,
+    required super.xPos,
+    required super.yPos,
     required this.conditions,
-    required this.pinpong,
-
+    required this.pingpong,
+    super.type = BaseStageType.conditional,
   });
 
   factory ConditionalStage.fromJson(json, T Function(Object? json) fromJsonT) {

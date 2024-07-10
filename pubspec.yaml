@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.7.7+103
+version: 1.8.0+131
 
 environment:
   sdk: ">=3.0.0"
@@ -54,18 +54,18 @@ dependencies:
   gigaturnip_api:
     path: packages/gigaturnip_api
   flutter_json_schema_form:
-#    path: ../flutter-jsonschema-form
-    git:
-      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
-      ref: master
+    path: ../flutter-jsonschema-form
+#    git:
+#      url: https://github.com/KloopMedia/flutter-jsonschema-form.git
+#      ref: master
   font_awesome_flutter: ^10.1.0
-  intl: ^0.18.1
+  intl: ^0.19.0
   shared_preferences: ^2.0.18
-  go_router: ^11.1.2
+  go_router: ^14.0.2
   permission_handler: ^11.0.0
   rxdart: ^0.27.7
   sliver_tools: ^0.2.9
-  universal_html: ^2.2.1
+  universal_html: ^2.2.4
   path_provider: ^2.0.14
   dio: ^5.1.1
   pinput: ^3.0.1
@@ -78,6 +78,13 @@ dependencies:
   firebase_messaging: ^14.7.8
   flutter_local_notifications: ^16.2.0
   flutter_inappwebview: ^6.0.0
+  infinite_scroll_pagination: ^4.0.0
+  flutter_linkify: ^6.0.0
+  graphview: ^1.2.0
+  syncfusion_flutter_charts: ^25.2.4
+
+dependency_overrides:
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

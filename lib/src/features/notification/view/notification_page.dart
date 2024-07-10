@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
-import 'package:gigaturnip/src/widgets/tab_bar/base_tab_bar.dart';
-import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
-import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../bloc/notification_cubit.dart';
-import 'notification_view.dart';
+import '../widgets/no_items_found_indicator.dart';
 
 class NotificationPage extends StatefulWidget {
   final int campaignId;
@@ -21,25 +22,57 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  // @override
-  // void initState() {
-  //   if (!kIsWeb) {
-  //     BackButtonInterceptor.add(myInterceptor);
-  //   }
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   BackButtonInterceptor.remove(myInterceptor);
-  //   super.dispose();
-  // }
-  //
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   redirectToTaskPage();
-  //   return true;
-  // }
-  //
+  static const _pageSize = 10;
+
+  final PagingController<int, api.Notification> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    _markAsRead();
+    super.initState();
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final client = context.read<api.GigaTurnipApiClient>();
+
+      final newItems = await client.getNotifications(query: {
+        'limit': _pageSize,
+        'offset': pageKey,
+        'campaign': widget.campaignId,
+      });
+
+      final results = newItems.results;
+
+      final isLastPage = results.length < _pageSize;
+
+      if (isLastPage) {
+        _pagingController.appendLastPage(results);
+      } else {
+        final nextPageKey = pageKey + results.length;
+        _pagingController.appendPage(results, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  Future<void> _markAsRead() async {
+    try {
+      final client = context.read<api.GigaTurnipApiClient>();
+
+      await client.readAllNotifications(query: {
+        'campaign': widget.campaignId,
+      });
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
   void redirectToTaskPage() {
     context.goNamed(
       TaskRoute.name,
@@ -50,48 +83,107 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<OpenNotificationCubit>(
-          create: (context) => NotificationCubit(
-            OpenNotificationRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-              campaignId: widget.campaignId,
-            ),
-          )..initialize(),
-          child: NotificationView<OpenNotificationCubit>(campaignId: widget.campaignId, isClosed: false),
+    return DefaultAppBar(
+      automaticallyImplyLeading: false,
+      leading: [BackButton(onPressed: redirectToTaskPage)],
+      title: Text(context.loc.notifications),
+      child: PagedListView<int, api.Notification>.separated(
+        pagingController: _pagingController,
+        reverse: true,
+        padding: const EdgeInsets.all(20),
+        builderDelegate: PagedChildBuilderDelegate<api.Notification>(
+          itemBuilder: (context, item, index) {
+            bool isFirstOfTheDay;
+            try {
+              final nextItem = _pagingController.itemList?[index + 1];
+
+              isFirstOfTheDay = !DateUtils.isSameDay(item.createdAt, nextItem!.createdAt);
+            } on RangeError {
+              isFirstOfTheDay = true;
+            } catch (e) {
+              isFirstOfTheDay = false;
+            }
+
+            return NotificationListItem(
+              notification: item,
+              isFirstOfTheDay: isFirstOfTheDay,
+            );
+          },
+          noItemsFoundIndicatorBuilder: (context) {
+            return const NoItemsFoundIndicator();
+          },
         ),
-        BlocProvider<ClosedNotificationCubit>(
-          create: (context) => NotificationCubit(
-            ClosedNotificationRepository(
-              gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
-              campaignId: widget.campaignId,
-            ),
-          )..initialize(),
-          child: NotificationView<ClosedNotificationCubit>(campaignId: widget.campaignId, isClosed: true),
-        ),
-      ],
-      child: DefaultTabController(
-        length: 2,
-        child: DefaultAppBar(
-          automaticallyImplyLeading: false,
-          leading: [BackButton(onPressed: redirectToTaskPage)],
-          title: Text(context.loc.notifications),
-          bottom: BaseTabBar(
-            tabs: [
-              Tab(child: Text(context.loc.open_notification, overflow: TextOverflow.ellipsis)),
-              Tab(child: Text(context.loc.closed_notification, overflow: TextOverflow.ellipsis)),
-            ],
-          ),
-          child: TabBarView(
-            children: [
-              NotificationView<OpenNotificationCubit>(campaignId: widget.campaignId, isClosed: false),
-              NotificationView<ClosedNotificationCubit>(campaignId: widget.campaignId, isClosed: true),
-            ],
-          ),
-        ),
+        separatorBuilder: (context, index) {
+          return const SizedBox(
+            height: 10,
+          );
+        },
       ),
+    );
+  }
+}
+
+class NotificationListItem extends StatelessWidget {
+  final api.Notification notification;
+  final bool isFirstOfTheDay;
+  final DateTime localTime;
+
+  NotificationListItem({super.key, required this.notification, required this.isFirstOfTheDay})
+      : localTime = notification.createdAt.toLocal();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (isFirstOfTheDay)
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Center(
+              child: Text(
+                DateFormat("EEEE, d MMM y").format(localTime),
+                style: const TextStyle(
+                  color: Color(0xFFAEAEAE),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF2F4F4),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Linkify(
+            text: notification.text,
+            style: const TextStyle(fontSize: 18),
+            onOpen: (link) async {
+              if (!await launchUrl(Uri.parse(link.url))) {
+                throw Exception('Could not launch ${link.url}');
+              }
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          DateFormat("Hm").format(localTime),
+          style: const TextStyle(
+            color: Color(0xFFAEAEAE),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            fontFamily: "Inter",
+          ),
+        )
+      ],
     );
   }
 }

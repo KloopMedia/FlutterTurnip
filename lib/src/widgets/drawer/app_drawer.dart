@@ -84,7 +84,7 @@ class AppDrawer extends StatelessWidget {
                   contentPadding: contentPadding,
                   leadingPadding: iconPadding,
                   leading: Icon(Icons.grid_view, color: theme.primary),
-                  title: Text(context.loc.drawer_campaigns, style: titleTextStyle),
+                  title: Text(context.loc.courses, style: titleTextStyle),
                   onTap: () => context.pushNamed(CampaignRoute.name, extra: true),
                 ),
               // CustomListTile(

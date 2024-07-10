@@ -15,7 +15,7 @@ CreateTaskResponse _$CreateTaskResponseFromJson(Map<String, dynamic> json) =>
       ($checkedConvert) {
         final val = CreateTaskResponse(
           status: $checkedConvert('status', (v) => v as String? ?? ""),
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
         );
         return val;
       },

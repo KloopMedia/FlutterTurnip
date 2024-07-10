@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
+import 'package:gigaturnip_api/src/models/user_activity.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'gigaturnip_api_client.g.dart';
@@ -104,7 +105,26 @@ abstract class GigaTurnipApiClient {
   @GET("$tasksRoute/{id}/$reopenTaskActionRoute")
   Future<void> reopenTask(@Path("id") int id);
 
+  @GET("$tasksRoute/user_activity")
+  Future<PaginationWrapper<UserActivity>> getUserActivity({@Queries() Map<String, dynamic>? query});
+
   // TaskStage methods
+
+  @GET(taskStagesRoute)
+  Future<PaginationWrapper<TaskStageDetail>> getTaskStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET(conditionalStagesRoute)
+  Future<PaginationWrapper<ConditionalStage>> getConditionalStages({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET("$conditionalStagesRoute/{id}")
+  Future<ConditionalStage> getConditionalStageById(
+      @Path("id") int id, {
+      @Queries() Map<String, dynamic>? query,
+  });
 
   @GET("$taskStagesRoute/{id}/$loadDynamicSchema")
   Future<DynamicSchema> getDynamicSchema(
@@ -151,6 +171,11 @@ abstract class GigaTurnipApiClient {
     @Queries() Map<String, dynamic>? query,
   });
 
+  @GET(readAllNotificationRoute)
+  Future<void> readAllNotifications({
+    @Queries() Map<String, dynamic>? query,
+  });
+
   @GET("$notificationsRoute/{id}")
   Future<Notification> getNotificationById(@Path("id") int id);
 
@@ -161,4 +186,11 @@ abstract class GigaTurnipApiClient {
 
   @POST(updateFcmTokenActionRoute)
   Future<void> updateFcmToken(@Body() Map<String, dynamic> data);
+
+  // Volume methods
+
+  @GET(volumesRoute)
+  Future<PaginationWrapper<Volume>> getVolumes({
+    @Queries() Map<String, dynamic>? query,
+  });
 }

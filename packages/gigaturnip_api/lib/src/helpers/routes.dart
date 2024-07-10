@@ -21,6 +21,8 @@ const userRelevantTaskStageRoute = '${taskStagesRoute}user_relevant/';
 const selectableTaskStageRoute = '${taskStagesRoute}selectable/';
 const availableTaskStageRoute = '${taskStagesRoute}available_stages/';
 
+// ConditionalStages routes
+const conditionalStagesRoute = 'conditionalstages/';
 
 // TaskStages actions
 const createTaskActionRoute = 'create_task/';
@@ -43,6 +45,7 @@ const reopenTaskActionRoute = 'uncomplete/';
 // Notifications routes
 const notificationsRoute = 'notifications/';
 const userNotificationsRoute = '${notificationsRoute}list_user_notifications/';
+const readAllNotificationRoute = '${notificationsRoute}read_all_notifications/';
 
 // Notifications actions
 const openNotificationActionRoute = 'open_notification/';
@@ -55,3 +58,6 @@ const deleteUserAction = '/delete_user/';
 // FCM routes
 const fcmRoute = 'fcm/fcm/';
 const updateFcmTokenActionRoute = '$fcmRoute/update_fcm_token/';
+
+// Volume routes
+const volumesRoute = 'volumes/';

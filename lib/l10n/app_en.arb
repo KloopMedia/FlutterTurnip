@@ -191,5 +191,16 @@
 	"settings_ranks": "Ranks",
 	"settings_messages": "Messages",
 
-	"chains": "Chains"
+	"chains": "Chains",
+	"no_notifications": "No items found",
+
+	"webview_return_to_lesson": "Back to the lesson",
+
+	"in_progress": "In progress",
+	"volume": "Volume",
+
+	"statistics": "Statistics",
+	"your_courses": "Your courses",
+	"join_other_courses": "Join other courses",
+	"courses": "Courses"
 }

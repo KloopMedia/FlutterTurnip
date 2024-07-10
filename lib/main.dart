@@ -31,7 +31,7 @@ Future<void> main() async {
 
   try {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.requestPermission(
+    messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,

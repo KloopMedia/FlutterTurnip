@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:gigaturnip/src/features/notification_detail/bloc/notification_detail_bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../router/routes/routes.dart';
 
@@ -48,25 +50,6 @@ class NotificationDetailView extends StatefulWidget {
 }
 
 class _NotificationDetailViewState extends State<NotificationDetailView> {
-  // @override
-  // void initState() {
-  //   if (!kIsWeb) {
-  //     BackButtonInterceptor.add(myInterceptor);
-  //   }
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   BackButtonInterceptor.remove(myInterceptor);
-  //   super.dispose();
-  // }
-  //
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   redirectToNotificationPage();
-  //   return true;
-  // }
-  //
   void redirectToNotificationPage() {
     if (context.canPop()) {
       context.pop(true);
@@ -123,7 +106,15 @@ class _NotificationDetailViewState extends State<NotificationDetailView> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text(state.data.text, textAlign: TextAlign.center),
+                          Linkify(
+                            text: state.data.text,
+                            textAlign: TextAlign.center,
+                            onOpen: (link) async {
+                              if (!await launchUrl(Uri.parse(link.url))) {
+                                throw Exception('Could not launch ${link.url}');
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),

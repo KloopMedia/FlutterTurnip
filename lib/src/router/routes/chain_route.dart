@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/features/chain/view/chain_page.dart';
+import 'package:gigaturnip/src/features/campaign_management/view/campaing_management_page.dart';
 import 'package:go_router/go_router.dart';
 
 class ChainRoute {
@@ -23,7 +23,7 @@ class ChainRoute {
         if (campaignId == null) {
           return const Text('Error: Failed to parse id');
         }
-        return ChainPage(campaignId: campaignId);
+        return const CampaignManagementPage();
       },
     );
   }

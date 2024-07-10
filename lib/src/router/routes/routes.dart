@@ -9,3 +9,4 @@ export 'available_task_route.dart';
 export 'settings_route.dart';
 export 'chain_route.dart';
 export 'privacy_policy_route.dart';
+export 'task_management_route.dart';

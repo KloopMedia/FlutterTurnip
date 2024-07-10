@@ -14,7 +14,7 @@ DynamicSchema _$DynamicSchemaFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = DynamicSchema(
-          status: $checkedConvert('status', (v) => v as int),
+          status: $checkedConvert('status', (v) => (v as num).toInt()),
           schema: $checkedConvert('schema', (v) => v as Map<String, dynamic>),
         );
         return val;

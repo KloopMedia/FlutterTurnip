@@ -13,10 +13,10 @@ Chain _$ChainFromJson(Map<String, dynamic> json) => $checkedCreate(
       json,
       ($checkedConvert) {
         final val = Chain(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           description: $checkedConvert('description', (v) => v as String),
-          campaign: $checkedConvert('campaign', (v) => v as int),
+          campaign: $checkedConvert('campaign', (v) => (v as num).toInt()),
         );
         return val;
       },

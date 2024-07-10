@@ -33,7 +33,7 @@ class ChainCard extends StatelessWidget {
     ];
 
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       borderRadius: BorderRadius.circular(15),
       child: Container(
         width: 380,

@@ -14,7 +14,7 @@ IndividualChain _$IndividualChainFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = IndividualChain(
-          id: $checkedConvert('id', (v) => v as int),
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
           stagesData: $checkedConvert(
               'stages_data',

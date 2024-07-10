@@ -7,8 +7,11 @@ import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
+import '../../../router/routes/routes.dart';
 import '../../../utilities/constants.dart';
 import '../../../utilities/notification_services.dart';
 import '../../../widgets/button/filter_button/web_filter/web_filter.dart';
@@ -17,9 +20,6 @@ import '../bloc/campaign_cubit.dart';
 import '../bloc/category_bloc/category_cubit.dart';
 import '../bloc/country_bloc/country_cubit.dart';
 import '../bloc/language_bloc/language_cubit.dart';
-import '../widgets/category_filter_bar_widget.dart';
-import 'available_campaign_view.dart';
-import 'user_campaign_view.dart';
 
 class CampaignPage extends StatefulWidget {
   const CampaignPage({Key? key}) : super(key: key);
@@ -35,6 +35,7 @@ class _CampaignPageState extends State<CampaignPage> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
@@ -118,8 +119,7 @@ class _CampaignViewState extends State<CampaignView> {
       var category = Category(
           id: selectedCategory.values.first['categories'],
           name: selectedCategory.keys.first,
-          outCategories: const []
-      );
+          outCategories: const []);
       queries.removeWhere((element) => element is Category);
       queries.add(category);
       queryMap.removeWhere((key, value) => key == 'categories');
@@ -140,7 +140,8 @@ class _CampaignViewState extends State<CampaignView> {
     final firstTimeCountry = sharedPreferences.getBool(Constants.sharedPrefFirstTimeCountryKey);
     if (firstTimeCountry != null && firstTimeCountry) {
       isDialogShown = true;
-      if (selectedCountry != null && selectedCountry.isNotEmpty) queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
+      if (selectedCountry != null && selectedCountry.isNotEmpty)
+        queries.add(Country(id: int.tryParse(selectedCountry[0])!, name: selectedCountry[1]));
     }
   }
 
@@ -152,16 +153,18 @@ class _CampaignViewState extends State<CampaignView> {
       showModalBottomSheet(
         isDismissible: false,
         isScrollControlled: true,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15.0))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(15.0))),
         context: context,
         builder: (context) {
           return DropdownDialog(
             data: data,
             onSubmit: (value) {
               onSubmit(value);
-            }
+            },
           );
-        });
+        },
+      );
     } else {
       showDialog(
         context: context,
@@ -170,85 +173,85 @@ class _CampaignViewState extends State<CampaignView> {
           return SearchBarDialog(
             data: data,
             onSubmit: (value) {
-             onSubmit(value);
-            }
+              onSubmit(value);
+            },
           );
-      });
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: context.read<CountryCubit>().loadData(),
-      builder: (context, snapshot) {
-        /// comment until new countries appear
-        // if (snapshot.hasData) {
-        //   if (!isDialogShown) {
-        //     Future.delayed(Duration.zero, () {
-        //       _searchBarDialog(
-        //         data: snapshot.data!,
-        //         onSubmit: (selectedCountry) {
-        //           setState(() {
-        //             queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
-        //           });
-        //           sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
-        //           sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
-        //           context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
-        //           context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
-        //         }
-        //       );
-        //     });
-        //     isDialogShown = true;
-        //   }
-        // }
+        future: context.read<CountryCubit>().loadData(),
+        builder: (context, snapshot) {
+          /// comment until new countries appear
+          // if (snapshot.hasData) {
+          //   if (!isDialogShown) {
+          //     Future.delayed(Duration.zero, () {
+          //       _searchBarDialog(
+          //         data: snapshot.data!,
+          //         onSubmit: (selectedCountry) {
+          //           setState(() {
+          //             queries.add(Country(id: selectedCountry.first.id, name: selectedCountry.first.name));
+          //           });
+          //           sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedCountry.first.id.toString(), selectedCountry.first.name]);
+          //           sharedPreferences.setBool(Constants.sharedPrefFirstTimeCountryKey, true);
+          //           context.read<UserCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
+          //           context.read<SelectableCampaignCubit>().refetchWithFilter(query: {'countries__name': selectedCountry.first.name});
+          //         }
+          //       );
+          //     });
+          //     isDialogShown = true;
+          //   }
+          // }
 
-        return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
-              builder: (context, state) {
-                final theme = Theme.of(context).colorScheme;
-                return DefaultTabController(
-                  length: 2,
-                  child: DefaultAppBar(
-                    title: Text(context.loc.campaigns),
-                    actions: [
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-                      FilterButton(
-                        queries: queries,
-                        onPressed: (selectedItems) {
-                          queries.clear();
-                          queryMap.clear();
-                          if (selectedItems.isNotEmpty) {
-                            for (var selectedItem in selectedItems) {
-                              if (selectedItem is Country) {
-                                queryMap.addAll({'countries__name': selectedItem.name});
-                                sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
-                              } else if (selectedItem is Category) {
-                                queryMap.addAll({'categories': selectedItem.id});
-                              } else if (selectedItem is Language){
-                                queryMap.addAll({'language__code': selectedItem.code});
-                              }
-                            }
-                            queries.addAll(selectedItems);
-                            _onFilterTapByQuery(queryMap);
-                          } else {
-                            sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
-                            _onFilterTapByQuery(queryMap);
-                          }
-                        },
-                        openCloseFilter: (openClose) {
-                          setState((){
-                            showFilters = openClose;
-                          });
-                      }),
-                    ],
-                    middle: CategoryFilterBarWidget(
+          return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
+            builder: (context, state) {
+              final theme = Theme.of(context).colorScheme;
+              return DefaultAppBar(
+                title: Text(context.loc.courses),
+                actions: [
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+                  FilterButton(
                       queries: queries,
-                      onChanged: (query) {
-                        _addSelectedCategoryToQueries(query!);
+                      onPressed: (selectedItems) {
+                        queries.clear();
+                        queryMap.clear();
+                        if (selectedItems.isNotEmpty) {
+                          for (var selectedItem in selectedItems) {
+                            if (selectedItem is Country) {
+                              queryMap.addAll({'countries__name': selectedItem.name});
+                              sharedPreferences.setStringList(Constants.sharedPrefCountryKey,
+                                  [selectedItem.id.toString(), selectedItem.name]);
+                            } else if (selectedItem is Category) {
+                              queryMap.addAll({'categories': selectedItem.id});
+                            } else if (selectedItem is Language) {
+                              queryMap.addAll({'language__code': selectedItem.code});
+                            }
+                          }
+                          queries.addAll(selectedItems);
+                          _onFilterTapByQuery(queryMap);
+                        } else {
+                          sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
+                          _onFilterTapByQuery(queryMap);
+                        }
                       },
-                    ),
-                    subActions: (showFilters)
-                      ? [
+                      openCloseFilter: (openClose) {
+                        setState(() {
+                          showFilters = openClose;
+                        });
+                      }),
+                ],
+                // middle: CategoryFilterBarWidget(
+                //   queries: queries,
+                //   onChanged: (query) {
+                //     _addSelectedCategoryToQueries(query!);
+                //   },
+                // ),
+                subActions: (showFilters)
+                    ? [
                         WebFilter<Country, CountryCubit>(
                           queries: queries,
                           title: context.loc.country,
@@ -257,11 +260,12 @@ class _CampaignViewState extends State<CampaignView> {
                               queries.removeWhere((item) => item is Country);
                               queries.add(selectedItem);
                               queryMap.addAll({'countries__name': selectedItem.name});
-                              sharedPreferences.setStringList(Constants.sharedPrefCountryKey, [selectedItem.id.toString(), selectedItem.name]);
+                              sharedPreferences.setStringList(Constants.sharedPrefCountryKey,
+                                  [selectedItem.id.toString(), selectedItem.name]);
                               _onFilterTapByQuery(queryMap);
                             } else {
                               queries.removeWhere((item) => item is Country);
-                              queryMap.removeWhere((key, value) => key =='countries__name');
+                              queryMap.removeWhere((key, value) => key == 'countries__name');
                               sharedPreferences.setStringList(Constants.sharedPrefCountryKey, []);
                               _onFilterTapByQuery(queryMap);
                             }
@@ -300,37 +304,174 @@ class _CampaignViewState extends State<CampaignView> {
                           },
                         ),
                       ]
-                      : null,
-                    bottom: BaseTabBar(
-                      width: calculateTabWidth(context),
-                      border: context.formFactor == FormFactor.small
-                          ? Border(
-                              bottom: BorderSide(
-                                color: theme.isLight ? theme.neutralVariant80 : theme.neutralVariant40,
-                                width: 2,
-                              ),
-                            )
-                          : null,
-                      tabs: [
-                        Tab(
-                          child: Text(context.loc.my_campaigns, overflow: TextOverflow.ellipsis),
-                        ),
-                        Tab(
-                          child: Text(context.loc.available_campaigns, overflow: TextOverflow.ellipsis),
-                        ),
-                      ],
-                    ),
-                    child: const TabBarView(
-                      children: [
-                        UserCampaignView(),
-                        AvailableCampaignView(),
-                      ],
-                    ),
+                    : null,
+                child: const CustomScrollView(
+                  slivers: [
+                    AvailableCampaignView(),
+                    UserCampaignView(),
+                  ],
+                ),
+              );
+            },
+          );
+        });
+  }
+}
+
+class UserCampaignView extends StatelessWidget {
+  const UserCampaignView({super.key});
+
+  void redirectToTaskMenu(BuildContext context, Campaign item) {
+    context.pushNamed(
+      TaskRoute.name,
+      pathParameters: {'cid': '${item.id}'},
+      extra: item,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+
+    return BlocBuilder<UserCampaignCubit, RemoteDataState<Campaign>>(
+      builder: (context, state) {
+        if (state is RemoteDataLoaded<Campaign>) {
+          return MultiSliver(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24),
+                child: Text(
+                  context.loc.your_courses,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: theme.isLight ? theme.neutral30 : theme.neutral90,
                   ),
-                );
-              },
-            );
-      }
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = state.data[index];
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        top: index == 0 ? 0 : 10,
+                        bottom: 10.0,
+                        left: 24,
+                        right: 24,
+                      ),
+                      child: CardWithTitle(
+                        title: item.name,
+                        body: SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            item.description,
+                          ),
+                        ),
+                        imageUrl: item.logo,
+                        onTap: () => redirectToTaskMenu(context, item),
+                      ),
+                    );
+                  },
+                  childCount: state.data.length,
+                ),
+              )
+            ],
+          );
+        }
+
+        return const SliverToBoxAdapter(
+          child: SizedBox.shrink(),
+        );
+      },
+    );
+  }
+}
+
+class AvailableCampaignView extends StatelessWidget {
+  const AvailableCampaignView({super.key});
+
+  void redirectToCampaignDetail(BuildContext context, Campaign campaign) {
+    context.pushNamed(
+      CampaignDetailRoute.name,
+      pathParameters: {'cid': '${campaign.id}'},
+      extra: campaign,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+
+    return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
+      builder: (context, state) {
+        if (state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty) {
+          return MultiSliver(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24),
+                child: Text(
+                  context.loc.join_other_courses,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: theme.isLight ? theme.neutral30 : theme.neutral90,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 180,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  itemBuilder: (context, index) {
+                    final item = state.data[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: CardWithTitle(
+                        title: item.name,
+                        backgroundColor: Color(0xFFDCE1FF),
+                        body: SizedBox(
+                          height: 20,
+                          width: double.infinity,
+                          child: Text(
+                            item.description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        bottom: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: theme.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () => redirectToCampaignDetail(context, item),
+                            child: Text(context.loc.join),
+                          ),
+                        ),
+                        size: const Size(340, 150),
+                        imageUrl: item.logo,
+                        flex: 1,
+                        onTap: () => redirectToCampaignDetail(context, item),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(width: 16);
+                  },
+                  itemCount: state.data.length,
+                ),
+              )
+            ],
+          );
+        }
+        return const SliverToBoxAdapter(child: SizedBox.shrink());
+      },
     );
   }
 }

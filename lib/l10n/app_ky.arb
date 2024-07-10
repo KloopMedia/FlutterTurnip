@@ -191,5 +191,16 @@
 	"settings_ranks": "Ранги",
 	"settings_messages": "Сообщения",
 
-	"chains": "Цепочки"
+	"chains": "Цепочки",
+	"no_notifications": "Эч нерсе табылган жок",
+
+	"webview_return_to_lesson": "Сабакка кайтуу",
+
+	"in_progress": "Аткарылууда",
+	"volume": "Бөлүм",
+
+	"statistics": "Статистика",
+	"your_courses": "Сиздин курстарыңыз",
+	"join_other_courses": "Башка курстарга кошулуңуз",
+	"courses": "Курстар"
 }

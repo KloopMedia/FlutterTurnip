@@ -36,6 +36,14 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
       externalRendererUrl: json['externalRendererUrl'] as String?,
       openLimit: json['openLimit'] as int? ?? 0,
       totalLimit: json['totalLimit'] as int? ?? 0,
+      inStages:
+          (json['inStages'] as List<dynamic>).map((e) => e as int).toList(),
+      outStages:
+          (json['outStages'] as List<dynamic>).map((e) => e as int).toList(),
+      xPos: BaseStage.parseStringToDouble(json['xPos'] as String),
+      yPos: BaseStage.parseStringToDouble(json['yPos'] as String),
+      type: $enumDecodeNullable(_$BaseStageTypeEnumMap, json['type']) ??
+          api.BaseStageType.task,
     );
 
 Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
@@ -44,6 +52,11 @@ Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
       'name': instance.name,
       'description': instance.description,
       'chain': instance.chain,
+      'inStages': instance.inStages,
+      'outStages': instance.outStages,
+      'xPos': instance.xPos,
+      'yPos': instance.yPos,
+      'type': _$BaseStageTypeEnumMap[instance.type]!,
       'campaign': instance.campaign,
       'richText': instance.richText,
       'cardJsonSchema': instance.cardJsonSchema,
@@ -61,3 +74,8 @@ Map<String, dynamic> _$TaskStageDetailToJson(TaskStageDetail instance) =>
       'quizAnswers': instance.quizAnswers,
       'externalRendererUrl': instance.externalRendererUrl,
     };
+
+const _$BaseStageTypeEnumMap = {
+  BaseStageType.task: 'task',
+  BaseStageType.conditional: 'conditional',
+};
