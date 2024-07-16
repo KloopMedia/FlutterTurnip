@@ -420,7 +420,7 @@ class AvailableCampaignView extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 180,
+                height: 190,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 24),
