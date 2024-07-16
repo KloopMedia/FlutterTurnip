@@ -153,9 +153,17 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           final selectedVolume = selectedVolumeState.volume;
 
           var filterNames = [
-            selectedVolume?.activeTasksText ?? context.loc.task_filter_active,
-            selectedVolume?.returnedTasksText ?? context.loc.task_filter_returned,
-            selectedVolume?.completedTasksText ?? context.loc.task_filter_submitted,
+            selectedVolume?.activeTasksText != null && selectedVolume!.activeTasksText.isNotEmpty
+                ? selectedVolume.activeTasksText
+                : context.loc.task_filter_active,
+            selectedVolume?.returnedTasksText != null &&
+                    selectedVolume!.returnedTasksText.isNotEmpty
+                ? selectedVolume.returnedTasksText
+                : context.loc.task_filter_returned,
+            selectedVolume?.completedTasksText != null &&
+                    selectedVolume!.completedTasksText.isNotEmpty
+                ? selectedVolume.completedTasksText
+                : context.loc.task_filter_submitted,
             context.loc.task_filter_all,
           ];
 
