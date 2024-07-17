@@ -404,7 +404,7 @@ class AvailableCampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
-    return BlocBuilder<UserCampaignCubit, RemoteDataState<Campaign>>(
+    return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
       builder: (context, state) {
         if (state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty) {
           return MultiSliver(
