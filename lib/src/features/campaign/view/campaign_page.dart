@@ -366,6 +366,7 @@ class UserCampaignView extends StatelessWidget {
                           width: double.infinity,
                           child: Text(
                             item.description,
+                            style: TextStyle(color: theme.onSurfaceVariant),
                           ),
                         ),
                         imageUrl: item.logo,
@@ -403,7 +404,7 @@ class AvailableCampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
-    return BlocBuilder<SelectableCampaignCubit, RemoteDataState<Campaign>>(
+    return BlocBuilder<UserCampaignCubit, RemoteDataState<Campaign>>(
       builder: (context, state) {
         if (state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty) {
           return MultiSliver(
@@ -430,6 +431,7 @@ class AvailableCampaignView extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: CardWithTitle(
                         title: item.name,
+                        titleColor: Colors.black,
                         backgroundColor: Color(0xFFDCE1FF),
                         body: SizedBox(
                           height: 20,
