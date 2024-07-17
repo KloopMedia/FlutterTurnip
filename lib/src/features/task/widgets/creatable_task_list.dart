@@ -32,24 +32,24 @@ class CreatableTaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: BlocBuilder<ProactiveTasksButtons, RemoteDataState<TaskStage>>(
-          builder: (context, state) {
-            if (state is RemoteDataLoaded<TaskStage>) {
-              final items = createTasks(context, state.data);
+      child: BlocBuilder<ProactiveTasksButtons, RemoteDataState<TaskStage>>(
+        builder: (context, state) {
+          if (state is RemoteDataLoaded<TaskStage> && state.data.isNotEmpty) {
+            final items = createTasks(context, state.data);
 
-              return Wrap(
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              child: Wrap(
                 direction: Axis.horizontal,
                 spacing: 20,
                 runSpacing: 20,
                 children: items,
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }
