@@ -167,6 +167,7 @@ class AppRouter {
         ChainRoute(parentKey: _rootNavigatorKey).route,
         PrivacyPolicyRoute(parentKey: _rootNavigatorKey).route,
         TaskManagementRoute(parentKey: _rootNavigatorKey).route,
+        PushNotificationRoute(parentKey: _rootNavigatorKey).route,
       ],
     );
   }
