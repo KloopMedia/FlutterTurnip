@@ -84,7 +84,7 @@ class _CampaignPageState extends State<CampaignManagementPage> {
                   campaignId: campaignId,
                   gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
                 ),
-              )..initialize(query: {'limit': 300}),
+              )..initialize(query: {'limit': 2000}),
             ),
           ],
           child: const TabBarView(
