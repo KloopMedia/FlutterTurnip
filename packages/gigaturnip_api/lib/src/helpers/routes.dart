@@ -61,3 +61,7 @@ const updateFcmTokenActionRoute = '$fcmRoute/update_fcm_token/';
 
 // Volume routes
 const volumesRoute = 'volumes/';
+
+
+const lessonsRoute = 'lessons/chained_stages/';
+const testsRoute = '/api/v1/tests/';
