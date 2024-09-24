@@ -90,19 +90,18 @@ class LessonTaskPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<IndividualChainCubit, RemoteDataState<IndividualChain>>(
       builder: (context, state) {
-        if (state is RemoteDataFetching<IndividualChain>) {
+        if (state is RemoteDataLoading) {
           return const SliverToBoxAdapter(
             child: Center(
               child: CircularProgressIndicator(),
             ),
           );
         }
-        if (state is RemoteDataFetchingError<IndividualChain> ||
-            state is RemoteDataRefetchingError<IndividualChain>) {
+        if (state is RemoteDataFailed) {
           return const SliverToBoxAdapter(child: SizedBox());
         }
 
-        if (state is RemoteDataLoaded<IndividualChain>) {
+        if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
           final data = state.data;
 
           final items = _buildChain(data.first.stagesData);

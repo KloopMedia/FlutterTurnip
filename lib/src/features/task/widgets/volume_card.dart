@@ -27,13 +27,17 @@ class VolumeCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
       child: Container(
         width: 238,
         height: 141,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFECF0FF) : const Color(0xFFEFF1F1),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
+          border: isSelected
+              ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2)
+              : null,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
