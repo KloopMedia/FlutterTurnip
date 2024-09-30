@@ -21,6 +21,9 @@ class Volume {
   final int trackFk;
   final List<int> openingRanks;
   final List<int> closingRanks;
+  final bool userHasDefaultRank;
+  final bool userHasOpeningRanks;
+  final bool userHasClosingRanks;
 
   Volume({
     required this.id,
@@ -40,6 +43,9 @@ class Volume {
     required this.trackFk,
     required this.openingRanks,
     required this.closingRanks,
+    required this.userHasDefaultRank,
+    required this.userHasOpeningRanks,
+    required this.userHasClosingRanks,
   });
 
   factory Volume.fromJson(Map<String, dynamic> json) {

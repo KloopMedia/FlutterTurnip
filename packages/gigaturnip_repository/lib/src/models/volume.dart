@@ -3,6 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'volume.g.dart';
 
+enum VolumeStatus { locked, complete, current }
+
 @JsonSerializable(explicitToJson: true)
 class Volume {
   final int id;
@@ -22,6 +24,7 @@ class Volume {
   final int trackFk;
   final List<int> openingRanks;
   final List<int> closingRanks;
+  final VolumeStatus status;
 
   Volume({
     required this.id,
@@ -41,6 +44,7 @@ class Volume {
     required this.trackFk,
     required this.openingRanks,
     required this.closingRanks,
+    required this.status,
   });
 
   factory Volume.fromJson(Map<String, dynamic> json) {
@@ -66,6 +70,17 @@ class Volume {
       trackFk: model.trackFk,
       openingRanks: model.openingRanks,
       closingRanks: model.closingRanks,
+      status: _getStatus(model),
     );
+  }
+
+  static VolumeStatus _getStatus(api.Volume model) {
+    if (model.userHasOpeningRanks && !model.userHasClosingRanks) {
+      return VolumeStatus.current;
+    } else if (model.userHasOpeningRanks && model.userHasClosingRanks) {
+      return VolumeStatus.complete;
+    } else {
+      return VolumeStatus.locked;
+    }
   }
 }

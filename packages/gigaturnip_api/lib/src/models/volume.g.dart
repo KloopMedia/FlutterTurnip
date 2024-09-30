@@ -43,6 +43,12 @@ Volume _$VolumeFromJson(Map<String, dynamic> json) => $checkedCreate(
               'closing_ranks',
               (v) =>
                   (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+          userHasDefaultRank:
+              $checkedConvert('user_has_default_rank', (v) => v as bool),
+          userHasOpeningRanks:
+              $checkedConvert('user_has_opening_ranks', (v) => v as bool),
+          userHasClosingRanks:
+              $checkedConvert('user_has_closing_ranks', (v) => v as bool),
         );
         return val;
       },
@@ -59,6 +65,9 @@ Volume _$VolumeFromJson(Map<String, dynamic> json) => $checkedCreate(
         'completedTasksText': 'completed_tasks_text',
         'trackFk': 'track_fk',
         'openingRanks': 'opening_ranks',
-        'closingRanks': 'closing_ranks'
+        'closingRanks': 'closing_ranks',
+        'userHasDefaultRank': 'user_has_default_rank',
+        'userHasOpeningRanks': 'user_has_opening_ranks',
+        'userHasClosingRanks': 'user_has_closing_ranks'
       },
     );
