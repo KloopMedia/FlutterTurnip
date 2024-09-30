@@ -38,7 +38,6 @@ class _CampaignPageState extends State<CampaignPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isGridView = context.isExtraLarge || context.isLarge;
     final gigaTurnipApiClient = context.read<api.GigaTurnipApiClient>();
     notificationServices.getDeviceToken(gigaTurnipApiClient, null);
 
@@ -48,7 +47,7 @@ class _CampaignPageState extends State<CampaignPage> {
           create: (context) => CampaignCubit(
             SelectableCampaignRepository(
               gigaTurnipApiClient: gigaTurnipApiClient,
-              limit: isGridView ? 9 : 10,
+              limit: 30,
             ),
             context.read<SharedPreferences>(),
           )..initialize(),
@@ -57,7 +56,7 @@ class _CampaignPageState extends State<CampaignPage> {
           create: (context) => CampaignCubit(
             UserCampaignRepository(
               gigaTurnipApiClient: gigaTurnipApiClient,
-              limit: isGridView ? 9 : 10,
+              limit: 30,
             ),
             context.read<SharedPreferences>(),
           )..initialize(),

@@ -130,9 +130,6 @@ class AppRouter {
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
 
-        // if there is push notification, then send user to NotificationDetailPage
-        if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
-
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
         if (loggingIn) return redirectToInitialPage(context, state);
