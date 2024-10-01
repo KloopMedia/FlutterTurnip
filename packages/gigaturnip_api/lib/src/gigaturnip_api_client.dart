@@ -57,6 +57,9 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<IndividualChain>> getIndividualChains(
       {@Queries() Map<String, dynamic>? query});
 
+  @GET("$trackRoute/{id}")
+  Future<HttpResponse> getTrackById(@Path("id") int id);
+
   // Task methods
 
   @GET(tasksRoute)

@@ -14,6 +14,7 @@ const languagesRoute = 'languages/';
 // Chain routes
 const chainsRoute = 'chains/';
 const individualChainsRoute = '${chainsRoute}individuals/';
+const trackRoute = 'tracks/';
 
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';

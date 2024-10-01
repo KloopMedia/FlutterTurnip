@@ -44,11 +44,35 @@ class _OnBoardingState extends State<OnBoarding> {
     );
 
     Future<void> redirect(BuildContext context, int campaignId) async {
-      final campaign = await context.read<api.GigaTurnipApiClient>().getCampaignById(campaignId);
+      final client = context.read<api.GigaTurnipApiClient>();
+      final campaign = await client.getCampaignById(campaignId);
       final isJoined = campaign.isJoined;
 
       if (context.mounted && !isJoined) {
-        await context.read<api.GigaTurnipApiClient>().joinCampaign(campaignId);
+        await client.joinCampaign(campaignId);
+      }
+
+      if (!context.mounted) return;
+
+      final defaultTrack = campaign.defaultTrack;
+      if (defaultTrack != null) {
+        final track = await client.getTrackById(defaultTrack);
+        final registrationStage = track.data["registration_stage"];
+
+        if (context.mounted && registrationStage != null) {
+          try {
+            final task = await client.createTaskFromStageId(registrationStage);
+            if (context.mounted) {
+              context.goNamed(TaskDetailRoute.name, pathParameters: {
+                'cid': '$campaignId',
+                'tid': task.id.toString(),
+              });
+            }
+            return;
+          } catch (e) {
+            print(e);
+          }
+        }
       }
 
       if (context.mounted) context.goNamed(TaskRoute.name, pathParameters: {'cid': '$campaignId'});

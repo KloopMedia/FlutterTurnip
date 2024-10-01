@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
-import 'package:gigaturnip/src/theme/shadows.dart';
-import 'package:gigaturnip/src/theme/theme.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -46,12 +44,36 @@ class CampaignDetailView extends StatelessWidget {
   final bool isCampaignLink;
 
   const CampaignDetailView({
-    Key? key,
+    super.key,
     required this.campaignId,
     required this.isCampaignLink,
-  }) : super(key: key);
+  });
 
-  void redirectToTaskMenu(BuildContext context, int id) {
+  void redirectToTaskMenu(BuildContext context, int id) async {
+    final client = context.read<GigaTurnipApiClient>();
+    final campaign = await client.getCampaignById(campaignId);
+
+    final defaultTrack = campaign.defaultTrack;
+    if (defaultTrack != null) {
+      final track = await client.getTrackById(defaultTrack);
+      final registrationStage = track.data["registration_stage"];
+
+      if (context.mounted && registrationStage != null) {
+        try {
+          final task = await client.createTaskFromStageId(registrationStage);
+          if (context.mounted) {
+            context.goNamed(TaskDetailRoute.name, pathParameters: {
+              'cid': '$campaignId',
+              'tid': task.id.toString(),
+            });
+          }
+          return;
+        } catch (e) {
+          print(e);
+        }
+      }
+    }
+
     context.goNamed(
       TaskRoute.name,
       pathParameters: {
