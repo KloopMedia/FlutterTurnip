@@ -24,12 +24,9 @@ class VolumeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chipOrder = index > 9
-        ? "${context.loc.volume} $index"
-        : "${context.orderLabel(index)} ${context.loc.volume.toLowerCase()}";
-
     return InkWell(
       onTap: status == VolumeStatus.locked ? null : onTap,
+      borderRadius: BorderRadius.circular(15),
       child: Container(
         width: 238,
         height: 141,
@@ -40,7 +37,7 @@ class VolumeCard extends StatelessWidget {
             VolumeStatus.locked => const Color(0xFFEFF1F1),
             VolumeStatus.current => const Color(0xFFECF0FF),
           },
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
