@@ -244,7 +244,7 @@ class _WebViewState extends State<WebView> {
       setState(() {});
       if (_history.isNotEmpty) {
         final lastPage = _history.last;
-        webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage.uri));
+        webViewController?.goBack();
         webViewController?.platform.scrollTo(x: lastPage.scrollX, y: lastPage.scrollY);
       } else {
         await webViewController?.loadData(data: _data);
@@ -287,7 +287,6 @@ class _WebViewState extends State<WebView> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {},
       child: Scaffold(
         appBar: AppBar(
           leading: BackButton(
