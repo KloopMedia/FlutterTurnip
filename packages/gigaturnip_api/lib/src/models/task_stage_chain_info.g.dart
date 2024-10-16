@@ -27,9 +27,6 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
               (v) => (v as List<dynamic>)
                   .map((e) => (e as num?)?.toInt())
                   .toList()),
-          totalCount: $checkedConvert('total_count', (v) => (v as num).toInt()),
-          completeCount:
-              $checkedConvert('complete_count', (v) => (v as num).toInt()),
           completed: $checkedConvert(
               'completed',
               (v) =>
@@ -48,8 +45,6 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
       fieldKeyMap: const {
         'assignType': 'assign_type',
         'inStages': 'in_stages',
-        'outStages': 'out_stages',
-        'totalCount': 'total_count',
-        'completeCount': 'complete_count'
+        'outStages': 'out_stages'
       },
     );

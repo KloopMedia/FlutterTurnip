@@ -7,20 +7,24 @@ part of 'user_activity.dart';
 // **************************************************************************
 
 UserActivity _$UserActivityFromJson(Map<String, dynamic> json) => UserActivity(
-      stage: json['stage'] as int,
+      stage: (json['stage'] as num).toInt(),
       stageName: json['stageName'] as String,
-      chain: json['chain'] as int,
+      chain: (json['chain'] as num).toInt(),
       chainName: json['chainName'] as String,
-      ranks: (json['ranks'] as List<dynamic>).map((e) => e as int?).toList(),
-      inStages:
-          (json['inStages'] as List<dynamic>).map((e) => e as int?).toList(),
-      outStages:
-          (json['outStages'] as List<dynamic>).map((e) => e as int?).toList(),
-      completeTrue: json['completeTrue'] as int,
-      completeFalse: json['completeFalse'] as int,
-      forceCompleteTrue: json['forceCompleteTrue'] as int,
-      forceCompleteFalse: json['forceCompleteFalse'] as int,
-      countTasks: json['countTasks'] as int,
+      ranks: (json['ranks'] as List<dynamic>)
+          .map((e) => (e as num?)?.toInt())
+          .toList(),
+      inStages: (json['inStages'] as List<dynamic>)
+          .map((e) => (e as num?)?.toInt())
+          .toList(),
+      outStages: (json['outStages'] as List<dynamic>)
+          .map((e) => (e as num?)?.toInt())
+          .toList(),
+      completeTrue: (json['completeTrue'] as num).toInt(),
+      completeFalse: (json['completeFalse'] as num).toInt(),
+      forceCompleteTrue: (json['forceCompleteTrue'] as num).toInt(),
+      forceCompleteFalse: (json['forceCompleteFalse'] as num).toInt(),
+      countTasks: (json['countTasks'] as num).toInt(),
     );
 
 Map<String, dynamic> _$UserActivityToJson(UserActivity instance) =>
