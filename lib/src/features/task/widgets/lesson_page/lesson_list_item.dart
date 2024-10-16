@@ -26,30 +26,34 @@ class LessonListItem extends StatelessWidget {
           color: Theme.of(context).colorScheme.neutral95,
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                if (description != null && description!.isNotEmpty)
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    description ?? "",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.outline,
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-              ],
+                  if (description != null && description!.isNotEmpty)
+                    Text(
+                      description ?? "",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.outline,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                ],
+              ),
             ),
-            const Spacer(),
             const Icon(Icons.arrow_forward_ios, size: 16)
           ],
         ),
