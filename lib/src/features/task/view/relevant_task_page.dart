@@ -5,6 +5,7 @@ import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/volume_bloc/volume_cubit.dart';
 import 'package:gigaturnip/src/features/task/view/volumes.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
+import 'package:gigaturnip/src/features/task/widgets/contact_us_button.dart';
 import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -344,6 +345,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
                     context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
                   },
+                ),
+                SliverToBoxAdapter(
+                  child: ContactUsButton(),
                 ),
                 if (true)
                   ..._buildAlternativeTaskView()
