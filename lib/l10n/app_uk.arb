@@ -202,5 +202,8 @@
 	"statistics": "Статистика",
 	"your_courses": "Ваші курси",
 	"join_other_courses": "Приєднуйтесь до інших курсів",
-	"courses": "Курси"
+	"courses": "Курси",
+
+	"call_us_whatsapp": "Написать в WhatsApp",
+  "call_us_telegram": "Написать в Telegram"
 }

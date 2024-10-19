@@ -116,6 +116,37 @@ class AppDrawer extends StatelessWidget {
               //   title: Text(context.loc.drawer_help, style: titleTextStyle),
               //   onTap: () {},
               // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 10, 24, 2),
+                child: SelectableText(
+                  "Свяжитесь с нами:",
+                  style: titleTextStyle,
+                ),
+              ),
+              CustomListTile(
+                contentPadding: contentPadding,
+                leadingPadding: iconPadding,
+                leading: Image.asset(
+                  'assets/icon/whatsapp.png',
+                  width: 24,
+                  height: 24,
+                ),
+                title: Text(context.loc.call_us_whatsapp,
+                    style: titleTextStyle.copyWith(color: Color(0xFF25D366))),
+                onTap: () {},
+              ),
+              CustomListTile(
+                contentPadding: contentPadding,
+                leadingPadding: iconPadding,
+                leading: Image.asset(
+                  'assets/icon/telegram.png',
+                  width: 24,
+                  height: 24,
+                ),
+                title: Text(context.loc.call_us_telegram,
+                    style: titleTextStyle.copyWith(color: Color(0xFF4F9CE1))),
+                onTap: () {},
+              ),
               if (isAuthenticated)
                 CustomListTile(
                   contentPadding: contentPadding,
