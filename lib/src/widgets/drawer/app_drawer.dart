@@ -6,6 +6,7 @@ import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../router/routes/routes.dart';
 import 'language_select.dart';
@@ -124,6 +125,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               CustomListTile(
+                height: 24,
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,
                 leading: Image.asset(
@@ -131,11 +133,22 @@ class AppDrawer extends StatelessWidget {
                   width: 24,
                   height: 24,
                 ),
-                title: Text(context.loc.call_us_whatsapp,
-                    style: titleTextStyle.copyWith(color: Color(0xFF25D366))),
-                onTap: () {},
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Color(0xFF25D366),
+                  size: 12,
+                ),
+                title: Text(
+                  context.loc.call_us_whatsapp,
+                  style: titleTextStyle.copyWith(color: Color(0xFF25D366)),
+                ),
+                onTap: () {
+                  launchUrl(Uri.parse('https://wa.me/'));
+                },
               ),
+              SizedBox(height: 12),
               CustomListTile(
+                height: 24,
                 contentPadding: contentPadding,
                 leadingPadding: iconPadding,
                 leading: Image.asset(
@@ -143,10 +156,20 @@ class AppDrawer extends StatelessWidget {
                   width: 24,
                   height: 24,
                 ),
-                title: Text(context.loc.call_us_telegram,
-                    style: titleTextStyle.copyWith(color: Color(0xFF4F9CE1))),
-                onTap: () {},
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Color(0xFF4F9CE1),
+                  size: 12,
+                ),
+                title: Text(
+                  context.loc.call_us_telegram,
+                  style: titleTextStyle.copyWith(color: Color(0xFF4F9CE1)),
+                ),
+                onTap: () {
+                  launchUrl(Uri.parse('https://wa.me/'));
+                },
               ),
+              SizedBox(height: 5),
               if (isAuthenticated)
                 CustomListTile(
                   contentPadding: contentPadding,
