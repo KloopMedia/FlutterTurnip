@@ -7,12 +7,12 @@ part of 'volume.dart';
 // **************************************************************************
 
 Volume _$VolumeFromJson(Map<String, dynamic> json) => Volume(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       name: json['name'] as String,
       description: json['description'] as String,
-      order: json['order'] as int,
+      order: (json['order'] as num).toInt(),
       notYetOpenMessage: json['notYetOpenMessage'] as String,
       alreadyClosedMessage: json['alreadyClosedMessage'] as String,
       showTags: json['showTags'] as bool,
@@ -21,12 +21,13 @@ Volume _$VolumeFromJson(Map<String, dynamic> json) => Volume(
       activeTasksText: json['activeTasksText'] as String,
       returnedTasksText: json['returnedTasksText'] as String,
       completedTasksText: json['completedTasksText'] as String,
-      trackFk: json['trackFk'] as int,
-      openingRanks:
-          (json['openingRanks'] as List<dynamic>).map((e) => e as int).toList(),
-      closingRanks:
-          (json['closingRanks'] as List<dynamic>).map((e) => e as int).toList(),
-      status: $enumDecode(_$VolumeStatusEnumMap, json['status']),
+      trackFk: (json['trackFk'] as num).toInt(),
+      openingRanks: (json['openingRanks'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      closingRanks: (json['closingRanks'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$VolumeToJson(Volume instance) => <String, dynamic>{
@@ -47,11 +48,4 @@ Map<String, dynamic> _$VolumeToJson(Volume instance) => <String, dynamic>{
       'trackFk': instance.trackFk,
       'openingRanks': instance.openingRanks,
       'closingRanks': instance.closingRanks,
-      'status': _$VolumeStatusEnumMap[instance.status]!,
     };
-
-const _$VolumeStatusEnumMap = {
-  VolumeStatus.locked: 'locked',
-  VolumeStatus.complete: 'complete',
-  VolumeStatus.current: 'current',
-};

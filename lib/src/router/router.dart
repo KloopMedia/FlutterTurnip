@@ -134,6 +134,10 @@ class AppRouter {
         // home if they weren't going anywhere)
         if (loggingIn) return redirectToInitialPage(context, state);
 
+        // if (state.matchedLocation == TaskRoute.path.replaceFirst(':cid', '1')) {
+        //   return OkutoolRoute.path;
+        // }
+
         final activeCampaign = _getActiveCampaign(context);
         if (isOnInitialPage && activeCampaign != null) {
           final bool showCampaignPage = state.extra as bool? ?? false;

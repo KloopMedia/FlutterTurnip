@@ -23,6 +23,8 @@ class Campaign {
   final bool isJoined;
   final bool featured;
   final String? featuredImage;
+  final String? contactUsLink;
+  final bool newTaskViewMode;
 
   Campaign({
     required this.id,
@@ -44,6 +46,8 @@ class Campaign {
     required this.featured,
     required this.featuredImage,
     this.smsCompleteTaskAllow = false,
+    required this.contactUsLink,
+    required this.newTaskViewMode,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

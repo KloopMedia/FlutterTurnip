@@ -21,6 +21,9 @@ class Campaign extends Equatable {
   final bool isJoined;
   final bool featured;
   final String? featuredImage;
+  final String? contactUsLink;
+  final bool newTaskViewMode;
+  final int? defaultTrack;
 
   const Campaign({
     required this.id,
@@ -38,6 +41,9 @@ class Campaign extends Equatable {
     required this.isJoined,
     required this.featured,
     required this.featuredImage,
+    required this.contactUsLink,
+    required this.newTaskViewMode,
+    required this.defaultTrack
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
@@ -65,6 +71,9 @@ class Campaign extends Equatable {
       isJoined: model.isJoined,
       featured: model.featured,
       featuredImage: model.featuredImage,
+      contactUsLink: model.contactUsLink,
+      newTaskViewMode: model.newTaskViewMode,
+      defaultTrack: model.defaultTrack,
     );
   }
 

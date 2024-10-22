@@ -7,7 +7,7 @@ part of 'task_detail.dart';
 // **************************************************************************
 
 TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) => TaskDetail(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       responses: json['responses'] as Map<String, dynamic>?,
       complete: json['complete'] as bool,
@@ -21,7 +21,7 @@ TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) => TaskDetail(
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
       displayedPrevTasks: (json['displayedPrevTasks'] as List<dynamic>?)
-          ?.map((e) => e as int)
+          ?.map((e) => (e as num).toInt())
           .toList(),
       isIntegrated: json['isIntegrated'] as bool,
       dynamicSource: (json['dynamicSource'] as List<dynamic>?)

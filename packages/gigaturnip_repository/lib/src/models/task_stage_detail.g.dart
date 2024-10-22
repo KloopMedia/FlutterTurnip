@@ -8,11 +8,11 @@ part of 'task_stage_detail.dart';
 
 TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
     TaskStageDetail(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String?,
-      chain: json['chain'] as int,
-      campaign: json['campaign'] as int,
+      chain: (json['chain'] as num).toInt(),
+      campaign: (json['campaign'] as num).toInt(),
       richText: json['richText'] as String?,
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
@@ -34,12 +34,14 @@ TaskStageDetail _$TaskStageDetailFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['availableFrom'] as String),
       quizAnswers: json['quizAnswers'] as Map<String, dynamic>?,
       externalRendererUrl: json['externalRendererUrl'] as String?,
-      openLimit: json['openLimit'] as int? ?? 0,
-      totalLimit: json['totalLimit'] as int? ?? 0,
-      inStages:
-          (json['inStages'] as List<dynamic>).map((e) => e as int).toList(),
-      outStages:
-          (json['outStages'] as List<dynamic>).map((e) => e as int).toList(),
+      openLimit: (json['openLimit'] as num?)?.toInt() ?? 0,
+      totalLimit: (json['totalLimit'] as num?)?.toInt() ?? 0,
+      inStages: (json['inStages'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      outStages: (json['outStages'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       xPos: BaseStage.parseStringToDouble(json['xPos'] as String),
       yPos: BaseStage.parseStringToDouble(json['yPos'] as String),
       type: $enumDecodeNullable(_$BaseStageTypeEnumMap, json['type']) ??

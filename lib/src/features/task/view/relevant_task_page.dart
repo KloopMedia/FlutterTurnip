@@ -5,6 +5,7 @@ import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/volume_bloc/volume_cubit.dart';
 import 'package:gigaturnip/src/features/task/view/volumes.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
+import 'package:gigaturnip/src/features/task/widgets/contact_us_button.dart';
 import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -21,6 +22,7 @@ import '../bloc/bloc.dart';
 import '../widgets/creatable_task_list.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/task_chain/types.dart';
+import 'lesson_task_page.dart';
 
 class RelevantTaskPage extends StatefulWidget {
   final int campaignId;
@@ -108,15 +110,23 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  List<Widget> _buildClassicTaskPage(
+      BuildContext context, SelectedVolumeState selectedVolumeState) {
     final theme = Theme.of(context).colorScheme;
-    final notificationStyle = TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      color: theme.isLight ? theme.onSurfaceVariant : theme.neutral80,
-      overflow: TextOverflow.ellipsis,
-    );
+    final selectedVolume = selectedVolumeState.volume;
+
+    var filterNames = [
+      selectedVolume?.activeTasksText != null && selectedVolume!.activeTasksText.isNotEmpty
+          ? selectedVolume.activeTasksText
+          : context.loc.task_filter_active,
+      selectedVolume?.returnedTasksText != null && selectedVolume!.returnedTasksText.isNotEmpty
+          ? selectedVolume.returnedTasksText
+          : context.loc.task_filter_returned,
+      selectedVolume?.completedTasksText != null && selectedVolume!.completedTasksText.isNotEmpty
+          ? selectedVolume.completedTasksText
+          : context.loc.task_filter_submitted,
+      context.loc.task_filter_all,
+    ];
 
     const taskFilterMap = {
       'Активные': {'complete': false, 'reopened': null},
@@ -131,6 +141,134 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       'Отправленные': {'completed': true},
       'Все': null,
     };
+
+    return [
+      AvailableTaskStages(
+        onTap: (item) => redirectToAvailableTasks(context, item),
+      ),
+      const CreatableTaskList(),
+      if (selectedVolume?.showTagsFilter ?? true)
+        SliverToBoxAdapter(
+          child: FilterBar(
+            title: context.loc.mytasks,
+            onChanged: (query, key) {
+              final selectedVolume = selectedVolumeState.volume;
+              setState(() {
+                taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
+              });
+              context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
+              context.read<IndividualChainCubit>().refetchWithFilter(query: {
+                ...?individualChainFilterMap[key],
+                'stages__volumes': selectedVolume?.id
+              });
+            },
+            value: taskFilterMap.keys.first,
+            filters: taskFilterMap,
+            names: filterNames,
+          ),
+        ),
+      AdaptiveListView<TaskStage, ReactiveTasks>(
+        showLoader: false,
+        padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+        itemBuilder: (context, index, item) {
+          return CardWithTitle(
+            chips: [
+              CardChip(context.loc.creatable_task),
+              const Spacer(),
+              CardChip(
+                context.loc.creatable_task_not_assigned,
+                fontColor: Colors.white,
+                backgroundColor: theme.neutral90,
+              )
+            ],
+            title: item.name,
+            size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+            flex: context.isSmall || context.isMedium ? 0 : 1,
+            bottom: SizedBox(
+              height: 40,
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                onPressed: () => context.read<ReactiveTasks>().createTask(item),
+                child: Text(
+                  item.takeTaskButtonText ?? context.loc.creatable_task_assign_button,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      AdaptiveListView<Task, RelevantTaskCubit>(
+        padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+        itemBuilder: (context, index, item) {
+          final cardBody = CardDate(date: item.createdAt?.toLocal());
+          final statusChip = selectedVolume?.showTags ?? true
+              ? StatusCardChip(
+                  item,
+                  openText: selectedVolume?.activeTasksText,
+                  closedText: selectedVolume?.completedTasksText,
+                  returnedText: selectedVolume?.returnedTasksText,
+                )
+              : const SizedBox.shrink();
+
+          return CardWithTitleAndTaskNotification(
+            taskId: item.id,
+            body: Container(
+              decoration: BoxDecoration(
+                color: theme.error,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  CardWithTitle(
+                    chips: [
+                      CardChip(item.id.toString()),
+                      statusChip,
+                    ],
+                    title: item.name,
+                    contentPadding: 20,
+                    size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
+                    flex: context.isSmall || context.isMedium ? 0 : 1,
+                    onTap: () => redirectToTask(context, item),
+                    bottom: cardBody,
+                  ),
+                  if (item.submittedOffline)
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "The form wasn't sent due to a poor internet connection. Please resubmit the form when you have a stable connection.",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+      TaskStageChainView(onTap: onChainTap),
+      const SliverToBoxAdapter(child: SizedBox(height: 20)),
+    ];
+  }
+
+  List<Widget> _buildAlternativeTaskView() {
+    return [LessonTaskPage(onTap: onChainTap)];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    final notificationStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: theme.isLight ? theme.onSurfaceVariant : theme.neutral80,
+      overflow: TextOverflow.ellipsis,
+    );
 
     return BlocListener<ReactiveTasks, RemoteDataState<TaskStage>>(
       listener: (context, state) {
@@ -150,30 +288,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       },
       child: BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
         builder: (context, selectedVolumeState) {
-          final selectedVolume = selectedVolumeState.volume;
-
-          var filterNames = [
-            selectedVolume?.activeTasksText != null && selectedVolume!.activeTasksText.isNotEmpty
-                ? selectedVolume.activeTasksText
-                : context.loc.task_filter_active,
-            selectedVolume?.returnedTasksText != null &&
-                    selectedVolume!.returnedTasksText.isNotEmpty
-                ? selectedVolume.returnedTasksText
-                : context.loc.task_filter_returned,
-            selectedVolume?.completedTasksText != null &&
-                    selectedVolume!.completedTasksText.isNotEmpty
-                ? selectedVolume.completedTasksText
-                : context.loc.task_filter_submitted,
-            context.loc.task_filter_all,
-          ];
-
           return RefreshIndicator(
             onRefresh: () async => refreshAllTasks(context),
             child: CustomScrollView(
               slivers: [
-                // const SliverToBoxAdapter(
-                //   child: PageHeader(padding: EdgeInsets.only(top: 20, bottom: 20)),
-                // ),
                 if (!closeNotificationCard)
                   ImportantAndOpenNotificationListView(
                     padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
@@ -228,117 +346,13 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                     context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
                   },
                 ),
-                AvailableTaskStages(
-                  onTap: (item) => redirectToAvailableTasks(context, item),
+                SliverToBoxAdapter(
+                  child: ContactUsButton(),
                 ),
-                const CreatableTaskList(),
-                if (selectedVolume?.showTagsFilter ?? true)
-                  SliverToBoxAdapter(
-                    child: FilterBar(
-                      title: context.loc.mytasks,
-                      onChanged: (query, key) {
-                        final selectedVolume = selectedVolumeState.volume;
-                        setState(() {
-                          taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
-                        });
-                        context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
-                        context.read<IndividualChainCubit>().refetchWithFilter(query: {
-                          ...?individualChainFilterMap[key],
-                          'stages__volumes': selectedVolume?.id
-                        });
-                      },
-                      value: taskFilterMap.keys.first,
-                      filters: taskFilterMap,
-                      names: filterNames,
-                    ),
-                  ),
-                AdaptiveListView<TaskStage, ReactiveTasks>(
-                  showLoader: false,
-                  padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-                  itemBuilder: (context, index, item) {
-                    return CardWithTitle(
-                      chips: [
-                        CardChip(context.loc.creatable_task),
-                        const Spacer(),
-                        CardChip(
-                          context.loc.creatable_task_not_assigned,
-                          fontColor: Colors.white,
-                          backgroundColor: theme.neutral90,
-                        )
-                      ],
-                      title: item.name,
-                      size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),
-                      flex: context.isSmall || context.isMedium ? 0 : 1,
-                      bottom: Container(
-                          height: 40,
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            onPressed: () => context.read<ReactiveTasks>().createTask(item),
-                            child: Text(
-                              item.takeTaskButtonText ?? context.loc.creatable_task_assign_button,
-                            ),
-                          )),
-                    );
-                  },
-                ),
-                AdaptiveListView<Task, RelevantTaskCubit>(
-                  padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-                  itemBuilder: (context, index, item) {
-                    final cardBody = CardDate(date: item.createdAt?.toLocal());
-                    final statusChip = selectedVolume?.showTags ?? true
-                        ? StatusCardChip(
-                            item,
-                            openText: selectedVolume?.activeTasksText,
-                            closedText: selectedVolume?.completedTasksText,
-                            returnedText: selectedVolume?.returnedTasksText,
-                          )
-                        : const SizedBox.shrink();
-
-                    return CardWithTitleAndTaskNotification(
-                      taskId: item.id,
-                      body: Container(
-                        decoration: BoxDecoration(
-                          color: theme.error,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          children: [
-                            CardWithTitle(
-                              chips: [
-                                CardChip(item.id.toString()),
-                                statusChip,
-                              ],
-                              title: item.name,
-                              contentPadding: 20,
-                              size: context.isSmall || context.isMedium
-                                  ? null
-                                  : const Size.fromHeight(165),
-                              flex: context.isSmall || context.isMedium ? 0 : 1,
-                              onTap: () => redirectToTask(context, item),
-                              bottom: cardBody,
-                            ),
-                            if (item.submittedOffline)
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "The form wasn't sent due to a poor internet connection. Please resubmit the form when you have a stable connection.",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                TaskStageChainView(onTap: onChainTap),
-                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                if (true)
+                  ..._buildAlternativeTaskView()
+                else
+                  ..._buildClassicTaskPage(context, selectedVolumeState),
               ],
             ),
           );

@@ -12,8 +12,6 @@ class TaskStageChainInfo {
   final List<int> completed;
   final List<int> reopened;
   final List<int> opened;
-  final int totalCount;
-  final int completeCount;
 
   const TaskStageChainInfo({
     required this.id,
@@ -21,8 +19,6 @@ class TaskStageChainInfo {
     required this.assignType,
     required this.inStages,
     required this.outStages,
-    required this.totalCount,
-    required this.completeCount,
     required this.completed,
     required this.reopened,
     required this.opened,

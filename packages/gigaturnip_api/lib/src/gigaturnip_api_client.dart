@@ -196,4 +196,13 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Volume>> getVolumes({
     @Queries() Map<String, dynamic>? query,
   });
+
+  @GET(lessonsRoute)
+  Future<List<Lesson>> getLessons({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET(testsRoute)
+  Future<Test> getTestById();
 }
+

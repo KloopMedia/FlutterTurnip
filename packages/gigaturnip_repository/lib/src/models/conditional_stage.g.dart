@@ -11,14 +11,16 @@ ConditionalStage<T> _$ConditionalStageFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) =>
     ConditionalStage<T>(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String?,
-      chain: json['chain'] as int,
-      inStages:
-          (json['inStages'] as List<dynamic>).map((e) => e as int).toList(),
-      outStages:
-          (json['outStages'] as List<dynamic>).map((e) => e as int).toList(),
+      chain: (json['chain'] as num).toInt(),
+      inStages: (json['inStages'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      outStages: (json['outStages'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       xPos: BaseStage.parseStringToDouble(json['xPos'] as String),
       yPos: BaseStage.parseStringToDouble(json['yPos'] as String),
       conditions: (json['conditions'] as List<dynamic>)

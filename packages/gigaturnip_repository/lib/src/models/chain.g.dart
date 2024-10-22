@@ -7,10 +7,10 @@ part of 'chain.dart';
 // **************************************************************************
 
 Chain _$ChainFromJson(Map<String, dynamic> json) => Chain(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
-      campaign: json['campaign'] as int,
+      campaign: (json['campaign'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ChainToJson(Chain instance) => <String, dynamic>{
