@@ -143,7 +143,7 @@ class AppDrawer extends StatelessWidget {
                   style: titleTextStyle.copyWith(color: Color(0xFF25D366)),
                 ),
                 onTap: () {
-                  launchUrl(Uri.parse('https://wa.me/'));
+                  launchUrl(Uri.parse('https://wa.me/996220035226'));
                 },
               ),
               SizedBox(height: 12),
@@ -166,7 +166,7 @@ class AppDrawer extends StatelessWidget {
                   style: titleTextStyle.copyWith(color: Color(0xFF4F9CE1)),
                 ),
                 onTap: () {
-                  launchUrl(Uri.parse('https://wa.me/'));
+                  launchUrl(Uri.parse('https://t.me/+996220035226'));
                 },
               ),
               SizedBox(height: 5),
