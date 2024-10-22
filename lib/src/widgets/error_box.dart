@@ -13,7 +13,7 @@ class NetworkErrorBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final String errorCode;
     if (error is DioException) {
-      errorCode = (error as DioException).response!.statusCode!.toString();
+      errorCode = (error as DioException).response?.statusCode?.toString() ?? "";
     } else {
       errorCode = "Error";
     }
