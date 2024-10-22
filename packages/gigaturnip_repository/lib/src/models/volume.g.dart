@@ -28,6 +28,7 @@ Volume _$VolumeFromJson(Map<String, dynamic> json) => Volume(
       closingRanks: (json['closingRanks'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
+      status: $enumDecode(_$VolumeStatusEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$VolumeToJson(Volume instance) => <String, dynamic>{
@@ -48,4 +49,11 @@ Map<String, dynamic> _$VolumeToJson(Volume instance) => <String, dynamic>{
       'trackFk': instance.trackFk,
       'openingRanks': instance.openingRanks,
       'closingRanks': instance.closingRanks,
+      'status': _$VolumeStatusEnumMap[instance.status]!,
     };
+
+const _$VolumeStatusEnumMap = {
+  VolumeStatus.locked: 'locked',
+  VolumeStatus.complete: 'complete',
+  VolumeStatus.current: 'current',
+};
