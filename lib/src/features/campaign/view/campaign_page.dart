@@ -391,14 +391,52 @@ class UserCampaignView extends StatelessWidget {
 class AvailableCampaignView extends StatelessWidget {
   const AvailableCampaignView({super.key});
 
-  void redirectToCampaignDetail(BuildContext context, Campaign campaign) {
-    context.pushNamed(
-      CampaignDetailRoute.name,
-      pathParameters: {'cid': '${campaign.id}'},
-      extra: campaign,
-    );
+  void redirectToCampaignDetail(BuildContext context, Campaign campaign) async {
+    final client = context.read<api.GigaTurnipApiClient>();
+
+    try {
+      await client.joinCampaign(campaign.id);
+
+      final defaultTrack = campaign.defaultTrack;
+      if (defaultTrack == null) {
+        _navigateToTaskRoute(context, campaign.id);
+        return;
+      }
+
+      final track = await client.getTrackById(defaultTrack);
+      final registrationStage = track.data["registration_stage"];
+
+      if (registrationStage == null || !context.mounted) {
+        _navigateToTaskRoute(context, campaign.id);
+        return;
+      }
+
+      try {
+        final task = await client.createTaskFromStageId(registrationStage);
+        if (context.mounted) {
+          _navigateToTaskDetail(context, campaign.id, task.id);
+        }
+      } catch (e) {
+        print(e);
+        _navigateToTaskRoute(context, campaign.id);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
+  void _navigateToTaskDetail(BuildContext context, int campaignId, int taskId) {
+    context.goNamed(TaskDetailRoute.name, pathParameters: {
+      'cid': "$campaignId",
+      'tid': taskId.toString(),
+    });
+  }
+
+  void _navigateToTaskRoute(BuildContext context, int campaignId) {
+    context.goNamed(TaskRoute.name, pathParameters: {
+      'cid': "$campaignId",
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
