@@ -47,7 +47,7 @@ class Campaign {
     required this.featuredImage,
     this.smsCompleteTaskAllow = false,
     required this.contactUsLink,
-    required this.newTaskViewMode,
+    this.newTaskViewMode = false,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

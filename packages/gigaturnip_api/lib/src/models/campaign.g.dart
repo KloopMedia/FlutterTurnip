@@ -53,7 +53,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           contactUsLink:
               $checkedConvert('contact_us_link', (v) => v as String?),
           newTaskViewMode:
-              $checkedConvert('new_task_view_mode', (v) => v as bool),
+              $checkedConvert('new_task_view_mode', (v) => v as bool? ?? false),
         );
         return val;
       },

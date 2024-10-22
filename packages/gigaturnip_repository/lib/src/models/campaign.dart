@@ -42,8 +42,8 @@ class Campaign extends Equatable {
     required this.featured,
     required this.featuredImage,
     required this.contactUsLink,
-    required this.newTaskViewMode,
-    required this.defaultTrack
+    this.newTaskViewMode = false,
+    required this.defaultTrack,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

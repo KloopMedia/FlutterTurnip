@@ -27,7 +27,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       featured: json['featured'] as bool,
       featuredImage: json['featuredImage'] as String?,
       contactUsLink: json['contactUsLink'] as String?,
-      newTaskViewMode: json['newTaskViewMode'] as bool,
+      newTaskViewMode: json['newTaskViewMode'] as bool? ?? false,
       defaultTrack: (json['defaultTrack'] as num?)?.toInt(),
     );
 
