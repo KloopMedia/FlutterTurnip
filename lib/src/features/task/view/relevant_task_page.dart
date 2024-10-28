@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/volume_bloc/volume_cubit.dart';
 import 'package:gigaturnip/src/features/task/view/volumes.dart';
 import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
@@ -286,76 +287,86 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           );
         }
       },
-      child: BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
-        builder: (context, selectedVolumeState) {
-          return RefreshIndicator(
-            onRefresh: () async => refreshAllTasks(context),
-            child: CustomScrollView(
-              slivers: [
-                if (!closeNotificationCard)
-                  ImportantAndOpenNotificationListView(
-                    padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
-                    importantNotificationCount: 1,
-                    itemBuilder: (context, item) {
-                      return CardWithTitle(
-                        chips: [
-                          TagWithIconAndTitle(
-                            context.loc.important_notification,
-                            icon: Image.asset(
-                              'assets/images/important_notification_icon.png',
-                              color:
-                                  theme.isLight ? const Color(0xFF5E80FB) : const Color(0xFF9BB1FF),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              final repo = NotificationDetailRepository(
-                                  gigaTurnipApiClient: context.read<GigaTurnipApiClient>());
-                              await repo.markNotificationAsViewed(item.id);
-                              setState(() => closeNotificationCard = true);
-                            },
-                            icon: Icon(Icons.close,
-                                color: theme.isLight
-                                    ? theme.onSurfaceVariant
-                                    : theme.neutralVariant70),
-                          )
-                        ],
-                        hasBoxShadow: false,
-                        title: item.title,
-                        backgroundColor:
-                            theme.isLight ? theme.primaryContainer : theme.surfaceVariant,
-                        size: context.isSmall || context.isMedium ? null : const Size(400, 165),
-                        flex: context.isSmall || context.isMedium ? 0 : 1,
-                        onTap: () => redirectToNotification(context, item),
-                        body: Text(item.text, style: notificationStyle, maxLines: 3),
-                      );
-                    },
-                  ),
-                Volumes(
-                  onChanged: (Volume volume) {
-                    final query = {...taskQuery, 'stage__volumes': volume.id};
-                    context.read<SelectedVolumeCubit>().selectVolume(volume);
-                    context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
-                    context
-                        .read<IndividualChainCubit>()
-                        .refetchWithFilter(query: {...taskQuery, 'stages__volumes': volume.id});
+      child: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+        builder: (context, campaignState) {
+          if (campaignState is CampaignInitialized) {
+            return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
+              builder: (context, selectedVolumeState) {
+                return RefreshIndicator(
+                  onRefresh: () async => refreshAllTasks(context),
+                  child: CustomScrollView(
+                    slivers: [
+                      if (!closeNotificationCard)
+                        ImportantAndOpenNotificationListView(
+                          padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+                          importantNotificationCount: 1,
+                          itemBuilder: (context, item) {
+                            return CardWithTitle(
+                              chips: [
+                                TagWithIconAndTitle(
+                                  context.loc.important_notification,
+                                  icon: Image.asset(
+                                    'assets/images/important_notification_icon.png',
+                                    color: theme.isLight
+                                        ? const Color(0xFF5E80FB)
+                                        : const Color(0xFF9BB1FF),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    final repo = NotificationDetailRepository(
+                                        gigaTurnipApiClient: context.read<GigaTurnipApiClient>());
+                                    await repo.markNotificationAsViewed(item.id);
+                                    setState(() => closeNotificationCard = true);
+                                  },
+                                  icon: Icon(Icons.close,
+                                      color: theme.isLight
+                                          ? theme.onSurfaceVariant
+                                          : theme.neutralVariant70),
+                                )
+                              ],
+                              hasBoxShadow: false,
+                              title: item.title,
+                              backgroundColor:
+                                  theme.isLight ? theme.primaryContainer : theme.surfaceVariant,
+                              size:
+                                  context.isSmall || context.isMedium ? null : const Size(400, 165),
+                              flex: context.isSmall || context.isMedium ? 0 : 1,
+                              onTap: () => redirectToNotification(context, item),
+                              body: Text(item.text, style: notificationStyle, maxLines: 3),
+                            );
+                          },
+                        ),
+                      Volumes(
+                        onChanged: (Volume volume) {
+                          final query = {...taskQuery, 'stage__volumes': volume.id};
+                          context.read<SelectedVolumeCubit>().selectVolume(volume);
+                          context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
+                          context.read<IndividualChainCubit>().refetchWithFilter(
+                              query: {...taskQuery, 'stages__volumes': volume.id});
 
-                    final stageQuery = {'volumes': volume.id};
-                    context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
-                    context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
-                    context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
-                  },
-                ),
-                SliverToBoxAdapter(
-                  child: ContactUsButton(),
-                ),
-                if (true)
-                  ..._buildAlternativeTaskView()
-                else
-                  ..._buildClassicTaskPage(context, selectedVolumeState),
-              ],
-            ),
-          );
+                          final stageQuery = {'volumes': volume.id};
+                          context
+                              .read<SelectableTaskStageCubit>()
+                              .refetchWithFilter(query: stageQuery);
+                          context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
+                          context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
+                        },
+                      ),
+                      SliverToBoxAdapter(
+                        child: ContactUsButton(),
+                      ),
+                      if (campaignState.data.newTaskViewMode)
+                        ..._buildAlternativeTaskView()
+                      else
+                        ..._buildClassicTaskPage(context, selectedVolumeState),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+          return SizedBox.shrink();
         },
       ),
     );
