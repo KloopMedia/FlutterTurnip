@@ -422,6 +422,10 @@ class AvailableCampaignView extends StatelessWidget {
       }
     } catch (e) {
       print(e);
+      final snackBar = SnackBar(
+        content: Text("Error: $e"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -437,6 +441,7 @@ class AvailableCampaignView extends StatelessWidget {
       'cid': "$campaignId",
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
