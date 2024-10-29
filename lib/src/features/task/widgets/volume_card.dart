@@ -38,6 +38,9 @@ class VolumeCard extends StatelessWidget {
             VolumeStatus.current => const Color(0xFFECF0FF),
           },
           borderRadius: BorderRadius.circular(15),
+          border: isSelected
+              ? Border.all(width: 2, color: Theme.of(context).colorScheme.primary)
+              : null,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -45,18 +48,18 @@ class VolumeCard extends StatelessWidget {
           children: [
             switch (status) {
               VolumeStatus.locked => CardChip(
-                context.loc.closed,
-                backgroundColor: const Color(0xFFFFCFC9),
-              ),
+                  context.loc.closed,
+                  backgroundColor: const Color(0xFFFFCFC9),
+                ),
               VolumeStatus.complete => CardChip(
-                context.loc.complete,
-                backgroundColor: const Color(0xFF98F072),
-              ),
+                  context.loc.complete,
+                  backgroundColor: const Color(0xFF98F072),
+                ),
               VolumeStatus.current => CardChip(
-                context.loc.in_progress,
-                backgroundColor: const Color(0xFF5E81FB),
-                fontColor: Colors.white,
-              ),
+                  context.loc.in_progress,
+                  backgroundColor: const Color(0xFF5E81FB),
+                  fontColor: Colors.white,
+                ),
             },
             const SizedBox(height: 8),
             Text(
