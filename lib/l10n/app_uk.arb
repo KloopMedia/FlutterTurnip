@@ -205,5 +205,8 @@
 	"courses": "Курси",
 
 	"call_us_whatsapp": "Написать в WhatsApp",
-  "call_us_telegram": "Написать в Telegram"
+  "call_us_telegram": "Написать в Telegram",
+
+	"complete_volume": "Закінчений",
+	"closed_volume": "Закрито"
 }

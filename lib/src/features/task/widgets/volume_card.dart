@@ -48,11 +48,11 @@ class VolumeCard extends StatelessWidget {
           children: [
             switch (status) {
               VolumeStatus.locked => CardChip(
-                  context.loc.closed,
+                  context.loc.closed_volume,
                   backgroundColor: const Color(0xFFFFCFC9),
                 ),
               VolumeStatus.complete => CardChip(
-                  context.loc.complete,
+                  context.loc.complete_volume,
                   backgroundColor: const Color(0xFF98F072),
                 ),
               VolumeStatus.current => CardChip(
