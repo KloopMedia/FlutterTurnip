@@ -39,6 +39,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
   Map<String, dynamic> taskQuery = {'complete': false};
 
   void refreshAllTasks(BuildContext context) {
+    context.read<CampaignDetailBloc>().add(RefreshCampaign());
     context.read<RelevantTaskCubit>().refetch();
     context.read<SelectableTaskStageCubit>().refetch();
     context.read<ReactiveTasks>().refetch();
@@ -289,6 +290,11 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
       },
       child: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
         builder: (context, campaignState) {
+          if (campaignState is CampaignFetching) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           if (campaignState is CampaignInitialized) {
             return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
               builder: (context, selectedVolumeState) {

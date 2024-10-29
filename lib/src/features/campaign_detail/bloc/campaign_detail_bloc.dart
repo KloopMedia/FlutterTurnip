@@ -20,7 +20,7 @@ class CampaignDetailBloc extends Bloc<CampaignDetailEvent, CampaignDetailState> 
         super(campaign != null ? CampaignLoaded(campaign) : CampaignUninitialized()) {
     on<InitializeCampaign>(_onInitializeCampaign);
     on<JoinCampaign>(_onJoinCampaign);
-
+    on<RefreshCampaign>(_onRefreshCampaign);
     add(InitializeCampaign());
   }
 
@@ -50,6 +50,16 @@ class CampaignDetailBloc extends Bloc<CampaignDetailEvent, CampaignDetailState> 
       print(e);
       print(s);
       emit(CampaignJoinError.clone(state as CampaignInitialized, e.toString()));
+    }
+  }
+
+  Future<void> _onRefreshCampaign(RefreshCampaign event, Emitter<CampaignDetailState> emit) async {
+    emit(CampaignFetching());
+    try {
+      final data = await _repository.fetchData(campaignId);
+      emit(CampaignLoaded(data));
+    } catch (e) {
+      emit(CampaignFetchingError(e.toString()));
     }
   }
 }

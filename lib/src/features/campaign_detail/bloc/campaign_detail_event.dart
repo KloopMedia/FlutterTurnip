@@ -10,3 +10,5 @@ abstract class CampaignDetailEvent extends Equatable {
 class InitializeCampaign extends CampaignDetailEvent {}
 
 class JoinCampaign extends CampaignDetailEvent {}
+
+class RefreshCampaign extends CampaignDetailEvent {}
