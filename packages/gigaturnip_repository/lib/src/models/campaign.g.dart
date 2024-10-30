@@ -29,6 +29,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       contactUsLink: json['contactUsLink'] as String?,
       newTaskViewMode: json['newTaskViewMode'] as bool? ?? false,
       defaultTrack: (json['defaultTrack'] as num?)?.toInt(),
+      registrationStage: (json['registrationStage'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
@@ -50,4 +51,5 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'contactUsLink': instance.contactUsLink,
       'newTaskViewMode': instance.newTaskViewMode,
       'defaultTrack': instance.defaultTrack,
+      'registrationStage': instance.registrationStage,
     };

@@ -24,6 +24,7 @@ class Campaign extends Equatable {
   final String? contactUsLink;
   final bool newTaskViewMode;
   final int? defaultTrack;
+  final int? registrationStage;
 
   const Campaign({
     required this.id,
@@ -44,6 +45,7 @@ class Campaign extends Equatable {
     required this.contactUsLink,
     this.newTaskViewMode = false,
     required this.defaultTrack,
+    required this.registrationStage,
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,7 @@ class Campaign extends Equatable {
       contactUsLink: model.contactUsLink,
       newTaskViewMode: model.newTaskViewMode,
       defaultTrack: model.defaultTrack,
+      registrationStage: model.registrationStage,
     );
   }
 

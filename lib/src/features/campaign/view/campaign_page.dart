@@ -397,14 +397,7 @@ class AvailableCampaignView extends StatelessWidget {
     try {
       await client.joinCampaign(campaign.id);
 
-      final defaultTrack = campaign.defaultTrack;
-      if (defaultTrack == null) {
-        _navigateToTaskRoute(context, campaign.id);
-        return;
-      }
-
-      final track = await client.getTrackById(defaultTrack);
-      final registrationStage = track.data["registration_stage"];
+      final registrationStage = campaign.registrationStage;
 
       if (registrationStage == null || !context.mounted) {
         _navigateToTaskRoute(context, campaign.id);
