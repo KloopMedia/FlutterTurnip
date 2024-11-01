@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,6 +30,7 @@ class ContactUsButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       children: [
@@ -40,7 +42,7 @@ class ContactUsButton extends StatelessWidget {
                         ),
                         SizedBox(width: 2),
                         Text(
-                          "У вас есть вопросы?",
+                          context.loc.have_questions_campaign,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
@@ -49,10 +51,10 @@ class ContactUsButton extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          "Связаться с нами",
+                          context.loc.call_us_campaign,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 14,
+                            fontSize: 16,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
@@ -63,14 +65,6 @@ class ContactUsButton extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text(
-                      'Напишите нам и мы обязательно свяжемся с вами',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.neutral30,
-                      ),
-                    )
                   ],
                 ),
               ),

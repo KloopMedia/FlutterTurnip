@@ -204,8 +204,12 @@
 	"join_other_courses": "Башка курстарга кошулуңуз",
 	"courses": "Курстар",
 
-  "call_us_whatsapp": "Написать в WhatsApp",
-	"call_us_telegram": "Написать в Telegram",
+  "have_questions_campaign": "Суроолор пайда болсо?",
+	"call_us_campaign": "Бизге жазыңыз",
+
+  "call_us_title": "Биз менен байланышуу:",
+  "call_us_whatsapp": "WhatsApp",
+	"call_us_telegram": "Telegram",
 
   "complete_volume": "Аткарылган",
   "closed_volume": "Жабык"

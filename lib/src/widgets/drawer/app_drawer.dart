@@ -120,7 +120,7 @@ class AppDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 10, 24, 2),
                 child: SelectableText(
-                  "Свяжитесь с нами:",
+                  context.loc.call_us_title,
                   style: titleTextStyle,
                 ),
               ),

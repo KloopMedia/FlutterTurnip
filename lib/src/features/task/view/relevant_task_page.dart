@@ -212,9 +212,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
           final statusChip = selectedVolume?.showTags ?? true
               ? StatusCardChip(
                   item,
-                  openText: selectedVolume?.activeTasksText,
-                  closedText: selectedVolume?.completedTasksText,
-                  returnedText: selectedVolume?.returnedTasksText,
+                  openText: selectedVolume?.activeTasksText ?? context.loc.task_status_not_submitted,
+                  closedText: selectedVolume?.completedTasksText ?? context.loc.task_status_submitted,
+                  returnedText: selectedVolume?.returnedTasksText ?? context.loc.task_status_returned,
                 )
               : const SizedBox.shrink();
 

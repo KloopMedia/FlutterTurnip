@@ -204,8 +204,12 @@
 	"join_other_courses": "Join other courses",
 	"courses": "Courses",
 
-	"call_us_whatsapp": "Написать в WhatsApp",
-	"call_us_telegram": "Написать в Telegram",
+	"have_questions_campaign": "Do you have questions?",
+	"call_us_campaign": "Contact us",
+
+	"call_us_title": "Contact us:",
+	"call_us_whatsapp": "WhatsApp",
+	"call_us_telegram": "Telegram",
 
 	"complete_volume": "Complete",
 	"closed_volume": "Closed"
