@@ -112,6 +112,14 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     }
   }
 
+  String _getStatusText(String? volumeText, String defaultText) {
+    if (volumeText != null && volumeText.isNotEmpty) {
+      return volumeText;
+    } else {
+      return defaultText;
+    }
+  }
+
   List<Widget> _buildClassicTaskPage(
       BuildContext context, SelectedVolumeState selectedVolumeState) {
     final theme = Theme.of(context).colorScheme;
@@ -209,12 +217,28 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
         padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
         itemBuilder: (context, index, item) {
           final cardBody = CardDate(date: item.createdAt?.toLocal());
+
+          final openText = _getStatusText(
+            selectedVolume?.activeTasksText,
+            context.loc.task_status_not_submitted,
+          );
+
+          final closedText = _getStatusText(
+            selectedVolume?.completedTasksText,
+            context.loc.task_status_not_submitted,
+          );
+
+          final returnedText = _getStatusText(
+            selectedVolume?.returnedTasksText,
+            context.loc.task_status_returned,
+          );
+
           final statusChip = selectedVolume?.showTags ?? true
               ? StatusCardChip(
                   item,
-                  openText: selectedVolume?.activeTasksText ?? context.loc.task_status_not_submitted,
-                  closedText: selectedVolume?.completedTasksText ?? context.loc.task_status_submitted,
-                  returnedText: selectedVolume?.returnedTasksText ?? context.loc.task_status_returned,
+                  openText: openText,
+                  closedText: closedText,
+                  returnedText: returnedText,
                 )
               : const SizedBox.shrink();
 
