@@ -320,9 +320,11 @@ class _WebViewState extends State<WebView> {
                 final scrollX = await controller.platform.getScrollX() ?? 0;
                 final scrollY = await controller.platform.getScrollY() ?? 0;
                 final page = Page(uri: uri, scrollX: scrollX, scrollY: scrollY);
-                setState(() {
-                  _history.add(page);
-                });
+                if (!kIsWeb) {
+                  setState(() {
+                    _history.add(page);
+                  });
+                }
               }
             },
           );
