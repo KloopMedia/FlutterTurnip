@@ -118,7 +118,7 @@ class AppDrawer extends StatelessWidget {
               //   onTap: () {},
               // ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 10, 24, 2),
+                padding: const EdgeInsets.fromLTRB(24, 10, 24, 12),
                 child: SelectableText(
                   context.loc.call_us_title,
                   style: titleTextStyle,
@@ -146,7 +146,7 @@ class AppDrawer extends StatelessWidget {
                   launchUrl(Uri.parse('https://wa.me/996220035226'));
                 },
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 24),
               CustomListTile(
                 height: 24,
                 contentPadding: contentPadding,
@@ -169,7 +169,7 @@ class AppDrawer extends StatelessWidget {
                   launchUrl(Uri.parse('https://t.me/+996220035226'));
                 },
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 24),
               if (isAuthenticated)
                 CustomListTile(
                   contentPadding: contentPadding,
