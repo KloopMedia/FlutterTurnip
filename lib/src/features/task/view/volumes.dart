@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../bloc/volume_bloc/volume_cubit.dart';
 import '../widgets/volume_card.dart';
@@ -20,6 +21,8 @@ class Volumes extends StatefulWidget {
 }
 
 class _VolumesState extends State<Volumes> {
+  final ItemScrollController _itemScrollController = ItemScrollController();
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -29,20 +32,25 @@ class _VolumesState extends State<Volumes> {
           if (state is RemoteDataLoading<Volume>) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is RemoteDataLoaded && state.data.isNotEmpty) {
+          if (state is RemoteDataLoaded<Volume> && state.data.isNotEmpty) {
             final volumes = state.data;
-            return Container(
-              height: volumes.isEmpty ? 0 : null,
-              constraints: const BoxConstraints(maxHeight: 141),
-              margin: const EdgeInsets.only(top: 11),
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                scrollDirection: Axis.horizontal,
-                itemCount: volumes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final volume = volumes[index];
-                  return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
-                    builder: (context, selectedVolumeState) {
+            return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
+              builder: (context, selectedVolumeState) {
+                final selectedVolumeIndex = volumes.indexWhere(
+                  (volume) => volume.id == selectedVolumeState.volume?.id,
+                );
+                return Container(
+                  height: volumes.isEmpty ? 0 : null,
+                  constraints: const BoxConstraints(maxHeight: 141),
+                  margin: const EdgeInsets.only(top: 11),
+                  child: ScrollablePositionedList.separated(
+                    initialScrollIndex: selectedVolumeIndex,
+                    itemScrollController: _itemScrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: volumes.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final volume = volumes[index];
                       return VolumeCard(
                         status: volume.status,
                         name: volume.name,
@@ -54,12 +62,12 @@ class _VolumesState extends State<Volumes> {
                         },
                       );
                     },
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(width: 8);
-                },
-              ),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(width: 8);
+                    },
+                  ),
+                );
+              },
             );
           }
           return const SizedBox();
