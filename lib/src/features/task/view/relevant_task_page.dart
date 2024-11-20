@@ -146,9 +146,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     };
 
     const individualChainFilterMap = {
-      'Активные': {'completed': false},
-      'Возвращенные': {'completed': false},
-      'Отправленные': {'completed': true},
+      'Активные': {'complete': false},
+      'Возвращенные': {'complete': false},
+      'Отправленные': {'complete': true},
       'Все': null,
     };
 
