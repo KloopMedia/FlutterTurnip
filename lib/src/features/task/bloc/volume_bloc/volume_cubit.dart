@@ -33,10 +33,16 @@ class SelectedVolumeCubit extends Cubit<SelectedVolumeState> {
     _volumeSubscription = volumeSubscription.listen(
       (volumeState) {
         if (volumeState is RemoteDataLoaded<Volume>) {
-          final currentVolume = volumeState.data.firstWhere(
-            (volume) => volume.status == VolumeStatus.current,
-            orElse: () => volumeState.data.first,
-          );
+          Volume? currentVolume;
+          try {
+            currentVolume = volumeState.data.firstWhere(
+              (volume) => volume.status == VolumeStatus.current,
+              orElse: () => volumeState.data.first,
+            );
+          } catch (e) {
+            currentVolume = null;
+          }
+
           emit(SelectedVolumeLoaded(currentVolume));
         }
       },
