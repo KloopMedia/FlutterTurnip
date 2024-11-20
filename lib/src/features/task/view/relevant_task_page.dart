@@ -225,7 +225,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
 
           final closedText = _getStatusText(
             selectedVolume?.completedTasksText,
-            context.loc.task_status_not_submitted,
+            context.loc.task_status_submitted,
           );
 
           final returnedText = _getStatusText(
