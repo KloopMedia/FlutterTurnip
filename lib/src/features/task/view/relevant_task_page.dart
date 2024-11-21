@@ -37,6 +37,7 @@ class RelevantTaskPage extends StatefulWidget {
 class _RelevantTaskPageState extends State<RelevantTaskPage> {
   bool closeNotificationCard = false;
   Map<String, dynamic> taskQuery = {'complete': false};
+  Map<String, dynamic> chainQuery = {'completed': false};
 
   void refreshAllTasks(BuildContext context) {
     context.read<CampaignDetailBloc>().add(RefreshCampaign());
@@ -146,9 +147,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     };
 
     const individualChainFilterMap = {
-      'Активные': {'complete': false},
-      'Возвращенные': {'complete': false},
-      'Отправленные': {'complete': true},
+      'Активные': {'completed': false},
+      'Возвращенные': {'completed': false},
+      'Отправленные': {'completed': true},
       'Все': null,
     };
 
@@ -165,6 +166,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               final selectedVolume = selectedVolumeState.volume;
               setState(() {
                 taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
+                chainQuery = {...?individualChainFilterMap[key], 'stage__volumes': selectedVolume?.id};
               });
               context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
               context.read<IndividualChainCubit>().refetchWithFilter(query: {
@@ -373,7 +375,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           context.read<SelectedVolumeCubit>().selectVolume(volume);
                           context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
                           context.read<IndividualChainCubit>().refetchWithFilter(
-                              query: {...taskQuery, 'stages__volumes': volume.id});
+                              query: {...chainQuery, 'stages__volumes': volume.id});
 
                           final stageQuery = {'volumes': volume.id};
                           context

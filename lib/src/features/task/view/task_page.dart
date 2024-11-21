@@ -136,7 +136,7 @@ class _TaskPageState extends State<TaskPage> {
                   .initialize(query: {'complete': false, 'stage__volumes': state.volume!.id});
               context
                   .read<IndividualChainCubit>()
-                  .initialize(query: {'stages__volumes': state.volume!.id});
+                  .initialize(query: {'completed': false, 'stages__volumes': state.volume!.id});
               context.read<ReactiveTasks>().initialize(query: {'volumes': state.volume!.id});
               context.read<ProactiveTasks>().initialize(query: {'volumes': state.volume!.id});
               context
