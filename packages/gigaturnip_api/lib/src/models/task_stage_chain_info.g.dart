@@ -39,6 +39,7 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
               'opened',
               (v) =>
                   (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+          test: $checkedConvert('test', (v) => (v as num?)?.toInt()),
         );
         return val;
       },

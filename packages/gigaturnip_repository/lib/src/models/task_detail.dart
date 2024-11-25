@@ -4,6 +4,8 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:gigaturnip_repository/src/models/task_stage_detail.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'test.dart';
+
 part 'task_detail.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -25,26 +27,27 @@ class TaskDetail extends Equatable {
   final List<Map<String, dynamic>>? dynamicTarget;
   final DateTime? startPeriod;
   final DateTime? endPeriod;
+  final Test? test;
 
-  const TaskDetail({
-    required this.id,
-    required this.name,
-    required this.responses,
-    required this.complete,
-    required this.reopened,
-    required this.stage,
-    required this.createdAt,
-    required this.schema,
-    required this.uiSchema,
-    required this.cardJsonSchema,
-    required this.cardUiSchema,
-    required this.displayedPrevTasks,
-    required this.isIntegrated,
-    required this.dynamicSource,
-    required this.dynamicTarget,
-    required this.startPeriod,
-    required this.endPeriod,
-  });
+  const TaskDetail(
+      {required this.id,
+      required this.name,
+      required this.responses,
+      required this.complete,
+      required this.reopened,
+      required this.stage,
+      required this.createdAt,
+      required this.schema,
+      required this.uiSchema,
+      required this.cardJsonSchema,
+      required this.cardUiSchema,
+      required this.displayedPrevTasks,
+      required this.isIntegrated,
+      required this.dynamicSource,
+      required this.dynamicTarget,
+      required this.startPeriod,
+      required this.endPeriod,
+      this.test});
 
   factory TaskDetail.fromJson(Map<String, dynamic> json) {
     return _$TaskDetailFromJson(json);
@@ -69,13 +72,18 @@ class TaskDetail extends Equatable {
       dynamicTarget: model.stage.dynamicJsonsTarget,
       startPeriod: model.startPeriod,
       endPeriod: model.endPeriod,
+      test: model.test != null ? Test.fromApiModel(model.test!) : null,
     );
   }
 
   Map<String, dynamic> toJson() => _$TaskDetailToJson(this);
 
-  TaskDetail copyWith(
-      {Map<String, dynamic>? responses, bool? complete, Map<String, dynamic>? schema}) {
+  TaskDetail copyWith({
+    Map<String, dynamic>? responses,
+    bool? complete,
+    Map<String, dynamic>? schema,
+    Test? test,
+  }) {
     return TaskDetail(
       id: id,
       name: name,
@@ -94,6 +102,7 @@ class TaskDetail extends Equatable {
       dynamicTarget: dynamicTarget,
       startPeriod: startPeriod,
       endPeriod: endPeriod,
+      test: test ?? this.test,
     );
   }
 

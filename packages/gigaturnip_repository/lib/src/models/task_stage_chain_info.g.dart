@@ -28,6 +28,7 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
       opened: (json['opened'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
+      test: (json['test'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$TaskStageChainInfoToJson(TaskStageChainInfo instance) =>
@@ -42,4 +43,5 @@ Map<String, dynamic> _$TaskStageChainInfoToJson(TaskStageChainInfo instance) =>
       'opened': instance.opened,
       'totalCount': instance.totalCount,
       'completeCount': instance.completeCount,
+      'test': instance.test,
     };

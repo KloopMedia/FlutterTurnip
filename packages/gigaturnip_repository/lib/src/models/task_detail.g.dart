@@ -36,6 +36,9 @@ TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) => TaskDetail(
       endPeriod: json['endPeriod'] == null
           ? null
           : DateTime.parse(json['endPeriod'] as String),
+      test: json['test'] == null
+          ? null
+          : Test.fromJson(json['test'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TaskDetailToJson(TaskDetail instance) =>
@@ -57,4 +60,5 @@ Map<String, dynamic> _$TaskDetailToJson(TaskDetail instance) =>
       'dynamicTarget': instance.dynamicTarget,
       'startPeriod': instance.startPeriod?.toIso8601String(),
       'endPeriod': instance.endPeriod?.toIso8601String(),
+      'test': instance.test?.toJson(),
     };

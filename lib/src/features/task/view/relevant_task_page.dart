@@ -34,6 +34,33 @@ class RelevantTaskPage extends StatefulWidget {
   State<RelevantTaskPage> createState() => _RelevantTaskPageState();
 }
 
+List<String> getFilterNames(BuildContext context, Volume? selectedVolume) => [
+      selectedVolume?.activeTasksText != null && selectedVolume!.activeTasksText.isNotEmpty
+          ? selectedVolume.activeTasksText
+          : context.loc.task_filter_active,
+      selectedVolume?.returnedTasksText != null && selectedVolume!.returnedTasksText.isNotEmpty
+          ? selectedVolume.returnedTasksText
+          : context.loc.task_filter_returned,
+      selectedVolume?.completedTasksText != null && selectedVolume!.completedTasksText.isNotEmpty
+          ? selectedVolume.completedTasksText
+          : context.loc.task_filter_submitted,
+      context.loc.task_filter_all,
+    ];
+
+const taskFilterMap = {
+  'Активные': {'complete': false, 'reopened': null},
+  'Возвращенные': {'reopened': true, 'complete': false},
+  'Отправленные': {'complete': true, 'reopened': null},
+  'Все': null,
+};
+
+const individualChainFilterMap = {
+  'Активные': {'completed': false},
+  'Возвращенные': {'completed': false},
+  'Отправленные': {'completed': true},
+  'Все': null,
+};
+
 class _RelevantTaskPageState extends State<RelevantTaskPage> {
   bool closeNotificationCard = false;
   Map<String, dynamic> taskQuery = {'complete': false};
@@ -126,33 +153,6 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     final theme = Theme.of(context).colorScheme;
     final selectedVolume = selectedVolumeState.volume;
 
-    var filterNames = [
-      selectedVolume?.activeTasksText != null && selectedVolume!.activeTasksText.isNotEmpty
-          ? selectedVolume.activeTasksText
-          : context.loc.task_filter_active,
-      selectedVolume?.returnedTasksText != null && selectedVolume!.returnedTasksText.isNotEmpty
-          ? selectedVolume.returnedTasksText
-          : context.loc.task_filter_returned,
-      selectedVolume?.completedTasksText != null && selectedVolume!.completedTasksText.isNotEmpty
-          ? selectedVolume.completedTasksText
-          : context.loc.task_filter_submitted,
-      context.loc.task_filter_all,
-    ];
-
-    const taskFilterMap = {
-      'Активные': {'complete': false, 'reopened': null},
-      'Возвращенные': {'reopened': true, 'complete': false},
-      'Отправленные': {'complete': true, 'reopened': null},
-      'Все': null,
-    };
-
-    const individualChainFilterMap = {
-      'Активные': {'completed': false},
-      'Возвращенные': {'completed': false},
-      'Отправленные': {'completed': true},
-      'Все': null,
-    };
-
     return [
       AvailableTaskStages(
         onTap: (item) => redirectToAvailableTasks(context, item),
@@ -166,7 +166,10 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
               final selectedVolume = selectedVolumeState.volume;
               setState(() {
                 taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
-                chainQuery = {...?individualChainFilterMap[key], 'stage__volumes': selectedVolume?.id};
+                chainQuery = {
+                  ...?individualChainFilterMap[key],
+                  'stage__volumes': selectedVolume?.id
+                };
               });
               context.read<RelevantTaskCubit>().refetchWithFilter(query: taskQuery);
               context.read<IndividualChainCubit>().refetchWithFilter(query: {
@@ -176,7 +179,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             },
             value: taskFilterMap.keys.first,
             filters: taskFilterMap,
-            names: filterNames,
+            names: getFilterNames(context, selectedVolume),
           ),
         ),
       AdaptiveListView<TaskStage, ReactiveTasks>(
@@ -284,8 +287,34 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
     ];
   }
 
-  List<Widget> _buildAlternativeTaskView() {
-    return [LessonTaskPage(onTap: onChainTap)];
+  List<Widget> _buildAlternativeTaskView(Volume? volume) {
+    return [if (volume?.showTagsFilter ?? true)
+      SliverToBoxAdapter(
+        child: FilterBar(
+          title: context.loc.mytasks,
+          onChanged: (query, key) {
+            final selectedVolume = volume;
+            setState(() {
+              taskQuery = {...?query, 'stage__volumes': selectedVolume?.id};
+              chainQuery = {
+                ...?individualChainFilterMap[key],
+                'stage__volumes': selectedVolume?.id
+              };
+            });
+            context
+                .read<RelevantTaskCubit>()
+                .refetchWithFilter(query: taskQuery);
+            context.read<IndividualChainCubit>().refetchWithFilter(query: {
+              ...?individualChainFilterMap[key],
+              'stages__volumes': selectedVolume?.id
+            });
+          },
+          value: taskFilterMap.keys.first,
+          filters: taskFilterMap,
+          names: getFilterNames(context, volume),
+        ),
+      ),
+      LessonTaskPage(onTap: onChainTap),];
   }
 
   @override
@@ -389,7 +418,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                         child: ContactUsButton(),
                       ),
                       if (campaignState.data.newTaskViewMode)
-                        ..._buildAlternativeTaskView()
+                        ..._buildAlternativeTaskView(selectedVolumeState.volume)
                       else
                         ..._buildClassicTaskPage(context, selectedVolumeState),
                     ],

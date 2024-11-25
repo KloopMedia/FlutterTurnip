@@ -12,6 +12,7 @@ class TaskStageChainInfo {
   final List<int> completed;
   final List<int> reopened;
   final List<int> opened;
+  final int? test;
 
   const TaskStageChainInfo({
     required this.id,
@@ -22,6 +23,7 @@ class TaskStageChainInfo {
     required this.completed,
     required this.reopened,
     required this.opened,
+    this.test,
   });
 
   factory TaskStageChainInfo.fromJson(Map<String, dynamic> json) {

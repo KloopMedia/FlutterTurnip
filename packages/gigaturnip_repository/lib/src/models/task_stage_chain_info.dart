@@ -16,6 +16,7 @@ class TaskStageChainInfo extends Equatable {
   final List<int> opened;
   final int totalCount;
   final int completeCount;
+  final int? test;
 
   const TaskStageChainInfo({
     required this.id,
@@ -28,6 +29,7 @@ class TaskStageChainInfo extends Equatable {
     required this.completed,
     required this.reopened,
     required this.opened,
+    this.test,
   });
 
   factory TaskStageChainInfo.fromJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class TaskStageChainInfo extends Equatable {
       completed: model.completed,
       reopened: model.reopened,
       opened: model.opened,
+      test: model.test,
     );
   }
 

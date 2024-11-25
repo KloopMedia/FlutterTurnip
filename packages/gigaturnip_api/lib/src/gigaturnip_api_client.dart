@@ -202,7 +202,7 @@ abstract class GigaTurnipApiClient {
     @Queries() Map<String, dynamic>? query,
   });
 
-  @GET(testsRoute)
-  Future<Test> getTestById();
+  @GET("$testsRoute/{id}")
+  Future<Test> getTestById(@Path("id") int id);
 }
 

@@ -1586,7 +1586,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
   }
 
   @override
-  Future<Test> getTestById() async {
+  Future<Test> getTestById(int id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -1598,7 +1598,7 @@ class _GigaTurnipApiClient implements GigaTurnipApiClient {
     )
         .compose(
           _dio.options,
-          '/api/v1/tests/',
+          '/api/v1/tests//${id}',
           queryParameters: queryParameters,
           data: _data,
         )
