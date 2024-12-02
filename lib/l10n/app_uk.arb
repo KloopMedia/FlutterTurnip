@@ -212,5 +212,16 @@
   "call_us_telegram": "Telegram",
 
 	"complete_volume": "Закінчений",
-	"closed_volume": "Закрито"
+	"closed_volume": "Закрито",
+
+	"course_is_completed": "Курс завершено",
+	"course_start_at": "Запуск курсу {date}",
+    "@course_start_at": {
+        "description": "A message with a date parameter",
+        "placeholders": {
+		        "date": {
+		        "type": "String"
+        }
+    }
+	}
 }

@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/widgets/error_box.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../router/routes/routes.dart';
 import '../../campaign/bloc/campaign_cubit.dart';
@@ -266,6 +267,34 @@ class FeaturedCampaignCard extends StatefulWidget {
 class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
   bool isHover = false;
 
+  Widget _buildCampaignHeader(Campaign? campaign) {
+    if (campaign == null) {
+      return SizedBox.shrink();
+    }
+
+    String? headerText;
+    if (campaign.startDate != null) {
+      final formattedDateString = DateFormat.MMMMd(context.loc.localeName).format(campaign.startDate!);
+      headerText = context.loc.course_start_at(formattedDateString);
+    } else if (campaign.isCompleted) {
+      headerText = context.loc.course_is_completed;
+    }
+
+    if (headerText == null) {
+      return SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Text(
+        headerText,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
@@ -281,32 +310,46 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
           isHover = false;
         }),
         child: Container(
-          width: widget.width,
-          height: widget.height,
-          padding: const EdgeInsets.all(6),
-          margin: (widget.verticalMargin == null)
-              ? null
-              : EdgeInsets.symmetric(vertical: widget.verticalMargin!),
           decoration: BoxDecoration(
-              color: const Color(0xFFE9EAFD), borderRadius: BorderRadius.circular(15)),
+            color: Color(0xFF5E81FB),
+            borderRadius: BorderRadius.circular(15),
+          ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (widget.item.featuredImage != null && widget.item.featuredImage!.isNotEmpty)
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    child: Image.network(widget.item.featuredImage!),
-                  ),
+              _buildCampaignHeader(widget.item),
+              Container(
+                width: widget.width,
+                height: widget.height,
+                padding: const EdgeInsets.all(6),
+                margin: (widget.verticalMargin == null)
+                    ? null
+                    : EdgeInsets.symmetric(vertical: widget.verticalMargin!),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE9EAFD),
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              const SizedBox(height: 20),
-              Text(
-                  (widget.item.shortDescription != null && widget.item.shortDescription!.isNotEmpty)
-                      ? widget.item.shortDescription!
-                      : '',
-                  style: textStyle,
-                  textAlign: TextAlign.center),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (widget.item.featuredImage != null && widget.item.featuredImage!.isNotEmpty)
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          child: Image.network(widget.item.featuredImage!),
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    Text(
+                        (widget.item.shortDescription != null &&
+                                widget.item.shortDescription!.isNotEmpty)
+                            ? widget.item.shortDescription!
+                            : '',
+                        style: textStyle,
+                        textAlign: TextAlign.center),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

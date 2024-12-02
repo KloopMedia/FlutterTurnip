@@ -8,6 +8,7 @@ import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -328,6 +329,33 @@ class UserCampaignView extends StatelessWidget {
     );
   }
 
+  Widget? campaignStatusWidget(BuildContext context, Campaign campaign) {
+    Widget? chip;
+
+    if (campaign.startDate != null) {
+      final startDateString = DateFormat.MMMMd(context.loc.localeName).format(campaign.startDate!);
+      chip = CardChip(
+        context.loc.course_start_at(startDateString),
+        fontColor: Colors.white,
+        backgroundColor: Color(0xFF778CE0),
+      );
+    } else if (campaign.isCompleted) {
+      chip = CardChip(
+        context.loc.course_is_completed,
+        fontColor: Colors.white,
+        backgroundColor: Color(0xFF74BF3B),
+      );
+    }
+
+    if (chip == null) {
+      return null;
+    }
+
+    return Row(
+      children: [chip],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -370,6 +398,7 @@ class UserCampaignView extends StatelessWidget {
                         ),
                         imageUrl: item.logo,
                         onTap: () => redirectToTaskMenu(context, item),
+                        bottom: campaignStatusWidget(context, item),
                       ),
                     );
                   },

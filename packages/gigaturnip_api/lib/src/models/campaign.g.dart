@@ -56,6 +56,10 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
               $checkedConvert('new_task_view_mode', (v) => v as bool? ?? false),
           registrationStage: $checkedConvert(
               'registration_stage', (v) => (v as num?)?.toInt()),
+          isCompleted:
+              $checkedConvert('is_completed', (v) => v as bool? ?? false),
+          startDate: $checkedConvert('start_date',
+              (v) => v == null ? null : DateTime.parse(v as String)),
         );
         return val;
       },
@@ -72,6 +76,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
         'smsCompleteTaskAllow': 'sms_complete_task_allow',
         'contactUsLink': 'contact_us_link',
         'newTaskViewMode': 'new_task_view_mode',
-        'registrationStage': 'registration_stage'
+        'registrationStage': 'registration_stage',
+        'isCompleted': 'is_completed',
+        'startDate': 'start_date'
       },
     );

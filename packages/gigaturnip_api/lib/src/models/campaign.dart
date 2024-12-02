@@ -26,6 +26,8 @@ class Campaign {
   final String? contactUsLink;
   final bool newTaskViewMode;
   final int? registrationStage;
+  final bool isCompleted;
+  final DateTime? startDate;
 
   Campaign({
     required this.id,
@@ -49,7 +51,9 @@ class Campaign {
     this.smsCompleteTaskAllow = false,
     required this.contactUsLink,
     this.newTaskViewMode = false,
-    required this.registrationStage
+    required this.registrationStage,
+    this.isCompleted = false,
+    this.startDate
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {

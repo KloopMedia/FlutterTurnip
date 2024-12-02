@@ -25,6 +25,8 @@ class Campaign extends Equatable {
   final bool newTaskViewMode;
   final int? defaultTrack;
   final int? registrationStage;
+  final bool isCompleted;
+  final DateTime? startDate;
 
   const Campaign({
     required this.id,
@@ -46,6 +48,8 @@ class Campaign extends Equatable {
     this.newTaskViewMode = false,
     required this.defaultTrack,
     required this.registrationStage,
+    this.isCompleted = false,
+    this.startDate
   });
 
   factory Campaign.fromJson(Map<String, dynamic> json) {
@@ -77,6 +81,8 @@ class Campaign extends Equatable {
       newTaskViewMode: model.newTaskViewMode,
       defaultTrack: model.defaultTrack,
       registrationStage: model.registrationStage,
+      isCompleted: model.isCompleted,
+      startDate: model.startDate,
     );
   }
 

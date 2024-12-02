@@ -30,6 +30,10 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       newTaskViewMode: json['newTaskViewMode'] as bool? ?? false,
       defaultTrack: (json['defaultTrack'] as num?)?.toInt(),
       registrationStage: (json['registrationStage'] as num?)?.toInt(),
+      isCompleted: json['isCompleted'] as bool? ?? false,
+      startDate: json['startDate'] == null
+          ? null
+          : DateTime.parse(json['startDate'] as String),
     );
 
 Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
@@ -52,4 +56,6 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'newTaskViewMode': instance.newTaskViewMode,
       'defaultTrack': instance.defaultTrack,
       'registrationStage': instance.registrationStage,
+      'isCompleted': instance.isCompleted,
+      'startDate': instance.startDate?.toIso8601String(),
     };
