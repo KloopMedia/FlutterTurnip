@@ -104,9 +104,22 @@ class LessonTaskPage extends StatelessWidget {
         if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
           final data = state.data;
 
-          final items = _buildChain(data.first.stagesData);
+          final chains = data.expand<Widget>((item) {
+            return [
+              const SizedBox(height: 10),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
+                  item.name,
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22.0),
+                ),
+              ),
+              ..._buildChain(item.stagesData),
+              const SizedBox(height: 10),
+            ];
+          }).toList();
 
-          return SliverList.list(children: items);
+          return SliverList.list(children: chains);
         }
 
         return const SliverToBoxAdapter(
