@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gigaturnip/src/features/task/view/settings_page.dart';
+import 'package:gigaturnip/src/features/settings/view/settings_page.dart';
 import 'package:go_router/go_router.dart';
 
 class SettingsRoute {

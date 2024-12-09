@@ -4,10 +4,6 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/volume_bloc/volume_cubit.dart';
-import 'package:gigaturnip/src/features/task/view/volumes.dart';
-import 'package:gigaturnip/src/features/task/widgets/available_task_stages.dart';
-import 'package:gigaturnip/src/features/task/widgets/contact_us_button.dart';
-import 'package:gigaturnip/src/features/task/widgets/task_chain/task_stage_chain_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/card/addons/card_with_title_and_task_notification.dart';
@@ -20,10 +16,8 @@ import '../../../widgets/card/tag_with_icon_and title.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../bloc/bloc.dart';
-import '../widgets/creatable_task_list.dart';
-import '../widgets/filter_bar.dart';
-import '../widgets/task_chain/types.dart';
-import 'lesson_task_page.dart';
+import '../widgets/widgets.dart';
+import 'lesson_task_view.dart';
 
 class RelevantTaskPage extends StatefulWidget {
   final int campaignId;

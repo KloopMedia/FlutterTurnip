@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../../widgets/card/addons/card_chip.dart';
+import '../../../../widgets/card/addons/card_chip.dart';
 
 class VolumeCard extends StatelessWidget {
   final String name;

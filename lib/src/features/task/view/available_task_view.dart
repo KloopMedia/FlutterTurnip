@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_json_schema_form/flutter_json_schema_form.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
-import 'package:gigaturnip/src/features/task/widgets/available_task_filter/mobile_filter_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/utilities/download_service.dart';
@@ -18,6 +17,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
 
 import '../bloc/bloc.dart';
+import '../widgets/available_tasks_widgets/available_task_filter/mobile_filter_page.dart';
 
 class AvailableTaskPage extends StatelessWidget {
   final int campaignId;

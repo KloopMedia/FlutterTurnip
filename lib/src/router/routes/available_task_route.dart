@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/features/task/view/available_task_page.dart';
+import 'package:gigaturnip/src/features/task/view/available_task_view.dart';
 import 'package:go_router/go_router.dart';
 
 class AvailableTaskRoute {

@@ -5,8 +5,8 @@ import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../bloc/volume_bloc/volume_cubit.dart';
-import '../widgets/volume_card.dart';
+import '../../bloc/volume_bloc/volume_cubit.dart';
+import 'volume_card.dart';
 
 class Volumes extends StatefulWidget {
   final void Function(Volume volume) onChanged;

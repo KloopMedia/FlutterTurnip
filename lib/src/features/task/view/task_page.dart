@@ -13,7 +13,7 @@ import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
 import '../bloc/volume_bloc/volume_cubit.dart';
 import '../widgets/task_page_floating_action_button.dart';
-import 'relevant_task_page.dart';
+import 'relevant_task_view.dart';
 
 class TaskPage extends StatefulWidget {
   final int campaignId;

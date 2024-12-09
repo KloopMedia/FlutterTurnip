@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/features/task/widgets/task_chain/types.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../bloc/bloc.dart';
 import '../bloc/bloc.dart';
-import '../widgets/lesson_page/lesson_decorator.dart';
-import '../widgets/lesson_page/lesson_line.dart';
-import '../widgets/lesson_page/lesson_list_item.dart';
+import '../widgets/widgets.dart';
 
 class LessonTaskPage extends StatelessWidget {
   final Function(TaskStageChainInfo item, ChainInfoStatus status) onTap;

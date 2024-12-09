@@ -5,12 +5,12 @@ import 'package:gigaturnip/src/widgets/button/custom_floating_action_button.dart
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../bloc/bloc.dart';
-import 'creatable_task_menu.dart';
+import 'creatable_tasks_widgets/creatable_task_menu.dart';
 
 class TaskPageFloatingActionButton extends StatelessWidget {
   final int campaignId;
 
-  const TaskPageFloatingActionButton({Key? key, required this.campaignId}) : super(key: key);
+  const TaskPageFloatingActionButton({super.key, required this.campaignId});
 
   @override
   Widget build(BuildContext context) {
