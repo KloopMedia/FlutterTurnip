@@ -45,8 +45,8 @@ class FilterBar extends StatefulWidget {
 
 class _FilterBarState extends State<FilterBar> {
   late String _activeFilter;
-  late final Volume? _selectedVolume;
-  late final List<String> _filterNames;
+  late Volume? _selectedVolume;
+  late List<String> _filterNames;
 
   @override
   void initState() {
