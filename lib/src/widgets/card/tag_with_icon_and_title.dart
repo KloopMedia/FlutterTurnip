@@ -11,11 +11,11 @@ class TagWithIconAndTitle extends StatelessWidget {
 
   const TagWithIconAndTitle(
     this.text, {
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.fontColor,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

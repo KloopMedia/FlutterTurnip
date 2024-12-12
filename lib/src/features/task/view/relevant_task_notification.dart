@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
-import '../../../widgets/card/tag_with_icon_and title.dart';
+import '../../../widgets/card/tag_with_icon_and_title.dart';
 import '../../../widgets/widgets.dart';
 import '../../notification/widgets/important_and_open_notification_listview.dart';
 import '../widgets/relevant_task_widgets/relevant_task_navigation.dart';
