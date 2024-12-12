@@ -21,16 +21,14 @@ const individualChainFilterMap = {
   'Все': null,
 };
 
-// Helper function to get filter names dynamically
 List<String> getFilterNames(BuildContext context, Volume? volume) {
-  String getDefault(String? customText, String defaultText) {
-    return (customText?.isNotEmpty ?? false) ? customText! : defaultText;
-  }
+  String getDefaultText(String? custom, String fallback) =>
+      (custom?.isNotEmpty ?? false) ? custom! : fallback;
 
   return [
-    getDefault(volume?.activeTasksText, context.loc.task_filter_active),
-    getDefault(volume?.returnedTasksText, context.loc.task_filter_returned),
-    getDefault(volume?.completedTasksText, context.loc.task_filter_submitted),
+    getDefaultText(volume?.activeTasksText, context.loc.task_filter_active),
+    getDefaultText(volume?.returnedTasksText, context.loc.task_filter_returned),
+    getDefaultText(volume?.completedTasksText, context.loc.task_filter_submitted),
     context.loc.task_filter_all,
   ];
 }
@@ -43,26 +41,19 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  late String _activeFilter = taskFilterMap.keys.first;
-  late Volume? _selectedVolume;
-  late List<String> _filterNames;
+  late String _activeFilter;
 
   @override
-  void didChangeDependencies() {
-    _selectedVolume = context.read<TaskFilterCubit>().state.volume;
-    _filterNames = getFilterNames(context, _selectedVolume);
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _activeFilter = taskFilterMap.keys.first;
   }
 
-  void _onFilterChanged(BuildContext context, String key) {
-    final taskQuery = {...?taskFilterMap[key]};
-    final chainQuery = {...?individualChainFilterMap[key]};
+  void _applyFilter(BuildContext context, String filterKey) {
+    final taskQuery = {...?taskFilterMap[filterKey]};
+    final chainQuery = {...?individualChainFilterMap[filterKey]};
 
-    if (key == 'Все') {
-      context.read<TaskFilterCubit>().updateAll(taskQuery: null, chainQuery: null);
-    } else {
-      context.read<TaskFilterCubit>().updateAll(taskQuery: taskQuery, chainQuery: chainQuery);
-    }
+    context.read<TaskFilterCubit>().updateAll(taskQuery: taskQuery, chainQuery: chainQuery);
   }
 
   @override
@@ -70,37 +61,43 @@ class _FilterBarState extends State<FilterBar> {
     final theme = Theme.of(context).colorScheme;
     final filterKeys = taskFilterMap.keys.toList();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.loc.mytasks,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: theme.isLight ? theme.neutral30 : theme.neutral90,
-            ),
-          ),
-          const SizedBox(height: 15),
-          FixedChipBar(
-            children: List.generate(
-              filterKeys.length,
-              (index) => DefaultChip(
-                label: _filterNames[index],
-                active: filterKeys[index] == _activeFilter,
-                onPressed: () {
-                  setState(() {
-                    _activeFilter = filterKeys[index];
-                  });
-                  _onFilterChanged(context, filterKeys[index]);
-                },
+    return BlocBuilder<TaskFilterCubit, TaskFilterState>(
+      builder: (context, state) {
+        final filterNames = getFilterNames(context, state.volume);
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.loc.mytasks,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: theme.isLight ? theme.neutral30 : theme.neutral90,
+                ),
               ),
-            ),
+              const SizedBox(height: 15),
+              FixedChipBar(
+                children: List.generate(filterKeys.length, (index) {
+                  final key = filterKeys[index];
+                  return DefaultChip(
+                    label: filterNames[index],
+                    active: key == _activeFilter,
+                    onPressed: () {
+                      setState(() {
+                        _activeFilter = key;
+                      });
+                      _applyFilter(context, key);
+                    },
+                  );
+                }),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
