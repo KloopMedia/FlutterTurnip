@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_cubit.dart';
+import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
