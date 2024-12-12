@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
-import 'package:gigaturnip/src/features/task/bloc/volume_bloc/volume_cubit.dart';
+import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/card/addons/card_with_title_and_task_notification.dart';
@@ -22,7 +22,7 @@ import 'lesson_task_view.dart';
 class RelevantTaskPage extends StatefulWidget {
   final int campaignId;
 
-  const RelevantTaskPage({Key? key, required this.campaignId}) : super(key: key);
+  const RelevantTaskPage({super.key, required this.campaignId});
 
   @override
   State<RelevantTaskPage> createState() => _RelevantTaskPageState();
@@ -116,9 +116,9 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
   }
 
   List<Widget> _buildClassicTaskPage(
-      BuildContext context, SelectedVolumeState selectedVolumeState) {
+      BuildContext context, Volume? volume) {
     final theme = Theme.of(context).colorScheme;
-    final selectedVolume = selectedVolumeState.volume;
+    final selectedVolume = volume;
 
     return [
       AvailableTaskStages(
@@ -278,7 +278,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
             );
           }
           if (campaignState is CampaignInitialized) {
-            return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
+            return BlocBuilder<TaskFilterCubit, TaskFilterState>(
               builder: (context, selectedVolumeState) {
                 return RefreshIndicator(
                   onRefresh: () async => refreshAllTasks(context),
@@ -327,18 +327,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                         ),
                       Volumes(
                         onChanged: (Volume volume) {
-                          final query = {...taskQuery, 'stage__volumes': volume.id};
-                          context.read<SelectedVolumeCubit>().selectVolume(volume);
-                          context.read<RelevantTaskCubit>().refetchWithFilter(query: query);
-                          context.read<IndividualChainCubit>().refetchWithFilter(
-                              query: {...chainQuery, 'stages__volumes': volume.id});
-
-                          final stageQuery = {'volumes': volume.id};
-                          context
-                              .read<SelectableTaskStageCubit>()
-                              .refetchWithFilter(query: stageQuery);
-                          context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
-                          context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
+                          context.read<TaskFilterCubit>().setVolume(volume);
                         },
                       ),
                       SliverToBoxAdapter(
@@ -347,7 +336,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                       if (campaignState.data.newTaskViewMode)
                         ..._buildAlternativeTaskView(selectedVolumeState.volume)
                       else
-                        ..._buildClassicTaskPage(context, selectedVolumeState),
+                        ..._buildClassicTaskPage(context, selectedVolumeState.volume),
                     ],
                   ),
                 );

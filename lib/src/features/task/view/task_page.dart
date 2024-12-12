@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
+import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_cubit.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
@@ -112,12 +113,12 @@ class _TaskPageState extends State<TaskPage> {
             VolumeRepository(gigaTurnipApiClient: apiClient, campaignId: widget.campaignId),
           )..initialize(query: {'limit': 50, 'track_fk__campaign': widget.campaignId}),
         ),
-        BlocProvider(
-          lazy: false,
-          create: (context) => SelectedVolumeCubit(
-            volumeSubscription: context.read<VolumeCubit>().stream,
-          ),
-        ),
+        // BlocProvider(
+        //   lazy: false,
+        //   create: (context) => SelectedVolumeCubit(
+        //     volumeSubscription: context.read<VolumeCubit>().stream,
+        //   ),
+        // ),
         BlocProvider<OpenNotificationCubit>(
           create: (context) => NotificationCubit(
             OpenNotificationRepository(
@@ -126,35 +127,37 @@ class _TaskPageState extends State<TaskPage> {
             ),
           )..initialize(),
         ),
+        BlocProvider(
+          create: (context) => TaskFilterCubit(
+            volumeSubscription: context.read<VolumeCubit>().stream,
+          ),
+        ),
       ],
-      child: BlocListener<SelectedVolumeCubit, SelectedVolumeState>(
-        listener: (context, state) {
-          if (state is SelectedVolumeLoaded) {
-            if (state.volume != null) {
-              context
-                  .read<RelevantTaskCubit>()
-                  .initialize(query: {'complete': false, 'stage__volumes': state.volume!.id});
-              context
-                  .read<IndividualChainCubit>()
-                  .initialize(query: {'completed': false, 'stages__volumes': state.volume!.id});
-              context.read<ReactiveTasks>().initialize(query: {'volumes': state.volume!.id});
-              context.read<ProactiveTasks>().initialize(query: {'volumes': state.volume!.id});
-              context
-                  .read<ProactiveTasksButtons>()
-                  .initialize(query: {'volumes': state.volume!.id});
-              context
-                  .read<SelectableTaskStageCubit>()
-                  .initialize(query: {'volumes': state.volume!.id});
-            } else {
-              context.read<RelevantTaskCubit>().initialize(query: {'complete': false});
-              context.read<IndividualChainCubit>().initialize(query: {'completed': false});
-              context.read<ReactiveTasks>().initialize();
-              context.read<ProactiveTasks>().initialize();
-              context.read<ProactiveTasksButtons>().initialize();
-              context.read<SelectableTaskStageCubit>().initialize();
-            }
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<TaskFilterCubit, TaskFilterState>(listener: (context, state) {
+            final volumeId = state.volume?.id;
+
+            context.read<RelevantTaskCubit>().refetchWithFilter(
+              query: {
+                ...?state.taskQuery,
+                'stage__volumes': volumeId,
+              },
+            );
+            context.read<IndividualChainCubit>().refetchWithFilter(
+              query: {
+                ...?state.chainQuery,
+                'stages__volumes': volumeId,
+              },
+            );
+
+            final stageQuery = {'volumes': volumeId};
+            context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
+            context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
+            context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
+            context.read<ProactiveTasksButtons>().initialize(query: stageQuery);
+          }),
+        ],
         child: DefaultAppBar(
           // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
           title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(

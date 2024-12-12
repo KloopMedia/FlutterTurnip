@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_cubit.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -34,7 +35,7 @@ class _VolumesState extends State<Volumes> {
           }
           if (state is RemoteDataLoaded<Volume> && state.data.isNotEmpty) {
             final volumes = state.data;
-            return BlocBuilder<SelectedVolumeCubit, SelectedVolumeState>(
+            return BlocBuilder<TaskFilterCubit, TaskFilterState>(
               builder: (context, selectedVolumeState) {
                 final selectedVolumeIndex = volumes.indexWhere(
                   (volume) => volume.id == selectedVolumeState.volume?.id,

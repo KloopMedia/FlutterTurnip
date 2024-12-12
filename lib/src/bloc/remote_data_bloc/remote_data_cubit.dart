@@ -9,99 +9,105 @@ abstract class RemoteDataCubit<Data> extends Cubit<RemoteDataState<Data>> {
   RemoteDataCubit() : super(RemoteDataUninitialized());
 
   Future<void> initialize({Map<String, dynamic>? query}) async {
-    try {
-      emit(RemoteDataFetching());
-
-      final pageData = await fetchAndParseData(0, query: query);
-
-      emit(
-        RemoteDataLoaded(
-          data: pageData.data,
-          currentPage: pageData.currentPage,
-          total: pageData.total,
-          count: pageData.count,
-          query: query,
-        ),
-      );
-    } on Exception catch (e, c) {
-      if (kDebugMode) {
-        print(e);
-        print(c);
-      }
-      emit(RemoteDataFetchingError(e));
-    }
+    await _loadPage(0, query: query, refetching: false);
   }
 
-  Future<void> fetchData(int page) async {
-    try {
-      Map<String, dynamic>? query;
-      Map<String, dynamic>? body;
+  Future<void> fetchData(int page, {Map<String, dynamic>? query}) async {
+    final currentState = state;
+    final effectiveQuery = query ?? _currentQueryOrNull(currentState);
+    final effectiveBody = _currentBodyOrNull(currentState);
 
-      if (state is RemoteDataInitialized<Data>) {
-        emit(RemoteDataRefetching.clone(state as RemoteDataInitialized<Data>));
-        query = (state as RemoteDataInitialized).query;
-        body = (state as RemoteDataInitialized).body;
-      } else {
-        emit(RemoteDataFetching());
-        query = null;
-        body = null;
-      }
-
-      final pageData = await fetchAndParseData(page, body: body, query: query);
-
-      emit(
-        RemoteDataLoaded(
-          data: pageData.data,
-          currentPage: pageData.currentPage,
-          total: pageData.total,
-          count: pageData.count,
-          query: query,
-          body: body,
-        ),
-      );
-    } on Exception catch (e, c) {
-      if (kDebugMode) {
-        print(e);
-        print(c);
-      }
-      if (state is RemoteDataInitialized<Data>) {
-        emit(RemoteDataRefetchingError.clone(state as RemoteDataInitialized<Data>, e));
-      } else {
-        emit(RemoteDataFetchingError(e));
-      }
-    }
+    await _loadPage(
+      page,
+      query: effectiveQuery,
+      body: effectiveBody,
+      refetching: currentState is RemoteDataInitialized<Data>,
+    );
   }
 
   Future<void> setFilter(Map<String, dynamic>? query, Map<String, dynamic>? body) async {
-    final _state = state;
-    if (_state is RemoteDataLoaded<Data>) {
-      emit(
-        RemoteDataLoaded(
-            data: _state.data,
-            currentPage: _state.currentPage,
-            total: _state.total,
-            count: _state.count,
-            query: query,
-            body: body),
-      );
+    if (state is RemoteDataLoaded<Data>) {
+      final currentState = state as RemoteDataLoaded<Data>;
+      emit(RemoteDataLoaded(
+        data: currentState.data,
+        currentPage: currentState.currentPage,
+        total: currentState.total,
+        count: currentState.count,
+        query: query,
+        body: body,
+      ));
     }
   }
 
   void refetchWithFilter({Map<String, dynamic>? query, Map<String, dynamic>? body}) {
     setFilter(query, body);
-    fetchData(0);
+    fetchData(0, query: query);
   }
 
   void refetch() {
-    final _state = state;
-    final page = _state is RemoteDataInitialized<Data> ? _state.currentPage : 0;
-
-    fetchData(page);
+    final currentPage = state is RemoteDataInitialized<Data>
+        ? (state as RemoteDataInitialized<Data>).currentPage
+        : 0;
+    fetchData(currentPage);
   }
 
+  /// This must be implemented by subclasses to fetch data.
   Future<PageData<Data>> fetchAndParseData(
-    int page, {
-    Map<String, dynamic>? body,
-    Map<String, dynamic>? query,
-  });
+      int page, {
+        Map<String, dynamic>? body,
+        Map<String, dynamic>? query,
+      });
+
+  /// Unified method to handle loading pages and emitting states
+  Future<void> _loadPage(
+      int page, {
+        Map<String, dynamic>? query,
+        Map<String, dynamic>? body,
+        bool refetching = false,
+      }) async {
+    try {
+      emit(_loadingStateFromCurrent(state, refetching));
+      final pageData = await fetchAndParseData(page, query: query, body: body);
+
+      emit(RemoteDataLoaded<Data>(
+        data: pageData.data,
+        currentPage: pageData.currentPage,
+        total: pageData.total,
+        count: pageData.count,
+        query: query,
+        body: body,
+      ));
+    } catch (error, stackTrace) {
+      _handleError(state, error, stackTrace);
+    }
+  }
+
+  RemoteDataState<Data> _loadingStateFromCurrent(RemoteDataState<Data> currentState, bool refetching) {
+    if (refetching && currentState is RemoteDataInitialized<Data>) {
+      return RemoteDataRefetching.clone(currentState);
+    }
+    return RemoteDataFetching();
+  }
+
+  void _handleError(RemoteDataState<Data> currentState, Object error, StackTrace stackTrace) {
+    if (kDebugMode) {
+      print(error);
+      print(stackTrace);
+    }
+
+    final exception = error is Exception ? error : Exception(error.toString());
+    if (currentState is RemoteDataInitialized<Data>) {
+      emit(RemoteDataRefetchingError.clone(currentState, exception));
+    } else {
+      emit(RemoteDataFetchingError(exception));
+    }
+  }
+
+  Map<String, dynamic>? _currentQueryOrNull(RemoteDataState<Data> state) {
+    return state is RemoteDataInitialized<Data> ? state.query : null;
+  }
+
+  Map<String, dynamic>? _currentBodyOrNull(RemoteDataState<Data> state) {
+    return state is RemoteDataInitialized<Data> ? state.body : null;
+  }
 }

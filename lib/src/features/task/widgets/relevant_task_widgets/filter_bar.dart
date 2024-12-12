@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/features/task/bloc/volume_bloc/volume_cubit.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/chip_bar/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../bloc/bloc.dart';
+import '../../bloc/task_filter_bloc/task_filter_cubit.dart';
 
 const taskFilterMap = {
   'Активные': {'complete': false, 'reopened': null},
@@ -44,41 +43,32 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  late String _activeFilter;
+  late String _activeFilter = taskFilterMap.keys.first;
   late Volume? _selectedVolume;
   late List<String> _filterNames;
 
   @override
-  void initState() {
-    _activeFilter = taskFilterMap.keys.first;
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
-    _selectedVolume = context.read<SelectedVolumeCubit>().state.volume;
+    _selectedVolume = context.read<TaskFilterCubit>().state.volume;
     _filterNames = getFilterNames(context, _selectedVolume);
     super.didChangeDependencies();
   }
 
-  void _onFilterChanged(BuildContext context, String key, Map<String, dynamic>? value) {
-    final selectedVolume = context.read<SelectedVolumeCubit>().state.volume;
-    final volumeId = selectedVolume?.id;
+  void _onFilterChanged(BuildContext context, String key) {
+    final taskQuery = {...?taskFilterMap[key]};
+    final chainQuery = {...?individualChainFilterMap[key]};
 
-    context.read<RelevantTaskCubit>().refetchWithFilter();
-    context.read<IndividualChainCubit>().refetchWithFilter(
-      query: {
-        ...?individualChainFilterMap[key],
-        if (volumeId != null) 'stages__volumes': volumeId,
-      },
-    );
+    if (key == 'Все') {
+      context.read<TaskFilterCubit>().updateAll(taskQuery: null, chainQuery: null);
+    } else {
+      context.read<TaskFilterCubit>().updateAll(taskQuery: taskQuery, chainQuery: chainQuery);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final filterKeys = taskFilterMap.keys.toList();
-    final filterValues = taskFilterMap.values.toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -104,7 +94,7 @@ class _FilterBarState extends State<FilterBar> {
                   setState(() {
                     _activeFilter = filterKeys[index];
                   });
-                  _onFilterChanged(context, filterKeys[index], filterValues[index]);
+                  _onFilterChanged(context, filterKeys[index]);
                 },
               ),
             ),
