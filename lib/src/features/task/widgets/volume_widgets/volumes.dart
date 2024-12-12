@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_cubit.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -27,50 +26,53 @@ class _VolumesState extends State<Volumes> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: BlocBuilder(
-        bloc: context.read<VolumeCubit>(),
+      child: BlocBuilder<VolumeCubit, RemoteDataState<Volume>>(
         builder: (context, state) {
           if (state is RemoteDataLoading<Volume>) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is RemoteDataLoaded<Volume> && state.data.isNotEmpty) {
+
+          if (state is RemoteDataLoaded<Volume>) {
             final volumes = state.data;
+            if (volumes.isEmpty) {
+              return const SizedBox();
+            }
+
             return BlocBuilder<TaskFilterCubit, TaskFilterState>(
-              builder: (context, selectedVolumeState) {
-                final selectedVolumeIndex = volumes.indexWhere(
-                  (volume) => volume.id == selectedVolumeState.volume?.id,
-                );
+              builder: (context, filterState) {
+                final selectedVolume = filterState.volume;
+                final selectedVolumeIndex = volumes.indexWhere((v) => v.id == selectedVolume?.id);
+
                 return Container(
-                  height: volumes.isEmpty ? 0 : null,
-                  constraints: const BoxConstraints(maxHeight: 141),
                   margin: const EdgeInsets.only(top: 11),
+                  constraints: const BoxConstraints(maxHeight: 141),
                   child: ScrollablePositionedList.separated(
-                    initialScrollIndex: selectedVolumeIndex,
+                    initialScrollIndex: selectedVolumeIndex >= 0 ? selectedVolumeIndex : 0,
                     itemScrollController: _itemScrollController,
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     scrollDirection: Axis.horizontal,
                     itemCount: volumes.length,
                     itemBuilder: (BuildContext context, int index) {
                       final volume = volumes[index];
+                      final isSelected = volume.id == selectedVolume?.id;
+
                       return VolumeCard(
                         status: volume.status,
                         name: volume.name,
                         description: volume.description,
-                        isSelected: selectedVolumeState.volume?.id == volume.id,
+                        isSelected: isSelected,
                         index: index,
-                        onTap: () {
-                          widget.onChanged(volume);
-                        },
+                        onTap: () => widget.onChanged(volume),
                       );
                     },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(width: 8);
-                    },
+                    separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 8),
                   ),
                 );
               },
             );
           }
+
+          // If state is neither loading nor loaded, just return empty
           return const SizedBox();
         },
       ),
