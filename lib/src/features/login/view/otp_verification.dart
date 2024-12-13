@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 import 'package:pinput/pinput.dart';
 
+/// A page where users enter a verification code sent to their phone number.
+/// If the user doesn't receive the code, they can resend it.
 class VerificationPage extends StatefulWidget {
   final void Function(String code) onConfirm;
   final void Function() onResend;
@@ -24,11 +24,10 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
-  String pinCode = "";
   final int _length = 6;
-
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  String pinCode = "";
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +47,7 @@ class _VerificationPageState extends State<VerificationPage> {
 
     final defaultPinTheme = PinTheme(
       height: 54,
-      textStyle: TextStyle(
-        fontSize: 16,
-        color: theme.primary,
-      ),
+      textStyle: TextStyle(fontSize: 16, color: theme.primary),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: theme.isLight ? theme.neutral95 : theme.onSecondary,
@@ -66,17 +62,11 @@ class _VerificationPageState extends State<VerificationPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.loc.phone_number_verification,
-              style: titleTextStyle,
-            ),
+            Text(context.loc.phone_number_verification, style: titleTextStyle),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  context.loc.enter_code,
-                  style: textStyle,
-                ),
+                Text(context.loc.enter_code, style: textStyle),
                 const SizedBox(height: 15.0),
                 Pinput(
                   autofocus: true,
@@ -84,14 +74,8 @@ class _VerificationPageState extends State<VerificationPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   defaultPinTheme: defaultPinTheme,
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                  onChanged: (value) {
-                    setState(() {
-                      pinCode = value;
-                    });
-                  },
-                  onCompleted: (value) {
-                    focusNode.requestFocus();
-                  },
+                  onChanged: (value) => setState(() => pinCode = value),
+                  onCompleted: (_) => focusNode.requestFocus(),
                   cursor: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
@@ -110,7 +94,11 @@ class _VerificationPageState extends State<VerificationPage> {
               buttonText: context.loc.further,
               width: double.infinity,
               focusNode: focusNode,
-              onPressed: () => pinCode.length != _length ? null : () => widget.onConfirm(pinCode),
+              onPressed: () {
+                if (pinCode.length == _length) {
+                  widget.onConfirm(pinCode);
+                }
+              },
             ),
           ],
         ),
@@ -119,6 +107,7 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 }
 
+/// A button that lets the user resend the verification code after a countdown.
 class ResendCodeButton extends StatefulWidget {
   final void Function() onResend;
 
@@ -129,39 +118,43 @@ class ResendCodeButton extends StatefulWidget {
 }
 
 class _ResendCodeButtonState extends State<ResendCodeButton> {
-  final oneSec = const Duration(seconds: 1);
-  var countDown = 45;
+  static const oneSec = Duration(seconds: 1);
+  int countDown = 45;
+  Timer? _timer;
 
   @override
-  initState() {
-    Timer.periodic(oneSec, (timer) {
+  void initState() {
+    super.initState();
+    _startCountdown();
+  }
+
+  void _startCountdown() {
+    _timer = Timer.periodic(oneSec, (timer) {
       if (countDown == 0) {
-        setState(() {
-          timer.cancel();
-        });
+        setState(() => timer.cancel());
       } else {
-        setState(() {
-          countDown--;
-        });
+        setState(() => countDown--);
       }
     });
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const textButtonStyle = TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-    );
+    const textButtonStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w400);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: countDown == 0 ? () => widget.onResend() : null,
+          onPressed: countDown == 0 ? widget.onResend : null,
           style: const ButtonStyle(
-            padding: MaterialStatePropertyAll(EdgeInsets.all(0.0)),
+            padding: MaterialStatePropertyAll(EdgeInsets.zero),
           ),
           child: Text(
             countDown == 0 ? context.loc.resend_code : context.loc.resend_code_count(countDown),

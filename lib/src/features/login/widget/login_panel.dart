@@ -5,7 +5,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
-import '../view/pickers.dart';
+import '../view/language_picker.dart';
 import 'provider_buttons.dart';
 
 class LoginPanel extends StatelessWidget {
@@ -17,14 +17,14 @@ class LoginPanel extends StatelessWidget {
   final void Function(String phoneNumber) onChange;
 
   const LoginPanel({
-    Key? key,
+    super.key,
     this.padding = EdgeInsets.zero,
     this.constraints,
     this.isLocaleSelected,
     this.errorMessage,
     required this.onChange,
     required this.onSubmit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +85,6 @@ class LoginPanel extends StatelessWidget {
                     onSubmit(errorMessage);
                   }
               ),
-              // const SizedBox.shrink(),
-              // Column(
-              //   children: [
-              //     PhoneNumberField(onChanged: onChange),
-              //     const SizedBox(height: 20),
-              //     SignUpButton(onPressed: (_) => onSubmit()),
-              //     DividerWithLabel(
-              //       label: context.loc.or,
-              //       padding: const EdgeInsets.symmetric(vertical: 47.0),
-              //       color: theme.isLight ? theme.neutral50 : theme.neutral60,
-              //       thickness: 0.2,
-              //     ),
-              //     const LoginProviderButtons(),
-              //   ],
-              // ),
             ],
           ),
           Column(
@@ -113,8 +98,9 @@ class LoginPanel extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   if (kIsWeb) Text(
                     context.loc.privacy_policy_acceptance_1,
