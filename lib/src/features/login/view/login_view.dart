@@ -10,7 +10,6 @@ import '../../../bloc/bloc.dart';
 import '../bloc/login_bloc.dart';
 import '../widget/privacy_policy.dart';
 
-/// The main login view, showing login panel, onboarding, or OTP verification depending on the [LoginBloc] state.
 class LoginView extends StatefulWidget {
   final int? campaignId;
 
@@ -36,104 +35,125 @@ class _LoginViewState extends State<LoginView> {
     sharedPreferences = await SharedPreferences.getInstance();
     if (!mounted) return;
     final state = context.read<LocalizationBloc>().state;
-    if (state.firstLogin == false) {
-      setState(() {
-        isLocaleSelected = true;
-      });
-    }
+    setState(() {
+      isLocaleSelected = state.firstLogin == false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+      body: _buildBackground(
         child: SafeArea(
           bottom: false,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Column(
-                children: [
-                  SizedBox(height: 29),
-                  SizedBox(
-                    height: 315,
-                    width: 285,
-                    child: Placeholder(),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 334,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Учись легко и эффективно!',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                  color: theme.neutral30,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 14),
-                              Text(
-                                'Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: theme.neutral30,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 21),
-                              LanguagePicker(isLocaleSelected: isLocaleSelected)
-                            ],
-                          ),
-                        ),
-                        // SizedBox(height: 51),
-                        Column(
-                          children: [
-                            LoginProviderButtons(
-                              isActive: true,
-                              onError: (value) {},
-                            ),
-                            SizedBox(height: 40),
-                            PrivacyPolicy(),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+              _buildLogoSection(),
+              Expanded(child: _buildLoginPanel()),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBackground({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildLogoSection() {
+    return Column(
+      children: const [
+        SizedBox(height: 29),
+        SizedBox(
+          height: 290,
+          width: 285,
+          child: Placeholder(), // Replace with your logo widget
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginPanel() {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32),
+          topRight: Radius.circular(32),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildLoginContent(),
+            _buildBottomSection(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginContent() {
+    return SizedBox(
+      width: 334,
+      child: Column(
+        children: [
+          Text(
+            'Учись легко и эффективно!',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+              color: theme.neutral30,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: theme.neutral30,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 21),
+          LanguagePicker(isLocaleSelected: isLocaleSelected),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomSection() {
+    return Column(
+      children: [
+        LoginProviderButtons(
+          isActive: true,
+          onError: (value) {
+            setState(() {
+              errorMessage = value;
+            });
+          },
+        ),
+        const SizedBox(height: 40),
+        const PrivacyPolicy(),
+      ],
     );
   }
 }
