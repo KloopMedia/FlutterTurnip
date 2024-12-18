@@ -3,7 +3,7 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/widgets.dart';
 
-import '../../features/login/view/country_picker.dart';
+import '../../features/login/widget/country_picker.dart';
 
 class SearchBarDialog extends StatefulWidget{
   final List data;

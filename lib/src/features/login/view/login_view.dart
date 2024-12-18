@@ -1,17 +1,14 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/app.dart';
+import 'package:gigaturnip/src/features/login/widget/language_picker.dart';
+import 'package:gigaturnip/src/features/login/widget/provider_buttons.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/bloc.dart';
 import '../bloc/login_bloc.dart';
-import '../widget/login_panel.dart'; // Adjust import based on actual path
-import 'onboarding.dart';
-import 'otp_verification.dart';
+import '../widget/privacy_policy.dart';
 
 /// The main login view, showing login panel, onboarding, or OTP verification depending on the [LoginBloc] state.
 class LoginView extends StatefulWidget {
@@ -25,10 +22,9 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   late SharedPreferences sharedPreferences;
-  String _phoneNumber = "";
+  late final theme = Theme.of(context).colorScheme;
   String? errorMessage;
   bool isLocaleSelected = false;
-  int? _resendToken;
 
   @override
   void initState() {
@@ -47,139 +43,97 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  void _loginWithPhone([int? forceResendToken]) async {
-    final authenticationRepository = context.read<AuthenticationRepository>();
-    final bloc = context.read<LoginBloc>();
-
-    if (kIsWeb) {
-      // Web login
-      final result = await authenticationRepository.logInWithPhoneWeb(_phoneNumber);
-      bloc.add(SendOTP(result.verificationId, null));
-    } else {
-      // Mobile login
-      await authenticationRepository.logInWithPhone(
-        phoneNumber: _phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) => bloc.add(CompleteVerification(credential)),
-        verificationFailed: (FirebaseAuthException e) {},
-        codeSent: (String verificationId, int? resendToken) {
-          setState(() {
-            _resendToken = resendToken;
-          });
-          bloc.add(SendOTP(verificationId, resendToken));
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-        forceResendingToken: forceResendToken,
-      );
-    }
-  }
-
-  void _onPhoneNumberChanged(String phoneNumber) {
-    setState(() {
-      _phoneNumber = phoneNumber;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-
-    return Container(
-      color: theme.surface,
-      child: SafeArea(
-        child: Scaffold(
-          body: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (!context.isSmall) _buildSideImage(context),
-              _buildMainContent(context),
-            ],
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSideImage(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-    final width = context.isMedium
-        ? MediaQuery.of(context).size.width / 2
-        : MediaQuery.of(context).size.width / 3;
-
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: theme.primary,
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 24.0, top: 30, right: 24),
-        child: Center(
+        child: SafeArea(
+          bottom: false,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Image.asset('assets/images/people_3.png', height: 330),
-              const SizedBox(height: 20),
-              Text(
-                context.loc.welcome_title,
-                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white),
-                textAlign: TextAlign.center,
+              Column(
+                children: [
+                  SizedBox(height: 29),
+                  SizedBox(
+                    height: 315,
+                    width: 285,
+                    child: Placeholder(),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              Text(
-                context.loc.welcome_subtitle,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white.withOpacity(0.85),
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w300,
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32),
+                      topRight: Radius.circular(32),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 334,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Учись легко и эффективно!',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                  color: theme.neutral30,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 14),
+                              Text(
+                                'Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: theme.neutral30,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 21),
+                              LanguagePicker(isLocaleSelected: isLocaleSelected)
+                            ],
+                          ),
+                        ),
+                        // SizedBox(height: 51),
+                        Column(
+                          children: [
+                            LoginProviderButtons(
+                              isActive: true,
+                              onError: (value) {},
+                            ),
+                            SizedBox(height: 40),
+                            PrivacyPolicy(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
+              )
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildMainContent(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, loginState) {
-        if (loginState is LoginSuccess) {
-          return Flexible(
-            child: OnBoarding(
-              constraints: context.isSmall ? null : const BoxConstraints(maxWidth: 650, maxHeight: 430),
-            ),
-          );
-        } else if (loginState is LoginInitial) {
-          return Expanded(
-            child: LoginPanel(
-              constraints: kIsWeb ? const BoxConstraints(maxWidth: 600, maxHeight: 460) : null,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-              onChange: _onPhoneNumberChanged,
-              onSubmit: (value) {
-                if (value != null) {
-                  setState(() => errorMessage = value);
-                } else {
-                  _loginWithPhone();
-                }
-              },
-              isLocaleSelected: isLocaleSelected,
-              errorMessage: errorMessage,
-            ),
-          );
-        } else if (loginState is OTPCodeSend) {
-          return VerificationPage(
-            constraints: kIsWeb ? const BoxConstraints(maxWidth: 600, maxHeight: 450) : null,
-            onResend: () => _loginWithPhone(_resendToken),
-            onConfirm: (smsCode) {
-              context.read<LoginBloc>().add(ConfirmOTP(smsCode, loginState.verificationId));
-            },
-          );
-        }
-        return const SizedBox.shrink();
-      },
     );
   }
 }

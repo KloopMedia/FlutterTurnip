@@ -5,7 +5,7 @@ import 'package:gigaturnip/src/theme/index.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/routes/routes.dart';
-import '../view/language_picker.dart';
+import 'language_picker.dart';
 import 'provider_buttons.dart';
 
 class LoginPanel extends StatelessWidget {
@@ -81,7 +81,7 @@ class LoginPanel extends StatelessWidget {
               const SizedBox(height: 60),
               LoginProviderButtons(
                   isActive: isLocaleSelected ?? true,
-                  onPressed: (errorMessage) {
+                  onError: (errorMessage) {
                     onSubmit(errorMessage);
                   }
               ),
