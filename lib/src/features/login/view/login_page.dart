@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/features/login/view/onboarding_view.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,7 +64,14 @@ class LoginPage extends StatelessWidget {
           )..initialize(),
         ),
       ],
-      child: LoginView(campaignId: campaignId),
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          if (state is LoginSuccess) {
+            return OnBoardingView();
+          }
+          return LoginView(campaignId: campaignId);
+        },
+      ),
     );
   }
 }

@@ -151,7 +151,7 @@ class _LoginViewState extends State<LoginView> {
             });
           },
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 32),
         const PrivacyPolicy(),
       ],
     );
