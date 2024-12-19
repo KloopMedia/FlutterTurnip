@@ -254,28 +254,30 @@ class NotificationButton extends StatelessWidget {
               clipBehavior: Clip.none,
               alignment: Alignment.topLeft,
               children: [
-                const Positioned(
-                  right: 12,
-                  top: 5,
-                  child: Icon(Icons.notifications_outlined),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 22.0,
-                    height: 20.0,
-                    margin: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).colorScheme.tertiary),
-                    child: Center(
-                      child: Text(
+                Icon(Icons.notifications_outlined),
+                if (notifications.isNotEmpty)
+                  Positioned(
+                    right: -12,
+                    top: -5,
+                    child: Container(
+                      width: 22.0,
+                      height: 20.0,
+                      margin: EdgeInsets.zero,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Theme.of(context).colorScheme.tertiary),
+                      child: Center(
+                        child: Text(
                           (notifications.length > 10) ? '10+' : notifications.length.toString(),
                           style: TextStyle(
-                              fontSize: 14.0, color: Theme.of(context).colorScheme.onPrimary)),
+                            fontSize: 14.0,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ),
-                ),
               ],
             );
           } else {
