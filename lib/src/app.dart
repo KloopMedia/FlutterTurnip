@@ -55,18 +55,14 @@ class _AppState extends State<App> {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       builder: (context, child) {
-        final MediaQueryData data = MediaQuery.of(context);
-        return MediaQuery(
-          data: data.copyWith(textScaler: const TextScaler.linear(0.9)),
-          child: BlocBuilder<AuthBloc, AuthState>(
-            builder: (BuildContext context, AuthState state) {
-              if (state is DeletingAccount) {
-                return const Scaffold(body: Center(child: CircularProgressIndicator()));
-              }
+        return BlocBuilder<AuthBloc, AuthState>(
+          builder: (BuildContext context, AuthState state) {
+            if (state is DeletingAccount) {
+              return const Scaffold(body: Center(child: CircularProgressIndicator()));
+            }
 
-              return child!;
-            },
-          ),
+            return child!;
+          },
         );
       },
     );
