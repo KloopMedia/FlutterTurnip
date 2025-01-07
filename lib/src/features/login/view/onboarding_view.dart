@@ -83,7 +83,7 @@ class _OnboardingContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 191),
+        SizedBox(height: campaigns.length > 2 ? 110 : 190),
         _OnboardingHeader(fontColor: fontColor),
         Expanded(child: _CampaignGrid(campaigns: campaigns)),
         _SkipButton(),
@@ -122,25 +122,21 @@ class _CampaignGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      shrinkWrap: true,
-      slivers: [
-        SliverGridView(
-          itemBuilder: (context, index, item) {
-            return FeaturedCampaignCard(
-              item: item,
-              onTap: () => _handleCampaignSelection(context, item.id),
-            );
-          },
-          crossAxisAlignment: CrossAxisAlignment.end,
-          fillRow: campaigns.length == 1,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 16,
-          crossAxisCount: 2,
-          items: campaigns,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 56),
-        ),
-      ],
+    return CustomGridView(
+      itemBuilder: (context, index, item) {
+        return FeaturedCampaignCard(
+          item: item,
+          onTap: () => _handleCampaignSelection(context, item.id),
+        );
+      },
+      crossAxisAlignment: CrossAxisAlignment.end,
+      fillRow: campaigns.length == 1,
+      crossAxisSpacing: 12,
+      mainAxisSpacing: 16,
+      crossAxisCount: 2,
+      physics: NeverScrollableScrollPhysics(),
+      items: campaigns,
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 65, bottom: 44),
     );
   }
 
