@@ -32,7 +32,7 @@ class LoginProviderButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(1000.0),
+              borderRadius: BorderRadius.circular(1000),
             ),
             side: border,
             backgroundColor: backgroundColor,
@@ -41,13 +41,11 @@ class LoginProviderButton extends StatelessWidget {
           onPressed: onPressed,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               icon,
               const SizedBox(width: 15.0),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: child,
-              ),
+              child,
             ],
           ),
         ),
@@ -100,12 +98,15 @@ abstract class BaseLoginButton extends StatelessWidget {
           onError(context.loc.choose_language + helperText);
         }
       },
-      icon: Image.asset(
-        isActive ? iconActive : iconInactive,
-        height: provider == AuthProvider.apple ? 22.0 : 24.0,
-        color: provider == AuthProvider.apple && isActive
-            ? (theme.isLight ? Colors.white : Colors.black)
-            : null,
+      icon: Padding(
+        padding: provider == AuthProvider.apple ? EdgeInsets.only(bottom: 4.0) : EdgeInsets.zero,
+        child: Image.asset(
+          isActive ? iconActive : iconInactive,
+          height: provider == AuthProvider.apple ? 22.0 : 24.0,
+          color: provider == AuthProvider.apple && isActive
+              ? (theme.isLight ? Colors.white : Colors.black)
+              : null,
+        ),
       ),
       child: Text(
         buttonText,
