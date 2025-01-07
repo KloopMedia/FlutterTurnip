@@ -10,7 +10,6 @@ import '../widgets/widgets.dart';
 import 'relevant_task_notification.dart';
 import 'relevant_task_view.dart';
 
-
 class RelevantTaskPage extends StatefulWidget {
   final int campaignId;
 
@@ -41,16 +40,18 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   child: CustomScrollView(
                     slivers: [
                       if (!closeNotificationCard)
-                        buildImportantNotificationSliver(context, closeNotificationCardCallback: (id) async {
+                        buildImportantNotificationSliver(context,
+                            closeNotificationCardCallback: (id) async {
                           await closeNotificationCardMethod(context, id);
                           setState(() => closeNotificationCard = true);
                         }),
                       buildVolumesSliver(context),
                       const SliverToBoxAdapter(child: ContactUsButton()),
                       if (campaignState.data.newTaskViewMode)
-                        ...buildAlternativeTaskView(selectedVolumeState.volume, onChainTap: (item, status) {
-                          onChainTapMethod(context, item, status);
-                        })
+                        ...buildAlternativeTaskView(
+                          selectedVolumeState.volume,
+                          onChainTap: (item, status) => onChainTapMethod(context, item, status),
+                        )
                       else
                         ...buildClassicTaskPage(
                           context,

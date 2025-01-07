@@ -8,8 +8,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import '../../../widgets/card/addons/card_with_title_and_task_notification.dart';
 import '../bloc/bloc.dart';
 import '../bloc/task_filter_bloc/task_filter_cubit.dart';
-import '../widgets/relevant_task_widgets/relevant_task_helpers.dart';
-import '../widgets/relevant_task_widgets/relevant_task_navigation.dart';
 import '../widgets/widgets.dart';
 import 'lesson_task_view.dart';
 
