@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gigaturnip/src/app.dart';
 import 'package:gigaturnip/src/features/login/widget/language_picker.dart';
 import 'package:gigaturnip/src/features/login/widget/provider_buttons.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/bloc.dart';
-import '../bloc/login_bloc.dart';
 import '../widget/privacy_policy.dart';
 
 class LoginView extends StatefulWidget {
@@ -50,6 +48,7 @@ class _LoginViewState extends State<LoginView> {
             mainAxisSize: MainAxisSize.max,
             children: [
               _buildLogoSection(),
+              SizedBox(height: 16),
               Expanded(child: _buildLoginPanel()),
             ],
           ),
@@ -75,10 +74,10 @@ class _LoginViewState extends State<LoginView> {
   Widget _buildLogoSection() {
     return Column(
       children: const [
-        SizedBox(height: 29),
+        SizedBox(height: 45),
         SizedBox(
-          height: 290,
-          width: 285,
+          height: 304,
+          width: 361,
           child: Placeholder(), // Replace with your logo widget
         ),
       ],
@@ -120,6 +119,7 @@ class _LoginViewState extends State<LoginView> {
               fontSize: 24,
               fontWeight: FontWeight.w500,
               color: theme.neutral30,
+              height: 1.17
             ),
             textAlign: TextAlign.center,
           ),
@@ -130,10 +130,11 @@ class _LoginViewState extends State<LoginView> {
               fontSize: 16,
               fontWeight: FontWeight.w400,
               color: theme.neutral30,
+              height: 1.17
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 21),
+          const SizedBox(height: 16),
           LanguagePicker(isLocaleSelected: isLocaleSelected),
         ],
       ),

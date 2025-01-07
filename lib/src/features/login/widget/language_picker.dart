@@ -71,7 +71,7 @@ class _LanguagePickerState extends State<LanguagePicker> {
     final dropdownValue = widget.isLocaleSelected ? currentLocaleCode : null;
 
     return Container(
-      width: 236,
+      width: 247,
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
         color: Colors.white,
