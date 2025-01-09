@@ -44,7 +44,6 @@ class _VolumesState extends State<Volumes> {
                 final selectedVolumeIndex = volumes.indexWhere((v) => v.id == selectedVolume?.id);
 
                 return Container(
-                  margin: const EdgeInsets.only(top: 11),
                   constraints: const BoxConstraints(maxHeight: 141),
                   child: ScrollablePositionedList.separated(
                     initialScrollIndex: selectedVolumeIndex >= 0 ? selectedVolumeIndex : 0,

@@ -5,7 +5,7 @@ import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_c
 import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
+import 'package:gigaturnip/src/widgets/drawer/app_drawer.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart'; // hide Notification;
 import 'package:go_router/go_router.dart';
@@ -15,17 +15,16 @@ import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
 import '../bloc/volume_bloc/volume_cubit.dart';
 import '../widgets/task_page_floating_action_button.dart';
-import 'relevant_task_view.dart';
 
 class TaskPage extends StatefulWidget {
   final int campaignId;
   final Campaign? campaign;
 
   const TaskPage({
-    Key? key,
+    super.key,
     required this.campaignId,
     this.campaign,
-  }) : super(key: key);
+  });
 
   @override
   State<TaskPage> createState() => _TaskPageState();
@@ -114,12 +113,6 @@ class _TaskPageState extends State<TaskPage> {
             VolumeRepository(gigaTurnipApiClient: apiClient, campaignId: widget.campaignId),
           )..initialize(query: {'limit': 50, 'track_fk__campaign': widget.campaignId}),
         ),
-        // BlocProvider(
-        //   lazy: false,
-        //   create: (context) => SelectedVolumeCubit(
-        //     volumeSubscription: context.read<VolumeCubit>().stream,
-        //   ),
-        // ),
         BlocProvider<OpenNotificationCubit>(
           create: (context) => NotificationCubit(
             OpenNotificationRepository(
@@ -136,75 +129,84 @@ class _TaskPageState extends State<TaskPage> {
       ],
       child: MultiBlocListener(
         listeners: [
-          BlocListener<TaskFilterCubit, TaskFilterState>(listener: (context, state) {
-            final volumeId = state.volume?.id;
+          BlocListener<TaskFilterCubit, TaskFilterState>(
+            listener: (context, state) {
+              final volumeId = state.volume?.id;
 
-            context.read<RelevantTaskCubit>().refetchWithFilter(
-              query: {
-                ...?state.taskQuery,
-                'stage__volumes': volumeId,
-              },
-            );
-            context.read<IndividualChainCubit>().refetchWithFilter(
-              query: {
-                ...?state.chainQuery,
-                'stages__volumes': volumeId,
-              },
-            );
+              context.read<RelevantTaskCubit>().refetchWithFilter(
+                query: {
+                  ...?state.taskQuery,
+                  'stage__volumes': volumeId,
+                },
+              );
+              context.read<IndividualChainCubit>().refetchWithFilter(
+                query: {
+                  ...?state.chainQuery,
+                  'stages__volumes': volumeId,
+                },
+              );
 
-            final stageQuery = {'volumes': volumeId};
-            context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
-            context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
-            context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
-            context.read<ProactiveTasksButtons>().initialize(query: stageQuery);
-          }),
-        ],
-        child: DefaultAppBar(
-          // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
-          title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-            builder: (context, state) {
-              if (state is CampaignInitialized) {
-                return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
-              }
-              return const SizedBox.shrink();
+              final stageQuery = {'volumes': volumeId};
+              context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
+              context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
+              context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
+              context.read<ProactiveTasksButtons>().initialize(query: stageQuery);
             },
           ),
-          titleSpacing: 0,
-          leading: [
-            const SizedBox(width: 20),
-            if (!context.isSmall || context.isMedium)
-              IconButton(
-                onPressed: () => _redirectToCampaignDetail(context),
-                icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                  builder: (context, state) {
-                    if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
-                      return Container(
-                        width: 24,
-                        height: 24,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: ShapeDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(state.data.logo),
-                            fit: BoxFit.fill,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return const Icon(Icons.info_outline);
-                    }
-                  },
+        ],
+        child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 48,
+            title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+              builder: (context, state) {
+                if (state is CampaignInitialized) {
+                  return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            centerTitle: false,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
-          ],
-          // TODO: add filter to show settings button only to moderators.
-          actions: const [NotificationButton()],
-          // SettingsButton()
+            ),
+            titleSpacing: 0,
+            leading: Builder(builder: (context) {
+              return IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: Icon(Icons.menu),
+              );
+            }),
+            leadingWidth: 64,
+            actions: const [
+              NotificationButton(),
+              SizedBox(width: 12),
+            ],
+          ),
+          drawer: AppDrawer(),
           floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-          child: RelevantTaskPage(
-            campaignId: widget.campaignId,
+          body: Container(
+            padding: EdgeInsets.only(top: 9),
+            decoration: BoxDecoration(
+              color: Color(0xFFFECFB5),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(32),
+                topRight: Radius.circular(32),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: RelevantTaskPage(campaignId: widget.campaignId),
+              ),
+            ),
           ),
         ),
       ),

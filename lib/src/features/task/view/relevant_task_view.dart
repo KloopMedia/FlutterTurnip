@@ -18,6 +18,7 @@ List<Widget> buildClassicTaskPage(
   required void Function(TaskStageChainInfo, ChainInfoStatus) onChainTap,
 }) {
   return [
+    const SliverToBoxAdapter(child: ContactUsButton()),
     AvailableTaskStages(
       onTap: (item) => redirectToAvailableTasks(context, campaignId, item),
     ),
@@ -35,7 +36,14 @@ List<Widget> buildAlternativeTaskView(
   required void Function(TaskStageChainInfo, ChainInfoStatus) onChainTap,
 }) {
   return [
-    if (volume?.showTagsFilter ?? true) const SliverToBoxAdapter(child: FilterBar()),
+    if (volume?.showTagsFilter ?? true)
+      const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.only(top: 20.0),
+          child: FilterBar(),
+        ),
+      ),
+    const SliverToBoxAdapter(child: ContactUsButton()),
     LessonTaskPage(onTap: onChainTap),
   ];
 }

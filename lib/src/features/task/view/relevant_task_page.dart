@@ -39,14 +39,20 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                   onRefresh: () async => refreshAllTasks(context),
                   child: CustomScrollView(
                     slivers: [
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 27,
+                        ),
+                      ),
                       if (!closeNotificationCard)
-                        buildImportantNotificationSliver(context,
-                            closeNotificationCardCallback: (id) async {
-                          await closeNotificationCardMethod(context, id);
-                          setState(() => closeNotificationCard = true);
-                        }),
+                        buildImportantNotificationSliver(
+                          context,
+                          closeNotificationCardCallback: (id) async {
+                            await closeNotificationCardMethod(context, id);
+                            setState(() => closeNotificationCard = true);
+                          },
+                        ),
                       buildVolumesSliver(context),
-                      const SliverToBoxAdapter(child: ContactUsButton()),
                       if (campaignState.data.newTaskViewMode)
                         ...buildAlternativeTaskView(
                           selectedVolumeState.volume,

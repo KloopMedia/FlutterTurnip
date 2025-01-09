@@ -47,8 +47,7 @@ class AppDrawer extends StatelessWidget {
       child: Drawer(
         backgroundColor: theme.isLight ? Colors.white : theme.background,
         elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
