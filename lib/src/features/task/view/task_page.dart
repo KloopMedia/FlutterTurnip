@@ -14,6 +14,7 @@ import '../../../bloc/bloc.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
 import '../bloc/volume_bloc/volume_cubit.dart';
+import '../widgets/relevant_task_widgets/relevant_task_navigation.dart';
 import '../widgets/task_page_floating_action_button.dart';
 
 class TaskPage extends StatefulWidget {
@@ -239,9 +240,13 @@ class SettingsButton extends StatelessWidget {
 class NotificationButton extends StatelessWidget {
   const NotificationButton({super.key});
 
-  void _redirectToNotificationPage(BuildContext context) {
+  void _redirectToNotificationPage(BuildContext context) async {
     final params = GoRouterState.of(context).pathParameters;
-    context.pushNamed(NotificationRoute.name, pathParameters: params);
+    final result = await context.pushNamed(NotificationRoute.name, pathParameters: params);
+
+    if (context.mounted && result == true) {
+      refreshAllTasks(context);
+    }
   }
 
   @override
