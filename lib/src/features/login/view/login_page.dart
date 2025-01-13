@@ -36,7 +36,6 @@ class LoginPage extends StatelessWidget {
               gigaTurnipApiClient: context.read<GigaTurnipApiClient>(),
               limit: 10,
             ),
-            context.read<SharedPreferences>(),
           )..initialize(),
         ),
         if (campaignId != null)

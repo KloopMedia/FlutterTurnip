@@ -84,22 +84,11 @@ class TaskRoute {
       builder: (BuildContext context, GoRouterState state) {
         final id = state.pathParameters['cid'] ?? '';
         final campaign = state.extra;
-        // final createTaskIdQueryValue = state.uri.queryParameters['create_task'] ?? '';
 
         final campaignId = int.tryParse(id);
         if (campaignId == null) {
           return const Text('Error: Failed to parse id');
         }
-
-        // final createTaskId = int.tryParse(createTaskIdQueryValue);
-        // if (createTaskId != null) {
-        //   return CreateTaskPage(taskId: createTaskId);
-        // }
-
-        final userId = context.read<AuthenticationRepository>().user.id;
-        context
-            .read<SharedPreferences>()
-            .setString('${Constants.sharedPrefActiveCampaignKey}_$userId', id);
 
         if (campaign != null && campaign is Campaign) {
           return TaskPage(campaignId: campaignId, campaign: campaign);

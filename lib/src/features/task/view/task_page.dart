@@ -32,14 +32,6 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  void _redirectToCampaignDetail(BuildContext context) {
-    context.pushNamed(
-      CampaignDetailRoute.name,
-      pathParameters: {'cid': '${widget.campaignId}'},
-      extra: widget.campaign,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
