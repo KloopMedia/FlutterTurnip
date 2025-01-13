@@ -22,7 +22,7 @@ const drawerDecoration = BoxDecoration(
 );
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  const AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +94,12 @@ class AppDrawer extends StatelessWidget {
               //   title: Text(context.loc.drawer_notifications, style: titleTextStyle),
               //   onTap: () {},
               // ),
-              ThemeSwitch(
-                contentPadding: contentPadding,
-                iconPadding: iconPadding,
-                icon: Icon(Icons.mode_night_outlined, color: theme.primary),
-                title: Text(context.loc.drawer_theme, style: titleTextStyle),
-              ),
+              // ThemeSwitch(
+              //   contentPadding: contentPadding,
+              //   iconPadding: iconPadding,
+              //   icon: Icon(Icons.mode_night_outlined, color: theme.primary),
+              //   title: Text(context.loc.drawer_theme, style: titleTextStyle),
+              // ),
               if (isAuthenticated)
                 CustomListTile(
                   contentPadding: contentPadding,
