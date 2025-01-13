@@ -13,7 +13,7 @@ import 'avatar_button.dart';
 class AvailableTaskStages extends StatelessWidget {
   final void Function(TaskStage item) onTap;
 
-  const AvailableTaskStages({Key? key, required this.onTap}) : super(key: key);
+  const AvailableTaskStages({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +25,14 @@ class AvailableTaskStages extends StatelessWidget {
           return MultiSliver(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24),
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
                 child: Text(
                   context.loc.task_available,
                   style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: theme.isLight ? theme.neutral30 : theme.neutral90),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: theme.isLight ? theme.neutral30 : theme.neutral90,
+                  ),
                 ),
               ),
               SizedBox(
