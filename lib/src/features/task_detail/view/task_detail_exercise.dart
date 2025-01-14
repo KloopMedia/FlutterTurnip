@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../widgets/dialogs/index.dart';
@@ -33,25 +34,38 @@ class _ExercisePageState extends State<ExercisePage> {
   @override
   Widget build(BuildContext context) {
     final questions = widget.test.questions;
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: questions.isEmpty ? const SizedBox.shrink() : _buildQuestion(context, questions),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
+    return ScaffoldAppbar(
+      title: progressAppbar(questions.length),
       leading: IconButton(
         onPressed: () => Navigator.pop(context),
         icon: const Icon(Icons.close),
       ),
+      child: questions.isEmpty ? const SizedBox.shrink() : _buildQuestion(context, questions),
+    );
+  }
+
+  Widget progressAppbar(int count) {
+    return Row(
+      children: List.generate(count, (index) {
+        final isActive = index <= _currentQuestionIndex;
+        return Expanded(
+          child: Container(
+            margin: EdgeInsets.only(right: 10),
+            height: 10,
+            decoration: BoxDecoration(
+              color: isActive ? Theme.of(context).colorScheme.primary : Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        );
+      }),
     );
   }
 
   Widget _buildQuestion(BuildContext context, List<Question> questions) {
     final currentQuestion = questions[_currentQuestionIndex];
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: QuestionField(
         key: Key("question_$_currentQuestionIndex"),
         title: currentQuestion.title,
