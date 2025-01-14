@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ScaffoldAppbar extends StatelessWidget {
   final Widget? title;
+  final Widget? leading;
   final List<Widget>? actions;
   final Widget? drawer;
   final Widget? floatingActionButton;
@@ -10,6 +11,7 @@ class ScaffoldAppbar extends StatelessWidget {
   const ScaffoldAppbar({
     super.key,
     required this.title,
+    this.leading,
     this.actions,
     this.drawer,
     this.floatingActionButton,
@@ -34,6 +36,7 @@ class ScaffoldAppbar extends StatelessWidget {
         ),
         titleSpacing: 0,
         leadingWidth: 64,
+        leading: leading,
         actions: [
           ...?actions,
           SizedBox(width: 12),
