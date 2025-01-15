@@ -16,22 +16,19 @@ class TaskDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => context.read<TaskBloc>().add(RefetchTask()),
-      child: BlocListener<TaskBloc, TaskState>(
-        listener: (context, state) => _handleState(context, state),
-        child: BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            if (state is TaskLoadingState) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            } else if (state is TaskInitialized) {
-              return _buildInitializedState(context, state);
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+    return BlocListener<TaskBloc, TaskState>(
+      listener: (context, state) => _handleState(context, state),
+      child: BlocBuilder<TaskBloc, TaskState>(
+        builder: (context, state) {
+          if (state is TaskLoadingState) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          } else if (state is TaskInitialized) {
+            return _buildInitializedState(context, state);
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
