@@ -71,6 +71,7 @@ class _ExercisePageState extends State<ExercisePage> {
         title: currentQuestion.title,
         schema: currentQuestion.jsonSchema,
         uiSchema: currentQuestion.uiSchema,
+        attachments: currentQuestion.attachments,
         correctFormData: currentQuestion.correctAnswer,
         onSubmit: (data, isCorrect) => _handleSubmit(data, isCorrect, questions),
       ),
