@@ -26,29 +26,29 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
         ? NetworkImage(widget.item.featuredImage!) as ImageProvider
         : AssetImage('assets/images/test.png');
 
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: theme.primary,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _CampaignHeader(campaign: widget.item),
-                _CardContent(
-                  image: image,
-                ),
-              ],
-            ),
+    return Container(
+      width: 184,
+      decoration: BoxDecoration(
+        color: theme.primary,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _CampaignHeader(campaign: widget.item),
+              _CardContent(
+                image: image,
+              ),
+            ],
           ),
         ),
       ),
     );
+
   }
 }
 
@@ -93,7 +93,6 @@ class _CardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 184,
       height: 208,
       decoration: BoxDecoration(
         color: Colors.white,

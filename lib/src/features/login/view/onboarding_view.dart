@@ -87,6 +87,7 @@ class _OnboardingContent extends StatelessWidget {
         _OnboardingHeader(fontColor: fontColor),
         Expanded(child: _CampaignGrid(campaigns: campaigns)),
         _SkipButton(),
+        SizedBox(height: context.isSmall ? null : 50),
       ],
     );
   }
@@ -122,21 +123,24 @@ class _CampaignGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomGridView(
-      itemBuilder: (context, index, item) {
-        return FeaturedCampaignCard(
-          item: item,
-          onTap: () => _handleCampaignSelection(context, item.id),
-        );
-      },
-      crossAxisAlignment: CrossAxisAlignment.end,
-      fillRow: campaigns.length == 1,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 16,
-      crossAxisCount: 2,
-      physics: NeverScrollableScrollPhysics(),
-      items: campaigns,
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 65, bottom: 44),
+    return Container(
+      constraints: BoxConstraints(maxWidth: 500),
+      child: CustomGridView(
+        itemBuilder: (context, index, item) {
+          return FeaturedCampaignCard(
+            item: item,
+            onTap: () => _handleCampaignSelection(context, item.id),
+          );
+        },
+        crossAxisAlignment: CrossAxisAlignment.end,
+        fillRow: campaigns.length == 1,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 16,
+        crossAxisCount: 2,
+        physics: NeverScrollableScrollPhysics(),
+        items: campaigns,
+        padding: const EdgeInsets.only(left: 24, right: 24, top: 65, bottom: 44),
+      ),
     );
   }
 

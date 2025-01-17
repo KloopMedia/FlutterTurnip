@@ -72,12 +72,13 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget _buildLogoSection() {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
-      children: const [
+      children: [
         SizedBox(height: 45),
         SizedBox(
-          height: 304,
-          width: 361,
+          height: context.isSmall ? 304 : screenHeight / 3,
           child: Placeholder(), // Replace with your logo widget
         ),
       ],
@@ -116,22 +117,14 @@ class _LoginViewState extends State<LoginView> {
           Text(
             'Учись легко и эффективно!',
             style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              color: theme.neutral30,
-              height: 1.17
-            ),
+                fontSize: 24, fontWeight: FontWeight.w500, color: theme.neutral30, height: 1.17),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 14),
           Text(
             'Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам',
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: theme.neutral30,
-              height: 1.17
-            ),
+                fontSize: 16, fontWeight: FontWeight.w400, color: theme.neutral30, height: 1.17),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -144,13 +137,16 @@ class _LoginViewState extends State<LoginView> {
   Widget _buildBottomSection() {
     return Column(
       children: [
-        LoginProviderButtons(
-          isActive: true,
-          onError: (value) {
-            setState(() {
-              errorMessage = value;
-            });
-          },
+        Container(
+          constraints: BoxConstraints(maxWidth: 500),
+          child: LoginProviderButtons(
+            isActive: true,
+            onError: (value) {
+              setState(() {
+                errorMessage = value;
+              });
+            },
+          ),
         ),
         const SizedBox(height: 32),
         const PrivacyPolicy(),
