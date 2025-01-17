@@ -76,10 +76,13 @@ class _CampaignViewState extends State<CampaignView> {
         slivers: [
           AvailableCampaignView(),
           UserCampaignView(),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 30,
+            ),
+          )
         ],
       ),
     );
   }
 }
-
-
