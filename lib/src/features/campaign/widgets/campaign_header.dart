@@ -3,15 +3,16 @@ import 'package:gigaturnip/src/theme/index.dart';
 
 class CampaignHeader extends StatelessWidget {
   final String title;
+  final EdgeInsetsGeometry? padding;
 
-  const CampaignHeader({super.key, required this.title});
+  const CampaignHeader({super.key, required this.title, this.padding});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 21, 16, 16),
+      padding: padding ?? EdgeInsets.zero,
       child: Text(
         title,
         style: TextStyle(

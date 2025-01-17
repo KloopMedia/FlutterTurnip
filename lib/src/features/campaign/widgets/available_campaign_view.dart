@@ -21,7 +21,10 @@ class AvailableCampaignView extends StatelessWidget {
         if (state is RemoteDataLoaded<Campaign> && state.data.isNotEmpty) {
           return MultiSliver(
             children: [
-              CampaignHeader(title: context.loc.join_other_courses),
+              CampaignHeader(
+                title: context.loc.join_other_courses,
+                padding: const EdgeInsets.fromLTRB(16, 21, 16, 16),
+              ),
               _CampaignCarousel(campaigns: state.data, theme: theme),
             ],
           );

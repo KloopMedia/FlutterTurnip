@@ -19,7 +19,10 @@ class UserCampaignView extends StatelessWidget {
         if (state is RemoteDataLoaded<Campaign>) {
           return MultiSliver(
             children: [
-              CampaignHeader(title: context.loc.your_courses),
+              CampaignHeader(
+                title: context.loc.your_courses,
+                padding: const EdgeInsets.fromLTRB(16, 21, 16, 11),
+              ),
               _CampaignList(campaigns: state.data),
             ],
           );
