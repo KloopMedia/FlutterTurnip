@@ -69,16 +69,10 @@ class _CampaignViewState extends State<CampaignView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 48,
-        titleSpacing: 0,
-        leadingWidth: 64,
-        centerTitle: false,
-        title: Text(context.loc.courses),
-      ),
+    return ScaffoldAppbar(
+      title: Text(context.loc.courses),
       drawer: AppDrawer(),
-      body: CustomScrollView(
+      child: CustomScrollView(
         slivers: [
           AvailableCampaignView(),
           UserCampaignView(),
