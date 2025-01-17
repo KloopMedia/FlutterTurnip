@@ -56,7 +56,7 @@ class ScaffoldAppbar extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFFFAFDFD),
             ),
             child: child,
           ),
