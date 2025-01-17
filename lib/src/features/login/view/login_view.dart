@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/features/login/widget/language_picker.dart';
 import 'package:gigaturnip/src/features/login/widget/provider_buttons.dart';
 import 'package:gigaturnip/src/theme/index.dart';
@@ -115,14 +116,14 @@ class _LoginViewState extends State<LoginView> {
       child: Column(
         children: [
           Text(
-            'Учись легко и эффективно!',
+            context.loc.login_header,
             style: TextStyle(
                 fontSize: 24, fontWeight: FontWeight.w500, color: theme.neutral30, height: 1.17),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 14),
           Text(
-            'Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам',
+            context.loc.login_description,
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w400, color: theme.neutral30, height: 1.17),
             textAlign: TextAlign.center,

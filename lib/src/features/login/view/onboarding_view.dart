@@ -62,7 +62,7 @@ class _ErrorState extends StatelessWidget {
     return Center(
       child: NetworkErrorBox(
         error as DioException,
-        buttonText: 'Home',
+        buttonText: context.loc.error_box_button_home,
         onPressed: () => context.goNamed(CampaignRoute.name),
       ),
     );
@@ -103,7 +103,7 @@ class _OnboardingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "Что вы хотите изучать?",
+        context.loc.onboarding_header,
         style: TextStyle(
           fontSize: 25,
           fontWeight: FontWeight.w600,

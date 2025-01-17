@@ -223,5 +223,16 @@
 		      "type": "String"
 		    }
 		  }
-	}
+	},
+
+	"question_field_header_correct": "Правильно",
+  "question_field_header_incorrect": "Неправильно",
+  "question_field_correct_answer_label": "Правильный ответ:",
+  "question_field_next_button": "Далее",
+  "form_submit_button": "Отправить",
+  "onboarding_header": "Что вы хотите изучать?",
+  "onboarding_button_skip": "Пропустить",
+  "error_box_button_home": "Главная",
+  "login_header": "Учись легко и эффективно!",
+  "login_description": "Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам"
 }

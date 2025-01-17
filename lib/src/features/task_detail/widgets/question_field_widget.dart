@@ -163,14 +163,14 @@ class _AnswerFeedbackSheet extends StatelessWidget {
               Icon(isCorrect ? Icons.check_circle_outline : Icons.cancel_outlined, color: color),
               SizedBox(width: 8),
               Text(
-                isCorrect ? 'Correct' : 'Incorrect',
+                isCorrect ? context.loc.question_field_header_correct : context.loc.question_field_header_incorrect,
                 style: TextStyle(fontSize: 24, color: color, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
-            'Correct Answer:',
+            context.loc.question_field_correct_answer_label,
             style: TextStyle(fontSize: 18, color: color, fontWeight: FontWeight.bold),
           ),
           Text(correctValue, style: TextStyle(fontSize: 18, color: color)),
@@ -188,7 +188,7 @@ class _AnswerFeedbackSheet extends StatelessWidget {
                 Navigator.pop(context);
                 onPop();
               },
-              child: const Text('Next'),
+              child:  Text(context.loc.question_field_next_button),
             ),
           ),
         ],
