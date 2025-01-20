@@ -80,7 +80,10 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(height: 45),
         SizedBox(
           height: context.isSmall ? 304 : screenHeight / 3,
-          child: Placeholder(), // Replace with your logo widget
+          child: Image.asset(
+            'assets/images/login_page.png',
+            fit: BoxFit.contain,
+          ),
         ),
       ],
     );
