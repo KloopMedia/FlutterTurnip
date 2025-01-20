@@ -25,6 +25,7 @@ class PrivacyPolicy extends StatelessWidget {
             color: theme.primary,
             onTap: () => context.goNamed(PrivacyPolicyRoute.name),
           ),
+          _buildStaticText(context.loc.privacy_policy_acceptance_3),
         ],
       ),
     );
