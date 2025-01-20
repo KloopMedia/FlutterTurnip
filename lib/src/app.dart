@@ -42,6 +42,16 @@ class _AppState extends State<App> {
         ),
         colorScheme: lightColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF5C5F5F),
+          ),
+          iconTheme: IconThemeData(
+            color: Color(0xFF5C5F5F),
+          ),
+        ),
       ),
       darkTheme: ThemeData(
         checkboxTheme: CheckboxThemeData(
