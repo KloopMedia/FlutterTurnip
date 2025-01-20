@@ -118,7 +118,7 @@ abstract class BaseLoginButton extends StatelessWidget {
   TextStyle _getTextStyle(ColorScheme theme) {
     return const CupertinoTextThemeData().textStyle.copyWith(
           fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           color: isActive
               ? provider == AuthProvider.google
                   ? (theme.isLight ? theme.neutral30 : theme.neutral90)

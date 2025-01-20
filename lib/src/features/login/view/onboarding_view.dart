@@ -106,7 +106,7 @@ class _OnboardingHeader extends StatelessWidget {
         context.loc.onboarding_header,
         style: TextStyle(
           fontSize: 25,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           color: fontColor,
         ),
         textAlign: TextAlign.center,
@@ -194,7 +194,7 @@ class _SkipButton extends StatelessWidget {
       child: Text(
         context.loc.skip,
         style: TextStyle(
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           fontSize: 14,
           color: theme.primary,
         ),

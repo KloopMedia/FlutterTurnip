@@ -75,7 +75,7 @@ class _CampaignHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Text(
         headerText,
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         textAlign: TextAlign.center,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

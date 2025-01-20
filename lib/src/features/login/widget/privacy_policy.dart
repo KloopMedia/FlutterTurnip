@@ -36,7 +36,7 @@ class PrivacyPolicy extends StatelessWidget {
     return TextStyle(
       color: color,
       fontSize: 14,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       height: 1.21,
     );
   }
@@ -54,7 +54,12 @@ class PrivacyPolicy extends StatelessWidget {
   }) {
     return TextSpan(
       text: text,
-      style: _baseTextStyle(color),
+      style: TextStyle(
+        color: color,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        height: 1.21,
+      ),
       recognizer: TapGestureRecognizer()..onTap = onTap,
     );
   }

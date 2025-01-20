@@ -62,7 +62,7 @@ class _LanguagePickerState extends State<LanguagePicker> {
   }) {
     final borderRadius = BorderRadius.circular(24);
     final textStyle = TextStyle(
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       fontSize: 16,
       color: theme.neutral30,
     );

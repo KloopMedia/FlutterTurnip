@@ -42,18 +42,28 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBackground(
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              _buildLogoSection(),
-              SizedBox(height: 16),
-              Expanded(child: _buildLoginPanel()),
-            ],
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 45),
+                _buildLogoSection(),
+                SizedBox(height: 16),
+              ],
+            ),
           ),
-        ),
+          Expanded(child: _buildLoginPanel()),
+        ],
       ),
     );
   }
@@ -91,23 +101,26 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _buildLoginPanel() {
     return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
+      color: Color(0xFFFECFB5),
+      child: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(32),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildLoginContent(),
-            _buildBottomSection(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildLoginContent(),
+              _buildBottomSection(),
+            ],
+          ),
         ),
       ),
     );
@@ -121,14 +134,22 @@ class _LoginViewState extends State<LoginView> {
           Text(
             context.loc.login_header,
             style: TextStyle(
-                fontSize: 24, fontWeight: FontWeight.w500, color: theme.neutral30, height: 1.17),
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: theme.neutral30,
+              height: 1.17,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 14),
           Text(
             context.loc.login_description,
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w400, color: theme.neutral30, height: 1.17),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: theme.neutral30,
+              height: 1.17,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
