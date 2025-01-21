@@ -4,6 +4,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -90,11 +91,16 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultAppBar(
-      automaticallyImplyLeading: false,
-      leading: [BackButton(onPressed: redirectToTaskPage)],
-      title: Text(context.loc.notifications),
-      child: PagedListView<int, api.Notification>.separated(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: BackButton(onPressed: redirectToTaskPage),
+        title: Text(context.loc.notifications),
+        titleSpacing: 0,
+        leadingWidth: 64,
+        toolbarHeight: 48,
+      ),
+      body: PagedListView<int, api.Notification>.separated(
         pagingController: _pagingController,
         reverse: true,
         padding: const EdgeInsets.all(20),
@@ -148,7 +154,7 @@ class NotificationListItem extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                DateFormat("EEEE, d MMM y").format(localTime),
+                DateFormat("EEEE, d MMM y", context.loc.localeName).format(localTime),
                 style: const TextStyle(
                   color: Color(0xFFAEAEAE),
                   fontSize: 14,
