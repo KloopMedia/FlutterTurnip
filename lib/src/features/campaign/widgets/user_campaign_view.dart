@@ -16,6 +16,14 @@ class UserCampaignView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCampaignCubit, RemoteDataState<Campaign>>(
       builder: (context, state) {
+        if (state is RemoteDataLoading<Campaign>) {
+          return SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
         if (state is RemoteDataLoaded<Campaign>) {
           return MultiSliver(
             children: [

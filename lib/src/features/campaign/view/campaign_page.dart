@@ -72,16 +72,22 @@ class _CampaignViewState extends State<CampaignView> {
     return ScaffoldAppbar(
       title: Text(context.loc.courses),
       drawer: AppDrawer(),
-      child: CustomScrollView(
-        slivers: [
-          AvailableCampaignView(),
-          UserCampaignView(),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 30,
-            ),
-          )
-        ],
+      child: RefreshIndicator(
+        onRefresh: () async {
+          context.read<SelectableCampaignCubit>().refetch();
+          context.read<UserCampaignCubit>().refetch();
+        },
+        child: CustomScrollView(
+          slivers: [
+            AvailableCampaignView(),
+            UserCampaignView(),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 30,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
