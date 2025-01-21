@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
-import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
-import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';

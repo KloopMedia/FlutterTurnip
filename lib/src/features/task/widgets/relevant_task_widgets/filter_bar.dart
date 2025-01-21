@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
-import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip/src/widgets/chip_bar/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 

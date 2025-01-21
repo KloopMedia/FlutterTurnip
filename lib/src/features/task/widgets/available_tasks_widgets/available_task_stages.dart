@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/widgets/section_header.dart';
-import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -18,8 +16,6 @@ class AvailableTaskStages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-
     return BlocBuilder<SelectableTaskStageCubit, RemoteDataState<TaskStage>>(
       builder: (context, state) {
         if (state is RemoteDataLoaded<TaskStage> && state.data.isNotEmpty) {
