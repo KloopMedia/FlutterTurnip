@@ -7,7 +7,6 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../widgets/card/addons/card_with_title_and_task_notification.dart';
 import '../bloc/bloc.dart';
-import '../bloc/task_filter_bloc/task_filter_cubit.dart';
 import '../widgets/widgets.dart';
 import 'lesson_task_view.dart';
 
@@ -23,11 +22,12 @@ List<Widget> buildClassicTaskPage(
       onTap: (item) => redirectToAvailableTasks(context, campaignId, item),
     ),
     const CreatableTaskList(),
+    SectionHeader(context.loc.mytasks),
     if (volume?.showTagsFilter ?? true) const SliverToBoxAdapter(child: FilterBar()),
     buildAdaptiveListViewForStages(context),
     buildAdaptiveListViewForTasks(context, volume, campaignId),
     TaskStageChainView(onTap: onChainTap),
-    const SliverToBoxAdapter(child: SizedBox(height: 20)),
+    const SliverToBoxAdapter(child: SizedBox(height: 30)),
   ];
 }
 
@@ -53,7 +53,7 @@ Widget buildAdaptiveListViewForStages(BuildContext context) {
 
   return AdaptiveListView<TaskStage, ReactiveTasks>(
     showLoader: false,
-    padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+    padding: const EdgeInsets.symmetric(horizontal: 16),
     itemBuilder: (context, index, item) => CardWithTitle(
       chips: [
         CardChip(context.loc.creatable_task),
@@ -87,7 +87,7 @@ Widget buildAdaptiveListViewForTasks(BuildContext context, Volume? volume, int c
   final theme = Theme.of(context).colorScheme;
 
   return AdaptiveListView<Task, RelevantTaskCubit>(
-    padding: const EdgeInsets.only(top: 15.0, left: 24, right: 24),
+    padding: const EdgeInsets.only(left: 16, right: 16),
     itemBuilder: (context, index, item) {
       final cardBody = CardDate(date: item.createdAt?.toLocal());
 
@@ -113,7 +113,17 @@ Widget buildAdaptiveListViewForTasks(BuildContext context, Volume? volume, int c
           child: Column(
             children: [
               CardWithTitle(
-                chips: [CardChip(item.id.toString()), statusChip],
+                chips: [
+                  CardChip(
+                    item.id.toString(),
+                    textStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: theme.neutral40,
+                    ),
+                  ),
+                  statusChip
+                ],
                 title: item.name,
                 contentPadding: 20,
                 size: context.isSmall || context.isMedium ? null : const Size.fromHeight(165),

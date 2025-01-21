@@ -24,6 +24,11 @@ class VolumeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const chipTextStyle = TextStyle(
+      fontFamily: "Inter",
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+    );
     return InkWell(
       onTap: status == VolumeStatus.locked ? null : onTap,
       borderRadius: BorderRadius.circular(15),
@@ -50,22 +55,24 @@ class VolumeCard extends StatelessWidget {
               VolumeStatus.locked => CardChip(
                   context.loc.closed_volume,
                   backgroundColor: const Color(0xFFFFCFC9),
+                  textStyle: chipTextStyle,
                 ),
               VolumeStatus.complete => CardChip(
                   context.loc.complete_volume,
                   backgroundColor: const Color(0xFF98F072),
+                  textStyle: chipTextStyle,
                 ),
               VolumeStatus.current => CardChip(
                   context.loc.in_progress,
                   backgroundColor: const Color(0xFF5E81FB),
-                  fontColor: Colors.white,
+                  textStyle: chipTextStyle.copyWith(color: Colors.white),
                 ),
             },
             const SizedBox(height: 8),
             Text(
               name,
               style: const TextStyle(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 fontSize: 16,
                 fontFamily: "Inter",
               ),
@@ -75,7 +82,7 @@ class VolumeCard extends StatelessWidget {
             Text(
               description,
               style: const TextStyle(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 fontSize: 14,
                 fontFamily: "Inter",
               ),

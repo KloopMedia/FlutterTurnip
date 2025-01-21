@@ -17,24 +17,32 @@ class StatusCardChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final fontColor = theme.isLight ? Colors.white : Colors.black;
+    final textStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: fontColor,
+    );
 
     if (item.complete) {
       return CardChip(
         closedText ?? context.loc.task_status_submitted,
         fontColor: fontColor,
         backgroundColor: theme.statusGreen,
+        textStyle: textStyle,
       );
     } else if (item.reopened) {
       return CardChip(
         returnedText ?? context.loc.task_status_returned,
         fontColor: fontColor,
         backgroundColor: theme.statusYellow,
+        textStyle: textStyle,
       );
     } else {
       return CardChip(
         openText ?? context.loc.task_status_not_submitted,
         fontColor: fontColor,
         backgroundColor: theme.statusRed,
+        textStyle: textStyle,
       );
     }
   }

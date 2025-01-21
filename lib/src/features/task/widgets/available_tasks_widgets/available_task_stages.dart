@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/task/bloc/bloc.dart';
+import 'package:gigaturnip/src/features/task/widgets/section_header.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -24,17 +25,7 @@ class AvailableTaskStages extends StatelessWidget {
         if (state is RemoteDataLoaded<TaskStage> && state.data.isNotEmpty) {
           return MultiSliver(
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
-                child: Text(
-                  context.loc.task_available,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: theme.isLight ? theme.neutral30 : theme.neutral90,
-                  ),
-                ),
-              ),
+              SectionHeader(context.loc.task_available),
               SizedBox(
                 height: 140,
                 child: ListView.builder(

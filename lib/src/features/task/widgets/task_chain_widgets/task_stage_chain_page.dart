@@ -22,8 +22,7 @@ class TaskStageChainView extends StatelessWidget {
         if (state is RemoteDataLoading) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         }
-        if (state is RemoteDataInitialized<IndividualChain> &&
-            state.data.isNotEmpty) {
+        if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
           final chains = state.data
               .map((data) => Chains(
                     count: state.count,
@@ -110,7 +109,8 @@ class _ChainsState extends State<Chains> {
     secondTaskActive = activeTaskIndex == 1;
     penultTaskActive = activeTaskIndex == totalItemsCount - 2;
     lastTaskActive = activeTaskIndex == totalItemsCount - 1;
-    middleTaskActive = !firstTaskActive && !secondTaskActive && !penultTaskActive && !lastTaskActive;
+    middleTaskActive =
+        !firstTaskActive && !secondTaskActive && !penultTaskActive && !lastTaskActive;
   }
 
   void updateShowHideItemList() {
@@ -134,13 +134,15 @@ class _ChainsState extends State<Chains> {
         showBottomButton = true;
         isBottomCollapsed = true;
       } else if (isNeedToBeCollapsed && middleTaskActive) {
-        showHideItemsList.addAll(totalItemsList.getRange(activeTaskIndex! - 1, activeTaskIndex! + 2));
+        showHideItemsList
+            .addAll(totalItemsList.getRange(activeTaskIndex! - 1, activeTaskIndex! + 2));
         showTopButton = true;
         isTopCollapsed = true;
         showBottomButton = true;
         isBottomCollapsed = true;
       } else if (isNeedToBeCollapsed && lastTaskActive || penultTaskActive) {
-        showHideItemsList.addAll(totalItemsList.getRange(totalItemsCount - itemCountToShow, totalItemsCount));
+        showHideItemsList
+            .addAll(totalItemsList.getRange(totalItemsCount - itemCountToShow, totalItemsCount));
         showTopButton = true;
         isTopCollapsed = true;
         showBottomButton = false;
@@ -152,11 +154,7 @@ class _ChainsState extends State<Chains> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final textStyle = TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-        color: theme.neutral30
-    );
+    final textStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: theme.neutral40);
 
     for (var i = 0; i < widget.count; i++) {
       return MultiSliver(
@@ -164,39 +162,45 @@ class _ChainsState extends State<Chains> {
           Container(
             margin: EdgeInsets.symmetric(
                 horizontal: (context.isSmall || context.isMedium)
-                    ? 0.0 : MediaQuery.of(context).size.width / 6),
+                    ? 0.0
+                    : MediaQuery.of(context).size.width / 6),
             padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
             child: Text(widget.chainName, style: textStyle),
           ),
-
           (isNeedToBeCollapsed)
-            ? (showTopButton)
-              ? (isTopCollapsed)
-                ? CustomTextButton(
-                  text: context.loc.show_previous,
-                  onTap: () {
-                    setState(() {
-                      showHideItemsList.clear();
-                      (lastTaskActive || !isBottomCollapsed)
-                          ? showHideItemsList.addAll(totalItemsList.getRange(0, totalItemsCount))
-                          : showHideItemsList.addAll(totalItemsList.getRange(0, activeTaskIndex! + 2));
-                      isTopCollapsed = false;
-                    });
-                  })
-                : CustomTextButton(
-                  text: context.loc.hide_previous,
-                  onTap: () {
-                    setState(() {
-                      showHideItemsList.clear();
-                      (lastTaskActive)
-                          ? showHideItemsList.addAll(totalItemsList.getRange(totalItemsCount - itemCountToShow, totalItemsCount))
-                          : showHideItemsList.addAll(totalItemsList.getRange(activeTaskIndex! - 1, (!isBottomCollapsed) ? totalItemsCount : activeTaskIndex! + 2));
-                      isTopCollapsed = true;
-                    });
-                  })
-              : const SizedBox(height: 30)
-            : const SizedBox(height: 30),
-
+              ? (showTopButton)
+                  ? (isTopCollapsed)
+                      ? CustomTextButton(
+                          text: context.loc.show_previous,
+                          onTap: () {
+                            setState(() {
+                              showHideItemsList.clear();
+                              (lastTaskActive || !isBottomCollapsed)
+                                  ? showHideItemsList
+                                      .addAll(totalItemsList.getRange(0, totalItemsCount))
+                                  : showHideItemsList
+                                      .addAll(totalItemsList.getRange(0, activeTaskIndex! + 2));
+                              isTopCollapsed = false;
+                            });
+                          })
+                      : CustomTextButton(
+                          text: context.loc.hide_previous,
+                          onTap: () {
+                            setState(() {
+                              showHideItemsList.clear();
+                              (lastTaskActive)
+                                  ? showHideItemsList.addAll(totalItemsList.getRange(
+                                      totalItemsCount - itemCountToShow, totalItemsCount))
+                                  : showHideItemsList.addAll(totalItemsList.getRange(
+                                      activeTaskIndex! - 1,
+                                      (!isBottomCollapsed)
+                                          ? totalItemsCount
+                                          : activeTaskIndex! + 2));
+                              isTopCollapsed = true;
+                            });
+                          })
+                  : const SizedBox(height: 30)
+              : const SizedBox(height: 30),
           const SizedBox(height: 20),
           IndividualChainBuilder(
               data: showHideItemsList,
@@ -206,34 +210,38 @@ class _ChainsState extends State<Chains> {
               isTopCollapsed: isTopCollapsed,
               isBottomCollapsed: isBottomCollapsed),
           const SizedBox(height: 20),
-
           (isNeedToBeCollapsed)
-            ? (showBottomButton)
-              ? (isBottomCollapsed)
-                ? CustomTextButton(
-              text: context.loc.show_next,
-              onTap: () {
-                setState(() {
-                  showHideItemsList.clear();
-                  (firstTaskActive || completed || !isTopCollapsed)
-                      ? showHideItemsList.addAll(totalItemsList.getRange(0, totalItemsCount))
-                      : showHideItemsList.addAll(totalItemsList.getRange(activeTaskIndex! - 1, totalItemsCount));
-                  isBottomCollapsed = false;
-                });
-              })
-                : CustomTextButton(
-              text: context.loc.hide_next,
-              onTap: () {
-                setState(() {
-                  showHideItemsList.clear();
-                  (firstTaskActive || completed)
-                      ? showHideItemsList.addAll(totalItemsList.getRange(0, itemCountToShow))
-                      : showHideItemsList.addAll(totalItemsList.getRange((!isTopCollapsed) ? 0 : activeTaskIndex! - 1, activeTaskIndex! + 2));
-                  isBottomCollapsed = true;
-                });
-              })
+              ? (showBottomButton)
+                  ? (isBottomCollapsed)
+                      ? CustomTextButton(
+                          text: context.loc.show_next,
+                          onTap: () {
+                            setState(() {
+                              showHideItemsList.clear();
+                              (firstTaskActive || completed || !isTopCollapsed)
+                                  ? showHideItemsList
+                                      .addAll(totalItemsList.getRange(0, totalItemsCount))
+                                  : showHideItemsList.addAll(totalItemsList.getRange(
+                                      activeTaskIndex! - 1, totalItemsCount));
+                              isBottomCollapsed = false;
+                            });
+                          })
+                      : CustomTextButton(
+                          text: context.loc.hide_next,
+                          onTap: () {
+                            setState(() {
+                              showHideItemsList.clear();
+                              (firstTaskActive || completed)
+                                  ? showHideItemsList
+                                      .addAll(totalItemsList.getRange(0, itemCountToShow))
+                                  : showHideItemsList.addAll(totalItemsList.getRange(
+                                      (!isTopCollapsed) ? 0 : activeTaskIndex! - 1,
+                                      activeTaskIndex! + 2));
+                              isBottomCollapsed = true;
+                            });
+                          })
+                  : const SizedBox(height: 30)
               : const SizedBox(height: 30)
-            : const SizedBox(height: 30)
         ],
       );
     }
@@ -251,12 +259,12 @@ class IndividualChainBuilder extends StatelessWidget {
 
   const IndividualChainBuilder(
       {Key? key,
-        required this.data,
-        required this.activeTaskIndex,
-        required this.onTap,
-        required this.lastTaskActive,
-        required this.isTopCollapsed,
-        required this.isBottomCollapsed})
+      required this.data,
+      required this.activeTaskIndex,
+      required this.onTap,
+      required this.lastTaskActive,
+      required this.isTopCollapsed,
+      required this.isBottomCollapsed})
       : super(key: key);
 
   ChainInfoStatus getTaskStatus(TaskStageChainInfo item) {
@@ -271,11 +279,8 @@ class IndividualChainBuilder extends StatelessWidget {
     }
   }
 
-  Function? handleTap(
-      int index, ChainInfoStatus status, TaskStageChainInfo item) {
-    if (index == 0 ||
-        status == ChainInfoStatus.active ||
-        status == ChainInfoStatus.complete) {
+  Function? handleTap(int index, ChainInfoStatus status, TaskStageChainInfo item) {
+    if (index == 0 || status == ChainInfoStatus.active || status == ChainInfoStatus.complete) {
       return onTap(item, status);
     }
     return null;
@@ -301,19 +306,18 @@ class IndividualChainBuilder extends StatelessWidget {
             }
 
             final secondElement = data.elementAtOrNull(1);
-            final secondsElementStatus = secondElement != null
-                ? getTaskStatus(secondElement)
-                : ChainInfoStatus.notStarted;
+            final secondsElementStatus =
+                secondElement != null ? getTaskStatus(secondElement) : ChainInfoStatus.notStarted;
 
-            final itemStatus =
-                index == 0 && secondsElementStatus == ChainInfoStatus.notStarted
-                    ? ChainInfoStatus.active
-                    : status;
+            final itemStatus = index == 0 && secondsElementStatus == ChainInfoStatus.notStarted
+                ? ChainInfoStatus.active
+                : status;
 
             return Container(
               margin: EdgeInsets.symmetric(
                   horizontal: (context.isSmall || context.isMedium)
-                      ? 0.0 : MediaQuery.of(context).size.width / 6),
+                      ? 0.0
+                      : MediaQuery.of(context).size.width / 6),
               child: ChainRow(
                 position: position,
                 title: item.name,
@@ -348,10 +352,8 @@ class CustomTextButton extends StatelessWidget {
       onPressed: onTap,
       child: Text(
         text,
-        style: TextStyle(
-          color: theme.primary,
-          fontSize: 14,
-          fontWeight: FontWeight.w500)),
+        style: TextStyle(color: theme.primary, fontSize: 14, fontWeight: FontWeight.w600),
+      ),
     );
   }
 }

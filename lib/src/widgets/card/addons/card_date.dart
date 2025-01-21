@@ -16,28 +16,26 @@ class CardDate extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final textStyle = TextStyle(
+      color: theme.neutral70,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
+
     return Row(
       children: [
         Icon(Icons.calendar_month, color: theme.neutral70),
         const SizedBox(width: 8),
         Text(
           '${date!.day} ${DateFormat.MMMM().format(date!)}',
-          style: TextStyle(
-            color: theme.neutral70,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: textStyle,
         ),
         const SizedBox(width: 20),
         Icon(Icons.alarm, color: theme.neutral70),
         const SizedBox(width: 8),
         Text(
           DateFormat.Hm().format(date!),
-          style: TextStyle(
-            color: theme.neutral70,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: textStyle,
         ),
       ],
     );

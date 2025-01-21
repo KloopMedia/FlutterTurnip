@@ -42,7 +42,6 @@ class FilterBar extends StatefulWidget {
 
 class _FilterBarState extends State<FilterBar> {
   late String _activeFilter;
-  final _padding = EdgeInsets.symmetric(horizontal: 24);
   final _filterKeys = taskFilterMap.keys.toList();
 
   @override
@@ -60,44 +59,25 @@ class _FilterBarState extends State<FilterBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-
     return BlocBuilder<TaskFilterCubit, TaskFilterState>(
       builder: (context, state) {
         final filterNames = getFilterNames(context, state.volume);
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: _padding,
-              child: Text(
-                context.loc.mytasks,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: theme.isLight ? theme.neutral30 : theme.neutral90,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            FixedChipBar(
-              padding: _padding,
-              children: List.generate(_filterKeys.length, (index) {
-                final key = _filterKeys[index];
-                return DefaultChip(
-                  label: filterNames[index],
-                  active: key == _activeFilter,
-                  onPressed: () {
-                    setState(() {
-                      _activeFilter = key;
-                    });
-                    _applyFilter(context, key);
-                  },
-                );
-              }),
-            ),
-          ],
+        return FixedChipBar(
+          padding: EdgeInsets.only(left: 16, right: 16, bottom: 20),
+          children: List.generate(_filterKeys.length, (index) {
+            final key = _filterKeys[index];
+            return DefaultChip(
+              label: filterNames[index],
+              active: key == _activeFilter,
+              onPressed: () {
+                setState(() {
+                  _activeFilter = key;
+                });
+                _applyFilter(context, key);
+              },
+            );
+          }),
         );
       },
     );

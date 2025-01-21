@@ -5,3 +5,4 @@ export 'relevant_task_widgets/widgets.dart';
 export 'task_chain_widgets/widgets.dart';
 export 'volume_widgets/widgets.dart';
 export 'buttons/widgets.dart';
+export 'section_header.dart';
