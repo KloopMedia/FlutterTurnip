@@ -37,7 +37,7 @@ class LessonListItem extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -46,7 +46,7 @@ class LessonListItem extends StatelessWidget {
                       description ?? "",
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.outline,
                         overflow: TextOverflow.ellipsis,
                       ),
