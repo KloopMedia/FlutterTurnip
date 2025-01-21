@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
-import '../../../widgets/app_bar/default_app_bar.dart';
 import '../bloc/bloc.dart';
 import '../util/util.dart';
 import '../widgets/current_task_widget.dart';
