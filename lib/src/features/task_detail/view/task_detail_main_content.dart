@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../../../widgets/app_bar/default_app_bar.dart';
@@ -33,13 +34,12 @@ class _TaskDetailMainContentState extends State<TaskDetailMainContent> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultAppBar(
+    return ScaffoldAppbar(
       title: Text(
         widget.task.name,
         overflow: TextOverflow.ellipsis,
       ),
-      automaticallyImplyLeading: false,
-      leading: [_buildBackButton(context)],
+      leading: _buildBackButton(context),
       actions: [ReleaseButton(bloc: bloc, task: widget.task, campaignId: widget.campaignId)],
       child: RefreshIndicator(
         onRefresh: () async => bloc.add(RefetchTask()),
