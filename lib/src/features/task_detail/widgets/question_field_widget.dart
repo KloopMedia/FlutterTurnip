@@ -98,7 +98,9 @@ class _QuestionFieldState extends State<QuestionField> {
               foregroundColor:
                   Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
             ),
-            onPressed: () => formKey.currentState!.formBloc.add(SubmitFormEvent()),
+            onPressed: _formData.isNotEmpty
+                ? () => formKey.currentState!.formBloc.add(SubmitFormEvent())
+                : null,
             child: Text(
               widget.isLast
                   ? context.loc.form_submit_button
