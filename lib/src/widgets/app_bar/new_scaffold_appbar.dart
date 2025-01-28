@@ -6,15 +6,17 @@ class ScaffoldAppbar extends StatelessWidget {
   final List<Widget>? actions;
   final Widget? drawer;
   final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
   final Widget child;
 
   const ScaffoldAppbar({
     super.key,
-    required this.title,
+    this.title,
     this.leading,
     this.actions,
     this.drawer,
     this.floatingActionButton,
+    this.bottomNavigationBar,
     required this.child,
   });
 
@@ -44,6 +46,7 @@ class ScaffoldAppbar extends StatelessWidget {
       ),
       drawer: drawer,
       floatingActionButton: floatingActionButton,
+      bottomNavigationBar: bottomNavigationBar,
       body: Container(
         padding: EdgeInsets.only(top: 9),
         decoration: BoxDecoration(

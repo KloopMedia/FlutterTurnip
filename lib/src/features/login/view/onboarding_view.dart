@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:gigaturnip/src/widgets/error_box.dart';
 import 'package:gigaturnip/src/widgets/slivers/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
@@ -26,8 +27,8 @@ class OnBoardingView extends StatefulWidget {
 class _OnBoardingViewState extends State<OnBoardingView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return ScaffoldAppbar(
+      child: SafeArea(
         child: FutureBuilder<List<Campaign>>(
           future: context.read<CampaignCubit>().fetchCampaigns(query: {'featured': true}),
           builder: (context, snapshot) {

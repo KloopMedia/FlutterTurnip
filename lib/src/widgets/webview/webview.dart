@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:universal_html/parsing.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -79,7 +80,6 @@ class _WebViewState extends State<WebView> {
           #container {
             margin: auto;
             width: $width;
-            border-style: groove;
           }
           
           #spacer {
@@ -287,13 +287,8 @@ class _WebViewState extends State<WebView> {
 
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: goBackOrClose,
-          ),
-        ),
-        body: Builder(builder: (context) {
+      child: ScaffoldAppbar(
+        child: Builder(builder: (context) {
           if (widget.htmlText.isEmpty) {
             return Center(
               child: Text(
