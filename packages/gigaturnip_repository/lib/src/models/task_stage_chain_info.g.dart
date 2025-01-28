@@ -10,10 +10,6 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
     TaskStageChainInfo(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      assignType: json['assignType'] as String,
-      inStages: (json['inStages'] as List<dynamic>)
-          .map((e) => (e as num?)?.toInt())
-          .toList(),
       outStages: (json['outStages'] as List<dynamic>)
           .map((e) => (e as num?)?.toInt())
           .toList(),
@@ -29,14 +25,13 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
           .map((e) => (e as num).toInt())
           .toList(),
       test: (json['test'] as num?)?.toInt(),
+      richText: json['richText'] as String?,
     );
 
 Map<String, dynamic> _$TaskStageChainInfoToJson(TaskStageChainInfo instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'assignType': instance.assignType,
-      'inStages': instance.inStages,
       'outStages': instance.outStages,
       'completed': instance.completed,
       'reopened': instance.reopened,
@@ -44,4 +39,5 @@ Map<String, dynamic> _$TaskStageChainInfoToJson(TaskStageChainInfo instance) =>
       'totalCount': instance.totalCount,
       'completeCount': instance.completeCount,
       'test': instance.test,
+      'richText': instance.richText,
     };

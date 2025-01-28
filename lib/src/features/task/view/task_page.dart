@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
+import 'package:gigaturnip/src/features/task/view/book_chain_view.dart';
 import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
@@ -14,11 +15,13 @@ import '../widgets/widgets.dart';
 class TaskPage extends StatefulWidget {
   final int campaignId;
   final Campaign? campaign;
+  final bool? isTextbook;
 
   const TaskPage({
     super.key,
     required this.campaignId,
     this.campaign,
+    this.isTextbook,
   });
 
   @override
@@ -26,6 +29,8 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  late bool _isBookView = widget.isTextbook ?? false;
+
   @override
   Widget build(BuildContext context) {
     final isGridView = context.isExtraLarge || context.isLarge;
@@ -95,6 +100,14 @@ class _TaskPageState extends State<TaskPage> {
           ),
         ),
         BlocProvider(
+          create: (context) => BookChainCubit(
+            BookChainRepository(
+              gigaTurnipApiClient: apiClient,
+              campaignId: widget.campaignId,
+            ),
+          )..initialize(),
+        ),
+        BlocProvider(
           lazy: false,
           create: (context) => VolumeCubit(
             VolumeRepository(gigaTurnipApiClient: apiClient, campaignId: widget.campaignId),
@@ -150,14 +163,32 @@ class _TaskPageState extends State<TaskPage> {
               return const SizedBox.shrink();
             },
           ),
-          actions: [NotificationButton()],
+          actions: [
+            NotificationButton(),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _isBookView = !_isBookView;
+                });
+              },
+              icon: Image.asset(
+                _isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',
+                width: 24,
+                height: 24,
+                color: Theme.of(context).appBarTheme.iconTheme?.color,
+              ),
+            )
+          ],
           drawer: AppDrawer(),
           floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-          child: RelevantTaskPage(campaignId: widget.campaignId),
+          child: Builder(builder: (context) {
+            if (_isBookView) {
+              return BookChainView();
+            }
+            return RelevantTaskPage(campaignId: widget.campaignId);
+          }),
         ),
       ),
     );
   }
 }
-
-

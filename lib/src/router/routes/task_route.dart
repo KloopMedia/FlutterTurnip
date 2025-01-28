@@ -87,11 +87,22 @@ class TaskRoute {
           return const Text('Error: Failed to parse id');
         }
 
+        final query = {...state.uri.queryParameters};
+
+        final isTextbook = query['textbook']?.toLowerCase() == 'true';
+
         if (campaign != null && campaign is Campaign) {
-          return TaskPage(campaignId: campaignId, campaign: campaign);
+          return TaskPage(
+            campaignId: campaignId,
+            campaign: campaign,
+            isTextbook: isTextbook,
+          );
         }
 
-        return TaskPage(campaignId: campaignId);
+        return TaskPage(
+          campaignId: campaignId,
+          isTextbook: isTextbook,
+        );
       },
     );
   }
