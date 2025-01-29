@@ -7,8 +7,6 @@ import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart'; // hide Notification;
-import 'package:go_router/go_router.dart';
-import 'package:universal_html/html.dart';
 
 import '../../../widgets/widgets.dart';
 import '../../notification/bloc/notification_cubit.dart';
@@ -33,6 +31,12 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
   late bool _isBookView = widget.isTextbook ?? false;
+
+  void handleTextBookViewModeChange(BuildContext context) {
+    setState(() {
+      _isBookView = !_isBookView;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,60 +166,113 @@ class _TaskPageState extends State<TaskPage> {
             },
           ),
         ],
-        child: ScaffoldAppbar(
-          title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-            builder: (context, state) {
-              if (state is CampaignInitialized) {
-                return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-          actions: [
-            NotificationButton(),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _isBookView = !_isBookView;
-                });
+        child: Builder(builder: (context) {
+          if (kIsWeb) {
+            return WebTaskPage(
+              isBookView: _isBookView,
+              campaignId: widget.campaignId,
+              onTextBookViewChange: handleTextBookViewModeChange,
+            );
+          }
 
-                if (kIsWeb) {
-                  // Get the current route state
-                  final router = GoRouterState.of(context);
-                  final currentUri = Uri.parse(router.matchedLocation);
-
-                  // Build a new URI with or without `textbook=true`
-                  final updatedUri = _isBookView
-                      ? currentUri.replace(queryParameters: {
-                    ...currentUri.queryParameters,
-                    'textbook': 'true',
-                  })
-                      : currentUri.replace(queryParameters: {
-                    ...currentUri.queryParameters..remove('textbook'),
-                  });
-
-                  final newUrl = updatedUri.toString();
-                  window.history.pushState(null, '', newUrl);
+          return ScaffoldAppbar(
+            title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+              builder: (context, state) {
+                if (state is CampaignInitialized) {
+                  return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
                 }
+                return const SizedBox.shrink();
               },
-              icon: Image.asset(
-                _isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',
-                width: 24,
-                height: 24,
-                color: Theme.of(context).appBarTheme.iconTheme?.color,
-              ),
-            )
-          ],
-          drawer: AppDrawer(),
-          floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-          child: Builder(builder: (context) {
-            if (_isBookView) {
-              return BookChainView();
-            }
-            return RelevantTaskPage(campaignId: widget.campaignId);
-          }),
-        ),
+            ),
+            actions: [
+              NotificationButton(),
+              IconButton(
+                onPressed: () => handleTextBookViewModeChange(context),
+                icon: Image.asset(
+                  _isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',
+                  width: 24,
+                  height: 24,
+                  color: Theme.of(context).appBarTheme.iconTheme?.color,
+                ),
+              )
+            ],
+            drawer: AppDrawer(),
+            floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
+            child: Builder(builder: (context) {
+              if (_isBookView) {
+                return BookChainView();
+              }
+              return RelevantTaskPage(campaignId: widget.campaignId);
+            }),
+          );
+        }),
       ),
+    );
+  }
+}
+
+class WebTaskPage extends StatefulWidget {
+  final int campaignId;
+  final bool isBookView;
+  final void Function(BuildContext context) onTextBookViewChange;
+
+  const WebTaskPage({
+    super.key,
+    required this.isBookView,
+    required this.campaignId,
+    required this.onTextBookViewChange,
+  });
+
+  @override
+  State<WebTaskPage> createState() => _WebTaskPageState();
+}
+
+class _WebTaskPageState extends State<WebTaskPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 304.0),
+          child: ScaffoldAppbar(
+            title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+              builder: (context, state) {
+                if (state is CampaignInitialized) {
+                  return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            titleSpacing: 24,
+            rounded: false,
+            actions: [
+              NotificationButton(),
+              IconButton(
+                onPressed: () => widget.onTextBookViewChange(context),
+                icon: Image.asset(
+                  widget.isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',
+                  width: 24,
+                  height: 24,
+                  color: Theme.of(context).appBarTheme.iconTheme?.color,
+                ),
+              )
+            ],
+            floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
+            child: Builder(builder: (context) {
+              if (widget.isBookView) {
+                return BookChainView();
+              }
+              return RelevantTaskPage(campaignId: widget.campaignId);
+            }),
+          ),
+        ),
+        Container(
+          color: Color(0xFFFEFBD2),
+          child: AppDrawer(
+            backgroundColor: const Color(0xFFFAFDFD),
+          ),
+        ),
+      ],
     );
   }
 }
