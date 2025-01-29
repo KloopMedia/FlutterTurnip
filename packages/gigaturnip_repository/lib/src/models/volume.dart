@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'volume.g.dart';
 
-enum VolumeStatus { locked, complete, current }
+enum VolumeStatus { locked, complete, current, unknown }
 
 @JsonSerializable(explicitToJson: true)
 class Volume {

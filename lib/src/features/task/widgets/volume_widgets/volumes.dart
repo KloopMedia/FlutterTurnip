@@ -9,11 +9,13 @@ import '../../bloc/volume_bloc/volume_cubit.dart';
 import 'volume_card.dart';
 
 class Volumes extends StatefulWidget {
+  final bool isBookView;
   final void Function(Volume volume) onChanged;
 
   const Volumes({
     super.key,
     required this.onChanged,
+    this.isBookView = false,
   });
 
   @override
@@ -25,56 +27,54 @@ class _VolumesState extends State<Volumes> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: BlocBuilder<VolumeCubit, RemoteDataState<Volume>>(
-        builder: (context, state) {
-          if (state is RemoteDataLoading<Volume>) {
-            return const Center(child: CircularProgressIndicator());
+    return BlocBuilder<VolumeCubit, RemoteDataState<Volume>>(
+      builder: (context, state) {
+        if (state is RemoteDataLoading<Volume>) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is RemoteDataLoaded<Volume>) {
+          final volumes = state.data;
+          if (volumes.isEmpty) {
+            return const SizedBox();
           }
 
-          if (state is RemoteDataLoaded<Volume>) {
-            final volumes = state.data;
-            if (volumes.isEmpty) {
-              return const SizedBox();
-            }
+          return BlocBuilder<TaskFilterCubit, TaskFilterState>(
+            builder: (context, filterState) {
+              final selectedVolume = filterState.volume;
+              final selectedVolumeIndex = volumes.indexWhere((v) => v.id == selectedVolume?.id);
 
-            return BlocBuilder<TaskFilterCubit, TaskFilterState>(
-              builder: (context, filterState) {
-                final selectedVolume = filterState.volume;
-                final selectedVolumeIndex = volumes.indexWhere((v) => v.id == selectedVolume?.id);
+              return Container(
+                constraints: const BoxConstraints(maxHeight: 141),
+                child: ScrollablePositionedList.separated(
+                  initialScrollIndex: selectedVolumeIndex >= 0 ? selectedVolumeIndex : 0,
+                  itemScrollController: _itemScrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: volumes.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final volume = volumes[index];
+                    final isSelected = volume.id == selectedVolume?.id;
 
-                return Container(
-                  constraints: const BoxConstraints(maxHeight: 141),
-                  child: ScrollablePositionedList.separated(
-                    initialScrollIndex: selectedVolumeIndex >= 0 ? selectedVolumeIndex : 0,
-                    itemScrollController: _itemScrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: volumes.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final volume = volumes[index];
-                      final isSelected = volume.id == selectedVolume?.id;
+                    return VolumeCard(
+                      status: widget.isBookView ? VolumeStatus.unknown : volume.status,
+                      name: volume.name,
+                      description: volume.description,
+                      isSelected: isSelected,
+                      index: index,
+                      onTap: () => widget.onChanged(volume),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 8),
+                ),
+              );
+            },
+          );
+        }
 
-                      return VolumeCard(
-                        status: volume.status,
-                        name: volume.name,
-                        description: volume.description,
-                        isSelected: isSelected,
-                        index: index,
-                        onTap: () => widget.onChanged(volume),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 8),
-                  ),
-                );
-              },
-            );
-          }
-
-          // If state is neither loading nor loaded, just return empty
-          return const SizedBox();
-        },
-      ),
+        // If state is neither loading nor loaded, just return empty
+        return const SizedBox();
+      },
     );
   }
 }

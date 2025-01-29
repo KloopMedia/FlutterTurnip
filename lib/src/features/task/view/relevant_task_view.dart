@@ -148,9 +148,14 @@ Widget buildAdaptiveListViewForTasks(BuildContext context, Volume? volume, int c
 }
 
 Widget buildVolumesSliver(BuildContext context) {
-  return Volumes(
-    onChanged: (Volume volume) {
-      context.read<TaskFilterCubit>().setVolume(volume);
-    },
+  return SliverPadding(
+    padding: EdgeInsets.only(bottom: 20),
+    sliver: SliverToBoxAdapter(
+      child: Volumes(
+        onChanged: (Volume volume) {
+          context.read<TaskFilterCubit>().setVolume(volume);
+        },
+      ),
+    ),
   );
 }

@@ -286,44 +286,8 @@ class _WebViewState extends State<WebView> {
     final theme = Theme.of(context).colorScheme;
 
     return PopScope(
-      canPop: false,
+      canPop: kIsWeb ? true : false,
       child: ScaffoldAppbar(
-        child: Builder(builder: (context) {
-          if (widget.htmlText.isEmpty) {
-            return Center(
-              child: Text(
-                context.loc.empty_richtext,
-              ),
-            );
-          }
-
-          return InAppWebView(
-            initialSettings: settings,
-            initialData: InAppWebViewInitialData(data: _data),
-            onCreateWindow: (controller, action) async {
-              if (Platform.isAndroid) {
-                await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
-              }
-            },
-            onWebViewCreated: (controller) {
-              setState(() {
-                webViewController = controller;
-              });
-            },
-            onLoadStart: (controller, uri) async {
-              if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
-                final scrollX = await controller.platform.getScrollX() ?? 0;
-                final scrollY = await controller.platform.getScrollY() ?? 0;
-                final page = Page(uri: uri, scrollX: scrollX, scrollY: scrollY);
-                if (!kIsWeb) {
-                  setState(() {
-                    _history.add(page);
-                  });
-                }
-              }
-            },
-          );
-        }),
         bottomNavigationBar: SafeArea(
           child: Container(
             margin: EdgeInsets.symmetric(
@@ -376,6 +340,42 @@ class _WebViewState extends State<WebView> {
             ),
           ),
         ),
+        child: Builder(builder: (context) {
+          if (widget.htmlText.isEmpty) {
+            return Center(
+              child: Text(
+                context.loc.empty_richtext,
+              ),
+            );
+          }
+
+          return InAppWebView(
+            initialSettings: settings,
+            initialData: InAppWebViewInitialData(data: _data),
+            onCreateWindow: (controller, action) async {
+              if (Platform.isAndroid) {
+                await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
+              }
+            },
+            onWebViewCreated: (controller) {
+              setState(() {
+                webViewController = controller;
+              });
+            },
+            onLoadStart: (controller, uri) async {
+              if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
+                final scrollX = await controller.platform.getScrollX() ?? 0;
+                final scrollY = await controller.platform.getScrollY() ?? 0;
+                final page = Page(uri: uri, scrollX: scrollX, scrollY: scrollY);
+                if (!kIsWeb) {
+                  setState(() {
+                    _history.add(page);
+                  });
+                }
+              }
+            },
+          );
+        }),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart'; // hide Notification;
+import 'package:go_router/go_router.dart';
+import 'package:universal_html/html.dart';
 
 import '../../../widgets/widgets.dart';
 import '../../notification/bloc/notification_cubit.dart';
@@ -145,6 +148,11 @@ class _TaskPageState extends State<TaskPage> {
                   'stages__volumes': volumeId,
                 },
               );
+              context.read<BookChainCubit>().refetchWithFilter(
+                query: {
+                  'stages__volumes': volumeId,
+                },
+              );
 
               final stageQuery = {'volumes': volumeId};
               context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
@@ -170,6 +178,25 @@ class _TaskPageState extends State<TaskPage> {
                 setState(() {
                   _isBookView = !_isBookView;
                 });
+
+                if (kIsWeb) {
+                  // Get the current route state
+                  final router = GoRouterState.of(context);
+                  final currentUri = Uri.parse(router.matchedLocation);
+
+                  // Build a new URI with or without `textbook=true`
+                  final updatedUri = _isBookView
+                      ? currentUri.replace(queryParameters: {
+                    ...currentUri.queryParameters,
+                    'textbook': 'true',
+                  })
+                      : currentUri.replace(queryParameters: {
+                    ...currentUri.queryParameters..remove('textbook'),
+                  });
+
+                  final newUrl = updatedUri.toString();
+                  window.history.pushState(null, '', newUrl);
+                }
               },
               icon: Image.asset(
                 _isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',

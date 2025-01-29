@@ -41,6 +41,7 @@ class VolumeCard extends StatelessWidget {
             VolumeStatus.complete => const Color(0xFFDBF1C8),
             VolumeStatus.locked => const Color(0xFFEFF1F1),
             VolumeStatus.current => const Color(0xFFECF0FF),
+            VolumeStatus.unknown => const Color(0xFFDBF1C8),
           },
           borderRadius: BorderRadius.circular(15),
           border: isSelected
@@ -67,6 +68,7 @@ class VolumeCard extends StatelessWidget {
                   backgroundColor: const Color(0xFF5E81FB),
                   textStyle: chipTextStyle.copyWith(color: Colors.white),
                 ),
+              VolumeStatus.unknown => SizedBox.shrink(),
             },
             const SizedBox(height: 8),
             Text(

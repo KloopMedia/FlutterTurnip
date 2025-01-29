@@ -13,7 +13,11 @@ ChainInfoStatus getChainStatus(TaskStageChainInfo item) {
 }
 
 /// Builds the widget representation of a single chain.
-List<Widget> _buildChain(List<TaskStageChainInfo> chainData, Function(TaskStageChainInfo item, ChainInfoStatus status) onTap) {
+List<Widget> _buildChain(
+  List<TaskStageChainInfo> chainData,
+  Function(TaskStageChainInfo item, ChainInfoStatus status) onTap, {
+  bool minimalistic = false,
+}) {
   final List<Widget> chainWidgets = [];
 
   for (int index = 0; index < chainData.length; index++) {
@@ -40,7 +44,8 @@ List<Widget> _buildChain(List<TaskStageChainInfo> chainData, Function(TaskStageC
         isComplete: isComplete,
         isLast: isLast,
         nextItemPreview: nextItemPreview,
-        onTap: onTap
+        onTap: onTap,
+        minimalistic: minimalistic,
       ),
     );
   }
@@ -55,18 +60,20 @@ Widget _buildChainItem({
   required bool isComplete,
   required bool isLast,
   TaskStageChainInfo? nextItemPreview,
+  bool minimalistic = false,
   required Function(TaskStageChainInfo item, ChainInfoStatus status) onTap,
 }) {
   return Padding(
     padding: const EdgeInsets.all(16),
     child: Row(
       children: [
-        Stack(
-          children: [
-            LessonLine(isComplete: isComplete, isLast: isLast),
-            LessonDecorator(isComplete: isComplete),
-          ],
-        ),
+        if (!minimalistic)
+          Stack(
+            children: [
+              LessonLine(isComplete: isComplete, isLast: isLast),
+              LessonDecorator(isComplete: isComplete),
+            ],
+          ),
         const SizedBox(width: 10),
         Expanded(
           child: LessonListItem(
@@ -88,7 +95,11 @@ Widget _buildChainItem({
 }
 
 /// Builds the chains to be displayed in the UI.
-List<Widget> buildChains(List<IndividualChain> chainsData, Function(TaskStageChainInfo item, ChainInfoStatus status) onTap) {
+List<Widget> buildChains(
+  List<IndividualChain> chainsData,
+  Function(TaskStageChainInfo item, ChainInfoStatus status) onTap, {
+  bool minimalistic = false,
+}) {
   return chainsData.expand<Widget>((chain) {
     return [
       const SizedBox(height: 10),
@@ -99,7 +110,7 @@ List<Widget> buildChains(List<IndividualChain> chainsData, Function(TaskStageCha
           style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22.0),
         ),
       ),
-      ..._buildChain(chain.stagesData, onTap),
+      ..._buildChain(chain.stagesData, onTap, minimalistic: minimalistic),
       const SizedBox(height: 10),
     ];
   }).toList();
