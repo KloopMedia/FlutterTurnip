@@ -46,6 +46,7 @@ class _VolumesState extends State<Volumes> {
 
               return Container(
                 constraints: const BoxConstraints(maxHeight: 141),
+                margin: EdgeInsets.only(bottom: 20),
                 child: ScrollablePositionedList.separated(
                   initialScrollIndex: selectedVolumeIndex >= 0 ? selectedVolumeIndex : 0,
                   itemScrollController: _itemScrollController,
