@@ -7,6 +7,8 @@ class ScaffoldAppbar extends StatelessWidget {
   final Widget? drawer;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
+  final Color backgroundColor;
+  final double titleSpacing;
   final Widget child;
 
   const ScaffoldAppbar({
@@ -17,6 +19,8 @@ class ScaffoldAppbar extends StatelessWidget {
     this.drawer,
     this.floatingActionButton,
     this.bottomNavigationBar,
+    this.backgroundColor = const Color(0xFFFAFDFD),
+    this.titleSpacing = 0,
     required this.child,
   });
 
@@ -36,7 +40,7 @@ class ScaffoldAppbar extends StatelessWidget {
             ),
           ),
         ),
-        titleSpacing: 0,
+        titleSpacing: titleSpacing,
         leadingWidth: 64,
         leading: leading,
         actions: [
@@ -59,7 +63,7 @@ class ScaffoldAppbar extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: Color(0xFFFAFDFD),
+              color: backgroundColor,
             ),
             child: child,
           ),
