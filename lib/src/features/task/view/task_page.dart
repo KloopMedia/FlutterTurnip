@@ -167,7 +167,7 @@ class _TaskPageState extends State<TaskPage> {
           ),
         ],
         child: Builder(builder: (context) {
-          if (kIsWeb) {
+          if (kIsWeb && (context.isLarge || context.isExtraLarge)) {
             return WebTaskPage(
               isBookView: _isBookView,
               campaignId: widget.campaignId,
