@@ -9,10 +9,16 @@ import '../../../widgets/card/addons/card_chip.dart';
 
 class UserCampaignCard extends StatelessWidget {
   final Campaign campaign;
+  final double? height;
+  final double? width;
+  final int? titleMaxLines;
 
   const UserCampaignCard({
     super.key,
     required this.campaign,
+    this.height,
+    this.width,
+    this.titleMaxLines,
   });
 
   void _redirectToTaskMenu(BuildContext context, Campaign campaign) {
@@ -29,6 +35,8 @@ class UserCampaignCard extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(10),
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -67,6 +75,7 @@ class UserCampaignCard extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
+                        maxLines: titleMaxLines,
                       ),
                       Text(
                         campaign.description,
@@ -101,14 +110,17 @@ class UserCampaignCard extends StatelessWidget {
                   ),
               ],
             ),
-             if (campaign.startDate != null || campaign.isCompleted) Row(
-              children: [Column(
+            if (campaign.startDate != null || campaign.isCompleted)
+              Row(
                 children: [
-                  SizedBox(height: 8),
-                  _CampaignStatusChip(campaign: campaign),
+                  Column(
+                    children: [
+                      SizedBox(height: 8),
+                      _CampaignStatusChip(campaign: campaign),
+                    ],
+                  )
                 ],
-              )],
-            )
+              )
           ],
         ),
       ),

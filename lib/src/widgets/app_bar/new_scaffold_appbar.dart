@@ -9,6 +9,7 @@ class ScaffoldAppbar extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Color backgroundColor;
   final double titleSpacing;
+  final bool rounded;
   final Widget child;
 
   const ScaffoldAppbar({
@@ -21,6 +22,7 @@ class ScaffoldAppbar extends StatelessWidget {
     this.bottomNavigationBar,
     this.backgroundColor = const Color(0xFFFAFDFD),
     this.titleSpacing = 0,
+    this.rounded = true,
     required this.child,
   });
 
@@ -57,10 +59,10 @@ class ScaffoldAppbar extends StatelessWidget {
           color: Color(0xFFFECFB5),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: rounded ? BorderRadius.only(
             topLeft: Radius.circular(32),
             topRight: Radius.circular(32),
-          ),
+          ) : BorderRadius.zero,
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,

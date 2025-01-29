@@ -13,7 +13,7 @@ import 'language_select.dart';
 import 'user_avatar.dart';
 
 const drawerDecoration = BoxDecoration(
-  boxShadow: Shadows.elevation2,
+  boxShadow: Shadows.elevation3,
   borderRadius: BorderRadius.only(
     topRight: Radius.circular(16),
     bottomRight: Radius.circular(16),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -69,6 +70,10 @@ class _CampaignViewState extends State<CampaignView> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return WebCampaignView();
+    }
+
     return ScaffoldAppbar(
       title: Text(context.loc.courses),
       drawer: AppDrawer(),
@@ -89,6 +94,52 @@ class _CampaignViewState extends State<CampaignView> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class WebCampaignView extends StatelessWidget {
+  const WebCampaignView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 304.0),
+          child: ScaffoldAppbar(
+            title: Text(context.loc.courses),
+            titleSpacing: 24,
+            rounded: false,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                context.read<SelectableCampaignCubit>().refetch();
+                context.read<UserCampaignCubit>().refetch();
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: CustomScrollView(
+                  slivers: [
+                    AvailableCampaignView(),
+                    UserCampaignView(),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 30,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          color: Color(0xFFFEFBD2),
+          child: AppDrawer(
+            backgroundColor: const Color(0xFFFAFDFD),
+          ),
+        ),
+      ],
     );
   }
 }
