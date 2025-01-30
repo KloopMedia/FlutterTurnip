@@ -139,16 +139,17 @@ class _TaskPageState extends State<TaskPage> {
           BlocListener<TaskFilterCubit, TaskFilterState>(
             listener: (context, state) {
               final volumeId = state.volume?.id;
+              final hasFilter = state.volume?.showTagsFilter ?? true;
 
               context.read<RelevantTaskCubit>().refetchWithFilter(
                 query: {
-                  ...?state.taskQuery,
+                  if (hasFilter) ...?state.taskQuery,
                   'stage__volumes': volumeId,
                 },
               );
               context.read<IndividualChainCubit>().refetchWithFilter(
                 query: {
-                  ...?state.chainQuery,
+                  if (hasFilter) ...?state.chainQuery,
                   'stages__volumes': volumeId,
                 },
               );
