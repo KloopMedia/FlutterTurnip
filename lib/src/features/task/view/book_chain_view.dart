@@ -58,7 +58,7 @@ class _BookChainViewState extends State<BookChainView> {
                     context.read<TaskFilterCubit>().setVolume(volume);
                   },
                 ),
-                ListView(shrinkWrap: true, children: chains),
+                ListView(shrinkWrap: true, physics: NeverScrollableScrollPhysics(), children: chains),
               ],
             ),
           );
