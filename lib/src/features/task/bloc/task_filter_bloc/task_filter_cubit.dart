@@ -22,7 +22,7 @@ class TaskFilterCubit extends Cubit<TaskFilterState> {
             currentVolume = null;
           }
 
-          emit(TaskFilterState(volume: currentVolume));
+          emit(TaskFilterState(volume: currentVolume, taskQuery: state.taskQuery, chainQuery: state.chainQuery));
         }
       },
     );
