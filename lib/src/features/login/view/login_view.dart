@@ -42,43 +42,31 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 45),
+                  _buildLogoSection(),
+                  SizedBox(height: 16),
+                ],
               ),
             ),
-            child: Column(
-              children: [
-                SizedBox(height: 45),
-                _buildLogoSection(),
-                SizedBox(height: 16),
-              ],
-            ),
-          ),
-          Expanded(child: _buildLoginPanel()),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackground({required Widget child}) {
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFFEFBD2), Color(0xFFFECFB5)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+            Expanded(flex: 0, child: _buildLoginPanel()),
+          ],
         ),
       ),
-      child: child,
     );
   }
 
@@ -118,6 +106,7 @@ class _LoginViewState extends State<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildLoginContent(),
+              SizedBox(height: 48),
               _buildBottomSection(),
             ],
           ),
