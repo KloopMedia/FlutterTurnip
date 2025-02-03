@@ -25,6 +25,7 @@ class _BookChainViewState extends State<BookChainView> {
           builder: (context) {
             return WebView(
               html: item.richText,
+              hideButton: true,
             );
           },
         ),

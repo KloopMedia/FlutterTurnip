@@ -11,6 +11,7 @@ class ScaffoldAppbar extends StatelessWidget {
   final Color backgroundColor;
   final double titleSpacing;
   final bool rounded;
+  final bool? automaticallyImplyLeading;
   final Widget child;
 
   const ScaffoldAppbar({
@@ -24,6 +25,7 @@ class ScaffoldAppbar extends StatelessWidget {
     this.backgroundColor = const Color(0xFFFAFDFD),
     this.titleSpacing = 0,
     this.rounded = true,
+    this.automaticallyImplyLeading,
     required this.child,
   });
 
@@ -43,7 +45,7 @@ class ScaffoldAppbar extends StatelessWidget {
             ),
           ),
         ),
-        automaticallyImplyLeading: context.isSmall || context.isMedium,
+        automaticallyImplyLeading: automaticallyImplyLeading ?? context.isSmall || context.isMedium,
         titleSpacing: titleSpacing,
         leadingWidth: 64,
         leading: leading,

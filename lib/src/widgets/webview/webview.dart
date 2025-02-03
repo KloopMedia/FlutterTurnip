@@ -23,6 +23,7 @@ class WebView extends StatefulWidget {
   final void Function()? onSubmitCallback;
   final void Function()? onCloseCallback;
   final void Function()? onOpenPreviousTask;
+  final bool hideButton;
 
   const WebView({
     Key? key,
@@ -31,6 +32,7 @@ class WebView extends StatefulWidget {
     this.onCloseCallback,
     this.onOpenPreviousTask,
     this.allowOpenPrevious = false,
+    this.hideButton = false,
   })  : htmlText = html as String,
         super(key: key);
 
@@ -288,6 +290,7 @@ class _WebViewState extends State<WebView> {
     return PopScope(
       canPop: kIsWeb ? true : false,
       child: ScaffoldAppbar(
+        automaticallyImplyLeading: true,
         bottomNavigationBar: SafeArea(
           child: Container(
             margin: EdgeInsets.symmetric(
@@ -318,7 +321,7 @@ class _WebViewState extends State<WebView> {
                     ),
                   ),
                 if (widget.allowOpenPrevious) const SizedBox(width: 10),
-                Expanded(
+                if (!widget.hideButton) Expanded(
                   child: SizedBox(
                     height: 52,
                     child: ElevatedButton(
