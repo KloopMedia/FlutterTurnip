@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gigaturnip/src/theme/index.dart';
 
 class ScaffoldAppbar extends StatelessWidget {
   final Widget? title;
@@ -43,7 +43,7 @@ class ScaffoldAppbar extends StatelessWidget {
             ),
           ),
         ),
-        automaticallyImplyLeading: !kIsWeb,
+        automaticallyImplyLeading: context.isSmall || context.isMedium,
         titleSpacing: titleSpacing,
         leadingWidth: 64,
         leading: leading,
@@ -61,10 +61,12 @@ class ScaffoldAppbar extends StatelessWidget {
           color: Color(0xFFFECFB5),
         ),
         child: ClipRRect(
-          borderRadius: rounded ? BorderRadius.only(
-            topLeft: Radius.circular(32),
-            topRight: Radius.circular(32),
-          ) : BorderRadius.zero,
+          borderRadius: rounded
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(32),
+                )
+              : BorderRadius.zero,
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,
