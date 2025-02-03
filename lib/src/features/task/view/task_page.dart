@@ -112,7 +112,7 @@ class _TaskPageState extends State<TaskPage> {
               gigaTurnipApiClient: apiClient,
               campaignId: widget.campaignId,
             ),
-          )..initialize(),
+          ),
         ),
         BlocProvider(
           lazy: false,
