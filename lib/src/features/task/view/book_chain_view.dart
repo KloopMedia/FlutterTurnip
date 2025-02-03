@@ -46,25 +46,32 @@ class _BookChainViewState extends State<BookChainView> {
           return SizedBox();
         }
 
-        if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
-          final chains = buildChains(state.data, handleTap, minimalistic: true);
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 20,),
-                Volumes(
-                  isBookView: true,
-                  onChanged: (Volume volume) {
-                    context.read<TaskFilterCubit>().setVolume(volume);
-                  },
-                ),
-                ListView(shrinkWrap: true, physics: NeverScrollableScrollPhysics(), children: chains),
-              ],
-            ),
-          );
-        }
-
-        return SizedBox();
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Volumes(
+                isBookView: true,
+                onChanged: (Volume volume) {
+                  context.read<TaskFilterCubit>().setVolume(volume);
+                },
+              ),
+              Builder(builder: (context) {
+                if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
+                  final chains = buildChains(state.data, handleTap, minimalistic: true);
+                  return ListView(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: chains,
+                  );
+                }
+                return SizedBox.shrink();
+              }),
+            ],
+          ),
+        );
       },
     );
   }
