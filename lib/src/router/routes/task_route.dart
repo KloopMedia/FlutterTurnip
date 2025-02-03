@@ -61,9 +61,9 @@ class TaskRoute {
     final joinCampaignQueryValue = query['join']?.toLowerCase() == 'true';
     final createTaskIdQueryValue = query['create_task'];
 
-    if (joinCampaignQueryValue) {
-      return await joinCampaign(context, state);
-    }
+    // if (joinCampaignQueryValue) {
+    //   return await joinCampaign(context, state);
+    // }
 
     if (createTaskIdQueryValue != null) {
       return await createTask(context, state);
@@ -88,6 +88,12 @@ class TaskRoute {
         }
 
         final query = {...state.uri.queryParameters};
+
+        final joinCampaignQueryValue = query['join']?.toLowerCase() == 'true';
+        if (joinCampaignQueryValue) {
+          print('JOIN');
+          context.read<GigaTurnipApiClient>().joinCampaign(campaignId);
+        }
 
         final isTextbook = query['textbook']?.toLowerCase() == 'true';
 
