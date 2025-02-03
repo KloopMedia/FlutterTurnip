@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldAppbar extends StatelessWidget {
@@ -42,6 +43,7 @@ class ScaffoldAppbar extends StatelessWidget {
             ),
           ),
         ),
+        automaticallyImplyLeading: !kIsWeb,
         titleSpacing: titleSpacing,
         leadingWidth: 64,
         leading: leading,
