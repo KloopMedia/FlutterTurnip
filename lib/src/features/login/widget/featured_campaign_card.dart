@@ -123,7 +123,6 @@ class _CardContent extends StatelessWidget {
       height: 208,
       padding: EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
           fit: BoxFit.cover,
