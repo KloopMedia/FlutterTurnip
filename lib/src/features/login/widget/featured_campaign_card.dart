@@ -26,29 +26,56 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
         ? NetworkImage(widget.item.featuredImage!) as ImageProvider
         : AssetImage('assets/images/test.png');
 
-    return Container(
-      width: 184,
-      decoration: BoxDecoration(
-        color: theme.primary,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
+    String title;
+    if (widget.item.shortDescription != null && widget.item.shortDescription!.isNotEmpty) {
+      title = widget.item.shortDescription!;
+    } else {
+      title = widget.item.name;
+    }
+
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          width: 184,
+          decoration: BoxDecoration(
+            color: theme.primary,
+            borderRadius: BorderRadius.circular(15),
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               _CampaignHeader(campaign: widget.item),
-              _CardContent(
-                image: image,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: widget.item.isCompleted ? Color(0xFFE7E7E7) : Color(0xFFFFDBC3),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 8),
+                    _CardContent(
+                      image: image,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Inter",
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
     );
-
   }
 }
 
@@ -94,6 +121,7 @@ class _CardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 208,
+      padding: EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),

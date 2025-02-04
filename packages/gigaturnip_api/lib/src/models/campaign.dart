@@ -13,7 +13,7 @@ class Campaign {
   // final int? defaultTrack;
   // final List<int>? managers;
   // final bool smsLoginAllow;
-  // final String? shortDescription;
+  final String? shortDescription;
   final String logo;
   // final int notificationsCount;
   // final List<int>? languages;
@@ -40,7 +40,7 @@ class Campaign {
     // required this.managers,
     // required this.smsLoginAllow,
     required this.logo,
-    // required this.shortDescription,
+    required this.shortDescription,
     // required this.notificationsCount,
     // required this.languages,
     // required this.countries,

@@ -11,7 +11,7 @@ class Campaign extends Equatable {
   final String description;
   // final bool canJoin;
   // final bool smsLoginAllow;
-  // final String? shortDescription;
+  final String? shortDescription;
   final String logo;
   // final int unreadNotifications;
   // final List<int>? languages;
@@ -32,7 +32,7 @@ class Campaign extends Equatable {
     required this.id,
     required this.name,
     required this.description,
-    // required this.shortDescription,
+    required this.shortDescription,
     required this.logo,
     // required this.smsLoginAllow,
     // required this.unreadNotifications,
@@ -66,7 +66,7 @@ class Campaign extends Equatable {
       name: model.name,
       description: model.description,
       // canJoin: canJoin,
-      // shortDescription: model.shortDescription,
+      shortDescription: model.shortDescription,
       logo: model.logo,
       // smsLoginAllow: model.smsLoginAllow,
       // unreadNotifications: model.notificationsCount,

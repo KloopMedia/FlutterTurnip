@@ -17,6 +17,8 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
           name: $checkedConvert('name', (v) => v as String),
           description: $checkedConvert('description', (v) => v as String),
           logo: $checkedConvert('logo', (v) => v as String),
+          shortDescription:
+              $checkedConvert('short_description', (v) => v as String?),
           smsPhone: $checkedConvert('sms_phone', (v) => v as String?),
           isJoined: $checkedConvert('is_joined', (v) => v as bool),
           featuredImage: $checkedConvert('featured_image', (v) => v as String?),
@@ -36,6 +38,7 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
         return val;
       },
       fieldKeyMap: const {
+        'shortDescription': 'short_description',
         'smsPhone': 'sms_phone',
         'isJoined': 'is_joined',
         'featuredImage': 'featured_image',

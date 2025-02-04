@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
@@ -80,11 +81,13 @@ class _OnboardingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final fontColor = theme.isLight ? theme.neutral30 : theme.neutral90;
+    final double topSpacing = campaigns.length > 2 ? 110 : 190;
+    final double topSpacingWeb = 90;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: campaigns.length > 2 ? 110 : 190),
+        SizedBox(height: kIsWeb ? topSpacingWeb : topSpacing),
         _OnboardingHeader(fontColor: fontColor),
         Expanded(child: _CampaignGrid(campaigns: campaigns)),
         _SkipButton(),
@@ -138,7 +141,7 @@ class _CampaignGrid extends StatelessWidget {
         crossAxisSpacing: 12,
         mainAxisSpacing: 16,
         crossAxisCount: 2,
-        physics: NeverScrollableScrollPhysics(),
+        physics: kIsWeb ? null : NeverScrollableScrollPhysics(),
         items: campaigns,
         padding: const EdgeInsets.only(left: 24, right: 24, top: 65, bottom: 44),
       ),
