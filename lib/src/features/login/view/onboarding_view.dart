@@ -178,6 +178,7 @@ class _CampaignGrid extends StatelessWidget {
       }
     } catch (e) {
       debugPrint('Error creating task from stage: $e');
+      _navigateToTaskRoute(context, campaignId);
     }
   }
 
