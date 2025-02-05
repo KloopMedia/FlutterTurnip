@@ -290,7 +290,9 @@ class _WebViewState extends State<WebView> {
     return PopScope(
       canPop: kIsWeb ? true : false,
       child: ScaffoldAppbar(
-        automaticallyImplyLeading: true,
+        leading: BackButton(
+          onPressed: goBackOrClose,
+        ),
         bottomNavigationBar: SafeArea(
           child: Container(
             margin: EdgeInsets.symmetric(
