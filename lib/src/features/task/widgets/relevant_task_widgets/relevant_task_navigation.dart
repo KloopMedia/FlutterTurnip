@@ -71,16 +71,16 @@ void redirectToAvailableTasks(BuildContext context, int campaignId, TaskStage st
   );
 }
 
-void onChainTapMethod(BuildContext context, TaskStageChainInfo item, ChainInfoStatus status) {
+void onChainTapMethod(BuildContext context, TaskStageChainInfo item, ChainInfoStatus status, int campaignId) {
   if (status == ChainInfoStatus.notStarted) {
     context.read<ReactiveTasks>().createTaskById(item.id);
   } else {
     if (item.reopened.isNotEmpty) {
-      redirectToTaskWithId(context, /* provide correct campaignId */ 0, item.reopened.first);
+      redirectToTaskWithId(context, campaignId, item.reopened.first);
     } else if (item.opened.isNotEmpty) {
-      redirectToTaskWithId(context, /* provide correct campaignId */ 0, item.opened.first);
+      redirectToTaskWithId(context, campaignId, item.opened.first);
     } else if (item.completed.isNotEmpty) {
-      redirectToTaskWithId(context, /* provide correct campaignId */ 0, item.completed.first);
+      redirectToTaskWithId(context, campaignId, item.completed.first);
     } else {
       context.read<ReactiveTasks>().createTaskById(item.id);
     }

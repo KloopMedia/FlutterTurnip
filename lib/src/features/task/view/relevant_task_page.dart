@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
-import 'package:gigaturnip/src/features/task/bloc/task_filter_bloc/task_filter_cubit.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 
 import '../bloc/bloc.dart';
@@ -56,7 +55,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                       if (campaignState.data.newTaskViewMode)
                         ...buildAlternativeTaskView(
                           selectedVolumeState.volume,
-                          onChainTap: (item, status) => onChainTapMethod(context, item, status),
+                          onChainTap: (item, status) => onChainTapMethod(context, item, status, widget.campaignId),
                         )
                       else
                         ...buildClassicTaskPage(
@@ -64,7 +63,7 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           selectedVolumeState.volume,
                           campaignId: widget.campaignId,
                           onChainTap: (item, status) {
-                            onChainTapMethod(context, item, status);
+                            onChainTapMethod(context, item, status, widget.campaignId);
                           },
                         ),
                     ],
