@@ -47,6 +47,7 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
             children: [
               _CampaignHeader(campaign: widget.item),
               Container(
+                height: 208,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: widget.item.isCompleted ? Color(0xFFE7E7E7) : Color(0xFFFFDBC3),
@@ -66,6 +67,8 @@ class _FeaturedCampaignCardState extends State<FeaturedCampaignCard> {
                         fontWeight: FontWeight.w600,
                         fontFamily: "Inter",
                       ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.fade,
                     ),
                     SizedBox(height: 20),
                   ],
@@ -120,7 +123,7 @@ class _CardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 208,
+      height: 128,
       padding: EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
