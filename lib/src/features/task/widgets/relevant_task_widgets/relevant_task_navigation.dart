@@ -11,6 +11,7 @@ import '../../bloc/bloc.dart';
 import '../widgets.dart';
 
 void refreshAllTasks(BuildContext context) {
+  context.read<VolumeCubit>().refetch();
   context.read<CampaignDetailBloc>().add(RefreshCampaign());
   context.read<RelevantTaskCubit>().refetch();
   context.read<SelectableTaskStageCubit>().refetch();
