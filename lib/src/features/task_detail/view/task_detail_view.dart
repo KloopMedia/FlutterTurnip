@@ -7,7 +7,6 @@ import '../util/util.dart';
 import 'task_detail_exercise.dart';
 import 'task_detail_main_content.dart';
 
-
 /// A view that responds to [TaskBloc] states and displays the appropriate UI.
 class TaskDetailView extends StatelessWidget {
   final int campaignId;
@@ -66,7 +65,11 @@ class TaskDetailView extends StatelessWidget {
 
   Widget _buildInitializedState(BuildContext context, TaskInitialized state) {
     if (state.data.test != null) {
-      return ExercisePage(test: state.data.test!, campaignId: campaignId);
+      return ExercisePage(
+        test: state.data.test!,
+        campaignId: campaignId,
+        completed: state.data.complete,
+      );
     }
     return TaskDetailMainContent(
       campaignId: campaignId,

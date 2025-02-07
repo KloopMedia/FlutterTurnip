@@ -13,11 +13,15 @@ import '../widgets/question_field_widget.dart';
 class ExercisePage extends StatefulWidget {
   final Test test;
   final int campaignId;
+  final bool completed;
+  final Map<String, dynamic>? responses;
 
   const ExercisePage({
     super.key,
     required this.test,
     required this.campaignId,
+    this.responses,
+    required this.completed,
   });
 
   @override
@@ -27,7 +31,7 @@ class ExercisePage extends StatefulWidget {
 class _ExercisePageState extends State<ExercisePage> {
   int _currentQuestionIndex = 0;
   int _score = 0;
-  Map<String, dynamic> _responses = {};
+  late Map<String, dynamic> _responses = widget.responses ?? {};
 
   late final TaskBloc bloc = context.read<TaskBloc>();
 
@@ -35,12 +39,25 @@ class _ExercisePageState extends State<ExercisePage> {
   Widget build(BuildContext context) {
     final questions = widget.test.questions;
     return ScaffoldAppbar(
-      title: progressAppbar(questions.length),
+      title: !widget.completed ? progressAppbar(questions.length) : null,
       leading: IconButton(
         onPressed: () => Navigator.pop(context),
         icon: const Icon(Icons.close),
       ),
-      child: questions.isEmpty ? const SizedBox.shrink() : _buildQuestion(context, questions),
+      child: Builder(
+        builder: (context) {
+          if (widget.completed) {
+            return CorrectAnswersWidget(
+              questions: questions,
+              responses: _responses,
+            );
+          } else if (questions.isNotEmpty) {
+            return _buildQuestion(context, questions);
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      ),
     );
   }
 
@@ -75,6 +92,7 @@ class _ExercisePageState extends State<ExercisePage> {
         correctFormData: currentQuestion.correctAnswer,
         onSubmit: (data, isCorrect) => _handleSubmit(data, isCorrect, questions),
         isLast: _currentQuestionIndex == questions.length - 1,
+        showCorrectResponses: true,
       ),
     );
   }
@@ -109,5 +127,42 @@ class _ExercisePageState extends State<ExercisePage> {
   int _calculateTotalScore() {
     final totalQuestions = widget.test.questions.length;
     return (_score * 100 / totalQuestions).round();
+  }
+}
+
+class CorrectAnswersWidget extends StatelessWidget {
+  final List<Question> questions;
+  final Map<String, dynamic> responses;
+
+  const CorrectAnswersWidget({
+    super.key,
+    required this.questions,
+    required this.responses,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 34),
+      itemBuilder: (context, index) {
+        final question = questions[index];
+
+        return QuestionField(
+          key: Key("question_$index"),
+          title: question.title,
+          schema: question.jsonSchema,
+          uiSchema: question.uiSchema,
+          attachments: question.attachments,
+          correctFormData: question.correctAnswer,
+          showCorrectResponses: true,
+        );
+      },
+      separatorBuilder: (context, index) {
+        return SizedBox(
+          height: 16,
+        );
+      },
+      itemCount: questions.length,
+    );
   }
 }

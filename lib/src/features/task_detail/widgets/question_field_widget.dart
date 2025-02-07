@@ -13,8 +13,9 @@ class QuestionField extends StatefulWidget {
   final Map<String, dynamic>? uiSchema;
   final Map<String, dynamic>? correctFormData;
   final List<QuestionAttachment> attachments;
-  final bool isLast;
-  final void Function(Map<String, dynamic> data, bool isCorrect) onSubmit;
+  final bool? isLast;
+  final bool showCorrectResponses;
+  final void Function(Map<String, dynamic> data, bool isCorrect)? onSubmit;
 
   const QuestionField({
     super.key,
@@ -23,8 +24,9 @@ class QuestionField extends StatefulWidget {
     this.uiSchema,
     this.attachments = const [],
     required this.correctFormData,
-    required this.onSubmit,
-    required this.isLast,
+    this.onSubmit,
+    this.isLast,
+    this.showCorrectResponses = false,
   });
 
   @override
@@ -43,6 +45,7 @@ class _QuestionFieldState extends State<QuestionField> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (widget.attachments.isNotEmpty)
           Builder(
@@ -61,11 +64,11 @@ class _QuestionFieldState extends State<QuestionField> {
           ),
         if (widget.title != null)
           Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: EdgeInsets.only(bottom: widget.showCorrectResponses ? 0 : 20),
             child: Text(
               widget.title!,
-              style: const TextStyle(
-                fontSize: 24,
+              style: TextStyle(
+                fontSize: widget.showCorrectResponses ? 18 : 24,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF5C5F5F),
               ),
@@ -84,41 +87,45 @@ class _QuestionFieldState extends State<QuestionField> {
           onSubmit: (data) => _handleSubmit(context, data),
           hideSubmitButton: true,
           alternativeTheme: true,
+          showAlternativeCorrectFields: widget.showCorrectResponses,
         ),
-        Spacer(),
-        SizedBox(
-          height: 52,
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+        if (!widget.showCorrectResponses) Spacer(),
+        if (widget.isLast != null)
+          SizedBox(
+            height: 52,
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor:
+                    Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
               ),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor:
-                  Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
-            ),
-            onPressed: _formData.isNotEmpty
-                ? () => formKey.currentState!.formBloc.add(SubmitFormEvent())
-                : null,
-            child: Text(
-              widget.isLast
-                  ? context.loc.form_submit_button
-                  : context.loc.question_field_next_button,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              onPressed: _formData.isNotEmpty
+                  ? () => formKey.currentState!.formBloc.add(SubmitFormEvent())
+                  : null,
+              child: Text(
+                widget.isLast!
+                    ? context.loc.form_submit_button
+                    : context.loc.question_field_next_button,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-        )
+          )
       ],
     );
   }
 
   void _handleSubmit(BuildContext context, Map<String, dynamic> data) {
-    final isCorrect = _isAnswerCorrect(data);
-    _showAnswerFeedback(context, isCorrect, () => widget.onSubmit(data, isCorrect));
+    if (widget.onSubmit != null) {
+      final isCorrect = _isAnswerCorrect(data);
+      _showAnswerFeedback(context, isCorrect, () => widget.onSubmit!(data, isCorrect));
+    }
   }
 
   bool _isAnswerCorrect(Map<String, dynamic> data) {
