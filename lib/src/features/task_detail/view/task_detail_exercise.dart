@@ -92,7 +92,6 @@ class _ExercisePageState extends State<ExercisePage> {
         correctFormData: currentQuestion.correctAnswer,
         onSubmit: (data, isCorrect) => _handleSubmit(data, isCorrect, questions),
         isLast: _currentQuestionIndex == questions.length - 1,
-        showCorrectResponses: true,
       ),
     );
   }
