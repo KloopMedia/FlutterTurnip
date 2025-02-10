@@ -123,6 +123,11 @@ class AppRouter {
         final bool isOnInitialPage = state.matchedLocation == _initialLocation;
         final campaignJoinQueryValue = query['join_campaign'];
 
+        // Let anonymous user see Privacy Policy page
+        if (state.matchedLocation == PrivacyPolicyRoute.path) {
+          return PrivacyPolicyRoute.path;
+        }
+
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
 
