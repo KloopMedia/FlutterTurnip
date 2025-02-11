@@ -22,7 +22,6 @@ List<Widget> buildClassicTaskPage(
       onTap: (item) => redirectToAvailableTasks(context, campaignId, item),
     ),
     const CreatableTaskList(),
-    SectionHeader(context.loc.mytasks),
     if (volume?.showTagsFilter ?? true) const SliverToBoxAdapter(child: FilterBar()),
     buildAdaptiveListViewForStages(context),
     buildAdaptiveListViewForTasks(context, volume, campaignId),
