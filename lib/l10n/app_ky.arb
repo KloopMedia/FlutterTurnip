@@ -226,11 +226,11 @@
     }
   },
 
-  "question_field_header_correct": "Туура",
-  "question_field_header_incorrect": "Туура эмес",
+  "question_field_header_correct": "Азаматсыз!",
+  "question_field_header_incorrect": "Туура эмес!",
   "question_field_correct_answer_label": "Туура жооп:",
   "question_field_next_button": "Кийинки",
-  "form_submit_button": "Жөнөтүү",
+  "test_form_submit_button": "Жөнөтүү",
   "onboarding_header": "Эмне үйрөнгүңүз келет?",
   "onboarding_button_skip": "Өткөрүү",
   "error_box_button_home": "Башкы бет",

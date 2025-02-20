@@ -56,7 +56,10 @@ class AnswerFeedbackSheet extends StatelessWidget {
                 Navigator.pop(context);
                 onPop();
               },
-              child: Text(context.loc.question_field_next_button),
+              child: Text(
+                context.loc.question_field_next_button,
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ),
         ],

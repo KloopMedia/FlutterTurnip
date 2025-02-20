@@ -108,10 +108,10 @@ class _QuestionFieldState extends State<QuestionField> {
                   : null,
               child: Text(
                 widget.isLast!
-                    ? context.loc.form_submit_button
+                    ? context.loc.test_form_submit_button
                     : context.loc.question_field_next_button,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -140,6 +140,8 @@ class _QuestionFieldState extends State<QuestionField> {
 
     showModalBottomSheet<void>(
       context: context,
+      isDismissible: false,
+      enableDrag: false,
       builder: (_) => AnswerFeedbackSheet(
         isCorrect: isCorrect,
         color: color,
