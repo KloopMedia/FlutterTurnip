@@ -7,6 +7,7 @@ import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../../../bloc/bloc.dart';
+import '../../utils.dart';
 import 'chain_row.dart';
 import 'types.dart';
 
@@ -23,15 +24,34 @@ class TaskStageChainView extends StatelessWidget {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         }
         if (state is RemoteDataInitialized<IndividualChain> && state.data.isNotEmpty) {
-          final chains = state.data
-              .map((data) => Chains(
-                    count: state.count,
-                    onTap: onTap,
-                    isChainSingle: state.count == 1 ? true : false,
-                    chainName: data.name,
-                    stagesData: data.stagesData,
-                  ))
-              .toList();
+          final chains = state.data.map((data) {
+            if (data.newTaskViewMode) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Text(
+                      data.name,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.neutral40,
+                      ),
+                    ),
+                  ),
+                  ...buildLessonChain(data.stagesData, onTap),
+                ],
+              );
+            }
+            return Chains(
+              count: state.count,
+              onTap: onTap,
+              isChainSingle: state.count == 1 ? true : false,
+              chainName: data.name,
+              stagesData: data.stagesData,
+            );
+          }).toList();
 
           return MultiSliver(children: chains);
         }

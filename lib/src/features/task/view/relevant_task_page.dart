@@ -52,20 +52,14 @@ class _RelevantTaskPageState extends State<RelevantTaskPage> {
                           },
                         ),
                       buildVolumesSliver(context),
-                      if (campaignState.data.newTaskViewMode)
-                        ...buildAlternativeTaskView(
-                          selectedVolumeState.volume,
-                          onChainTap: (item, status) => onChainTapMethod(context, item, status, widget.campaignId),
-                        )
-                      else
-                        ...buildClassicTaskPage(
-                          context,
-                          selectedVolumeState.volume,
-                          campaignId: widget.campaignId,
-                          onChainTap: (item, status) {
-                            onChainTapMethod(context, item, status, widget.campaignId);
-                          },
-                        ),
+                      ...buildClassicTaskPage(
+                        context,
+                        selectedVolumeState.volume,
+                        campaignId: widget.campaignId,
+                        onChainTap: (item, status) {
+                          onChainTapMethod(context, item, status, widget.campaignId);
+                        },
+                      ),
                     ],
                   ),
                 );

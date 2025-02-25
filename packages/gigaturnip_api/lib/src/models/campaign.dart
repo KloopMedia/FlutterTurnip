@@ -24,7 +24,6 @@ class Campaign {
   // final bool featured;
   final String? featuredImage;
   final String? contactUsLink;
-  final bool newTaskViewMode;
   final int? registrationStage;
   final bool isCompleted;
   final DateTime? startDate;
@@ -50,7 +49,6 @@ class Campaign {
     required this.featuredImage,
     this.smsCompleteTaskAllow = false,
     required this.contactUsLink,
-    this.newTaskViewMode = false,
     required this.registrationStage,
     this.isCompleted = false,
     this.startDate

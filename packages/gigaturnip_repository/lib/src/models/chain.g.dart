@@ -11,6 +11,7 @@ Chain _$ChainFromJson(Map<String, dynamic> json) => Chain(
       name: json['name'] as String,
       description: json['description'] as String,
       campaign: (json['campaign'] as num).toInt(),
+      newTaskViewMode: json['newTaskViewMode'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$ChainToJson(Chain instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$ChainToJson(Chain instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'campaign': instance.campaign,
+      'newTaskViewMode': instance.newTaskViewMode,
     };

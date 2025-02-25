@@ -17,7 +17,6 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => Campaign(
       isJoined: json['isJoined'] as bool,
       featuredImage: json['featuredImage'] as String?,
       contactUsLink: json['contactUsLink'] as String?,
-      newTaskViewMode: json['newTaskViewMode'] as bool? ?? false,
       registrationStage: (json['registrationStage'] as num?)?.toInt(),
       isCompleted: json['isCompleted'] as bool? ?? false,
       startDate: json['startDate'] == null
@@ -36,7 +35,6 @@ Map<String, dynamic> _$CampaignToJson(Campaign instance) => <String, dynamic>{
       'isJoined': instance.isJoined,
       'featuredImage': instance.featuredImage,
       'contactUsLink': instance.contactUsLink,
-      'newTaskViewMode': instance.newTaskViewMode,
       'registrationStage': instance.registrationStage,
       'isCompleted': instance.isCompleted,
       'startDate': instance.startDate?.toIso8601String(),

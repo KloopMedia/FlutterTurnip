@@ -13,6 +13,7 @@ IndividualChain _$IndividualChainFromJson(Map<String, dynamic> json) =>
       stagesData: (json['stagesData'] as List<dynamic>)
           .map((e) => TaskStageChainInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
+      newTaskViewMode: json['newTaskViewMode'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$IndividualChainToJson(IndividualChain instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$IndividualChainToJson(IndividualChain instance) =>
       'id': instance.id,
       'name': instance.name,
       'stagesData': instance.stagesData,
+      'newTaskViewMode': instance.newTaskViewMode,
     };

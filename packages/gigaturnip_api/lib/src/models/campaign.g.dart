@@ -26,8 +26,6 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
               'sms_complete_task_allow', (v) => v as bool? ?? false),
           contactUsLink:
               $checkedConvert('contact_us_link', (v) => v as String?),
-          newTaskViewMode:
-              $checkedConvert('new_task_view_mode', (v) => v as bool? ?? false),
           registrationStage: $checkedConvert(
               'registration_stage', (v) => (v as num?)?.toInt()),
           isCompleted:
@@ -44,7 +42,6 @@ Campaign _$CampaignFromJson(Map<String, dynamic> json) => $checkedCreate(
         'featuredImage': 'featured_image',
         'smsCompleteTaskAllow': 'sms_complete_task_allow',
         'contactUsLink': 'contact_us_link',
-        'newTaskViewMode': 'new_task_view_mode',
         'registrationStage': 'registration_stage',
         'isCompleted': 'is_completed',
         'startDate': 'start_date'

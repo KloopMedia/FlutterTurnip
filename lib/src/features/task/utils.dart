@@ -13,7 +13,7 @@ ChainInfoStatus getChainStatus(TaskStageChainInfo item) {
 }
 
 /// Builds the widget representation of a single chain.
-List<Widget> _buildChain(
+List<Widget> buildLessonChain(
   List<TaskStageChainInfo> chainData,
   Function(TaskStageChainInfo item, ChainInfoStatus status) onTap, {
   bool minimalistic = false,
@@ -110,7 +110,7 @@ List<Widget> buildChains(
           style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22.0),
         ),
       ),
-      ..._buildChain(chain.stagesData, onTap, minimalistic: minimalistic),
+      ...buildLessonChain(chain.stagesData, onTap, minimalistic: minimalistic),
       const SizedBox(height: 10),
     ];
   }).toList();

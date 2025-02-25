@@ -22,7 +22,6 @@ class Campaign extends Equatable {
   // final bool featured;
   final String? featuredImage;
   final String? contactUsLink;
-  final bool newTaskViewMode;
   // final int? defaultTrack;
   final int? registrationStage;
   final bool isCompleted;
@@ -45,7 +44,6 @@ class Campaign extends Equatable {
     // required this.featured,
     required this.featuredImage,
     required this.contactUsLink,
-    this.newTaskViewMode = false,
     // required this.defaultTrack,
     required this.registrationStage,
     this.isCompleted = false,
@@ -78,7 +76,6 @@ class Campaign extends Equatable {
       // featured: model.featured,
       featuredImage: model.featuredImage,
       contactUsLink: model.contactUsLink,
-      newTaskViewMode: model.newTaskViewMode,
       // defaultTrack: model.defaultTrack,
       registrationStage: model.registrationStage,
       isCompleted: model.isCompleted,
