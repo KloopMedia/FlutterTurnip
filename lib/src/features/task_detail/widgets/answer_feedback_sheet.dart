@@ -18,7 +18,7 @@ class AnswerFeedbackSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 220,
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -41,7 +41,7 @@ class AnswerFeedbackSheet extends StatelessWidget {
             context.loc.question_field_correct_answer_label,
             style: TextStyle(fontSize: 18, color: color, fontWeight: FontWeight.bold),
           ),
-          Text(correctValue, style: TextStyle(fontSize: 18, color: color)),
+          Text(correctValue, style: TextStyle(fontSize: 18, color: color), maxLines: 3, overflow: TextOverflow.ellipsis,),
           const Spacer(),
           SizedBox(
             width: double.infinity,
