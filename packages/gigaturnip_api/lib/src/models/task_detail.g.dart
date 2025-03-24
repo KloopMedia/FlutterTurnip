@@ -45,6 +45,10 @@ TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) => v == null ? null : DateTime.parse(v as String)),
           endPeriod: $checkedConvert('end_period',
               (v) => v == null ? null : DateTime.parse(v as String)),
+          test: $checkedConvert(
+              'test',
+              (v) =>
+                  v == null ? null : Test.fromJson(v as Map<String, dynamic>)),
         );
         return val;
       },

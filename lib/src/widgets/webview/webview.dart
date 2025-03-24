@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:universal_html/parsing.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -22,6 +23,7 @@ class WebView extends StatefulWidget {
   final void Function()? onSubmitCallback;
   final void Function()? onCloseCallback;
   final void Function()? onOpenPreviousTask;
+  final bool hideButton;
 
   const WebView({
     Key? key,
@@ -30,6 +32,7 @@ class WebView extends StatefulWidget {
     this.onCloseCallback,
     this.onOpenPreviousTask,
     this.allowOpenPrevious = false,
+    this.hideButton = false,
   })  : htmlText = html as String,
         super(key: key);
 
@@ -79,7 +82,6 @@ class _WebViewState extends State<WebView> {
           #container {
             margin: auto;
             width: $width;
-            border-style: groove;
           }
           
           #spacer {
@@ -244,7 +246,7 @@ class _WebViewState extends State<WebView> {
       setState(() {});
       if (_history.isNotEmpty) {
         final lastPage = _history.last;
-        webViewController?.loadUrl(urlRequest: URLRequest(url: lastPage.uri));
+        webViewController?.goBack();
         webViewController?.platform.scrollTo(x: lastPage.scrollX, y: lastPage.scrollY);
       } else {
         await webViewController?.loadData(data: _data);
@@ -286,48 +288,11 @@ class _WebViewState extends State<WebView> {
     final theme = Theme.of(context).colorScheme;
 
     return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {},
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: goBackOrClose,
-          ),
+      canPop: kIsWeb ? true : false,
+      child: ScaffoldAppbar(
+        leading: BackButton(
+          onPressed: goBackOrClose,
         ),
-        body: Builder(builder: (context) {
-          if (widget.htmlText.isEmpty) {
-            return Center(
-              child: Text(
-                context.loc.empty_richtext,
-              ),
-            );
-          }
-
-          return InAppWebView(
-            initialSettings: settings,
-            initialData: InAppWebViewInitialData(data: _data),
-            onCreateWindow: (controller, action) async {
-              if (Platform.isAndroid) {
-                await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
-              }
-            },
-            onWebViewCreated: (controller) {
-              setState(() {
-                webViewController = controller;
-              });
-            },
-            onLoadStart: (controller, uri) async {
-              if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
-                final scrollX = await controller.platform.getScrollX() ?? 0;
-                final scrollY = await controller.platform.getScrollY() ?? 0;
-                final page = Page(uri: uri, scrollX: scrollX, scrollY: scrollY);
-                setState(() {
-                  _history.add(page);
-                });
-              }
-            },
-          );
-        }),
         bottomNavigationBar: SafeArea(
           child: Container(
             margin: EdgeInsets.symmetric(
@@ -358,7 +323,7 @@ class _WebViewState extends State<WebView> {
                     ),
                   ),
                 if (widget.allowOpenPrevious) const SizedBox(width: 10),
-                Expanded(
+                if (!widget.hideButton) Expanded(
                   child: SizedBox(
                     height: 52,
                     child: ElevatedButton(
@@ -380,6 +345,42 @@ class _WebViewState extends State<WebView> {
             ),
           ),
         ),
+        child: Builder(builder: (context) {
+          if (widget.htmlText.isEmpty) {
+            return Center(
+              child: Text(
+                context.loc.empty_richtext,
+              ),
+            );
+          }
+
+          return InAppWebView(
+            initialSettings: settings,
+            initialData: InAppWebViewInitialData(data: _data),
+            onCreateWindow: (controller, action) async {
+              if (Platform.isAndroid) {
+                await InAppBrowser.openWithSystemBrowser(url: action.request.url!);
+              }
+            },
+            onWebViewCreated: (controller) {
+              setState(() {
+                webViewController = controller;
+              });
+            },
+            onLoadStart: (controller, uri) async {
+              if (uri != null && uri.isValidUri && uri.rawValue != "about:blank") {
+                final scrollX = await controller.platform.getScrollX() ?? 0;
+                final scrollY = await controller.platform.getScrollY() ?? 0;
+                final page = Page(uri: uri, scrollX: scrollX, scrollY: scrollY);
+                if (!kIsWeb) {
+                  setState(() {
+                    _history.add(page);
+                  });
+                }
+              }
+            },
+          );
+        }),
       ),
     );
   }

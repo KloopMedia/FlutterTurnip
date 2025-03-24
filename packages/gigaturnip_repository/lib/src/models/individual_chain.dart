@@ -10,8 +10,14 @@ class IndividualChain {
   final int id;
   final String name;
   final List<TaskStageChainInfo> stagesData;
+  final bool newTaskViewMode;
 
-  const IndividualChain({required this.id, required this.name, required this.stagesData});
+  const IndividualChain({
+    required this.id,
+    required this.name,
+    required this.stagesData,
+    this.newTaskViewMode = false,
+  });
 
   factory IndividualChain.fromJson(Map<String, dynamic> json) {
     return _$IndividualChainFromJson(json);
@@ -22,6 +28,7 @@ class IndividualChain {
       id: model.id,
       name: model.name,
       stagesData: model.stagesData.map((e) => TaskStageChainInfo.fromApiModel(e)).toList(),
+      newTaskViewMode: model.newTaskViewMode,
     );
   }
 }

@@ -57,6 +57,13 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<IndividualChain>> getIndividualChains(
       {@Queries() Map<String, dynamic>? query});
 
+  @GET(bookChainRoute)
+  Future<PaginationWrapper<IndividualChain>> getBookChains(
+      {@Queries() Map<String, dynamic>? query});
+
+  @GET("$trackRoute/{id}")
+  Future<HttpResponse> getTrackById(@Path("id") int id);
+
   // Task methods
 
   @GET(tasksRoute)
@@ -193,4 +200,13 @@ abstract class GigaTurnipApiClient {
   Future<PaginationWrapper<Volume>> getVolumes({
     @Queries() Map<String, dynamic>? query,
   });
+
+  @GET(lessonsRoute)
+  Future<List<Lesson>> getLessons({
+    @Queries() Map<String, dynamic>? query,
+  });
+
+  @GET("$testsRoute/{id}")
+  Future<Test> getTestById(@Path("id") int id);
 }
+

@@ -14,6 +14,8 @@ const languagesRoute = 'languages/';
 // Chain routes
 const chainsRoute = 'chains/';
 const individualChainsRoute = '${chainsRoute}individuals/';
+const bookChainRoute = '${chainsRoute}textbooks/';
+const trackRoute = 'tracks/';
 
 // TaskStages routes
 const taskStagesRoute = 'taskstages/';
@@ -61,3 +63,7 @@ const updateFcmTokenActionRoute = '$fcmRoute/update_fcm_token/';
 
 // Volume routes
 const volumesRoute = 'volumes/';
+
+
+const lessonsRoute = 'lessons/chained_stages/';
+const testsRoute = '/api/v1/tests/';

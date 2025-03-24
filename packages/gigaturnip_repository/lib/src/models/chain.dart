@@ -10,12 +10,14 @@ class Chain extends Equatable {
   final String name;
   final String description;
   final int campaign;
+  final bool newTaskViewMode;
 
   const Chain({
     required this.id,
     required this.name,
     required this.description,
     required this.campaign,
+    this.newTaskViewMode = false
   });
 
   factory Chain.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class Chain extends Equatable {
       name: model.name,
       description: model.description,
       campaign: model.campaign,
+      newTaskViewMode: model.newTaskViewMode
     );
   }
 

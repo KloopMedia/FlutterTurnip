@@ -109,8 +109,8 @@
   "privacy_policy_acceptance_3": " кабыл алам",
   "form_submit_button": "Жөнөтүү",
   "form_divider": "Сиздин формаңыз ушул жерден башталат",
-  "join_campaign": "Кампанияга кошулуу",
-  "joined_campaigns": "Сиз кошулган кампанияларды “Менин кампанияларым” өтмөгүнөн тапса болот",
+  "join_campaign": "Курска кошулуу",
+  "joined_campaigns": "Кошулган курстарды “Сиздин курстарыңыз” өтмөгүнөн тапса болот",
   "joined": "Сиз кошулдуңуз!",
   "got_it": "Түшүнүктүү",
   "yes": "Ооба",
@@ -202,5 +202,38 @@
 	"statistics": "Статистика",
 	"your_courses": "Сиздин курстарыңыз",
 	"join_other_courses": "Башка курстарга кошулуңуз",
-	"courses": "Курстар"
+	"courses": "Курстар",
+
+  "have_questions_campaign": "Суроолоруңуз барбы?",
+	"call_us_campaign": "Бизге жазыңыз",
+  "call_us_description": "Бизге жазыңыз, сөзсүз сиз менен байланышабыз",
+
+  "call_us_title": "Биз менен байланышуу:",
+  "call_us_whatsapp": "WhatsApp",
+	"call_us_telegram": "Telegram",
+
+  "complete_volume": "Аткарылган",
+  "closed_volume": "Жабык",
+
+  "course_is_completed": "Курс аяктады",
+	"course_start_at": "Курс {date} башталат",
+	"@course_start_at": {
+    "description": "A message with a date parameter",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "question_field_header_correct": "Азаматсыз!",
+  "question_field_header_incorrect": "Туура эмес!",
+  "question_field_correct_answer_label": "Туура жооп:",
+  "question_field_next_button": "Кийинки",
+  "test_form_submit_button": "Жөнөтүү",
+  "onboarding_header": "Эмне үйрөнгүңүз келет?",
+  "onboarding_button_skip": "Өткөрүү",
+  "error_box_button_home": "Башкы бет",
+  "login_header": "Оңой жана натыйжалуу окуңуз!",
+  "login_description": "Акысыз курстарга кирүү үчүн катталыңыз"
 }

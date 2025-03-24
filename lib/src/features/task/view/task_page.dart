@@ -1,41 +1,41 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/campaign_detail/bloc/campaign_detail_bloc.dart';
-import 'package:gigaturnip/src/router/routes/routes.dart';
+import 'package:gigaturnip/src/features/task/view/book_chain_view.dart';
+import 'package:gigaturnip/src/features/task/view/relevant_task_page.dart';
 import 'package:gigaturnip/src/theme/index.dart';
-import 'package:gigaturnip/src/widgets/app_bar/default_app_bar.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' show GigaTurnipApiClient;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart'; // hide Notification;
-import 'package:go_router/go_router.dart';
 
-import '../../../bloc/bloc.dart';
+import '../../../widgets/widgets.dart';
 import '../../notification/bloc/notification_cubit.dart';
 import '../bloc/bloc.dart';
-import '../bloc/volume_bloc/volume_cubit.dart';
-import '../widgets/task_page_floating_action_button.dart';
-import 'relevant_task_page.dart';
+import '../widgets/widgets.dart';
 
 class TaskPage extends StatefulWidget {
   final int campaignId;
   final Campaign? campaign;
+  final bool? isTextbook;
 
   const TaskPage({
-    Key? key,
+    super.key,
     required this.campaignId,
     this.campaign,
-  }) : super(key: key);
+    this.isTextbook,
+  });
 
   @override
   State<TaskPage> createState() => _TaskPageState();
 }
 
 class _TaskPageState extends State<TaskPage> {
-  void _redirectToCampaignDetail(BuildContext context) {
-    context.pushNamed(
-      CampaignDetailRoute.name,
-      pathParameters: {'cid': '${widget.campaignId}'},
-      extra: widget.campaign,
-    );
+  late bool _isBookView = widget.isTextbook ?? false;
+
+  void handleTextBookViewModeChange(BuildContext context) {
+    setState(() {
+      _isBookView = !_isBookView;
+    });
   }
 
   @override
@@ -107,16 +107,18 @@ class _TaskPageState extends State<TaskPage> {
           ),
         ),
         BlocProvider(
+          create: (context) => BookChainCubit(
+            BookChainRepository(
+              gigaTurnipApiClient: apiClient,
+              campaignId: widget.campaignId,
+            ),
+          ),
+        ),
+        BlocProvider(
           lazy: false,
           create: (context) => VolumeCubit(
             VolumeRepository(gigaTurnipApiClient: apiClient, campaignId: widget.campaignId),
           )..initialize(query: {'limit': 50, 'track_fk__campaign': widget.campaignId}),
-        ),
-        BlocProvider(
-          lazy: false,
-          create: (context) => SelectedVolumeCubit(
-            volumeSubscription: context.read<VolumeCubit>().stream,
-          ),
         ),
         BlocProvider<OpenNotificationCubit>(
           create: (context) => NotificationCubit(
@@ -126,159 +128,152 @@ class _TaskPageState extends State<TaskPage> {
             ),
           )..initialize(),
         ),
-      ],
-      child: BlocListener<SelectedVolumeCubit, SelectedVolumeState>(
-        listener: (context, state) {
-          if (state is SelectedVolumeLoaded) {
-            if (state.volume != null) {
-              context
-                  .read<RelevantTaskCubit>()
-                  .initialize(query: {'complete': false, 'stage__volumes': state.volume!.id});
-              context
-                  .read<IndividualChainCubit>()
-                  .initialize(query: {'completed': false, 'stages__volumes': state.volume!.id});
-              context.read<ReactiveTasks>().initialize(query: {'volumes': state.volume!.id});
-              context.read<ProactiveTasks>().initialize(query: {'volumes': state.volume!.id});
-              context
-                  .read<ProactiveTasksButtons>()
-                  .initialize(query: {'volumes': state.volume!.id});
-              context
-                  .read<SelectableTaskStageCubit>()
-                  .initialize(query: {'volumes': state.volume!.id});
-            } else {
-              context.read<RelevantTaskCubit>().initialize(query: {'complete': false});
-              context.read<IndividualChainCubit>().initialize(query: {'completed': false});
-              context.read<ReactiveTasks>().initialize();
-              context.read<ProactiveTasks>().initialize();
-              context.read<ProactiveTasksButtons>().initialize();
-              context.read<SelectableTaskStageCubit>().initialize();
-            }
-          }
-        },
-        child: DefaultAppBar(
-          // boxShadow: context.isExtraLarge || context.isLarge ? Shadows.elevation1 : null,
-          title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-            builder: (context, state) {
-              if (state is CampaignInitialized) {
-                return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-          titleSpacing: 0,
-          leading: [
-            const SizedBox(width: 20),
-            if (!context.isSmall || context.isMedium)
-              IconButton(
-                onPressed: () => _redirectToCampaignDetail(context),
-                icon: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-                  builder: (context, state) {
-                    if (state is CampaignInitialized && state.data.logo.isNotEmpty) {
-                      return Container(
-                        width: 24,
-                        height: 24,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: ShapeDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(state.data.logo),
-                            fit: BoxFit.fill,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return const Icon(Icons.info_outline);
-                    }
-                  },
-                ),
-              ),
-          ],
-          // TODO: add filter to show settings button only to moderators.
-          actions: const [NotificationButton()],
-          // SettingsButton()
-          floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
-          child: RelevantTaskPage(
-            campaignId: widget.campaignId,
+        BlocProvider(
+          create: (context) => TaskFilterCubit(
+            volumeSubscription: context.read<VolumeCubit>().stream,
           ),
         ),
-      ),
-    );
-  }
-}
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<TaskFilterCubit, TaskFilterState>(
+            listener: (context, state) {
+              final volumeId = state.volume?.id;
+              final hasFilter = state.volume?.showTagsFilter ?? true;
 
-class SettingsButton extends StatelessWidget {
-  const SettingsButton({super.key});
+              context.read<RelevantTaskCubit>().refetchWithFilter(
+                query: {
+                  if (hasFilter) ...?state.taskQuery,
+                  'stage__volumes': volumeId,
+                },
+              );
+              context.read<IndividualChainCubit>().refetchWithFilter(
+                query: {
+                  if (hasFilter) ...?state.chainQuery,
+                  'stages__volumes': volumeId,
+                },
+              );
+              context.read<BookChainCubit>().refetchWithFilter(
+                query: {
+                  'stages__volumes': volumeId,
+                },
+              );
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
-      builder: (context, state) {
-        if (state is CampaignInitialized) {
-          return IconButton(
-            onPressed: () {
-              final params = GoRouterState.of(context).pathParameters;
-              context.pushNamed(SettingsRoute.name, pathParameters: params);
+              final stageQuery = {'volumes': volumeId};
+              context.read<SelectableTaskStageCubit>().refetchWithFilter(query: stageQuery);
+              context.read<ReactiveTasks>().refetchWithFilter(query: stageQuery);
+              context.read<ProactiveTasks>().refetchWithFilter(query: stageQuery);
+              context.read<ProactiveTasksButtons>().initialize(query: stageQuery);
             },
-            icon: const Icon(Icons.settings),
+          ),
+        ],
+        child: Builder(builder: (context) {
+          if (kIsWeb && (context.isLarge || context.isExtraLarge)) {
+            return WebTaskPage(
+              isBookView: _isBookView,
+              campaignId: widget.campaignId,
+              onTextBookViewChange: handleTextBookViewModeChange,
+            );
+          }
+
+          return ScaffoldAppbar(
+            title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+              builder: (context, state) {
+                if (state is CampaignInitialized) {
+                  return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            actions: [
+              NotificationButton(),
+              IconButton(
+                onPressed: () => handleTextBookViewModeChange(context),
+                icon: Image.asset(
+                  _isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',
+                  width: 24,
+                  height: 24,
+                  color: Theme.of(context).appBarTheme.iconTheme?.color,
+                ),
+              )
+            ],
+            drawer: AppDrawer(),
+            floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
+            child: Builder(builder: (context) {
+              if (_isBookView) {
+                return BookChainView();
+              }
+              return RelevantTaskPage(campaignId: widget.campaignId);
+            }),
           );
-        }
-        return const SizedBox.shrink();
-      },
+        }),
+      ),
     );
   }
 }
 
-class NotificationButton extends StatelessWidget {
-  const NotificationButton({super.key});
+class WebTaskPage extends StatefulWidget {
+  final int campaignId;
+  final bool isBookView;
+  final void Function(BuildContext context) onTextBookViewChange;
 
-  void _redirectToNotificationPage(BuildContext context) {
-    final params = GoRouterState.of(context).pathParameters;
-    context.pushNamed(NotificationRoute.name, pathParameters: params);
-  }
+  const WebTaskPage({
+    super.key,
+    required this.isBookView,
+    required this.campaignId,
+    required this.onTextBookViewChange,
+  });
 
   @override
+  State<WebTaskPage> createState() => _WebTaskPageState();
+}
+
+class _WebTaskPageState extends State<WebTaskPage> {
+  @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => _redirectToNotificationPage(context),
-      icon: BlocBuilder<OpenNotificationCubit, RemoteDataState<Notification>>(
-        builder: (context, state) {
-          if (state is RemoteDataLoaded<Notification>) {
-            final notifications = state.data.where((item) => item.importance > 0).toList();
-            return Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topLeft,
-              children: [
-                const Positioned(
-                  right: 12,
-                  top: 5,
-                  child: Icon(Icons.notifications_outlined),
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 304.0),
+          child: ScaffoldAppbar(
+            title: BlocBuilder<CampaignDetailBloc, CampaignDetailState>(
+              builder: (context, state) {
+                if (state is CampaignInitialized) {
+                  return Text(state.data.name, overflow: TextOverflow.ellipsis, maxLines: 1);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            titleSpacing: 24,
+            rounded: false,
+            actions: [
+              NotificationButton(),
+              IconButton(
+                onPressed: () => widget.onTextBookViewChange(context),
+                icon: Image.asset(
+                  widget.isBookView ? 'assets/icon/book_closed.png' : 'assets/icon/book_open.png',
+                  width: 24,
+                  height: 24,
+                  color: Theme.of(context).appBarTheme.iconTheme?.color,
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 22.0,
-                    height: 20.0,
-                    margin: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Theme.of(context).colorScheme.tertiary),
-                    child: Center(
-                      child: Text(
-                          (notifications.length > 10) ? '10+' : notifications.length.toString(),
-                          style: TextStyle(
-                              fontSize: 14.0, color: Theme.of(context).colorScheme.onPrimary)),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ),
+              )
+            ],
+            floatingActionButton: TaskPageFloatingActionButton(campaignId: widget.campaignId),
+            child: Builder(builder: (context) {
+              if (widget.isBookView) {
+                return BookChainView();
+              }
+              return RelevantTaskPage(campaignId: widget.campaignId);
+            }),
+          ),
+        ),
+        Container(
+          color: Color(0xFFFEFBD2),
+          child: AppDrawer(
+            backgroundColor: const Color(0xFFFAFDFD),
+          ),
+        ),
+      ],
     );
   }
 }

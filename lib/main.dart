@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/firebase_options.dart';
@@ -42,6 +43,11 @@ Future<void> main() async {
     );
 
     NotificationServices notificationServices = NotificationServices();
+
+    if (!kIsWeb) {
+      final token = await messaging.getToken();
+      notificationServices.getDeviceToken(gigaTurnipApiClient, token);
+    }
 
     messaging.onTokenRefresh.listen((fcmToken) {
       notificationServices.getDeviceToken(gigaTurnipApiClient, fcmToken);

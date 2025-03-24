@@ -47,52 +47,26 @@ class _CampaignPageState extends State<CampaignManagementPage> {
       length: 2,
       child: DefaultAppBar(
         title: Text(context.loc.campaigns),
-        bottom: BaseTabBar(
-          width: calculateTabWidth(context),
-          border: context.formFactor == FormFactor.small
-              ? Border(
-                  bottom: BorderSide(
-                    color: colorScheme.isLight
-                        ? colorScheme.neutralVariant80
-                        : colorScheme.neutralVariant40,
-                    width: 2,
-                  ),
-                )
-              : null,
-          tabs: [
-            Tab(
-              child: Text(context.loc.chains, overflow: TextOverflow.ellipsis),
-            ),
-            Tab(
-              child: Text(context.loc.statistics, overflow: TextOverflow.ellipsis),
-            ),
-          ],
-        ),
         child: MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (context) => ChainCubit(
-                ChainRepository(
-                  campaignId: campaignId,
-                  gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
-                ),
-              )..initialize(),
-            ),
+            // BlocProvider(
+            //   create: (context) => ChainCubit(
+            //     ChainRepository(
+            //       campaignId: campaignId,
+            //       gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
+            //     ),
+            //   )..initialize(),
+            // ),
             BlocProvider(
               create: (context) => UserActivityCubit(
                 UserActivityRepository(
                   campaignId: campaignId,
                   gigaTurnipApiClient: context.read<api.GigaTurnipApiClient>(),
                 ),
-              )..initialize(query: {'limit': 300}),
+              )..initialize(query: {'limit': 2000}),
             ),
           ],
-          child: const TabBarView(
-            children: [
-              ChainView(),
-              StatisticView(),
-            ],
-          ),
+          child: const StatisticView(),
         ),
       ),
     );

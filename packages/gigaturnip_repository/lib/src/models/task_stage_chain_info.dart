@@ -8,26 +8,26 @@ part 'task_stage_chain_info.g.dart';
 class TaskStageChainInfo extends Equatable {
   final int id;
   final String name;
-  final String assignType;
-  final List<int?> inStages;
   final List<int?> outStages;
   final List<int> completed;
   final List<int> reopened;
   final List<int> opened;
   final int totalCount;
   final int completeCount;
+  final int? test;
+  final String? richText;
 
   const TaskStageChainInfo({
     required this.id,
     required this.name,
-    required this.assignType,
-    required this.inStages,
     required this.outStages,
     required this.totalCount,
     required this.completeCount,
     required this.completed,
     required this.reopened,
     required this.opened,
+    this.test,
+    this.richText,
   });
 
   factory TaskStageChainInfo.fromJson(Map<String, dynamic> json) {
@@ -38,14 +38,14 @@ class TaskStageChainInfo extends Equatable {
     return TaskStageChainInfo(
       id: model.id,
       name: model.name,
-      assignType: model.assignType,
-      inStages: model.inStages,
       outStages: model.outStages,
-      totalCount: model.totalCount,
-      completeCount: model.completeCount,
+      totalCount: model.completed.length + model.opened.length,
+      completeCount: model.completed.length,
       completed: model.completed,
       reopened: model.reopened,
       opened: model.opened,
+      test: model.test,
+      richText: model.richText
     );
   }
 
@@ -55,8 +55,6 @@ class TaskStageChainInfo extends Equatable {
   List<Object?> get props => [
     id,
     name,
-    assignType,
-    inStages,
     outStages,
     totalCount,
     completeCount,

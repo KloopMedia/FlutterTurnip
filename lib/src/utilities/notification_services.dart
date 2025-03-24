@@ -1,14 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:gigaturnip/src/router/routes/push_notification_route.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart';
 import 'package:go_router/go_router.dart';
 
 import '../router/routes/routes.dart';
 
 class NotificationServices {
-
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   static const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel',
     'High Importance Notifications',
@@ -19,7 +20,6 @@ class NotificationServices {
   void getDeviceToken(GigaTurnipApiClient gigaTurnipApiClient, String? fcmToken) async {
     final token = await messaging.getToken();
     await gigaTurnipApiClient.updateFcmToken({'fcm_token': fcmToken ?? token});
-
   }
 
   Future<void> initialize(GoRouter router) async {
@@ -27,10 +27,7 @@ class NotificationServices {
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
-    messaging.setForegroundNotificationPresentationOptions(
-        alert: true,
-        badge: true,
-        sound: true);
+    messaging.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
     RemoteMessage? terminatedMessage = await messaging.getInitialMessage();
     if (terminatedMessage != null) {
@@ -43,7 +40,7 @@ class NotificationServices {
   }
 
   void onMessageOpenedAppListen(GoRouter router) {
-    FirebaseMessaging.onMessageOpenedApp.listen((message){
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
       _handleMessage(message, router);
     });
   }
@@ -55,12 +52,10 @@ class NotificationServices {
 
       var androidInitialize = const AndroidInitializationSettings('launcher_icon');
       var initializationSettings = InitializationSettings(android: androidInitialize);
-      _flutterLocalNotificationsPlugin.initialize(
-          initializationSettings,
+      _flutterLocalNotificationsPlugin.initialize(initializationSettings,
           onDidReceiveNotificationResponse: (NotificationResponse? response) async {
-            _handleMessage(message, router);
-          }
-      );
+        _handleMessage(message, router);
+      });
 
       /// show message
       if (notification != null && android != null) {
@@ -81,12 +76,6 @@ class NotificationServices {
   }
 
   void _handleMessage(RemoteMessage message, GoRouter router) {
-    router.go(
-      NotificationDetailRoute.path,
-      extra: {
-        'cid': message.data['campaign_id'],
-        'nid': message.data['notification_id'],
-      },
-    );
+    router.go(PushNotificationRoute.path, extra: message);
   }
 }

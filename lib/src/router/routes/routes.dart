@@ -10,3 +10,4 @@ export 'settings_route.dart';
 export 'chain_route.dart';
 export 'privacy_policy_route.dart';
 export 'task_management_route.dart';
+export 'push_notification_route.dart';

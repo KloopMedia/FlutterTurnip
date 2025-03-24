@@ -109,8 +109,8 @@
   "privacy_policy_acceptance_3": "",
   "form_submit_button": "Enter",
   "form_divider": "Your form starts here",
-  "join_campaign": "Join campaign",
-  "joined_campaigns": "Campaigns you have joined can be found in the “My Campaigns” tab",
+  "join_campaign": "Join course",
+  "joined_campaigns": "Courses you have joined can be found in the “My Courses” tab",
   "joined": "You have joined!",
   "got_it": "Got it",
   "yes": "Yes",
@@ -202,5 +202,38 @@
 	"statistics": "Statistics",
 	"your_courses": "Your courses",
 	"join_other_courses": "Join other courses",
-	"courses": "Courses"
+	"courses": "Courses",
+
+	"have_questions_campaign": "Do you have questions?",
+	"call_us_campaign": "Contact us",
+	"call_us_description": "Write to us, and we will definitely get in touch with you",
+
+	"call_us_title": "Contact us:",
+	"call_us_whatsapp": "WhatsApp",
+	"call_us_telegram": "Telegram",
+
+	"complete_volume": "Complete",
+	"closed_volume": "Closed",
+
+	"course_is_completed": "Course completed",
+	"course_start_at": "Course begins on {date}",
+	"@course_start_at": {
+    "description": "A message with a date parameter",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "question_field_header_correct": "Well done!",
+  "question_field_header_incorrect": "Incorrect!",
+  "question_field_correct_answer_label": "Correct Answer:",
+  "question_field_next_button": "Next",
+  "test_form_submit_button": "Submit",
+  "onboarding_header": "What do you want to learn?",
+  "onboarding_button_skip": "Skip",
+  "error_box_button_home": "Home",
+  "login_header": "Learn easily and effectively!",
+  "login_description": "Sign up to access free courses"
 }

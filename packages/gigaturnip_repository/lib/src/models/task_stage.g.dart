@@ -7,11 +7,11 @@ part of 'task_stage.dart';
 // **************************************************************************
 
 TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String?,
-      chain: json['chain'] as int,
-      campaign: json['campaign'] as int,
+      chain: (json['chain'] as num).toInt(),
+      campaign: (json['campaign'] as num).toInt(),
       cardJsonSchema: json['cardJsonSchema'] as Map<String, dynamic>?,
       cardUiSchema: json['cardUiSchema'] as Map<String, dynamic>?,
       availableTo: json['availableTo'] == null
@@ -23,8 +23,8 @@ TaskStage _$TaskStageFromJson(Map<String, dynamic> json) => TaskStage(
       stageType: convertStringToStageType(json['stageType'] as String?),
       takeTaskButtonText: json['takeTaskButtonText'] as String?,
       externalRendererUrl: json['externalRendererUrl'] as String?,
-      openLimit: json['openLimit'] as int? ?? 0,
-      totalLimit: json['totalLimit'] as int? ?? 0,
+      openLimit: (json['openLimit'] as num?)?.toInt() ?? 0,
+      totalLimit: (json['totalLimit'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$TaskStageToJson(TaskStage instance) => <String, dynamic>{

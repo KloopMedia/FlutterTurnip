@@ -20,3 +20,7 @@ export 'language.dart';
 export 'base_stage.dart';
 export 'volume.dart';
 export 'user_activity.dart';
+export 'lesson.dart';
+export 'test.dart';
+export 'question.dart';
+export 'question_attachment.dart';

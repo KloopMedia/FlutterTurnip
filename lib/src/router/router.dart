@@ -119,19 +119,17 @@ class AppRouter {
         final authenticationService = context.read<AuthenticationRepository>();
         final query = {...state.uri.queryParameters};
         final bool loggedIn = authenticationService.user.isNotEmpty;
-        final bool isPrivacyPolicyRoute = state.matchedLocation == PrivacyPolicyRoute.path;
         final bool loggingIn = state.matchedLocation == LoginRoute.path;
         final bool isOnInitialPage = state.matchedLocation == _initialLocation;
-        final bool gettingPushNotification = state.matchedLocation == NotificationDetailRoute.path;
         final campaignJoinQueryValue = query['join_campaign'];
 
-        if (isPrivacyPolicyRoute) return redirectToPrivacyPolicyPage(context, state);
+        // Let anonymous user see Privacy Policy page
+        if (state.matchedLocation == PrivacyPolicyRoute.path) {
+          return PrivacyPolicyRoute.path;
+        }
 
         // bundle the location the user is coming from into a query parameter
         if (!loggedIn) return loggingIn ? null : redirectToLoginPage(context, state);
-
-        // if there is push notification, then send user to NotificationDetailPage
-        if (gettingPushNotification) return redirectToNotificationDetailPage(context, state);
 
         // if the user is logged in, send them where they were going before (or
         // home if they weren't going anywhere)
@@ -167,6 +165,7 @@ class AppRouter {
         ChainRoute(parentKey: _rootNavigatorKey).route,
         PrivacyPolicyRoute(parentKey: _rootNavigatorKey).route,
         TaskManagementRoute(parentKey: _rootNavigatorKey).route,
+        PushNotificationRoute(parentKey: _rootNavigatorKey).route,
       ],
     );
   }

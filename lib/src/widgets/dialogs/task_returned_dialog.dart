@@ -3,7 +3,8 @@ import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 
 class TaskReturnedDialog extends StatelessWidget {
-  const TaskReturnedDialog({super.key});
+  final VoidCallback? onPop;
+  const TaskReturnedDialog({super.key, this.onPop});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,9 @@ class TaskReturnedDialog extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.pop(context);
+              if (onPop != null) {
+                onPop!();
+              }
             },
             child: Text(context.loc.ok),
           ),

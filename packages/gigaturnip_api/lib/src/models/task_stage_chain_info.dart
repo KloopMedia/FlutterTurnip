@@ -6,26 +6,22 @@ part 'task_stage_chain_info.g.dart';
 class TaskStageChainInfo {
   final int id;
   final String name;
-  final String assignType;
-  final List<int?> inStages;
   final List<int?> outStages;
   final List<int> completed;
   final List<int> reopened;
   final List<int> opened;
-  final int totalCount;
-  final int completeCount;
+  final int? test;
+  final String? richText;
 
   const TaskStageChainInfo({
     required this.id,
     required this.name,
-    required this.assignType,
-    required this.inStages,
     required this.outStages,
-    required this.totalCount,
-    required this.completeCount,
-    required this.completed,
-    required this.reopened,
-    required this.opened,
+    this.completed = const [],
+    this.reopened = const [],
+    this.opened = const [],
+    this.test,
+    this.richText,
   });
 
   factory TaskStageChainInfo.fromJson(Map<String, dynamic> json) {

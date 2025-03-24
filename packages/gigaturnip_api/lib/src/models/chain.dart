@@ -8,12 +8,14 @@ class Chain {
   final String name;
   final String description;
   final int campaign;
+  final bool newTaskViewMode;
 
   const Chain({
     required this.id,
     required this.name,
     required this.description,
     required this.campaign,
+    this.newTaskViewMode = false
   });
 
   factory Chain.fromJson(Map<String, dynamic> json) {

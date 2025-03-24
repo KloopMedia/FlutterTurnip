@@ -12,6 +12,7 @@ class CardWithTitle extends StatelessWidget {
   final Widget? body;
   final Widget? bottom;
   final Size? size;
+  final Color? titleColor;
   final Color? backgroundColor;
   final int flex;
   final double? contentPadding;
@@ -28,6 +29,7 @@ class CardWithTitle extends StatelessWidget {
     this.onTap,
     this.elevation = 0,
     this.size,
+    this.titleColor,
     this.backgroundColor,
     this.contentPadding,
     this.hasBoxShadow = true,
@@ -40,7 +42,7 @@ class CardWithTitle extends StatelessWidget {
     final titleStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w600,
-      color: theme.isLight ? theme.neutral40 : theme.neutral90,
+      color: titleColor ?? (theme.isLight ? theme.neutral40 : theme.neutral90),
       overflow: TextOverflow.ellipsis,
     );
 

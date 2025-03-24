@@ -7,13 +7,13 @@ part of 'notification.dart';
 // **************************************************************************
 
 Notification _$NotificationFromJson(Map<String, dynamic> json) => Notification(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       text: json['text'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      importance: json['importance'] as int,
-      senderTask: json['senderTask'] as int?,
-      receiverTask: json['receiverTask'] as int?,
+      importance: (json['importance'] as num).toInt(),
+      senderTask: (json['senderTask'] as num?)?.toInt(),
+      receiverTask: (json['receiverTask'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$NotificationToJson(Notification instance) =>
