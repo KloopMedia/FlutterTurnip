@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/src/features/task_detail/bloc/task_bloc/task_bloc.dart';
-import 'package:gigaturnip/src/features/task_detail/view/task_detail_view.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
+import 'task_detail_view.dart';
 
+/// A page that sets up and displays details of a specific task, providing a [TaskBloc] to its child.
 class TaskDetailPage extends StatelessWidget {
   final int taskId;
   final int campaignId;
   final Task? task;
 
   const TaskDetailPage({
-    Key? key,
+    super.key,
     required this.taskId,
-    this.task,
     required this.campaignId,
-  }) : super(key: key);
+    this.task,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final apiClient = context.read<api.GigaTurnipApiClient>();
     return BlocProvider(
-      create: (context) => TaskBloc(
-        repository: TaskDetailRepository(gigaTurnipApiClient: apiClient),
-        campaignRepository: CampaignDetailRepository(gigaTurnipApiClient: apiClient),
-        taskId: taskId,
-        task: task,
-      )..add(InitializeTask()),
-      child: TaskDetailView(campaignId),
+      create: (context) => _createTaskBloc(context),
+      child: TaskDetailView(campaignId: campaignId),
     );
+  }
+
+  TaskBloc _createTaskBloc(BuildContext context) {
+    final apiClient = context.read<api.GigaTurnipApiClient>();
+    final repository = TaskDetailRepository(gigaTurnipApiClient: apiClient);
+    final campaignRepository = CampaignDetailRepository(gigaTurnipApiClient: apiClient);
+
+    return TaskBloc(
+      repository: repository,
+      campaignRepository: campaignRepository,
+      taskId: taskId,
+      task: task,
+    )..add(InitializeTask());
   }
 }

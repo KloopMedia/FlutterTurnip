@@ -206,6 +206,7 @@
 
   "have_questions_campaign": "У вас есть вопросы?",
 	"call_us_campaign": "Свяжитесь с нами",
+	"call_us_description": "Напишите нам и мы обязательно свяжемся с вами",
 
 	"call_us_title": "Свяжитесь с нами:",
 	"call_us_whatsapp": "WhatsApp",
@@ -223,5 +224,16 @@
 		      "type": "String"
 		    }
 		  }
-	}
+	},
+
+	"question_field_header_correct": "Молодец!",
+  "question_field_header_incorrect": "Неправильно!",
+  "question_field_correct_answer_label": "Правильный ответ:",
+  "question_field_next_button": "Далее",
+  "test_form_submit_button": "Отправить",
+  "onboarding_header": "Что вы хотите изучать?",
+  "onboarding_button_skip": "Пропустить",
+  "error_box_button_home": "Главная",
+  "login_header": "Учись легко и эффективно!",
+  "login_description": "Зарегистрируйтесь, чтобы получить доступ к бесплатным курсам"
 }

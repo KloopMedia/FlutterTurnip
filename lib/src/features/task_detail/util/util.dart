@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -87,4 +88,47 @@ void handleSmsRedirect(BuildContext context, String? phoneNumber, TaskDetail dat
       OfflinePhoneMessageDialog(phoneNumber: phoneNumber ?? '', message: message),
     );
   }
+}
+
+
+void showNotificationDialog(BuildContext context, {required String text, required VoidCallback onPressed}) {
+  showTaskDialog(
+    context,
+    FormDialog(
+      title: context.loc.new_notification,
+      content: text,
+      buttonText: context.loc.got_it,
+      onPressed: onPressed,
+    ),
+  );
+}
+
+void showTaskReturnedDialog(BuildContext context, int id) {
+  showTaskDialog(
+    context,
+    TaskReturnedDialog(
+      onPop: () => navigateToTask(context, null, id),
+    ),
+  );
+}
+
+void showFileDownloadedDialog(BuildContext context, String message) {
+  showTaskDialog(
+    context,
+    FormDialog(
+      content: message,
+      buttonText: context.loc.ok,
+    ),
+  );
+}
+
+void showErrorDialog(BuildContext context, String error) {
+  showTaskDialog(
+    context,
+    FormDialog(
+      title: context.loc.form_error,
+      content: error,
+      buttonText: context.loc.ok,
+    ),
+  );
 }

@@ -22,8 +22,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   })  : _authenticationRepository = authenticationRepository,
         _sharedPreferences = sharedPreferences,
         super(
-          LoginInitial(
-              firstTime: sharedPreferences.getBool(Constants.sharedPrefFirstTimeKey) ?? true),
+          authenticationRepository.user.isNotEmpty
+              ? LoginSuccess()
+              : LoginInitial(
+                  firstTime: sharedPreferences.getBool(Constants.sharedPrefFirstTimeKey) ?? true),
         ) {
     on<LoginWithAuthProvider>(_onLoginWithAuthProvider);
     on<SendOTP>(_onSendOTP);
@@ -43,7 +45,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Future<void> _onLoginWithAuthProvider(LoginWithAuthProvider event, Emitter<LoginState> emit) async {
+  Future<void> _onLoginWithAuthProvider(
+      LoginWithAuthProvider event, Emitter<LoginState> emit) async {
     final provider = event.provider;
 
     try {

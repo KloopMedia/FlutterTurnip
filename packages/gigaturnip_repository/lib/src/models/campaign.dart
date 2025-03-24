@@ -9,21 +9,20 @@ class Campaign extends Equatable {
   final int id;
   final String name;
   final String description;
-  final bool canJoin;
-  final bool smsLoginAllow;
+  // final bool canJoin;
+  // final bool smsLoginAllow;
   final String? shortDescription;
   final String logo;
-  final int unreadNotifications;
-  final List<int>? languages;
-  final List<int>? countries;
+  // final int unreadNotifications;
+  // final List<int>? languages;
+  // final List<int>? countries;
   final String? smsPhone;
   final bool smsCompleteTaskAllow;
   final bool isJoined;
-  final bool featured;
+  // final bool featured;
   final String? featuredImage;
   final String? contactUsLink;
-  final bool newTaskViewMode;
-  final int? defaultTrack;
+  // final int? defaultTrack;
   final int? registrationStage;
   final bool isCompleted;
   final DateTime? startDate;
@@ -34,19 +33,18 @@ class Campaign extends Equatable {
     required this.description,
     required this.shortDescription,
     required this.logo,
-    required this.smsLoginAllow,
-    required this.unreadNotifications,
-    required this.languages,
-    required this.countries,
-    this.canJoin = false,
+    // required this.smsLoginAllow,
+    // required this.unreadNotifications,
+    // required this.languages,
+    // required this.countries,
+    // this.canJoin = false,
     required this.smsPhone,
     required this.smsCompleteTaskAllow,
     required this.isJoined,
-    required this.featured,
+    // required this.featured,
     required this.featuredImage,
     required this.contactUsLink,
-    this.newTaskViewMode = false,
-    required this.defaultTrack,
+    // required this.defaultTrack,
     required this.registrationStage,
     this.isCompleted = false,
     this.startDate
@@ -65,21 +63,20 @@ class Campaign extends Equatable {
       id: model.id,
       name: model.name,
       description: model.description,
-      canJoin: canJoin,
+      // canJoin: canJoin,
       shortDescription: model.shortDescription,
       logo: model.logo,
-      smsLoginAllow: model.smsLoginAllow,
-      unreadNotifications: model.notificationsCount,
-      languages: model.languages,
-      countries: model.countries,
+      // smsLoginAllow: model.smsLoginAllow,
+      // unreadNotifications: model.notificationsCount,
+      // languages: model.languages,
+      // countries: model.countries,
       smsPhone: model.smsPhone,
       smsCompleteTaskAllow: model.smsCompleteTaskAllow,
       isJoined: model.isJoined,
-      featured: model.featured,
+      // featured: model.featured,
       featuredImage: model.featuredImage,
       contactUsLink: model.contactUsLink,
-      newTaskViewMode: model.newTaskViewMode,
-      defaultTrack: model.defaultTrack,
+      // defaultTrack: model.defaultTrack,
       registrationStage: model.registrationStage,
       isCompleted: model.isCompleted,
       startDate: model.startDate,
@@ -87,5 +84,5 @@ class Campaign extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, description, canJoin];
+  List<Object?> get props => [id, name, description];
 }

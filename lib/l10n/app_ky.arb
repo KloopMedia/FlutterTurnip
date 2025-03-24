@@ -206,6 +206,7 @@
 
   "have_questions_campaign": "Суроолоруңуз барбы?",
 	"call_us_campaign": "Бизге жазыңыз",
+  "call_us_description": "Бизге жазыңыз, сөзсүз сиз менен байланышабыз",
 
   "call_us_title": "Биз менен байланышуу:",
   "call_us_whatsapp": "WhatsApp",
@@ -223,5 +224,16 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "question_field_header_correct": "Азаматсыз!",
+  "question_field_header_incorrect": "Туура эмес!",
+  "question_field_correct_answer_label": "Туура жооп:",
+  "question_field_next_button": "Кийинки",
+  "test_form_submit_button": "Жөнөтүү",
+  "onboarding_header": "Эмне үйрөнгүңүз келет?",
+  "onboarding_button_skip": "Өткөрүү",
+  "error_box_button_home": "Башкы бет",
+  "login_header": "Оңой жана натыйжалуу окуңуз!",
+  "login_description": "Акысыз курстарга кирүү үчүн катталыңыз"
 }

@@ -56,4 +56,5 @@ const _$VolumeStatusEnumMap = {
   VolumeStatus.locked: 'locked',
   VolumeStatus.complete: 'complete',
   VolumeStatus.current: 'current',
+  VolumeStatus.unknown: 'unknown',
 };

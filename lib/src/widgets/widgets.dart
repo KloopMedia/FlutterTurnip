@@ -8,3 +8,4 @@ export 'app_bar/base_app_bar.dart';
 export 'tab_bar/base_tab_bar.dart';
 export 'button/index.dart';
 export 'dialogs/index.dart';
+export 'app_bar/new_scaffold_appbar.dart';

@@ -22,8 +22,13 @@ IndividualChain _$IndividualChainFromJson(Map<String, dynamic> json) =>
                   .map((e) =>
                       TaskStageChainInfo.fromJson(e as Map<String, dynamic>))
                   .toList()),
+          newTaskViewMode:
+              $checkedConvert('new_task_view_mode', (v) => v as bool? ?? false),
         );
         return val;
       },
-      fieldKeyMap: const {'stagesData': 'stages_data'},
+      fieldKeyMap: const {
+        'stagesData': 'stages_data',
+        'newTaskViewMode': 'new_task_view_mode'
+      },
     );

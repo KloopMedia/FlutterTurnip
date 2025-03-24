@@ -55,3 +55,28 @@ class IndividualChainRepository extends GigaTurnipRepository<IndividualChain> {
     return response.id;
   }
 }
+
+class BookChainRepository extends GigaTurnipRepository<IndividualChain> {
+  final api.GigaTurnipApiClient _gigaTurnipApiClient;
+  final int campaignId;
+
+  BookChainRepository({
+    required api.GigaTurnipApiClient gigaTurnipApiClient,
+    required this.campaignId,
+  }) : _gigaTurnipApiClient = gigaTurnipApiClient;
+
+  @override
+  Future<api.PaginationWrapper<IndividualChain>> fetchAndParseData(
+      {Map<String, dynamic>? query}) async {
+    final data = await _gigaTurnipApiClient.getBookChains(query: {
+      'campaign': campaignId,
+      ...?query,
+    });
+
+    return data.copyWith<IndividualChain>(count: data.count, results: parseData(data.results));
+  }
+
+  List<IndividualChain> parseData(List<api.IndividualChain> data) {
+    return data.map(IndividualChain.fromApiModel).toList();
+  }
+}

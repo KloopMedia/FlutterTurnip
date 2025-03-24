@@ -53,24 +53,20 @@ class CampaignDetailView extends StatelessWidget {
     final client = context.read<GigaTurnipApiClient>();
     final campaign = await client.getCampaignById(campaignId);
 
-    final defaultTrack = campaign.defaultTrack;
-    if (defaultTrack != null) {
-      final track = await client.getTrackById(defaultTrack);
-      final registrationStage = track.data["registration_stage"];
+    final registrationStage = campaign.registrationStage;
 
-      if (context.mounted && registrationStage != null) {
-        try {
-          final task = await client.createTaskFromStageId(registrationStage);
-          if (context.mounted) {
-            context.goNamed(TaskDetailRoute.name, pathParameters: {
-              'cid': '$campaignId',
-              'tid': task.id.toString(),
-            });
-          }
-          return;
-        } catch (e) {
-          print(e);
+    if (context.mounted && registrationStage != null) {
+      try {
+        final task = await client.createTaskFromStageId(registrationStage);
+        if (context.mounted) {
+          context.goNamed(TaskDetailRoute.name, pathParameters: {
+            'cid': '$campaignId',
+            'tid': task.id.toString(),
+          });
         }
+        return;
+      } catch (e) {
+        print(e);
       }
     }
 

@@ -16,12 +16,6 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
         final val = TaskStageChainInfo(
           id: $checkedConvert('id', (v) => (v as num).toInt()),
           name: $checkedConvert('name', (v) => v as String),
-          assignType: $checkedConvert('assign_type', (v) => v as String),
-          inStages: $checkedConvert(
-              'in_stages',
-              (v) => (v as List<dynamic>)
-                  .map((e) => (e as num?)?.toInt())
-                  .toList()),
           outStages: $checkedConvert(
               'out_stages',
               (v) => (v as List<dynamic>)
@@ -30,22 +24,28 @@ TaskStageChainInfo _$TaskStageChainInfoFromJson(Map<String, dynamic> json) =>
           completed: $checkedConvert(
               'completed',
               (v) =>
-                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+                  (v as List<dynamic>?)
+                      ?.map((e) => (e as num).toInt())
+                      .toList() ??
+                  const []),
           reopened: $checkedConvert(
               'reopened',
               (v) =>
-                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+                  (v as List<dynamic>?)
+                      ?.map((e) => (e as num).toInt())
+                      .toList() ??
+                  const []),
           opened: $checkedConvert(
               'opened',
               (v) =>
-                  (v as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+                  (v as List<dynamic>?)
+                      ?.map((e) => (e as num).toInt())
+                      .toList() ??
+                  const []),
           test: $checkedConvert('test', (v) => (v as num?)?.toInt()),
+          richText: $checkedConvert('rich_text', (v) => v as String?),
         );
         return val;
       },
-      fieldKeyMap: const {
-        'assignType': 'assign_type',
-        'inStages': 'in_stages',
-        'outStages': 'out_stages'
-      },
+      fieldKeyMap: const {'outStages': 'out_stages', 'richText': 'rich_text'},
     );

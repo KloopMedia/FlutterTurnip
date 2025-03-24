@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/theme/index.dart';
+import 'package:gigaturnip/src/widgets/app_bar/new_scaffold_appbar.dart';
 import 'package:universal_html/parsing.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -22,6 +23,7 @@ class WebView extends StatefulWidget {
   final void Function()? onSubmitCallback;
   final void Function()? onCloseCallback;
   final void Function()? onOpenPreviousTask;
+  final bool hideButton;
 
   const WebView({
     Key? key,
@@ -30,6 +32,7 @@ class WebView extends StatefulWidget {
     this.onCloseCallback,
     this.onOpenPreviousTask,
     this.allowOpenPrevious = false,
+    this.hideButton = false,
   })  : htmlText = html as String,
         super(key: key);
 
@@ -79,7 +82,6 @@ class _WebViewState extends State<WebView> {
           #container {
             margin: auto;
             width: $width;
-            border-style: groove;
           }
           
           #spacer {
@@ -286,14 +288,64 @@ class _WebViewState extends State<WebView> {
     final theme = Theme.of(context).colorScheme;
 
     return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: goBackOrClose,
+      canPop: kIsWeb ? true : false,
+      child: ScaffoldAppbar(
+        leading: BackButton(
+          onPressed: goBackOrClose,
+        ),
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            margin: EdgeInsets.symmetric(
+              horizontal:
+                  context.isSmall || context.isMedium ? 0 : MediaQuery.of(context).size.width / 5,
+            ),
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.allowOpenPrevious)
+                  Expanded(
+                    child: SizedBox(
+                      height: 52,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            width: 1,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: goToPreviousTask,
+                        child: Text(context.loc.go_back_to_previous_task),
+                      ),
+                    ),
+                  ),
+                if (widget.allowOpenPrevious) const SizedBox(width: 10),
+                if (!widget.hideButton) Expanded(
+                  child: SizedBox(
+                    height: 52,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        backgroundColor: theme.primary,
+                        foregroundColor: theme.isLight ? Colors.white : Colors.black,
+                      ),
+                      onPressed: goBackOrSubmit,
+                      child: Text(_history.isNotEmpty
+                          ? context.loc.webview_return_to_lesson
+                          : context.loc.close),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        body: Builder(builder: (context) {
+        child: Builder(builder: (context) {
           if (widget.htmlText.isEmpty) {
             return Center(
               child: Text(
@@ -329,58 +381,6 @@ class _WebViewState extends State<WebView> {
             },
           );
         }),
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              horizontal:
-                  context.isSmall || context.isMedium ? 0 : MediaQuery.of(context).size.width / 5,
-            ),
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.allowOpenPrevious)
-                  Expanded(
-                    child: SizedBox(
-                      height: 52,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        onPressed: goToPreviousTask,
-                        child: Text(context.loc.go_back_to_previous_task),
-                      ),
-                    ),
-                  ),
-                if (widget.allowOpenPrevious) const SizedBox(width: 10),
-                Expanded(
-                  child: SizedBox(
-                    height: 52,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        backgroundColor: theme.primary,
-                        foregroundColor: theme.isLight ? Colors.white : Colors.black,
-                      ),
-                      onPressed: goBackOrSubmit,
-                      child: Text(_history.isNotEmpty
-                          ? context.loc.webview_return_to_lesson
-                          : context.loc.close),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

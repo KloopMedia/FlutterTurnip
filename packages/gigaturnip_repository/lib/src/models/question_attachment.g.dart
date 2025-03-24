@@ -9,13 +9,13 @@ part of 'question_attachment.dart';
 QuestionAttachment _$QuestionAttachmentFromJson(Map<String, dynamic> json) =>
     QuestionAttachment(
       id: (json['id'] as num).toInt(),
-      type: json['type'] as String,
+      type: QuestionAttachment._stringToType(json['type'] as String),
       file: json['file'] as String,
     );
 
 Map<String, dynamic> _$QuestionAttachmentToJson(QuestionAttachment instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'type': instance.type,
+      'type': QuestionAttachment._stringFromType(instance.type),
       'file': instance.file,
     };
