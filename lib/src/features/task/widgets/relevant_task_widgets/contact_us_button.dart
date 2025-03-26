@@ -64,16 +64,6 @@ class ContactUsButton extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 2),
-                    Row(
-                      children: [
-                        SizedBox(width: 5),
-                        Text(
-                          context.loc.call_us_description,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),
