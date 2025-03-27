@@ -26,6 +26,8 @@ List<Widget> buildLessonChain(
     final isComplete = status == ChainInfoStatus.complete;
     final isLast = index == (chainData.length - 1);
 
+    final prevItem = index > 0 ? chainData[index - 1] : null;
+
     TaskStageChainInfo? nextItemPreview;
     if (index < chainData.length - 1) {
       final nextItem = chainData[index + 1];
@@ -37,12 +39,21 @@ List<Widget> buildLessonChain(
       }
     }
 
+    final nextItem = index < chainData.length - 1 ? chainData[index + 1] : null;
+
+    final prevItemComplete =
+        prevItem != null && getChainStatus(prevItem) == ChainInfoStatus.complete;
+    final nextItemComplete =
+        nextItem != null && getChainStatus(nextItem) == ChainInfoStatus.complete;
+    final isActive = !isComplete && prevItemComplete && !nextItemComplete;
+
     chainWidgets.add(
       _buildChainItem(
         currentItem: currentItem,
         status: status,
         isComplete: isComplete,
         isLast: isLast,
+        isActive: isActive,
         nextItemPreview: nextItemPreview,
         onTap: onTap,
         minimalistic: minimalistic,
@@ -59,6 +70,7 @@ Widget _buildChainItem({
   required ChainInfoStatus status,
   required bool isComplete,
   required bool isLast,
+  required bool isActive,
   TaskStageChainInfo? nextItemPreview,
   bool minimalistic = false,
   required Function(TaskStageChainInfo item, ChainInfoStatus status) onTap,
@@ -71,13 +83,18 @@ Widget _buildChainItem({
           Stack(
             children: [
               LessonLine(isComplete: isComplete, isLast: isLast),
-              LessonDecorator(isComplete: isComplete),
+              LessonDecorator(
+                isComplete: isComplete,
+                isActive: isActive,
+              ),
             ],
           ),
         const SizedBox(width: 10),
         Expanded(
           child: LessonListItem(
             title: currentItem.name,
+            isComplete: isComplete,
+            isActive: isActive,
             onTap: () => onTap(currentItem, status),
           ),
         ),
@@ -86,6 +103,8 @@ Widget _buildChainItem({
           Expanded(
             child: LessonListItem(
               title: nextItemPreview.name,
+              isActive: isActive,
+              isComplete: isComplete,
               onTap: () => onTap(nextItemPreview, status),
             ),
           ),
