@@ -1,9 +1,12 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gigaturnip/extensions/buildcontext/loc.dart';
+import 'package:gigaturnip/src/utilities/constants.dart';
 import 'package:gigaturnip_api/gigaturnip_api.dart' as api;
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../router/routes/routes.dart';
 
@@ -20,6 +23,9 @@ class AvailableCampaignCard extends StatelessWidget {
 
     try {
       await client.joinCampaign(campaign.id);
+
+      final userId = context.read<AuthenticationRepository>().user.id;
+      await context.read<SharedPreferences>().setString("${Constants.sharedPrefActiveCampaignKey}_$userId", campaign.id.toString());
 
       final registrationStage = campaign.registrationStage;
 
