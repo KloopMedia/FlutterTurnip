@@ -11,7 +11,7 @@ class TaskCreated extends RemoteDataInitialized<TaskStage> {
 }
 
 class TaskCreatingError extends RemoteDataInitialized<TaskStage> {
-  final String error;
+  final DioException error;
 
   TaskCreatingError.clone(RemoteDataInitialized<TaskStage> state, this.error) : super.clone(state);
 

@@ -19,7 +19,7 @@ class FormDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: title ?? '',
+      title: title,
       content: content,
       actions: [
         SizedBox(

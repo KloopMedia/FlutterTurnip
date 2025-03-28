@@ -235,5 +235,7 @@
   "onboarding_button_skip": "Өткөрүү",
   "error_box_button_home": "Башкы бет",
   "login_header": "Оңой жана натыйжалуу окуңуз!",
-  "login_description": "Акысыз курстарга кирүү үчүн катталыңыз"
+  "login_description": "Акысыз курстарга кирүү үчүн катталыңыз",
+
+  "task_creation_fail_403": "Сабакты ачуу үчүн буга чейинкилерин өтүңүз."
 }

@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gigaturnip/extensions/buildcontext/loc.dart';
 import 'package:gigaturnip/src/router/routes/routes.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +94,11 @@ void handleReactiveTasksState(BuildContext context, RemoteDataState<TaskStage> s
   if (state is TaskCreated) {
     redirectToTaskWithId(context, campaignId, state.createdTaskId);
   } else if (state is TaskCreatingError) {
-    showTaskCreateErrorDialog(context, state.error);
+    if (state.error.response?.statusCode == 403) {
+      showTaskCreateErrorDialog(context, context.loc.task_creation_fail_403);
+    } else {
+      showTaskCreateErrorDialog(context, state.error.message.toString());
+    }
   }
 }
 

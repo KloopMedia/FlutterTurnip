@@ -235,5 +235,7 @@
   "onboarding_button_skip": "Skip",
   "error_box_button_home": "Home",
   "login_header": "Learn easily and effectively!",
-  "login_description": "Sign up to access free courses"
+  "login_description": "Sign up to access free courses",
+
+  "task_creation_fail_403": "To open the lesson, complete the previous ones."
 }

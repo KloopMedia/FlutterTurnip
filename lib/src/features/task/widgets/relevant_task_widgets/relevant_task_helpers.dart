@@ -18,7 +18,6 @@ void showTaskCreateErrorDialog(BuildContext context, String error) {
   showDialog(
     context: context,
     builder: (context) => FormDialog(
-      title: 'Error', // You might access context.loc here for localization
       content: error,
       buttonText: 'OK',
     ),

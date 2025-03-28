@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gigaturnip/src/bloc/bloc.dart';
 import 'package:gigaturnip_repository/gigaturnip_repository.dart';
@@ -32,12 +33,12 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage>
       final createdTaskId = await _repository.createTask(task.id);
       emit(TaskCreated.clone(state as RemoteDataInitialized<TaskStage>, createdTaskId));
       emit(RemoteDataLoaded.clone(state as RemoteDataInitialized<TaskStage>));
-    } catch (e, c) {
+    } on DioException catch (e, c) {
       if (kDebugMode) {
         print(e);
         print(c);
       }
-      emit(TaskCreatingError.clone(state as RemoteDataInitialized<TaskStage>, e.toString()));
+      emit(TaskCreatingError.clone(state as RemoteDataInitialized<TaskStage>, e));
       emit(RemoteDataLoaded.clone(state as RemoteDataInitialized<TaskStage>));
     }
   }
@@ -48,12 +49,12 @@ class CreatableTaskCubit extends RemoteDataCubit<TaskStage>
       final createdTaskId = await _repository.createTask(id);
       emit(TaskCreated.clone(state as RemoteDataInitialized<TaskStage>, createdTaskId));
       emit(RemoteDataLoaded.clone(state as RemoteDataInitialized<TaskStage>));
-    } catch (e, c) {
+    } on DioException catch (e, c) {
       if (kDebugMode) {
         print(e);
         print(c);
       }
-      emit(TaskCreatingError.clone(state as RemoteDataInitialized<TaskStage>, e.toString()));
+      emit(TaskCreatingError.clone(state as RemoteDataInitialized<TaskStage>, e));
       emit(RemoteDataLoaded.clone(state as RemoteDataInitialized<TaskStage>));
     }
   }
